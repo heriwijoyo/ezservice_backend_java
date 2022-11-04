@@ -7,6 +7,11 @@
 		<module>app/core/member</module>
 		<module>app/core/bootstrap</module>
 		<module>app/core/bifrost</module>
+		<module>app/common/dal</module>
+		<module>app/common/logging</module>
+		<module>app/common/util</module>
+		<module>app/test/common</module>
+		<module>app/test/core</module>
 	</modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
