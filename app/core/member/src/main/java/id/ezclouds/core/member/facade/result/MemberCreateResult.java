@@ -1,11 +1,11 @@
 /**
- * DANA.id
- * Copyright (c) 2004‐2022 All Rights Reserved.
+ * Ezclouds.id
+ * Copyright (c) 2020‐2022 All Rights Reserved.
  */
 package id.ezclouds.core.member.facade.result;
 
 /**
- * @author Heri Wijoyo (heri.wijoyo@dana.id)
- * @version $Id: MemberCreateResult.java, v 0.1 2022‐10‐28 12:47 AM Heri Wijoyo (heri.wijoyo@dana.id) Exp $$ */
+ * @author Heri Wijoyo (heri.wijoyo@gmail.com)
+ * @version $Id: MemberCreateResult.java, v 0.1 2022‐10‐28 12:47 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
 public class MemberCreateResult {
 }
