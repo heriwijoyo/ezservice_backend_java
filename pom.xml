@@ -12,7 +12,8 @@
 		<module>app/common/util</module>
 		<module>app/test/common</module>
 		<module>app/test/core</module>
-	</modules>
+        <module>app/common/param</module>
+    </modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
