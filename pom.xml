@@ -5,7 +5,6 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>app/core/member</module>
-		<module>app/core/bootstrap</module>
 		<module>app/core/bifrost</module>
 		<module>app/common/dal</module>
 		<module>app/common/logging</module>
