@@ -6,13 +6,14 @@
 	<modules>
 		<module>app/core/member</module>
 		<module>app/core/bifrost</module>
+		<module>app/core/heimdall</module>
 		<module>app/common/dal</module>
 		<module>app/common/logging</module>
 		<module>app/common/util</module>
 		<module>app/test/common</module>
 		<module>app/test/core</module>
         <module>app/common/param</module>
-		<module>app/fixyou</module>
+		<module>app/biz/tanahlado</module>
 	</modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
