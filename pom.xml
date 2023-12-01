@@ -6,7 +6,6 @@
 	<modules>
 		<module>app/biz/tanahlado</module>
 		<module>app/core/bifrost</module>
-		<module>app/core/bootstrap</module>
 		<module>app/core/heimdall</module>
 		<module>app/core/member</module>
 		<module>app/common/dal</module>
@@ -30,6 +29,7 @@
 	<description>Ez Clouds Core Project</description>
 	<properties>
 		<java.version>1.8</java.version>
+		<common.facade.version>1.0.0</common.facade.version>
 	</properties>
 	<dependencies>
 		<dependency>

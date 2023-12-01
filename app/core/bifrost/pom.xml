@@ -18,8 +18,30 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <version>2.7.5</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jetty</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>id.ezclouds.core</groupId>
+            <artifactId>ezclouds-common-facade</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>id.ezclouds.core</groupId>
+            <artifactId>ezclouds-core-heimdall</artifactId>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
-
 
 </project>
