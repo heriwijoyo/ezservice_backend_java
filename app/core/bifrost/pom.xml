@@ -42,6 +42,12 @@
             <artifactId>ezclouds-core-heimdall</artifactId>
             <version>1.0.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>id.ezclouds.biz</groupId>
+            <artifactId>biz-arahindonesia</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
 </project>
