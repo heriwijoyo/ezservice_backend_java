@@ -16,6 +16,7 @@
 		<module>app/test/common</module>
 		<module>app/test/core</module>
 		<module>app/biz/arahindonesia</module>
+		<module>app/common/cache</module>
 	</modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
