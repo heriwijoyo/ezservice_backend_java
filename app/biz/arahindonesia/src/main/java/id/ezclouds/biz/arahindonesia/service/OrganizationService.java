@@ -7,6 +7,7 @@ package id.ezclouds.biz.arahindonesia.service;
 import id.ezclouds.common.dal.OrganizationRepository;
 import id.ezclouds.common.dal.model.Organization;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -20,7 +21,8 @@ public class OrganizationService {
     @Autowired
     private OrganizationRepository organizationRepository;
 
-    public List<Organization> fetchAll() {
+    @Cacheable("organizations")
+    public List<Organization> getOrganizations() {
         return organizationRepository.findAll();
     }
 }

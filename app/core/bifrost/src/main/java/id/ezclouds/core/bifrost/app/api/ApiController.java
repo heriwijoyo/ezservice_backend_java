@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.bifrost.app.api;
 
+import id.ezclouds.biz.arahindonesia.service.CacheService;
 import id.ezclouds.biz.arahindonesia.service.OrganizationService;
 import id.ezclouds.common.dal.OrganizationRepository;
 import id.ezclouds.common.dal.model.Organization;
@@ -24,6 +25,9 @@ public class ApiController {
     @Autowired
     private OrganizationService organizationService;
 
+    @Autowired
+    private CacheService cacheService;
+
     @GetMapping("/test")
     public String test() {
         return "API test";
@@ -31,6 +35,16 @@ public class ApiController {
 
     @GetMapping("/organizations")
     public List<Organization> getOrganization() {
-        return organizationService.fetchAll();
+        return organizationService.getOrganizations();
+    }
+
+
+
+    @GetMapping("refresh_cache")
+    public String refreshAllCache() {
+        cacheService.refreshAllCache();
+
+        organizationService.getOrganizations();
+        return "All caches refreshed";
     }
 }

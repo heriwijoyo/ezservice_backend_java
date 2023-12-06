@@ -7,6 +7,7 @@ package id.ezclouds.core.bifrost;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
@@ -17,6 +18,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication(scanBasePackages = "id.ezclouds.core.bifrost,id.ezclouds.core.heimdall,id.ezclouds.biz.arahindonesia")
 @EnableJpaRepositories(basePackages = "id.ezclouds.common.dal")
 @EntityScan(basePackages = "id.ezclouds.common.dal")
+@EnableCaching
 public class BifrostWebApplication {
 
     public static void main(String[] args) {
