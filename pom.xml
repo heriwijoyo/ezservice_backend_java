@@ -4,10 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<packaging>pom</packaging>
 	<modules>
+		<module>app/biz/arahindonesia</module>
 		<module>app/biz/tanahlado</module>
 		<module>app/core/bifrost</module>
 		<module>app/core/heimdall</module>
 		<module>app/core/member</module>
+		<module>app/common/cache</module>
 		<module>app/common/dal</module>
 		<module>app/common/facade</module>
 		<module>app/common/logging</module>
@@ -15,8 +17,6 @@
 		<module>app/common/util</module>
 		<module>app/test/common</module>
 		<module>app/test/core</module>
-		<module>app/biz/arahindonesia</module>
-		<module>app/common/cache</module>
 	</modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>

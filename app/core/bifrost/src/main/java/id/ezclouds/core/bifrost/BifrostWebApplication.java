@@ -6,13 +6,17 @@ package id.ezclouds.core.bifrost;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BifrostWebApplication.java, v 0.1 2023‐06‐18 11:31 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
 @ImportResource({ "classpath:/META-INF/ezclouds/spring/config.xml" })
-@SpringBootApplication(scanBasePackages = "id.ezclouds.core.bifrost,id.ezclouds.core.heimdall")
+@SpringBootApplication(scanBasePackages = "id.ezclouds.core.bifrost,id.ezclouds.core.heimdall,id.ezclouds.biz.arahindonesia")
+@EnableJpaRepositories(basePackages = "id.ezclouds.common.dal")
+@EntityScan(basePackages = "id.ezclouds.common.dal")
 public class BifrostWebApplication {
 
     public static void main(String[] args) {
