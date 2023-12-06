@@ -6,7 +6,6 @@ package id.ezclouds.core.bifrost.app.api;
 
 import id.ezclouds.biz.arahindonesia.service.CacheService;
 import id.ezclouds.biz.arahindonesia.service.OrganizationService;
-import id.ezclouds.common.dal.OrganizationRepository;
 import id.ezclouds.common.dal.model.Organization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,10 +40,7 @@ public class ApiController {
 
 
     @GetMapping("refresh_cache")
-    public String refreshAllCache() {
-        cacheService.refreshAllCache();
-
-        organizationService.getOrganizations();
-        return "All caches refreshed";
+    public List<String> refreshAllCache() {
+        return cacheService.refreshAllCache();
     }
 }
