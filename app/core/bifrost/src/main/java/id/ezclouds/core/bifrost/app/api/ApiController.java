@@ -4,8 +4,10 @@
  */
 package id.ezclouds.core.bifrost.app.api;
 
+import id.ezclouds.biz.arahindonesia.service.AppClientService;
 import id.ezclouds.biz.arahindonesia.service.CacheService;
 import id.ezclouds.biz.arahindonesia.service.OrganizationService;
+import id.ezclouds.common.dal.model.AppClient;
 import id.ezclouds.common.dal.model.Organization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +27,9 @@ public class ApiController {
     private OrganizationService organizationService;
 
     @Autowired
+    private AppClientService appClientService;
+
+    @Autowired
     private CacheService cacheService;
 
     @GetMapping("/test")
@@ -37,6 +42,10 @@ public class ApiController {
         return organizationService.getOrganizations();
     }
 
+    @GetMapping("/app_clients")
+    public List<AppClient> getAppClients() {
+        return appClientService.getAppClients();
+    }
 
 
     @GetMapping("refresh_cache")
