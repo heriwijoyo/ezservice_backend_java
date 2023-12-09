@@ -6,14 +6,13 @@ package id.ezclouds.biz.arahindonesia.service;
 
 import id.ezclouds.biz.arahindonesia.converter.ModelConverter;
 import id.ezclouds.common.dal.OrganizationRepository;
-import id.ezclouds.common.dal.model.OrganizationDO;
 import id.ezclouds.core.shared.model.Organization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -26,12 +25,10 @@ public class OrganizationService {
 
     @Cacheable("organizations")
     public List<Organization> getOrganizations() {
-        List<Organization> organizations = new ArrayList<>();
-
-        List<OrganizationDO> organizationDOList = organizationRepository.findAll();
-        for (OrganizationDO organizationDO : organizationDOList) {
-            organizations.add(ModelConverter.convert(organizationDO));
-        }
-        return organizations;
+        return organizationRepository
+                .findAll()
+                .stream()
+                .map(ModelConverter::convert)
+                .collect(Collectors.toList());
     }
 }

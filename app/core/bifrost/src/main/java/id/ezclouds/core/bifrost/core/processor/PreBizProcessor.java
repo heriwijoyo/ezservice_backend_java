@@ -7,7 +7,6 @@ package id.ezclouds.core.bifrost.core.processor;
 import id.ezclouds.biz.arahindonesia.model.AppClient;
 import id.ezclouds.biz.arahindonesia.service.AppClientService;
 import id.ezclouds.biz.arahindonesia.service.OrganizationService;
-import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.error.EzErrorCode;
 import id.ezclouds.common.util.error.EzErrorException;
@@ -20,8 +19,6 @@ import id.ezclouds.core.shared.context.EzAppEvent;
 import id.ezclouds.core.shared.model.Organization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -42,40 +39,32 @@ public class PreBizProcessor {
             AssertUtil.isTrue((request instanceof ApiBaseRequest), EzErrorCode.PARAM_ILLEGAL, "Unsupported request type");
 
             ApiBaseRequest apiBaseRequest = (ApiBaseRequest) request;
-            RequestAppClient requestAppClient = apiBaseRequest.getAppClient();
-            AssertUtil.notNull(requestAppClient, EzErrorCode.PARAM_ILLEGAL, "Request.AppClient is null");
+            RequestAppClient reqClient = apiBaseRequest.getAppClient();
+            AssertUtil.notNull(reqClient, EzErrorCode.PARAM_ILLEGAL, "Request.AppClient is null");
+            AssertUtil.notBlank(reqClient.getOrganizationId(), EzErrorCode.PARAM_ILLEGAL, "Request.AppClient.organizationId is blank");
+            AssertUtil.notBlank(reqClient.getApplicationId(), EzErrorCode.PARAM_ILLEGAL, "Request.AppClient.applicationId is blank");
+            AssertUtil.notBlank(reqClient.getClientId(), EzErrorCode.PARAM_ILLEGAL, "Request.AppClient.clientId is blank");
+            AssertUtil.notBlank(reqClient.getClientSecret(), EzErrorCode.PARAM_ILLEGAL, "Request.AppClient.clientSecret is blank");
 
-            List<Organization> organizations = organizationService.getOrganizations();
-            List<AppClient> appClients = appClientService.getAppClients();
+            Organization organization = organizationService
+                    .getOrganizations()
+                    .stream()
+                    .filter(org -> reqClient.getOrganizationId().equals(org.getOrgId()))
+                    .findFirst()
+                    .get();
+            AssertUtil.notNull(organization, EzErrorCode.UNAUTHORIZED, "Unauthorized client request");
 
-            boolean isOrgIdFound = false;
-            Organization requestOrganization = null;
-            for (Organization organization : organizations) {
-                if (StringUtil.equalsNotNull(requestAppClient.getOrganizationId(), organization.getOrgId())) {
-                    isOrgIdFound = true;
-                    requestOrganization = organization;
-                    break;
-                }
-            }
-            AssertUtil.isTrue(isOrgIdFound, EzErrorCode.UNAUTHORIZED, "Unauthorized client request");
+            AppClient appClient = appClientService
+                    .getAppClients()
+                    .stream()
+                    .filter(aClient -> reqClient.getApplicationId().equals(aClient.getAppId()))
+                    .filter(aClient -> reqClient.getClientId().equals(aClient.getClientId()))
+                    .filter(aClient -> reqClient.getClientSecret().equals(aClient.getClientSecret()))
+                    .findFirst()
+                    .get();
+            AssertUtil.notNull(appClient, EzErrorCode.UNAUTHORIZED, "Unauthorized client request");
 
-            boolean isClientCredentialPass = false;
-            for (AppClient appClientDO : appClients) {
-
-                if (StringUtil.equalsNotNull(requestAppClient.getApplicationId(), appClientDO.getAppId())) {
-                    boolean orgIdMatch = StringUtil.equalsNotNull(requestOrganization.getOrgId(), appClientDO.getOrgId());
-                    boolean clientIdMatch = StringUtil.equalsNotNull(requestAppClient.getClientId(), appClientDO.getClientId());
-                    boolean clientSecretMatch = StringUtil.equalsNotNull(requestAppClient.getClientSecret(), appClientDO.getClientSecret());
-
-                    if (orgIdMatch && clientIdMatch && clientSecretMatch) {
-                        isClientCredentialPass = true;
-                        break;
-                    }
-                }
-            }
-            AssertUtil.isTrue(isClientCredentialPass, EzErrorCode.UNAUTHORIZED, "Unauthorized client request");
-
-            EzAppContextHolder.setOrganization(requestOrganization);
+            EzAppContextHolder.setOrganization(organization);
         }
     }
 }

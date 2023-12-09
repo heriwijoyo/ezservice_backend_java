@@ -19,10 +19,16 @@ import id.ezclouds.core.shared.model.Organization;
 public class ModelConverter {
 
     public static Organization convert(OrganizationDO organizationDO) {
+        if (organizationDO == null) {
+            return null;
+        }
         return new Organization(organizationDO.getOrgId(), organizationDO.getName());
     }
 
     public static AppClient convert(AppClientDO appClientDO) {
+        if (appClientDO == null) {
+            return null;
+        }
         AppClient appClient = new AppClient();
         appClient.setOrgId(appClientDO.getOrgId());
         appClient.setAppId(appClientDO.getAppId());
@@ -33,6 +39,9 @@ public class ModelConverter {
     }
 
     public static AppConfig convert(AppConfigDO appConfigDO) {
+        if (appConfigDO == null) {
+            return null;
+        }
         AppConfig appConfig = new AppConfig();
         appConfig.setAppName(appConfigDO.getAppName());
         appConfig.setVersionCode(appConfigDO.getVersionCode());

@@ -81,6 +81,7 @@ public class ControllerTemplate {
         ErrorResult errorResult = new ErrorResult();
         errorResult.setErrorCode(ezError.getEzErrorCode().getCode());
         errorResult.setErrorMessage(errorMessage);
+        errorResult.setErrorContext(ezError.getEzErrorCode().getInnerCode());
 
         return errorResult;
     }

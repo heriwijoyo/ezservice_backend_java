@@ -39,6 +39,10 @@ public enum EzErrorCode {
         return code;
     }
 
+    public String getInnerCode() {
+        return innerCode;
+    }
+
     /**
      * Getter method for property <tt>description</tt>.
      *
