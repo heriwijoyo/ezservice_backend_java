@@ -5,8 +5,10 @@
 package id.ezclouds.biz.arahindonesia.converter;
 
 import id.ezclouds.biz.arahindonesia.constant.AppConstant;
+import id.ezclouds.biz.arahindonesia.model.AppClient;
 import id.ezclouds.biz.arahindonesia.model.AppConfig;
 import id.ezclouds.biz.arahindonesia.model.AppUpdateInfo;
+import id.ezclouds.common.dal.model.AppClientDO;
 import id.ezclouds.common.dal.model.AppConfigDO;
 import id.ezclouds.common.dal.model.OrganizationDO;
 import id.ezclouds.core.shared.model.Organization;
@@ -18,6 +20,16 @@ public class ModelConverter {
 
     public static Organization convert(OrganizationDO organizationDO) {
         return new Organization(organizationDO.getOrgId(), organizationDO.getName());
+    }
+
+    public static AppClient convert(AppClientDO appClientDO) {
+        AppClient appClient = new AppClient();
+        appClient.setOrgId(appClientDO.getOrgId());
+        appClient.setAppId(appClientDO.getAppId());
+        appClient.setClientId(appClientDO.getClientId());
+        appClient.setClientSecret(appClientDO.getClientSecret());
+        appClient.setStatus(appClientDO.getStatus());
+        return appClient;
     }
 
     public static AppConfig convert(AppConfigDO appConfigDO) {

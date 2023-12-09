@@ -4,9 +4,9 @@
  */
 package id.ezclouds.core.bifrost.core.processor;
 
+import id.ezclouds.biz.arahindonesia.model.AppClient;
 import id.ezclouds.biz.arahindonesia.service.AppClientService;
 import id.ezclouds.biz.arahindonesia.service.OrganizationService;
-import id.ezclouds.common.dal.model.AppClient;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.error.EzErrorCode;
@@ -60,12 +60,12 @@ public class PreBizProcessor {
             AssertUtil.isTrue(isOrgIdFound, EzErrorCode.UNAUTHORIZED, "Unauthorized client request");
 
             boolean isClientCredentialPass = false;
-            for (AppClient appClient : appClients) {
+            for (AppClient appClientDO : appClients) {
 
-                if (StringUtil.equalsNotNull(requestAppClient.getApplicationId(), appClient.getAppId())) {
-                    boolean orgIdMatch = StringUtil.equalsNotNull(requestOrganization.getOrgId(), appClient.getOrgId());
-                    boolean clientIdMatch = StringUtil.equalsNotNull(requestAppClient.getClientId(), appClient.getClientId());
-                    boolean clientSecretMatch = StringUtil.equalsNotNull(requestAppClient.getClientSecret(), appClient.getClientSecret());
+                if (StringUtil.equalsNotNull(requestAppClient.getApplicationId(), appClientDO.getAppId())) {
+                    boolean orgIdMatch = StringUtil.equalsNotNull(requestOrganization.getOrgId(), appClientDO.getOrgId());
+                    boolean clientIdMatch = StringUtil.equalsNotNull(requestAppClient.getClientId(), appClientDO.getClientId());
+                    boolean clientSecretMatch = StringUtil.equalsNotNull(requestAppClient.getClientSecret(), appClientDO.getClientSecret());
 
                     if (orgIdMatch && clientIdMatch && clientSecretMatch) {
                         isClientCredentialPass = true;

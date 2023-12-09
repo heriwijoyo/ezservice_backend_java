@@ -4,13 +4,16 @@
  */
 package id.ezclouds.biz.arahindonesia.service;
 
+import id.ezclouds.biz.arahindonesia.converter.ModelConverter;
+import id.ezclouds.biz.arahindonesia.model.AppClient;
 import id.ezclouds.common.dal.AppClientRepository;
-import id.ezclouds.common.dal.model.AppClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -24,6 +27,10 @@ public class AppClientService {
 
     @Cacheable("appClients")
     public List<AppClient> getAppClients() {
-        return appClientRepository.findAll();
+        return appClientRepository
+                .findAll()
+                .stream()
+                .map(ModelConverter::convert)
+                .collect(Collectors.toList());
     }
 }
