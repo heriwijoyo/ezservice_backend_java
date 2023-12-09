@@ -4,17 +4,12 @@
  */
 package id.ezclouds.biz.arahindonesia.service;
 
-import id.ezclouds.biz.arahindonesia.converter.ModelConverter;
 import id.ezclouds.biz.arahindonesia.model.AppConfig;
 import id.ezclouds.biz.arahindonesia.model.AppSetting;
-import id.ezclouds.common.dal.model.AppConfigDO;
-import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.model.Organization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -28,14 +23,7 @@ public class AppSettingService {
 
     public AppSetting getAppSetting() {
         Organization currentOrg = EzAppContextHolder.getOrganization();
-        AppConfig appConfig = new AppConfig();
-
-        List<AppConfigDO> appConfigDOList = appConfigService.getAppConfigs();
-        for (AppConfigDO appConfigDO : appConfigDOList) {
-            if (StringUtil.equalsNotNull(currentOrg.getOrgId(), appConfigDO.getOrgId())) {
-                appConfig = ModelConverter.convert(appConfigDO);
-            }
-        }
+        AppConfig appConfig = appConfigService.getAppConfigByOrgId(currentOrg.getOrgId());
 
         AppSetting appSetting = new AppSetting();
         appSetting.setAppConfig(appConfig);

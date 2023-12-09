@@ -4,13 +4,12 @@
  */
 package id.ezclouds.biz.arahindonesia.service;
 
+import id.ezclouds.biz.arahindonesia.converter.ModelConverter;
+import id.ezclouds.biz.arahindonesia.model.AppConfig;
 import id.ezclouds.common.dal.AppConfigRepository;
-import id.ezclouds.common.dal.model.AppConfigDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -22,8 +21,14 @@ public class AppConfigService {
     @Autowired
     private AppConfigRepository appConfigRepository;
 
-    @Cacheable("app_configs")
-    public List<AppConfigDO> getAppConfigs() {
-        return appConfigRepository.findAll();
+    @Cacheable("app_config")
+    public AppConfig getAppConfigByOrgId(String orgId) {
+        return appConfigRepository
+                .findAll()
+                .stream()
+                .filter(appConfigDO -> orgId.equals(appConfigDO.getOrgId()))
+                .findFirst()
+                .map(ModelConverter::convert)
+                .get();
     }
 }
