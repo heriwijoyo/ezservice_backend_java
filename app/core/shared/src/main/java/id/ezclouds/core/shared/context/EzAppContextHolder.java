@@ -2,10 +2,8 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2023 All Rights Reserved.
  */
-package id.ezclouds.core.bifrost.core;
+package id.ezclouds.core.shared.context;
 
-import id.ezclouds.core.shared.context.EzAppContext;
-import id.ezclouds.core.shared.context.EzAppEvent;
 import id.ezclouds.core.shared.model.Organization;
 
 /**
@@ -36,5 +34,9 @@ public class EzAppContextHolder {
 
     public static void setOrganization(Organization organization) {
         threadLocal.get().setOrganization(organization);
+    }
+
+    public static Organization getOrganization() {
+        return threadLocal.get().getOrganization();
     }
 }

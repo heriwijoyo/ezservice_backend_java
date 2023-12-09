@@ -15,7 +15,7 @@ import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiBaseRequest;
 import id.ezclouds.core.bifrost.app.api.request.RequestAppClient;
 import id.ezclouds.core.bifrost.core.BaseRequest;
-import id.ezclouds.core.bifrost.core.EzAppContextHolder;
+import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.context.EzAppEvent;
 import id.ezclouds.core.shared.model.Organization;
 import org.springframework.beans.factory.annotation.Autowired;

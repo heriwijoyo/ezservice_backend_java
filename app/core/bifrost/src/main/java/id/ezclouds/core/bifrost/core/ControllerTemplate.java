@@ -10,6 +10,7 @@ import id.ezclouds.common.util.error.EzErrorException;
 import id.ezclouds.core.bifrost.app.api.result.ErrorResult;
 import id.ezclouds.core.bifrost.core.processor.BizProcessorFactory;
 import id.ezclouds.core.bifrost.core.processor.PreBizProcessor;
+import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.context.EzAppEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
