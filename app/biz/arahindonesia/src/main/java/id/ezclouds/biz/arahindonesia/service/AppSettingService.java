@@ -4,8 +4,14 @@
  */
 package id.ezclouds.biz.arahindonesia.service;
 
+import id.ezclouds.biz.arahindonesia.config.AppConfig;
 import id.ezclouds.biz.arahindonesia.model.AppSetting;
+import id.ezclouds.common.dal.AppConfigRepository;
+import id.ezclouds.common.dal.model.AppConfigDO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -14,7 +20,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class AppSettingService {
 
+    @Autowired
+    private AppConfigService appConfigService;
+
     public AppSetting getSetting() {
-        return new AppSetting();
+        List<AppConfigDO> appConfigDOList = appConfigService.getAppConfigs();
+
+        for (AppConfigDO appConfigDO : appConfigDOList) {
+            
+        }
+
+        AppSetting appSetting = new AppSetting();
+        appSetting.setAppConfig(new AppConfig());
+
+        return appSetting;
     }
 }

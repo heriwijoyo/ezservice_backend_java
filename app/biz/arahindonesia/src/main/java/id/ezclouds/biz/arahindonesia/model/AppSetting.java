@@ -4,20 +4,21 @@
  */
 package id.ezclouds.biz.arahindonesia.model;
 
+import id.ezclouds.biz.arahindonesia.config.AppConfig;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: AppSetting.java, v 0.1 2023‐12‐09 10:38 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 public class AppSetting {
 
-    private String first = "First Message";
-    private String second = "Second Message";
+    private AppConfig appConfig;
 
-    public String getFirst() {
-        return first;
+    public AppConfig getAppConfig() {
+        return appConfig;
     }
 
-    public String getSecond() {
-        return second;
+    public void setAppConfig(AppConfig appConfig) {
+        this.appConfig = appConfig;
     }
 }
