@@ -4,7 +4,9 @@
  */
 package id.ezclouds.core.bifrost.core;
 
-import id.ezclouds.common.dal.model.Organization;
+import id.ezclouds.core.shared.context.EzAppContext;
+import id.ezclouds.core.shared.context.EzAppEvent;
+import id.ezclouds.core.shared.model.Organization;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)

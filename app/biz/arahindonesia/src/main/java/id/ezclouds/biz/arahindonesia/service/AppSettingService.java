@@ -6,7 +6,6 @@ package id.ezclouds.biz.arahindonesia.service;
 
 import id.ezclouds.biz.arahindonesia.config.AppConfig;
 import id.ezclouds.biz.arahindonesia.model.AppSetting;
-import id.ezclouds.common.dal.AppConfigRepository;
 import id.ezclouds.common.dal.model.AppConfigDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +26,7 @@ public class AppSettingService {
         List<AppConfigDO> appConfigDOList = appConfigService.getAppConfigs();
 
         for (AppConfigDO appConfigDO : appConfigDOList) {
-            
+
         }
 
         AppSetting appSetting = new AppSetting();

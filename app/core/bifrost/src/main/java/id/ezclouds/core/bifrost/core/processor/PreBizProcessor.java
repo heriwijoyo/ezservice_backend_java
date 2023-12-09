@@ -7,7 +7,6 @@ package id.ezclouds.core.bifrost.core.processor;
 import id.ezclouds.biz.arahindonesia.service.AppClientService;
 import id.ezclouds.biz.arahindonesia.service.OrganizationService;
 import id.ezclouds.common.dal.model.AppClient;
-import id.ezclouds.common.dal.model.Organization;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.error.EzErrorCode;
@@ -17,7 +16,8 @@ import id.ezclouds.core.bifrost.app.api.request.ApiBaseRequest;
 import id.ezclouds.core.bifrost.app.api.request.RequestAppClient;
 import id.ezclouds.core.bifrost.core.BaseRequest;
 import id.ezclouds.core.bifrost.core.EzAppContextHolder;
-import id.ezclouds.core.bifrost.core.EzAppEvent;
+import id.ezclouds.core.shared.context.EzAppEvent;
+import id.ezclouds.core.shared.model.Organization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

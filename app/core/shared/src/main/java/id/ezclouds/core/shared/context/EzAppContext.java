@@ -2,9 +2,9 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2023 All Rights Reserved.
  */
-package id.ezclouds.core.bifrost.core;
+package id.ezclouds.core.shared.context;
 
-import id.ezclouds.common.dal.model.Organization;
+import id.ezclouds.core.shared.model.Organization;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)

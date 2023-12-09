@@ -5,7 +5,7 @@
 package id.ezclouds.core.bifrost.core.processor;
 
 import id.ezclouds.core.bifrost.core.BaseRequest;
-import id.ezclouds.core.bifrost.core.EzAppEvent;
+import id.ezclouds.core.shared.context.EzAppEvent;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)

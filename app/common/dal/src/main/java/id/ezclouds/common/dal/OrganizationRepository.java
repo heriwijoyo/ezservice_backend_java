@@ -4,7 +4,7 @@
  */
 package id.ezclouds.common.dal;
 
-import id.ezclouds.common.dal.model.Organization;
+import id.ezclouds.common.dal.model.OrganizationDO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,5 +13,5 @@ import org.springframework.stereotype.Repository;
  * @version $Id: OrganizationRepository.java, v 0.1 2023‐12‐04 2:51 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Repository
-public interface OrganizationRepository extends JpaRepository<Organization, String> {
+public interface OrganizationRepository extends JpaRepository<OrganizationDO, String> {
 }

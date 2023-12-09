@@ -14,14 +14,14 @@ import javax.persistence.Table;
  * @version $Id: Organization.java, v 0.1 2023‐12‐04 2:52 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
 @Entity
 @Table(name = "app_organization")
-public class Organization {
+public class OrganizationDO {
 
     private String orgId;
     private String name;
 
-    public Organization() {}
+    public OrganizationDO() {}
 
-    public Organization(String orgId, String name) {
+    public OrganizationDO(String orgId, String name) {
         this.orgId = orgId;
         this.name = name;
     }

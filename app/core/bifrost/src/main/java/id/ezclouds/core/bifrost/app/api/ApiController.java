@@ -5,11 +5,6 @@
 package id.ezclouds.core.bifrost.app.api;
 
 import id.ezclouds.biz.arahindonesia.model.AppSetting;
-import id.ezclouds.biz.arahindonesia.service.AppClientService;
-import id.ezclouds.biz.arahindonesia.service.CacheService;
-import id.ezclouds.biz.arahindonesia.service.OrganizationService;
-import id.ezclouds.common.dal.model.AppClient;
-import id.ezclouds.common.dal.model.Organization;
 import id.ezclouds.common.util.error.EzErrorCode;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiBaseRequest;
@@ -22,7 +17,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -30,13 +24,6 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_PLAIN_VALUE})
 public class ApiController {
-
-    private OrganizationService organizationService;
-
-    private AppClientService appClientService;
-
-    @Autowired
-    private CacheService cacheService;
 
     @Autowired
     private ControllerTemplate controllerTemplate;
@@ -74,30 +61,5 @@ public class ApiController {
 
         apiResult.setSuccess(false);
         apiResult.setErrorResult(errorResult);
-    }
-
-
-
-
-
-
-    @GetMapping("/test")
-    public String test() {
-        return "API test";
-    }
-
-    @GetMapping("/organizations")
-    public List<Organization> getOrganization() {
-        return organizationService.getOrganizations();
-    }
-
-    @GetMapping("/app_clients")
-    public List<AppClient> getAppClients() {
-        return appClientService.getAppClients();
-    }
-
-    @GetMapping("refresh_cache")
-    public List<String> refreshAllCache() {
-        return cacheService.refreshAllCache();
     }
 }

@@ -4,7 +4,7 @@
  */
 package id.ezclouds.core.bifrost.app.api.event;
 
-import id.ezclouds.core.bifrost.core.EzAppEvent;
+import id.ezclouds.core.shared.context.EzAppEvent;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
