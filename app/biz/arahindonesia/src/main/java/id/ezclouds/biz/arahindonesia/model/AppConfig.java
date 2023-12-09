@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2023 All Rights Reserved.
  */
-package id.ezclouds.biz.arahindonesia.config;
+package id.ezclouds.biz.arahindonesia.model;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -10,13 +10,12 @@ package id.ezclouds.biz.arahindonesia.config;
  */
 public class AppConfig {
 
-    private String appName = "RJL";
-    private int versionCode = 1;
-    private String versionName = "1.0.0";
-    private String updateUrl = "https://files-rjl.arahindonesia.id/android/RJLApp_1.apk";
-
-    private int sliderAnimationDuration = 200;
-    private int maxTpsNumber = 50;
+    private String appName;
+    private String versionName;
+    private int versionCode;
+    private int sliderAnimationDuration;
+    private int maxTpsNumber;
+    private AppUpdateInfo appUpdateInfo;
 
     public String getAppName() {
         return appName;
@@ -42,14 +41,6 @@ public class AppConfig {
         this.versionName = versionName;
     }
 
-    public String getUpdateUrl() {
-        return updateUrl;
-    }
-
-    public void setUpdateUrl(String updateUrl) {
-        this.updateUrl = updateUrl;
-    }
-
     public int getSliderAnimationDuration() {
         return sliderAnimationDuration;
     }
@@ -64,5 +55,13 @@ public class AppConfig {
 
     public void setMaxTpsNumber(int maxTpsNumber) {
         this.maxTpsNumber = maxTpsNumber;
+    }
+
+    public AppUpdateInfo getAppUpdateInfo() {
+        return appUpdateInfo;
+    }
+
+    public void setAppUpdateInfo(AppUpdateInfo appUpdateInfo) {
+        this.appUpdateInfo = appUpdateInfo;
     }
 }

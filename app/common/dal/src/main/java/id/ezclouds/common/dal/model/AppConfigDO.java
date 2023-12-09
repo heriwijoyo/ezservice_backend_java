@@ -18,6 +18,7 @@ import javax.persistence.Table;
 public class AppConfigDO {
 
     private String id;
+    private String orgId;
     private String appName;
     private int versionCode;
     private String versionName;
@@ -34,6 +35,15 @@ public class AppConfigDO {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    @Column(name = "org_id")
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
     }
 
     @Column(name = "app_name")

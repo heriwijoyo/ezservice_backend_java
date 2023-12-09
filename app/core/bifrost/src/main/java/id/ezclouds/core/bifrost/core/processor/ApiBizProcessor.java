@@ -4,10 +4,11 @@
  */
 package id.ezclouds.core.bifrost.core.processor;
 
-import id.ezclouds.biz.arahindonesia.model.AppSetting;
+import id.ezclouds.biz.arahindonesia.service.AppSettingService;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.core.BaseRequest;
 import id.ezclouds.core.shared.context.EzAppEvent;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,13 +18,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class ApiBizProcessor implements BizProcessor {
 
+    @Autowired
+    private AppSettingService appSettingService;
+
     @Override
     public Object process(EzAppEvent appEvent, BaseRequest request) {
         ApiEvent apiEvent = (ApiEvent) appEvent;
 
         switch (apiEvent) {
             case API_APP_SETTING:
-                return new AppSetting();
+                return appSettingService.getAppSetting();
         }
         return null;
     }

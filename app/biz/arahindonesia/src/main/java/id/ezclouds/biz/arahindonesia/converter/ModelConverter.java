@@ -4,6 +4,10 @@
  */
 package id.ezclouds.biz.arahindonesia.converter;
 
+import id.ezclouds.biz.arahindonesia.constant.AppConstant;
+import id.ezclouds.biz.arahindonesia.model.AppConfig;
+import id.ezclouds.biz.arahindonesia.model.AppUpdateInfo;
+import id.ezclouds.common.dal.model.AppConfigDO;
 import id.ezclouds.common.dal.model.OrganizationDO;
 import id.ezclouds.core.shared.model.Organization;
 
@@ -14,5 +18,24 @@ public class ModelConverter {
 
     public static Organization convert(OrganizationDO organizationDO) {
         return new Organization(organizationDO.getOrgId(), organizationDO.getName());
+    }
+
+    public static AppConfig convert(AppConfigDO appConfigDO) {
+        AppConfig appConfig = new AppConfig();
+        appConfig.setAppName(appConfigDO.getAppName());
+        appConfig.setVersionCode(appConfigDO.getVersionCode());
+        appConfig.setVersionName(appConfigDO.getVersionName());
+        appConfig.setSliderAnimationDuration(appConfigDO.getSliderAnimationDuration());
+        appConfig.setMaxTpsNumber(appConfigDO.getMaxTpsNumber());
+
+        AppUpdateInfo appUpdateInfo = new AppUpdateInfo();
+        appUpdateInfo.setTitle(AppConstant.APP_UPDATE_TITLE);
+        appUpdateInfo.setMessage(AppConstant.APP_UPDATE_MESSAGE.replace(AppConstant.APP_VERSION_NAME_TAG, appConfigDO.getVersionName()));
+        appUpdateInfo.setNeedForceUpdate(appConfigDO.getNeedForceUpdate() == 1);
+        appUpdateInfo.setUpdateUrl(appConfigDO.getUpdateUrl());
+
+        appConfig.setAppUpdateInfo(appUpdateInfo);
+
+        return appConfig;
     }
 }

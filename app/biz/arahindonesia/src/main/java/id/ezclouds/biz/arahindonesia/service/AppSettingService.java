@@ -4,9 +4,13 @@
  */
 package id.ezclouds.biz.arahindonesia.service;
 
-import id.ezclouds.biz.arahindonesia.config.AppConfig;
+import id.ezclouds.biz.arahindonesia.converter.ModelConverter;
+import id.ezclouds.biz.arahindonesia.model.AppConfig;
 import id.ezclouds.biz.arahindonesia.model.AppSetting;
 import id.ezclouds.common.dal.model.AppConfigDO;
+import id.ezclouds.common.util.StringUtil;
+import id.ezclouds.core.shared.context.EzAppContextHolder;
+import id.ezclouds.core.shared.model.Organization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,15 +26,19 @@ public class AppSettingService {
     @Autowired
     private AppConfigService appConfigService;
 
-    public AppSetting getSetting() {
+    public AppSetting getAppSetting() {
+        Organization currentOrg = EzAppContextHolder.getOrganization();
+        AppConfig appConfig = new AppConfig();
+
         List<AppConfigDO> appConfigDOList = appConfigService.getAppConfigs();
-
         for (AppConfigDO appConfigDO : appConfigDOList) {
-
+            if (StringUtil.equalsNotNull(currentOrg.getOrgId(), appConfigDO.getOrgId())) {
+                appConfig = ModelConverter.convert(appConfigDO);
+            }
         }
 
         AppSetting appSetting = new AppSetting();
-        appSetting.setAppConfig(new AppConfig());
+        appSetting.setAppConfig(appConfig);
 
         return appSetting;
     }
