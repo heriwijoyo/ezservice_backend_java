@@ -12,6 +12,6 @@
 
     <groupId>id.ezclouds.common</groupId>
     <artifactId>ezclouds-common-util</artifactId>
-
+    <version>1.0.0</version>
 
 </project>

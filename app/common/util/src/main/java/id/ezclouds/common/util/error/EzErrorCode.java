@@ -8,18 +8,23 @@ package id.ezclouds.common.util.error;
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: ErrorCodeEnum.java, v 0.1 2023‐06‐19 1:56 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public enum ErrorCodeEnum {
+public enum EzErrorCode {
 
-    SYSTEM_ERROR("SYSTEM_ERROR", "Unknown system error"),
+    SYSTEM_ERROR("001", "SYSTEM_ERROR", "Unknown system error"),
 
-    PARAM_ILLEGAL("PARAM_ILLEGAL", "Parameter illegal")
+    PARAM_ILLEGAL("002", "PARAM_ILLEGAL", "Parameter illegal"),
+
+    UNAUTHORIZED("003", "UNAUTHORIZED", "Unauthorized"),
+
     ;
 
     private String code;
+    private String innerCode;
     private String description;
 
-    ErrorCodeEnum(String code, String description) {
+    EzErrorCode(String code, String innerCode, String description) {
         this.code = code;
+        this.innerCode = innerCode;
         this.description = description;
     }
 

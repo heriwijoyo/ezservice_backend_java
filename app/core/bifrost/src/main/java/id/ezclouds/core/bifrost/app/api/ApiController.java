@@ -4,15 +4,20 @@
  */
 package id.ezclouds.core.bifrost.app.api;
 
+import id.ezclouds.biz.arahindonesia.model.AppSetting;
 import id.ezclouds.biz.arahindonesia.service.AppClientService;
 import id.ezclouds.biz.arahindonesia.service.CacheService;
 import id.ezclouds.biz.arahindonesia.service.OrganizationService;
 import id.ezclouds.common.dal.model.AppClient;
 import id.ezclouds.common.dal.model.Organization;
+import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
+import id.ezclouds.core.bifrost.app.api.request.ApiBaseRequest;
+import id.ezclouds.core.bifrost.app.api.result.ApiResult;
+import id.ezclouds.core.bifrost.app.api.result.ErrorResult;
+import id.ezclouds.core.bifrost.core.ControllerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,6 +37,40 @@ public class ApiController {
     @Autowired
     private CacheService cacheService;
 
+    @PostMapping(value = "/appSetting.json", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    public ApiResult<AppSetting> getAppSetting(@RequestBody ApiBaseRequest request) {
+        ApiResult<AppSetting> apiResult = new ApiResult<>();
+        apiResult.setSuccess(true);
+
+        ControllerTemplate
+                .withEvent(ApiEvent.API_APP_SETTING)
+                .withRequest(request)
+                .withHandler(new ControllerTemplate.Handler() {
+                    @Override
+                    public void onResult(Object result) {
+                        apiResult.setData((AppSetting) result);
+                    }
+
+                    @Override
+                    public void onError(ErrorResult errorResult) {
+                        setErrorResult(apiResult, errorResult);
+                    }
+                })
+                .process();
+
+        return apiResult;
+    }
+
+    private void setErrorResult(ApiResult apiResult, ErrorResult errorResult) {
+        apiResult.setSuccess(false);
+        apiResult.setErrorResult(errorResult);
+    }
+
+
+
+
+
+
     @GetMapping("/test")
     public String test() {
         return "API test";
@@ -46,7 +85,6 @@ public class ApiController {
     public List<AppClient> getAppClients() {
         return appClientService.getAppClients();
     }
-
 
     @GetMapping("refresh_cache")
     public List<String> refreshAllCache() {

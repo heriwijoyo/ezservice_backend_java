@@ -12,6 +12,7 @@
 
     <groupId>id.ezclouds.common</groupId>
     <artifactId>ezclouds-common-dal</artifactId>
+    <version>1.0.0</version>
 
     <dependencies>
         <dependency>

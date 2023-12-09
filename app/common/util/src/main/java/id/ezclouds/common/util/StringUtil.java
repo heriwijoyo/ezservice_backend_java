@@ -4,9 +4,12 @@
  */
 package id.ezclouds.common.util;
 
+import java.util.Objects;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: StringUtil.java, v 0.1 2022‐11‐04 7:58 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
+ * @version $Id: StringUtil.java, v 0.1 2022‐11‐04 7:58 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ */
 public class StringUtil {
 
     public static final String EMPTY = "";
@@ -41,5 +44,12 @@ public class StringUtil {
 
     public static boolean equals(String str1, String str2) {
         return str1 == null ? str2 == null : str1.equals(str2);
+    }
+
+    public static boolean equalsNotNull(String str1, String str2) {
+        if (str1 == null || str2 == null) {
+            return false;
+        }
+        return str1.equals(str2);
     }
 }
