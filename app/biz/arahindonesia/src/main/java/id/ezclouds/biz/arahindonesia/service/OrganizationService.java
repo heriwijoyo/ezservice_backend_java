@@ -8,14 +8,14 @@ import id.ezclouds.common.dal.OrganizationRepository;
 import id.ezclouds.common.dal.model.Organization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: OrganizationService.java, v 0.1 2023‐12‐04 3:06 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
-@Component
+@Service
 public class OrganizationService {
 
     @Autowired
