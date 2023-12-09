@@ -31,7 +31,9 @@ public class AssertUtil {
             errorMessage = "";
 
             for (String errMessage : message) {
-                errorMessage += errMessage;
+                if (errMessage != null) {
+                    errorMessage += errMessage;
+                }
             }
         }
         return errorMessage;

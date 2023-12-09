@@ -24,7 +24,6 @@ public class ControllerTemplate {
 
     private EzAppEvent appEvent;
     private BaseRequest baseRequest;
-    private Handler handler;
 
     @Autowired
     private PreBizProcessor preBizProcessor;
@@ -41,7 +40,6 @@ public class ControllerTemplate {
     }
 
     public void process(Handler handler) {
-        this.handler = handler;
 
         EzAppContextHolder.init(appEvent);
 
@@ -56,17 +54,9 @@ public class ControllerTemplate {
             processResult = bizProcessorFactory.getBizProcessor(appEvent).process(appEvent, baseRequest);
 
         } catch (EzErrorException ezError) {
-            System.out.println("EzErrorException: " + ezError.getErrorMessage());
             errorResult = composeErrorResult(ezError);
-        } catch (ClassCastException exception) {
-            System.out.println("ClassCastException: " + exception.getMessage());
-            errorResult = composeErrorResult(new EzErrorException(EzErrorCode.SYSTEM_ERROR, exception.getMessage()));
-        } catch (RuntimeException exception) {
-            System.out.println("RuntimeException: " + exception.getMessage());
-            errorResult = composeErrorResult(new EzErrorException(EzErrorCode.SYSTEM_ERROR, exception.getMessage()));
         } catch (Exception exception) {
-            System.out.println("Exception: " + exception.getMessage());
-            errorResult = composeErrorResult(new EzErrorException(EzErrorCode.SYSTEM_ERROR, exception.getMessage()));
+            errorResult = composeErrorResult(new EzErrorException(EzErrorCode.SYSTEM_ERROR, "System unknown exception: ", exception.getMessage()));
         } finally {
             //do logging
             //do rollback process if any
@@ -74,10 +64,9 @@ public class ControllerTemplate {
 
             if (errorResult != null) {
                 handler.onError(errorResult);
-                return;
+            } else {
+                handler.onResult(processResult);
             }
-
-            handler.onResult(processResult);
         }
     }
 

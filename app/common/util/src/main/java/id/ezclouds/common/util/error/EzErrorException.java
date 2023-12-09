@@ -17,9 +17,9 @@ public class EzErrorException extends RuntimeException {
         this(ezErrorCode, null);
     }
 
-    public EzErrorException(EzErrorCode ezErrorCode, String errorMessage) {
+    public EzErrorException(EzErrorCode ezErrorCode, String... errorMessage) {
         this.ezErrorCode = ezErrorCode;
-        this.errorMessage = errorMessage;
+        this.errorMessage = composeErrorMessage(errorMessage);
     }
 
     public EzErrorCode getEzErrorCode() {
@@ -27,6 +27,20 @@ public class EzErrorException extends RuntimeException {
     }
 
     public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    private static String composeErrorMessage(String... message) {
+        String errorMessage = null;
+        if (message != null) {
+            errorMessage = "";
+
+            for (String errMessage : message) {
+                if (errMessage != null) {
+                    errorMessage += errMessage;
+                }
+            }
+        }
         return errorMessage;
     }
 }
