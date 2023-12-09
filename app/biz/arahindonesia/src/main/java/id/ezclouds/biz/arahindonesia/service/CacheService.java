@@ -29,6 +29,9 @@ public class CacheService {
     @Autowired
     private AppClientService appClientService;
 
+    @Autowired
+    private AppConfigService appConfigService;
+
     @EventListener(ApplicationReadyEvent.class)
     public List<String> refreshAllCache() {
         List<String> cacheNames = new ArrayList<>();
@@ -41,6 +44,7 @@ public class CacheService {
 
         organizationService.getOrganizations();
         appClientService.getAppClients();
+        appConfigService.getAppConfigs();
 
         return cacheNames;
     }

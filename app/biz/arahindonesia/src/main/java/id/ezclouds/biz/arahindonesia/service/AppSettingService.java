@@ -7,7 +7,6 @@ package id.ezclouds.biz.arahindonesia.service;
 import id.ezclouds.biz.arahindonesia.model.AppConfig;
 import id.ezclouds.biz.arahindonesia.model.AppSetting;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
-import id.ezclouds.core.shared.model.Organization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +21,13 @@ public class AppSettingService {
     private AppConfigService appConfigService;
 
     public AppSetting getAppSetting() {
-        Organization currentOrg = EzAppContextHolder.getOrganization();
-        AppConfig appConfig = appConfigService.getAppConfigByOrgId(currentOrg.getOrgId());
+        String orgId = EzAppContextHolder.getOrganization().getOrgId();
+        AppConfig appConfig = appConfigService
+                .getAppConfigs()
+                .stream()
+                .filter(aConfig -> orgId.equals(aConfig.getOrgId()))
+                .findFirst()
+                .get();
 
         AppSetting appSetting = new AppSetting();
         appSetting.setAppConfig(appConfig);

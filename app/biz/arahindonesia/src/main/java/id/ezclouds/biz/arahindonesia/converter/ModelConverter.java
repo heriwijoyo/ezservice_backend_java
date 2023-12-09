@@ -43,6 +43,7 @@ public class ModelConverter {
             return null;
         }
         AppConfig appConfig = new AppConfig();
+        appConfig.setOrgId(appConfigDO.getOrgId());
         appConfig.setAppName(appConfigDO.getAppName());
         appConfig.setVersionCode(appConfigDO.getVersionCode());
         appConfig.setVersionName(appConfigDO.getVersionName());

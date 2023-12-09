@@ -10,12 +10,21 @@ package id.ezclouds.biz.arahindonesia.model;
  */
 public class AppConfig {
 
+    private String orgId;
     private String appName;
     private String versionName;
     private int versionCode;
     private int sliderAnimationDuration;
     private int maxTpsNumber;
     private AppUpdateInfo appUpdateInfo;
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
 
     public String getAppName() {
         return appName;
