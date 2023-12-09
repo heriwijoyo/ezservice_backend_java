@@ -10,11 +10,13 @@ package id.ezclouds.common.util.error;
  */
 public enum EzErrorCode {
 
-    SYSTEM_ERROR("001", "SYSTEM_ERROR", "Unknown system error"),
+    SYSTEM_ERROR("E001", "SYSTEM_ERROR", "Unknown system error"),
 
-    PARAM_ILLEGAL("002", "PARAM_ILLEGAL", "Parameter illegal"),
+    PARAM_ILLEGAL("E002", "PARAM_ILLEGAL", "Parameter illegal"),
 
-    UNAUTHORIZED("003", "UNAUTHORIZED", "Unauthorized"),
+    UNAUTHORIZED("E003", "UNAUTHORIZED", "Unauthorized"),
+
+    SESSION_EXPIRED("E003", "SESSION_EXPIRED", "User session expired"),
 
     ;
 

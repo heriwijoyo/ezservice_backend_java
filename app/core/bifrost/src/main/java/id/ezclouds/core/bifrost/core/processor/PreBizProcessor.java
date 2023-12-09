@@ -11,6 +11,7 @@ import id.ezclouds.common.dal.model.Organization;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.error.EzErrorCode;
+import id.ezclouds.common.util.error.EzErrorException;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiBaseRequest;
 import id.ezclouds.core.bifrost.app.api.request.RequestAppClient;
@@ -18,6 +19,7 @@ import id.ezclouds.core.bifrost.core.BaseRequest;
 import id.ezclouds.core.bifrost.core.EzAppContextHolder;
 import id.ezclouds.core.bifrost.core.EzAppEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -25,6 +27,7 @@ import java.util.List;
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: PreBizProcessor.java, v 0.1 2023‐12‐09 3:22 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
+@Component
 public class PreBizProcessor {
 
     @Autowired
@@ -33,7 +36,7 @@ public class PreBizProcessor {
     @Autowired
     private AppClientService appClientService;
 
-    public void process(EzAppEvent event, BaseRequest request) {
+    public void process(EzAppEvent event, BaseRequest request) throws EzErrorException, ClassCastException {
 
         if (event instanceof ApiEvent) {
             AssertUtil.isTrue((request instanceof ApiBaseRequest), EzErrorCode.PARAM_ILLEGAL, "Unsupported request type");

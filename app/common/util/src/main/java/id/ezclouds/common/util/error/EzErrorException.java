@@ -13,6 +13,10 @@ public class EzErrorException extends RuntimeException {
     private EzErrorCode ezErrorCode;
     private String errorMessage;
 
+    public EzErrorException(EzErrorCode ezErrorCode) {
+        this(ezErrorCode, null);
+    }
+
     public EzErrorException(EzErrorCode ezErrorCode, String errorMessage) {
         this.ezErrorCode = ezErrorCode;
         this.errorMessage = errorMessage;

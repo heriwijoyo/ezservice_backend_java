@@ -13,13 +13,13 @@ import id.ezclouds.common.util.error.EzErrorException;
  */
 public class AssertUtil {
 
-    public static void notNull(Object object, EzErrorCode ezErrorCode, String... message) {
+    public static void notNull(Object object, EzErrorCode ezErrorCode, String... message) throws EzErrorException {
         if (object == null) {
             throw new EzErrorException(ezErrorCode, composeErrorMessage(message));
         }
     }
 
-    public static void isTrue(boolean state, EzErrorCode ezErrorCode, String... message) {
+    public static void isTrue(boolean state, EzErrorCode ezErrorCode, String... message) throws EzErrorException {
         if (!state) {
             throw new EzErrorException(ezErrorCode, composeErrorMessage(message));
         }

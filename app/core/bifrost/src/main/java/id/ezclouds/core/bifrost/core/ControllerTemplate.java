@@ -7,76 +7,70 @@ package id.ezclouds.core.bifrost.core;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.error.EzErrorCode;
 import id.ezclouds.common.util.error.EzErrorException;
-import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.result.ErrorResult;
-import id.ezclouds.core.bifrost.core.processor.ApiBizProcessor;
-import id.ezclouds.core.bifrost.core.processor.BizProcessor;
+import id.ezclouds.core.bifrost.core.processor.BizProcessorFactory;
 import id.ezclouds.core.bifrost.core.processor.PreBizProcessor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: ControllerTemplate.java, v 0.1 2023‐12‐09 1:01 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
+@Component
+@Scope(value = "prototype")
 public class ControllerTemplate {
 
     private EzAppEvent appEvent;
     private BaseRequest baseRequest;
     private Handler handler;
 
+    @Autowired
     private PreBizProcessor preBizProcessor;
-    private BizProcessor bizProcessor;
 
-    private ControllerTemplate(EzAppEvent appEvent) {
+    @Autowired
+    private BizProcessorFactory bizProcessorFactory;
+
+    public void setAppEvent(EzAppEvent appEvent) {
         this.appEvent = appEvent;
-
-        preBizProcessor = new PreBizProcessor();
-        if (appEvent instanceof ApiEvent) {
-            bizProcessor = new ApiBizProcessor();
-        }
     }
 
-    private void setBaseRequest(BaseRequest baseRequest) {
+    public void setBaseRequest(BaseRequest baseRequest) {
         this.baseRequest = baseRequest;
     }
 
-    private void setHandler(Handler handler) {
+    public void process(Handler handler) {
         this.handler = handler;
-    }
 
-    public static ControllerTemplate withEvent(ApiEvent apiEvent) {
-        return new ControllerTemplate(apiEvent);
-    }
-
-    public ControllerTemplate withRequest(BaseRequest baseRequest) {
-        this.baseRequest = baseRequest;
-        return this;
-    }
-
-    public ControllerTemplate withHandler(Handler handler) {
-        this.handler = handler;
-        return this;
-    }
-
-    public void process() {
         EzAppContextHolder.init(appEvent);
 
         Object processResult = null;
         ErrorResult errorResult = null;
 
         try {
-            AssertUtil.notNull(handler, EzErrorCode.SYSTEM_ERROR, "Undefined ControllerTemplate.Handler");
+            AssertUtil.notNull(appEvent, EzErrorCode.SYSTEM_ERROR, "Undefined appEvent");
 
             preBizProcessor.process(appEvent, baseRequest);
 
-            processResult = bizProcessor.process(appEvent, baseRequest);
+            processResult = bizProcessorFactory.getBizProcessor(appEvent).process(appEvent, baseRequest);
 
         } catch (EzErrorException ezError) {
+            System.out.println("EzErrorException: " + ezError.getErrorMessage());
             errorResult = composeErrorResult(ezError);
+        } catch (ClassCastException exception) {
+            System.out.println("ClassCastException: " + exception.getMessage());
+            errorResult = composeErrorResult(new EzErrorException(EzErrorCode.SYSTEM_ERROR, exception.getMessage()));
+        } catch (RuntimeException exception) {
+            System.out.println("RuntimeException: " + exception.getMessage());
+            errorResult = composeErrorResult(new EzErrorException(EzErrorCode.SYSTEM_ERROR, exception.getMessage()));
         } catch (Exception exception) {
-
+            System.out.println("Exception: " + exception.getMessage());
+            errorResult = composeErrorResult(new EzErrorException(EzErrorCode.SYSTEM_ERROR, exception.getMessage()));
         } finally {
             //do logging
             //do rollback process if any
+
 
             if (errorResult != null) {
                 handler.onError(errorResult);

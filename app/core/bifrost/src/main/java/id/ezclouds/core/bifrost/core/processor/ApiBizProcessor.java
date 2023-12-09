@@ -8,11 +8,13 @@ import id.ezclouds.biz.arahindonesia.model.AppSetting;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.core.BaseRequest;
 import id.ezclouds.core.bifrost.core.EzAppEvent;
+import org.springframework.stereotype.Service;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: ApiBizProcessor.java, v 0.1 2023‐12‐09 3:15 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
+@Service
 public class ApiBizProcessor implements BizProcessor {
 
     @Override
