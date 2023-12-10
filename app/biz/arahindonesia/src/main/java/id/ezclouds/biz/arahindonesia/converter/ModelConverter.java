@@ -84,6 +84,7 @@ public class ModelConverter {
         simpleNews.setOrgId(newsDO.getOrgId());
         simpleNews.setTitle(newsDO.getTitle());
         simpleNews.setThumbnail(newsDO.getThumbnail());
+        simpleNews.setDescription(newsDO.getDescription());
         return simpleNews;
     }
 

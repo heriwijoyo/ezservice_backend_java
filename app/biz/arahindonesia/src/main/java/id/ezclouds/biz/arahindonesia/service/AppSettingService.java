@@ -55,6 +55,7 @@ public class AppSettingService {
 
     private HomeData composeHomeData(String orgId) {
         HomeData homeData = new HomeData();
+        homeData.setPemiluDeadline("2024-02-14 00:00:00");
         homeData.setHighlightBanners(fetchHomeImageSlide(orgId));
         homeData.setHighlightNews(fetchSimpleNews(orgId));
         homeData.setHomePosters(fetchHomePoster(orgId));

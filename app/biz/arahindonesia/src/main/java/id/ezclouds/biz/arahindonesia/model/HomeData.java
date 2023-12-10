@@ -6,6 +6,7 @@ package id.ezclouds.biz.arahindonesia.model;
 
 import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,6 +19,16 @@ public class HomeData {
     private List<SimpleNews> highlightNews;
     private List<ImageSlide> homePosters;
     private List<VideoSection> videoSections;
+    private String pemiluDeadline;
+    private List<String> communities = new ArrayList<>();
+
+    public List<String> getCommunities() {
+        return communities;
+    }
+
+    public void setCommunities(List<String> communities) {
+        this.communities = communities;
+    }
 
     public List<ImageSlide> getHighlightBanners() {
         return highlightBanners;
@@ -49,5 +60,13 @@ public class HomeData {
 
     public void setVideoSections(List<VideoSection> videoSections) {
         this.videoSections = videoSections;
+    }
+
+    public String getPemiluDeadline() {
+        return pemiluDeadline;
+    }
+
+    public void setPemiluDeadline(String pemiluDeadline) {
+        this.pemiluDeadline = pemiluDeadline;
     }
 }
