@@ -4,9 +4,12 @@
  */
 package id.ezclouds.core.bifrost.core.processor;
 
+import id.ezclouds.biz.arahindonesia.model.news.ListNews;
 import id.ezclouds.biz.arahindonesia.service.AppSettingService;
+import id.ezclouds.biz.arahindonesia.service.NewsService;
 import id.ezclouds.biz.arahindonesia.service.api.CandidateProfileService;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
+import id.ezclouds.core.bifrost.app.api.result.ListResult;
 import id.ezclouds.core.bifrost.core.BaseRequest;
 import id.ezclouds.core.shared.context.EzAppEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,9 @@ public class ApiBizProcessor implements BizProcessor {
     @Autowired
     private CandidateProfileService candidateProfileService;
 
+    @Autowired
+    private NewsService newsService;
+
     @Override
     public Object process(EzAppEvent appEvent, BaseRequest request) {
         ApiEvent apiEvent = (ApiEvent) appEvent;
@@ -35,6 +41,11 @@ public class ApiBizProcessor implements BizProcessor {
 
             case CANDIDATE_PROFILE:
                 return candidateProfileService.getCandidateProfile();
+
+            case NEWS:
+                ListResult<ListNews> listResult = new ListResult<>();
+                listResult.setItems(newsService.getActiveListNews());
+                return listResult;
         }
         return null;
     }

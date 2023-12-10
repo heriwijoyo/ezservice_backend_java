@@ -5,12 +5,14 @@
 package id.ezclouds.core.bifrost.app.api;
 
 import id.ezclouds.biz.arahindonesia.model.AppSetting;
+import id.ezclouds.biz.arahindonesia.model.news.ListNews;
 import id.ezclouds.biz.arahindonesia.model.profile.CandidateProfile;
 import id.ezclouds.common.util.error.EzErrorCode;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiBaseRequest;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
 import id.ezclouds.core.bifrost.app.api.result.ErrorResult;
+import id.ezclouds.core.bifrost.app.api.result.ListResult;
 import id.ezclouds.core.bifrost.core.ControllerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -70,6 +73,31 @@ public class ApiController {
                     profile = (CandidateProfile) result;
                 }
                 apiResult.setData(profile);
+            }
+
+            @Override
+            public void onError(ErrorResult errorResult) {
+                setErrorResult(apiResult, errorResult, httpServletResponse);
+            }
+        });
+
+        return apiResult;
+    }
+
+    @PostMapping(value = "/news.json")
+    public ApiResult<List<ListNews>> getNews(@RequestBody ApiBaseRequest request, HttpServletResponse httpServletResponse) {
+        ApiResult<List<ListNews>> apiResult = new ApiResult<>();
+        apiResult.setSuccess(true);
+
+        controllerTemplate.setAppEvent(ApiEvent.NEWS);
+        controllerTemplate.setBaseRequest(request);
+        controllerTemplate.process(new ControllerTemplate.Handler() {
+            @Override
+            public void onResult(Object result) {
+                if (result instanceof ListResult) {
+                    ListResult<ListNews> listResult = (ListResult) result;
+                    apiResult.setData(listResult.getItems());
+                }
             }
 
             @Override

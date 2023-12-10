@@ -5,8 +5,10 @@
 package id.ezclouds.biz.arahindonesia.service;
 
 import id.ezclouds.biz.arahindonesia.converter.ModelConverter;
+import id.ezclouds.biz.arahindonesia.model.news.ListNews;
 import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
 import id.ezclouds.common.dal.NewsRepository;
+import id.ezclouds.core.shared.context.EzAppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,8 @@ import java.util.stream.Collectors;
 @Service
 public class NewsService {
 
+    private static final int NEWS_LIMIT = 10;
+
     @Autowired
     private NewsRepository newsRepository;
 
@@ -30,6 +34,15 @@ public class NewsService {
                 .findHighlightedNews()
                 .stream()
                 .map(ModelConverter::convert)
+                .collect(Collectors.toList());
+    }
+
+    public List<ListNews> getActiveListNews() {
+        String orgId = EzAppContextHolder.getOrganization().getOrgId();
+        return newsRepository
+                .findActiveNews(orgId, NEWS_LIMIT)
+                .stream()
+                .map(ModelConverter::convertToListNews)
                 .collect(Collectors.toList());
     }
 }

@@ -6,6 +6,7 @@ package id.ezclouds.biz.arahindonesia.converter;
 
 import id.ezclouds.biz.arahindonesia.constant.AppConstant;
 import id.ezclouds.biz.arahindonesia.model.*;
+import id.ezclouds.biz.arahindonesia.model.news.ListNews;
 import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
 import id.ezclouds.biz.arahindonesia.model.profile.CandidateBio;
 import id.ezclouds.biz.arahindonesia.model.profile.CandidateProfileItem;
@@ -84,6 +85,19 @@ public class ModelConverter {
         simpleNews.setTitle(newsDO.getTitle());
         simpleNews.setThumbnail(newsDO.getThumbnail());
         return simpleNews;
+    }
+
+    public static ListNews convertToListNews(NewsDO newsDO) {
+        if (newsDO == null) {
+            return null;
+        }
+        ListNews listNews = new ListNews();
+        listNews.setNewsId(newsDO.getNewsId());
+        listNews.setOrgId(newsDO.getOrgId());
+        listNews.setTitle(newsDO.getTitle());
+        listNews.setThumbnail(newsDO.getThumbnail());
+        listNews.setDescription(newsDO.getDescription());
+        return listNews;
     }
 
     public static VideoCard convert(VideoCardDO cardDO) {
