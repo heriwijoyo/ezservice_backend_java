@@ -8,7 +8,7 @@ import id.ezclouds.biz.arahindonesia.model.ImageSlide;
 import id.ezclouds.biz.arahindonesia.model.profile.CandidateBio;
 import id.ezclouds.biz.arahindonesia.model.profile.CandidateProfile;
 import id.ezclouds.biz.arahindonesia.model.profile.CandidateProfileItem;
-import id.ezclouds.biz.arahindonesia.service.ImageSlideService;
+import id.ezclouds.biz.arahindonesia.service.data.ImageSlideService;
 import id.ezclouds.biz.arahindonesia.service.data.CandidateBioService;
 import id.ezclouds.biz.arahindonesia.service.data.CandidateProfileItemService;
 import id.ezclouds.core.shared.context.EzAppContextHolder;

@@ -5,8 +5,8 @@
 package id.ezclouds.core.bifrost.core.processor;
 
 import id.ezclouds.biz.arahindonesia.model.AppClient;
-import id.ezclouds.biz.arahindonesia.service.AppClientService;
-import id.ezclouds.biz.arahindonesia.service.OrganizationService;
+import id.ezclouds.biz.arahindonesia.service.data.AppClientService;
+import id.ezclouds.biz.arahindonesia.service.data.OrganizationService;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.error.EzErrorCode;
 import id.ezclouds.common.util.error.EzErrorException;

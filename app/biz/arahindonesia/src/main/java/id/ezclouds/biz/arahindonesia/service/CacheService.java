@@ -4,6 +4,10 @@
  */
 package id.ezclouds.biz.arahindonesia.service;
 
+import id.ezclouds.biz.arahindonesia.service.data.AppClientService;
+import id.ezclouds.biz.arahindonesia.service.data.AppConfigService;
+import id.ezclouds.biz.arahindonesia.service.data.ImageSlideService;
+import id.ezclouds.biz.arahindonesia.service.data.OrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.cache.CacheManager;
