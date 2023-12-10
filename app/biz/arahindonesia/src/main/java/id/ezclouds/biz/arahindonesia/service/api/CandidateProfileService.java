@@ -4,8 +4,10 @@
  */
 package id.ezclouds.biz.arahindonesia.service.api;
 
+import id.ezclouds.biz.arahindonesia.model.ImageSlide;
 import id.ezclouds.biz.arahindonesia.model.profile.CandidateProfile;
 import id.ezclouds.biz.arahindonesia.model.profile.CandidateProfileItem;
+import id.ezclouds.biz.arahindonesia.service.ImageSlideService;
 import id.ezclouds.biz.arahindonesia.service.data.CandidateProfileItemService;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ public class CandidateProfileService {
 
     @Autowired
     private CandidateProfileItemService candidateProfileItemService;
+
+    @Autowired
+    private ImageSlideService imageSlideService;
 
     public CandidateProfile getCandidateProfile() {
         String orgId = EzAppContextHolder.getOrganization().getOrgId();
@@ -58,5 +63,12 @@ public class CandidateProfileService {
                         profile.setMission(candidateProfileItem.getValue());
                     }
                 });
+
+        List<ImageSlide> portfolioImages = imageSlideService
+                .getPortfolioImage()
+                .stream()
+                .filter(imageSlide -> orgId.equals(imageSlide.getOrgId()))
+                .collect(Collectors.toList());
+        profile.setPortfolios(portfolioImages);
     }
 }

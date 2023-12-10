@@ -42,4 +42,13 @@ public class ImageSlideService {
                 .map(ModelConverter::convert)
                 .collect(Collectors.toList());
     }
+
+    @Cacheable("porfolio_images")
+    public List<ImageSlide> getPortfolioImage() {
+        return imageSlideRepository
+                .findActiveSectionImageSlide(AppConstant.IMAGE_SLIDE_PORTFOLIO)
+                .stream()
+                .map(ModelConverter::convert)
+                .collect(Collectors.toList());
+    }
 }

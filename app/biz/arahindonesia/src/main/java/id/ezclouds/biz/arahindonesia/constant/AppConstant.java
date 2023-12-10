@@ -16,6 +16,7 @@ public class AppConstant {
 
     public static final String IMAGE_SLIDE_SECTION_HOME = "HOME_BANNER";
     public static final String IMAGE_SLIDE_HOME_POSTER = "HOME_POSTER";
+    public static final String IMAGE_SLIDE_PORTFOLIO = "PORTFOLIO";
 
     public static final int HIGHLIGHTED_NEWS_LIMIT = 3;
 
