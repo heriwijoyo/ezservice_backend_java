@@ -6,6 +6,7 @@ package id.ezclouds.biz.arahindonesia.converter;
 
 import id.ezclouds.biz.arahindonesia.constant.AppConstant;
 import id.ezclouds.biz.arahindonesia.model.*;
+import id.ezclouds.biz.arahindonesia.model.profile.CandidateProfileItem;
 import id.ezclouds.common.dal.model.*;
 import id.ezclouds.core.shared.model.Organization;
 
@@ -95,5 +96,16 @@ public class ModelConverter {
         videoCard.setTargetUrl(cardDO.getTargetUrl());
         videoCard.setThumbnail(cardDO.getThumbnail());
         return videoCard;
+    }
+
+    public static CandidateProfileItem convert(CandidateProfileItemDO itemDO) {
+        if (itemDO == null) {
+            return null;
+        }
+        CandidateProfileItem item = new CandidateProfileItem();
+        item.setOrgId(itemDO.getOrgId());
+        item.setSection(itemDO.getSection());
+        item.setValue(itemDO.getValue());
+        return item;
     }
 }
