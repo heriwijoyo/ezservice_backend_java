@@ -39,6 +39,8 @@ public class CacheService {
     private VideoCardService videoCardService;
     @Autowired
     private CandidateBioService candidateBioService;
+    @Autowired
+    private AppProfileService appProfileService;
 
     @EventListener(ApplicationReadyEvent.class)
     public List<String> refreshAllCache() {
@@ -62,6 +64,7 @@ public class CacheService {
         candidateProfileItemService.getCandidateProfileItems();
         videoCardService.getAllVideoCards();
         candidateBioService.getActiveCandidateBios();
+        appProfileService.getAllAppProfile();
 
         return cacheNames;
     }
