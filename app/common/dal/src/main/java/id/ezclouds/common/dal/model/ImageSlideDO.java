@@ -24,7 +24,8 @@ public class ImageSlideDO {
     private String imageUrl;
     private String targetType;
     private String targetUrl;
-    private int status;
+    private Integer order;
+    private Integer status;
 
     @Id
     @Column(name = "slide_id")
@@ -90,12 +91,21 @@ public class ImageSlideDO {
         this.targetUrl = targetUrl;
     }
 
+    @Column(name = "order")
+    public Integer getOrder() {
+        return order;
+    }
+
+    public void setOrder(Integer order) {
+        this.order = order;
+    }
+
     @Column(name = "status")
-    public int getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 }

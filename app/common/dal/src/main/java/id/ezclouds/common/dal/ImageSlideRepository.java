@@ -17,6 +17,6 @@ import java.util.List;
  */
 public interface ImageSlideRepository extends JpaRepository<ImageSlideDO, String> {
 
-    @Query("SELECT is FROM app_image_slides WHERE is.section = :section AND is.status = 1 ORDER BY is.order ASC")
+    @Query("SELECT ims FROM ImageSlideDO ims WHERE ims.section = :section AND ims.status = 1 ORDER BY ims.order")
     List<ImageSlideDO> findActiveSectionImageSlide(@Param("section") String section);
 }

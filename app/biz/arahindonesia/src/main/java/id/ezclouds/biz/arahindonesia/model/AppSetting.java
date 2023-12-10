@@ -11,6 +11,7 @@ package id.ezclouds.biz.arahindonesia.model;
 public class AppSetting {
 
     private AppConfig appConfig;
+    private HomeData homeData;
 
     public AppConfig getAppConfig() {
         return appConfig;
@@ -18,5 +19,13 @@ public class AppSetting {
 
     public void setAppConfig(AppConfig appConfig) {
         this.appConfig = appConfig;
+    }
+
+    public HomeData getHomeData() {
+        return homeData;
+    }
+
+    public void setHomeData(HomeData homeData) {
+        this.homeData = homeData;
     }
 }

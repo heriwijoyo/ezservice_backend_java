@@ -6,9 +6,14 @@ package id.ezclouds.biz.arahindonesia.service;
 
 import id.ezclouds.biz.arahindonesia.model.AppConfig;
 import id.ezclouds.biz.arahindonesia.model.AppSetting;
+import id.ezclouds.biz.arahindonesia.model.HomeData;
+import id.ezclouds.biz.arahindonesia.model.ImageSlide;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -19,6 +24,9 @@ public class AppSettingService {
 
     @Autowired
     private AppConfigService appConfigService;
+
+    @Autowired
+    private ImageSlideService imageSlideService;
 
     public AppSetting getAppSetting() {
         String orgId = EzAppContextHolder.getOrganization().getOrgId();
@@ -31,7 +39,23 @@ public class AppSettingService {
 
         AppSetting appSetting = new AppSetting();
         appSetting.setAppConfig(appConfig);
+        appSetting.setHomeData(composeHomeData(orgId));
 
         return appSetting;
+    }
+
+    private HomeData composeHomeData(String orgId) {
+        HomeData homeData = new HomeData();
+        homeData.setHighlightBanners(fetchHomeImageSlide(orgId));
+
+        return homeData;
+    }
+
+    private List<ImageSlide> fetchHomeImageSlide(String orgId) {
+        return imageSlideService
+                .getImageSlideHome()
+                .stream()
+                .filter(imageSlide -> orgId.equals(imageSlide.getOrgId()))
+                .collect(Collectors.toList());
     }
 }
