@@ -6,6 +6,7 @@ package id.ezclouds.common.dal.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
@@ -16,6 +17,7 @@ import javax.persistence.Table;
 @Table(name = "app_video_card")
 public class VideoCardDO {
 
+    @Id
     @Column(name = "id")
     private String id;
 

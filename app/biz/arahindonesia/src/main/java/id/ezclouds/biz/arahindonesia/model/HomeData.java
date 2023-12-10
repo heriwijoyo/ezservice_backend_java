@@ -15,6 +15,7 @@ public class HomeData {
     private List<ImageSlide> highlightBanners;
     private List<SimpleNews> highlightNews;
     private List<ImageSlide> homePosters;
+    private List<VideoSection> videoSections;
 
     public List<ImageSlide> getHighlightBanners() {
         return highlightBanners;
@@ -38,5 +39,13 @@ public class HomeData {
 
     public void setHomePosters(List<ImageSlide> homePosters) {
         this.homePosters = homePosters;
+    }
+
+    public List<VideoSection> getVideoSections() {
+        return videoSections;
+    }
+
+    public void setVideoSections(List<VideoSection> videoSections) {
+        this.videoSections = videoSections;
     }
 }
