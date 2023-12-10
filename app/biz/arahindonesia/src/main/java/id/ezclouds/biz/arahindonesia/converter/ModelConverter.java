@@ -5,14 +5,8 @@
 package id.ezclouds.biz.arahindonesia.converter;
 
 import id.ezclouds.biz.arahindonesia.constant.AppConstant;
-import id.ezclouds.biz.arahindonesia.model.AppClient;
-import id.ezclouds.biz.arahindonesia.model.AppConfig;
-import id.ezclouds.biz.arahindonesia.model.AppUpdateInfo;
-import id.ezclouds.biz.arahindonesia.model.ImageSlide;
-import id.ezclouds.common.dal.model.AppClientDO;
-import id.ezclouds.common.dal.model.AppConfigDO;
-import id.ezclouds.common.dal.model.ImageSlideDO;
-import id.ezclouds.common.dal.model.OrganizationDO;
+import id.ezclouds.biz.arahindonesia.model.*;
+import id.ezclouds.common.dal.model.*;
 import id.ezclouds.core.shared.model.Organization;
 
 /**
@@ -75,5 +69,17 @@ public class ModelConverter {
         imageSlide.setTargetUrl(slideDO.getTargetUrl());
 
         return imageSlide;
+    }
+
+    public static SimpleNews convert(NewsDO newsDO) {
+        if (newsDO == null) {
+            return null;
+        }
+        SimpleNews simpleNews = new SimpleNews();
+        simpleNews.setNewsId(newsDO.getNewsId());
+        simpleNews.setOrgId(newsDO.getOrgId());
+        simpleNews.setTitle(newsDO.getTitle());
+        simpleNews.setThumbnail(newsDO.getThumbnail());
+        return simpleNews;
     }
 }

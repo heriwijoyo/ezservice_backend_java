@@ -4,10 +4,8 @@
  */
 package id.ezclouds.biz.arahindonesia.service;
 
-import id.ezclouds.biz.arahindonesia.model.AppConfig;
-import id.ezclouds.biz.arahindonesia.model.AppSetting;
-import id.ezclouds.biz.arahindonesia.model.HomeData;
-import id.ezclouds.biz.arahindonesia.model.ImageSlide;
+import id.ezclouds.biz.arahindonesia.constant.AppConstant;
+import id.ezclouds.biz.arahindonesia.model.*;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +26,9 @@ public class AppSettingService {
     @Autowired
     private ImageSlideService imageSlideService;
 
+    @Autowired
+    private NewsService newsService;
+
     public AppSetting getAppSetting() {
         String orgId = EzAppContextHolder.getOrganization().getOrgId();
         AppConfig appConfig = appConfigService
@@ -47,6 +48,7 @@ public class AppSettingService {
     private HomeData composeHomeData(String orgId) {
         HomeData homeData = new HomeData();
         homeData.setHighlightBanners(fetchHomeImageSlide(orgId));
+        homeData.setHighlightNews(fetchSimpleNews(orgId));
 
         return homeData;
     }
@@ -56,6 +58,15 @@ public class AppSettingService {
                 .getImageSlideHome()
                 .stream()
                 .filter(imageSlide -> orgId.equals(imageSlide.getOrgId()))
+                .collect(Collectors.toList());
+    }
+
+    private List<SimpleNews> fetchSimpleNews(String orgId) {
+        return newsService
+                .getHighlightedNews()
+                .stream()
+                .filter(simpleNews -> orgId.equals(simpleNews.getOrgId()))
+                .limit(AppConstant.HIGHLIGHTED_NEWS_LIMIT)
                 .collect(Collectors.toList());
     }
 }

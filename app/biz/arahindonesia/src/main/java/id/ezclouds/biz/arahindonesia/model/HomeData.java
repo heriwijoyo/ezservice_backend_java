@@ -13,6 +13,7 @@ import java.util.List;
 public class HomeData {
 
     private List<ImageSlide> highlightBanners;
+    private List<SimpleNews> highlightNews;
 
     public List<ImageSlide> getHighlightBanners() {
         return highlightBanners;
@@ -20,5 +21,13 @@ public class HomeData {
 
     public void setHighlightBanners(List<ImageSlide> highlightBanners) {
         this.highlightBanners = highlightBanners;
+    }
+
+    public List<SimpleNews> getHighlightNews() {
+        return highlightNews;
+    }
+
+    public void setHighlightNews(List<SimpleNews> highlightNews) {
+        this.highlightNews = highlightNews;
     }
 }
