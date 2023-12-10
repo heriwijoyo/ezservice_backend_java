@@ -5,6 +5,7 @@
 package id.ezclouds.core.bifrost.app.api;
 
 import id.ezclouds.biz.arahindonesia.model.AppSetting;
+import id.ezclouds.biz.arahindonesia.model.profile.CandidateProfile;
 import id.ezclouds.common.util.error.EzErrorCode;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiBaseRequest;
@@ -38,7 +39,37 @@ public class ApiController {
         controllerTemplate.process(new ControllerTemplate.Handler() {
             @Override
             public void onResult(Object result) {
-                apiResult.setData((AppSetting) result);
+                AppSetting appSetting = null;
+                if (result instanceof AppSetting) {
+                    appSetting = (AppSetting) result;
+                }
+                apiResult.setData(appSetting);
+            }
+
+            @Override
+            public void onError(ErrorResult errorResult) {
+                setErrorResult(apiResult, errorResult, httpServletResponse);
+            }
+        });
+
+        return apiResult;
+    }
+
+    @PostMapping(value = "/candidateProfile.json")
+    public ApiResult<CandidateProfile> getCandidateProfile(@RequestBody ApiBaseRequest request, HttpServletResponse httpServletResponse) {
+        ApiResult<CandidateProfile> apiResult = new ApiResult<>();
+        apiResult.setSuccess(true);
+
+        controllerTemplate.setAppEvent(ApiEvent.CANDIDATE_PROFILE);
+        controllerTemplate.setBaseRequest(request);
+        controllerTemplate.process(new ControllerTemplate.Handler() {
+            @Override
+            public void onResult(Object result) {
+                CandidateProfile profile = null;
+                if (result instanceof CandidateProfile) {
+                    profile = (CandidateProfile) result;
+                }
+                apiResult.setData(profile);
             }
 
             @Override

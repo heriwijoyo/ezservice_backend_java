@@ -5,6 +5,7 @@
 package id.ezclouds.core.bifrost.core.processor;
 
 import id.ezclouds.biz.arahindonesia.service.AppSettingService;
+import id.ezclouds.biz.arahindonesia.service.api.CandidateProfileService;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.core.BaseRequest;
 import id.ezclouds.core.shared.context.EzAppEvent;
@@ -21,6 +22,9 @@ public class ApiBizProcessor implements BizProcessor {
     @Autowired
     private AppSettingService appSettingService;
 
+    @Autowired
+    private CandidateProfileService candidateProfileService;
+
     @Override
     public Object process(EzAppEvent appEvent, BaseRequest request) {
         ApiEvent apiEvent = (ApiEvent) appEvent;
@@ -28,6 +32,9 @@ public class ApiBizProcessor implements BizProcessor {
         switch (apiEvent) {
             case API_APP_SETTING:
                 return appSettingService.getAppSetting();
+
+            case CANDIDATE_PROFILE:
+                return candidateProfileService.getCandidateProfile();
         }
         return null;
     }
