@@ -8,6 +8,7 @@ import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
 import id.ezclouds.biz.arahindonesia.service.AppSettingService;
 import id.ezclouds.biz.arahindonesia.service.NewsService;
 import id.ezclouds.biz.arahindonesia.service.api.CandidateProfileService;
+import id.ezclouds.biz.arahindonesia.service.api.MemberProfileService;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.result.ListResult;
 import id.ezclouds.core.bifrost.core.BaseRequest;
@@ -31,6 +32,9 @@ public class ApiBizProcessor implements BizProcessor {
     @Autowired
     private NewsService newsService;
 
+    @Autowired
+    private MemberProfileService memberProfileService;
+
     @Override
     public Object process(EzAppEvent appEvent, BaseRequest request) {
         ApiEvent apiEvent = (ApiEvent) appEvent;
@@ -46,6 +50,9 @@ public class ApiBizProcessor implements BizProcessor {
                 ListResult<SimpleNews> listResult = new ListResult<>();
                 listResult.setItems(newsService.getActiveListNews());
                 return listResult;
+
+            case MEMBER_PROFILE:
+                return memberProfileService.getMemberProfile();
         }
         return null;
     }

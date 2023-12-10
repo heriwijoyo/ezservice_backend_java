@@ -7,6 +7,7 @@ package id.ezclouds.core.bifrost.app.api;
 import id.ezclouds.biz.arahindonesia.model.AppSetting;
 import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
 import id.ezclouds.biz.arahindonesia.model.profile.CandidateProfile;
+import id.ezclouds.biz.arahindonesia.model.profile.MemberProfile;
 import id.ezclouds.biz.arahindonesia.service.CacheService;
 import id.ezclouds.common.util.error.EzErrorCode;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
@@ -98,6 +99,30 @@ public class ApiController {
                 if (result instanceof ListResult) {
                     ListResult<SimpleNews> listResult = (ListResult) result;
                     apiResult.setData(listResult.getItems());
+                }
+            }
+
+            @Override
+            public void onError(ErrorResult errorResult) {
+                setErrorResult(apiResult, errorResult, httpServletResponse);
+            }
+        });
+
+        return apiResult;
+    }
+
+    @PostMapping(value = "/memberProfile.json")
+    public ApiResult<MemberProfile> getMemberProfile(@RequestBody ApiBaseRequest request, HttpServletResponse httpServletResponse) {
+        ApiResult<MemberProfile> apiResult = new ApiResult<>();
+        apiResult.setSuccess(true);
+
+        controllerTemplate.setAppEvent(ApiEvent.MEMBER_PROFILE);
+        controllerTemplate.setBaseRequest(request);
+        controllerTemplate.process(new ControllerTemplate.Handler() {
+            @Override
+            public void onResult(Object result) {
+                if (result instanceof MemberProfile) {
+                    apiResult.setData((MemberProfile) result);
                 }
             }
 
