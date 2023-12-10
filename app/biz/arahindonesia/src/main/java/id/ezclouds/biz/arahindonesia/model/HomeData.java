@@ -21,6 +21,7 @@ public class HomeData {
     private List<VideoSection> videoSections;
     private String pemiluDeadline;
     private List<String> communities = new ArrayList<>();
+    private String midBannerUrl;
 
     public List<String> getCommunities() {
         return communities;
@@ -68,5 +69,13 @@ public class HomeData {
 
     public void setPemiluDeadline(String pemiluDeadline) {
         this.pemiluDeadline = pemiluDeadline;
+    }
+
+    public String getMidBannerUrl() {
+        return midBannerUrl;
+    }
+
+    public void setMidBannerUrl(String midBannerUrl) {
+        this.midBannerUrl = midBannerUrl;
     }
 }

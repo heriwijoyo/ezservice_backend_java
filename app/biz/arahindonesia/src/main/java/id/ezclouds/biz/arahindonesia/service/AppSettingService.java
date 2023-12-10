@@ -60,6 +60,7 @@ public class AppSettingService {
         homeData.setHighlightNews(fetchSimpleNews(orgId));
         homeData.setHomePosters(fetchHomePoster(orgId));
         homeData.setVideoSections(composeVideoSections(orgId));
+        homeData.setMidBannerUrl(AppConstant.TMP_MID_BANNER_URL);
 
         return homeData;
     }
