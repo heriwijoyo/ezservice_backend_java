@@ -8,8 +8,10 @@ import id.ezclouds.biz.arahindonesia.constant.AppConstant;
 import id.ezclouds.biz.arahindonesia.model.AppClient;
 import id.ezclouds.biz.arahindonesia.model.AppConfig;
 import id.ezclouds.biz.arahindonesia.model.AppUpdateInfo;
+import id.ezclouds.biz.arahindonesia.model.ImageSlide;
 import id.ezclouds.common.dal.model.AppClientDO;
 import id.ezclouds.common.dal.model.AppConfigDO;
+import id.ezclouds.common.dal.model.ImageSlideDO;
 import id.ezclouds.common.dal.model.OrganizationDO;
 import id.ezclouds.core.shared.model.Organization;
 
@@ -59,5 +61,19 @@ public class ModelConverter {
         appConfig.setAppUpdateInfo(appUpdateInfo);
 
         return appConfig;
+    }
+
+    public static ImageSlide convert(ImageSlideDO slideDO) {
+        if (slideDO == null) {
+            return null;
+        }
+        ImageSlide imageSlide = new ImageSlide();
+        imageSlide.setOrgId(slideDO.getOrgId());
+        imageSlide.setTitle(slideDO.getTitle());
+        imageSlide.setImageUrl(slideDO.getImageUrl());
+        imageSlide.setTargetType(slideDO.getTargetType());
+        imageSlide.setTargetUrl(slideDO.getTargetUrl());
+
+        return imageSlide;
     }
 }

@@ -14,4 +14,6 @@ public class AppConstant {
     public static final String APP_UPDATE_TITLE = "Informasi Pembaruan";
     public static final String APP_UPDATE_MESSAGE = "Pembaruan aplikasi versi "+ APP_VERSION_NAME_TAG +" telah tersedia. Perbarui aplikasi anda untuk mendapatkan keuntungan maksimal dari semua fitur";
 
+    public static final String IMAGE_SLIDE_SECTION_HOME = "HOME_BANNER";
+
 }

@@ -32,19 +32,25 @@ public class CacheService {
     @Autowired
     private AppConfigService appConfigService;
 
+    @Autowired
+    private ImageSlideService imageSlideService;
+
     @EventListener(ApplicationReadyEvent.class)
     public List<String> refreshAllCache() {
         List<String> cacheNames = new ArrayList<>();
 
-        cacheManager.getCacheNames().stream()
+        cacheManager.getCacheNames()
                 .forEach((cacheName) -> {
                     cacheNames.add(cacheName);
-                    cacheManager.getCache(cacheName).clear();
+                    if (cacheManager.getCache(cacheName) != null) {
+                        cacheManager.getCache(cacheName).clear();
+                    }
                 });
 
         organizationService.getOrganizations();
         appClientService.getAppClients();
         appConfigService.getAppConfigs();
+        imageSlideService.getImageSlideHome();
 
         return cacheNames;
     }
