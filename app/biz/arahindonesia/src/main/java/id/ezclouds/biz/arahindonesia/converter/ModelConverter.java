@@ -6,6 +6,7 @@ package id.ezclouds.biz.arahindonesia.converter;
 
 import id.ezclouds.biz.arahindonesia.constant.AppConstant;
 import id.ezclouds.biz.arahindonesia.model.*;
+import id.ezclouds.biz.arahindonesia.model.profile.CandidateBio;
 import id.ezclouds.biz.arahindonesia.model.profile.CandidateProfileItem;
 import id.ezclouds.common.dal.model.*;
 import id.ezclouds.core.shared.model.Organization;
@@ -107,5 +108,16 @@ public class ModelConverter {
         item.setSection(itemDO.getSection());
         item.setValue(itemDO.getValue());
         return item;
+    }
+
+    public static CandidateBio convert(CandidateBioDO bioDO) {
+        if (bioDO == null) {
+            return null;
+        }
+        CandidateBio candidateBio = new CandidateBio();
+        candidateBio.setOrgId(bioDO.getOrgId());
+        candidateBio.setLabel(bioDO.getLabel());
+        candidateBio.setValue(bioDO.getValue());
+        return candidateBio;
     }
 }

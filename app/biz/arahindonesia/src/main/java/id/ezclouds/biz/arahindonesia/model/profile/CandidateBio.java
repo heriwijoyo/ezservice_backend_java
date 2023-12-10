@@ -10,8 +10,17 @@ package id.ezclouds.biz.arahindonesia.model.profile;
  */
 public class CandidateBio {
 
+    private String orgId;
     private String label;
     private String value;
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
 
     public String getLabel() {
         return label;
