@@ -4,10 +4,7 @@
  */
 package id.ezclouds.biz.arahindonesia.service;
 
-import id.ezclouds.biz.arahindonesia.service.data.AppClientService;
-import id.ezclouds.biz.arahindonesia.service.data.AppConfigService;
-import id.ezclouds.biz.arahindonesia.service.data.ImageSlideService;
-import id.ezclouds.biz.arahindonesia.service.data.OrganizationService;
+import id.ezclouds.biz.arahindonesia.service.data.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.cache.CacheManager;
@@ -26,18 +23,22 @@ public class CacheService {
 
     @Autowired
     private CacheManager cacheManager;
-
     @Autowired
     private OrganizationService organizationService;
-
     @Autowired
     private AppClientService appClientService;
-
     @Autowired
     private AppConfigService appConfigService;
-
     @Autowired
     private ImageSlideService imageSlideService;
+    @Autowired
+    private NewsService newsService;
+    @Autowired
+    private CandidateProfileItemService candidateProfileItemService;
+    @Autowired
+    private VideoCardService videoCardService;
+    @Autowired
+    private CandidateBioService candidateBioService;
 
     @EventListener(ApplicationReadyEvent.class)
     public List<String> refreshAllCache() {
@@ -55,6 +56,12 @@ public class CacheService {
         appClientService.getAppClients();
         appConfigService.getAppConfigs();
         imageSlideService.getImageSlideHome();
+        imageSlideService.getHomePosterImage();
+        imageSlideService.getPortfolioImage();
+        newsService.getHighlightedNews();
+        candidateProfileItemService.getCandidateProfileItems();
+        videoCardService.getAllVideoCards();
+        candidateBioService.getActiveCandidateBios();
 
         return cacheNames;
     }
