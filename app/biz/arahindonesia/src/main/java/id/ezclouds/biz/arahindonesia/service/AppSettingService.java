@@ -49,6 +49,7 @@ public class AppSettingService {
         HomeData homeData = new HomeData();
         homeData.setHighlightBanners(fetchHomeImageSlide(orgId));
         homeData.setHighlightNews(fetchSimpleNews(orgId));
+        homeData.setHomePosters(fetchHomePoster(orgId));
 
         return homeData;
     }
@@ -58,6 +59,15 @@ public class AppSettingService {
                 .getImageSlideHome()
                 .stream()
                 .filter(imageSlide -> orgId.equals(imageSlide.getOrgId()))
+                .collect(Collectors.toList());
+    }
+
+    private List<ImageSlide> fetchHomePoster(String orgId) {
+        return imageSlideService
+                .getHomePosterImage()
+                .stream()
+                .filter(imageSlide -> orgId.equals(imageSlide.getOrgId()))
+                .limit(1)
                 .collect(Collectors.toList());
     }
 

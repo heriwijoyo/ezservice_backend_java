@@ -27,9 +27,17 @@ public class ImageSlideService {
 
     @Cacheable("imageSlide_home")
     public List<ImageSlide> getImageSlideHome() {
-
         return imageSlideRepository
                 .findActiveSectionImageSlide(AppConstant.IMAGE_SLIDE_SECTION_HOME)
+                .stream()
+                .map(ModelConverter::convert)
+                .collect(Collectors.toList());
+    }
+
+    @Cacheable("home_poster")
+    public List<ImageSlide> getHomePosterImage() {
+        return imageSlideRepository
+                .findActiveSectionImageSlide(AppConstant.IMAGE_SLIDE_HOME_POSTER)
                 .stream()
                 .map(ModelConverter::convert)
                 .collect(Collectors.toList());

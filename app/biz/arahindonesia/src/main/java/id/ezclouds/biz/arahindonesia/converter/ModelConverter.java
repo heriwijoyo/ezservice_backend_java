@@ -82,4 +82,18 @@ public class ModelConverter {
         simpleNews.setThumbnail(newsDO.getThumbnail());
         return simpleNews;
     }
+
+    public static VideoCard convert(VideoCardDO cardDO) {
+        if (cardDO == null) {
+            return null;
+        }
+        VideoCard videoCard = new VideoCard();
+        videoCard.setOrgId(cardDO.getOrgId());
+        videoCard.setSection(cardDO.getSection());
+        videoCard.setSectionName(cardDO.getSectionName());
+        videoCard.setTargetType(cardDO.getTargetType());
+        videoCard.setTargetUrl(cardDO.getTargetUrl());
+        videoCard.setThumbnail(cardDO.getThumbnail());
+        return videoCard;
+    }
 }
