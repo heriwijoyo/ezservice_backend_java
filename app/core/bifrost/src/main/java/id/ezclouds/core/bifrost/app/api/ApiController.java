@@ -5,7 +5,7 @@
 package id.ezclouds.core.bifrost.app.api;
 
 import id.ezclouds.biz.arahindonesia.model.AppSetting;
-import id.ezclouds.biz.arahindonesia.model.news.ListNews;
+import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
 import id.ezclouds.biz.arahindonesia.model.profile.CandidateProfile;
 import id.ezclouds.common.util.error.EzErrorCode;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
@@ -85,8 +85,8 @@ public class ApiController {
     }
 
     @PostMapping(value = "/news.json")
-    public ApiResult<List<ListNews>> getNews(@RequestBody ApiBaseRequest request, HttpServletResponse httpServletResponse) {
-        ApiResult<List<ListNews>> apiResult = new ApiResult<>();
+    public ApiResult<List<SimpleNews>> getNews(@RequestBody ApiBaseRequest request, HttpServletResponse httpServletResponse) {
+        ApiResult<List<SimpleNews>> apiResult = new ApiResult<>();
         apiResult.setSuccess(true);
 
         controllerTemplate.setAppEvent(ApiEvent.NEWS);
@@ -95,7 +95,7 @@ public class ApiController {
             @Override
             public void onResult(Object result) {
                 if (result instanceof ListResult) {
-                    ListResult<ListNews> listResult = (ListResult) result;
+                    ListResult<SimpleNews> listResult = (ListResult) result;
                     apiResult.setData(listResult.getItems());
                 }
             }

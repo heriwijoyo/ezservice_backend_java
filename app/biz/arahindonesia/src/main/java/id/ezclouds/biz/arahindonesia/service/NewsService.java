@@ -5,7 +5,6 @@
 package id.ezclouds.biz.arahindonesia.service;
 
 import id.ezclouds.biz.arahindonesia.converter.ModelConverter;
-import id.ezclouds.biz.arahindonesia.model.news.ListNews;
 import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
 import id.ezclouds.common.dal.NewsRepository;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
@@ -37,12 +36,12 @@ public class NewsService {
                 .collect(Collectors.toList());
     }
 
-    public List<ListNews> getActiveListNews() {
+    public List<SimpleNews> getActiveListNews() {
         String orgId = EzAppContextHolder.getOrganization().getOrgId();
         return newsRepository
                 .findActiveNews(orgId, NEWS_LIMIT)
                 .stream()
-                .map(ModelConverter::convertToListNews)
+                .map(ModelConverter::convert)
                 .collect(Collectors.toList());
     }
 }
