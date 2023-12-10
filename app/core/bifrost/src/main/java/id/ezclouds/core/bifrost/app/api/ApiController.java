@@ -12,6 +12,7 @@ import id.ezclouds.biz.arahindonesia.service.CacheService;
 import id.ezclouds.common.util.error.EzErrorCode;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiBaseRequest;
+import id.ezclouds.core.bifrost.app.api.request.MemberLoginRequest;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
 import id.ezclouds.core.bifrost.app.api.result.ErrorResult;
 import id.ezclouds.core.bifrost.app.api.result.ListResult;
@@ -117,6 +118,30 @@ public class ApiController {
         apiResult.setSuccess(true);
 
         controllerTemplate.setAppEvent(ApiEvent.MEMBER_PROFILE);
+        controllerTemplate.setBaseRequest(request);
+        controllerTemplate.process(new ControllerTemplate.Handler() {
+            @Override
+            public void onResult(Object result) {
+                if (result instanceof MemberProfile) {
+                    apiResult.setData((MemberProfile) result);
+                }
+            }
+
+            @Override
+            public void onError(ErrorResult errorResult) {
+                setErrorResult(apiResult, errorResult, httpServletResponse);
+            }
+        });
+
+        return apiResult;
+    }
+
+    @PostMapping(value = "/memberLogin.json")
+    public ApiResult<MemberProfile> getMemberLogin(@RequestBody MemberLoginRequest request, HttpServletResponse httpServletResponse) {
+        ApiResult<MemberProfile> apiResult = new ApiResult<>();
+        apiResult.setSuccess(true);
+
+        controllerTemplate.setAppEvent(ApiEvent.MEMBER_LOGIN);
         controllerTemplate.setBaseRequest(request);
         controllerTemplate.process(new ControllerTemplate.Handler() {
             @Override

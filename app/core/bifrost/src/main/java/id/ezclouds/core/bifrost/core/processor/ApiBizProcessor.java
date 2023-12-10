@@ -9,6 +9,8 @@ import id.ezclouds.biz.arahindonesia.service.AppSettingService;
 import id.ezclouds.biz.arahindonesia.service.NewsService;
 import id.ezclouds.biz.arahindonesia.service.api.CandidateProfileService;
 import id.ezclouds.biz.arahindonesia.service.api.MemberProfileService;
+import id.ezclouds.common.util.error.EzErrorCode;
+import id.ezclouds.common.util.error.EzErrorException;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.result.ListResult;
 import id.ezclouds.core.bifrost.core.BaseRequest;
@@ -36,7 +38,7 @@ public class ApiBizProcessor implements BizProcessor {
     private MemberProfileService memberProfileService;
 
     @Override
-    public Object process(EzAppEvent appEvent, BaseRequest request) {
+    public Object process(EzAppEvent appEvent, BaseRequest request) throws EzErrorException {
         ApiEvent apiEvent = (ApiEvent) appEvent;
 
         switch (apiEvent) {
@@ -53,6 +55,9 @@ public class ApiBizProcessor implements BizProcessor {
 
             case MEMBER_PROFILE:
                 return memberProfileService.getMemberProfile();
+
+            case MEMBER_LOGIN:
+                throw new EzErrorException(EzErrorCode.MEMBER_LOGIN_FAILED);
         }
         return null;
     }

@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.bifrost.core.processor;
 
+import id.ezclouds.common.util.error.EzErrorException;
 import id.ezclouds.core.bifrost.core.BaseRequest;
 import id.ezclouds.core.shared.context.EzAppEvent;
 
@@ -13,5 +14,5 @@ import id.ezclouds.core.shared.context.EzAppEvent;
  */
 public interface BizProcessor {
 
-    Object process(EzAppEvent event, BaseRequest request);
+    Object process(EzAppEvent event, BaseRequest request) throws EzErrorException;
 }

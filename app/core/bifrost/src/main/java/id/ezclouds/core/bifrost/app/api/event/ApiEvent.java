@@ -15,6 +15,7 @@ public enum ApiEvent implements EzAppEvent {
     CANDIDATE_PROFILE("002", "CandidateProfile"),
     NEWS("003", "News"),
     MEMBER_PROFILE("004", "MemberProfile"),
+    MEMBER_LOGIN("004", "MemberLogin"),
 
     ;
 
