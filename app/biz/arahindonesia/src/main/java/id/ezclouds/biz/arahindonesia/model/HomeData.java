@@ -4,6 +4,8 @@
  */
 package id.ezclouds.biz.arahindonesia.model;
 
+import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
+
 import java.util.List;
 
 /**

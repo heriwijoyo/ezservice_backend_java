@@ -6,6 +6,7 @@ package id.ezclouds.biz.arahindonesia.converter;
 
 import id.ezclouds.biz.arahindonesia.constant.AppConstant;
 import id.ezclouds.biz.arahindonesia.model.*;
+import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
 import id.ezclouds.biz.arahindonesia.model.profile.CandidateBio;
 import id.ezclouds.biz.arahindonesia.model.profile.CandidateProfileItem;
 import id.ezclouds.common.dal.model.*;

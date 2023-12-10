@@ -4,9 +4,8 @@
  */
 package id.ezclouds.biz.arahindonesia.service;
 
-import id.ezclouds.biz.arahindonesia.constant.AppConstant;
 import id.ezclouds.biz.arahindonesia.converter.ModelConverter;
-import id.ezclouds.biz.arahindonesia.model.SimpleNews;
+import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
 import id.ezclouds.common.dal.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;

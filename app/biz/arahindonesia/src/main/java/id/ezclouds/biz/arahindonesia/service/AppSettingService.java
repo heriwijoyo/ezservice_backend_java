@@ -6,6 +6,7 @@ package id.ezclouds.biz.arahindonesia.service;
 
 import id.ezclouds.biz.arahindonesia.constant.AppConstant;
 import id.ezclouds.biz.arahindonesia.model.*;
+import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

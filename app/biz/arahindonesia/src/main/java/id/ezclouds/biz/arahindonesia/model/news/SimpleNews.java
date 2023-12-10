@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2023 All Rights Reserved.
  */
-package id.ezclouds.biz.arahindonesia.model;
+package id.ezclouds.biz.arahindonesia.model.news;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
