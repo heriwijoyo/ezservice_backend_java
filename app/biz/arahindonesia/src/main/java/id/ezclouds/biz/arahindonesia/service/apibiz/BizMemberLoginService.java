@@ -35,7 +35,7 @@ public class BizMemberLoginService {
         MemberBase memberBase = memberService.getMemberById(appMemberClientDO.getMemberId());
 
         AssertUtil.notNull(memberBase, EzErrorCode.MEMBER_NOT_FOUND);
-        AssertUtil.isTrue(memberBase.isActive(), EzErrorCode.MEMBER_LOGIN_FAILED, AppConstant.MEMBER_LOGIN_MESSAGE_SUSPEND, " KNTL");
+        AssertUtil.isTrue(memberBase.isActive(), EzErrorCode.MEMBER_LOGIN_FAILED, AppConstant.MEMBER_LOGIN_MESSAGE_SUSPEND);
 
         // create member session
 
