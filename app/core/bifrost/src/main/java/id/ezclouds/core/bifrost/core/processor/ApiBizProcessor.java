@@ -5,7 +5,7 @@
 package id.ezclouds.core.bifrost.core.processor;
 
 import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
-import id.ezclouds.biz.arahindonesia.service.BizAppSettingService;
+import id.ezclouds.biz.arahindonesia.service.api.BizAppSettingService;
 import id.ezclouds.biz.arahindonesia.service.NewsService;
 import id.ezclouds.biz.arahindonesia.service.api.CandidateProfileService;
 import id.ezclouds.biz.arahindonesia.service.api.BizMemberLoginService;
