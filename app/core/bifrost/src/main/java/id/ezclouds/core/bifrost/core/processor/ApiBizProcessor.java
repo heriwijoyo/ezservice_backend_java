@@ -4,16 +4,14 @@
  */
 package id.ezclouds.core.bifrost.core.processor;
 
-import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
 import id.ezclouds.biz.arahindonesia.service.apibiz.BizAppSettingService;
-import id.ezclouds.biz.arahindonesia.service.core.NewsService;
 import id.ezclouds.biz.arahindonesia.service.apibiz.BizCandidateProfileService;
 import id.ezclouds.biz.arahindonesia.service.apibiz.BizMemberLoginService;
 import id.ezclouds.biz.arahindonesia.service.apibiz.BizMemberProfileService;
+import id.ezclouds.biz.arahindonesia.service.apibiz.BizNewsService;
 import id.ezclouds.common.util.error.EzErrorException;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.MemberLoginRequest;
-import id.ezclouds.core.shared.result.ListResult;
 import id.ezclouds.core.bifrost.core.BaseRequest;
 import id.ezclouds.core.shared.context.EzAppEvent;
 import id.ezclouds.core.shared.model.MemberLogin;
@@ -34,7 +32,7 @@ public class ApiBizProcessor implements BizProcessor {
     private BizCandidateProfileService bizCandidateProfileService;
 
     @Autowired
-    private NewsService newsService;
+    private BizNewsService bizNewsService;
 
     @Autowired
     private BizMemberProfileService bizMemberProfileService;
@@ -54,9 +52,7 @@ public class ApiBizProcessor implements BizProcessor {
                 return bizCandidateProfileService.getCandidateProfile();
 
             case NEWS:
-                ListResult<SimpleNews> listResult = new ListResult<>();
-                listResult.setItems(newsService.getActiveListNews());
-                return listResult;
+                return bizNewsService.getActiveNews();
 
             case MEMBER_PROFILE:
                 return bizMemberProfileService.getMemberProfile();
