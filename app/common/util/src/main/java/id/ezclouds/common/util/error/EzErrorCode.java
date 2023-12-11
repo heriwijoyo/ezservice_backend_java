@@ -15,6 +15,7 @@ public enum EzErrorCode {
     UNAUTHORIZED("E003", "UNAUTHORIZED", "Unauthorized"),
     SESSION_EXPIRED("E004", "SESSION_EXPIRED", "User session expired"),
     MEMBER_LOGIN_FAILED("E005", "MEMBER_LOGIN_FAILED", "Member login failed"),
+    MEMBER_NOT_FOUND("E006", "MEMBER_NOT_FOUND", "Member not found"),
 
     ;
 

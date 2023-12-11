@@ -9,4 +9,14 @@ package id.ezclouds.biz.arahindonesia.model.member;
  * @version $Id: MemberBase.java, v 0.1 2023‐12‐11 2:06 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 public class MemberBase {
+
+    private Integer status;
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 }

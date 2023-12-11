@@ -8,7 +8,7 @@ import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
 import id.ezclouds.biz.arahindonesia.service.AppSettingService;
 import id.ezclouds.biz.arahindonesia.service.NewsService;
 import id.ezclouds.biz.arahindonesia.service.api.CandidateProfileService;
-import id.ezclouds.biz.arahindonesia.service.api.MemberLoginService;
+import id.ezclouds.biz.arahindonesia.service.api.BizMemberLoginService;
 import id.ezclouds.biz.arahindonesia.service.api.MemberProfileService;
 import id.ezclouds.common.util.error.EzErrorException;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
@@ -40,7 +40,7 @@ public class ApiBizProcessor implements BizProcessor {
     private MemberProfileService memberProfileService;
 
     @Autowired
-    private MemberLoginService memberLoginService;
+    private BizMemberLoginService bizMemberLoginService;
 
     @Override
     public Object process(EzAppEvent appEvent, BaseRequest request) throws EzErrorException {
@@ -62,7 +62,7 @@ public class ApiBizProcessor implements BizProcessor {
                 return memberProfileService.getMemberProfile();
 
             case MEMBER_LOGIN:
-                return memberLoginService.loginMember(composeMemberLogin((MemberLoginRequest)request));
+                return bizMemberLoginService.loginMember(composeMemberLogin((MemberLoginRequest)request));
         }
         return null;
     }

@@ -29,7 +29,7 @@ public class AuthenticationService {
     @Autowired
     private AppMemberClientRepository appMemberClientRepository;
 
-    public void authenticate(MemberLogin memberLogin) throws EzErrorException {
+    public AppMemberClientDO authenticate(MemberLogin memberLogin) throws EzErrorException {
         String orgId = EzAppContextHolder.getContext().getOrgId();
         String appId = EzAppContextHolder.getContext().getAppId();
 
@@ -43,5 +43,7 @@ public class AuthenticationService {
         AssertUtil.isTrue(isPasswordMatched, EzErrorCode.MEMBER_LOGIN_FAILED, AppConstant.MEMBER_LOGIN_MESSAGE_FAILED);
 
         AssertUtil.isTrue(clientDO.getStatus() == AppConstant.COMMON_STATUS_ACTIVE, EzErrorCode.MEMBER_LOGIN_FAILED, AppConstant.MEMBER_LOGIN_MESSAGE_SUSPEND);
+
+        return clientDO;
     }
 }
