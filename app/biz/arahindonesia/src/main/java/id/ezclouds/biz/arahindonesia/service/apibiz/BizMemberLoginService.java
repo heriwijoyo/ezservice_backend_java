@@ -12,6 +12,7 @@ import id.ezclouds.biz.arahindonesia.service.authentication.AuthenticationServic
 import id.ezclouds.common.dal.model.AppMemberClientDO;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.error.EzErrorCode;
+import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.model.MemberLogin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,11 +31,12 @@ public class BizMemberLoginService {
     private MemberService memberService;
 
     public MemberLoginResult loginMember(MemberLogin memberLogin) {
+        String orgId = EzAppContextHolder.getContext().getOrgId();
 
         AppMemberClientDO appMemberClientDO = authenticationService.authenticate(memberLogin);
-        MemberBase memberBase = memberService.getMemberById(appMemberClientDO.getMemberId());
+        MemberBase memberBase = memberService.getMemberById(appMemberClientDO.getMemberId(), orgId);
 
-        AssertUtil.notNull(memberBase, EzErrorCode.MEMBER_NOT_FOUND);
+        AssertUtil.notNull(memberBase, EzErrorCode.MEMBER_NOT_FOUND, AppConstant.MEMBER_LOGIN_MESSAGE_FAILED);
         AssertUtil.isTrue(memberBase.isActive(), EzErrorCode.MEMBER_LOGIN_FAILED, AppConstant.MEMBER_LOGIN_MESSAGE_SUSPEND);
 
         // create member session

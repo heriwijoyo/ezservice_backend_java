@@ -20,9 +20,11 @@ public class MemberService {
     @Autowired
     private AppMemberRepository appMemberRepository;
 
-    public MemberBase getMemberById(String memberId) {
+    public MemberBase getMemberById(String memberId, String orgId) {
         return appMemberRepository
-                .findById(memberId)
+                .findByMemberIdAndOrgId(memberId, orgId)
+                .stream()
+                .findFirst()
                 .map(MemberConverter::convert)
                 .orElse(null);
     }
