@@ -5,11 +5,11 @@
 package id.ezclouds.core.bifrost.core.processor;
 
 import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
-import id.ezclouds.biz.arahindonesia.service.api.BizAppSettingService;
+import id.ezclouds.biz.arahindonesia.service.apibiz.BizAppSettingService;
 import id.ezclouds.biz.arahindonesia.service.NewsService;
-import id.ezclouds.biz.arahindonesia.service.api.BizCandidateProfileService;
-import id.ezclouds.biz.arahindonesia.service.api.BizMemberLoginService;
-import id.ezclouds.biz.arahindonesia.service.api.BizMemberProfileService;
+import id.ezclouds.biz.arahindonesia.service.apibiz.BizCandidateProfileService;
+import id.ezclouds.biz.arahindonesia.service.apibiz.BizMemberLoginService;
+import id.ezclouds.biz.arahindonesia.service.apibiz.BizMemberProfileService;
 import id.ezclouds.common.util.error.EzErrorException;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.MemberLoginRequest;
