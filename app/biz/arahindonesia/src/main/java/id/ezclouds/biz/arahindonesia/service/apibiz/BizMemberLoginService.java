@@ -42,7 +42,6 @@ public class BizMemberLoginService {
         AssertUtil.notNull(memberBase, EzErrorCode.MEMBER_NOT_FOUND, AppConstant.MEMBER_LOGIN_MESSAGE_FAILED);
         AssertUtil.isTrue(memberBase.isActive(), EzErrorCode.MEMBER_LOGIN_FAILED, AppConstant.MEMBER_LOGIN_MESSAGE_SUSPEND);
 
-        // create member session
         MemberSession memberSession = memberSessionService.createMemberSession(appMemberClient);
 
         MemberLoginResult loginResult = new MemberLoginResult();
