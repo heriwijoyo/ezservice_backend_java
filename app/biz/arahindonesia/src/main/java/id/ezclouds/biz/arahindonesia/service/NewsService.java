@@ -37,7 +37,7 @@ public class NewsService {
     }
 
     public List<SimpleNews> getActiveListNews() {
-        String orgId = EzAppContextHolder.getOrganization().getOrgId();
+        String orgId = EzAppContextHolder.getContext().getOrgId();
         return newsRepository
                 .findActiveNews(orgId, NEWS_LIMIT)
                 .stream()

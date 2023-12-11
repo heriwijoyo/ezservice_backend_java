@@ -14,8 +14,8 @@ public class EzAppContext {
 
     private EzAppEvent ezAppEvent;
     private String traceId;
-
-    private Organization organization;
+    private String orgId;
+    private String appId;
 
     public EzAppContext(EzAppEvent ezAppEvent) {
         this.ezAppEvent = ezAppEvent;
@@ -26,11 +26,19 @@ public class EzAppContext {
         return traceId;
     }
 
-    public Organization getOrganization() {
-        return organization;
+    public String getOrgId() {
+        return orgId;
     }
 
-    public void setOrganization(Organization organization) {
-        this.organization = organization;
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
+
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
     }
 }

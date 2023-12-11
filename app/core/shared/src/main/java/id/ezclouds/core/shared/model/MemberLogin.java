@@ -2,13 +2,13 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2023 All Rights Reserved.
  */
-package id.ezclouds.core.bifrost.app.api.request;
+package id.ezclouds.core.shared.model;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: MemberLoginRequest.java, v 0.1 2023‐12‐11 1:41 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: MemberLogin.java, v 0.1 2023‐12‐11 1:54 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class MemberLoginRequest extends ApiBaseRequest {
+public class MemberLogin {
 
     private String loginType;
     private String loginId;

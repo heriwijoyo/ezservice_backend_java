@@ -14,7 +14,7 @@ public enum EzErrorCode {
     PARAM_ILLEGAL("E002", "PARAM_ILLEGAL", "Parameter illegal"),
     UNAUTHORIZED("E003", "UNAUTHORIZED", "Unauthorized"),
     SESSION_EXPIRED("E004", "SESSION_EXPIRED", "User session expired"),
-    MEMBER_LOGIN_FAILED("E005", "MEMBER_LOGIN_FAILED", "Nomor HP atau sandi yang anda masukkan salah"),
+    MEMBER_LOGIN_FAILED("E005", "MEMBER_LOGIN_FAILED", "Member login failed"),
 
     ;
 

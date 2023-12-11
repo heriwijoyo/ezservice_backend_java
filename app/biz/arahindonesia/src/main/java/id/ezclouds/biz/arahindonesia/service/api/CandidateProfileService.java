@@ -39,7 +39,7 @@ public class CandidateProfileService {
     private CandidateBioService candidateBioService;
 
     public CandidateProfile getCandidateProfile() {
-        String orgId = EzAppContextHolder.getOrganization().getOrgId();
+        String orgId = EzAppContextHolder.getContext().getOrgId();
         CandidateProfile profile = new CandidateProfile();
 
         setCandidateProfile(profile, orgId);

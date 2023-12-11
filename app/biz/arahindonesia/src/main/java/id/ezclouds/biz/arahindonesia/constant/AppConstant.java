@@ -21,5 +21,10 @@ public class AppConstant {
     public static final String TMP_MID_BANNER_URL = "http://ezservice.id/uploads/hb_006.jpeg";
 
     public static final int HIGHLIGHTED_NEWS_LIMIT = 3;
+    public static final int COMMON_STATUS_ACTIVE = 1;
 
+    public static final String PHONE_PREFIX = "62";
+    public static final String MEMBER_LOGIN_MESSAGE_SUCCESS = "LOGIN BERHASIL\\n\\nSelamat datang di Member Area Sistem RJL";
+    public static final String MEMBER_LOGIN_MESSAGE_FAILED = "Nomor HP atau sandi yang anda masukkan salah";
+    public static final String MEMBER_LOGIN_MESSAGE_SUSPEND = "Akun anda telah di nonaktifkan, silakan hubungi admin sistem kami";
 }

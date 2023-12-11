@@ -21,7 +21,7 @@ public class MemberProfileService {
     private AppProfileService appProfileService;
 
     public MemberProfile getMemberProfile() {
-        String orgId = EzAppContextHolder.getOrganization().getOrgId();
+        String orgId = EzAppContextHolder.getContext().getOrgId();
         MemberProfile profile = new MemberProfile();
         setAppProfile(profile, orgId);
 

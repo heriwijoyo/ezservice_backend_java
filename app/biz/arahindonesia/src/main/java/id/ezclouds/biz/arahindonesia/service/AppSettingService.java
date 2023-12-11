@@ -38,7 +38,7 @@ public class AppSettingService {
     private VideoCardService videoCardService;
 
     public AppSetting getAppSetting() {
-        String orgId = EzAppContextHolder.getOrganization().getOrgId();
+        String orgId = EzAppContextHolder.getContext().getOrgId();
         AppConfig appConfig = appConfigService
                 .getAppConfigs()
                 .stream()
