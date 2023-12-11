@@ -4,8 +4,6 @@
  */
 package id.ezclouds.core.shared.context;
 
-import id.ezclouds.core.shared.model.Organization;
-
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: AppBizContext.java, v 0.1 2023‐12‐09 9:42 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -16,6 +14,7 @@ public class EzAppContext {
     private String traceId;
     private String orgId;
     private String appId;
+    private String deviceId;
 
     public EzAppContext(EzAppEvent ezAppEvent) {
         this.ezAppEvent = ezAppEvent;
@@ -40,5 +39,13 @@ public class EzAppContext {
 
     public void setAppId(String appId) {
         this.appId = appId;
+    }
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
 }

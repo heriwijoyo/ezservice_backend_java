@@ -66,6 +66,7 @@ public class PreBizProcessor {
 
             EzAppContextHolder.getContext().setOrgId(organization.getOrgId());
             EzAppContextHolder.getContext().setAppId(appClient.getAppId());
+            EzAppContextHolder.getContext().setDeviceId(reqClient.getDeviceId());
         }
     }
 }
