@@ -5,6 +5,8 @@
 package id.ezclouds.biz.arahindonesia.service.authentication;
 
 import id.ezclouds.biz.arahindonesia.constant.AppConstant;
+import id.ezclouds.biz.arahindonesia.converter.ModelConverter;
+import id.ezclouds.biz.arahindonesia.model.authentication.AppMemberClient;
 import id.ezclouds.common.dal.model.AppMemberClientDO;
 import id.ezclouds.common.dal.repo.auth.AppMemberClientRepository;
 import id.ezclouds.common.util.CollectionUtil;
@@ -29,7 +31,7 @@ public class AuthenticationService {
     @Autowired
     private AppMemberClientRepository appMemberClientRepository;
 
-    public AppMemberClientDO authenticate(MemberLogin memberLogin) throws EzErrorException {
+    public AppMemberClient authenticate(MemberLogin memberLogin) throws EzErrorException {
         String orgId = EzAppContextHolder.getContext().getOrgId();
         String appId = EzAppContextHolder.getContext().getAppId();
 
@@ -42,8 +44,8 @@ public class AuthenticationService {
         boolean isPasswordMatched = bCrypt.matches(memberLogin.getLoginPassword(), clientDO.getLoginPassword());
         AssertUtil.isTrue(isPasswordMatched, EzErrorCode.MEMBER_LOGIN_FAILED, AppConstant.MEMBER_LOGIN_MESSAGE_FAILED);
 
-        AssertUtil.isTrue(clientDO.getStatus() == AppConstant.COMMON_STATUS_ACTIVE, EzErrorCode.MEMBER_LOGIN_FAILED, AppConstant.MEMBER_LOGIN_MESSAGE_SUSPEND);
+        AssertUtil.isTrue(clientDO.isActive(), EzErrorCode.MEMBER_LOGIN_FAILED, AppConstant.MEMBER_LOGIN_MESSAGE_SUSPEND);
 
-        return clientDO;
+        return ModelConverter.convert(clientDO);
     }
 }

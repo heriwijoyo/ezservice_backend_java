@@ -1,0 +1,38 @@
+/**
+ * Ezclouds.id
+ * Copyright (c) 2020‐2023 All Rights Reserved.
+ */
+package id.ezclouds.common.util;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+/**
+ * @author Heri Wijoyo (heri.wijoyo@gmail.com)
+ * @version $Id: DateUtil.java, v 0.1 2023‐12‐11 11:09 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ */
+public class DateUtil {
+
+    public static final String FORMAT_DATETIME_DEFAULT = "yyyy-MM-dd HH:mm:ss";
+
+    public static String getFormattedDate(Date date, String dateFormat) {
+        SimpleDateFormat dateFormatter = new SimpleDateFormat(dateFormat);
+        return dateFormatter.format(date);
+    }
+
+    public static String getFormattedDate(Date date) {
+        return getFormattedDate(date, FORMAT_DATETIME_DEFAULT);
+    }
+
+    public static String getCurrentFormattedDate() {
+        return getFormattedDate(new Date());
+    }
+
+    public static Date getDateAfterDays(Date originalDate, int daysAfter) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(originalDate);
+        calendar.add(Calendar.DATE, daysAfter);
+        return calendar.getTime();
+    }
+}

@@ -4,6 +4,8 @@
  */
 package id.ezclouds.common.dal.model;
 
+import id.ezclouds.common.dal.DOConstant;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -109,11 +111,14 @@ public class AppMemberClientDO {
         this.loginPin = loginPin;
     }
 
-    public Integer getStatus() {
-        return status;
-    }
-
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public boolean isActive() {
+        if (status == null) {
+            return false;
+        }
+        return DOConstant.COMMON_STATUS_ACTIVE == status;
     }
 }

@@ -13,9 +13,10 @@ public enum EzErrorCode {
     SYSTEM_ERROR("E001", "SYSTEM_ERROR", "Unknown system error"),
     PARAM_ILLEGAL("E002", "PARAM_ILLEGAL", "Parameter illegal"),
     UNAUTHORIZED("E003", "UNAUTHORIZED", "Unauthorized"),
-    SESSION_EXPIRED("E004", "SESSION_EXPIRED", "User session expired"),
     MEMBER_LOGIN_FAILED("E005", "MEMBER_LOGIN_FAILED", "Member login failed"),
     MEMBER_NOT_FOUND("E006", "MEMBER_NOT_FOUND", "Member not found"),
+    SESSION_INVALID("E301", "SESSION_INVALID", "Session invalid"),
+    SESSION_EXPIRED("E302", "SESSION_EXPIRED", "User session expired"),
 
     ;
 

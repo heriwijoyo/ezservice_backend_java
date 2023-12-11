@@ -61,7 +61,7 @@ public class PreBizProcessor {
                     .filter(aClient -> reqClient.getClientId().equals(aClient.getClientId()))
                     .filter(aClient -> reqClient.getClientSecret().equals(aClient.getClientSecret()))
                     .findFirst()
-                    .get();
+                    .orElse(null);
             AssertUtil.notNull(appClient, EzErrorCode.UNAUTHORIZED, "Unauthorized client request");
 
             EzAppContextHolder.getContext().setOrgId(organization.getOrgId());

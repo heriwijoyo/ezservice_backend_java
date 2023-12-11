@@ -52,4 +52,15 @@ public class StringUtil {
         }
         return str1.equals(str2);
     }
+
+    public static String concateAll(String... strings) {
+        if (strings == null) {
+            return null;
+        }
+        String concate = "";
+        for (String item : strings) {
+            concate += item;
+        }
+        return concate;
+    }
 }

@@ -16,33 +16,19 @@ public class AssertUtil {
 
     public static void notNull(Object object, EzErrorCode ezErrorCode, String... message) throws EzErrorException {
         if (object == null) {
-            throw new EzErrorException(ezErrorCode, composeErrorMessage(message));
+            throw new EzErrorException(ezErrorCode, StringUtil.concateAll(message));
         }
     }
 
     public static void notBlank(String value, EzErrorCode ezErrorCode, String... message) throws EzErrorException {
         if (StringUtil.isBlank(value)) {
-            throw new EzErrorException(ezErrorCode, composeErrorMessage(message));
+            throw new EzErrorException(ezErrorCode, StringUtil.concateAll(message));
         }
     }
 
     public static void isTrue(boolean state, EzErrorCode ezErrorCode, String... message) throws EzErrorException {
         if (!state) {
-            throw new EzErrorException(ezErrorCode, composeErrorMessage(message));
+            throw new EzErrorException(ezErrorCode, StringUtil.concateAll(message));
         }
-    }
-
-    private static String composeErrorMessage(String... message) {
-        String errorMessage = null;
-        if (message != null) {
-            errorMessage = "";
-
-            for (String errMessage : message) {
-                if (errMessage != null) {
-                    errorMessage += errMessage;
-                }
-            }
-        }
-        return errorMessage;
     }
 }

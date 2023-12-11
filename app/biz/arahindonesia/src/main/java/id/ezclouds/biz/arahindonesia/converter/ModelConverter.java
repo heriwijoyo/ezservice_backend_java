@@ -6,6 +6,7 @@ package id.ezclouds.biz.arahindonesia.converter;
 
 import id.ezclouds.biz.arahindonesia.constant.AppConstant;
 import id.ezclouds.biz.arahindonesia.model.*;
+import id.ezclouds.biz.arahindonesia.model.authentication.AppMemberClient;
 import id.ezclouds.biz.arahindonesia.model.member.MemberBase;
 import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
 import id.ezclouds.biz.arahindonesia.model.profile.CandidateBio;
@@ -122,5 +123,17 @@ public class ModelConverter {
         candidateBio.setLabel(bioDO.getLabel());
         candidateBio.setValue(bioDO.getValue());
         return candidateBio;
+    }
+
+    public static AppMemberClient convert(AppMemberClientDO clientDO) {
+        if (clientDO == null) {
+            return null;
+        }
+        AppMemberClient memberClient = new AppMemberClient();
+        memberClient.setClientId(clientDO.getClientId());
+        memberClient.setOrgId(clientDO.getOrgId());
+        memberClient.setAppId(clientDO.getAppId());
+        memberClient.setMemberId(clientDO.getMemberId());
+        return memberClient;
     }
 }

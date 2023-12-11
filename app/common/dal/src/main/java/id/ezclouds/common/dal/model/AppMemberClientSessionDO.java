@@ -2,22 +2,47 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2023 All Rights Reserved.
  */
-package id.ezclouds.biz.arahindonesia.model.session;
+package id.ezclouds.common.dal.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: MemberSession.java, v 0.1 2023‐12‐11 11:44 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: AppMemberClientSessionDO.java, v 0.1 2023‐12‐11 10:42 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class MemberSession {
+@Entity
+@Table(name = "app_member_client_session")
+public class AppMemberClientSessionDO {
 
+    @Id
+    @Column(name = "session_id")
     private String sessionId;
+
+    @Column(name = "org_id")
     private String orgId;
+
+    @Column(name = "app_id")
     private String appId;
+
+    @Column(name = "client_id")
     private String clientId;
+
+    @Column(name = "member_id")
     private String memberId;
+
+    @Column(name = "device_id")
     private String deviceId;
+
+    @Column(name = "created_time")
     private String createdTime;
+
+    @Column(name = "expiry_time")
     private String expiryTime;
+
+    @Column(name = "status")
     private Integer status;
 
     public String getSessionId() {

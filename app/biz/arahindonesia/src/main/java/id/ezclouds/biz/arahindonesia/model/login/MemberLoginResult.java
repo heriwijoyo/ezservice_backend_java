@@ -12,17 +12,17 @@ import id.ezclouds.biz.arahindonesia.model.member.MemberBase;
  */
 public class MemberLoginResult {
 
-    private String memberSessionCode;
+    private String memberSessionId;
     private String memberRoleCode;
     private String successMessage;
     private MemberBase memberBase;
 
-    public String getMemberSessionCode() {
-        return memberSessionCode;
+    public String getMemberSessionId() {
+        return memberSessionId;
     }
 
-    public void setMemberSessionCode(String memberSessionCode) {
-        this.memberSessionCode = memberSessionCode;
+    public void setMemberSessionId(String memberSessionId) {
+        this.memberSessionId = memberSessionId;
     }
 
     public String getMemberRoleCode() {
