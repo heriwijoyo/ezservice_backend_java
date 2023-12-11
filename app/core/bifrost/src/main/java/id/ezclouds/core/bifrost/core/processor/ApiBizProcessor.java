@@ -5,7 +5,7 @@
 package id.ezclouds.core.bifrost.core.processor;
 
 import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
-import id.ezclouds.biz.arahindonesia.service.AppSettingService;
+import id.ezclouds.biz.arahindonesia.service.BizAppSettingService;
 import id.ezclouds.biz.arahindonesia.service.NewsService;
 import id.ezclouds.biz.arahindonesia.service.api.CandidateProfileService;
 import id.ezclouds.biz.arahindonesia.service.api.BizMemberLoginService;
@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 public class ApiBizProcessor implements BizProcessor {
 
     @Autowired
-    private AppSettingService appSettingService;
+    private BizAppSettingService bizAppSettingService;
 
     @Autowired
     private CandidateProfileService candidateProfileService;
@@ -48,7 +48,7 @@ public class ApiBizProcessor implements BizProcessor {
 
         switch (apiEvent) {
             case API_APP_SETTING:
-                return appSettingService.getAppSetting();
+                return bizAppSettingService.getAppSetting();
 
             case CANDIDATE_PROFILE:
                 return candidateProfileService.getCandidateProfile();

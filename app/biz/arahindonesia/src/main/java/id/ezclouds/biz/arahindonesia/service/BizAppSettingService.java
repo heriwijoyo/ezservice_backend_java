@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * @version $Id: AppSettingService.java, v 0.1 2023‐12‐09 12:53 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class AppSettingService {
+public class BizAppSettingService {
 
     @Autowired
     private AppConfigService appConfigService;
