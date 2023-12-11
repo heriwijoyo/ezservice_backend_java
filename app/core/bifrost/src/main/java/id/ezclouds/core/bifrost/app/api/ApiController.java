@@ -15,7 +15,7 @@ import id.ezclouds.core.bifrost.app.api.request.ApiBaseRequest;
 import id.ezclouds.core.bifrost.app.api.request.MemberLoginRequest;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
 import id.ezclouds.core.bifrost.app.api.result.ErrorResult;
-import id.ezclouds.core.bifrost.app.api.result.ListResult;
+import id.ezclouds.core.shared.result.ListResult;
 import id.ezclouds.core.bifrost.core.ControllerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

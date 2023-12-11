@@ -7,13 +7,13 @@ package id.ezclouds.core.bifrost.core.processor;
 import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
 import id.ezclouds.biz.arahindonesia.service.api.BizAppSettingService;
 import id.ezclouds.biz.arahindonesia.service.NewsService;
-import id.ezclouds.biz.arahindonesia.service.api.CandidateProfileService;
+import id.ezclouds.biz.arahindonesia.service.api.BizCandidateProfileService;
 import id.ezclouds.biz.arahindonesia.service.api.BizMemberLoginService;
-import id.ezclouds.biz.arahindonesia.service.api.MemberProfileService;
+import id.ezclouds.biz.arahindonesia.service.api.BizMemberProfileService;
 import id.ezclouds.common.util.error.EzErrorException;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.MemberLoginRequest;
-import id.ezclouds.core.bifrost.app.api.result.ListResult;
+import id.ezclouds.core.shared.result.ListResult;
 import id.ezclouds.core.bifrost.core.BaseRequest;
 import id.ezclouds.core.shared.context.EzAppEvent;
 import id.ezclouds.core.shared.model.MemberLogin;
@@ -31,13 +31,13 @@ public class ApiBizProcessor implements BizProcessor {
     private BizAppSettingService bizAppSettingService;
 
     @Autowired
-    private CandidateProfileService candidateProfileService;
+    private BizCandidateProfileService bizCandidateProfileService;
 
     @Autowired
     private NewsService newsService;
 
     @Autowired
-    private MemberProfileService memberProfileService;
+    private BizMemberProfileService bizMemberProfileService;
 
     @Autowired
     private BizMemberLoginService bizMemberLoginService;
@@ -51,7 +51,7 @@ public class ApiBizProcessor implements BizProcessor {
                 return bizAppSettingService.getAppSetting();
 
             case CANDIDATE_PROFILE:
-                return candidateProfileService.getCandidateProfile();
+                return bizCandidateProfileService.getCandidateProfile();
 
             case NEWS:
                 ListResult<SimpleNews> listResult = new ListResult<>();
@@ -59,7 +59,7 @@ public class ApiBizProcessor implements BizProcessor {
                 return listResult;
 
             case MEMBER_PROFILE:
-                return memberProfileService.getMemberProfile();
+                return bizMemberProfileService.getMemberProfile();
 
             case MEMBER_LOGIN:
                 return bizMemberLoginService.loginMember(composeMemberLogin((MemberLoginRequest)request));

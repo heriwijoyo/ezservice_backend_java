@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2023 All Rights Reserved.
  */
-package id.ezclouds.core.bifrost.app.api.result;
+package id.ezclouds.core.shared.result;
 
 import java.util.List;
 

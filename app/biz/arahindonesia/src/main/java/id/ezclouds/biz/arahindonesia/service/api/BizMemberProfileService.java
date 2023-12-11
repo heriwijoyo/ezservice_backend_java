@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
  * @version $Id: MemberProfileService.java, v 0.1 2023‐12‐11 1:03 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class MemberProfileService {
+public class BizMemberProfileService {
 
     @Autowired
     private AppProfileService appProfileService;

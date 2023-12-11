@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * @version $Id: CandidateProfileService.java, v 0.1 2023‐12‐10 3:09 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class CandidateProfileService {
+public class BizCandidateProfileService {
 
     private static final String KEY_CONTACT_NUMBER = "contactNumber";
     private static final String KEY_VISION = "vision";
