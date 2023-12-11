@@ -123,13 +123,4 @@ public class ModelConverter {
         candidateBio.setValue(bioDO.getValue());
         return candidateBio;
     }
-
-    public static MemberBase convert(AppMemberDO memberDO) {
-        if (memberDO == null) {
-            return null;
-        }
-        MemberBase memberBase = new MemberBase();
-
-        return memberBase;
-    }
 }

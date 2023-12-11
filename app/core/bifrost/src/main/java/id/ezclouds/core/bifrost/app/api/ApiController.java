@@ -5,6 +5,7 @@
 package id.ezclouds.core.bifrost.app.api;
 
 import id.ezclouds.biz.arahindonesia.model.AppSetting;
+import id.ezclouds.biz.arahindonesia.model.login.MemberLoginResult;
 import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
 import id.ezclouds.biz.arahindonesia.model.profile.CandidateProfile;
 import id.ezclouds.biz.arahindonesia.model.profile.MemberProfile;
@@ -137,8 +138,8 @@ public class ApiController {
     }
 
     @PostMapping(value = "/memberLogin.json")
-    public ApiResult<MemberProfile> getMemberLogin(@RequestBody MemberLoginRequest request, HttpServletResponse httpServletResponse) {
-        ApiResult<MemberProfile> apiResult = new ApiResult<>();
+    public ApiResult<MemberLoginResult> getMemberLogin(@RequestBody MemberLoginRequest request, HttpServletResponse httpServletResponse) {
+        ApiResult<MemberLoginResult> apiResult = new ApiResult<>();
         apiResult.setSuccess(true);
 
         controllerTemplate.setAppEvent(ApiEvent.MEMBER_LOGIN);
@@ -146,8 +147,8 @@ public class ApiController {
         controllerTemplate.process(new ControllerTemplate.Handler() {
             @Override
             public void onResult(Object result) {
-                if (result instanceof MemberProfile) {
-                    apiResult.setData((MemberProfile) result);
+                if (result instanceof MemberLoginResult) {
+                    apiResult.setData((MemberLoginResult) result);
                 }
             }
 

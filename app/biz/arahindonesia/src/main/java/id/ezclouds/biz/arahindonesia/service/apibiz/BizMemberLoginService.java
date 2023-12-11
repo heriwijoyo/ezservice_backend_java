@@ -35,11 +35,14 @@ public class BizMemberLoginService {
         MemberBase memberBase = memberService.getMemberById(appMemberClientDO.getMemberId());
 
         AssertUtil.notNull(memberBase, EzErrorCode.MEMBER_NOT_FOUND);
-        AssertUtil.isTrue(memberBase.getStatus() == AppConstant.COMMON_STATUS_ACTIVE, EzErrorCode.MEMBER_LOGIN_FAILED, AppConstant.MEMBER_LOGIN_MESSAGE_SUSPEND);
+        AssertUtil.isTrue(memberBase.isActive(), EzErrorCode.MEMBER_LOGIN_FAILED, AppConstant.MEMBER_LOGIN_MESSAGE_SUSPEND, " KNTL");
 
         // create member session
 
         MemberLoginResult loginResult = new MemberLoginResult();
+        loginResult.setMemberSessionCode("123");
+        loginResult.setMemberRoleCode(memberBase.getRole());
+        loginResult.setSuccessMessage(AppConstant.MEMBER_LOGIN_MESSAGE_SUCCESS);
         loginResult.setMemberBase(memberBase);
 
         return loginResult;

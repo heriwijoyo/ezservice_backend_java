@@ -4,7 +4,7 @@
  */
 package id.ezclouds.biz.arahindonesia.service.core;
 
-import id.ezclouds.biz.arahindonesia.converter.ModelConverter;
+import id.ezclouds.biz.arahindonesia.converter.MemberConverter;
 import id.ezclouds.biz.arahindonesia.model.member.MemberBase;
 import id.ezclouds.common.dal.repo.member.AppMemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class MemberService {
     public MemberBase getMemberById(String memberId) {
         return appMemberRepository
                 .findById(memberId)
-                .map(ModelConverter::convert)
+                .map(MemberConverter::convert)
                 .orElse(null);
     }
 }
