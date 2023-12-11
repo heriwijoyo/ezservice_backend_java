@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2023 All Rights Reserved.
  */
-package id.ezclouds.biz.arahindonesia.service;
+package id.ezclouds.biz.arahindonesia.service.core;
 
 import id.ezclouds.biz.arahindonesia.service.data.*;
 import org.springframework.beans.factory.annotation.Autowired;

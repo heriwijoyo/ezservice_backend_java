@@ -7,7 +7,7 @@ package id.ezclouds.biz.arahindonesia.service.apibiz;
 import id.ezclouds.biz.arahindonesia.constant.AppConstant;
 import id.ezclouds.biz.arahindonesia.model.login.MemberLoginResult;
 import id.ezclouds.biz.arahindonesia.model.member.MemberBase;
-import id.ezclouds.biz.arahindonesia.service.MemberService;
+import id.ezclouds.biz.arahindonesia.service.core.MemberService;
 import id.ezclouds.biz.arahindonesia.service.authentication.AuthenticationService;
 import id.ezclouds.common.dal.model.AppMemberClientDO;
 import id.ezclouds.common.util.assertion.AssertUtil;
