@@ -9,6 +9,7 @@ import id.ezclouds.biz.arahindonesia.model.login.MemberLoginResult;
 import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
 import id.ezclouds.biz.arahindonesia.model.profile.CandidateProfile;
 import id.ezclouds.biz.arahindonesia.model.profile.MemberProfile;
+import id.ezclouds.biz.arahindonesia.service.apibiz.BizMemberLoginService;
 import id.ezclouds.biz.arahindonesia.service.core.CacheService;
 import id.ezclouds.common.util.error.EzErrorCode;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
@@ -175,8 +176,13 @@ public class ApiController {
     }
 
 
+    @Autowired
+    private BizMemberLoginService bizMemberLoginService;
 
-
+    @GetMapping(value = "/seqGenerate.json")
+    public String seqGenerate() {
+        return bizMemberLoginService.generateSequence();
+    }
 
 
     @Autowired

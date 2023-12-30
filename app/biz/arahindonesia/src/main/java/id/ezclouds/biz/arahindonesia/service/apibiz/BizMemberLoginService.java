@@ -15,8 +15,11 @@ import id.ezclouds.biz.arahindonesia.service.session.MemberSessionService;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.error.EzErrorCode;
 import id.ezclouds.core.shared.model.MemberLogin;
+import id.ezclouds.core.shared.service.CoreSequenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -33,6 +36,9 @@ public class BizMemberLoginService {
 
     @Autowired
     private MemberSessionService memberSessionService;
+
+    @Autowired
+    private CoreSequenceService coreSequenceService;
 
     public MemberLoginResult loginMember(MemberLogin memberLogin) {
 
@@ -51,5 +57,10 @@ public class BizMemberLoginService {
         loginResult.setMemberBase(memberBase);
 
         return loginResult;
+    }
+
+    @Transactional
+    public String generateSequence() {
+        return coreSequenceService.generateSequence("RJL0", "MEMBER_ID");
     }
 }
