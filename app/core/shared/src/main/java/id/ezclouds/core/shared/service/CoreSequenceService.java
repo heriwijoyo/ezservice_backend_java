@@ -6,8 +6,6 @@ package id.ezclouds.core.shared.service;
 
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.error.EzErrorCode;
-import id.ezclouds.core.shared.converter.EzCoreConverter;
-import id.ezclouds.core.shared.model.EzCoreSequence;
 import id.ezclouds.core.shared.repo.EzCoreSequenceRepository;
 import id.ezclouds.core.shared.repo.dataobject.EzCoreSequenceDO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,15 +22,10 @@ public class CoreSequenceService {
     @Autowired
     private EzCoreSequenceRepository ezCoreSequenceRepository;
 
-    public String generateSequence(String orgId, String scene) {
-        EzCoreSequenceDO ezCoreSequenceDO = ezCoreSequenceRepository.findForUpdateByOrgAndScene(orgId, scene);
+    public String generateSequence(String orgId, String orgCode, String scene) {
+        EzCoreSequenceDO currentSequence = ezCoreSequenceRepository.findForUpdateByOrgAndScene(orgId, scene);
 
-        AssertUtil.notNull(ezCoreSequenceDO, EzErrorCode.CORE_SEQUENCE_ERROR, "EzCoreSequenceDO is null");
-
-        EzCoreSequence currentSequence = EzCoreConverter.convert(ezCoreSequenceDO);
-        EzCoreSequence newSequence = new EzCoreSequence();
-        newSequence.setOrgId(currentSequence.getOrgId());
-        newSequence.setScene(currentSequence.getScene());
+        AssertUtil.notNull(currentSequence, EzErrorCode.CORE_SEQUENCE_ERROR, "EzCoreSequenceDO is null");
 
         int nextStep;
         int nextSequence = currentSequence.getSequence();
@@ -43,8 +36,21 @@ public class CoreSequenceService {
             nextStep = currentSequence.getStepValue() + 1;
         }
 
-        ezCoreSequenceRepository.updateEzCoreSequence(currentSequence.getId(), nextStep, nextSequence);
+        ezCoreSequenceRepository.updateEzCoreSequence(currentSequence.getSequenceId(), nextStep, nextSequence);
 
-        return String.valueOf(nextStep) + nextSequence;
+        String shard = String.valueOf(nextStep).substring(1);
+        String sceneCode = currentSequence.getSceneCode();
+        String sequence = composeSequence(nextSequence, currentSequence.getSequenceLength());
+
+        return orgCode + shard + sceneCode + sequence;
+    }
+
+    private String composeSequence(int sequence, int sequenceLength) {
+        String seqStr = String.valueOf(sequence);
+        while (seqStr.length() < sequenceLength) {
+            seqStr = "0" + seqStr;
+        }
+
+        return seqStr;
     }
 }

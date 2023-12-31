@@ -61,6 +61,6 @@ public class BizMemberLoginService {
 
     @Transactional
     public String generateSequence() {
-        return coreSequenceService.generateSequence("RJL0", "MEMBER_ID");
+        return coreSequenceService.generateSequence("RJL0", "201", "MEMBER_ID");
     }
 }

@@ -16,8 +16,15 @@ import javax.persistence.Table;
 @Table(name = "app_organization")
 public class OrganizationDO {
 
+    @Id
+    @Column(name = "org_id")
     private String orgId;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "code")
+    private String code;
 
     public OrganizationDO() {}
 
@@ -26,8 +33,6 @@ public class OrganizationDO {
         this.name = name;
     }
 
-    @Id
-    @Column(name = "org_id")
     public String getOrgId() {
         return orgId;
     }
@@ -36,12 +41,19 @@ public class OrganizationDO {
         this.orgId = orgId;
     }
 
-    @Column(name = "name")
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

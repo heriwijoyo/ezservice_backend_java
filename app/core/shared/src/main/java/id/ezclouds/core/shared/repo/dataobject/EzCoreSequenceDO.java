@@ -19,13 +19,16 @@ public class EzCoreSequenceDO {
 
     @Id
     @Column(name = "sequence_id")
-    private String id;
+    private String sequenceId;
 
     @Column(name = "org_id")
     private String orgId;
 
     @Column(name = "scene")
     private String scene;
+
+    @Column(name = "scene_code")
+    private String sceneCode;
 
     @Column(name = "step_min")
     private int stepMin;
@@ -36,15 +39,18 @@ public class EzCoreSequenceDO {
     @Column(name = "step_value")
     private int stepValue;
 
+    @Column(name = "sequence_length")
+    private int sequenceLength;
+
     @Column(name = "sequence")
     private int sequence;
 
-    public String getId() {
-        return id;
+    public String getSequenceId() {
+        return sequenceId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setSequenceId(String sequenceId) {
+        this.sequenceId = sequenceId;
     }
 
     public String getOrgId() {
@@ -61,6 +67,14 @@ public class EzCoreSequenceDO {
 
     public void setScene(String scene) {
         this.scene = scene;
+    }
+
+    public String getSceneCode() {
+        return sceneCode;
+    }
+
+    public void setSceneCode(String sceneCode) {
+        this.sceneCode = sceneCode;
     }
 
     public int getStepMin() {
@@ -85,6 +99,14 @@ public class EzCoreSequenceDO {
 
     public void setStepValue(int stepValue) {
         this.stepValue = stepValue;
+    }
+
+    public int getSequenceLength() {
+        return sequenceLength;
+    }
+
+    public void setSequenceLength(int sequenceLength) {
+        this.sequenceLength = sequenceLength;
     }
 
     public int getSequence() {

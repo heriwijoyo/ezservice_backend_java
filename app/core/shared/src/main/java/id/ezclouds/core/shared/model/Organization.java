@@ -12,10 +12,12 @@ public class Organization {
 
     private String orgId;
     private String name;
+    private String code;
 
-    public Organization(String orgId, String name) {
+    public Organization(String orgId, String name, String code) {
         this.orgId = orgId;
         this.name = name;
+        this.code = code;
     }
 
     public String getOrgId() {
@@ -24,5 +26,9 @@ public class Organization {
 
     public String getName() {
         return name;
+    }
+
+    public String getCode() {
+        return code;
     }
 }

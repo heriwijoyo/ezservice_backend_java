@@ -23,7 +23,7 @@ public class ModelConverter {
         if (organizationDO == null) {
             return null;
         }
-        return new Organization(organizationDO.getOrgId(), organizationDO.getName());
+        return new Organization(organizationDO.getOrgId(), organizationDO.getName(), organizationDO.getCode());
     }
 
     public static AppClient convert(AppClientDO appClientDO) {
