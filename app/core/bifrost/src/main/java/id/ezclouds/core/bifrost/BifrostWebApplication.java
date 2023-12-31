@@ -15,9 +15,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BifrostWebApplication.java, v 0.1 2023‐06‐18 11:31 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
 @ImportResource({ "classpath:/META-INF/ezclouds/spring/config.xml" })
-@SpringBootApplication(scanBasePackages = "id.ezclouds.core.bifrost,id.ezclouds.core.heimdall,id.ezclouds.biz.arahindonesia,id.ezclouds.core.shared")
-@EnableJpaRepositories(basePackages = {"id.ezclouds.common.dal", "id.ezclouds.core.shared"})
-@EntityScan(basePackages = {"id.ezclouds.common.dal", "id.ezclouds.core.shared"})
+@SpringBootApplication(scanBasePackages = {"id.ezclouds.core.bifrost", "id.ezclouds.biz.arahindonesia", "id.ezclouds.core.shared", "id.ezclouds.core.member"})
+@EnableJpaRepositories(basePackages = {"id.ezclouds.common.dal", "id.ezclouds.core.shared", "id.ezclouds.core.member"})
+@EntityScan(basePackages = {"id.ezclouds.common.dal", "id.ezclouds.core.shared", "id.ezclouds.core.member"})
 @EnableCaching
 public class BifrostWebApplication {
 

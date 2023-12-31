@@ -4,6 +4,14 @@
  */
 package id.ezclouds.core.member.service;
 
+import id.ezclouds.core.member.dataobject.CoreMemberDO;
+import id.ezclouds.core.member.dataobject.CoreMemberExtensionDO;
+import id.ezclouds.core.member.model.CoreMember;
+import id.ezclouds.core.member.model.CoreMemberExtension;
+import id.ezclouds.core.member.repo.CoreMemberExtensionRepository;
+import id.ezclouds.core.member.repo.CoreMemberRepository;
+import id.ezclouds.core.member.util.CoreMemberConverter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,4 +20,18 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CoreMemberService {
+
+    @Autowired
+    private CoreMemberRepository coreMemberRepository;
+
+    @Autowired
+    private CoreMemberExtensionRepository coreMemberExtensionRepository;
+
+    public void store(CoreMember coreMember, CoreMemberExtension coreMemberExtension) {
+        CoreMemberDO coreMemberDO = CoreMemberConverter.convert(coreMember);
+        coreMemberRepository.save(coreMemberDO);
+
+        CoreMemberExtensionDO extensionDO = CoreMemberConverter.convert(coreMemberExtension);
+        coreMemberExtensionRepository.save(extensionDO);
+    }
 }
