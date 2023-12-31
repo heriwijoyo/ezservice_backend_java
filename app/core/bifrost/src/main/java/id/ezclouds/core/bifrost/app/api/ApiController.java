@@ -162,6 +162,30 @@ public class ApiController {
         return apiResult;
     }
 
+    @PostMapping(value = "/memberLogin.json")
+    public ApiResult<MemberLoginResult> registerMember(@RequestBody MemberLoginRequest request, HttpServletResponse httpServletResponse) {
+        ApiResult<MemberLoginResult> apiResult = new ApiResult<>();
+        apiResult.setSuccess(true);
+
+        controllerTemplate.setAppEvent(ApiEvent.MEMBER_LOGIN);
+        controllerTemplate.setBaseRequest(request);
+        controllerTemplate.process(new ControllerTemplate.Handler() {
+            @Override
+            public void onResult(Object result) {
+                if (result instanceof MemberLoginResult) {
+                    apiResult.setData((MemberLoginResult) result);
+                }
+            }
+
+            @Override
+            public void onError(ErrorResult errorResult) {
+                setErrorResult(apiResult, errorResult, httpServletResponse);
+            }
+        });
+
+        return apiResult;
+    }
+
     private void setErrorResult(ApiResult apiResult, ErrorResult errorResult, HttpServletResponse httpServletResponse) {
         if (EzErrorCode.UNAUTHORIZED.getCode().equals(errorResult.getErrorCode())) {
             httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());

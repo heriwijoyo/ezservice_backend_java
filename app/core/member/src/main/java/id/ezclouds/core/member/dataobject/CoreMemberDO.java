@@ -24,6 +24,8 @@ public class CoreMemberDO {
     private String orgId;
     @Column(name = "shard")
     private String shard;
+    @Column(name = "source_id")
+    private String sourceId;
     @Column(name = "referrer_id")
     private String referrerId;
     @Column(name = "roles")
@@ -73,6 +75,14 @@ public class CoreMemberDO {
 
     public void setShard(String shard) {
         this.shard = shard;
+    }
+
+    public String getSourceId() {
+        return sourceId;
+    }
+
+    public void setSourceId(String sourceId) {
+        this.sourceId = sourceId;
     }
 
     public String getReferrerId() {

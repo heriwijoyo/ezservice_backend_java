@@ -24,6 +24,22 @@ public class CoreMemberConverter {
     public static CoreMemberDO convert(CoreMember coreMember) {
         if (coreMember == null) { return null; }
         CoreMemberDO memberDO = new CoreMemberDO();
+        memberDO.setMemberId(coreMember.getMemberId());
+        memberDO.setOrgId(coreMember.getOrgId());
+        memberDO.setShard(coreMember.getShard());
+        memberDO.setSourceId(coreMember.getSourceId());
+        memberDO.setReferrerId(coreMember.getReferrerId());
+        memberDO.setRoles(coreMember.getRoles());
+        memberDO.setName(coreMember.getName());
+        memberDO.setNickname(coreMember.getNickname());
+        memberDO.setGenderCode(coreMember.getGender().getCode());
+        memberDO.setGenderLabel(coreMember.getGender().getLabel());
+        memberDO.setDateOfBirth(coreMember.getDateOfBirth());
+        memberDO.setPhone(coreMember.getPhone());
+        memberDO.setEmail(coreMember.getEmail());
+        memberDO.setAvatarUrl(coreMember.getAvatarUrl());
+        memberDO.setPhoneVerified(boolStateValue(coreMember.isPhoneVerified()));
+        memberDO.setEmailVerified(boolStateValue(coreMember.isEmailVerified()));
         return memberDO;
     }
 
@@ -37,5 +53,12 @@ public class CoreMemberConverter {
         if (extension == null) { return null; }
         CoreMemberExtensionDO extensionDO = new CoreMemberExtensionDO();
         return extensionDO;
+    }
+
+    private static int boolStateValue(boolean boolValue) {
+        if (boolValue) {
+            return 1;
+        }
+        return 0;
     }
 }

@@ -13,6 +13,7 @@ public class CoreMember {
     private String memberId;
     private String orgId;
     private String shard;
+    private String sourceId;
     private String referrerId;
     private String roles;
     private String name;
@@ -48,6 +49,14 @@ public class CoreMember {
 
     public void setShard(String shard) {
         this.shard = shard;
+    }
+
+    public String getSourceId() {
+        return sourceId;
+    }
+
+    public void setSourceId(String sourceId) {
+        this.sourceId = sourceId;
     }
 
     public String getReferrerId() {
