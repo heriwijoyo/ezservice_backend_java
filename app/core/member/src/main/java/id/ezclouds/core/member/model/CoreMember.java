@@ -18,13 +18,15 @@ public class CoreMember {
     private String roles;
     private String name;
     private String nickname;
-    private Gender gender;
+    private String gender;
     private String dateOfBirth;
     private String phone;
     private String email;
     private String avatarUrl;
     private boolean isPhoneVerified;
     private boolean isEmailVerified;
+    private String createdTime;
+    private String modifiedTime;
     private MemberStatus memberStatus;
 
     public String getMemberId() {
@@ -91,11 +93,11 @@ public class CoreMember {
         this.nickname = nickname;
     }
 
-    public Gender getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(Gender gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
@@ -145,6 +147,22 @@ public class CoreMember {
 
     public void setEmailVerified(boolean emailVerified) {
         isEmailVerified = emailVerified;
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(String modifiedTime) {
+        this.modifiedTime = modifiedTime;
     }
 
     public MemberStatus getMemberStatus() {

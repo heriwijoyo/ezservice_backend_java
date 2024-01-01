@@ -162,7 +162,7 @@ public class ApiController {
         return apiResult;
     }
 
-    @PostMapping(value = "/memberLogin.json")
+    @PostMapping(value = "/memberRegister.json")
     public ApiResult<MemberLoginResult> registerMember(@RequestBody MemberLoginRequest request, HttpServletResponse httpServletResponse) {
         ApiResult<MemberLoginResult> apiResult = new ApiResult<>();
         apiResult.setSuccess(true);

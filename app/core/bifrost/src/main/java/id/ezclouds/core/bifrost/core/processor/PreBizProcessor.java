@@ -65,6 +65,7 @@ public class PreBizProcessor {
             AssertUtil.notNull(appClient, EzErrorCode.UNAUTHORIZED, "Unauthorized client request");
 
             EzAppContextHolder.getContext().setOrgId(organization.getOrgId());
+            EzAppContextHolder.getContext().setOrgCode(organization.getCode());
             EzAppContextHolder.getContext().setAppId(appClient.getAppId());
             EzAppContextHolder.getContext().setDeviceId(reqClient.getDeviceId());
         }

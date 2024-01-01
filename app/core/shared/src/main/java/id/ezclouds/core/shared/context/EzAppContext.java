@@ -13,6 +13,7 @@ public class EzAppContext {
     private EzAppEvent ezAppEvent;
     private String traceId;
     private String orgId;
+    private String orgCode;
     private String appId;
     private String deviceId;
 
@@ -31,6 +32,14 @@ public class EzAppContext {
 
     public void setOrgId(String orgId) {
         this.orgId = orgId;
+    }
+
+    public String getOrgCode() {
+        return orgCode;
+    }
+
+    public void setOrgCode(String orgCode) {
+        this.orgCode = orgCode;
     }
 
     public String getAppId() {

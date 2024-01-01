@@ -20,36 +20,55 @@ public class CoreMemberDO {
     @Id
     @Column(name = "member_id")
     private String memberId;
+
     @Column(name = "org_id")
     private String orgId;
+
     @Column(name = "shard")
     private String shard;
+
     @Column(name = "source_id")
     private String sourceId;
+
     @Column(name = "referrer_id")
     private String referrerId;
+
     @Column(name = "roles")
     private String roles;
+
     @Column(name = "name")
     private String name;
+
     @Column(name = "nickname")
     private String nickname;
-    @Column(name = "gender_code")
-    private int genderCode;
-    @Column(name = "gender_label")
-    private String genderLabel;
+
+    @Column(name = "gender")
+    private String gender;
+
     @Column(name = "date_of_birth")
     private String dateOfBirth;
+
     @Column(name = "phone")
     private String phone;
+
     @Column(name = "email")
     private String email;
+
     @Column(name = "avatar_url")
     private String avatarUrl;
+
     @Column(name = "is_phone_verified")
     private int phoneVerified;
+
     @Column(name = "is_email_verified")
     private int emailVerified;
+
+    @Column(name = "created_time")
+    private String createdTime;
+
+    @Column(name = "modified_time")
+    private String modifiedTime;
+
     @Column(name = "status")
     private int status;
 
@@ -117,20 +136,12 @@ public class CoreMemberDO {
         this.nickname = nickname;
     }
 
-    public int getGenderCode() {
-        return genderCode;
+    public String getGender() {
+        return gender;
     }
 
-    public void setGenderCode(int genderCode) {
-        this.genderCode = genderCode;
-    }
-
-    public String getGenderLabel() {
-        return genderLabel;
-    }
-
-    public void setGenderLabel(String genderLabel) {
-        this.genderLabel = genderLabel;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getDateOfBirth() {
@@ -179,6 +190,22 @@ public class CoreMemberDO {
 
     public void setEmailVerified(int emailVerified) {
         this.emailVerified = emailVerified;
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(String modifiedTime) {
+        this.modifiedTime = modifiedTime;
     }
 
     public int getStatus() {

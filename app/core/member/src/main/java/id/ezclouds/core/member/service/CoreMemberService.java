@@ -27,10 +27,12 @@ public class CoreMemberService {
     @Autowired
     private CoreMemberExtensionRepository coreMemberExtensionRepository;
 
-    public void store(CoreMember coreMember, CoreMemberExtension coreMemberExtension) {
+    public void store(CoreMember coreMember) {
         CoreMemberDO coreMemberDO = CoreMemberConverter.convert(coreMember);
         coreMemberRepository.save(coreMemberDO);
+    }
 
+    public void store(CoreMemberExtension coreMemberExtension) {
         CoreMemberExtensionDO extensionDO = CoreMemberConverter.convert(coreMemberExtension);
         coreMemberExtensionRepository.save(extensionDO);
     }

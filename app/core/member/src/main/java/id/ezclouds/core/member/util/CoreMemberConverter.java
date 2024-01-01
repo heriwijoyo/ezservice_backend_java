@@ -32,14 +32,15 @@ public class CoreMemberConverter {
         memberDO.setRoles(coreMember.getRoles());
         memberDO.setName(coreMember.getName());
         memberDO.setNickname(coreMember.getNickname());
-        memberDO.setGenderCode(coreMember.getGender().getCode());
-        memberDO.setGenderLabel(coreMember.getGender().getLabel());
+        memberDO.setGender(coreMember.getGender());
         memberDO.setDateOfBirth(coreMember.getDateOfBirth());
         memberDO.setPhone(coreMember.getPhone());
         memberDO.setEmail(coreMember.getEmail());
         memberDO.setAvatarUrl(coreMember.getAvatarUrl());
         memberDO.setPhoneVerified(boolStateValue(coreMember.isPhoneVerified()));
         memberDO.setEmailVerified(boolStateValue(coreMember.isEmailVerified()));
+        memberDO.setCreatedTime(coreMember.getCreatedTime());
+        memberDO.setModifiedTime(coreMember.getModifiedTime());
         return memberDO;
     }
 
