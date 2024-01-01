@@ -25,9 +25,11 @@
 		<version>2.7.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+
 	<groupId>id.ezclouds.core</groupId>
 	<artifactId>ezclouds-parent</artifactId>
 	<version>1.0.0</version>
+
 	<name>ezclouds-parent</name>
 	<description>Ez Clouds Core Project</description>
 	<properties>
@@ -59,9 +61,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>id.ezclouds.common</groupId>
-			<artifactId>ezclouds-common-util</artifactId>
-			<version>1.0.0</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-cache</artifactId>
+			<version>2.4.0</version>
 		</dependency>
 
 		<dependency>

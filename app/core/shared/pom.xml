@@ -10,7 +10,15 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>id.ezclouds.core</groupId>
     <artifactId>ezclouds-core-shared</artifactId>
     <version>1.0.0</version>
 
+    <dependencies>
+        <dependency>
+            <groupId>id.ezclouds.common</groupId>
+            <artifactId>ezclouds-common-util</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
 </project>

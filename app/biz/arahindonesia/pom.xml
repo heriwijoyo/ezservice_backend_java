@@ -12,6 +12,7 @@
 
     <groupId>id.ezclouds.biz</groupId>
     <artifactId>biz-arahindonesia</artifactId>
+    <version>1.0.0</version>
 
     <dependencies>
         <dependency>
@@ -32,34 +33,11 @@
             <version>1.0.0</version>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>id.ezclouds.common</groupId>-->
-<!--            <artifactId>ezclouds-common-util</artifactId>-->
-<!--            <version>1.0.0</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>id.ezclouds.common</groupId>
+            <artifactId>ezclouds-common-util</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-cache</artifactId>
-            <version>2.4.0</version>
-        </dependency>
-        <dependency>
-            <groupId>id.ezclouds.core</groupId>
-            <artifactId>ezclouds-core-member</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>id.ezclouds.core</groupId>
-            <artifactId>ezclouds-core-member</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>id.ezclouds.core</groupId>
-            <artifactId>ezclouds-core-member</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 </project>
