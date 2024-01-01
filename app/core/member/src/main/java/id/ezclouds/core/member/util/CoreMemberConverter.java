@@ -41,6 +41,7 @@ public class CoreMemberConverter {
         memberDO.setEmailVerified(boolStateValue(coreMember.isEmailVerified()));
         memberDO.setCreatedTime(coreMember.getCreatedTime());
         memberDO.setModifiedTime(coreMember.getModifiedTime());
+        memberDO.setStatus(coreMember.getMemberStatus().getCode());
         return memberDO;
     }
 

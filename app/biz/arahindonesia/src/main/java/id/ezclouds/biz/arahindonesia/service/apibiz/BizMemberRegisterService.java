@@ -9,7 +9,10 @@ import id.ezclouds.biz.arahindonesia.service.request.BizRequest;
 import id.ezclouds.biz.arahindonesia.service.result.BizResult;
 import id.ezclouds.biz.arahindonesia.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.DateUtil;
+import id.ezclouds.common.util.assertion.AssertUtil;
+import id.ezclouds.common.util.error.EzErrorCode;
 import id.ezclouds.core.member.model.CoreMember;
+import id.ezclouds.core.member.model.MemberStatus;
 import id.ezclouds.core.member.service.CoreMemberService;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.enums.CoreSequenceScenario;
@@ -33,20 +36,26 @@ public class BizMemberRegisterService {
     private CoreMemberService coreMemberService;
 
     @Transactional
-    public void registerMember(BizMemberRegisterRequest request) {
+    public BizResult<String> registerMember(BizMemberRegisterRequest request) {
+        final BizResult<String> bizResult = new BizResult<>();
         final String orgId = EzAppContextHolder.getContext().getOrgId();
         final String orgCode = EzAppContextHolder.getContext().getOrgCode();
 
-        BizServiceTemplate.execute(request, new BizServiceTemplate.Handler<String>() {
+        BizServiceTemplate.execute(bizResult, new BizServiceTemplate.Handler() {
 
             @Override
-            public void onRequestCheck(BizRequest request) {
-                //TODO: bizRequest validation
+            public void onRequestCheck() {
+                AssertUtil.notNull(request, EzErrorCode.PARAM_ILLEGAL, "request (BizMemberRegisterRequest) is null");
+                AssertUtil.notBlank(request.getSourceId(), EzErrorCode.PARAM_ILLEGAL, "request.sourceId is blank");
+                AssertUtil.notBlank(request.getRoles(), EzErrorCode.PARAM_ILLEGAL, "request.roles is blank");
+                AssertUtil.notBlank(request.getName(), EzErrorCode.PARAM_ILLEGAL, "request.name is blank");
+                AssertUtil.notNull(request.getBizGender(), EzErrorCode.PARAM_ILLEGAL, "request.bizGender is null");
+                AssertUtil.notBlank(request.getDateOfBirth(), EzErrorCode.PARAM_ILLEGAL, "request.dateOfBirth is blank");
+                AssertUtil.notBlank(request.getPhone(), EzErrorCode.PARAM_ILLEGAL, "request.phone is blank");
             }
 
             @Override
-            public BizResult<String> onBizProcess(BizRequest request) {
-                BizMemberRegisterRequest registerRequest = (BizMemberRegisterRequest) request;
+            public void onBizProcess() {
 
                 String memberId = coreSequenceService.generateSequence(orgId, orgCode, CoreSequenceScenario.CORE_MEMBER_ID.getCode());
                 String shard = memberId.substring(orgId.length(), orgId.length() + 2);
@@ -55,21 +64,25 @@ public class BizMemberRegisterService {
                 coreMember.setMemberId(memberId);
                 coreMember.setOrgId(orgId);
                 coreMember.setShard(shard);
-                coreMember.setSourceId(registerRequest.getSourceId());
-                coreMember.setReferrerId(registerRequest.getReferrerId());
-                coreMember.setRoles(registerRequest.getRoles());
-                coreMember.setName(registerRequest.getName());
-                coreMember.setNickname(registerRequest.getNickname());
-                coreMember.setGender(registerRequest.getBizGender().getCode());
-                coreMember.setDateOfBirth(registerRequest.getNickname());
-                coreMember.setEmail(registerRequest.getEmail());
-                coreMember.setAvatarUrl(registerRequest.getAvatarUrl());
+                coreMember.setSourceId(request.getSourceId());
+                coreMember.setReferrerId(request.getReferrerId());
+                coreMember.setRoles(request.getRoles());
+                coreMember.setName(request.getName());
+                coreMember.setNickname(request.getNickname());
+                coreMember.setGender(request.getBizGender().getCode());
+                coreMember.setDateOfBirth(request.getNickname());
+                coreMember.setEmail(request.getEmail());
+                coreMember.setAvatarUrl(request.getAvatarUrl());
                 coreMember.setCreatedTime(DateUtil.getCurrentFormattedDate());
                 coreMember.setModifiedTime(DateUtil.getCurrentFormattedDate());
-
+                coreMember.setMemberStatus(MemberStatus.ACTIVE);
                 coreMemberService.store(coreMember);
-                return null;
+
+                bizResult.setObject(memberId);
+                bizResult.setSuccess(true);
             }
         });
+
+        return bizResult;
     }
 }

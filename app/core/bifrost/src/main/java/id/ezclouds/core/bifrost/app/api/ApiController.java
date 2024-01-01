@@ -11,10 +11,12 @@ import id.ezclouds.biz.arahindonesia.model.profile.CandidateProfile;
 import id.ezclouds.biz.arahindonesia.model.profile.MemberProfile;
 import id.ezclouds.biz.arahindonesia.service.apibiz.BizMemberLoginService;
 import id.ezclouds.biz.arahindonesia.service.core.CacheService;
+import id.ezclouds.biz.arahindonesia.service.result.BizResult;
 import id.ezclouds.common.util.error.EzErrorCode;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiBaseRequest;
 import id.ezclouds.core.bifrost.app.api.request.MemberLoginRequest;
+import id.ezclouds.core.bifrost.app.api.request.MemberRegisterRequest;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
 import id.ezclouds.core.bifrost.app.api.result.ErrorResult;
 import id.ezclouds.core.shared.result.ListResult;
@@ -163,17 +165,18 @@ public class ApiController {
     }
 
     @PostMapping(value = "/memberRegister.json")
-    public ApiResult<MemberLoginResult> registerMember(@RequestBody MemberLoginRequest request, HttpServletResponse httpServletResponse) {
-        ApiResult<MemberLoginResult> apiResult = new ApiResult<>();
+    public ApiResult<String> registerMember(@RequestBody MemberRegisterRequest request, HttpServletResponse httpServletResponse) {
+        ApiResult<String> apiResult = new ApiResult<>();
         apiResult.setSuccess(true);
 
-        controllerTemplate.setAppEvent(ApiEvent.MEMBER_LOGIN);
+        controllerTemplate.setAppEvent(ApiEvent.MEMBER_REGISTER);
         controllerTemplate.setBaseRequest(request);
         controllerTemplate.process(new ControllerTemplate.Handler() {
             @Override
             public void onResult(Object result) {
-                if (result instanceof MemberLoginResult) {
-                    apiResult.setData((MemberLoginResult) result);
+                if (result instanceof BizResult) {
+                    BizResult<String> bizResult = (BizResult<String>) result;
+                    apiResult.setData(bizResult.getObject());
                 }
             }
 
