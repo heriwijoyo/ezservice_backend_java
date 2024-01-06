@@ -11,6 +11,7 @@ import id.ezclouds.common.util.error.EzErrorException;
 import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
 import id.ezclouds.core.bifrost.app.api.result.ErrorResult;
+import id.ezclouds.core.bifrost.core.processor.BizProcessor;
 import id.ezclouds.core.bifrost.core.processor.BizProcessorFactory;
 import id.ezclouds.core.bifrost.core.processor.PreBizProcessor;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
@@ -32,16 +33,11 @@ public class ApiControllerTemplate<T> {
     @Autowired
     private PreBizProcessor preBizProcessor;
 
-    @Autowired
-    private BizProcessorFactory bizProcessorFactory;
-
-
     public ApiControllerTemplate(EzAppEvent ezAppEvent) {
         this.ezAppEvent = ezAppEvent;
         this.apiResult = new ApiResult<>();
 
         preBizProcessor = SpringContextConfig.getBean(PreBizProcessor.class);
-        bizProcessorFactory = SpringContextConfig.getBean(BizProcessorFactory.class);
     }
 
     public ApiResult<T> execute(ApiRequest request, HttpServletResponse response) {
@@ -52,14 +48,10 @@ public class ApiControllerTemplate<T> {
 
             preBizProcessor.process(ezAppEvent, request);
 
-            Object processResult = bizProcessorFactory.getBizProcessor(ezAppEvent)
-                    .process(ezAppEvent, request);
+            BizProcessor<T> bizProcessor = BizProcessorFactory.getProcessor(ezAppEvent);
+            BizResult<T> bizResult = bizProcessor.process(ezAppEvent, request);
 
-            if (processResult instanceof BizResult) {
-                BizResult<T> bizResult = (BizResult<T>) processResult;
-                apiResult.setData(bizResult.getObject());
-            }
-
+            apiResult.setData(bizResult.getObject());
             apiResult.setSuccess(true);
         } catch (EzErrorException ezError) {
             ezError.printStackTrace();

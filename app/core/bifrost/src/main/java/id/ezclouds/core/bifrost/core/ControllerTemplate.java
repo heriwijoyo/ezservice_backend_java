@@ -53,7 +53,7 @@ public class ControllerTemplate {
 
             preBizProcessor.process(appEvent, baseRequest);
 
-            processResult = bizProcessorFactory.getBizProcessor(appEvent).process(appEvent, baseRequest);
+            //processResult = bizProcessorFactory.getBizProcessor(appEvent).process(appEvent, baseRequest);
 
         } catch (EzErrorException ezError) {
             errorResult = composeErrorResult(ezError);

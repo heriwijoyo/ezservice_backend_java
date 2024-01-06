@@ -6,6 +6,7 @@ package id.ezclouds.core.bifrost.core.processor;
 
 import id.ezclouds.biz.arahindonesia.service.apibiz.*;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberRegisterRequest;
+import id.ezclouds.biz.arahindonesia.service.result.BizResult;
 import id.ezclouds.common.util.error.EzErrorException;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.MemberLoginRequest;
@@ -22,7 +23,7 @@ import org.springframework.stereotype.Service;
  * @version $Id: ApiBizProcessor.java, v 0.1 2023‐12‐09 3:15 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class ApiBizProcessor implements BizProcessor {
+public class ApiBizProcessor<T> implements BizProcessor {
 
     @Autowired
     private BizAppSettingService bizAppSettingService;
@@ -43,10 +44,11 @@ public class ApiBizProcessor implements BizProcessor {
     private BizMemberService bizMemberService;
 
     @Override
-    public Object process(EzAppEvent appEvent, BaseRequest request) throws EzErrorException {
+    public BizResult process(EzAppEvent appEvent, BaseRequest request) throws EzErrorException {
         ApiEvent apiEvent = (ApiEvent) appEvent;
 
         switch (apiEvent) {
+            /*
             case API_APP_SETTING:
                 return bizAppSettingService.getAppSetting();
 
@@ -66,6 +68,7 @@ public class ApiBizProcessor implements BizProcessor {
                 BizMemberRegisterRequest bizRequest = BizRequestConverter.convert((MemberRegisterRequest) request);
                 bizRequest.setSourceId("API");
                 return bizMemberService.registerMember(bizRequest);
+             */
 
 
 

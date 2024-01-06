@@ -5,6 +5,7 @@
 package id.ezclouds.core.bifrost.core.processor;
 
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
+import id.ezclouds.core.bifrost.core.SpringContextConfig;
 import id.ezclouds.core.shared.context.EzAppEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +25,13 @@ public class BizProcessorFactory {
             return apiBizProcessor;
         }
 
+        return null;
+    }
+
+    public static <T extends Object> BizProcessor<T> getProcessor(EzAppEvent ezAppEvent) {
+        if (ezAppEvent instanceof ApiEvent) {
+            return SpringContextConfig.getBean(ApiBizProcessor.class);
+        }
         return null;
     }
 }
