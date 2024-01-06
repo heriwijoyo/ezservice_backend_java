@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
  * @version $Id: ApiBizProcessor.java, v 0.1 2023‐12‐09 3:15 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class ApiBizProcessor<T> implements BizProcessor {
+public class ApiBizProcessor implements BizProcessor {
 
     @Autowired
     private BizAppSettingService bizAppSettingService;
@@ -62,13 +62,12 @@ public class ApiBizProcessor<T> implements BizProcessor {
                 return bizMemberProfileService.getMemberProfile();
 
             case MEMBER_LOGIN:
-                return bizMemberLoginService.loginMember(composeMemberLogin((MemberLoginRequest)request));
+                return bizMemberLoginService.loginMember(composeMemberLogin((MemberLoginRequest)request));*/
 
             case MEMBER_REGISTER:
                 BizMemberRegisterRequest bizRequest = BizRequestConverter.convert((MemberRegisterRequest) request);
                 bizRequest.setSourceId("API");
                 return bizMemberService.registerMember(bizRequest);
-             */
 
 
 

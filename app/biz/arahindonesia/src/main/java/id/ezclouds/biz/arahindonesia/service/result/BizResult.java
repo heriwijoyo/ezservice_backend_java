@@ -10,11 +10,11 @@ import id.ezclouds.common.util.error.EzErrorCode;
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizResult.java, v 0.1 2023‐12‐31 2:12 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class BizResult<T> {
+public class BizResult {
 
     private boolean success;
     private EzErrorCode errorCode;
-    private T object;
+    private Object object;
 
     public boolean isSuccess() {
         return success;
@@ -32,11 +32,11 @@ public class BizResult<T> {
         this.errorCode = errorCode;
     }
 
-    public T getObject() {
+    public Object getObject() {
         return object;
     }
 
-    public void setObject(T object) {
+    public void setObject(Object object) {
         this.object = object;
     }
 }

@@ -13,7 +13,7 @@ import id.ezclouds.core.shared.context.EzAppEvent;
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizProcessor.java, v 0.1 2023‐12‐09 3:13 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public interface BizProcessor<T> {
+public interface BizProcessor {
 
-    BizResult<T> process(EzAppEvent event, BaseRequest request) throws EzErrorException;
+    BizResult<Object> process(EzAppEvent event, BaseRequest request) throws EzErrorException;
 }

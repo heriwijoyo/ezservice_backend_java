@@ -9,7 +9,7 @@ package id.ezclouds.core.bifrost.app.api.request;
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: MemberRegisterRequest.java, v 0.1 2024‐01‐01 11:33 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class MemberRegisterRequest extends ApiBaseRequest {
+public class MemberRegisterRequest extends ApiRequest {
 
     private String referrerId;
     private String roles;

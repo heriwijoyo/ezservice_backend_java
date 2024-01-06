@@ -35,8 +35,8 @@ public class BizMemberService {
     private CoreMemberService coreMemberService;
 
     @Transactional
-    public BizResult<String> registerMember(BizMemberRegisterRequest request) {
-        final BizResult<String> bizResult = new BizResult<>();
+    public BizResult registerMember(BizMemberRegisterRequest request) {
+        final BizResult bizResult = new BizResult();
         final String orgId = EzAppContextHolder.getContext().getOrgId();
         final String orgCode = EzAppContextHolder.getContext().getOrgCode();
 
@@ -86,11 +86,11 @@ public class BizMemberService {
     }
 
     @Transactional
-    public BizResult<String> getMemberSequence() {
+    public BizResult getMemberSequence() {
         final String orgId = EzAppContextHolder.getContext().getOrgId();
         final String orgCode = EzAppContextHolder.getContext().getOrgCode();
 
-        BizResult<String> bizResult = new BizResult<>();
+        BizResult bizResult = new BizResult();
         BizServiceTemplate.execute(bizResult, new BizServiceTemplate.Handler() {
             @Override
             public void onRequestCheck() {

@@ -34,7 +34,8 @@ import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: ApiController.java, v 0.1 2023‐12‐03 11:46 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
+ * @version $Id: ApiController.java, v 0.1 2023‐12‐03 11:46 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ */
 @RestController
 @RequestMapping(value = "/api", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_PLAIN_VALUE})
 public class ApiController {
@@ -168,27 +169,9 @@ public class ApiController {
     }
 
     @PostMapping(value = "/memberRegister.json")
-    public ApiResult<String> registerMember(@RequestBody MemberRegisterRequest request, HttpServletResponse httpServletResponse) {
-        ApiResult<String> apiResult = new ApiResult<>();
-
-        controllerTemplate.setAppEvent(ApiEvent.MEMBER_REGISTER);
-        controllerTemplate.setBaseRequest(request);
-        controllerTemplate.process(new ControllerTemplate.Handler() {
-            @Override
-            public void onResult(Object result) {
-                if (result instanceof BizResult) {
-                    BizResult<String> bizResult = (BizResult<String>) result;
-                    apiResult.setData(bizResult.getObject());
-                }
-            }
-
-            @Override
-            public void onError(ErrorResult errorResult) {
-                setErrorResult(apiResult, errorResult, httpServletResponse);
-            }
-        });
-
-        return apiResult;
+    public ApiResult<String> registerMember(@RequestBody MemberRegisterRequest request, HttpServletResponse response) {
+        return new ApiControllerTemplate<String>(ApiEvent.MEMBER_REGISTER)
+                .execute(request, response);
     }
 
     private void setErrorResult(ApiResult apiResult, ErrorResult errorResult, HttpServletResponse httpServletResponse) {
