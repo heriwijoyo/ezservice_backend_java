@@ -58,7 +58,7 @@ public class ControllerTemplate {
         } catch (EzErrorException ezError) {
             errorResult = composeErrorResult(ezError);
         } catch (Exception exception) {
-            errorResult = composeErrorResult(new EzErrorException(EzErrorCode.SYSTEM_ERROR, "System unknown exception: ", exception.getMessage()));
+            errorResult = composeErrorResult(new EzErrorException(EzErrorCode.SYSTEM_ERROR, "System unknown exception: " + exception.getMessage()));
         } finally {
             //do logging
             //do rollback process if any

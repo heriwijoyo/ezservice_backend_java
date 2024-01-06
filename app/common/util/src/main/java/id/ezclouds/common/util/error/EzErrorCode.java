@@ -11,6 +11,7 @@ package id.ezclouds.common.util.error;
 public enum EzErrorCode {
 
     SYSTEM_ERROR("E001", "SYSTEM_ERROR", "Unknown system error"),
+    ILLEGAL_ACTION("E999", "ILLEGAL_ACTION", "Illegal action"),
     PARAM_ILLEGAL("E002", "PARAM_ILLEGAL", "Parameter illegal"),
     UNAUTHORIZED("E003", "UNAUTHORIZED", "Unauthorized"),
     MEMBER_LOGIN_FAILED("E005", "MEMBER_LOGIN_FAILED", "Member login failed"),

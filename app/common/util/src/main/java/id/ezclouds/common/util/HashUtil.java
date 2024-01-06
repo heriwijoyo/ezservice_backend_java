@@ -15,7 +15,7 @@ import java.util.UUID;
 public class HashUtil {
 
     public static String createHash(String... inputs) {
-        return createHash(StringUtil.concateAll(inputs));
+        return createHash(StringUtil.concateStrings(inputs));
     }
 
     public static String createHash(String input) {

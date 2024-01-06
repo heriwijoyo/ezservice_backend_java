@@ -167,7 +167,6 @@ public class ApiController {
     @PostMapping(value = "/memberRegister.json")
     public ApiResult<String> registerMember(@RequestBody MemberRegisterRequest request, HttpServletResponse httpServletResponse) {
         ApiResult<String> apiResult = new ApiResult<>();
-        apiResult.setSuccess(true);
 
         controllerTemplate.setAppEvent(ApiEvent.MEMBER_REGISTER);
         controllerTemplate.setBaseRequest(request);

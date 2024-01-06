@@ -53,7 +53,7 @@ public class StringUtil {
         return str1.equals(str2);
     }
 
-    public static String concateAll(String... strings) {
+    public static String concateStrings(String... strings) {
         if (strings == null) {
             return null;
         }

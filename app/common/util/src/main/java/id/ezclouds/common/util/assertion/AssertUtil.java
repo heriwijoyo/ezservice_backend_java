@@ -16,19 +16,19 @@ public class AssertUtil {
 
     public static void notNull(Object object, EzErrorCode ezErrorCode, String... message) throws EzErrorException {
         if (object == null) {
-            throw new EzErrorException(ezErrorCode, StringUtil.concateAll(message));
+            throw new EzErrorException(ezErrorCode, StringUtil.concateStrings(message));
         }
     }
 
     public static void notBlank(String value, EzErrorCode ezErrorCode, String... message) throws EzErrorException {
         if (StringUtil.isBlank(value)) {
-            throw new EzErrorException(ezErrorCode, StringUtil.concateAll(message));
+            throw new EzErrorException(ezErrorCode, StringUtil.concateStrings(message));
         }
     }
 
     public static void isTrue(boolean state, EzErrorCode ezErrorCode, String... message) throws EzErrorException {
         if (!state) {
-            throw new EzErrorException(ezErrorCode, StringUtil.concateAll(message));
+            throw new EzErrorException(ezErrorCode, StringUtil.concateStrings(message));
         }
     }
 }

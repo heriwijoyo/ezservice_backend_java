@@ -4,8 +4,6 @@
  */
 package id.ezclouds.common.util.error;
 
-import id.ezclouds.common.util.StringUtil;
-
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: EzErrorException.java, v 0.1 2023‐12‐09 4:31 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -15,13 +13,9 @@ public class EzErrorException extends RuntimeException {
     private EzErrorCode ezErrorCode;
     private String errorMessage;
 
-    public EzErrorException(EzErrorCode ezErrorCode) {
-        this(ezErrorCode, null);
-    }
-
-    public EzErrorException(EzErrorCode ezErrorCode, String... errorMessage) {
+    public EzErrorException(EzErrorCode ezErrorCode, String errorMessage) {
         this.ezErrorCode = ezErrorCode;
-        this.errorMessage = StringUtil.concateAll(errorMessage);
+        this.errorMessage = errorMessage;
     }
 
     public EzErrorCode getEzErrorCode() {

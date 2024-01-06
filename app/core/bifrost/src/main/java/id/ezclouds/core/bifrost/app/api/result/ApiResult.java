@@ -14,6 +14,10 @@ public class ApiResult<T> {
     private ErrorResult errorResult;
     private T data;
 
+    public ApiResult() {
+        this.success = false;
+    }
+
     public boolean isSuccess() {
         return success;
     }

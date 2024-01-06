@@ -4,7 +4,6 @@
  */
 package id.ezclouds.biz.arahindonesia.service.template;
 
-import id.ezclouds.biz.arahindonesia.service.request.BizRequest;
 import id.ezclouds.biz.arahindonesia.service.result.BizResult;
 import id.ezclouds.common.util.error.EzErrorException;
 
