@@ -11,7 +11,7 @@ import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.error.EzErrorCode;
 import id.ezclouds.common.util.error.EzErrorException;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
-import id.ezclouds.core.bifrost.app.api.request.ApiBaseRequest;
+import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
 import id.ezclouds.core.bifrost.app.api.request.RequestAppClient;
 import id.ezclouds.core.bifrost.core.BaseRequest;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
@@ -36,10 +36,10 @@ public class PreBizProcessor {
     public void process(EzAppEvent event, BaseRequest request) throws EzErrorException, ClassCastException {
 
         if (event instanceof ApiEvent) {
-            AssertUtil.isTrue((request instanceof ApiBaseRequest), EzErrorCode.PARAM_ILLEGAL, "Unsupported request type");
+            AssertUtil.isTrue((request instanceof ApiRequest), EzErrorCode.PARAM_ILLEGAL, "Unsupported request type");
 
-            ApiBaseRequest apiBaseRequest = (ApiBaseRequest) request;
-            RequestAppClient reqClient = apiBaseRequest.getAppClient();
+            ApiRequest apiRequest = (ApiRequest) request;
+            RequestAppClient reqClient = apiRequest.getAppClient();
             AssertUtil.notNull(reqClient, EzErrorCode.PARAM_ILLEGAL, "Request.AppClient is null");
             AssertUtil.notBlank(reqClient.getOrganizationId(), EzErrorCode.PARAM_ILLEGAL, "Request.AppClient.organizationId is blank");
             AssertUtil.notBlank(reqClient.getApplicationId(), EzErrorCode.PARAM_ILLEGAL, "Request.AppClient.applicationId is blank");

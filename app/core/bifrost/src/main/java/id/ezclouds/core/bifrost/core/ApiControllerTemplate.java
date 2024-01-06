@@ -39,6 +39,9 @@ public class ApiControllerTemplate<T> {
     public ApiControllerTemplate(EzAppEvent ezAppEvent) {
         this.ezAppEvent = ezAppEvent;
         this.apiResult = new ApiResult<>();
+
+        preBizProcessor = SpringContextConfig.getBean(PreBizProcessor.class);
+        bizProcessorFactory = SpringContextConfig.getBean(BizProcessorFactory.class);
     }
 
     public ApiResult<T> execute(ApiRequest request, HttpServletResponse response) {
