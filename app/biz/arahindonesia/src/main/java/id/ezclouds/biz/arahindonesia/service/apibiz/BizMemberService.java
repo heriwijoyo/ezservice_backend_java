@@ -5,7 +5,6 @@
 package id.ezclouds.biz.arahindonesia.service.apibiz;
 
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberRegisterRequest;
-import id.ezclouds.biz.arahindonesia.service.request.BizRequest;
 import id.ezclouds.biz.arahindonesia.service.result.BizResult;
 import id.ezclouds.biz.arahindonesia.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.DateUtil;
