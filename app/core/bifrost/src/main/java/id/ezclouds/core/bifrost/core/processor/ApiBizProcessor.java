@@ -40,7 +40,7 @@ public class ApiBizProcessor implements BizProcessor {
     private BizMemberLoginService bizMemberLoginService;
 
     @Autowired
-    private BizMemberRegisterService bizMemberRegisterService;
+    private BizMemberService bizMemberService;
 
     @Override
     public Object process(EzAppEvent appEvent, BaseRequest request) throws EzErrorException {
@@ -65,7 +65,7 @@ public class ApiBizProcessor implements BizProcessor {
             case MEMBER_REGISTER:
                 BizMemberRegisterRequest bizRequest = BizRequestConverter.convert((MemberRegisterRequest) request);
                 bizRequest.setSourceId("API");
-                return bizMemberRegisterService.registerMember(bizRequest);
+                return bizMemberService.registerMember(bizRequest);
         }
         return null;
     }
