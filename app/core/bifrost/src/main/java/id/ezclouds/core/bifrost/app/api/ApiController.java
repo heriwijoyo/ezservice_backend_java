@@ -15,10 +15,13 @@ import id.ezclouds.biz.arahindonesia.service.result.BizResult;
 import id.ezclouds.common.util.error.EzErrorCode;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiBaseRequest;
+import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
 import id.ezclouds.core.bifrost.app.api.request.MemberLoginRequest;
 import id.ezclouds.core.bifrost.app.api.request.MemberRegisterRequest;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
 import id.ezclouds.core.bifrost.app.api.result.ErrorResult;
+import id.ezclouds.core.bifrost.core.ApiControllerTemplate;
+import id.ezclouds.core.shared.context.EzAppEvent;
 import id.ezclouds.core.shared.result.ListResult;
 import id.ezclouds.core.bifrost.core.ControllerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -202,12 +205,10 @@ public class ApiController {
     }
 
 
-    @Autowired
-    private BizMemberLoginService bizMemberLoginService;
-
-    @GetMapping(value = "/seqGenerate.json")
-    public String seqGenerate() {
-        return bizMemberLoginService.generateSequence();
+    @PostMapping(value = "/seqGenerate.json")
+    public ApiResult<String> seqGenerate(@RequestBody ApiRequest request, HttpServletResponse response) {
+        return new ApiControllerTemplate<String>(ApiEvent.GENERATE_SEQUENCE)
+                .execute(request, response);
     }
 
 

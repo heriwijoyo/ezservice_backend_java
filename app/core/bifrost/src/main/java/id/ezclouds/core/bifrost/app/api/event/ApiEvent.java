@@ -18,6 +18,8 @@ public enum ApiEvent implements EzAppEvent {
     MEMBER_LOGIN("005", "MemberLogin"),
     MEMBER_REGISTER("006", "MemberRegister"),
 
+    GENERATE_SEQUENCE("", "GenerateSequence"),
+
     ;
 
     private String code;

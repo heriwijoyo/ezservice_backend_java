@@ -9,4 +9,9 @@ package id.ezclouds.core.bifrost.core;
  * @version $Id: BaseRequest.java, v 0.1 2023‐12‐09 3:00 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 public class BaseRequest {
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }
