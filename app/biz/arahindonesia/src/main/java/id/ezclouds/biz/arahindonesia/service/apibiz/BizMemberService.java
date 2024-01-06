@@ -84,4 +84,27 @@ public class BizMemberService {
 
         return bizResult;
     }
+
+    @Transactional
+    public BizResult<String> getMemberSequence() {
+        final String orgId = EzAppContextHolder.getContext().getOrgId();
+        final String orgCode = EzAppContextHolder.getContext().getOrgCode();
+
+        BizResult<String> bizResult = new BizResult<>();
+        BizServiceTemplate.execute(bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() {
+
+            }
+
+            @Override
+            public void onBizProcess() {
+                String memberId = coreSequenceService.generateSequence(orgId, orgCode, CoreSequenceScenario.CORE_MEMBER_ID.getCode());
+                bizResult.setSuccess(true);
+                bizResult.setObject(memberId);
+            }
+        });
+
+        return bizResult;
+    }
 }

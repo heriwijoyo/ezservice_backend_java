@@ -55,6 +55,11 @@ public class ApiControllerTemplate<T> {
             Object processResult = bizProcessorFactory.getBizProcessor(ezAppEvent)
                     .process(ezAppEvent, request);
 
+            if (processResult instanceof BizResult) {
+                BizResult<T> bizResult = (BizResult<T>) processResult;
+                apiResult.setData(bizResult.getObject());
+            }
+
             apiResult.setSuccess(true);
         } catch (EzErrorException ezError) {
             ezError.printStackTrace();
