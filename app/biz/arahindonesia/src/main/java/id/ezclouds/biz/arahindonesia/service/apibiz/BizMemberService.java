@@ -19,7 +19,7 @@ import id.ezclouds.core.member.model.CoreMemberExtension;
 import id.ezclouds.core.member.model.MemberStatus;
 import id.ezclouds.core.member.service.CoreMemberService;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
-import id.ezclouds.core.shared.enums.CoreSequenceScenario;
+import id.ezclouds.core.shared.enums.CoreSequenceScene;
 import id.ezclouds.core.shared.service.CoreSequenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,7 +62,7 @@ public class BizMemberService {
             @Override
             public void onBizProcess() {
 
-                String memberId = coreSequenceService.generateSequence(orgId, orgCode, CoreSequenceScenario.CORE_MEMBER_ID.getCode());
+                String memberId = coreSequenceService.generateSequence(orgId, orgCode, CoreSequenceScene.CORE_MEMBER_ID.getCode());
                 String shard = coreSequenceService.getShardId(memberId);
 
                 CoreMember coreMember = new CoreMember();
@@ -133,7 +133,7 @@ public class BizMemberService {
 
             @Override
             public void onBizProcess() {
-                String memberId = coreSequenceService.generateSequence(orgId, orgCode, CoreSequenceScenario.CORE_MEMBER_ID.getCode());
+                String memberId = coreSequenceService.generateSequence(orgId, orgCode, CoreSequenceScene.CORE_MEMBER_ID.getCode());
                 bizResult.setSuccess(true);
                 bizResult.setObject(memberId);
             }

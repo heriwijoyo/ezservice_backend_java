@@ -13,10 +13,10 @@ import org.springframework.stereotype.Repository;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: EzCoreSequenceRepository.java, v 0.1 2023‐12‐30 3:50 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: CoreSequenceRepository.java, v 0.1 2023‐12‐30 3:50 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Repository
-public interface EzCoreSequenceRepository extends JpaRepository<EzCoreSequenceDO, String> {
+public interface CoreSequenceRepository extends JpaRepository<EzCoreSequenceDO, String> {
 
     @Query(value = "SELECT * FROM ez_core_sequence s WHERE s.org_id = :orgId AND s.scene = :scene FOR UPDATE", nativeQuery = true)
     EzCoreSequenceDO findForUpdateByOrgAndScene(

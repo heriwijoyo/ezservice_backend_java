@@ -6,7 +6,7 @@ package id.ezclouds.core.shared.service;
 
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.error.EzErrorCode;
-import id.ezclouds.core.shared.repo.EzCoreSequenceRepository;
+import id.ezclouds.core.shared.repo.CoreSequenceRepository;
 import id.ezclouds.core.shared.repo.dataobject.EzCoreSequenceDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,10 +20,10 @@ import org.springframework.stereotype.Service;
 public class CoreSequenceService {
 
     @Autowired
-    private EzCoreSequenceRepository ezCoreSequenceRepository;
+    private CoreSequenceRepository coreSequenceRepository;
 
     public String generateSequence(String orgId, String orgCode, String scene) {
-        EzCoreSequenceDO currentSequence = ezCoreSequenceRepository.findForUpdateByOrgAndScene(orgId, scene);
+        EzCoreSequenceDO currentSequence = coreSequenceRepository.findForUpdateByOrgAndScene(orgId, scene);
 
         AssertUtil.notNull(currentSequence, EzErrorCode.CORE_SEQUENCE_ERROR, "EzCoreSequenceDO is null");
 
@@ -36,7 +36,7 @@ public class CoreSequenceService {
             nextStep = currentSequence.getStepValue() + 1;
         }
 
-        ezCoreSequenceRepository.updateEzCoreSequence(currentSequence.getSequenceId(), nextStep, nextSequence);
+        coreSequenceRepository.updateEzCoreSequence(currentSequence.getSequenceId(), nextStep, nextSequence);
 
         String shard = String.valueOf(nextStep).substring(1);
         String sceneCode = currentSequence.getSceneCode();

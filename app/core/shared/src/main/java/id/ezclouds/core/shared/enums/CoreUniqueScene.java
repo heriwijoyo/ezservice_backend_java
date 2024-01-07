@@ -10,7 +10,7 @@ package id.ezclouds.core.shared.enums;
  */
 public enum CoreUniqueScene {
 
-    MEMBER_ID("MEMBER_ID")
+    CORE_MEMBER_ID("CORE_MEMBER_ID")
     ;
     private final String code;
 
