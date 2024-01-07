@@ -68,12 +68,6 @@ public class ApiBizProcessor implements BizProcessor {
                 BizMemberRegisterRequest bizRequest = BizRequestConverter.convert((MemberRegisterRequest) request);
                 bizRequest.setSourceId("API");
                 return bizMemberService.registerMember(bizRequest);
-
-
-
-
-            case GENERATE_SEQUENCE:
-                return bizMemberService.getMemberSequence();
         }
         return null;
     }

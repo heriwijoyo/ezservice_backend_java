@@ -7,6 +7,7 @@ package id.ezclouds.biz.arahindonesia.service.template;
 import id.ezclouds.biz.arahindonesia.service.result.BizResult;
 import id.ezclouds.common.util.error.EzErrorCode;
 import id.ezclouds.common.util.error.EzErrorException;
+import org.springframework.dao.DataIntegrityViolationException;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -28,6 +29,10 @@ public final class BizServiceTemplate {
 
             //TODO: log error
             ezException.printStackTrace();
+        } catch (DataIntegrityViolationException exception) {
+            bizResult.setSuccess(false);
+            bizResult.setErrorCode(EzErrorCode.IDEMPOTENT_ERROR);
+            bizResult.setErrorMessage(EzErrorCode.IDEMPOTENT_ERROR.getDescription());
         } catch (Exception exception) {
             bizResult.setSuccess(false);
             bizResult.setErrorCode(EzErrorCode.SYSTEM_ERROR);
