@@ -6,6 +6,7 @@ package id.ezclouds.biz.arahindonesia.service.apibiz;
 
 import id.ezclouds.biz.arahindonesia.converter.BizMemberConverter;
 import id.ezclouds.biz.arahindonesia.model.member.BizMember;
+import id.ezclouds.biz.arahindonesia.model.member.BizMemberInfo;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberRegisterRequest;
 import id.ezclouds.biz.arahindonesia.service.result.BizResult;
 import id.ezclouds.biz.arahindonesia.service.template.BizServiceTemplate;
@@ -104,7 +105,10 @@ public class BizMemberService {
                 CoreMemberExtension storedMemberExtension = coreMemberService.getPessimisticCoreMemberExtension(memberId);
                 BizMember bizMember = BizMemberConverter.convert(storedMember, storedMemberExtension);
 
-                bizResult.setObject(bizMember);
+                BizMemberInfo bizMemberInfo = new BizMemberInfo();
+                bizMemberInfo.setBizMember(bizMember);
+
+                bizResult.setObject(bizMemberInfo);
                 bizResult.setSuccess(true);
             }
         });
