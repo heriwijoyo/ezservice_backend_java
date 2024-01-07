@@ -16,6 +16,7 @@ public enum EzErrorCode {
     UNAUTHORIZED("E003", "UNAUTHORIZED", "Unauthorized"),
     MEMBER_LOGIN_FAILED("E005", "MEMBER_LOGIN_FAILED", "Member login failed"),
     MEMBER_NOT_FOUND("E006", "MEMBER_NOT_FOUND", "Member not found"),
+    MEMBER_CLIENT_NOT_FOUND("E123", "MEMBER_CLIENT_NOT_FOUND", "Member client not found"),
     SESSION_INVALID("E301", "SESSION_INVALID", "Session invalid"),
     SESSION_EXPIRED("E302", "SESSION_EXPIRED", "User session expired"),
     CORE_SEQUENCE_ERROR("E007", "CORE_SEQUENCE_ERROR", "Core sequence error"),

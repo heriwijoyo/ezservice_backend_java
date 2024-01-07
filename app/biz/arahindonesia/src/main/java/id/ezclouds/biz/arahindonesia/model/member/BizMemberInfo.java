@@ -11,7 +11,7 @@ package id.ezclouds.biz.arahindonesia.model.member;
 public class BizMemberInfo {
 
     private BizMember bizMember;
-
+    private BizMemberClient bizMemberClient;
 
     public BizMember getBizMember() {
         return bizMember;
@@ -19,5 +19,13 @@ public class BizMemberInfo {
 
     public void setBizMember(BizMember bizMember) {
         this.bizMember = bizMember;
+    }
+
+    public BizMemberClient getBizMemberClient() {
+        return bizMemberClient;
+    }
+
+    public void setBizMemberClient(BizMemberClient bizMemberClient) {
+        this.bizMemberClient = bizMemberClient;
     }
 }

@@ -4,8 +4,11 @@
  */
 package id.ezclouds.biz.arahindonesia.service.apibiz;
 
+import id.ezclouds.biz.arahindonesia.converter.BizMemberClientConverter;
 import id.ezclouds.biz.arahindonesia.converter.BizMemberConverter;
+import id.ezclouds.biz.arahindonesia.model.BizStatus;
 import id.ezclouds.biz.arahindonesia.model.member.BizMember;
+import id.ezclouds.biz.arahindonesia.model.member.BizMemberClient;
 import id.ezclouds.biz.arahindonesia.model.member.BizMemberInfo;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberRegisterRequest;
 import id.ezclouds.biz.arahindonesia.service.result.BizResult;
@@ -14,6 +17,8 @@ import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.error.EzErrorCode;
 import id.ezclouds.common.util.error.EzErrorException;
+import id.ezclouds.core.auth.model.CoreMemberClient;
+import id.ezclouds.core.auth.service.CoreAuthService;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
 import id.ezclouds.core.member.model.MemberStatus;
@@ -35,6 +40,8 @@ import javax.transaction.Transactional;
 @Service
 public class BizMemberService {
 
+    private static final String DEFAULT_LOGIN_TYPE = "PHONE";
+
     @Autowired
     private CoreUniqueService coreUniqueService;
 
@@ -44,10 +51,12 @@ public class BizMemberService {
     @Autowired
     private CoreMemberService coreMemberService;
 
+    @Autowired
+    private CoreAuthService coreAuthService;
+
     public BizResult registerMember(BizMemberRegisterRequest request) throws EzErrorException {
         final BizResult bizResult = new BizResult();
         final String orgId = EzAppContextHolder.getContext().getOrgId();
-        final String orgCode = EzAppContextHolder.getContext().getOrgCode();
 
         BizServiceTemplate.execute(bizResult, new BizServiceTemplate.Handler() {
 
@@ -80,8 +89,9 @@ public class BizMemberService {
 
     @Transactional
     private BizMemberInfo processRegisterMember(BizMemberRegisterRequest request) {
-        final String orgId = EzAppContextHolder.getContext().getOrgId();
-        final String orgCode = EzAppContextHolder.getContext().getOrgCode();
+        String orgId = EzAppContextHolder.getContext().getOrgId();
+        String orgCode = EzAppContextHolder.getContext().getOrgCode();
+        String appId = EzAppContextHolder.getContext().getAppId();
 
         String memberId = coreSequenceService.generateSequence(orgId, orgCode, CoreSequenceScene.CORE_MEMBER_ID.getCode());
         String shard = coreSequenceService.getShardId(memberId);
@@ -125,12 +135,25 @@ public class BizMemberService {
         memberExtension.setTpsNumber(request.getTpsNumber());
         coreMemberService.store(memberExtension);
 
+        CoreMemberClient memberClient = new CoreMemberClient();
+        memberClient.setOrgId(orgId);
+        memberClient.setShard(shard);
+        memberClient.setAppId(appId);
+        memberClient.setMemberId(memberId);
+        memberClient.setLoginType(DEFAULT_LOGIN_TYPE);
+        memberClient.setStatus(BizStatus.ACTIVE.getCode());
+        coreAuthService.createMemberClient(memberClient);
+
         CoreMember storedMember = coreMemberService.getOptimisticCoreMember(memberId);
         CoreMemberExtension storedMemberExtension = coreMemberService.getPessimisticCoreMemberExtension(memberId);
+        CoreMemberClient storedMemberClient = coreAuthService.getOptimisticMemberClient(DEFAULT_LOGIN_TYPE, memberId);
+
         BizMember bizMember = BizMemberConverter.convert(storedMember, storedMemberExtension);
+        BizMemberClient bizMemberClient = BizMemberClientConverter.convert(storedMemberClient);
 
         BizMemberInfo bizMemberInfo = new BizMemberInfo();
         bizMemberInfo.setBizMember(bizMember);
+        bizMemberInfo.setBizMemberClient(bizMemberClient);
 
         return bizMemberInfo;
     }

@@ -45,6 +45,9 @@ public class CoreMemberClientDO {
     @Column(name = "login_pin")
     private String loginPin;
 
+    @Column(name = "created_time")
+    private String createdTime;
+
     @Column(name = "status")
     private int status;
 
@@ -118,6 +121,14 @@ public class CoreMemberClientDO {
 
     public void setLoginPin(String loginPin) {
         this.loginPin = loginPin;
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
     }
 
     public int getStatus() {
