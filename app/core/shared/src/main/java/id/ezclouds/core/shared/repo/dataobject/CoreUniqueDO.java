@@ -4,6 +4,8 @@
  */
 package id.ezclouds.core.shared.repo.dataobject;
 
+import org.springframework.data.domain.Persistable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -15,7 +17,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "ez_core_unique")
-public class CoreUniqueDO {
+public class CoreUniqueDO implements Persistable<String> {
 
     @Id
     @Column(name = "unique_id")
@@ -32,6 +34,16 @@ public class CoreUniqueDO {
 
     @Column(name = "created_time")
     private String createdTime;
+
+    @Override
+    public String getId() {
+        return uniqueId;
+    }
+
+    @Override
+    public boolean isNew() {
+        return true;
+    }
 
     public String getUniqueId() {
         return uniqueId;

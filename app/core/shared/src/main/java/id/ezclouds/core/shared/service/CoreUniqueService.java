@@ -11,6 +11,8 @@ import id.ezclouds.core.shared.repo.dataobject.CoreUniqueDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLIntegrityConstraintViolationException;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: CoreUniqueService.java, v 0.1 2024‐01‐07 7:12 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -37,6 +39,7 @@ public class CoreUniqueService {
             result = true;
         } catch (Exception e) {
             result = false;
+            e.printStackTrace();
         }
 
         return result;

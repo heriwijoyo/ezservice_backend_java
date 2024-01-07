@@ -43,7 +43,7 @@ public final class BizServiceTemplate {
     }
 
     public interface Handler {
-        void onRequestCheck();
-        void onBizProcess();
+        void onRequestCheck() throws EzErrorException;
+        void onBizProcess() throws EzErrorException;
     }
 }
