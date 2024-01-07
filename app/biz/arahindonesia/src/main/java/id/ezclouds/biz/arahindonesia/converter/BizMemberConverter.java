@@ -54,6 +54,8 @@ public class BizMemberConverter {
         bizMember.setEmail(member.getEmail());
         bizMember.setAddress(member.getAddress());
         bizMember.setPhoneVerified(member.isPhoneVerified());
+        bizMember.setEmailVerified(member.isEmailVerified());
+        bizMember.setAddressVerified(member.isAddressVerified());
         BizStatus bizStatus = BizStatus.getByCode(member.getMemberStatus().getCode());
         bizMember.setStatus(bizStatus);
 
@@ -61,7 +63,6 @@ public class BizMemberConverter {
         if (extension == null) {
             return bizMember;
         }
-
         bizMember.setIdCardNumber(extension.getIdCardNumber());
         bizMember.setIdCardDocUrl(extension.getIdCardDocUrl());
         bizMember.setFamilyCardNumber(extension.getFamilyCardNumber());

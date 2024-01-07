@@ -25,7 +25,7 @@ public class BizMember {
     private String address;
     private boolean phoneVerified;
     private boolean emailVerified;
-
+    private boolean addressVerified;
     private BizStatus status;
 
     //CoreMemberExtension
@@ -139,6 +139,14 @@ public class BizMember {
 
     public void setEmailVerified(boolean emailVerified) {
         this.emailVerified = emailVerified;
+    }
+
+    public boolean isAddressVerified() {
+        return addressVerified;
+    }
+
+    public void setAddressVerified(boolean addressVerified) {
+        this.addressVerified = addressVerified;
     }
 
     public BizStatus getStatus() {
