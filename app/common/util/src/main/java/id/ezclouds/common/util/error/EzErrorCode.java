@@ -12,7 +12,7 @@ public enum EzErrorCode {
 
     SYSTEM_ERROR("E001", "SYSTEM_ERROR", "Unknown system error"),
     ILLEGAL_ACTION("E999", "ILLEGAL_ACTION", "Illegal action"),
-    PARAM_ILLEGAL("E002", "PARAM_ILLEGAL", "Parameter illegal"),
+    ILLEGAL_PARAM("E002", "ILLEGAL_PARAM", "Illegal parameter"),
     UNAUTHORIZED("E003", "UNAUTHORIZED", "Unauthorized"),
     MEMBER_LOGIN_FAILED("E005", "MEMBER_LOGIN_FAILED", "Member login failed"),
     MEMBER_NOT_FOUND("E006", "MEMBER_NOT_FOUND", "Member not found"),

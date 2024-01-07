@@ -49,13 +49,14 @@ public class BizMemberService {
 
             @Override
             public void onRequestCheck() {
-                AssertUtil.notNull(request, EzErrorCode.PARAM_ILLEGAL, "request (BizMemberRegisterRequest) is null");
-                AssertUtil.notBlank(request.getSourceId(), EzErrorCode.PARAM_ILLEGAL, "request.sourceId is blank");
-                AssertUtil.notBlank(request.getRoles(), EzErrorCode.PARAM_ILLEGAL, "request.roles is blank");
-                AssertUtil.notBlank(request.getName(), EzErrorCode.PARAM_ILLEGAL, "request.name is blank");
-                AssertUtil.notNull(request.getBizGender(), EzErrorCode.PARAM_ILLEGAL, "request.bizGender is null");
-                AssertUtil.notBlank(request.getDateOfBirth(), EzErrorCode.PARAM_ILLEGAL, "request.dateOfBirth is blank");
-                AssertUtil.notBlank(request.getPhone(), EzErrorCode.PARAM_ILLEGAL, "request.phone is blank");
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM, "request (BizMemberRegisterRequest) is null");
+                AssertUtil.notBlank(request.getSourceId(), EzErrorCode.ILLEGAL_PARAM, "request.sourceId is blank");
+                AssertUtil.notBlank(request.getRoles(), EzErrorCode.ILLEGAL_PARAM, "request.roles is blank");
+                AssertUtil.notBlank(request.getName(), EzErrorCode.ILLEGAL_PARAM, "request.name is blank");
+                AssertUtil.notNull(request.getBizGender(), EzErrorCode.ILLEGAL_PARAM, "request.bizGender is null");
+                AssertUtil.notBlank(request.getDateOfBirth(), EzErrorCode.ILLEGAL_PARAM, "request.dateOfBirth is blank");
+                AssertUtil.notBlank(request.getPhone(), EzErrorCode.ILLEGAL_PARAM, "request.phone is blank");
+                AssertUtil.notBlank(request.getAddress(), EzErrorCode.ILLEGAL_PARAM, "request.address is blank");
             }
 
             @Override
@@ -74,7 +75,8 @@ public class BizMemberService {
                 coreMember.setName(request.getName());
                 coreMember.setNickname(request.getNickname());
                 coreMember.setGender(request.getBizGender().getCode());
-                coreMember.setDateOfBirth(request.getNickname());
+                coreMember.setDateOfBirth(request.getDateOfBirth());
+                coreMember.setPhone(request.getPhone());
                 coreMember.setEmail(request.getEmail());
                 coreMember.setAvatarUrl(request.getAvatarUrl());
                 coreMember.setAddress(request.getAddress());

@@ -36,15 +36,15 @@ public class PreBizProcessor {
     public void process(EzAppEvent event, BaseRequest request) throws EzErrorException, ClassCastException {
 
         if (event instanceof ApiEvent) {
-            AssertUtil.isTrue((request instanceof ApiRequest), EzErrorCode.PARAM_ILLEGAL, "Unsupported request type");
+            AssertUtil.isTrue((request instanceof ApiRequest), EzErrorCode.ILLEGAL_PARAM, "Unsupported request type");
 
             ApiRequest apiRequest = (ApiRequest) request;
             RequestAppClient reqClient = apiRequest.getAppClient();
-            AssertUtil.notNull(reqClient, EzErrorCode.PARAM_ILLEGAL, "Request.AppClient is null");
-            AssertUtil.notBlank(reqClient.getOrganizationId(), EzErrorCode.PARAM_ILLEGAL, "Request.AppClient.organizationId is blank");
-            AssertUtil.notBlank(reqClient.getApplicationId(), EzErrorCode.PARAM_ILLEGAL, "Request.AppClient.applicationId is blank");
-            AssertUtil.notBlank(reqClient.getClientId(), EzErrorCode.PARAM_ILLEGAL, "Request.AppClient.clientId is blank");
-            AssertUtil.notBlank(reqClient.getClientSecret(), EzErrorCode.PARAM_ILLEGAL, "Request.AppClient.clientSecret is blank");
+            AssertUtil.notNull(reqClient, EzErrorCode.ILLEGAL_PARAM, "Request.AppClient is null");
+            AssertUtil.notBlank(reqClient.getOrganizationId(), EzErrorCode.ILLEGAL_PARAM, "Request.AppClient.organizationId is blank");
+            AssertUtil.notBlank(reqClient.getApplicationId(), EzErrorCode.ILLEGAL_PARAM, "Request.AppClient.applicationId is blank");
+            AssertUtil.notBlank(reqClient.getClientId(), EzErrorCode.ILLEGAL_PARAM, "Request.AppClient.clientId is blank");
+            AssertUtil.notBlank(reqClient.getClientSecret(), EzErrorCode.ILLEGAL_PARAM, "Request.AppClient.clientSecret is blank");
 
             Organization organization = organizationService
                     .getOrganizations()
