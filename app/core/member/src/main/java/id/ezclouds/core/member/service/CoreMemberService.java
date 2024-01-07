@@ -4,6 +4,10 @@
  */
 package id.ezclouds.core.member.service;
 
+import id.ezclouds.common.util.DateUtil;
+import id.ezclouds.common.util.HashUtil;
+import id.ezclouds.common.util.assertion.AssertUtil;
+import id.ezclouds.common.util.error.EzErrorCode;
 import id.ezclouds.core.member.dataobject.CoreMemberDO;
 import id.ezclouds.core.member.dataobject.CoreMemberExtensionDO;
 import id.ezclouds.core.member.model.CoreMember;
@@ -34,6 +38,22 @@ public class CoreMemberService {
 
     public void store(CoreMemberExtension coreMemberExtension) {
         CoreMemberExtensionDO extensionDO = CoreMemberConverter.convert(coreMemberExtension);
+        extensionDO.setMemberExtensionId(HashUtil.createHash(extensionDO.getMemberId()));
+
+        String currentDate = DateUtil.getCurrentFormattedDate();
+        extensionDO.setCreatedTime(currentDate);
+        extensionDO.setModifiedTime(currentDate);
         coreMemberExtensionRepository.save(extensionDO);
+    }
+
+    public CoreMember getOptimisticCoreMember(String memberId) {
+        CoreMemberDO coreMemberDO = coreMemberRepository.findById(memberId).orElse(null);
+        AssertUtil.notNull(coreMemberDO, EzErrorCode.MEMBER_NOT_FOUND, "Member not found");
+        return CoreMemberConverter.convert(coreMemberDO);
+    }
+
+    public CoreMemberExtension getPessimisticCoreMemberExtension(String memberId) {
+        CoreMemberExtensionDO memberExtensionDO = coreMemberExtensionRepository.findByMemberId(memberId);
+        return CoreMemberConverter.convert(memberExtensionDO);
     }
 }

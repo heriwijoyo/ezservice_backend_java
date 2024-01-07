@@ -63,6 +63,9 @@ public class CoreMemberDO {
     @Column(name = "is_email_verified")
     private int emailVerified;
 
+    @Column(name = "address")
+    private String address;
+
     @Column(name = "created_time")
     private String createdTime;
 
@@ -190,6 +193,14 @@ public class CoreMemberDO {
 
     public void setEmailVerified(int emailVerified) {
         this.emailVerified = emailVerified;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getCreatedTime() {

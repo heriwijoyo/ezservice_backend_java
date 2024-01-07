@@ -4,6 +4,8 @@
  */
 package id.ezclouds.biz.arahindonesia.service.apibiz;
 
+import id.ezclouds.biz.arahindonesia.converter.BizMemberConverter;
+import id.ezclouds.biz.arahindonesia.model.member.BizMember;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberRegisterRequest;
 import id.ezclouds.biz.arahindonesia.service.result.BizResult;
 import id.ezclouds.biz.arahindonesia.service.template.BizServiceTemplate;
@@ -11,6 +13,7 @@ import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.error.EzErrorCode;
 import id.ezclouds.core.member.model.CoreMember;
+import id.ezclouds.core.member.model.CoreMemberExtension;
 import id.ezclouds.core.member.model.MemberStatus;
 import id.ezclouds.core.member.service.CoreMemberService;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
@@ -57,7 +60,7 @@ public class BizMemberService {
             public void onBizProcess() {
 
                 String memberId = coreSequenceService.generateSequence(orgId, orgCode, CoreSequenceScenario.CORE_MEMBER_ID.getCode());
-                String shard = memberId.substring(orgId.length(), orgId.length() + 2);
+                String shard = coreSequenceService.getShardId(memberId);
 
                 CoreMember coreMember = new CoreMember();
                 coreMember.setMemberId(memberId);
@@ -72,12 +75,36 @@ public class BizMemberService {
                 coreMember.setDateOfBirth(request.getNickname());
                 coreMember.setEmail(request.getEmail());
                 coreMember.setAvatarUrl(request.getAvatarUrl());
+                coreMember.setAddress(request.getAddress());
                 coreMember.setCreatedTime(DateUtil.getCurrentFormattedDate());
                 coreMember.setModifiedTime(DateUtil.getCurrentFormattedDate());
                 coreMember.setMemberStatus(MemberStatus.ACTIVE);
                 coreMemberService.store(coreMember);
 
-                bizResult.setObject(memberId);
+                CoreMemberExtension memberExtension = new CoreMemberExtension();
+                memberExtension.setMemberId(memberId);
+                memberExtension.setOrgId(orgId);
+                memberExtension.setShard(shard);
+                memberExtension.setIdCardNumber(request.getIdCardNumber());
+                memberExtension.setFamilyCardNumber(request.getFamilyCardNumber());
+                memberExtension.setProvinceId(request.getProvinceId());
+                memberExtension.setProvinceName(request.getProvinceName());
+                memberExtension.setRegencyId(request.getRegencyId());
+                memberExtension.setRegencyName(request.getRegencyName());
+                memberExtension.setDistrictId(request.getDistrictId());
+                memberExtension.setDistrictName(request.getDistrictName());
+                memberExtension.setVillageId(request.getVillageId());
+                memberExtension.setVillageName(request.getVillageName());
+                memberExtension.setRukunWarga(request.getRukunWarga());
+                memberExtension.setRukunTetangga(request.getRukunTetangga());
+                memberExtension.setTpsNumber(request.getTpsNumber());
+                coreMemberService.store(memberExtension);
+
+                CoreMember storedMember = coreMemberService.getOptimisticCoreMember(memberId);
+                CoreMemberExtension storedMemberExtension = coreMemberService.getPessimisticCoreMemberExtension(memberId);
+                BizMember bizMember = BizMemberConverter.convert(storedMember, storedMemberExtension);
+
+                bizResult.setObject(bizMember);
                 bizResult.setSuccess(true);
             }
         });

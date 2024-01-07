@@ -9,9 +9,7 @@ import id.ezclouds.biz.arahindonesia.model.login.MemberLoginResult;
 import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
 import id.ezclouds.biz.arahindonesia.model.profile.CandidateProfile;
 import id.ezclouds.biz.arahindonesia.model.profile.MemberProfile;
-import id.ezclouds.biz.arahindonesia.service.apibiz.BizMemberLoginService;
 import id.ezclouds.biz.arahindonesia.service.core.CacheService;
-import id.ezclouds.biz.arahindonesia.service.result.BizResult;
 import id.ezclouds.common.util.error.EzErrorCode;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiBaseRequest;
@@ -21,7 +19,6 @@ import id.ezclouds.core.bifrost.app.api.request.MemberRegisterRequest;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
 import id.ezclouds.core.bifrost.app.api.result.ErrorResult;
 import id.ezclouds.core.bifrost.core.ApiControllerTemplate;
-import id.ezclouds.core.shared.context.EzAppEvent;
 import id.ezclouds.core.shared.result.ListResult;
 import id.ezclouds.core.bifrost.core.ControllerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +37,6 @@ import java.util.List;
 @RequestMapping(value = "/api", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_PLAIN_VALUE})
 public class ApiController {
 
-    @Autowired
     private ControllerTemplate controllerTemplate;
 
     @PostMapping(value = "/appSetting.json")
@@ -171,7 +167,12 @@ public class ApiController {
     @PostMapping(value = "/memberRegister.json")
     public ApiResult<String> registerMember(@RequestBody MemberRegisterRequest request, HttpServletResponse response) {
         return new ApiControllerTemplate<String>(ApiEvent.MEMBER_REGISTER)
-                .execute(request, response);
+                .execute(request, response, new ApiControllerTemplate.ConvertHandler<String>() {
+                    @Override
+                    public String convertFrom(Object object) {
+                        return null;
+                    }
+                });
     }
 
     private void setErrorResult(ApiResult apiResult, ErrorResult errorResult, HttpServletResponse httpServletResponse) {
@@ -191,7 +192,12 @@ public class ApiController {
     @PostMapping(value = "/seqGenerate.json")
     public ApiResult<String> seqGenerate(@RequestBody ApiRequest request, HttpServletResponse response) {
         return new ApiControllerTemplate<String>(ApiEvent.GENERATE_SEQUENCE)
-                .execute(request, response);
+                .execute(request, response, new ApiControllerTemplate.ConvertHandler<String>() {
+                    @Override
+                    public String convertFrom(Object object) {
+                        return null;
+                    }
+                });
     }
 
 

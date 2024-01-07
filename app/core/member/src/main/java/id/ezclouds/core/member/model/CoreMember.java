@@ -23,6 +23,7 @@ public class CoreMember {
     private String phone;
     private String email;
     private String avatarUrl;
+    private String address;
     private boolean isPhoneVerified;
     private boolean isEmailVerified;
     private String createdTime;
@@ -123,6 +124,14 @@ public class CoreMember {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getAvatarUrl() {

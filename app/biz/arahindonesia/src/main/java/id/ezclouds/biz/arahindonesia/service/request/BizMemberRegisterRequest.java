@@ -22,6 +22,20 @@ public class BizMemberRegisterRequest extends BizRequest {
     private String phone;
     private String email;
     private String avatarUrl;
+    private String idCardNumber;
+    private String familyCardNumber;
+    private String provinceId;
+    private String provinceName;
+    private String regencyId;
+    private String regencyName;
+    private String districtId;
+    private String districtName;
+    private String villageId;
+    private String villageName;
+    private String rukunWarga;
+    private String rukunTetangga;
+    private String tpsNumber;
+    private String address;
 
     public String getSourceId() {
         return sourceId;
@@ -101,5 +115,117 @@ public class BizMemberRegisterRequest extends BizRequest {
 
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
+    }
+
+    public String getIdCardNumber() {
+        return idCardNumber;
+    }
+
+    public void setIdCardNumber(String idCardNumber) {
+        this.idCardNumber = idCardNumber;
+    }
+
+    public String getFamilyCardNumber() {
+        return familyCardNumber;
+    }
+
+    public void setFamilyCardNumber(String familyCardNumber) {
+        this.familyCardNumber = familyCardNumber;
+    }
+
+    public String getProvinceId() {
+        return provinceId;
+    }
+
+    public void setProvinceId(String provinceId) {
+        this.provinceId = provinceId;
+    }
+
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
+    }
+
+    public String getRegencyId() {
+        return regencyId;
+    }
+
+    public void setRegencyId(String regencyId) {
+        this.regencyId = regencyId;
+    }
+
+    public String getRegencyName() {
+        return regencyName;
+    }
+
+    public void setRegencyName(String regencyName) {
+        this.regencyName = regencyName;
+    }
+
+    public String getDistrictId() {
+        return districtId;
+    }
+
+    public void setDistrictId(String districtId) {
+        this.districtId = districtId;
+    }
+
+    public String getDistrictName() {
+        return districtName;
+    }
+
+    public void setDistrictName(String districtName) {
+        this.districtName = districtName;
+    }
+
+    public String getVillageId() {
+        return villageId;
+    }
+
+    public void setVillageId(String villageId) {
+        this.villageId = villageId;
+    }
+
+    public String getVillageName() {
+        return villageName;
+    }
+
+    public void setVillageName(String villageName) {
+        this.villageName = villageName;
+    }
+
+    public String getRukunWarga() {
+        return rukunWarga;
+    }
+
+    public void setRukunWarga(String rukunWarga) {
+        this.rukunWarga = rukunWarga;
+    }
+
+    public String getRukunTetangga() {
+        return rukunTetangga;
+    }
+
+    public void setRukunTetangga(String rukunTetangga) {
+        this.rukunTetangga = rukunTetangga;
+    }
+
+    public String getTpsNumber() {
+        return tpsNumber;
+    }
+
+    public void setTpsNumber(String tpsNumber) {
+        this.tpsNumber = tpsNumber;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

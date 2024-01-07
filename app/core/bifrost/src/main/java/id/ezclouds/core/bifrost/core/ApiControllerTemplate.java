@@ -40,7 +40,7 @@ public class ApiControllerTemplate<T> {
         preBizProcessor = SpringContextConfig.getBean(PreBizProcessor.class);
     }
 
-    public ApiResult<T> execute(ApiRequest request, HttpServletResponse response) {
+    public ApiResult<T> execute(ApiRequest request, HttpServletResponse response, ConvertHandler<T> convertHandler) {
 
         try {
             AssertUtil.notNull(ezAppEvent, EzErrorCode.ILLEGAL_ACTION, "Illegal action request");
@@ -48,11 +48,11 @@ public class ApiControllerTemplate<T> {
 
             preBizProcessor.process(ezAppEvent, request);
 
-            BizProcessor<T> bizProcessor = BizProcessorFactory.getProcessor(ezAppEvent);
-            BizResult<T> bizResult = bizProcessor.process(ezAppEvent, request);
+            BizProcessor bizProcessor = BizProcessorFactory.getBizProcessor(ezAppEvent);
+            BizResult bizResult = bizProcessor.process(ezAppEvent, request);
 
             apiResult.setSuccess(bizResult.isSuccess());
-            apiResult.setData(bizResult.getObject());
+            apiResult.setData(convertHandler.convertFrom(bizResult.getObject()));
         } catch (EzErrorException ezError) {
             ezError.printStackTrace();
             apiResult.setErrorResult(composeErrorResult(ezError));
@@ -104,5 +104,9 @@ public class ApiControllerTemplate<T> {
         if (EzErrorCode.SESSION_EXPIRED.getCode().equals(apiResult.getErrorResult().getErrorCode())) {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
         }
+    }
+
+    public interface ConvertHandler<T> {
+        T convertFrom(Object object);
     }
 }

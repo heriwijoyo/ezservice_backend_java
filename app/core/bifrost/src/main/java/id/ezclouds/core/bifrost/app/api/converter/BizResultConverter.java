@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.bifrost.app.api.converter;
 
+import id.ezclouds.biz.arahindonesia.model.member.MemberBase;
 import id.ezclouds.core.bifrost.app.api.model.MemberInfo;
 
 /**
@@ -12,7 +13,11 @@ import id.ezclouds.core.bifrost.app.api.model.MemberInfo;
  */
 public class BizResultConverter {
 
-    public static MemberInfo convert(Object origin) {
-        return null;
+    public static MemberInfo convert(MemberBase memberBase) {
+        if (memberBase == null) { return null; }
+        MemberInfo memberInfo = new MemberInfo();
+        memberInfo.setMemberId(memberBase.getMemberId());
+        memberInfo.setRoles(memberBase.getRole());
+        return memberInfo;
     }
 }

@@ -8,6 +8,7 @@ import id.ezclouds.core.member.dataobject.CoreMemberDO;
 import id.ezclouds.core.member.dataobject.CoreMemberExtensionDO;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
+import id.ezclouds.core.member.model.MemberStatus;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -18,6 +19,22 @@ public class CoreMemberConverter {
     public static CoreMember convert(CoreMemberDO memberDO) {
         if (memberDO == null) { return null; }
         CoreMember member = new CoreMember();
+        member.setMemberId(memberDO.getMemberId());
+        member.setOrgId(memberDO.getOrgId());
+        member.setShard(memberDO.getShard());
+        member.setName(memberDO.getName());
+        member.setNickname(memberDO.getNickname());
+        member.setReferrerId(memberDO.getReferrerId());
+        member.setRoles(memberDO.getRoles());
+        member.setGender(memberDO.getGender());
+        member.setDateOfBirth(memberDO.getDateOfBirth());
+        member.setPhone(memberDO.getPhone());
+        member.setEmail(memberDO.getEmail());
+        member.setAvatarUrl(memberDO.getAvatarUrl());
+        member.setAddress(memberDO.getAddress());
+        member.setPhoneVerified(boolValue(memberDO.getPhoneVerified()));
+        member.setEmailVerified(boolValue(memberDO.getEmailVerified()));
+        member.setMemberStatus(MemberStatus.getByCode(memberDO.getStatus()));
         return member;
     }
 
@@ -37,6 +54,7 @@ public class CoreMemberConverter {
         memberDO.setPhone(coreMember.getPhone());
         memberDO.setEmail(coreMember.getEmail());
         memberDO.setAvatarUrl(coreMember.getAvatarUrl());
+        memberDO.setAddress(coreMember.getAddress());
         memberDO.setPhoneVerified(boolStateValue(coreMember.isPhoneVerified()));
         memberDO.setEmailVerified(boolStateValue(coreMember.isEmailVerified()));
         memberDO.setCreatedTime(coreMember.getCreatedTime());
@@ -48,12 +66,50 @@ public class CoreMemberConverter {
     public static CoreMemberExtension convert(CoreMemberExtensionDO extensionDO) {
         if (extensionDO == null) { return null; }
         CoreMemberExtension extension = new CoreMemberExtension();
+        extension.setMemberId(extensionDO.getMemberId());
+        extension.setShard(extensionDO.getShard());
+        extension.setOrgId(extensionDO.getOrgId());
+        extension.setIdCardNumber(extensionDO.getIdCardNumber());
+        extension.setIdCardDocUrl(extensionDO.getIdCardDocUrl());
+        extension.setFamilyCardNumber(extensionDO.getFamilyCardNumber());
+        extension.setFamilyCardDocUrl(extensionDO.getFamilyCardDocUrl());
+        extension.setProvinceId(extensionDO.getProvinceId());
+        extension.setProvinceName(extensionDO.getProvinceName());
+        extension.setRegencyId(extensionDO.getRegencyId());
+        extension.setRegencyName(extensionDO.getRegencyName());
+        extension.setDistrictId(extensionDO.getDistrictId());
+        extension.setDistrictName(extensionDO.getDistrictName());
+        extension.setVillageId(extensionDO.getVillageId());
+        extension.setVillageName(extensionDO.getVillageName());
+        extension.setRukunWarga(extensionDO.getRukunWarga());
+        extension.setRukunTetangga(extensionDO.getRukunTetangga());
+        extension.setTpsNumber(extensionDO.getTpsNumber());
+        extension.setAddressVerified(boolValue(extensionDO.getIsAddressVerified()));
         return extension;
     }
 
     public static CoreMemberExtensionDO convert(CoreMemberExtension extension) {
         if (extension == null) { return null; }
         CoreMemberExtensionDO extensionDO = new CoreMemberExtensionDO();
+        extensionDO.setMemberId(extension.getMemberId());
+        extensionDO.setOrgId(extension.getOrgId());
+        extensionDO.setShard(extension.getShard());
+        extensionDO.setIdCardNumber(extension.getIdCardNumber());
+        extensionDO.setIdCardDocUrl(extension.getIdCardDocUrl());
+        extensionDO.setFamilyCardNumber(extension.getFamilyCardNumber());
+        extensionDO.setFamilyCardDocUrl(extension.getFamilyCardDocUrl());
+        extensionDO.setProvinceId(extension.getProvinceId());
+        extensionDO.setProvinceName(extension.getProvinceName());
+        extensionDO.setRegencyId(extension.getRegencyId());
+        extensionDO.setRegencyName(extension.getRegencyName());
+        extensionDO.setDistrictId(extension.getDistrictId());
+        extensionDO.setDistrictName(extension.getDistrictName());
+        extensionDO.setVillageId(extension.getVillageId());
+        extensionDO.setVillageName(extension.getVillageName());
+        extensionDO.setRukunWarga(extension.getRukunWarga());
+        extensionDO.setRukunTetangga(extension.getRukunTetangga());
+        extensionDO.setTpsNumber(extension.getTpsNumber());
+        extensionDO.setIsAddressVerified(boolStateValue(extension.isAddressVerified()));
         return extensionDO;
     }
 
@@ -62,5 +118,9 @@ public class CoreMemberConverter {
             return 1;
         }
         return 0;
+    }
+
+    private static boolean boolValue(int boolState) {
+        return boolState == 1;
     }
 }
