@@ -4,12 +4,15 @@
  */
 package id.ezclouds.biz.arahindonesia.model.member;
 
+import id.ezclouds.biz.arahindonesia.model.BizStatus;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizMember.java, v 0.1 2024‐01‐07 2:08 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 public class BizMember {
 
+    //CoreMember
     private String memberId;
     private String referrerId;
     private String roles;
@@ -20,9 +23,27 @@ public class BizMember {
     private String phone;
     private String email;
     private String address;
-    private Integer phoneVerified;
-    private Integer emailVerified;
-    private Integer status;
+    private boolean phoneVerified;
+    private boolean emailVerified;
+
+    private BizStatus status;
+
+    //CoreMemberExtension
+    private String idCardNumber;
+    private String idCardDocUrl;
+    private String familyCardNumber;
+    private String familyCardDocUrl;
+    private String provinceId;
+    private String provinceName;
+    private String regencyId;
+    private String regencyName;
+    private String districtId;
+    private String districtName;
+    private String villageId;
+    private String villageName;
+    private String rukunWarga;
+    private String rukunTetangga;
+    private String tpsNumber;
 
     public String getMemberId() {
         return memberId;
@@ -104,27 +125,147 @@ public class BizMember {
         this.address = address;
     }
 
-    public Integer getPhoneVerified() {
+    public boolean isPhoneVerified() {
         return phoneVerified;
     }
 
-    public void setPhoneVerified(Integer phoneVerified) {
+    public void setPhoneVerified(boolean phoneVerified) {
         this.phoneVerified = phoneVerified;
     }
 
-    public Integer getEmailVerified() {
+    public boolean isEmailVerified() {
         return emailVerified;
     }
 
-    public void setEmailVerified(Integer emailVerified) {
+    public void setEmailVerified(boolean emailVerified) {
         this.emailVerified = emailVerified;
     }
 
-    public Integer getStatus() {
+    public BizStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(BizStatus status) {
         this.status = status;
+    }
+
+    public String getIdCardNumber() {
+        return idCardNumber;
+    }
+
+    public void setIdCardNumber(String idCardNumber) {
+        this.idCardNumber = idCardNumber;
+    }
+
+    public String getIdCardDocUrl() {
+        return idCardDocUrl;
+    }
+
+    public void setIdCardDocUrl(String idCardDocUrl) {
+        this.idCardDocUrl = idCardDocUrl;
+    }
+
+    public String getFamilyCardNumber() {
+        return familyCardNumber;
+    }
+
+    public void setFamilyCardNumber(String familyCardNumber) {
+        this.familyCardNumber = familyCardNumber;
+    }
+
+    public String getFamilyCardDocUrl() {
+        return familyCardDocUrl;
+    }
+
+    public void setFamilyCardDocUrl(String familyCardDocUrl) {
+        this.familyCardDocUrl = familyCardDocUrl;
+    }
+
+    public String getProvinceId() {
+        return provinceId;
+    }
+
+    public void setProvinceId(String provinceId) {
+        this.provinceId = provinceId;
+    }
+
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
+    }
+
+    public String getRegencyId() {
+        return regencyId;
+    }
+
+    public void setRegencyId(String regencyId) {
+        this.regencyId = regencyId;
+    }
+
+    public String getRegencyName() {
+        return regencyName;
+    }
+
+    public void setRegencyName(String regencyName) {
+        this.regencyName = regencyName;
+    }
+
+    public String getDistrictId() {
+        return districtId;
+    }
+
+    public void setDistrictId(String districtId) {
+        this.districtId = districtId;
+    }
+
+    public String getDistrictName() {
+        return districtName;
+    }
+
+    public void setDistrictName(String districtName) {
+        this.districtName = districtName;
+    }
+
+    public String getVillageId() {
+        return villageId;
+    }
+
+    public void setVillageId(String villageId) {
+        this.villageId = villageId;
+    }
+
+    public String getVillageName() {
+        return villageName;
+    }
+
+    public void setVillageName(String villageName) {
+        this.villageName = villageName;
+    }
+
+    public String getRukunWarga() {
+        return rukunWarga;
+    }
+
+    public void setRukunWarga(String rukunWarga) {
+        this.rukunWarga = rukunWarga;
+    }
+
+    public String getRukunTetangga() {
+        return rukunTetangga;
+    }
+
+    public void setRukunTetangga(String rukunTetangga) {
+        this.rukunTetangga = rukunTetangga;
+    }
+
+    public String getTpsNumber() {
+        return tpsNumber;
+    }
+
+    public void setTpsNumber(String tpsNumber) {
+        this.tpsNumber = tpsNumber;
     }
 }

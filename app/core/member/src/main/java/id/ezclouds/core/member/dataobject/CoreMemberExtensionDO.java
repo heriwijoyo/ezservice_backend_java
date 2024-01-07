@@ -75,9 +75,6 @@ public class CoreMemberExtensionDO {
     @Column(name = "tpsNumber")
     private String tpsNumber;
 
-    @Column(name = "is_address_verified")
-    private int isAddressVerified;
-
     @Column(name = "created_time")
     private String createdTime;
 
@@ -234,14 +231,6 @@ public class CoreMemberExtensionDO {
 
     public void setTpsNumber(String tpsNumber) {
         this.tpsNumber = tpsNumber;
-    }
-
-    public int getIsAddressVerified() {
-        return isAddressVerified;
-    }
-
-    public void setIsAddressVerified(int isAddressVerified) {
-        this.isAddressVerified = isAddressVerified;
     }
 
     public String getCreatedTime() {

@@ -4,6 +4,7 @@
  */
 package id.ezclouds.biz.arahindonesia.converter;
 
+import id.ezclouds.biz.arahindonesia.model.BizStatus;
 import id.ezclouds.biz.arahindonesia.model.member.BizGender;
 import id.ezclouds.biz.arahindonesia.model.member.BizMember;
 import id.ezclouds.biz.arahindonesia.model.member.MemberBase;
@@ -43,6 +44,7 @@ public class BizMemberConverter {
         if (member == null) { return null; }
         BizMember bizMember = new BizMember();
         bizMember.setMemberId(member.getMemberId());
+        bizMember.setReferrerId(member.getReferrerId());
         bizMember.setRoles(member.getRoles());
         bizMember.setName(member.getName());
         bizMember.setNickname(member.getNickname());
@@ -51,6 +53,30 @@ public class BizMemberConverter {
         bizMember.setGender(BizGender.getByCode(member.getGender()));
         bizMember.setEmail(member.getEmail());
         bizMember.setAddress(member.getAddress());
+        bizMember.setPhoneVerified(member.isPhoneVerified());
+        BizStatus bizStatus = BizStatus.getByCode(member.getMemberStatus().getCode());
+        bizMember.setStatus(bizStatus);
+
+        //memberExt
+        if (extension == null) {
+            return bizMember;
+        }
+
+        bizMember.setIdCardNumber(extension.getIdCardNumber());
+        bizMember.setIdCardDocUrl(extension.getIdCardDocUrl());
+        bizMember.setFamilyCardNumber(extension.getFamilyCardNumber());
+        bizMember.setFamilyCardDocUrl(extension.getFamilyCardDocUrl());
+        bizMember.setProvinceId(extension.getProvinceId());
+        bizMember.setProvinceName(extension.getProvinceName());
+        bizMember.setRegencyId(extension.getRegencyId());
+        bizMember.setRegencyName(extension.getRegencyName());
+        bizMember.setDistrictId(extension.getDistrictId());
+        bizMember.setDistrictName(extension.getDistrictName());
+        bizMember.setVillageId(extension.getVillageId());
+        bizMember.setVillageName(extension.getVillageName());
+        bizMember.setRukunWarga(extension.getRukunWarga());
+        bizMember.setRukunTetangga(extension.getRukunTetangga());
+        bizMember.setTpsNumber(extension.getTpsNumber());
         return bizMember;
     }
 }

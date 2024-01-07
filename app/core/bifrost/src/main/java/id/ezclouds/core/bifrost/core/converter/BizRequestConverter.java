@@ -25,11 +25,24 @@ public class BizRequestConverter {
         bizRequest.setPhone(request.getPhone());
         bizRequest.setEmail(request.getEmail());
         bizRequest.setAvatarUrl(request.getAvatarUrl());
-
+        bizRequest.setAddress(request.getAddress());
         BizGender bizGender = BizGender.getByCode(request.getGender());
         if (bizGender != null) {
             bizRequest.setBizGender(bizGender);
         }
+
+
+        bizRequest.setProvinceId(request.getProvinceId());
+        bizRequest.setProvinceName(request.getProvinceName());
+        bizRequest.setRegencyId(request.getRegencyId());
+        bizRequest.setRegencyName(request.getRegencyName());
+        bizRequest.setDistrictId(request.getDistrictId());
+        bizRequest.setDistrictName(request.getDistrictName());
+        bizRequest.setVillageId(request.getVillageId());
+        bizRequest.setVillageName(request.getVillageName());
+        bizRequest.setRukunWarga(request.getRukunWarga());
+        bizRequest.setRukunTetangga(request.getRukunTetangga());
+        bizRequest.setTpsNumber(request.getTpsNumber());
 
         return bizRequest;
     }

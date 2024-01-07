@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.member.util;
 
+import id.ezclouds.common.util.BoolState;
 import id.ezclouds.core.member.dataobject.CoreMemberDO;
 import id.ezclouds.core.member.dataobject.CoreMemberExtensionDO;
 import id.ezclouds.core.member.model.CoreMember;
@@ -20,6 +21,7 @@ public class CoreMemberConverter {
         if (memberDO == null) { return null; }
         CoreMember member = new CoreMember();
         member.setMemberId(memberDO.getMemberId());
+        member.setReferrerId(memberDO.getReferrerId());
         member.setOrgId(memberDO.getOrgId());
         member.setShard(memberDO.getShard());
         member.setName(memberDO.getName());
@@ -32,8 +34,9 @@ public class CoreMemberConverter {
         member.setEmail(memberDO.getEmail());
         member.setAvatarUrl(memberDO.getAvatarUrl());
         member.setAddress(memberDO.getAddress());
-        member.setPhoneVerified(boolValue(memberDO.getPhoneVerified()));
-        member.setEmailVerified(boolValue(memberDO.getEmailVerified()));
+        member.setPhoneVerified(BoolState.getBool(memberDO.getPhoneVerified()));
+        member.setEmailVerified(BoolState.getBool(memberDO.getEmailVerified()));
+        member.setAddressVerified(BoolState.getBool(memberDO.getIsAddressVerified()));
         member.setMemberStatus(MemberStatus.getByCode(memberDO.getStatus()));
         return member;
     }
@@ -55,8 +58,8 @@ public class CoreMemberConverter {
         memberDO.setEmail(coreMember.getEmail());
         memberDO.setAvatarUrl(coreMember.getAvatarUrl());
         memberDO.setAddress(coreMember.getAddress());
-        memberDO.setPhoneVerified(boolStateValue(coreMember.isPhoneVerified()));
-        memberDO.setEmailVerified(boolStateValue(coreMember.isEmailVerified()));
+        memberDO.setPhoneVerified(BoolState.getState(coreMember.isPhoneVerified()));
+        memberDO.setEmailVerified(BoolState.getState(coreMember.isEmailVerified()));
         memberDO.setCreatedTime(coreMember.getCreatedTime());
         memberDO.setModifiedTime(coreMember.getModifiedTime());
         memberDO.setStatus(coreMember.getMemberStatus().getCode());
@@ -84,7 +87,6 @@ public class CoreMemberConverter {
         extension.setRukunWarga(extensionDO.getRukunWarga());
         extension.setRukunTetangga(extensionDO.getRukunTetangga());
         extension.setTpsNumber(extensionDO.getTpsNumber());
-        extension.setAddressVerified(boolValue(extensionDO.getIsAddressVerified()));
         return extension;
     }
 
@@ -109,18 +111,6 @@ public class CoreMemberConverter {
         extensionDO.setRukunWarga(extension.getRukunWarga());
         extensionDO.setRukunTetangga(extension.getRukunTetangga());
         extensionDO.setTpsNumber(extension.getTpsNumber());
-        extensionDO.setIsAddressVerified(boolStateValue(extension.isAddressVerified()));
         return extensionDO;
-    }
-
-    private static int boolStateValue(boolean boolValue) {
-        if (boolValue) {
-            return 1;
-        }
-        return 0;
-    }
-
-    private static boolean boolValue(int boolState) {
-        return boolState == 1;
     }
 }

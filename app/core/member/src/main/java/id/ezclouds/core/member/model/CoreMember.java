@@ -26,6 +26,7 @@ public class CoreMember {
     private String address;
     private boolean isPhoneVerified;
     private boolean isEmailVerified;
+    private boolean isAddressVerified;
     private String createdTime;
     private String modifiedTime;
     private MemberStatus memberStatus;
@@ -156,6 +157,14 @@ public class CoreMember {
 
     public void setEmailVerified(boolean emailVerified) {
         isEmailVerified = emailVerified;
+    }
+
+    public boolean isAddressVerified() {
+        return isAddressVerified;
+    }
+
+    public void setAddressVerified(boolean addressVerified) {
+        isAddressVerified = addressVerified;
     }
 
     public String getCreatedTime() {

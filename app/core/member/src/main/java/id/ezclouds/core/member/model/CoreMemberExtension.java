@@ -28,7 +28,6 @@ public class CoreMemberExtension {
     private String rukunWarga;
     private String rukunTetangga;
     private String tpsNumber;
-    private boolean isAddressVerified;
 
     public String getMemberId() {
         return memberId;
@@ -172,13 +171,5 @@ public class CoreMemberExtension {
 
     public void setTpsNumber(String tpsNumber) {
         this.tpsNumber = tpsNumber;
-    }
-
-    public boolean isAddressVerified() {
-        return isAddressVerified;
-    }
-
-    public void setAddressVerified(boolean addressVerified) {
-        isAddressVerified = addressVerified;
     }
 }
