@@ -6,6 +6,7 @@ package id.ezclouds.core.bifrost.app.api;
 
 import id.ezclouds.biz.arahindonesia.model.AppSetting;
 import id.ezclouds.biz.arahindonesia.model.login.MemberLoginResult;
+import id.ezclouds.biz.arahindonesia.model.member.BizMemberInfo;
 import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
 import id.ezclouds.biz.arahindonesia.model.profile.CandidateProfile;
 import id.ezclouds.biz.arahindonesia.model.profile.MemberProfile;
@@ -165,12 +166,12 @@ public class ApiController {
     }
 
     @PostMapping(value = "/memberRegister.json")
-    public ApiResult<String> registerMember(@RequestBody MemberRegisterRequest request, HttpServletResponse response) {
-        return new ApiControllerTemplate<String>(ApiEvent.MEMBER_REGISTER)
-                .execute(request, response, new ApiControllerTemplate.ConvertHandler<String>() {
+    public ApiResult<BizMemberInfo> registerMember(@RequestBody MemberRegisterRequest request, HttpServletResponse response) {
+        return new ApiControllerTemplate<BizMemberInfo>(ApiEvent.MEMBER_REGISTER)
+                .execute(request, response, new ApiControllerTemplate.ConvertHandler<BizMemberInfo>() {
                     @Override
-                    public String convertFrom(Object object) {
-                        return null;
+                    public BizMemberInfo convertFrom(Object object) {
+                        return (BizMemberInfo) object;
                     }
                 });
     }

@@ -5,6 +5,7 @@
 package id.ezclouds.biz.arahindonesia.service.template;
 
 import id.ezclouds.biz.arahindonesia.service.result.BizResult;
+import id.ezclouds.common.util.error.EzErrorCode;
 import id.ezclouds.common.util.error.EzErrorException;
 
 /**
@@ -21,9 +22,19 @@ public final class BizServiceTemplate {
             handler.onBizProcess();
         }
         catch (EzErrorException ezException) {
-            //TODO: log error
             bizResult.setSuccess(false);
             bizResult.setErrorCode(ezException.getEzErrorCode());
+            bizResult.setErrorMessage(ezException.getErrorMessage());
+
+            //TODO: log error
+            ezException.printStackTrace();
+        } catch (Exception exception) {
+            bizResult.setSuccess(false);
+            bizResult.setErrorCode(EzErrorCode.SYSTEM_ERROR);
+            bizResult.setErrorMessage(EzErrorCode.SYSTEM_ERROR.getDescription());
+
+            //TODO: log error
+            exception.printStackTrace();
         }
         finally {
             //TODO: log request and result

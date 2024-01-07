@@ -6,14 +6,17 @@ package id.ezclouds.biz.arahindonesia.service.result;
 
 import id.ezclouds.common.util.error.EzErrorCode;
 
+import java.io.Serializable;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizResult.java, v 0.1 2023‐12‐31 2:12 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class BizResult {
+public class BizResult implements Serializable {
 
     private boolean success;
     private EzErrorCode errorCode;
+    private String errorMessage;
     private Object object;
 
     public boolean isSuccess() {
@@ -30,6 +33,14 @@ public class BizResult {
 
     public void setErrorCode(EzErrorCode errorCode) {
         this.errorCode = errorCode;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 
     public Object getObject() {

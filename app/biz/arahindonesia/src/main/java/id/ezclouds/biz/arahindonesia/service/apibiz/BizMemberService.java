@@ -13,6 +13,7 @@ import id.ezclouds.biz.arahindonesia.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.error.EzErrorCode;
+import id.ezclouds.common.util.error.EzErrorException;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
 import id.ezclouds.core.member.model.MemberStatus;
@@ -39,7 +40,7 @@ public class BizMemberService {
     private CoreMemberService coreMemberService;
 
     @Transactional
-    public BizResult registerMember(BizMemberRegisterRequest request) {
+    public BizResult registerMember(BizMemberRegisterRequest request) throws EzErrorException {
         final BizResult bizResult = new BizResult();
         final String orgId = EzAppContextHolder.getContext().getOrgId();
         final String orgCode = EzAppContextHolder.getContext().getOrgCode();

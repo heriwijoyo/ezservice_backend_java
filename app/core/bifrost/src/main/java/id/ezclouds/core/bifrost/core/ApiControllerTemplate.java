@@ -52,6 +52,7 @@ public class ApiControllerTemplate<T> {
             BizResult bizResult = bizProcessor.process(ezAppEvent, request);
 
             apiResult.setSuccess(bizResult.isSuccess());
+            apiResult.setErrorResult(composeErrorResult(bizResult));
             apiResult.setData(convertHandler.convertFrom(bizResult.getObject()));
         } catch (EzErrorException ezError) {
             ezError.printStackTrace();
@@ -82,6 +83,19 @@ public class ApiControllerTemplate<T> {
         errorResult.setErrorMessage(errorMessage);
         errorResult.setErrorContext(ezError.getEzErrorCode().getInnerCode());
 
+        return errorResult;
+    }
+
+    private ErrorResult composeErrorResult(BizResult bizResult) {
+        if (bizResult == null) { return null; }
+
+        EzErrorCode ezErrorCode = bizResult.getErrorCode();
+        if (ezErrorCode == null) { return null; }
+
+        ErrorResult errorResult = new ErrorResult();
+        errorResult.setErrorCode(ezErrorCode.getCode());
+        errorResult.setErrorMessage(bizResult.getErrorMessage());
+        errorResult.setErrorContext(ezErrorCode.getInnerCode());
         return errorResult;
     }
 
