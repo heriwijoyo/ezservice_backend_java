@@ -84,6 +84,10 @@ public class ApiController extends AppController {
             public String convertResult(Object resultObject) {
                 return null;
             }
+            @Override
+            public String composeDigestLog(ApiRequest request, ApiResult<String> result) {
+                return "";
+            }
         });
     }
 

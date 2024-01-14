@@ -63,7 +63,8 @@ public class AppController {
             exception.printStackTrace();
             apiResult.setErrorResult(composeErrorResult());
         } finally {
-            logExecution(apiRequest, apiResult);
+            String digestLog = handler.composeDigestLog(apiRequest, apiResult);
+            logExecution(apiResult, digestLog);
         }
 
         return apiResult;
@@ -98,7 +99,7 @@ public class AppController {
         return composeErrorResult(ezErrorException);
     }
 
-    private <T> void logExecution(ApiRequest request, ApiResult<T> apiResult) {
+    private <T> void logExecution(ApiResult<T> apiResult, String digestLog) {
         StringBuilder stringBuilder = new StringBuilder();
 
         String traceId = EzAppContextHolder.getContext().getTraceId();
@@ -113,15 +114,15 @@ public class AppController {
         if (apiResult.getErrorResult() != null) {
             errorCode = apiResult.getErrorResult().getErrorCode();
             errorMessage = StringUtil.concateStrings(
-                    apiResult.getErrorResult().getErrorMessage(),
-                    "@",
-                    apiResult.getErrorResult().getErrorContext()
+                    apiResult.getErrorResult().getErrorContext(),
+                    "::",
+                    apiResult.getErrorResult().getErrorMessage()
             );
         }
 
-        stringBuilder.append("[");
         stringBuilder.append(traceId);
-        stringBuilder.append(",");
+        stringBuilder.append(" - ");
+        stringBuilder.append("[");
         stringBuilder.append(eventCode);
         stringBuilder.append(",");
         stringBuilder.append(resultStatus);
@@ -130,44 +131,14 @@ public class AppController {
         stringBuilder.append("][");
         stringBuilder.append(errorMessage);
         stringBuilder.append("][");
-        stringBuilder.append(composeRequestLog(ezAppEvent, request));
-        stringBuilder.append(",");
-        stringBuilder.append(composeResultLog(ezAppEvent, apiResult));
+        stringBuilder.append(digestLog);
         stringBuilder.append("]");
 
         LOGGER.info(stringBuilder.toString());
     }
 
-    private String composeRequestLog(EzAppEvent ezAppEvent, ApiRequest apiRequest) {
-        return apiRequest.toString();
-//        if (ezAppEvent instanceof ApiEvent) {
-//            ApiEvent apiEvent = (ApiEvent) ezAppEvent;
-//            switch (apiEvent) {
-//                case API_APP_SETTING:
-//                    return "";
-//
-//                default:
-//                    return "";
-//            }
-//        }
-//        return "";
-    }
-
-    private <T> String composeResultLog(EzAppEvent ezAppEvent, ApiResult<T> apiResult) {
-        if (ezAppEvent instanceof ApiEvent) {
-            ApiEvent apiEvent = (ApiEvent) ezAppEvent;
-            switch (apiEvent) {
-                case API_APP_SETTING:
-                    return "";
-
-                default:
-                    return "";
-            }
-        }
-        return "";
-    }
-
     interface RequestHandler<T> {
         T convertResult(Object resultObject);
+        String composeDigestLog(ApiRequest request, ApiResult<T> result);
     }
 }

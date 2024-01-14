@@ -75,7 +75,7 @@ public class ApiBizProcessor implements BizProcessor {
 
         BizResult bizResult = new BizResult();
         bizResult.setErrorCode(EzErrorCode.SYSTEM_ERROR);
-        bizResult.setErrorLocation(getClass().getSimpleName());
+        bizResult.setErrorLocation(getClass().getName());
         bizResult.setErrorMessage("Undefined bizProcessor");
         return bizResult;
     }
