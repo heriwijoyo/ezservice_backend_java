@@ -11,14 +11,15 @@ import id.ezclouds.core.shared.context.EzAppEvent;
  * @version $Id: ApiEvent.java, v 0.1 2023‐12‐09 2:04 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
 public enum ApiEvent implements EzAppEvent {
 
-    API_APP_SETTING("001", "ApiAppSetting"),
-    CANDIDATE_PROFILE("002", "CandidateProfile"),
-    NEWS("003", "News"),
-    MEMBER_PROFILE("004", "MemberProfile"),
-    MEMBER_LOGIN("005", "MemberLogin"),
-    MEMBER_REGISTER("006", "MemberRegister"),
-
+    API_APP_SETTING("API_APP_SETTING", "ApiAppSetting"),
+    API_CANDIDATE_PROFILE("API_CANDIDATE_PROFILE", "CandidateProfile"),
+    API_NEWS("API_NEWS", "News"),
+    API_MEMBER_PROFILE("API_MEMBER_PROFILE", "MemberProfile"),
+    API_MEMBER_LOGIN("API_MEMBER_LOGIN", "MemberLogin"),
+    API_MEMBER_REGISTER("API_MEMBER_REGISTER", "MemberRegister"),
     GENERATE_SEQUENCE("", "GenerateSequence"),
+    UNKNOWN_EVENT("UNKNOWN_EVENT", "Undefined event"),
+    SAMPLE_EVENT("SAMPLE_EVENT", "Sample event"),
 
     ;
 

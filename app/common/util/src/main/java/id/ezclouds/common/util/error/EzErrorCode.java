@@ -10,27 +10,25 @@ package id.ezclouds.common.util.error;
  */
 public enum EzErrorCode {
 
-    SYSTEM_ERROR("E001", "SYSTEM_ERROR", "Unknown system error"),
-    ILLEGAL_ACTION("E999", "ILLEGAL_ACTION", "Illegal action"),
-    ILLEGAL_PARAM("E002", "ILLEGAL_PARAM", "Illegal parameter"),
-    UNAUTHORIZED("E003", "UNAUTHORIZED", "Unauthorized"),
-    MEMBER_LOGIN_FAILED("E005", "MEMBER_LOGIN_FAILED", "Member login failed"),
-    MEMBER_NOT_FOUND("E006", "MEMBER_NOT_FOUND", "Member not found"),
-    MEMBER_CLIENT_NOT_FOUND("E123", "MEMBER_CLIENT_NOT_FOUND", "Member client not found"),
-    SESSION_INVALID("E301", "SESSION_INVALID", "Session invalid"),
-    SESSION_EXPIRED("E302", "SESSION_EXPIRED", "User session expired"),
-    CORE_SEQUENCE_ERROR("E007", "CORE_SEQUENCE_ERROR", "Core sequence error"),
-    IDEMPOTENT_ERROR("E222", "IDEMPOTENT_ERROR", "Idempotent error"),
+    SYSTEM_ERROR("SYSTEM_ERROR", "Unknown system error"),
+    ILLEGAL_ACTION("ILLEGAL_ACTION", "Illegal action"),
+    ILLEGAL_PARAM("ILLEGAL_PARAM", "Illegal parameter"),
+    UNAUTHORIZED("UNAUTHORIZED", "Unauthorized"),
+    MEMBER_LOGIN_FAILED("MEMBER_LOGIN_FAILED", "Member login failed"),
+    MEMBER_NOT_FOUND("MEMBER_NOT_FOUND", "Member not found"),
+    MEMBER_CLIENT_NOT_FOUND("MEMBER_CLIENT_NOT_FOUND", "Member client not found"),
+    SESSION_INVALID("SESSION_INVALID", "Session invalid"),
+    SESSION_EXPIRED("SESSION_EXPIRED", "User session expired"),
+    CORE_SEQUENCE_ERROR("CORE_SEQUENCE_ERROR", "Core sequence error"),
+    IDEMPOTENT_ERROR("IDEMPOTENT_ERROR", "Idempotent error"),
 
     ;
 
     private String code;
-    private String innerCode;
     private String description;
 
-    EzErrorCode(String code, String innerCode, String description) {
+    EzErrorCode(String code, String description) {
         this.code = code;
-        this.innerCode = innerCode;
         this.description = description;
     }
 
@@ -41,10 +39,6 @@ public enum EzErrorCode {
      */
     public String getCode() {
         return code;
-    }
-
-    public String getInnerCode() {
-        return innerCode;
     }
 
     /**
