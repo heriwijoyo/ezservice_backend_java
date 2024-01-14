@@ -15,5 +15,5 @@ import id.ezclouds.core.shared.context.EzAppEvent;
  */
 public interface BizProcessor {
 
-    Object process(EzAppEvent event, BaseRequest request) throws EzErrorException;
+    BizResult process(EzAppEvent event, BaseRequest request) throws EzErrorException;
 }

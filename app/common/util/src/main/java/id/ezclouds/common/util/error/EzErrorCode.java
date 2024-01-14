@@ -10,17 +10,17 @@ package id.ezclouds.common.util.error;
  */
 public enum EzErrorCode {
 
-    SYSTEM_ERROR("SYSTEM_ERROR", "Unknown system error"),
-    ILLEGAL_ACTION("ILLEGAL_ACTION", "Illegal action"),
-    ILLEGAL_PARAM("ILLEGAL_PARAM", "Illegal parameter"),
+    SYSTEM_ERROR("SYSTEM_ERROR", "Unknown System Error"),
+    ILLEGAL_ACTION("ILLEGAL_ACTION", "Illegal Action"),
+    ILLEGAL_PARAM("ILLEGAL_PARAM", "Illegal Parameter"),
     UNAUTHORIZED("UNAUTHORIZED", "Unauthorized"),
-    MEMBER_LOGIN_FAILED("MEMBER_LOGIN_FAILED", "Member login failed"),
-    MEMBER_NOT_FOUND("MEMBER_NOT_FOUND", "Member not found"),
-    MEMBER_CLIENT_NOT_FOUND("MEMBER_CLIENT_NOT_FOUND", "Member client not found"),
-    SESSION_INVALID("SESSION_INVALID", "Session invalid"),
-    SESSION_EXPIRED("SESSION_EXPIRED", "User session expired"),
-    CORE_SEQUENCE_ERROR("CORE_SEQUENCE_ERROR", "Core sequence error"),
-    IDEMPOTENT_ERROR("IDEMPOTENT_ERROR", "Idempotent error"),
+    MEMBER_LOGIN_FAILED("MEMBER_LOGIN_FAILED", "Member Login Failed"),
+    MEMBER_NOT_FOUND("MEMBER_NOT_FOUND", "Member Not Found"),
+    MEMBER_CLIENT_NOT_FOUND("MEMBER_CLIENT_NOT_FOUND", "Member Client Not Found"),
+    SESSION_INVALID("SESSION_INVALID", "Session Invalid"),
+    SESSION_EXPIRED("SESSION_EXPIRED", "Session Expired"),
+    CORE_SEQUENCE_ERROR("CORE_SEQUENCE_ERROR", "Core Sequence Error"),
+    IDEMPOTENT_ERROR("IDEMPOTENT_ERROR", "Idempotent Error"),
 
     ;
 

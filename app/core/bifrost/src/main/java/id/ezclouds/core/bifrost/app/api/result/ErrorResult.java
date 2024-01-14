@@ -11,8 +11,8 @@ package id.ezclouds.core.bifrost.app.api.result;
 public class ErrorResult {
 
     private String errorCode;
-    private String errorMessage;
     private String errorContext;
+    private String errorMessage;
 
     public String getErrorCode() {
         return errorCode;
@@ -22,19 +22,19 @@ public class ErrorResult {
         this.errorCode = errorCode;
     }
 
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
-    }
-
     public String getErrorContext() {
         return errorContext;
     }
 
     public void setErrorContext(String errorContext) {
         this.errorContext = errorContext;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 }

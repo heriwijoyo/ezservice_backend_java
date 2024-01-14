@@ -57,10 +57,12 @@ public class StringUtil {
         if (strings == null) {
             return null;
         }
-        String concate = "";
+        StringBuilder stringBuilder = new StringBuilder();
         for (String item : strings) {
-            concate += item;
+            if (item != null) {
+                stringBuilder.append(item);
+            }
         }
-        return concate;
+        return stringBuilder.toString();
     }
 }

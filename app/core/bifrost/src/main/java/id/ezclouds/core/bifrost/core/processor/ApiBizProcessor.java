@@ -6,6 +6,8 @@ package id.ezclouds.core.bifrost.core.processor;
 
 import id.ezclouds.biz.arahindonesia.service.apibiz.*;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberRegisterRequest;
+import id.ezclouds.biz.arahindonesia.service.result.BizResult;
+import id.ezclouds.common.util.error.EzErrorCode;
 import id.ezclouds.common.util.error.EzErrorException;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.MemberLoginRequest;
@@ -45,7 +47,7 @@ public class ApiBizProcessor implements BizProcessor {
     private BizMemberService bizMemberService;
 
     @Override
-    public Object process(EzAppEvent appEvent, BaseRequest request) throws EzErrorException {
+    public BizResult process(EzAppEvent appEvent, BaseRequest request) throws EzErrorException {
         ApiEvent apiEvent = (ApiEvent) appEvent;
 
         switch (apiEvent) {
@@ -70,7 +72,12 @@ public class ApiBizProcessor implements BizProcessor {
                 bizRequest.setSourceId(SOURCE_ID);
                 return bizMemberService.registerMember(bizRequest);
         }
-        return null;
+
+        BizResult bizResult = new BizResult();
+        bizResult.setErrorCode(EzErrorCode.SYSTEM_ERROR);
+        bizResult.setErrorLocation(getClass().getSimpleName());
+        bizResult.setErrorMessage("Undefined bizProcessor");
+        return bizResult;
     }
 
     private MemberLogin composeMemberLogin(MemberLoginRequest loginRequest) {

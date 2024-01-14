@@ -4,6 +4,8 @@
  */
 package id.ezclouds.core.bifrost.app.api;
 
+import id.ezclouds.biz.arahindonesia.service.result.BizResult;
+import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.error.EzErrorCode;
 import id.ezclouds.common.util.error.EzErrorException;
@@ -45,17 +47,21 @@ public class AppController {
 
             preBizProcessor.process(ezAppEvent, apiRequest);
             BizProcessor bizProcessor = BizProcessorFactory.getBizProcessor(ezAppEvent);
-            Object processResult = bizProcessor.process(ezAppEvent, apiRequest);
+            BizResult bizResult = bizProcessor.process(ezAppEvent, apiRequest);
 
-            apiResult.setData(handler.convertResult(processResult));
-            apiResult.setSuccess(true);
+            apiResult.setSuccess(bizResult.isSuccess());
+            if (bizResult.isSuccess()) {
+                apiResult.setData(handler.convertResult(bizResult.getObject()));
+            } else {
+                apiResult.setErrorResult(composeErrorResult(bizResult));
+            }
 
         } catch (EzErrorException ezException) {
             ezException.printStackTrace();
             apiResult.setErrorResult(composeErrorResult(ezException));
         } catch (Exception exception) {
             exception.printStackTrace();
-            apiResult.setErrorResult(composeErrorResult(EzErrorCode.SYSTEM_ERROR));
+            apiResult.setErrorResult(composeErrorResult());
         } finally {
             logExecution(apiRequest, apiResult);
         }
@@ -63,23 +69,38 @@ public class AppController {
         return apiResult;
     }
 
+    private ErrorResult composeErrorResult(BizResult bizResult) {
+        ErrorResult errorResult = new ErrorResult();
+        errorResult.setErrorCode(bizResult.getErrorCode().getCode());
+        errorResult.setErrorContext(
+                StringUtil.concateStrings(
+                        bizResult.getErrorCode().getCode(),
+                        "@",
+                        bizResult.getErrorLocation())
+        );
+        errorResult.setErrorMessage(bizResult.getErrorMessage());
+        return errorResult;
+    }
+
     private ErrorResult composeErrorResult(EzErrorException ezException) {
         ErrorResult errorResult = new ErrorResult();
         errorResult.setErrorCode(ezException.getEzErrorCode().getCode());
-        errorResult.setErrorContext(null);
+        errorResult.setErrorContext(ezException.getEzErrorCode().getDescription());
         errorResult.setErrorMessage(ezException.getErrorMessage());
         return errorResult;
     }
 
-    private ErrorResult composeErrorResult(EzErrorCode ezErrorCode) {
-        EzErrorException ezErrorException = new EzErrorException(ezErrorCode, ezErrorCode.getDescription());
+    private ErrorResult composeErrorResult() {
+        EzErrorException ezErrorException = new EzErrorException(
+                EzErrorCode.SYSTEM_ERROR,
+                EzErrorCode.SYSTEM_ERROR.getDescription()
+        );
         return composeErrorResult(ezErrorException);
     }
 
     private <T> void logExecution(ApiRequest request, ApiResult<T> apiResult) {
         StringBuilder stringBuilder = new StringBuilder();
 
-        String traceStartTime = EzAppContextHolder.getContext().getTraceStartTime();
         String traceId = EzAppContextHolder.getContext().getTraceId();
         EzAppEvent ezAppEvent = EzAppContextHolder.getContext().getEzAppEvent();
         if (ezAppEvent == null) {
@@ -87,10 +108,18 @@ public class AppController {
         }
         String eventCode = ezAppEvent.getEventCode();
         String resultStatus = apiResult.isSuccess() ? "Y" : "N";
-        String errorCode = apiResult.getErrorResult() != null ? apiResult.getErrorResult().getErrorCode() : "";
+        String errorCode = "";
+        String errorMessage = "";
+        if (apiResult.getErrorResult() != null) {
+            errorCode = apiResult.getErrorResult().getErrorCode();
+            errorMessage = StringUtil.concateStrings(
+                    apiResult.getErrorResult().getErrorMessage(),
+                    "@",
+                    apiResult.getErrorResult().getErrorContext()
+            );
+        }
 
-        stringBuilder.append(traceStartTime);
-        stringBuilder.append(" - [");
+        stringBuilder.append("[");
         stringBuilder.append(traceId);
         stringBuilder.append(",");
         stringBuilder.append(eventCode);
@@ -98,6 +127,8 @@ public class AppController {
         stringBuilder.append(resultStatus);
         stringBuilder.append(",");
         stringBuilder.append(errorCode);
+        stringBuilder.append("][");
+        stringBuilder.append(errorMessage);
         stringBuilder.append("][");
         stringBuilder.append(composeRequestLog(ezAppEvent, request));
         stringBuilder.append(",");
@@ -108,17 +139,18 @@ public class AppController {
     }
 
     private String composeRequestLog(EzAppEvent ezAppEvent, ApiRequest apiRequest) {
-        if (ezAppEvent instanceof ApiEvent) {
-            ApiEvent apiEvent = (ApiEvent) ezAppEvent;
-            switch (apiEvent) {
-                case API_APP_SETTING:
-                    return "";
-
-                default:
-                    return "";
-            }
-        }
-        return "";
+        return apiRequest.toString();
+//        if (ezAppEvent instanceof ApiEvent) {
+//            ApiEvent apiEvent = (ApiEvent) ezAppEvent;
+//            switch (apiEvent) {
+//                case API_APP_SETTING:
+//                    return "";
+//
+//                default:
+//                    return "";
+//            }
+//        }
+//        return "";
     }
 
     private <T> String composeResultLog(EzAppEvent ezAppEvent, ApiResult<T> apiResult) {

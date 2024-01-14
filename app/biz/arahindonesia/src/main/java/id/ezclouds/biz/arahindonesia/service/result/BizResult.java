@@ -16,8 +16,13 @@ public class BizResult implements Serializable {
 
     private boolean success;
     private EzErrorCode errorCode;
+    private String errorLocation;
     private String errorMessage;
     private Object object;
+
+    public BizResult() {
+        this.success = false;
+    }
 
     public boolean isSuccess() {
         return success;
@@ -33,6 +38,14 @@ public class BizResult implements Serializable {
 
     public void setErrorCode(EzErrorCode errorCode) {
         this.errorCode = errorCode;
+    }
+
+    public String getErrorLocation() {
+        return errorLocation;
+    }
+
+    public void setErrorLocation(String errorLocation) {
+        this.errorLocation = errorLocation;
     }
 
     public String getErrorMessage() {

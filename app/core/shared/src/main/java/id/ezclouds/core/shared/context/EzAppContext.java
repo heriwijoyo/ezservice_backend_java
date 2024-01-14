@@ -4,8 +4,9 @@
  */
 package id.ezclouds.core.shared.context;
 
-import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
+
+import java.util.UUID;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -14,7 +15,6 @@ import id.ezclouds.common.util.HashUtil;
 public class EzAppContext {
 
     private EzAppEvent ezAppEvent;
-    private String traceStartTime;
     private String traceId;
     private String orgId;
     private String orgCode;
@@ -22,17 +22,12 @@ public class EzAppContext {
     private String deviceId;
 
     public EzAppContext(EzAppEvent ezAppEvent) {
-        this.traceStartTime = DateUtil.getCurrentFormattedDate();
         this.ezAppEvent = ezAppEvent;
-        this.traceId = HashUtil.createHash(this.traceStartTime);
+        this.traceId = HashUtil.createHash(UUID.randomUUID().toString());
     }
 
     public EzAppEvent getEzAppEvent() {
         return ezAppEvent;
-    }
-
-    public String getTraceStartTime() {
-        return traceStartTime;
     }
 
     public String getTraceId() {
