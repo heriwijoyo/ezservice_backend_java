@@ -12,7 +12,6 @@ import id.ezclouds.biz.arahindonesia.model.member.BizGender;
  */
 public class BizMemberRegisterRequest extends BizRequest {
 
-    private String sourceId;
     private String referrerId;
     private String roles;
     private String name;
@@ -36,14 +35,6 @@ public class BizMemberRegisterRequest extends BizRequest {
     private String rukunTetangga;
     private String tpsNumber;
     private String address;
-
-    public String getSourceId() {
-        return sourceId;
-    }
-
-    public void setSourceId(String sourceId) {
-        this.sourceId = sourceId;
-    }
 
     public String getReferrerId() {
         return referrerId;

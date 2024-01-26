@@ -4,9 +4,12 @@
  */
 package id.ezclouds.core.bifrost.app.api;
 
+import id.ezclouds.biz.arahindonesia.service.apibiz.BizSampleService;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
+import id.ezclouds.core.shared.model.CoreSample;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +22,11 @@ import java.util.List;
  * @version $Id: ApiController.java, v 0.1 2023‐12‐03 11:46 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @RestController
-@RequestMapping(value = "/api", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_PLAIN_VALUE})
+@RequestMapping(value = "/api", consumes = {MediaType.APPLICATION_JSON_VALUE})
 public class ApiController extends AppController {
+
+    @Autowired
+    private BizSampleService bizSampleService;
 
     @PostMapping(value = "/sample.json")
     private ApiResult<String> getSample(@RequestBody ApiRequest request, HttpServletResponse response) {
@@ -54,8 +60,12 @@ public class ApiController extends AppController {
         return response;
     }
 
-    @GetMapping(value = "sample.php")
+    @GetMapping(value = "sample.php", consumes = {MediaType.ALL_VALUE})
     private String getSample() {
-        return "EzService Sample Response";
+        CoreSample coreSample = bizSampleService.getCoreSample();
+        if (coreSample == null) {
+            return "Static Sample Response";
+        }
+        return coreSample.getValue();
     }
 }

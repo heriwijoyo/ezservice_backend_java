@@ -9,4 +9,14 @@ package id.ezclouds.biz.arahindonesia.service.request;
  * @version $Id: BizRequest.java, v 0.1 2023‐12‐31 2:32 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 public class BizRequest {
+
+    private String sourceId;
+
+    public String getSourceId() {
+        return sourceId;
+    }
+
+    public void setSourceId(String sourceId) {
+        this.sourceId = sourceId;
+    }
 }
