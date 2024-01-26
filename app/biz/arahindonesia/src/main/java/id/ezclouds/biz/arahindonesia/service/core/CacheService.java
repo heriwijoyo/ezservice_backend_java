@@ -42,6 +42,7 @@ public class CacheService {
     @Autowired
     private AppProfileService appProfileService;
 
+    /*
     @EventListener(ApplicationReadyEvent.class)
     public List<String> refreshAllCache() {
         List<String> cacheNames = new ArrayList<>();
@@ -67,5 +68,5 @@ public class CacheService {
         appProfileService.getAllAppProfile();
 
         return cacheNames;
-    }
+    }*/
 }
