@@ -12,7 +12,7 @@ import id.ezclouds.common.util.exception.ExceptionUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
-import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
+import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
 import id.ezclouds.core.bifrost.app.api.result.ErrorResult;
@@ -20,10 +20,10 @@ import id.ezclouds.core.bifrost.core.SpringContextConfig;
 import id.ezclouds.core.bifrost.core.processor.BizProcessor;
 import id.ezclouds.core.bifrost.core.processor.BizProcessorFactory;
 import id.ezclouds.core.bifrost.core.processor.PreBizProcessor;
-import id.ezclouds.core.shared.context.EzAppContext;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.context.EzAppEvent;
 import id.ezclouds.core.shared.model.CoreSample;
+import id.ezclouds.core.shared.util.DigestLogUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,8 +91,8 @@ public class AppController {
             EzAppContextHolder.getContext().appendErrorStackTrace(ExceptionUtil.getStackTrace(exception));
             apiResult.setErrorResult(composeErrorResult());
         } finally {
-            String digestLog = handler.composeDigestLog(apiRequest, apiResult);
-            writeLog(apiResult, digestLog);
+            DigestLog digestLog = handler.composeDigestLog(apiRequest, apiResult);
+            DigestLogUtil.logDigest(LOGGER, digestLog);
         }
 
         return apiResult;
@@ -127,48 +127,8 @@ public class AppController {
         return composeErrorResult(ezErrorException);
     }
 
-    private <T> void writeLog(ApiResult<T> apiResult, String digestLog) {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        EzAppContext ezAppContext = EzAppContextHolder.getContext();
-        EzAppEvent ezAppEvent = EzAppContextHolder.getContext().getEzAppEvent();
-        if (ezAppEvent == null) {
-            ezAppEvent = ApiEvent.UNKNOWN_EVENT;
-        }
-        String eventCode = ezAppEvent.getEventCode();
-        String resultStatus = apiResult.isSuccess() ? "Y" : "N";
-        String errorCode = "";
-        String errorMessage = "";
-        if (apiResult.getErrorResult() != null) {
-            errorCode = apiResult.getErrorResult().getErrorCode();
-            errorMessage = StringUtil.concateStrings(
-                    apiResult.getErrorResult().getErrorContext(),
-                    "::",
-                    apiResult.getErrorResult().getErrorMessage()
-            );
-        }
-
-        stringBuilder.append(ezAppContext.getTraceId());
-        stringBuilder.append(" - ");
-        stringBuilder.append("[");
-        stringBuilder.append(eventCode);
-        stringBuilder.append(",");
-        stringBuilder.append(ezAppContext.getTimeCost());
-        stringBuilder.append(",");
-        stringBuilder.append(resultStatus);
-        stringBuilder.append(",");
-        stringBuilder.append(errorCode);
-        stringBuilder.append("][");
-        stringBuilder.append(errorMessage);
-        stringBuilder.append("][");
-        stringBuilder.append(digestLog);
-        stringBuilder.append("]");
-
-        LOGGER.info(stringBuilder.toString());
-    }
-
     interface RequestHandler<T> {
         T convertResult(Object resultObject);
-        String composeDigestLog(ApiRequest request, ApiResult<T> result);
+        DigestLog composeDigestLog(ApiRequest request, ApiResult<T> result);
     }
 }

@@ -4,6 +4,8 @@
  */
 package id.ezclouds.core.bifrost.app.api;
 
+import id.ezclouds.common.util.logger.DigestLog;
+import id.ezclouds.core.bifrost.app.api.digestlog.SampleDigestLog;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
@@ -29,8 +31,10 @@ public class ApiController extends AppController {
                 return null;
             }
             @Override
-            public String composeDigestLog(ApiRequest request, ApiResult<String> result) {
-                return "";
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<String> result) {
+                SampleDigestLog digestLog = new SampleDigestLog(result.isSuccess(), result.getResultCode());
+                digestLog.composeDigest(request, result);
+                return digestLog;
             }
         });
     }

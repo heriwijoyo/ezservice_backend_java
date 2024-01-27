@@ -86,6 +86,10 @@
             <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/controller.log.%d{yyyy-MM-dd}</fileNamePattern>
         </rollingPolicy>
         <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%d %p %C{1.} [%t] %m%n</pattern>
         </encoder>
@@ -106,13 +110,17 @@
             <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/biz-service.log.%d{yyyy-MM-dd}</fileNamePattern>
         </rollingPolicy>
         <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%d %p %C{1.} [%t] %m%n</pattern>
         </encoder>
     </appender>
 
     <logger name="APP_CONTROLLER" additivity="false">
-        <level value="${APP_LOG_LEVEL}" />
+        <level value="INFO" />
         <appender-ref ref="APP_CONTROLLER_${APP_LOG_TYPE}" />
         <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
     </logger>

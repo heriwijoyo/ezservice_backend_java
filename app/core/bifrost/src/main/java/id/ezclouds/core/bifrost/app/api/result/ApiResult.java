@@ -9,6 +9,7 @@ package id.ezclouds.core.bifrost.app.api.result;
  * @version $Id: ApiResult.java, v 0.1 2023‐12‐09 10:41 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 public class ApiResult<T> {
+    private static final String RESULT_SUCCESS = "RESULT_SUCCESS";
 
     private boolean success;
     private ErrorResult errorResult;
@@ -40,5 +41,12 @@ public class ApiResult<T> {
 
     public void setData(T data) {
         this.data = data;
+    }
+
+    public String getResultCode() {
+        if (success) {
+            return RESULT_SUCCESS;
+        }
+        return  errorResult.getErrorCode();
     }
 }
