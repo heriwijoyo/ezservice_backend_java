@@ -35,6 +35,26 @@
     </appender>
     <appender name="ErrorAppender_File"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/${APP_NAME}/default-error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/default-error.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <append>true</append>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d %p %C{1.} [%t] %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="AppErrorAppender_Console"
+              class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>
+                %black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable
+            </pattern>
+        </layout>
+    </appender>
+    <appender name="AppErrorAppender_File"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${APP_LOG_ROOT}/${APP_NAME}/common-error.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/common-error.log.%d{yyyy-MM-dd}</fileNamePattern>
@@ -88,13 +108,13 @@
     <logger name="APP_CONTROLLER" additivity="false">
         <level value="${APP_LOG_LEVEL}" />
         <appender-ref ref="APP_CONTROLLER_${APP_LOG_TYPE}" />
-        <appender-ref ref="ErrorAppender_${APP_LOG_TYPE}" />
+        <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
     </logger>
 
     <logger name="APP_BIZ_SERVICE" additivity="false">
         <level value="${APP_LOG_LEVEL}" />
         <appender-ref ref="APP_BIZ_SERVICE_${APP_LOG_TYPE}" />
-        <appender-ref ref="ErrorAppender_${APP_LOG_TYPE}" />
+        <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
     </logger>
 
     <root level="${APP_LOG_LEVEL}">
