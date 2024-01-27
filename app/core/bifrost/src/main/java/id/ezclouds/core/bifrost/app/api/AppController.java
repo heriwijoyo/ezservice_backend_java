@@ -11,7 +11,6 @@ import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.ExceptionUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
-import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
@@ -25,7 +24,6 @@ import id.ezclouds.core.shared.context.EzAppEvent;
 import id.ezclouds.core.shared.model.CoreSample;
 import id.ezclouds.core.shared.util.DigestLogUtil;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,14 +33,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: AppController.java, v 0.1 2024‐01‐14 8:18 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class AppController {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(CommonLoggerConstant.APP_CONTROLLER);
+public abstract class AppController {
 
     private PreBizProcessor preBizProcessor;
 
     @Autowired
     private BizSampleService bizSampleService;
+
+    protected abstract Logger getLogger();
 
     @RequestMapping(value = "/")
     private String getIndexPage() {
@@ -53,10 +51,10 @@ public class AppController {
     private String getSample() {
         CoreSample coreSample = bizSampleService.getCoreSample();
         if (coreSample == null) {
-            LOGGER.info("CoreSample is NULL, return static value");
+            getLogger().info("CoreSample is NULL, return static value");
             return "Static Sample Response";
         }
-        LOGGER.info("CoreSample is not NULL, return DB value");
+        getLogger().info("CoreSample is not NULL, return DB value");
         return coreSample.getValue();
     }
 
@@ -92,7 +90,7 @@ public class AppController {
             apiResult.setErrorResult(composeErrorResult());
         } finally {
             DigestLog digestLog = handler.composeDigestLog(apiRequest, apiResult);
-            DigestLogUtil.logDigest(LOGGER, digestLog);
+            DigestLogUtil.logDigest(getLogger(), digestLog);
         }
 
         return apiResult;

@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <springProperty scope="context" name="APP_NAME" source="spring.application.name" />
-    <springProperty scope="context" name="APP_LOG_LEVEL" source="logging.app.log_level" />
+    <springProperty scope="context" name="ROOT_LOG_LEVEL" source="logging.root.log_level" />
     <springProperty scope="context" name="APP_LOG_ROOT" source="logging.app.root_path" />
     <springProperty scope="context" name="APP_LOG_TYPE" source="logging.app.log_type" />
 
     <appender name="Appender_Console"
               class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>
-                %black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable
-            </pattern>
+            <pattern>%black(%d{ISO8601}) --- [%blue(%thread)]%m%n</pattern>
         </layout>
     </appender>
     <appender name="Appender_File"
@@ -27,10 +25,11 @@
 
     <appender name="ErrorAppender_Console"
               class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>error</level>
+        </filter>
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>
-                %black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable
-            </pattern>
+            <pattern>%black(%d{ISO8601}) --- [%blue(%thread)]%m%n</pattern>
         </layout>
     </appender>
     <appender name="ErrorAppender_File"
@@ -50,10 +49,11 @@
 
     <appender name="AppErrorAppender_Console"
               class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>error</level>
+        </filter>
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>
-                %black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable
-            </pattern>
+            <pattern>%black(%d{ISO8601}) --- [%blue(%thread)]%m%n</pattern>
         </layout>
     </appender>
     <appender name="AppErrorAppender_File"
@@ -67,19 +67,19 @@
             <level>error</level>
         </filter>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <pattern>%d %p %C{1.} [%t] %m%n</pattern>
+            <pattern>%d --- [%thread]%m%n</pattern>
         </encoder>
     </appender>
 
-    <appender name="APP_CONTROLLER_Console"
+    <appender name="API_CONTROLLER_Console"
               class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
             <pattern>
-                %black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable
+                %black(%d{ISO8601}) --- [%blue(%thread)]%m%n
             </pattern>
         </layout>
     </appender>
-    <appender name="APP_CONTROLLER_File"
+    <appender name="API_CONTROLLER_File"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${APP_LOG_ROOT}/${APP_NAME}/controller.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -91,7 +91,7 @@
             <OnMismatch>DENY</OnMismatch>
         </filter>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <pattern>%d %p %C{1.} [%t] %m%n</pattern>
+            <pattern>%d --- [%thread]%m%n</pattern>
         </encoder>
     </appender>
 
@@ -115,23 +115,23 @@
             <OnMismatch>DENY</OnMismatch>
         </filter>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <pattern>%d %p %C{1.} [%t] %m%n</pattern>
+            <pattern>%d --- [%thread]%m%n</pattern>
         </encoder>
     </appender>
 
-    <logger name="APP_CONTROLLER" additivity="false">
+    <logger name="API_CONTROLLER" additivity="false">
         <level value="INFO" />
-        <appender-ref ref="APP_CONTROLLER_${APP_LOG_TYPE}" />
+        <appender-ref ref="API_CONTROLLER_${APP_LOG_TYPE}" />
         <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
     </logger>
 
     <logger name="APP_BIZ_SERVICE" additivity="false">
-        <level value="${APP_LOG_LEVEL}" />
+        <level value="INFO" />
         <appender-ref ref="APP_BIZ_SERVICE_${APP_LOG_TYPE}" />
         <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
     </logger>
 
-    <root level="${APP_LOG_LEVEL}">
+    <root level="${ROOT_LOG_LEVEL}">
         <appender-ref ref="Appender_${APP_LOG_TYPE}" />
         <appender-ref ref="ErrorAppender_${APP_LOG_TYPE}" />
     </root>

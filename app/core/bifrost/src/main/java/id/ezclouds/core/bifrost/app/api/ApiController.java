@@ -4,11 +4,14 @@
  */
 package id.ezclouds.core.bifrost.app.api;
 
+import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.core.bifrost.app.api.digestlog.SampleDigestLog;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +25,11 @@ import java.util.List;
  */
 @RestController
 public class ApiController extends AppController {
+
+    @Override
+    protected Logger getLogger() {
+        return LoggerFactory.getLogger(CommonLoggerConstant.API_CONTROLLER);
+    }
 
     @PostMapping(value = "/api/sample.json", consumes = {MediaType.APPLICATION_JSON_VALUE})
     private ApiResult<String> getSample(@RequestBody ApiRequest request, HttpServletResponse response) {

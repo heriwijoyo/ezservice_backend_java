@@ -19,9 +19,11 @@ public class DigestLogUtil {
     public static void logDigest(Logger logger, DigestLog digestLog) {
         EzAppContext ezAppContext = EzAppContextHolder.getContext();
 
-        String infoLog = ezAppContext.getTraceId() +
-                " - " +
-                "[" +
+        String infoLog = "[" +
+                ezAppContext.getTraceId() +
+                "][" +
+                logger.getName() +
+                "," +
                 ezAppContext.getEzAppEvent().getEventCode() +
                 "," +
                 ezAppContext.getTimeCost() +
@@ -37,7 +39,7 @@ public class DigestLogUtil {
         logger.info(infoLog);
 
         if (StringUtil.isNotBlank(ezAppContext.getErrorStackTrace())) {
-            String errorLog = ezAppContext.getTraceId() + " - " + ezAppContext.getErrorStackTrace();
+            String errorLog = "[" + ezAppContext.getTraceId() + "] - " + ezAppContext.getErrorStackTrace();
             logger.error(errorLog);
         }
 
