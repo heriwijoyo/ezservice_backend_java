@@ -1,0 +1,19 @@
+/**
+ * Ezclouds.id
+ * Copyright (c) 2020‐2024 All Rights Reserved.
+ */
+package id.ezclouds.common.util.logger;
+
+/**
+ * @author Heri Wijoyo (heri.wijoyo@gmail.com)
+ * @version $Id: CommonLoggerConstant.java, v 0.1 2024‐01‐27 8:33 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ */
+public class CommonLoggerConstant {
+
+    public static final String APP_CONTROLLER   = "APP_CONTROLLER";
+    public static final String APP_BIZ_SERVICE  = "APP_BIZ_SERVICE";
+    public static final String APP_CORE_SERVICE = "APP_BIZ_SERVICE";
+    public static final String APP_CORE_AUTH    = "APP_CORE_AUTH";
+    public static final String APP_COMMON_DAL   = "APP_COMMON_DAL";
+
+}

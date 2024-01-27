@@ -4,11 +4,13 @@
  */
 package id.ezclouds.core.bifrost.app.api;
 
+import id.ezclouds.biz.arahindonesia.service.apibiz.BizSampleService;
 import id.ezclouds.biz.arahindonesia.service.result.BizResult;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.error.EzErrorCode;
 import id.ezclouds.common.util.error.EzErrorException;
+import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
@@ -19,8 +21,13 @@ import id.ezclouds.core.bifrost.core.processor.BizProcessorFactory;
 import id.ezclouds.core.bifrost.core.processor.PreBizProcessor;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.context.EzAppEvent;
+import id.ezclouds.core.shared.model.CoreSample;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -28,9 +35,28 @@ import org.slf4j.LoggerFactory;
  */
 public class AppController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AppController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommonLoggerConstant.APP_CONTROLLER);
 
     private PreBizProcessor preBizProcessor;
+
+    @Autowired
+    private BizSampleService bizSampleService;
+
+    @RequestMapping(value = "/")
+    private String getIndexPage() {
+        return "Welcome to Arah Indonesia";
+    }
+
+    @GetMapping(value = "/sample.php", consumes = {MediaType.ALL_VALUE})
+    private String getSample() {
+        CoreSample coreSample = bizSampleService.getCoreSample();
+        if (coreSample == null) {
+            LOGGER.info("CoreSample is NULL, return static value");
+            return "Static Sample Response";
+        }
+        LOGGER.info("CoreSample is not NULL, return DB value");
+        return coreSample.getValue();
+    }
 
     protected <T> ApiResult<T> executeInTemplate(EzAppEvent ezAppEvent, ApiRequest apiRequest, RequestHandler<T> handler) {
 

@@ -4,7 +4,7 @@
  */
 package id.ezclouds.common.util.service;
 
-import id.ezclouds.common.util.log.DigestLog;
+import id.ezclouds.common.util.logger.DigestLog;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
