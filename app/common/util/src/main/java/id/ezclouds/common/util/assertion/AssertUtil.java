@@ -5,8 +5,8 @@
 package id.ezclouds.common.util.assertion;
 
 import id.ezclouds.common.util.StringUtil;
-import id.ezclouds.common.util.error.EzErrorCode;
-import id.ezclouds.common.util.error.EzErrorException;
+import id.ezclouds.common.util.exception.EzErrorCode;
+import id.ezclouds.common.util.exception.EzErrorException;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)

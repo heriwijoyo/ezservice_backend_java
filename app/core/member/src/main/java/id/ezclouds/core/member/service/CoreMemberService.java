@@ -7,7 +7,7 @@ package id.ezclouds.core.member.service;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
-import id.ezclouds.common.util.error.EzErrorCode;
+import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.core.member.dataobject.CoreMemberDO;
 import id.ezclouds.core.member.dataobject.CoreMemberExtensionDO;
 import id.ezclouds.core.member.model.CoreMember;

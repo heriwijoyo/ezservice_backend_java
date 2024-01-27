@@ -8,8 +8,9 @@ import id.ezclouds.biz.arahindonesia.service.apibiz.BizSampleService;
 import id.ezclouds.biz.arahindonesia.service.result.BizResult;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
-import id.ezclouds.common.util.error.EzErrorCode;
-import id.ezclouds.common.util.error.EzErrorException;
+import id.ezclouds.common.util.exception.ExceptionUtil;
+import id.ezclouds.common.util.exception.EzErrorCode;
+import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
@@ -19,6 +20,7 @@ import id.ezclouds.core.bifrost.core.SpringContextConfig;
 import id.ezclouds.core.bifrost.core.processor.BizProcessor;
 import id.ezclouds.core.bifrost.core.processor.BizProcessorFactory;
 import id.ezclouds.core.bifrost.core.processor.PreBizProcessor;
+import id.ezclouds.core.shared.context.EzAppContext;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.context.EzAppEvent;
 import id.ezclouds.core.shared.model.CoreSample;
@@ -83,14 +85,14 @@ public class AppController {
             }
 
         } catch (EzErrorException ezException) {
-            ezException.printStackTrace();
+            EzAppContextHolder.getContext().appendErrorStackTrace(ExceptionUtil.getStackTrace(ezException));
             apiResult.setErrorResult(composeErrorResult(ezException));
         } catch (Exception exception) {
-            exception.printStackTrace();
+            EzAppContextHolder.getContext().appendErrorStackTrace(ExceptionUtil.getStackTrace(exception));
             apiResult.setErrorResult(composeErrorResult());
         } finally {
             String digestLog = handler.composeDigestLog(apiRequest, apiResult);
-            logExecution(apiResult, digestLog);
+            writeLog(apiResult, digestLog);
         }
 
         return apiResult;
@@ -125,10 +127,10 @@ public class AppController {
         return composeErrorResult(ezErrorException);
     }
 
-    private <T> void logExecution(ApiResult<T> apiResult, String digestLog) {
+    private <T> void writeLog(ApiResult<T> apiResult, String digestLog) {
         StringBuilder stringBuilder = new StringBuilder();
 
-        String traceId = EzAppContextHolder.getContext().getTraceId();
+        EzAppContext ezAppContext = EzAppContextHolder.getContext();
         EzAppEvent ezAppEvent = EzAppContextHolder.getContext().getEzAppEvent();
         if (ezAppEvent == null) {
             ezAppEvent = ApiEvent.UNKNOWN_EVENT;
@@ -146,10 +148,12 @@ public class AppController {
             );
         }
 
-        stringBuilder.append(traceId);
+        stringBuilder.append(ezAppContext.getTraceId());
         stringBuilder.append(" - ");
         stringBuilder.append("[");
         stringBuilder.append(eventCode);
+        stringBuilder.append(",");
+        stringBuilder.append(ezAppContext.getTimeCost());
         stringBuilder.append(",");
         stringBuilder.append(resultStatus);
         stringBuilder.append(",");

@@ -15,19 +15,28 @@ import java.util.UUID;
 public class EzAppContext {
 
     private EzAppEvent ezAppEvent;
+    private long startTimeMilis;
     private String traceId;
     private String orgId;
     private String orgCode;
     private String appId;
     private String deviceId;
+    private String errorStackTrace;
 
     public EzAppContext(EzAppEvent ezAppEvent) {
         this.ezAppEvent = ezAppEvent;
         this.traceId = HashUtil.createHash(UUID.randomUUID().toString());
+        this.startTimeMilis = System.currentTimeMillis();
     }
 
     public EzAppEvent getEzAppEvent() {
         return ezAppEvent;
+    }
+
+    public String getTimeCost() {
+        long currentTimeMilis = System.currentTimeMillis();
+        long timeCostMilis = currentTimeMilis - startTimeMilis;
+        return String.valueOf(timeCostMilis);
     }
 
     public String getTraceId() {
@@ -64,5 +73,17 @@ public class EzAppContext {
 
     public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
+    }
+
+    public String getErrorStackTrace() {
+        return errorStackTrace;
+    }
+
+    public void appendErrorStackTrace(String errorStackTrace) {
+        if (this.errorStackTrace == null) {
+            this.errorStackTrace = errorStackTrace;
+        } else {
+            this.errorStackTrace += "\n" + errorStackTrace;
+        }
     }
 }

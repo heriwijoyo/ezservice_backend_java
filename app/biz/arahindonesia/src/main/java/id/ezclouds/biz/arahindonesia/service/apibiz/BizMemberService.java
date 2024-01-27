@@ -10,8 +10,8 @@ import id.ezclouds.biz.arahindonesia.service.request.BizMemberRegisterRequest;
 import id.ezclouds.biz.arahindonesia.service.result.BizResult;
 import id.ezclouds.biz.arahindonesia.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.assertion.AssertUtil;
-import id.ezclouds.common.util.error.EzErrorCode;
-import id.ezclouds.common.util.error.EzErrorException;
+import id.ezclouds.common.util.exception.EzErrorCode;
+import id.ezclouds.common.util.exception.EzErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

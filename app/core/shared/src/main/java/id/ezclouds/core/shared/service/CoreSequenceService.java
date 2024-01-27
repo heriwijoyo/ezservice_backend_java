@@ -5,7 +5,7 @@
 package id.ezclouds.core.shared.service;
 
 import id.ezclouds.common.util.assertion.AssertUtil;
-import id.ezclouds.common.util.error.EzErrorCode;
+import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.core.shared.repo.CoreSequenceRepository;
 import id.ezclouds.core.shared.repo.dataobject.EzCoreSequenceDO;
 import org.springframework.beans.factory.annotation.Autowired;

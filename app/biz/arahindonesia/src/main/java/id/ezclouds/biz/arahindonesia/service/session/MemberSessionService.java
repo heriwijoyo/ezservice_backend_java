@@ -9,7 +9,7 @@ import id.ezclouds.biz.arahindonesia.model.session.MemberSession;
 import id.ezclouds.biz.arahindonesia.service.data.MemberSessionDataService;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
-import id.ezclouds.common.util.error.EzErrorException;
+import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

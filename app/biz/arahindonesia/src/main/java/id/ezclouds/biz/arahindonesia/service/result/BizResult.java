@@ -4,7 +4,7 @@
  */
 package id.ezclouds.biz.arahindonesia.service.result;
 
-import id.ezclouds.common.util.error.EzErrorCode;
+import id.ezclouds.common.util.exception.EzErrorCode;
 
 import java.io.Serializable;
 

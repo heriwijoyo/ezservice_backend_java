@@ -13,7 +13,7 @@ import id.ezclouds.biz.arahindonesia.service.core.MemberService;
 import id.ezclouds.biz.arahindonesia.service.authentication.AuthenticationService;
 import id.ezclouds.biz.arahindonesia.service.session.MemberSessionService;
 import id.ezclouds.common.util.assertion.AssertUtil;
-import id.ezclouds.common.util.error.EzErrorCode;
+import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.core.shared.model.MemberLogin;
 import id.ezclouds.core.shared.service.CoreSequenceService;
 import org.springframework.beans.factory.annotation.Autowired;

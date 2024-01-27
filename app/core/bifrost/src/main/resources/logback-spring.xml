@@ -40,6 +40,9 @@
             <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/default-error.log.%d{yyyy-MM-dd}</fileNamePattern>
         </rollingPolicy>
         <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>error</level>
+        </filter>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%d %p %C{1.} [%t] %m%n</pattern>
         </encoder>
@@ -60,6 +63,9 @@
             <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/common-error.log.%d{yyyy-MM-dd}</fileNamePattern>
         </rollingPolicy>
         <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>error</level>
+        </filter>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%d %p %C{1.} [%t] %m%n</pattern>
         </encoder>
