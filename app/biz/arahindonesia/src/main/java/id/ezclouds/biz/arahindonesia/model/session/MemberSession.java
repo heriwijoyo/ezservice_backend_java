@@ -28,4 +28,12 @@ public class MemberSession {
     public void setExpiryTime(String expiryTime) {
         this.expiryTime = expiryTime;
     }
+
+    @Override
+    public String toString() {
+        return "MemberSession{" +
+                "sessionId='" + sessionId + '\'' +
+                ", expiryTime='" + expiryTime + '\'' +
+                '}';
+    }
 }

@@ -64,5 +64,14 @@ public class BizResult implements Serializable {
         this.object = object;
     }
 
-
+    @Override
+    public String toString() {
+        return "BizResult{" +
+                "success=" + success +
+                ", errorCode=" + errorCode +
+                ", errorLocation='" + errorLocation + '\'' +
+                ", errorMessage='" + errorMessage + '\'' +
+                ", object=" + object.toString() +
+                '}';
+    }
 }

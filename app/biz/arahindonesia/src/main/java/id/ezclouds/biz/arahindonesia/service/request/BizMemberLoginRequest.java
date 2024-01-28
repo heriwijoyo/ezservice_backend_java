@@ -37,4 +37,13 @@ public class BizMemberLoginRequest extends BizRequest {
     public void setLoginPassword(String loginPassword) {
         this.loginPassword = loginPassword;
     }
+
+    @Override
+    public String toString() {
+        return "BizMemberLoginRequest{" +
+                "loginType='" + loginType + '\'' +
+                ", loginId='" + loginId + '\'' +
+                ", loginPassword='" + loginPassword + '\'' +
+                '}';
+    }
 }
