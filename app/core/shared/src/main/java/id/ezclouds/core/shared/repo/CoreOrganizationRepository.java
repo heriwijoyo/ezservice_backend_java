@@ -2,8 +2,9 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.core.shared.repo.dataobject;
+package id.ezclouds.core.shared.repo;
 
+import id.ezclouds.core.shared.repo.dataobject.EzCoreOrganizationDO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
