@@ -37,8 +37,8 @@ public class CoreAuthService {
     @Autowired
     private EzAuthMemberClientRepository ezAuthMemberClientRepository;
 
-    public CoreAuthResult<CoreAuthAppClient> authAppClient(CoreAppClientAuthRequest request) {
-        CoreAuthResult<CoreAuthAppClient> authResult = new CoreAuthResult<>();
+    public CoreAuthResult<Void> authAppClient(CoreAppClientAuthRequest request) {
+        CoreAuthResult<Void> authResult = new CoreAuthResult<>();
 
         if (request == null || StringUtil.isBlank(request.getAppId()) || StringUtil.isBlank(request.getClientId()) || StringUtil.isBlank(request.getClientSecret())) {
             return authResult;
@@ -51,7 +51,6 @@ public class CoreAuthService {
 
             if (appIdMatch && clientIdMatch && clientSecretMatch) {
                 authResult.setSuccess(true);
-                authResult.setData(appClient);
             }
         }
 

@@ -4,6 +4,12 @@
  */
 package id.ezclouds.biz.arahindonesia.service.authentication;
 
+import id.ezclouds.biz.arahindonesia.service.core.BizOrganizationService;
+import id.ezclouds.core.auth.request.CoreAppClientAuthRequest;
+import id.ezclouds.core.auth.result.CoreAuthResult;
+import id.ezclouds.core.auth.service.CoreAuthService;
+import id.ezclouds.core.shared.model.CoreOrganization;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,5 +19,32 @@ import org.springframework.stereotype.Service;
 @Service
 public class BizAuthService {
 
+    @Autowired
+    private BizOrganizationService bizOrganizationService;
 
+    @Autowired
+    private CoreAuthService coreAuthService;
+
+    public CoreAuthResult<String> authAppClient(String orgId, String appId, String clientId, String clientSecret) {
+        CoreAuthResult<String> bizAuthResult = new CoreAuthResult<>();
+
+        CoreOrganization coreOrganization = bizOrganizationService.getOrganizationById(orgId);
+        if (coreOrganization == null) {
+            return bizAuthResult;
+        }
+
+        CoreAppClientAuthRequest request = new CoreAppClientAuthRequest();
+        request.setAppId(appId);
+        request.setClientId(clientId);
+        request.setClientSecret(clientSecret);
+
+        CoreAuthResult<Void> clientAuthResult = coreAuthService.authAppClient(request);
+        if (!clientAuthResult.isSuccess()) {
+            return bizAuthResult;
+        }
+
+        bizAuthResult.setSuccess(true);
+        bizAuthResult.setData(coreOrganization.getCode());
+        return bizAuthResult;
+    }
 }

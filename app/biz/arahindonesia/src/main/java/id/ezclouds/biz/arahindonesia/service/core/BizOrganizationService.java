@@ -4,6 +4,7 @@
  */
 package id.ezclouds.biz.arahindonesia.service.core;
 
+import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.shared.model.CoreOrganization;
 import id.ezclouds.core.shared.service.CoreOrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,5 +26,18 @@ public class BizOrganizationService {
     @Cacheable("organizations")
     public List<CoreOrganization> getActiveOrganizations() {
         return coreOrganizationService.getActiveOrganizations();
+    }
+
+    public CoreOrganization getOrganizationById(String orgId) {
+        if (StringUtil.isBlank(orgId)) {
+            return null;
+        }
+
+        for (CoreOrganization organization : getActiveOrganizations()) {
+            if (orgId.equals(organization.getOrgId())) {
+                return organization;
+            }
+        }
+        return null;
     }
 }

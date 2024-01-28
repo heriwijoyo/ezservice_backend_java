@@ -4,19 +4,17 @@
  */
 package id.ezclouds.core.bifrost.core.processor;
 
-import id.ezclouds.biz.arahindonesia.model.AppClient;
-import id.ezclouds.biz.arahindonesia.service.core.BizOrganizationService;
-import id.ezclouds.biz.arahindonesia.service.data.AppClientService;
+import id.ezclouds.biz.arahindonesia.service.authentication.BizAuthService;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
+import id.ezclouds.core.auth.result.CoreAuthResult;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
 import id.ezclouds.core.bifrost.app.api.request.RequestAppClient;
 import id.ezclouds.core.bifrost.core.BaseRequest;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.context.EzAppEvent;
-import id.ezclouds.core.shared.model.CoreOrganization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,10 +26,7 @@ import org.springframework.stereotype.Component;
 public class PreBizProcessor {
 
     @Autowired
-    private BizOrganizationService bizOrganizationService;
-
-    @Autowired
-    private AppClientService appClientService;
+    private BizAuthService bizAuthService;
 
     public void process(EzAppEvent event, BaseRequest request) throws EzErrorException, ClassCastException {
 
@@ -46,27 +41,18 @@ public class PreBizProcessor {
             AssertUtil.notBlank(reqClient.getClientId(), EzErrorCode.ILLEGAL_PARAM, "Request.AppClient.clientId is blank");
             AssertUtil.notBlank(reqClient.getClientSecret(), EzErrorCode.ILLEGAL_PARAM, "Request.AppClient.clientSecret is blank");
 
-            CoreOrganization coreOrganization = bizOrganizationService
-                    .getActiveOrganizations()
-                    .stream()
-                    .filter(org -> reqClient.getOrganizationId().equals(org.getOrgId()))
-                    .findFirst()
-                    .get();
-            AssertUtil.notNull(coreOrganization, EzErrorCode.UNAUTHORIZED, "Unauthorized client request");
+            CoreAuthResult<String> clientAuthResult = bizAuthService.authAppClient(
+                    reqClient.getOrganizationId(),
+                    reqClient.getApplicationId(),
+                    reqClient.getClientId(),
+                    reqClient.getClientSecret()
+            );
+            AssertUtil.isTrue(clientAuthResult.isSuccess(), EzErrorCode.UNAUTHORIZED, "Unauthorized client request");
+            AssertUtil.notBlank(clientAuthResult.getData(), EzErrorCode.UNAUTHORIZED, "Unauthorized client request");
 
-            AppClient appClient = appClientService
-                    .getAppClients()
-                    .stream()
-                    .filter(aClient -> reqClient.getApplicationId().equals(aClient.getAppId()))
-                    .filter(aClient -> reqClient.getClientId().equals(aClient.getClientId()))
-                    .filter(aClient -> reqClient.getClientSecret().equals(aClient.getClientSecret()))
-                    .findFirst()
-                    .orElse(null);
-            AssertUtil.notNull(appClient, EzErrorCode.UNAUTHORIZED, "Unauthorized client request");
-
-            EzAppContextHolder.getContext().setOrgId(coreOrganization.getOrgId());
-            EzAppContextHolder.getContext().setOrgCode(coreOrganization.getCode());
-            EzAppContextHolder.getContext().setAppId(appClient.getAppId());
+            EzAppContextHolder.getContext().setOrgId(reqClient.getOrganizationId());
+            EzAppContextHolder.getContext().setOrgCode(clientAuthResult.getData());
+            EzAppContextHolder.getContext().setAppId(reqClient.getApplicationId());
             EzAppContextHolder.getContext().setDeviceId(reqClient.getDeviceId());
         }
     }
