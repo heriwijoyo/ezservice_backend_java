@@ -4,7 +4,7 @@
  */
 package id.ezclouds.core.auth.converter;
 
-import id.ezclouds.core.auth.dataobject.CoreMemberClientDO;
+import id.ezclouds.core.auth.dataobject.EzAuthMemberClientDO;
 import id.ezclouds.core.auth.model.CoreMemberClient;
 
 /**
@@ -12,7 +12,7 @@ import id.ezclouds.core.auth.model.CoreMemberClient;
  * @version $Id: CoreMemberClientConverter.java, v 0.1 2024‐01‐07 9:33 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
 public class CoreMemberClientConverter {
 
-    public static CoreMemberClient convert(CoreMemberClientDO clientDO) {
+    public static CoreMemberClient convert(EzAuthMemberClientDO clientDO) {
         if (clientDO == null) { return null; }
         CoreMemberClient client = new CoreMemberClient();
         client.setClientId(clientDO.getClientId());
@@ -28,9 +28,9 @@ public class CoreMemberClientConverter {
         return client;
     }
 
-    public static CoreMemberClientDO convert(CoreMemberClient client) {
+    public static EzAuthMemberClientDO convert(CoreMemberClient client) {
         if (client == null) { return null; }
-        CoreMemberClientDO clientDO = new CoreMemberClientDO();
+        EzAuthMemberClientDO clientDO = new EzAuthMemberClientDO();
         clientDO.setClientId(client.getClientId());
         clientDO.setOrgId(client.getOrgId());
         clientDO.setShard(client.getShard());

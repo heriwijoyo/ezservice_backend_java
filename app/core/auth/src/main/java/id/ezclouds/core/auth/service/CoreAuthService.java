@@ -9,9 +9,9 @@ import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.core.auth.converter.CoreMemberClientConverter;
-import id.ezclouds.core.auth.dataobject.CoreMemberClientDO;
+import id.ezclouds.core.auth.dataobject.EzAuthMemberClientDO;
 import id.ezclouds.core.auth.model.CoreMemberClient;
-import id.ezclouds.core.auth.repo.CoreMemberClientRepository;
+import id.ezclouds.core.auth.repo.EzAuthMemberClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,19 +23,19 @@ import org.springframework.stereotype.Service;
 public class CoreAuthService {
 
     @Autowired
-    private CoreMemberClientRepository coreMemberClientRepository;
+    private EzAuthMemberClientRepository ezAuthMemberClientRepository;
 
     public void createMemberClient(CoreMemberClient memberClient) {
-        CoreMemberClientDO memberClientDO = CoreMemberClientConverter.convert(memberClient);
+        EzAuthMemberClientDO memberClientDO = CoreMemberClientConverter.convert(memberClient);
         memberClientDO.setClientId(HashUtil.createHash(memberClient.getLoginType(), memberClient.getMemberId()));
         memberClientDO.setCreatedTime(DateUtil.getCurrentFormattedDate());
 
-        coreMemberClientRepository.save(memberClientDO);
+        ezAuthMemberClientRepository.save(memberClientDO);
     }
 
     public CoreMemberClient getOptimisticMemberClient(String loginType, String memberId) {
         String clientId = HashUtil.createHash(loginType, memberId);
-        CoreMemberClientDO memberClientDO = coreMemberClientRepository.findById(clientId).orElse(null);
+        EzAuthMemberClientDO memberClientDO = ezAuthMemberClientRepository.findById(clientId).orElse(null);
         AssertUtil.notNull(memberClientDO, EzErrorCode.MEMBER_CLIENT_NOT_FOUND, "Member client not found");
         return CoreMemberClientConverter.convert(memberClientDO);
     }
