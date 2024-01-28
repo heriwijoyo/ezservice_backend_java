@@ -5,8 +5,8 @@
 package id.ezclouds.core.bifrost.core.processor;
 
 import id.ezclouds.biz.arahindonesia.model.AppClient;
+import id.ezclouds.biz.arahindonesia.service.core.BizOrganizationService;
 import id.ezclouds.biz.arahindonesia.service.data.AppClientService;
-import id.ezclouds.biz.arahindonesia.service.data.OrganizationService;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
@@ -28,7 +28,7 @@ import org.springframework.stereotype.Component;
 public class PreBizProcessor {
 
     @Autowired
-    private OrganizationService organizationService;
+    private BizOrganizationService bizOrganizationService;
 
     @Autowired
     private AppClientService appClientService;
@@ -46,8 +46,8 @@ public class PreBizProcessor {
             AssertUtil.notBlank(reqClient.getClientId(), EzErrorCode.ILLEGAL_PARAM, "Request.AppClient.clientId is blank");
             AssertUtil.notBlank(reqClient.getClientSecret(), EzErrorCode.ILLEGAL_PARAM, "Request.AppClient.clientSecret is blank");
 
-            CoreOrganization coreOrganization = organizationService
-                    .getOrganizations()
+            CoreOrganization coreOrganization = bizOrganizationService
+                    .getActiveOrganizations()
                     .stream()
                     .filter(org -> reqClient.getOrganizationId().equals(org.getOrgId()))
                     .findFirst()

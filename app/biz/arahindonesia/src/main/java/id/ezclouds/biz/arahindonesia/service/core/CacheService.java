@@ -24,7 +24,7 @@ public class CacheService {
     @Autowired
     private CacheManager cacheManager;
     @Autowired
-    private OrganizationService organizationService;
+    private BizOrganizationService bizOrganizationService;
     @Autowired
     private AppClientService appClientService;
     @Autowired
