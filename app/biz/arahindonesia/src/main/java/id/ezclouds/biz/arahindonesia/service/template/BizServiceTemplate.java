@@ -4,9 +4,15 @@
  */
 package id.ezclouds.biz.arahindonesia.service.template;
 
+import id.ezclouds.biz.arahindonesia.service.request.BizRequest;
 import id.ezclouds.biz.arahindonesia.service.result.BizResult;
+import id.ezclouds.common.util.exception.ExceptionUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
+import id.ezclouds.common.util.logger.CommonLoggerConstant;
+import id.ezclouds.core.shared.context.EzAppContextHolder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 
 /**
@@ -15,7 +21,9 @@ import org.springframework.dao.DataIntegrityViolationException;
  */
 public final class BizServiceTemplate {
 
-    public static void execute(BizResult bizResult, Handler handler) {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommonLoggerConstant.APP_BIZ_SERVICE);
+
+    public static void execute(BizRequest request, BizResult bizResult, Handler handler) {
         bizResult.setSuccess(false);
 
         try {
@@ -26,25 +34,32 @@ public final class BizServiceTemplate {
             bizResult.setSuccess(false);
             bizResult.setErrorCode(ezException.getEzErrorCode());
             bizResult.setErrorMessage(ezException.getErrorMessage());
-
-            //TODO: log exception
-            ezException.printStackTrace();
+            EzAppContextHolder.getContext().appendErrorStackTrace(ExceptionUtil.getStackTrace(ezException));
         } catch (DataIntegrityViolationException exception) {
             bizResult.setSuccess(false);
             bizResult.setErrorCode(EzErrorCode.IDEMPOTENT_ERROR);
             bizResult.setErrorMessage(EzErrorCode.IDEMPOTENT_ERROR.getDescription());
+            EzAppContextHolder.getContext().appendErrorStackTrace(ExceptionUtil.getStackTrace(exception));
         } catch (Exception exception) {
             bizResult.setSuccess(false);
             bizResult.setErrorCode(EzErrorCode.SYSTEM_ERROR);
             bizResult.setErrorMessage(EzErrorCode.SYSTEM_ERROR.getDescription());
-
-            //TODO: log exception
-            exception.printStackTrace();
+            EzAppContextHolder.getContext().appendErrorStackTrace(ExceptionUtil.getStackTrace(exception));
         }
         finally {
-            //TODO: log request and result
+            logRequest(request);
+            logResult(bizResult);
         }
+    }
 
+    private static void logRequest(BizRequest request) {
+        String traceId = EzAppContextHolder.getContext().getTraceId();
+        LOGGER.info(traceId + " --- " + request.toString());
+    }
+
+    private static void logResult(BizResult result) {
+        String traceId = EzAppContextHolder.getContext().getTraceId();
+        LOGGER.info(traceId + " --- " + result.toString());
     }
 
     public interface Handler {

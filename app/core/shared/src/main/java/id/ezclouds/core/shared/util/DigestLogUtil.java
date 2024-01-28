@@ -42,6 +42,5 @@ public class DigestLogUtil {
             String errorLog = "[" + ezAppContext.getTraceId() + "] - " + ezAppContext.getErrorStackTrace();
             logger.error(errorLog);
         }
-
     }
 }

@@ -28,7 +28,7 @@ public class BizMemberService {
     public BizResult registerMember(BizMemberRegisterRequest request) throws EzErrorException {
         final BizResult bizResult = new BizResult();
 
-        BizServiceTemplate.execute(bizResult, new BizServiceTemplate.Handler() {
+        BizServiceTemplate.execute(request, bizResult, new BizServiceTemplate.Handler() {
 
             @Override
             public void onRequestCheck() throws EzErrorException {

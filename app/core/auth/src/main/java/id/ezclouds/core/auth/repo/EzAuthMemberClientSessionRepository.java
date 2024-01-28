@@ -6,6 +6,9 @@ package id.ezclouds.core.auth.repo;
 
 import id.ezclouds.core.auth.dataobject.EzAuthMemberClientSessionDO;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -14,4 +17,11 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface EzAuthMemberClientSessionRepository extends JpaRepository<EzAuthMemberClientSessionDO, String> {
+
+    @Modifying
+    @Query(value = "UPDATE ez_auth_member_client_session SET status = 0 WHERE org_id = :orgId AND client_id = :clientId", nativeQuery = true)
+    void invalidateSession(
+            @Param("orgId") String orgId,
+            @Param("clientId") String clientId
+    );
 }

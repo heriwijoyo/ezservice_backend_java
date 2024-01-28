@@ -7,12 +7,14 @@ package id.ezclouds.core.auth.dataobject;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: EzAuthAppClientDO.java, v 0.1 2024‐01‐28 6:38 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Entity
+@Table(name = "ez_auth_app_client")
 public class EzAuthAppClientDO {
 
     @Id
@@ -30,6 +32,9 @@ public class EzAuthAppClientDO {
 
     @Column(name = "client_secret")
     private String clientSecret;
+
+    @Column(name = "status")
+    private int status;
 
     public String getId() {
         return id;

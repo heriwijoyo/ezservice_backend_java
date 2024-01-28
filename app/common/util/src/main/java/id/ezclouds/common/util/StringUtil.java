@@ -4,8 +4,6 @@
  */
 package id.ezclouds.common.util;
 
-import java.util.Objects;
-
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: StringUtil.java, v 0.1 2022‐11‐04 7:58 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$

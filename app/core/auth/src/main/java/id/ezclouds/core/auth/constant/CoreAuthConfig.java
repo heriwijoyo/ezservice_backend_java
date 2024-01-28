@@ -13,5 +13,6 @@ public class CoreAuthConfig {
     public static class MemberClient {
 
         public static final boolean allowMultipleAuthSession = false;
+        public static final int sessionExpiryDays = 3;
     }
 }

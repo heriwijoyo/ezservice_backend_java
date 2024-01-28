@@ -4,16 +4,25 @@
  */
 package id.ezclouds.biz.arahindonesia.service.authentication;
 
-import id.ezclouds.biz.arahindonesia.model.login.MemberLoginResult;
+import id.ezclouds.biz.arahindonesia.model.session.MemberSession;
 import id.ezclouds.biz.arahindonesia.service.core.BizOrganizationService;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberLoginRequest;
 import id.ezclouds.biz.arahindonesia.service.result.BizResult;
+import id.ezclouds.biz.arahindonesia.service.template.BizServiceTemplate;
+import id.ezclouds.common.util.assertion.AssertUtil;
+import id.ezclouds.common.util.exception.EzErrorCode;
+import id.ezclouds.common.util.exception.EzErrorException;
+import id.ezclouds.core.auth.model.CoreAuthMemberClient;
 import id.ezclouds.core.auth.request.CoreAppClientAuthRequest;
 import id.ezclouds.core.auth.result.CoreAuthResult;
+import id.ezclouds.core.auth.result.CoreAuthSessionInfo;
 import id.ezclouds.core.auth.service.CoreAuthService;
+import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.model.CoreOrganization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -51,8 +60,43 @@ public class BizAuthService {
         return bizAuthResult;
     }
 
+    @Transactional
     public BizResult loginMember(BizMemberLoginRequest request) {
+        final BizResult bizResult = new BizResult();
 
-        return null;
+        BizServiceTemplate.execute(request, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM, "Invalid request");
+                AssertUtil.notBlank(request.getLoginType(), EzErrorCode.ILLEGAL_PARAM, "Invalid request");
+                AssertUtil.notBlank(request.getLoginId(), EzErrorCode.ILLEGAL_PARAM, "Invalid request");
+                AssertUtil.notBlank(request.getLoginPassword(), EzErrorCode.ILLEGAL_PARAM, "Invalid request");
+            }
+
+            @Override
+            public void onBizProcess() throws EzErrorException {
+                String orgId = EzAppContextHolder.getContext().getOrgId();
+                String appId = EzAppContextHolder.getContext().getAppId();
+                String deviceId = EzAppContextHolder.getContext().getDeviceId();
+
+                CoreAuthResult<CoreAuthSessionInfo> authResult = coreAuthService.authMemberClient(
+                        orgId, appId, request.getLoginType(), request.getLoginId(), request.getLoginPassword(), deviceId
+                );
+
+                if (!authResult.isSuccess()) {
+                    bizResult.setErrorCode(authResult.getEzErrorCode());
+                } else {
+                    CoreAuthSessionInfo sessionInfo = authResult.getData();
+                    MemberSession memberSession = new MemberSession();
+                    memberSession.setSessionId(sessionInfo.getSessionId());
+                    memberSession.setExpiryTime(sessionInfo.getExpiryTime());
+
+                    bizResult.setObject(memberSession);
+                }
+                bizResult.setSuccess(authResult.isSuccess());
+            }
+        });
+
+        return bizResult;
     }
 }

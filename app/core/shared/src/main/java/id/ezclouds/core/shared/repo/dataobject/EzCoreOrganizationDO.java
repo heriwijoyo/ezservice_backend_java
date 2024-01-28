@@ -27,6 +27,9 @@ public class EzCoreOrganizationDO {
     @Column(name = "code")
     private String code;
 
+    @Column(name = "status")
+    private int status;
+
     public String getOrgId() {
         return orgId;
     }

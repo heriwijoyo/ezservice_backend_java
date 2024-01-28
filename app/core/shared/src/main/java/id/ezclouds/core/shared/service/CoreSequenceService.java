@@ -45,10 +45,6 @@ public class CoreSequenceService {
         return orgCode + shard + sceneCode + sequence;
     }
 
-    public String getShardId(String memberId) {
-        return memberId.substring(3, 5);
-    }
-
     private String composeSequence(int sequence, int sequenceLength) {
         String seqStr = String.valueOf(sequence);
         while (seqStr.length() < sequenceLength) {

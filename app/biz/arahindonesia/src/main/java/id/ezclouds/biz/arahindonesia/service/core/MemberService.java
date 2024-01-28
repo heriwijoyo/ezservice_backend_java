@@ -14,6 +14,7 @@ import id.ezclouds.biz.arahindonesia.model.member.MemberBase;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberRegisterRequest;
 import id.ezclouds.common.dal.repo.member.AppMemberRepository;
 import id.ezclouds.common.util.DateUtil;
+import id.ezclouds.common.util.ShardUtil;
 import id.ezclouds.core.auth.model.CoreAuthMemberClient;
 import id.ezclouds.core.auth.service.CoreAuthService;
 import id.ezclouds.core.member.model.CoreMember;
@@ -65,7 +66,7 @@ public class MemberService {
         String appId = EzAppContextHolder.getContext().getAppId();
 
         String memberId = coreSequenceService.generateSequence(orgId, orgCode, CoreSequenceScene.CORE_MEMBER_ID.getCode());
-        String shard = coreSequenceService.getShardId(memberId);
+        String shard = ShardUtil.getShardId(memberId);
 
         CoreMember coreMember = new CoreMember();
         coreMember.setMemberId(memberId);
