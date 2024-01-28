@@ -6,17 +6,23 @@ package id.ezclouds.core.shared.model;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: Organization.java, v 0.1 2023‐12‐10 12:18 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: CoreOrganization.java, v 0.1 2023‐12‐10 12:18 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class Organization {
+public class CoreOrganization {
 
     private String orgId;
     private String name;
     private String code;
 
-    public Organization(String orgId, String name, String code) {
+    public void setOrgId(String orgId) {
         this.orgId = orgId;
+    }
+
+    public void setName(String name) {
         this.name = name;
+    }
+
+    public void setCode(String code) {
         this.code = code;
     }
 

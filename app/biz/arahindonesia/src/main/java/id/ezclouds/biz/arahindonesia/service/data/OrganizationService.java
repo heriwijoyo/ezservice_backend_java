@@ -6,7 +6,7 @@ package id.ezclouds.biz.arahindonesia.service.data;
 
 import id.ezclouds.biz.arahindonesia.converter.ModelConverter;
 import id.ezclouds.common.dal.OrganizationRepository;
-import id.ezclouds.core.shared.model.Organization;
+import id.ezclouds.core.shared.model.CoreOrganization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class OrganizationService {
     private OrganizationRepository organizationRepository;
 
     @Cacheable("organizations")
-    public List<Organization> getOrganizations() {
+    public List<CoreOrganization> getOrganizations() {
         return organizationRepository
                 .findAll()
                 .stream()

@@ -16,7 +16,7 @@ import id.ezclouds.core.bifrost.app.api.request.RequestAppClient;
 import id.ezclouds.core.bifrost.core.BaseRequest;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.context.EzAppEvent;
-import id.ezclouds.core.shared.model.Organization;
+import id.ezclouds.core.shared.model.CoreOrganization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -46,13 +46,13 @@ public class PreBizProcessor {
             AssertUtil.notBlank(reqClient.getClientId(), EzErrorCode.ILLEGAL_PARAM, "Request.AppClient.clientId is blank");
             AssertUtil.notBlank(reqClient.getClientSecret(), EzErrorCode.ILLEGAL_PARAM, "Request.AppClient.clientSecret is blank");
 
-            Organization organization = organizationService
+            CoreOrganization coreOrganization = organizationService
                     .getOrganizations()
                     .stream()
                     .filter(org -> reqClient.getOrganizationId().equals(org.getOrgId()))
                     .findFirst()
                     .get();
-            AssertUtil.notNull(organization, EzErrorCode.UNAUTHORIZED, "Unauthorized client request");
+            AssertUtil.notNull(coreOrganization, EzErrorCode.UNAUTHORIZED, "Unauthorized client request");
 
             AppClient appClient = appClientService
                     .getAppClients()
@@ -64,8 +64,8 @@ public class PreBizProcessor {
                     .orElse(null);
             AssertUtil.notNull(appClient, EzErrorCode.UNAUTHORIZED, "Unauthorized client request");
 
-            EzAppContextHolder.getContext().setOrgId(organization.getOrgId());
-            EzAppContextHolder.getContext().setOrgCode(organization.getCode());
+            EzAppContextHolder.getContext().setOrgId(coreOrganization.getOrgId());
+            EzAppContextHolder.getContext().setOrgCode(coreOrganization.getCode());
             EzAppContextHolder.getContext().setAppId(appClient.getAppId());
             EzAppContextHolder.getContext().setDeviceId(reqClient.getDeviceId());
         }
