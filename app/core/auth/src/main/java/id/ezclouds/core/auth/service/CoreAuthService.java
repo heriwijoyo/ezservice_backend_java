@@ -9,16 +9,22 @@ import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
+import id.ezclouds.common.util.exception.EzErrorException;
+import id.ezclouds.core.auth.constant.CoreAuthConfig;
+import id.ezclouds.core.auth.constant.CoreAuthConstant;
 import id.ezclouds.core.auth.converter.CoreAuthModelConverter;
 import id.ezclouds.core.auth.dataobject.EzAuthMemberClientDO;
+import id.ezclouds.core.auth.dataobject.EzAuthMemberClientSessionDO;
 import id.ezclouds.core.auth.model.CoreAuthAppClient;
 import id.ezclouds.core.auth.model.CoreAuthMemberClient;
 import id.ezclouds.core.auth.repo.EzAuthAppClientRepository;
 import id.ezclouds.core.auth.repo.EzAuthMemberClientRepository;
+import id.ezclouds.core.auth.repo.EzAuthMemberClientSessionRepository;
 import id.ezclouds.core.auth.request.CoreAppClientAuthRequest;
 import id.ezclouds.core.auth.result.CoreAuthResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,6 +42,9 @@ public class CoreAuthService {
 
     @Autowired
     private EzAuthMemberClientRepository ezAuthMemberClientRepository;
+
+    @Autowired
+    private EzAuthMemberClientSessionRepository ezAuthMemberClientSessionRepository;
 
     public CoreAuthResult<Void> authAppClient(CoreAppClientAuthRequest request) {
         CoreAuthResult<Void> authResult = new CoreAuthResult<>();
@@ -55,6 +64,31 @@ public class CoreAuthService {
         }
 
         return authResult;
+    }
+
+    public String authMemberClient(String orgId, String appId, String loginType, String loginId, String loginPass) throws EzErrorException {
+        EzAuthMemberClientDO memberClientDO = ezAuthMemberClientRepository.findByLoginRequest(orgId, appId, loginType, loginId);
+        AssertUtil.notNull(memberClientDO, EzErrorCode.MEMBER_CLIENT_NOT_FOUND, "Member Client Not Found");
+
+        AssertUtil.isNotTrue(memberClientDO.getStatus() == CoreAuthConstant.MEMBER_CLIENT_STATUS_NOT_ACTIVE, EzErrorCode.MEMBER_CLIENT_NOT_ACTIVE, "Member Client Not Active");
+        AssertUtil.isNotTrue(memberClientDO.getStatus() == CoreAuthConstant.MEMBER_CLIENT_STATUS_FROZEN, EzErrorCode.MEMBER_CLIENT_FROZEN, "Member Client Frozen");
+        AssertUtil.isTrue(memberClientDO.getStatus() == CoreAuthConstant.MEMBER_CLIENT_STATUS_ACTIVE, EzErrorCode.MEMBER_CLIENT_ABNORMAL, "Member Client Abnormal");
+
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        boolean isPassMatch = bCryptPasswordEncoder.matches(loginPass, memberClientDO.getLoginPassword());
+        AssertUtil.isTrue(isPassMatch, EzErrorCode.MEMBER_LOGIN_FAILED, "Member Login Failed");
+
+        boolean allowMultipleSession = CoreAuthConfig.MemberClient.allowMultipleAuthSession;
+        if (!allowMultipleSession) {
+            //TODO: force logout current active session
+        }
+
+        return memberClientDO.getClientId();
+    }
+
+    public void createAuthMemberClientSession(String orgId, String appId) {
+        EzAuthMemberClientSessionDO sessionDO = new EzAuthMemberClientSessionDO();
+        ezAuthMemberClientSessionRepository.save(sessionDO);
     }
 
     public void createMemberClient(CoreAuthMemberClient memberClient) {

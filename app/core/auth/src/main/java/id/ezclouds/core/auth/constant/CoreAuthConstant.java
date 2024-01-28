@@ -11,4 +11,7 @@ package id.ezclouds.core.auth.constant;
 public class CoreAuthConstant {
 
     public static final String AUTH_STRATEGY_PHONE_AND_PASSWORD = "AUTH_STRATEGY_PHONE_AND_PASSWORD";
+    public static final int MEMBER_CLIENT_STATUS_ACTIVE = 1;
+    public static final int MEMBER_CLIENT_STATUS_NOT_ACTIVE = 0;
+    public static final int MEMBER_CLIENT_STATUS_FROZEN = -1;
 }

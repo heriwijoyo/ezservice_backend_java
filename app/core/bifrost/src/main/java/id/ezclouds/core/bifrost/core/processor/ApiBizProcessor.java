@@ -5,6 +5,8 @@
 package id.ezclouds.core.bifrost.core.processor;
 
 import id.ezclouds.biz.arahindonesia.service.apibiz.*;
+import id.ezclouds.biz.arahindonesia.service.authentication.BizAuthService;
+import id.ezclouds.biz.arahindonesia.service.request.BizMemberLoginRequest;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberRegisterRequest;
 import id.ezclouds.biz.arahindonesia.service.result.BizResult;
 import id.ezclouds.common.util.exception.EzErrorCode;
@@ -15,7 +17,6 @@ import id.ezclouds.core.bifrost.app.api.request.MemberRegisterRequest;
 import id.ezclouds.core.bifrost.core.BaseRequest;
 import id.ezclouds.core.bifrost.core.converter.BizRequestConverter;
 import id.ezclouds.core.shared.context.EzAppEvent;
-import id.ezclouds.core.shared.model.MemberLogin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +47,9 @@ public class ApiBizProcessor implements BizProcessor {
     @Autowired
     private BizMemberService bizMemberService;
 
+    @Autowired
+    private BizAuthService bizAuthService;
+
     @Override
     public BizResult process(EzAppEvent appEvent, BaseRequest request) throws EzErrorException {
         ApiEvent apiEvent = (ApiEvent) appEvent;
@@ -62,10 +66,10 @@ public class ApiBizProcessor implements BizProcessor {
                 return bizNewsService.getActiveNews();
 
             case MEMBER_PROFILE:
-                return bizMemberProfileService.getMemberProfile();
+                return bizMemberProfileService.getMemberProfile();*/
 
-            case MEMBER_LOGIN:
-                return bizMemberLoginService.loginMember(composeMemberLogin((MemberLoginRequest)request));*/
+            case API_MEMBER_LOGIN:
+                return bizAuthService.loginMember(composeMemberLogin((MemberLoginRequest)request));
 
             case API_MEMBER_REGISTER:
                 BizMemberRegisterRequest bizRequest = BizRequestConverter.convert((MemberRegisterRequest) request);
@@ -80,8 +84,8 @@ public class ApiBizProcessor implements BizProcessor {
         return bizResult;
     }
 
-    private MemberLogin composeMemberLogin(MemberLoginRequest loginRequest) {
-        MemberLogin memberLogin = new MemberLogin();
+    private BizMemberLoginRequest composeMemberLogin(MemberLoginRequest loginRequest) {
+        BizMemberLoginRequest memberLogin = new BizMemberLoginRequest();
         memberLogin.setLoginType(loginRequest.getLoginType());
         memberLogin.setLoginId(loginRequest.getLoginId());
         memberLogin.setLoginPassword(loginRequest.getLoginPassword());

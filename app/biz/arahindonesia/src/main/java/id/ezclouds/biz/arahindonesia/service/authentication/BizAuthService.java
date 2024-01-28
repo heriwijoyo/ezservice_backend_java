@@ -4,7 +4,10 @@
  */
 package id.ezclouds.biz.arahindonesia.service.authentication;
 
+import id.ezclouds.biz.arahindonesia.model.login.MemberLoginResult;
 import id.ezclouds.biz.arahindonesia.service.core.BizOrganizationService;
+import id.ezclouds.biz.arahindonesia.service.request.BizMemberLoginRequest;
+import id.ezclouds.biz.arahindonesia.service.result.BizResult;
 import id.ezclouds.core.auth.request.CoreAppClientAuthRequest;
 import id.ezclouds.core.auth.result.CoreAuthResult;
 import id.ezclouds.core.auth.service.CoreAuthService;
@@ -46,5 +49,10 @@ public class BizAuthService {
         bizAuthResult.setSuccess(true);
         bizAuthResult.setData(coreOrganization.getCode());
         return bizAuthResult;
+    }
+
+    public BizResult loginMember(BizMemberLoginRequest request) {
+
+        return null;
     }
 }

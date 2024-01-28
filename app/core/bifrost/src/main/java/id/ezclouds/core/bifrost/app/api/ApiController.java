@@ -9,6 +9,7 @@ import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.core.bifrost.app.api.digestlog.SampleDigestLog;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
+import id.ezclouds.core.bifrost.app.api.request.MemberLoginRequest;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,20 @@ public class ApiController extends AppController {
     @Override
     protected Logger getLogger() {
         return LoggerFactory.getLogger(CommonLoggerConstant.API_CONTROLLER);
+    }
+
+    private ApiResult<String> memberLogin(@RequestBody MemberLoginRequest request, HttpServletResponse response) {
+        return executeInTemplate(ApiEvent.API_MEMBER_LOGIN, request, new RequestHandler<String>() {
+            @Override
+            public String convertResult(Object resultObject) {
+                return null;
+            }
+
+            @Override
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<String> result) {
+                return null;
+            }
+        });
     }
 
     @PostMapping(value = "/api/sample.json", consumes = {MediaType.APPLICATION_JSON_VALUE})

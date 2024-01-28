@@ -31,4 +31,8 @@ public class AssertUtil {
             throw new EzErrorException(ezErrorCode, StringUtil.concateStrings(message));
         }
     }
+
+    public static void isNotTrue(boolean state, EzErrorCode ezErrorCode, String... message) throws EzErrorException {
+        isTrue(!state, ezErrorCode, message);
+    }
 }
