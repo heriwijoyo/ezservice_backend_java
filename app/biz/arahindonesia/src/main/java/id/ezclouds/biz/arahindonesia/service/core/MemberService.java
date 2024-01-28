@@ -14,7 +14,7 @@ import id.ezclouds.biz.arahindonesia.model.member.MemberBase;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberRegisterRequest;
 import id.ezclouds.common.dal.repo.member.AppMemberRepository;
 import id.ezclouds.common.util.DateUtil;
-import id.ezclouds.core.auth.model.CoreMemberClient;
+import id.ezclouds.core.auth.model.CoreAuthMemberClient;
 import id.ezclouds.core.auth.service.CoreAuthService;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
@@ -106,7 +106,7 @@ public class MemberService {
         memberExtension.setTpsNumber(request.getTpsNumber());
         coreMemberService.store(memberExtension);
 
-        CoreMemberClient memberClient = new CoreMemberClient();
+        CoreAuthMemberClient memberClient = new CoreAuthMemberClient();
         memberClient.setOrgId(orgId);
         memberClient.setShard(shard);
         memberClient.setAppId(appId);
@@ -118,7 +118,7 @@ public class MemberService {
 
         CoreMember storedMember = coreMemberService.getOptimisticCoreMember(memberId);
         CoreMemberExtension storedMemberExtension = coreMemberService.getPessimisticCoreMemberExtension(memberId);
-        CoreMemberClient storedMemberClient = coreAuthService.getOptimisticMemberClient(DEFAULT_LOGIN_TYPE, memberId);
+        CoreAuthMemberClient storedMemberClient = coreAuthService.getOptimisticMemberClient(DEFAULT_LOGIN_TYPE, memberId);
 
         BizMember bizMember = BizMemberConverter.convert(storedMember, storedMemberExtension);
         BizMemberClient bizMemberClient = BizMemberClientConverter.convert(storedMemberClient);

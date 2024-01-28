@@ -6,9 +6,9 @@ package id.ezclouds.core.auth.model;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: CoreMemberClient.java, v 0.1 2024‐01‐07 9:29 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: CoreAuthMemberClient.java, v 0.1 2024‐01‐07 9:29 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class CoreMemberClient {
+public class CoreAuthMemberClient {
 
     private String clientId;
     private String orgId;

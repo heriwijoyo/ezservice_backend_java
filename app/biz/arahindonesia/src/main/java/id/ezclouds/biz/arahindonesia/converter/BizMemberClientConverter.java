@@ -6,7 +6,7 @@ package id.ezclouds.biz.arahindonesia.converter;
 
 import id.ezclouds.biz.arahindonesia.model.BizStatus;
 import id.ezclouds.biz.arahindonesia.model.member.BizMemberClient;
-import id.ezclouds.core.auth.model.CoreMemberClient;
+import id.ezclouds.core.auth.model.CoreAuthMemberClient;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -14,12 +14,12 @@ import id.ezclouds.core.auth.model.CoreMemberClient;
  */
 public class BizMemberClientConverter {
 
-    public static BizMemberClient convert(CoreMemberClient coreMemberClient) {
-        if (coreMemberClient == null) { return null; }
+    public static BizMemberClient convert(CoreAuthMemberClient coreAuthMemberClient) {
+        if (coreAuthMemberClient == null) { return null; }
         BizMemberClient bizMemberClient = new BizMemberClient();
-        bizMemberClient.setClientId(coreMemberClient.getClientId());
-        bizMemberClient.setLoginType(coreMemberClient.getLoginType());
-        bizMemberClient.setStatus(BizStatus.getByCode(coreMemberClient.getStatus()));
+        bizMemberClient.setClientId(coreAuthMemberClient.getClientId());
+        bizMemberClient.setLoginType(coreAuthMemberClient.getLoginType());
+        bizMemberClient.setStatus(BizStatus.getByCode(coreAuthMemberClient.getStatus()));
         return bizMemberClient;
     }
 }

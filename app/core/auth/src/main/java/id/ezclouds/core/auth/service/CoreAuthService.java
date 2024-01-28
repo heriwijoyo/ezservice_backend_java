@@ -10,7 +10,7 @@ import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.core.auth.converter.CoreMemberClientConverter;
 import id.ezclouds.core.auth.dataobject.EzAuthMemberClientDO;
-import id.ezclouds.core.auth.model.CoreMemberClient;
+import id.ezclouds.core.auth.model.CoreAuthMemberClient;
 import id.ezclouds.core.auth.repo.EzAuthMemberClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class CoreAuthService {
     @Autowired
     private EzAuthMemberClientRepository ezAuthMemberClientRepository;
 
-    public void createMemberClient(CoreMemberClient memberClient) {
+    public void createMemberClient(CoreAuthMemberClient memberClient) {
         EzAuthMemberClientDO memberClientDO = CoreMemberClientConverter.convert(memberClient);
         memberClientDO.setClientId(HashUtil.createHash(memberClient.getLoginType(), memberClient.getMemberId()));
         memberClientDO.setCreatedTime(DateUtil.getCurrentFormattedDate());
@@ -33,7 +33,7 @@ public class CoreAuthService {
         ezAuthMemberClientRepository.save(memberClientDO);
     }
 
-    public CoreMemberClient getOptimisticMemberClient(String loginType, String memberId) {
+    public CoreAuthMemberClient getOptimisticMemberClient(String loginType, String memberId) {
         String clientId = HashUtil.createHash(loginType, memberId);
         EzAuthMemberClientDO memberClientDO = ezAuthMemberClientRepository.findById(clientId).orElse(null);
         AssertUtil.notNull(memberClientDO, EzErrorCode.MEMBER_CLIENT_NOT_FOUND, "Member client not found");
