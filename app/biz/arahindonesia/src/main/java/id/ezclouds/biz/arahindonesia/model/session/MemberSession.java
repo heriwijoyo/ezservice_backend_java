@@ -11,14 +11,7 @@ package id.ezclouds.biz.arahindonesia.model.session;
 public class MemberSession {
 
     private String sessionId;
-    private String orgId;
-    private String appId;
-    private String clientId;
-    private String memberId;
-    private String deviceId;
-    private String createdTime;
     private String expiryTime;
-    private Integer status;
 
     public String getSessionId() {
         return sessionId;
@@ -28,67 +21,11 @@ public class MemberSession {
         this.sessionId = sessionId;
     }
 
-    public String getOrgId() {
-        return orgId;
-    }
-
-    public void setOrgId(String orgId) {
-        this.orgId = orgId;
-    }
-
-    public String getAppId() {
-        return appId;
-    }
-
-    public void setAppId(String appId) {
-        this.appId = appId;
-    }
-
-    public String getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
-    }
-
-    public String getMemberId() {
-        return memberId;
-    }
-
-    public void setMemberId(String memberId) {
-        this.memberId = memberId;
-    }
-
-    public String getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
-    }
-
-    public String getCreatedTime() {
-        return createdTime;
-    }
-
-    public void setCreatedTime(String createdTime) {
-        this.createdTime = createdTime;
-    }
-
     public String getExpiryTime() {
         return expiryTime;
     }
 
     public void setExpiryTime(String expiryTime) {
         this.expiryTime = expiryTime;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
     }
 }

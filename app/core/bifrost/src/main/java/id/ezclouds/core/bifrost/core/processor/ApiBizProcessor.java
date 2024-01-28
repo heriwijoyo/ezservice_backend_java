@@ -42,9 +42,6 @@ public class ApiBizProcessor implements BizProcessor {
     private BizMemberProfileService bizMemberProfileService;
 
     @Autowired
-    private BizMemberLoginService bizMemberLoginService;
-
-    @Autowired
     private BizMemberService bizMemberService;
 
     @Autowired
