@@ -5,6 +5,7 @@
 package id.ezclouds.biz.arahindonesia.service.core;
 
 import id.ezclouds.biz.arahindonesia.service.data.*;
+import id.ezclouds.core.auth.service.CoreAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.cache.CacheManager;
@@ -16,17 +17,17 @@ import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: CacheService.java, v 0.1 2023‐12‐07 2:14 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: BizCacheService.java, v 0.1 2023‐12‐07 2:14 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class CacheService {
+public class BizCacheService {
 
     @Autowired
     private CacheManager cacheManager;
     @Autowired
     private BizOrganizationService bizOrganizationService;
     @Autowired
-    private AppClientService appClientService;
+    private CoreAuthService coreAuthService;
     @Autowired
     private AppConfigService appConfigService;
     @Autowired
@@ -42,7 +43,6 @@ public class CacheService {
     @Autowired
     private AppProfileService appProfileService;
 
-    /*
     @EventListener(ApplicationReadyEvent.class)
     public List<String> refreshAllCache() {
         List<String> cacheNames = new ArrayList<>();
@@ -55,8 +55,10 @@ public class CacheService {
                     }
                 });
 
-        organizationService.getOrganizations();
-        appClientService.getAppClients();
+        bizOrganizationService.getActiveOrganizations();
+        coreAuthService.getActiveAppClients();
+
+        /*
         appConfigService.getAppConfigs();
         imageSlideService.getImageSlideHome();
         imageSlideService.getHomePosterImage();
@@ -66,7 +68,8 @@ public class CacheService {
         videoCardService.getAllVideoCards();
         candidateBioService.getActiveCandidateBios();
         appProfileService.getAllAppProfile();
+         */
 
         return cacheNames;
-    }*/
+    }
 }

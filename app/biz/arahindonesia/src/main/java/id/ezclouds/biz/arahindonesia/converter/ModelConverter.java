@@ -11,19 +11,11 @@ import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
 import id.ezclouds.biz.arahindonesia.model.profile.CandidateBio;
 import id.ezclouds.biz.arahindonesia.model.profile.CandidateProfileItem;
 import id.ezclouds.common.dal.model.*;
-import id.ezclouds.core.shared.model.CoreOrganization;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: ModelConverter.java, v 0.1 2023‐12‐10 12:22 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
 public class ModelConverter {
-
-    public static CoreOrganization convert(OrganizationDO organizationDO) {
-        if (organizationDO == null) {
-            return null;
-        }
-        return new CoreOrganization(organizationDO.getOrgId(), organizationDO.getName(), organizationDO.getCode());
-    }
 
     public static AppClient convert(AppClientDO appClientDO) {
         if (appClientDO == null) {
