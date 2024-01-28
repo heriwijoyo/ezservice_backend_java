@@ -27,9 +27,6 @@ public class EzCoreOrganizationDO {
     @Column(name = "code")
     private String code;
 
-    @Column(name = "status")
-    private int status;
-
     public String getOrgId() {
         return orgId;
     }
@@ -52,13 +49,5 @@ public class EzCoreOrganizationDO {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
     }
 }

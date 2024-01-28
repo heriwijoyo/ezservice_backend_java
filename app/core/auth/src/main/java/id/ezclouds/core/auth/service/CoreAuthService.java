@@ -6,14 +6,23 @@ package id.ezclouds.core.auth.service;
 
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
+import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
-import id.ezclouds.core.auth.converter.CoreMemberClientConverter;
+import id.ezclouds.core.auth.converter.CoreAuthModelConverter;
 import id.ezclouds.core.auth.dataobject.EzAuthMemberClientDO;
+import id.ezclouds.core.auth.model.CoreAuthAppClient;
 import id.ezclouds.core.auth.model.CoreAuthMemberClient;
+import id.ezclouds.core.auth.repo.EzAuthAppClientRepository;
 import id.ezclouds.core.auth.repo.EzAuthMemberClientRepository;
+import id.ezclouds.core.auth.request.CoreAppClientAuthRequest;
+import id.ezclouds.core.auth.result.CoreAuthResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -23,10 +32,34 @@ import org.springframework.stereotype.Service;
 public class CoreAuthService {
 
     @Autowired
+    private EzAuthAppClientRepository ezAuthAppClientRepository;
+
+    @Autowired
     private EzAuthMemberClientRepository ezAuthMemberClientRepository;
 
+    public CoreAuthResult<CoreAuthAppClient> authAppClient(CoreAppClientAuthRequest request) {
+        CoreAuthResult<CoreAuthAppClient> authResult = new CoreAuthResult<>();
+
+        if (request == null || StringUtil.isBlank(request.getAppId()) || StringUtil.isBlank(request.getClientId()) || StringUtil.isBlank(request.getClientSecret())) {
+            return authResult;
+        }
+
+        for (CoreAuthAppClient appClient : getActiveAppClients()) {
+            boolean appIdMatch = request.getAppId().equals(appClient.getAppId());
+            boolean clientIdMatch = request.getClientId().equals(appClient.getClientId());
+            boolean clientSecretMatch = request.getClientSecret().equals(appClient.getClientSecret());
+
+            if (appIdMatch && clientIdMatch && clientSecretMatch) {
+                authResult.setSuccess(true);
+                authResult.setData(appClient);
+            }
+        }
+
+        return authResult;
+    }
+
     public void createMemberClient(CoreAuthMemberClient memberClient) {
-        EzAuthMemberClientDO memberClientDO = CoreMemberClientConverter.convert(memberClient);
+        EzAuthMemberClientDO memberClientDO = CoreAuthModelConverter.convert(memberClient);
         memberClientDO.setClientId(HashUtil.createHash(memberClient.getLoginType(), memberClient.getMemberId()));
         memberClientDO.setCreatedTime(DateUtil.getCurrentFormattedDate());
 
@@ -37,6 +70,15 @@ public class CoreAuthService {
         String clientId = HashUtil.createHash(loginType, memberId);
         EzAuthMemberClientDO memberClientDO = ezAuthMemberClientRepository.findById(clientId).orElse(null);
         AssertUtil.notNull(memberClientDO, EzErrorCode.MEMBER_CLIENT_NOT_FOUND, "Member client not found");
-        return CoreMemberClientConverter.convert(memberClientDO);
+        return CoreAuthModelConverter.convert(memberClientDO);
+    }
+
+    @Cacheable("core_auth_app_client")
+    public List<CoreAuthAppClient> getActiveAppClients() {
+        return ezAuthAppClientRepository
+                .findActiveAppClients()
+                .stream()
+                .map(CoreAuthModelConverter::convert)
+                .collect(Collectors.toList());
     }
 }
