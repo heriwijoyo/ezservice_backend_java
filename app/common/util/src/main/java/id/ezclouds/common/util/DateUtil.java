@@ -4,6 +4,7 @@
  */
 package id.ezclouds.common.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -19,6 +20,17 @@ public class DateUtil {
     public static String getFormattedDate(Date date, String dateFormat) {
         SimpleDateFormat dateFormatter = new SimpleDateFormat(dateFormat);
         return dateFormatter.format(date);
+    }
+
+    public static Date parseFormattedDate(String formattedDate) {
+        SimpleDateFormat dateFormatter = new SimpleDateFormat(FORMAT_DATETIME_DEFAULT);
+        Date date;
+        try {
+            date = dateFormatter.parse(formattedDate);
+        } catch (Exception e) {
+            date = new Date();
+        }
+        return date;
     }
 
     public static String getFormattedDate(Date date) {

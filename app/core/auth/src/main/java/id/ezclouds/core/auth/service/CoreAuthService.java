@@ -158,6 +158,7 @@ public class CoreAuthService {
         return CoreAuthModelConverter.convert(memberClientDO);
     }
 
+    @Transactional
     public CoreAuthResult<String> authMemberSession(String sessionId) {
         CoreAuthResult<String> authResult = new CoreAuthResult<>();
         EzAuthMemberClientSessionDO sessionDO = ezAuthMemberClientSessionRepository.findById(sessionId).orElse(null);
@@ -171,6 +172,11 @@ public class CoreAuthService {
             authResult.setEzErrorCode(EzErrorCode.SESSION_EXPIRED);
             return authResult;
         }
+
+        Date newExpiry = DateUtil.getDateAfterDays(new Date(), CoreAuthConfig.MemberClient.sessionExpiryDays);
+        sessionDO.setExpiryTime(DateUtil.getFormattedDate(newExpiry));
+
+        ezAuthMemberClientSessionRepository.saveAndFlush(sessionDO);
 
         authResult.setSuccess(true);
         authResult.setData(sessionDO.getMemberId());

@@ -125,4 +125,31 @@ public class BizAuthService {
 
         return bizResult;
     }
+
+    public BizResult memberSessionCheck() {
+        final BizResult bizResult = new BizResult();
+
+        String sessionId = EzAppContextHolder.getContext().getMemberSessionId();
+
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notBlank(sessionId, EzErrorCode.SESSION_INVALID);
+            }
+
+            @Override
+            public void onBizProcess() throws EzErrorException {
+                CoreAuthResult<String> authResult = coreAuthService.authMemberSession(sessionId);
+
+                bizResult.setSuccess(authResult.isSuccess());
+                if (authResult.isSuccess()) {
+                    bizResult.setObject(authResult.getData());
+                } else {
+                    bizResult.setErrorCode(authResult.getEzErrorCode());
+                }
+            }
+        });
+
+        return bizResult;
+    }
 }

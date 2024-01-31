@@ -108,6 +108,23 @@ public class ApiController extends AppController {
         });
     }
 
+    @PostMapping(value = "/api/session_check.php")
+    private ApiResult<String> sessionCheck(@RequestBody ApiRequest request) {
+        return executeInTemplate(ApiEvent.API_SESSION_CHECK, request, new RequestHandler<String>() {
+            @Override
+            public String convertResult(Object resultObject) {
+                return (String) resultObject;
+            }
+
+            @Override
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<String> result) {
+                EmptyDigestLog digestLog = new EmptyDigestLog(result.isSuccess(), result.getResultCode());
+                digestLog.composeDigest(request, toEmptyResult(result));
+                return digestLog;
+            }
+        });
+    }
+
 
 
 

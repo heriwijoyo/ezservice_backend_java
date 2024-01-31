@@ -55,7 +55,6 @@ public class ApiBizProcessor implements BizProcessor {
             case API_APP_SETTING:
                 return bizAppSettingService.getAppSetting();
 
-
             case API_CANDIDATE_PROFILE:
                 return bizCandidateProfileService.getCandidateProfile();
 
@@ -67,6 +66,9 @@ public class ApiBizProcessor implements BizProcessor {
 
             case API_MEMBER_LOGIN:
                 return bizAuthService.loginMember(composeMemberLogin((MemberLoginRequest)request));
+
+            case API_SESSION_CHECK:
+                return bizAuthService.memberSessionCheck();
 
             case API_MEMBER_REGISTER:
                 BizMemberRegisterRequest bizRequest = BizRequestConverter.convert((MemberRegisterRequest) request);
