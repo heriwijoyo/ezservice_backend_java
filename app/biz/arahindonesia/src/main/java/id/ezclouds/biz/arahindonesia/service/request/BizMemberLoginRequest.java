@@ -4,6 +4,9 @@
  */
 package id.ezclouds.biz.arahindonesia.service.request;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizMemberLoginRequest.java, v 0.1 2024‐01‐29 1:03 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -40,10 +43,6 @@ public class BizMemberLoginRequest extends BizRequest {
 
     @Override
     public String toString() {
-        return "BizMemberLoginRequest{" +
-                "loginType='" + loginType + '\'' +
-                ", loginId='" + loginId + '\'' +
-                ", loginPassword='" + loginPassword + '\'' +
-                '}';
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

@@ -59,7 +59,6 @@ public class BizAuthService {
         return bizAuthResult;
     }
 
-    @Transactional
     public BizResult loginMember(BizMemberLoginRequest request) {
         final BizResult bizResult = new BizResult();
 

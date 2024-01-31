@@ -19,5 +19,5 @@ import java.util.List;
 public interface EzAuthAppClientRepository extends JpaRepository<EzAuthAppClientDO, String> {
 
     @Query("SELECT apc FROM EzAuthAppClientDO apc WHERE apc.status = 1")
-    public List<EzAuthAppClientDO> findActiveAppClients();
+    List<EzAuthAppClientDO> findActiveAppClients();
 }

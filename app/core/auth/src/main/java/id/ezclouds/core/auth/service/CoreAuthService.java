@@ -28,6 +28,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -98,14 +99,8 @@ public class CoreAuthService {
             return authResult;
         }
 
-        boolean allowMultipleSession = CoreAuthConfig.MemberClient.allowMultipleAuthSession;
-        if (!allowMultipleSession) {
-            //TODO: force logout current active session
-            ezAuthMemberClientSessionRepository.invalidateSession(orgId, memberClientDO.getClientId());
-        }
-
         CoreAuthMemberClient memberClient = CoreAuthModelConverter.convert(memberClientDO);
-        EzAuthMemberClientSessionDO sessionDO = createAuthMemberClientSession(memberClient, deviceId);
+        EzAuthMemberClientSessionDO sessionDO = startMemberClientSession(memberClient, deviceId);
 
         CoreAuthSessionInfo sessionInfo = new CoreAuthSessionInfo();
         sessionInfo.setSessionId(sessionDO.getSessionId());
@@ -116,7 +111,15 @@ public class CoreAuthService {
         return authResult;
     }
 
-    private EzAuthMemberClientSessionDO createAuthMemberClientSession(CoreAuthMemberClient memberClient, String deviceId) {
+    @Transactional
+    public EzAuthMemberClientSessionDO startMemberClientSession(CoreAuthMemberClient memberClient, String deviceId) {
+        boolean allowMultipleSession = CoreAuthConfig.MemberClient.allowMultipleAuthSession;
+        if (!allowMultipleSession) {
+            List<EzAuthMemberClientSessionDO> activeSessions = ezAuthMemberClientSessionRepository.findAllByClientId(memberClient.getOrgId(), memberClient.getClientId());
+            activeSessions.forEach(session -> session.setStatus(CoreAuthConstant.MEMBER_CLIENT_STATUS_NOT_ACTIVE));
+            ezAuthMemberClientSessionRepository.saveAllAndFlush(activeSessions);
+        }
+
         String currentDateTime = DateUtil.getCurrentFormattedDate();
         String sessionId = HashUtil.createHash(memberClient.getOrgId(), memberClient.getAppId(), memberClient.getClientId(), currentDateTime);
 
@@ -129,7 +132,7 @@ public class CoreAuthService {
         sessionDO.setMemberId(memberClient.getMemberId());
         sessionDO.setDeviceId(deviceId);
         sessionDO.setCreatedTime(DateUtil.getCurrentFormattedDate());
-        sessionDO.setStatus(1);
+        sessionDO.setStatus(CoreAuthConstant.MEMBER_CLIENT_STATUS_ACTIVE);
 
         Date expiryDate = DateUtil.getDateAfterDays(new Date(), CoreAuthConfig.MemberClient.sessionExpiryDays);
         sessionDO.setExpiryTime(DateUtil.getFormattedDate(expiryDate));

@@ -5,6 +5,8 @@
 package id.ezclouds.biz.arahindonesia.service.result;
 
 import id.ezclouds.common.util.exception.EzErrorCode;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 
@@ -66,12 +68,6 @@ public class BizResult implements Serializable {
 
     @Override
     public String toString() {
-        return "BizResult{" +
-                "success=" + success +
-                ", errorCode=" + errorCode +
-                ", errorLocation='" + errorLocation + '\'' +
-                ", errorMessage='" + errorMessage + '\'' +
-                ", object=" + object.toString() +
-                '}';
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }
