@@ -11,6 +11,9 @@ import id.ezclouds.biz.arahindonesia.model.profile.CandidateProfileItem;
 import id.ezclouds.biz.arahindonesia.service.data.ImageSlideService;
 import id.ezclouds.biz.arahindonesia.service.data.CandidateBioService;
 import id.ezclouds.biz.arahindonesia.service.data.CandidateProfileItemService;
+import id.ezclouds.biz.arahindonesia.service.result.BizResult;
+import id.ezclouds.biz.arahindonesia.service.template.BizServiceTemplate;
+import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,13 +41,25 @@ public class BizCandidateProfileService {
     @Autowired
     private CandidateBioService candidateBioService;
 
-    public CandidateProfile getCandidateProfile() {
-        String orgId = EzAppContextHolder.getContext().getOrgId();
-        CandidateProfile profile = new CandidateProfile();
+    public BizResult getCandidateProfile() {
+        final BizResult bizResult = new BizResult();
 
-        setCandidateProfile(profile, orgId);
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {}
 
-        return profile;
+            @Override
+            public void onBizProcess() throws EzErrorException {
+                String orgId = EzAppContextHolder.getContext().getOrgId();
+                CandidateProfile profile = new CandidateProfile();
+                setCandidateProfile(profile, orgId);
+
+                bizResult.setSuccess(true);
+                bizResult.setObject(profile);
+            }
+        });
+
+        return bizResult;
     }
 
     private void setCandidateProfile(CandidateProfile profile, String orgId) {
