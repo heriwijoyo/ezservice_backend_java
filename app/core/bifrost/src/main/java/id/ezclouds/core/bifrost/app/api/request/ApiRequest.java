@@ -14,11 +14,21 @@ public class ApiRequest extends BaseRequest {
 
     private RequestAppClient appClient;
 
+    private RequestAppSession appSession;
+
     public RequestAppClient getAppClient() {
         return appClient;
     }
 
     public void setAppClient(RequestAppClient requestAppClient) {
         this.appClient = requestAppClient;
+    }
+
+    public RequestAppSession getAppSession() {
+        return appSession;
+    }
+
+    public void setAppSession(RequestAppSession appSession) {
+        this.appSession = appSession;
     }
 }

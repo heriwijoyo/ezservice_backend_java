@@ -22,6 +22,7 @@ public class EzAppContext {
     private String appId;
     private String deviceId;
     private int appVersionNo;
+    private String memberSessionId;
     private String errorStackTrace;
 
     public EzAppContext(EzAppEvent ezAppEvent) {
@@ -82,6 +83,14 @@ public class EzAppContext {
 
     public void setAppVersionNo(int appVersionNo) {
         this.appVersionNo = appVersionNo;
+    }
+
+    public String getMemberSessionId() {
+        return memberSessionId;
+    }
+
+    public void setMemberSessionId(String memberSessionId) {
+        this.memberSessionId = memberSessionId;
     }
 
     public String getErrorStackTrace() {

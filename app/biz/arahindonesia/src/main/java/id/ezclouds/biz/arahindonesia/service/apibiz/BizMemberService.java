@@ -4,14 +4,26 @@
  */
 package id.ezclouds.biz.arahindonesia.service.apibiz;
 
+import id.ezclouds.biz.arahindonesia.constant.AppConstant;
+import id.ezclouds.biz.arahindonesia.converter.BizMemberConverter;
+import id.ezclouds.biz.arahindonesia.model.member.BizMember;
 import id.ezclouds.biz.arahindonesia.model.member.BizMemberInfo;
+import id.ezclouds.biz.arahindonesia.model.profile.MemberProfile;
 import id.ezclouds.biz.arahindonesia.service.core.MemberService;
+import id.ezclouds.biz.arahindonesia.service.data.AppProfileService;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberRegisterRequest;
 import id.ezclouds.biz.arahindonesia.service.result.BizResult;
 import id.ezclouds.biz.arahindonesia.service.template.BizServiceTemplate;
+import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
+import id.ezclouds.core.auth.result.CoreAuthResult;
+import id.ezclouds.core.auth.service.CoreAuthService;
+import id.ezclouds.core.member.model.CoreMember;
+import id.ezclouds.core.member.model.CoreMemberExtension;
+import id.ezclouds.core.member.service.CoreMemberService;
+import id.ezclouds.core.shared.context.EzAppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +36,60 @@ public class BizMemberService {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private CoreAuthService coreAuthService;
+
+    @Autowired
+    private AppProfileService appProfileService;
+
+    @Autowired
+    private CoreMemberService coreMemberService;
+
+    public BizResult getMemberProfile() {
+        final BizResult bizResult = new BizResult();
+
+        if (StringUtil.isBlank(EzAppContextHolder.getContext().getMemberSessionId())) {
+            bizResult.setErrorCode(EzErrorCode.SESSION_INVALID);
+            return bizResult;
+        }
+
+        String sessionId = EzAppContextHolder.getContext().getMemberSessionId();
+        String orgId = EzAppContextHolder.getContext().getOrgId();
+        int appVersionNo = EzAppContextHolder.getContext().getAppVersionNo();
+
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {}
+
+            @Override
+            public void onBizProcess() throws EzErrorException {
+                CoreAuthResult<String> authResult = coreAuthService.authMemberSession(sessionId);
+                if (!authResult.isSuccess()) {
+                    bizResult.setErrorCode(authResult.getEzErrorCode());
+                }
+                else {
+                    MemberProfile memberProfile = new MemberProfile();
+                    memberProfile.setAppProfiles(appProfileService.getAppProfile(orgId));
+
+                    String memberId = authResult.getData();
+                    CoreMember coreMember = coreMemberService.getOptimisticCoreMember(memberId);
+                    CoreMemberExtension coreMemberExtension = coreMemberService.getOptimisticCoreMemberExtension(memberId);
+                    BizMember bizMember = BizMemberConverter.convert(coreMember, coreMemberExtension);
+
+                    memberProfile.setBizMember(bizMember);
+                    if (appVersionNo < AppConstant.APP_V2_START_VERSION_NO) {
+                        memberProfile.setMemberBase(BizMemberConverter.convert(coreMember));
+                    }
+
+                    bizResult.setSuccess(true);
+                    bizResult.setObject(memberProfile);
+                }
+            }
+        });
+
+        return bizResult;
+    }
 
     public BizResult registerMember(BizMemberRegisterRequest request) throws EzErrorException {
         final BizResult bizResult = new BizResult();

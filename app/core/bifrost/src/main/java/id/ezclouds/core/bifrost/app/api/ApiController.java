@@ -7,6 +7,7 @@ package id.ezclouds.core.bifrost.app.api;
 import id.ezclouds.biz.arahindonesia.model.AppSetting;
 import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
 import id.ezclouds.biz.arahindonesia.model.profile.CandidateProfile;
+import id.ezclouds.biz.arahindonesia.model.profile.MemberProfile;
 import id.ezclouds.biz.arahindonesia.service.result.BizMemberLoginResult;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
@@ -66,6 +67,23 @@ public class ApiController extends AppController {
 
             @Override
             public DigestLog composeDigestLog(ApiRequest request, ApiResult<CandidateProfile> result) {
+                EmptyDigestLog digestLog = new EmptyDigestLog(result.isSuccess(), result.getResultCode());
+                digestLog.composeDigest(request, toEmptyResult(result));
+                return digestLog;
+            }
+        });
+    }
+
+    @PostMapping(value = "/api/profile.php")
+    private ApiResult<MemberProfile> getMemberProfile(@RequestBody ApiRequest request) {
+        return executeInTemplate(ApiEvent.API_MEMBER_PROFILE, request, new RequestHandler<MemberProfile>() {
+            @Override
+            public MemberProfile convertResult(Object resultObject) {
+                return (MemberProfile) resultObject;
+            }
+
+            @Override
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<MemberProfile> result) {
                 EmptyDigestLog digestLog = new EmptyDigestLog(result.isSuccess(), result.getResultCode());
                 digestLog.composeDigest(request, toEmptyResult(result));
                 return digestLog;

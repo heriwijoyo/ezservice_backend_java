@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -21,6 +23,18 @@ public class AppProfileService {
 
     @Autowired
     private AppProfileRepository appProfileRepository;
+
+    public Map<String, String> getAppProfile(String orgId) {
+        final Map<String, String> appProfile = new HashMap<>();
+
+        getAllAppProfile()
+                .stream()
+                .filter(appProfileDO -> orgId.equals(appProfileDO.getOrgId()))
+                .forEach(appProfileDO -> {
+                    appProfile.put(appProfileDO.getProfileKey(), appProfileDO.getProfileValue());
+                });
+        return appProfile;
+    }
 
     @Cacheable("app_profile")
     public List<AppProfileDO> getAllAppProfile() {

@@ -62,9 +62,8 @@ public class ApiBizProcessor implements BizProcessor {
             case API_NEWS:
                 return bizNewsService.getActiveNews();
 
-/*
-            case MEMBER_PROFILE:
-                return bizMemberProfileService.getMemberProfile();*/
+            case API_MEMBER_PROFILE:
+                return bizMemberService.getMemberProfile();
 
             case API_MEMBER_LOGIN:
                 return bizAuthService.loginMember(composeMemberLogin((MemberLoginRequest)request));

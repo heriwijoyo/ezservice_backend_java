@@ -4,6 +4,9 @@
  */
 package id.ezclouds.biz.arahindonesia.model.profile;
 
+import id.ezclouds.biz.arahindonesia.model.member.BizMember;
+import id.ezclouds.biz.arahindonesia.model.member.MemberBase;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,8 +17,30 @@ import java.util.Map;
 public class MemberProfile {
 
     private Map<String, String> appProfiles = new HashMap<>();
+    private MemberBase memberBase;
+    private BizMember bizMember;
 
     public Map<String, String> getAppProfiles() {
         return appProfiles;
+    }
+
+    public void setAppProfiles(Map<String, String> appProfiles) {
+        this.appProfiles = appProfiles;
+    }
+
+    public MemberBase getMemberBase() {
+        return memberBase;
+    }
+
+    public void setMemberBase(MemberBase memberBase) {
+        this.memberBase = memberBase;
+    }
+
+    public BizMember getBizMember() {
+        return bizMember;
+    }
+
+    public void setBizMember(BizMember bizMember) {
+        this.bizMember = bizMember;
     }
 }

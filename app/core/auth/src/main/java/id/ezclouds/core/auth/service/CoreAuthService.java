@@ -158,6 +158,25 @@ public class CoreAuthService {
         return CoreAuthModelConverter.convert(memberClientDO);
     }
 
+    public CoreAuthResult<String> authMemberSession(String sessionId) {
+        CoreAuthResult<String> authResult = new CoreAuthResult<>();
+        EzAuthMemberClientSessionDO sessionDO = ezAuthMemberClientSessionRepository.findById(sessionId).orElse(null);
+
+        if (sessionDO == null ) {
+            authResult.setEzErrorCode(EzErrorCode.SESSION_INVALID);
+            return authResult;
+        }
+
+        if (sessionDO.getStatus() < CoreAuthConstant.MEMBER_CLIENT_STATUS_ACTIVE) {
+            authResult.setEzErrorCode(EzErrorCode.SESSION_EXPIRED);
+            return authResult;
+        }
+
+        authResult.setSuccess(true);
+        authResult.setData(sessionDO.getMemberId());
+        return authResult;
+    }
+
     @Cacheable("core_auth_app_client")
     public List<CoreAuthAppClient> getActiveAppClients() {
         return ezAuthAppClientRepository
