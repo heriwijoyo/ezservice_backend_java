@@ -31,6 +31,8 @@ public class DigestLogUtil {
                 digestLog.getSuccessFlag() +
                 "," +
                 digestLog.getResultCode() +
+                "][appVersionNo=" +
+                ezAppContext.getAppVersionNo() +
                 "][" +
                 digestLog.getErrorMessage() +
                 "][" +

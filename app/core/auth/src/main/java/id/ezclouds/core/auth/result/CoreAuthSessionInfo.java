@@ -10,7 +10,7 @@ package id.ezclouds.core.auth.result;
  */
 public class CoreAuthSessionInfo {
     private String sessionId;
-    private String expiryTime;
+    private String memberId;
 
     public String getSessionId() {
         return sessionId;
@@ -20,11 +20,11 @@ public class CoreAuthSessionInfo {
         this.sessionId = sessionId;
     }
 
-    public String getExpiryTime() {
-        return expiryTime;
+    public String getMemberId() {
+        return memberId;
     }
 
-    public void setExpiryTime(String expiryTime) {
-        this.expiryTime = expiryTime;
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
     }
 }

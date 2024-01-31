@@ -4,7 +4,7 @@
  */
 package id.ezclouds.biz.arahindonesia.service.authentication;
 
-import id.ezclouds.biz.arahindonesia.model.session.MemberSession;
+import id.ezclouds.biz.arahindonesia.model.session.BizMemberSession;
 import id.ezclouds.biz.arahindonesia.service.core.BizOrganizationService;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberLoginRequest;
 import id.ezclouds.biz.arahindonesia.service.result.BizResult;
@@ -16,12 +16,11 @@ import id.ezclouds.core.auth.request.CoreAppClientAuthRequest;
 import id.ezclouds.core.auth.result.CoreAuthResult;
 import id.ezclouds.core.auth.result.CoreAuthSessionInfo;
 import id.ezclouds.core.auth.service.CoreAuthService;
+import id.ezclouds.core.member.service.CoreMemberService;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.model.CoreOrganization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -35,6 +34,9 @@ public class BizAuthService {
 
     @Autowired
     private CoreAuthService coreAuthService;
+
+    @Autowired
+    private CoreMemberService coreMemberService;
 
     public CoreAuthResult<String> authAppClient(String orgId, String appId, String clientId, String clientSecret) {
         CoreAuthResult<String> bizAuthResult = new CoreAuthResult<>();
@@ -85,11 +87,12 @@ public class BizAuthService {
                     bizResult.setErrorCode(authResult.getEzErrorCode());
                 } else {
                     CoreAuthSessionInfo sessionInfo = authResult.getData();
-                    MemberSession memberSession = new MemberSession();
-                    memberSession.setSessionId(sessionInfo.getSessionId());
-                    memberSession.setExpiryTime(sessionInfo.getExpiryTime());
+                    BizMemberSession bizMemberSession = new BizMemberSession();
+                    bizMemberSession.setSessionId(sessionInfo.getSessionId());
 
-                    bizResult.setObject(memberSession);
+                    coreMemberService.getOptimisticCoreMember(sessionInfo.getMemberId());
+
+                    bizResult.setObject(bizMemberSession);
                 }
                 bizResult.setSuccess(authResult.isSuccess());
             }

@@ -15,6 +15,7 @@ public class RequestAppClient {
     private String clientId;
     private String clientSecret;
     private String deviceId;
+    private Integer appVersionNo;
 
     public String getOrganizationId() {
         return organizationId;
@@ -54,5 +55,16 @@ public class RequestAppClient {
 
     public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
+    }
+
+    public Integer getAppVersionNo() {
+        if (appVersionNo == null) {
+            return 0;
+        }
+        return appVersionNo;
+    }
+
+    public void setAppVersionNo(Integer appVersionNo) {
+        this.appVersionNo = appVersionNo;
     }
 }

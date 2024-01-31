@@ -104,6 +104,7 @@ public class CoreAuthService {
 
         CoreAuthSessionInfo sessionInfo = new CoreAuthSessionInfo();
         sessionInfo.setSessionId(sessionDO.getSessionId());
+        sessionInfo.setMemberId(memberClientDO.getMemberId());
         sessionInfo.setExpiryTime(sessionDO.getExpiryTime());
 
         authResult.setSuccess(true);

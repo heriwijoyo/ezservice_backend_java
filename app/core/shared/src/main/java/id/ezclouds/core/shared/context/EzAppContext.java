@@ -21,6 +21,7 @@ public class EzAppContext {
     private String orgCode;
     private String appId;
     private String deviceId;
+    private int appVersionNo;
     private String errorStackTrace;
 
     public EzAppContext(EzAppEvent ezAppEvent) {
@@ -73,6 +74,14 @@ public class EzAppContext {
 
     public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
+    }
+
+    public int getAppVersionNo() {
+        return appVersionNo;
+    }
+
+    public void setAppVersionNo(int appVersionNo) {
+        this.appVersionNo = appVersionNo;
     }
 
     public String getErrorStackTrace() {

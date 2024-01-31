@@ -4,18 +4,20 @@
  */
 package id.ezclouds.biz.arahindonesia.model.login;
 
+import id.ezclouds.biz.arahindonesia.model.member.BizMember;
 import id.ezclouds.biz.arahindonesia.model.member.MemberBase;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: MemberLoginResult.java, v 0.1 2023‐12‐11 2:03 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: BizMemberLoginResult.java, v 0.1 2023‐12‐11 2:03 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class MemberLoginResult {
+public class BizMemberLoginResult {
 
     private String memberSessionId;
     private String memberRoleCode;
     private String successMessage;
     private MemberBase memberBase;
+    private BizMember bizMember;
 
     public String getMemberSessionId() {
         return memberSessionId;
@@ -47,5 +49,13 @@ public class MemberLoginResult {
 
     public void setMemberBase(MemberBase memberBase) {
         this.memberBase = memberBase;
+    }
+
+    public BizMember getBizMember() {
+        return bizMember;
+    }
+
+    public void setBizMember(BizMember bizMember) {
+        this.bizMember = bizMember;
     }
 }
