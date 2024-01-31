@@ -5,7 +5,7 @@
 package id.ezclouds.core.bifrost.core.processor;
 
 import id.ezclouds.biz.arahindonesia.service.apibiz.*;
-import id.ezclouds.biz.arahindonesia.service.authentication.BizAuthService;
+import id.ezclouds.biz.arahindonesia.service.apibiz.BizAuthService;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberLoginRequest;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberRegisterRequest;
 import id.ezclouds.biz.arahindonesia.service.result.BizResult;
@@ -52,10 +52,10 @@ public class ApiBizProcessor implements BizProcessor {
         ApiEvent apiEvent = (ApiEvent) appEvent;
 
         switch (apiEvent) {
-            /*
             case API_APP_SETTING:
                 return bizAppSettingService.getAppSetting();
 
+            /*
             case CANDIDATE_PROFILE:
                 return bizCandidateProfileService.getCandidateProfile();
 

@@ -54,7 +54,8 @@ public final class BizServiceTemplate {
 
     private static void logRequest(BizRequest request) {
         String traceId = EzAppContextHolder.getContext().getTraceId();
-        LOGGER.info(traceId + " --- " + request.toString());
+        String requestLog = request != null ? request.toString() : "BizRequest=NULL";
+        LOGGER.info(traceId + " --- " + requestLog);
     }
 
     private static void logResult(BizResult result) {

@@ -4,9 +4,11 @@
  */
 package id.ezclouds.core.bifrost.app.api;
 
+import id.ezclouds.biz.arahindonesia.model.AppSetting;
 import id.ezclouds.biz.arahindonesia.service.result.BizMemberLoginResult;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
+import id.ezclouds.core.bifrost.app.api.digestlog.EmptyDigestLog;
 import id.ezclouds.core.bifrost.app.api.digestlog.MemberLoginDigestLog;
 import id.ezclouds.core.bifrost.app.api.digestlog.SampleDigestLog;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
@@ -34,8 +36,25 @@ public class ApiController extends AppController {
         return LoggerFactory.getLogger(CommonLoggerConstant.API_CONTROLLER);
     }
 
+    @PostMapping(value = "/api/setting.php")
+    private ApiResult<AppSetting> getSetting(@RequestBody ApiRequest request) {
+        return executeInTemplate(ApiEvent.API_APP_SETTING, request, new RequestHandler<AppSetting>() {
+            @Override
+            public AppSetting convertResult(Object resultObject) {
+                return (AppSetting) resultObject;
+            }
+
+            @Override
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<AppSetting> result) {
+                EmptyDigestLog digestLog = new EmptyDigestLog(result.isSuccess(), result.getResultCode());
+                digestLog.composeDigest(request, toEmptyResult(result));
+                return digestLog;
+            }
+        });
+    }
+
     @PostMapping(value = "/api/login.php")
-    private ApiResult<BizMemberLoginResult> memberLogin(@RequestBody MemberLoginRequest request, HttpServletResponse response) {
+    private ApiResult<BizMemberLoginResult> memberLogin(@RequestBody MemberLoginRequest request) {
         return executeInTemplate(ApiEvent.API_MEMBER_LOGIN, request, new RequestHandler<BizMemberLoginResult>() {
             @Override
             public BizMemberLoginResult convertResult(Object resultObject) {
@@ -50,6 +69,8 @@ public class ApiController extends AppController {
             }
         });
     }
+
+
 
     @PostMapping(value = "/api/sample.json", consumes = {MediaType.APPLICATION_JSON_VALUE})
     private ApiResult<String> getSample(@RequestBody ApiRequest request, HttpServletResponse response) {
@@ -83,5 +104,12 @@ public class ApiController extends AppController {
         response += " - " + indexes.size();
 
         return response;
+    }
+
+    private <T> ApiResult<Void> toEmptyResult(ApiResult<T> apiResult) {
+        ApiResult<Void> emptyResult = new ApiResult<>();
+        emptyResult.setSuccess(apiResult.isSuccess());
+        emptyResult.setErrorResult(apiResult.getErrorResult());
+        return emptyResult;
     }
 }

@@ -11,6 +11,9 @@ import id.ezclouds.biz.arahindonesia.service.core.NewsService;
 import id.ezclouds.biz.arahindonesia.service.data.AppConfigService;
 import id.ezclouds.biz.arahindonesia.service.data.ImageSlideService;
 import id.ezclouds.biz.arahindonesia.service.data.VideoCardService;
+import id.ezclouds.biz.arahindonesia.service.result.BizResult;
+import id.ezclouds.biz.arahindonesia.service.template.BizServiceTemplate;
+import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,20 +41,32 @@ public class BizAppSettingService {
     @Autowired
     private VideoCardService videoCardService;
 
-    public AppSetting getAppSetting() {
-        String orgId = EzAppContextHolder.getContext().getOrgId();
-        AppConfig appConfig = appConfigService
-                .getAppConfigs()
-                .stream()
-                .filter(aConfig -> orgId.equals(aConfig.getOrgId()))
-                .findFirst()
-                .get();
+    public BizResult getAppSetting() {
+        final BizResult bizResult = new BizResult();
 
-        AppSetting appSetting = new AppSetting();
-        appSetting.setAppConfig(appConfig);
-        appSetting.setHomeData(composeHomeData(orgId));
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {}
 
-        return appSetting;
+            @Override
+            public void onBizProcess() throws EzErrorException {
+                String orgId = EzAppContextHolder.getContext().getOrgId();
+                AppConfig appConfig = appConfigService
+                        .getAppConfigs()
+                        .stream()
+                        .filter(aConfig -> orgId.equals(aConfig.getOrgId()))
+                        .findFirst()
+                        .get();
+
+                AppSetting appSetting = new AppSetting();
+                appSetting.setAppConfig(appConfig);
+                appSetting.setHomeData(composeHomeData(orgId));
+                bizResult.setSuccess(true);
+                bizResult.setObject(appSetting);
+            }
+        });
+
+        return bizResult;
     }
 
     private HomeData composeHomeData(String orgId) {
@@ -62,6 +77,12 @@ public class BizAppSettingService {
         homeData.setHomePosters(fetchHomePoster(orgId));
         homeData.setVideoSections(composeVideoSections(orgId));
         homeData.setMidBannerUrl(AppConstant.TMP_MID_BANNER_URL);
+
+        //support V1 compatibility
+        int appVersionNo = EzAppContextHolder.getContext().getAppVersionNo();
+        if (appVersionNo < AppConstant.APP_V2_START_VERSION_NO) {
+            //TODO: compose candidate profile
+        }
 
         return homeData;
     }
