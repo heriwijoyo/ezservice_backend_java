@@ -17,6 +17,7 @@ import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.auth.request.CoreAppClientAuthRequest;
+import id.ezclouds.core.auth.request.CoreMemberClientAuthRequest;
 import id.ezclouds.core.auth.result.CoreAuthResult;
 import id.ezclouds.core.auth.result.CoreAuthSessionInfo;
 import id.ezclouds.core.auth.service.CoreAuthService;
@@ -86,9 +87,14 @@ public class BizAuthService {
                 String deviceId = EzAppContextHolder.getContext().getDeviceId();
                 int appVersionNo = EzAppContextHolder.getContext().getAppVersionNo();
 
-                CoreAuthResult<CoreAuthSessionInfo> authResult = coreAuthService.authMemberClient(
-                        orgId, appId, request.getLoginType(), request.getLoginId(), request.getLoginPassword(), deviceId
-                );
+                CoreMemberClientAuthRequest authRequest = new CoreMemberClientAuthRequest();
+                authRequest.setOrgId(orgId);
+                authRequest.setAppId(appId);
+                authRequest.setLoginType(request.getLoginType());
+                authRequest.setLoginId(request.getLoginId());
+                authRequest.setLoginPass(request.getLoginPassword());
+                authRequest.setDeviceId(deviceId);
+                CoreAuthResult<CoreAuthSessionInfo> authResult = coreAuthService.authMemberClient(authRequest);
 
                 if (!authResult.isSuccess()) {
                     bizResult.setErrorCode(authResult.getEzErrorCode());

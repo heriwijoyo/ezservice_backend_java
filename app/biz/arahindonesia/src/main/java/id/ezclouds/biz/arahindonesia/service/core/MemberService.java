@@ -10,7 +10,6 @@ import id.ezclouds.biz.arahindonesia.model.BizStatus;
 import id.ezclouds.biz.arahindonesia.model.member.BizMember;
 import id.ezclouds.biz.arahindonesia.model.member.BizMemberClient;
 import id.ezclouds.biz.arahindonesia.model.member.BizMemberInfo;
-import id.ezclouds.biz.arahindonesia.model.member.MemberBase;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberRegisterRequest;
 import id.ezclouds.common.dal.repo.member.AppMemberRepository;
 import id.ezclouds.common.util.DateUtil;

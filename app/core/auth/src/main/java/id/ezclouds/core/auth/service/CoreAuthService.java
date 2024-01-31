@@ -21,6 +21,7 @@ import id.ezclouds.core.auth.repo.EzAuthAppClientRepository;
 import id.ezclouds.core.auth.repo.EzAuthMemberClientRepository;
 import id.ezclouds.core.auth.repo.EzAuthMemberClientSessionRepository;
 import id.ezclouds.core.auth.request.CoreAppClientAuthRequest;
+import id.ezclouds.core.auth.request.CoreMemberClientAuthRequest;
 import id.ezclouds.core.auth.result.CoreAuthResult;
 import id.ezclouds.core.auth.result.CoreAuthSessionInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,10 +70,10 @@ public class CoreAuthService {
         return authResult;
     }
 
-    public CoreAuthResult<CoreAuthSessionInfo> authMemberClient(String orgId, String appId, String loginType, String loginId, String loginPass, String deviceId) {
+    public CoreAuthResult<CoreAuthSessionInfo> authMemberClient(CoreMemberClientAuthRequest request) {
         CoreAuthResult<CoreAuthSessionInfo> authResult = new CoreAuthResult<>();
 
-        EzAuthMemberClientDO memberClientDO = ezAuthMemberClientRepository.findByLoginRequest(orgId, appId, loginType, loginId);
+        EzAuthMemberClientDO memberClientDO = ezAuthMemberClientRepository.findByLoginRequest(request.getOrgId(), request.getAppId(), request.getLoginType(), request.getLoginId());
         if (memberClientDO == null) {
             authResult.setEzErrorCode(EzErrorCode.MEMBER_CLIENT_NOT_FOUND);
             return authResult;
@@ -93,14 +94,14 @@ public class CoreAuthService {
         }
 
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        boolean isPassMatch = bCryptPasswordEncoder.matches(loginPass, memberClientDO.getLoginPassword());
+        boolean isPassMatch = bCryptPasswordEncoder.matches(request.getLoginPass(), memberClientDO.getLoginPassword());
         if (!isPassMatch) {
             authResult.setEzErrorCode(EzErrorCode.MEMBER_LOGIN_FAILED);
             return authResult;
         }
 
         CoreAuthMemberClient memberClient = CoreAuthModelConverter.convert(memberClientDO);
-        EzAuthMemberClientSessionDO sessionDO = startMemberClientSession(memberClient, deviceId);
+        EzAuthMemberClientSessionDO sessionDO = startMemberClientSession(memberClient, request.getDeviceId());
 
         CoreAuthSessionInfo sessionInfo = new CoreAuthSessionInfo();
         sessionInfo.setSessionId(sessionDO.getSessionId());
