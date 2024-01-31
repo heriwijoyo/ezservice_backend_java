@@ -5,6 +5,8 @@
 package id.ezclouds.biz.arahindonesia.model.profile;
 
 import id.ezclouds.biz.arahindonesia.model.ImageSlide;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.util.List;
 
@@ -58,5 +60,10 @@ public class CandidateProfile {
 
     public void setCandidateBios(List<CandidateBio> candidateBios) {
         this.candidateBios = candidateBios;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }
