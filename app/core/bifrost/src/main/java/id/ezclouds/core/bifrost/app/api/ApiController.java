@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.bifrost.app.api;
 
+import id.ezclouds.biz.arahindonesia.service.result.BizMemberLoginResult;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.core.bifrost.app.api.digestlog.MemberLoginDigestLog;
@@ -34,15 +35,15 @@ public class ApiController extends AppController {
     }
 
     @PostMapping(value = "/api/login.php")
-    private ApiResult<BizMemberSession> memberLogin(@RequestBody MemberLoginRequest request, HttpServletResponse response) {
-        return executeInTemplate(ApiEvent.API_MEMBER_LOGIN, request, new RequestHandler<BizMemberSession>() {
+    private ApiResult<BizMemberLoginResult> memberLogin(@RequestBody MemberLoginRequest request, HttpServletResponse response) {
+        return executeInTemplate(ApiEvent.API_MEMBER_LOGIN, request, new RequestHandler<BizMemberLoginResult>() {
             @Override
-            public BizMemberSession convertResult(Object resultObject) {
-                return (BizMemberSession) resultObject;
+            public BizMemberLoginResult convertResult(Object resultObject) {
+                return (BizMemberLoginResult) resultObject;
             }
 
             @Override
-            public DigestLog composeDigestLog(ApiRequest request, ApiResult<BizMemberSession> result) {
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<BizMemberLoginResult> result) {
                 MemberLoginDigestLog digestLog = new MemberLoginDigestLog(result.isSuccess(), result.getResultCode());
                 digestLog.composeDigest(request, result);
                 return digestLog;

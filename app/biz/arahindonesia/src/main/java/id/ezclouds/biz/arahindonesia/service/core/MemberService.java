@@ -50,15 +50,6 @@ public class MemberService {
     @Autowired
     private CoreAuthService coreAuthService;
 
-    public MemberBase getMemberById(String memberId, String orgId) {
-        return appMemberRepository
-                .findByMemberIdAndOrgId(memberId, orgId)
-                .stream()
-                .findFirst()
-                .map(BizMemberConverter::convert)
-                .orElse(null);
-    }
-
     @Transactional
     public BizMemberInfo processRegisterMember(BizMemberRegisterRequest request) {
         String orgId = EzAppContextHolder.getContext().getOrgId();
