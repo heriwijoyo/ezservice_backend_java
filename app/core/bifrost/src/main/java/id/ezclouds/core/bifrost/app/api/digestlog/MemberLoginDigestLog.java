@@ -4,7 +4,6 @@
  */
 package id.ezclouds.core.bifrost.app.api.digestlog;
 
-import id.ezclouds.biz.arahindonesia.model.session.BizMemberSession;
 import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
 

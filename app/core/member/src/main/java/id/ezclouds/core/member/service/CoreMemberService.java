@@ -52,6 +52,12 @@ public class CoreMemberService {
         return CoreMemberConverter.convert(coreMemberDO);
     }
 
+    public CoreMemberExtension getOptimisticCoreMemberExtension(String memberId) {
+        CoreMemberExtensionDO coreMemberExtensionDO = coreMemberExtensionRepository.findByMemberId(memberId);
+        AssertUtil.notNull(coreMemberExtensionDO, EzErrorCode.MEMBER_NOT_FOUND, "Member not found");
+        return CoreMemberConverter.convert(coreMemberExtensionDO);
+    }
+
     public CoreMemberExtension getPessimisticCoreMemberExtension(String memberId) {
         CoreMemberExtensionDO memberExtensionDO = coreMemberExtensionRepository.findByMemberId(memberId);
         return CoreMemberConverter.convert(memberExtensionDO);

@@ -4,7 +4,11 @@
  */
 package id.ezclouds.biz.arahindonesia.service.authentication;
 
-import id.ezclouds.biz.arahindonesia.model.session.BizMemberSession;
+import id.ezclouds.biz.arahindonesia.constant.AppConstant;
+import id.ezclouds.biz.arahindonesia.converter.BizMemberConverter;
+import id.ezclouds.biz.arahindonesia.model.login.BizMemberLoginResult;
+import id.ezclouds.biz.arahindonesia.model.member.BizMember;
+import id.ezclouds.biz.arahindonesia.model.member.MemberBase;
 import id.ezclouds.biz.arahindonesia.service.core.BizOrganizationService;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberLoginRequest;
 import id.ezclouds.biz.arahindonesia.service.result.BizResult;
@@ -16,6 +20,8 @@ import id.ezclouds.core.auth.request.CoreAppClientAuthRequest;
 import id.ezclouds.core.auth.result.CoreAuthResult;
 import id.ezclouds.core.auth.result.CoreAuthSessionInfo;
 import id.ezclouds.core.auth.service.CoreAuthService;
+import id.ezclouds.core.member.model.CoreMember;
+import id.ezclouds.core.member.model.CoreMemberExtension;
 import id.ezclouds.core.member.service.CoreMemberService;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.model.CoreOrganization;
@@ -78,6 +84,7 @@ public class BizAuthService {
                 String orgId = EzAppContextHolder.getContext().getOrgId();
                 String appId = EzAppContextHolder.getContext().getAppId();
                 String deviceId = EzAppContextHolder.getContext().getDeviceId();
+                int appVersionNo = EzAppContextHolder.getContext().getAppVersionNo();
 
                 CoreAuthResult<CoreAuthSessionInfo> authResult = coreAuthService.authMemberClient(
                         orgId, appId, request.getLoginType(), request.getLoginId(), request.getLoginPassword(), deviceId
@@ -87,12 +94,24 @@ public class BizAuthService {
                     bizResult.setErrorCode(authResult.getEzErrorCode());
                 } else {
                     CoreAuthSessionInfo sessionInfo = authResult.getData();
-                    BizMemberSession bizMemberSession = new BizMemberSession();
-                    bizMemberSession.setSessionId(sessionInfo.getSessionId());
 
-                    coreMemberService.getOptimisticCoreMember(sessionInfo.getMemberId());
+                    BizMemberLoginResult loginResult = new BizMemberLoginResult();
+                    loginResult.setMemberSessionId(sessionInfo.getSessionId());
+                    loginResult.setSuccessMessage(AppConstant.MEMBER_LOGIN_MESSAGE_SUCCESS);
 
-                    bizResult.setObject(bizMemberSession);
+                    CoreMember coreMember = coreMemberService.getOptimisticCoreMember(sessionInfo.getMemberId());
+                    CoreMemberExtension coreMemberExtension = coreMemberService.getOptimisticCoreMemberExtension(sessionInfo.getMemberId());
+
+                    if (appVersionNo >= AppConstant.APP_V2_START_VERSION_NO) {
+                        BizMember bizMember = BizMemberConverter.convert(coreMember, coreMemberExtension);
+                        loginResult.setBizMember(bizMember);
+                    }
+                    else {
+                        MemberBase memberBase = BizMemberConverter.convert(coreMember);
+                        loginResult.setMemberBase(memberBase);
+                    }
+
+                    bizResult.setObject(loginResult);
                 }
                 bizResult.setSuccess(authResult.isSuccess());
             }

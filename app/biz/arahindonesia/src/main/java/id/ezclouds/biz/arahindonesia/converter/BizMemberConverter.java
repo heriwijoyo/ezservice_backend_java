@@ -8,7 +8,6 @@ import id.ezclouds.biz.arahindonesia.model.BizStatus;
 import id.ezclouds.biz.arahindonesia.model.member.BizGender;
 import id.ezclouds.biz.arahindonesia.model.member.BizMember;
 import id.ezclouds.biz.arahindonesia.model.member.MemberBase;
-import id.ezclouds.common.dal.model.AppMemberDO;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
 
@@ -18,24 +17,33 @@ import id.ezclouds.core.member.model.CoreMemberExtension;
  */
 public class BizMemberConverter {
 
-    public static MemberBase convert(AppMemberDO memberDO) {
-        if (memberDO == null) { return null; }
+    public static MemberBase convert(CoreMember coreMember) {
+        if (coreMember == null) { return null; }
 
         MemberBase memberBase = new MemberBase();
-        memberBase.setMemberId(memberDO.getMemberId());
-        memberBase.setReferrerId(memberDO.getReferrerId());
-        memberBase.setRole(memberDO.getRole());
-        memberBase.setName(memberDO.getName());
-        memberBase.setNickname(memberDO.getNickname());
-        memberBase.setGenderCode(memberDO.getGenderCode());
-        memberBase.setGenderLabel(memberDO.getGenderLabel());
-        memberBase.setDateOfBirth(memberDO.getDateOfBirth());
-        memberBase.setPhone(memberDO.getPhone());
-        memberBase.setEmail(memberDO.getEmail());
-        memberBase.setPhoneVerified(memberDO.getPhoneVerified());
-        memberBase.setEmailVerified(memberDO.getEmailVerified());
-        memberBase.setAddress(memberDO.getAddress());
-        memberBase.setStatus(memberDO.getStatus());
+        memberBase.setMemberId(coreMember.getMemberId());
+        memberBase.setReferrerId(coreMember.getReferrerId());
+        memberBase.setName(coreMember.getName());
+        memberBase.setNickname(coreMember.getNickname());
+        memberBase.setDateOfBirth(coreMember.getDateOfBirth());
+        memberBase.setPhone(coreMember.getPhone());
+        memberBase.setEmail(coreMember.getEmail());
+        memberBase.setAddress(coreMember.getAddress());
+
+        //support backward compatibility for old version data model
+        memberBase.setRole(coreMember.getRoles());
+
+        if ("MALE".equals(coreMember.getGender())) {
+            memberBase.setGenderCode(0);
+            memberBase.setGenderLabel("Laki - Laki");
+        } else {
+            memberBase.setGenderCode(1);
+            memberBase.setGenderLabel("Perempuan");
+        }
+
+        memberBase.setPhoneVerified(coreMember.isPhoneVerified() ? 1 : 0);
+        memberBase.setEmailVerified(coreMember.isEmailVerified() ? 1 : 0);
+        memberBase.setStatus(coreMember.getMemberStatus().getCode());
 
         return memberBase;
     }
