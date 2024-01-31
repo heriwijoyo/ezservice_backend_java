@@ -58,10 +58,11 @@ public class ApiBizProcessor implements BizProcessor {
 
             case API_CANDIDATE_PROFILE:
                 return bizCandidateProfileService.getCandidateProfile();
-            /*
-            case NEWS:
+
+            case API_NEWS:
                 return bizNewsService.getActiveNews();
 
+/*
             case MEMBER_PROFILE:
                 return bizMemberProfileService.getMemberProfile();*/
 

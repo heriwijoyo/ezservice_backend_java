@@ -12,7 +12,25 @@ import java.util.List;
  */
 public class ListResult<T> {
 
+    private int pageNumber;
+    private boolean hasMore;
     private List<T> items;
+
+    public int getPageNumber() {
+        return pageNumber;
+    }
+
+    public void setPageNumber(int pageNumber) {
+        this.pageNumber = pageNumber;
+    }
+
+    public boolean isHasMore() {
+        return hasMore;
+    }
+
+    public void setHasMore(boolean hasMore) {
+        this.hasMore = hasMore;
+    }
 
     public List<T> getItems() {
         return items;

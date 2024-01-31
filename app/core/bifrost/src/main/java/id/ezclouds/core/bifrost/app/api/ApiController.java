@@ -5,6 +5,7 @@
 package id.ezclouds.core.bifrost.app.api;
 
 import id.ezclouds.biz.arahindonesia.model.AppSetting;
+import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
 import id.ezclouds.biz.arahindonesia.model.profile.CandidateProfile;
 import id.ezclouds.biz.arahindonesia.service.result.BizMemberLoginResult;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
@@ -16,6 +17,7 @@ import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
 import id.ezclouds.core.bifrost.app.api.request.MemberLoginRequest;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
+import id.ezclouds.core.shared.result.ListResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -70,6 +72,26 @@ public class ApiController extends AppController {
             }
         });
     }
+
+    @PostMapping(value = "/api/news.php")
+    private ApiResult<ListResult<SimpleNews>> getNews(@RequestBody ApiRequest request) {
+        return executeInTemplate(ApiEvent.API_NEWS, request, new RequestHandler<ListResult<SimpleNews>>() {
+            @Override
+            public ListResult<SimpleNews> convertResult(Object resultObject) {
+                return (ListResult<SimpleNews>) resultObject;
+            }
+
+            @Override
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<ListResult<SimpleNews>> result) {
+                EmptyDigestLog digestLog = new EmptyDigestLog(result.isSuccess(), result.getResultCode());
+                digestLog.composeDigest(request, toEmptyResult(result));
+                return digestLog;
+            }
+        });
+    }
+
+
+
 
     @PostMapping(value = "/api/login.php")
     private ApiResult<BizMemberLoginResult> memberLogin(@RequestBody MemberLoginRequest request) {

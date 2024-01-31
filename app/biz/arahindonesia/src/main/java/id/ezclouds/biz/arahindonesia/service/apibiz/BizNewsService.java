@@ -6,6 +6,9 @@ package id.ezclouds.biz.arahindonesia.service.apibiz;
 
 import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
 import id.ezclouds.biz.arahindonesia.service.core.NewsService;
+import id.ezclouds.biz.arahindonesia.service.result.BizResult;
+import id.ezclouds.biz.arahindonesia.service.template.BizServiceTemplate;
+import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.shared.result.ListResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,9 +23,25 @@ public class BizNewsService {
     @Autowired
     private NewsService newsService;
 
-    public ListResult<SimpleNews> getActiveNews() {
-        ListResult<SimpleNews> result = new ListResult<>();
-        result.setItems(newsService.getActiveListNews());
-        return result;
+    public BizResult getActiveNews() {
+        final BizResult bizResult = new BizResult();
+
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {}
+
+            @Override
+            public void onBizProcess() throws EzErrorException {
+                ListResult<SimpleNews> result = new ListResult<>();
+                result.setPageNumber(1);
+                result.setHasMore(false);
+                result.setItems(newsService.getActiveListNews());
+
+                bizResult.setSuccess(true);
+                bizResult.setObject(result);
+            }
+        });
+
+        return bizResult;
     }
 }
