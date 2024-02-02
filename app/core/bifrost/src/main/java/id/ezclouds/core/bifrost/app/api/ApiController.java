@@ -145,6 +145,23 @@ public class ApiController extends AppController {
         });
     }
 
+    @PostMapping(value = "/api/logout.php")
+    private ApiResult<Void> memberLogout(@RequestBody ApiRequest request) {
+        return executeInTemplate(ApiEvent.API_MEMBER_LOGOUT, request, new RequestHandler<Void>() {
+            @Override
+            public Void convertResult(Object resultObject) {
+                return null;
+            }
+
+            @Override
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<Void> result) {
+                EmptyDigestLog digestLog = new EmptyDigestLog(result.isSuccess(), result.getResultCode());
+                digestLog.composeDigest(request, result);
+                return digestLog;
+            }
+        });
+    }
+
 
 
     @PostMapping(value = "/api/sample.json", consumes = {MediaType.APPLICATION_JSON_VALUE})
@@ -163,9 +180,9 @@ public class ApiController extends AppController {
         });
     }
 
-    @GetMapping(value = "/api/generateKeyIdx.php", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "/api/generateKeyIdx.php", consumes = {MediaType.APPLICATION_JSON_VALUE})
     private String getKeyIdx(@RequestBody String request) {
-        String allChars = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789.";
+        String allChars = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789.:/";
 
         List<String> indexes = new ArrayList<>();
 

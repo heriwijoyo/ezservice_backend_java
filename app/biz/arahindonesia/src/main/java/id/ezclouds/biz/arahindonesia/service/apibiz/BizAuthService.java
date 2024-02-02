@@ -126,6 +126,25 @@ public class BizAuthService {
         return bizResult;
     }
 
+    public BizResult memberLogout() {
+        final BizResult bizResult = new BizResult();
+
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {}
+
+            @Override
+            public void onBizProcess() throws EzErrorException {
+                String sessionId = EzAppContextHolder.getContext().getMemberSessionId();
+                CoreAuthResult<Void> authResult = coreAuthService.invalidateMemberSession(sessionId);
+
+                bizResult.setSuccess(authResult.isSuccess());
+            }
+        });
+
+        return bizResult;
+    }
+
     public BizResult memberSessionCheck() {
         final BizResult bizResult = new BizResult();
 

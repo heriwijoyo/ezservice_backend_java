@@ -16,6 +16,7 @@ public enum ApiEvent implements EzAppEvent {
     API_NEWS("API_NEWS", "News"),
     API_MEMBER_PROFILE("API_MEMBER_PROFILE", "MemberProfile"),
     API_MEMBER_LOGIN("API_MEMBER_LOGIN", "MemberLogin"),
+    API_MEMBER_LOGOUT("API_MEMBER_LOGOUT", "MemberLogout"),
     API_MEMBER_REGISTER("API_MEMBER_REGISTER", "MemberRegister"),
     API_SESSION_CHECK("API_SESSION_CHECK", "Session Check"),
     GENERATE_SEQUENCE("", "GenerateSequence"),

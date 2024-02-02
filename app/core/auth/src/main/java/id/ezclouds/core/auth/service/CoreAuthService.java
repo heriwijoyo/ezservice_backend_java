@@ -183,6 +183,21 @@ public class CoreAuthService {
         return authResult;
     }
 
+    @Transactional
+    public CoreAuthResult<Void> invalidateMemberSession(String sessionId) {
+        CoreAuthResult<Void> authResult = new CoreAuthResult<>();
+
+        EzAuthMemberClientSessionDO sessionDO = ezAuthMemberClientSessionRepository.findById(sessionId).orElse(null);
+
+        if (sessionDO != null) {
+            sessionDO.setStatus(CoreAuthConstant.MEMBER_CLIENT_STATUS_NOT_ACTIVE);
+            ezAuthMemberClientSessionRepository.saveAndFlush(sessionDO);
+        }
+
+        authResult.setSuccess(true);
+        return authResult;
+    }
+
     @Cacheable("core_auth_app_client")
     public List<CoreAuthAppClient> getActiveAppClients() {
         return ezAuthAppClientRepository

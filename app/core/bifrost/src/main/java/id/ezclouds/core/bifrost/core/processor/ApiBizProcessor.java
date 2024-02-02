@@ -70,6 +70,9 @@ public class ApiBizProcessor implements BizProcessor {
             case API_SESSION_CHECK:
                 return bizAuthService.memberSessionCheck();
 
+            case API_MEMBER_LOGOUT:
+                return bizAuthService.memberLogout();
+
             case API_MEMBER_REGISTER:
                 BizMemberRegisterRequest bizRequest = BizRequestConverter.convert((MemberRegisterRequest) request);
                 bizRequest.setSourceId(SOURCE_ID);
