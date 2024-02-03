@@ -34,9 +34,9 @@ public class DigestLogUtil {
                 "][appVersionNo=" +
                 ezAppContext.getAppVersionNo() +
                 "][" +
-                digestLog.getErrorMessage() +
-                "][" +
                 digestLog.getDigestMessage() +
+                "][" +
+                digestLog.getErrorMessage() +
                 "]";
         logger.info(infoLog);
 
