@@ -90,6 +90,7 @@ public class CoreAuthService {
         }
         if (clientStatus != CoreAuthConstant.MEMBER_CLIENT_STATUS_ACTIVE) {
             authResult.setEzErrorCode(EzErrorCode.MEMBER_CLIENT_ABNORMAL);
+            //TODO: print error into core logger
             return authResult;
         }
 

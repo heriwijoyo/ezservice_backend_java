@@ -68,7 +68,7 @@ public class BizAuthService {
         return bizAuthResult;
     }
 
-    public BizResult loginMember(BizMemberLoginRequest request) {
+    public BizResult memberLogin(BizMemberLoginRequest request) {
         final BizResult bizResult = new BizResult();
 
         BizServiceTemplate.execute(request, bizResult, new BizServiceTemplate.Handler() {
@@ -98,6 +98,8 @@ public class BizAuthService {
 
                 if (!authResult.isSuccess()) {
                     bizResult.setErrorCode(authResult.getEzErrorCode());
+                    bizResult.setErrorMessage(composeErrorMessage(authResult.getEzErrorCode()));
+                    bizResult.setErrorLocation(BizAuthService.class.getSimpleName());
                 } else {
                     CoreAuthSessionInfo sessionInfo = authResult.getData();
 
@@ -170,5 +172,17 @@ public class BizAuthService {
         });
 
         return bizResult;
+    }
+
+    private String composeErrorMessage(EzErrorCode ezErrorCode) {
+        switch (ezErrorCode) {
+            case MEMBER_CLIENT_NOT_FOUND:
+                return AppConstant.MEMBER_LOGIN_MESSAGE_NOT_FOUND;
+            case MEMBER_CLIENT_NOT_ACTIVE:
+            case MEMBER_CLIENT_FROZEN:
+                return AppConstant.MEMBER_LOGIN_MESSAGE_SUSPEND;
+            default:
+                return AppConstant.MEMBER_LOGIN_MESSAGE_FAILED;
+        }
     }
 }

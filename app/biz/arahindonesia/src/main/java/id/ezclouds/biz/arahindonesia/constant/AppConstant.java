@@ -25,8 +25,10 @@ public class AppConstant {
 
     public static final String PHONE_PREFIX = "62";
     public static final String MEMBER_LOGIN_MESSAGE_SUCCESS = "LOGIN BERHASIL\n\nSelamat datang di Member Area Sistem RJL";
-    public static final String MEMBER_LOGIN_MESSAGE_FAILED = "Nomor HP atau sandi yang anda masukkan salah";
+    public static final String MEMBER_LOGIN_MESSAGE_NOT_FOUND = "Nomor HP yang anda masukkan tidak terdaftar, periksa dan coba kembali menggunakan nomor HP yang benar";
     public static final String MEMBER_LOGIN_MESSAGE_SUSPEND = "Akun anda telah di nonaktifkan, silakan hubungi admin sistem kami";
+    public static final String MEMBER_LOGIN_MESSAGE_FAILED = "Kata sandi yang anda masukkan salah, coba kembali dengan sandi yang benar";
+    public static final String MEMBER_LOGIN_MESSAGE_ABNORMAL = "Terjadi kesalahan pada sistem, silakan hubungi admin sistem kami";
 
     public static final int APP_V2_START_VERSION_NO = 15;
 }
