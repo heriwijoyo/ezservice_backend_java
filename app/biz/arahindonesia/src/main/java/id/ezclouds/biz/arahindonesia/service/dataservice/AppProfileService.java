@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2023 All Rights Reserved.
  */
-package id.ezclouds.biz.arahindonesia.service.data;
+package id.ezclouds.biz.arahindonesia.service.dataservice;
 
 import id.ezclouds.common.dal.dataobject.AppProfileDO;
 import id.ezclouds.common.dal.repo.AppProfileRepository;

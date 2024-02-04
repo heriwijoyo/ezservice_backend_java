@@ -10,7 +10,7 @@ import id.ezclouds.biz.arahindonesia.model.member.BizMember;
 import id.ezclouds.biz.arahindonesia.model.member.BizMemberInfo;
 import id.ezclouds.biz.arahindonesia.model.profile.MemberProfile;
 import id.ezclouds.biz.arahindonesia.service.inner.service.BizMemberInnerService;
-import id.ezclouds.biz.arahindonesia.service.data.AppProfileService;
+import id.ezclouds.biz.arahindonesia.service.dataservice.AppProfileService;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberRegisterRequest;
 import id.ezclouds.biz.arahindonesia.service.result.BizResult;
 import id.ezclouds.biz.arahindonesia.service.template.BizServiceTemplate;

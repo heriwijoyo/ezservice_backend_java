@@ -6,7 +6,7 @@ package id.ezclouds.biz.arahindonesia.service.apibiz;
 
 import id.ezclouds.biz.arahindonesia.constant.AppConstant;
 import id.ezclouds.biz.arahindonesia.converter.BizMemberConverter;
-import id.ezclouds.biz.arahindonesia.service.data.AppSubOrganizationService;
+import id.ezclouds.biz.arahindonesia.service.dataservice.AppSubOrganizationService;
 import id.ezclouds.biz.arahindonesia.service.result.BizMemberLoginResult;
 import id.ezclouds.biz.arahindonesia.model.member.BizMember;
 import id.ezclouds.biz.arahindonesia.model.member.MemberBase;

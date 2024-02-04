@@ -5,7 +5,7 @@
 package id.ezclouds.biz.arahindonesia.service.apibiz;
 
 import id.ezclouds.biz.arahindonesia.model.profile.MemberProfile;
-import id.ezclouds.biz.arahindonesia.service.data.AppProfileService;
+import id.ezclouds.biz.arahindonesia.service.dataservice.AppProfileService;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

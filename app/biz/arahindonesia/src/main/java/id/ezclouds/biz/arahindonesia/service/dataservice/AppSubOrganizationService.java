@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.biz.arahindonesia.service.data;
+package id.ezclouds.biz.arahindonesia.service.dataservice;
 
 import id.ezclouds.biz.arahindonesia.converter.BizModelConverter;
 import id.ezclouds.biz.arahindonesia.model.member.BizSubOrganization;

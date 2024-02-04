@@ -4,7 +4,7 @@
  */
 package id.ezclouds.biz.arahindonesia.service.core;
 
-import id.ezclouds.biz.arahindonesia.service.data.*;
+import id.ezclouds.biz.arahindonesia.service.dataservice.*;
 import id.ezclouds.core.auth.service.CoreAuthService;
 import id.ezclouds.core.shared.service.CoreConfigService;
 import org.springframework.beans.factory.annotation.Autowired;

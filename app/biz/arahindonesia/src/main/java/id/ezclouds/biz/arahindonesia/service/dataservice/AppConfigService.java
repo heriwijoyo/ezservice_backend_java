@@ -2,11 +2,11 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2023 All Rights Reserved.
  */
-package id.ezclouds.biz.arahindonesia.service.data;
+package id.ezclouds.biz.arahindonesia.service.dataservice;
 
 import id.ezclouds.biz.arahindonesia.converter.BizModelConverter;
-import id.ezclouds.biz.arahindonesia.model.profile.CandidateProfileItem;
-import id.ezclouds.common.dal.repo.CandidateProfileItemRepository;
+import id.ezclouds.biz.arahindonesia.model.AppConfig;
+import id.ezclouds.common.dal.repo.AppConfigRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -16,17 +16,17 @@ import java.util.stream.Collectors;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: CandidateProfileItemService.java, v 0.1 2023‐12‐10 3:32 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: AppConfigService.java, v 0.1 2023‐12‐09 11:48 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class CandidateProfileItemService {
+public class AppConfigService {
 
     @Autowired
-    private CandidateProfileItemRepository candidateProfileItemRepository;
+    private AppConfigRepository appConfigRepository;
 
-    @Cacheable("candidate_profile_item")
-    public List<CandidateProfileItem> getCandidateProfileItems() {
-        return candidateProfileItemRepository
+    @Cacheable("app_configs")
+    public List<AppConfig> getAppConfigs() {
+        return appConfigRepository
                 .findAll()
                 .stream()
                 .map(BizModelConverter::convert)
