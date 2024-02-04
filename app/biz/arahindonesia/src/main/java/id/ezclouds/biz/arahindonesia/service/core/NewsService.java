@@ -4,7 +4,7 @@
  */
 package id.ezclouds.biz.arahindonesia.service.core;
 
-import id.ezclouds.biz.arahindonesia.converter.ModelConverter;
+import id.ezclouds.biz.arahindonesia.converter.BizModelConverter;
 import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
 import id.ezclouds.common.dal.repo.NewsRepository;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
@@ -32,7 +32,7 @@ public class NewsService {
         return newsRepository
                 .findHighlightedNews()
                 .stream()
-                .map(ModelConverter::convert)
+                .map(BizModelConverter::convert)
                 .collect(Collectors.toList());
     }
 
@@ -41,7 +41,7 @@ public class NewsService {
         return newsRepository
                 .findActiveNews(orgId, NEWS_LIMIT)
                 .stream()
-                .map(ModelConverter::convert)
+                .map(BizModelConverter::convert)
                 .collect(Collectors.toList());
     }
 }

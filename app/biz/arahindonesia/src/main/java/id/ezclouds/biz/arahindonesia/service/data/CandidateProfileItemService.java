@@ -4,7 +4,7 @@
  */
 package id.ezclouds.biz.arahindonesia.service.data;
 
-import id.ezclouds.biz.arahindonesia.converter.ModelConverter;
+import id.ezclouds.biz.arahindonesia.converter.BizModelConverter;
 import id.ezclouds.biz.arahindonesia.model.profile.CandidateProfileItem;
 import id.ezclouds.common.dal.repo.CandidateProfileItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class CandidateProfileItemService {
         return candidateProfileItemRepository
                 .findAll()
                 .stream()
-                .map(ModelConverter::convert)
+                .map(BizModelConverter::convert)
                 .collect(Collectors.toList());
     }
 }

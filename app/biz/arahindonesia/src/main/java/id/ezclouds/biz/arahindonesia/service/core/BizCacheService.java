@@ -24,22 +24,34 @@ public class BizCacheService {
 
     @Autowired
     private CacheManager cacheManager;
+
     @Autowired
     private BizOrganizationService bizOrganizationService;
+
+    @Autowired
+    private AppSubOrganizationService appSubOrganizationService;
+
     @Autowired
     private CoreAuthService coreAuthService;
+
     @Autowired
     private AppConfigService appConfigService;
+
     @Autowired
     private ImageSlideService imageSlideService;
+
     @Autowired
     private NewsService newsService;
+
     @Autowired
     private CandidateProfileItemService candidateProfileItemService;
+
     @Autowired
     private VideoCardService videoCardService;
+
     @Autowired
     private CandidateBioService candidateBioService;
+
     @Autowired
     private AppProfileService appProfileService;
 
@@ -57,6 +69,7 @@ public class BizCacheService {
 
         bizOrganizationService.getActiveOrganizations();
         coreAuthService.getActiveAppClients();
+        appSubOrganizationService.getAllSubOrganization();
 
         /*
         appConfigService.getAppConfigs();

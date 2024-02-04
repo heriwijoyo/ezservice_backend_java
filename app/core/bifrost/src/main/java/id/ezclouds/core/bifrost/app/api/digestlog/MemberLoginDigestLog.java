@@ -21,12 +21,23 @@ public class MemberLoginDigestLog extends BaseDigestLog<BizMemberLoginResult> {
 
     @Override
     public void composeDigest(ApiRequest request, ApiResult<BizMemberLoginResult> result) {
-        String requestData = "request(";
+        String requestData;
         if (request instanceof MemberLoginRequest) {
             MemberLoginRequest loginRequest = (MemberLoginRequest) request;
-            requestData += "loginType=" + loginRequest.getLoginType() + ",loginId=" + loginRequest.getLoginId() + ")";
+            requestData = "loginType=" + loginRequest.getLoginType() + ",loginId=" + loginRequest.getLoginId();
+        } else {
+            requestData = "NULL";
         }
-        setDigestMessage(requestData);
-        setErrorMessage("errorContext=" + result.getErrorResult().getErrorContext());
+
+        String requestInfo = "request(" + requestData + ")";
+        setDigestMessage(requestInfo);
+
+        String errorContext;
+        if (result.getErrorResult() == null) {
+            errorContext = "NULL";
+        } else {
+            errorContext = result.getErrorResult().getErrorContext();
+        }
+        setErrorMessage("errorContext=" + errorContext);
     }
 }

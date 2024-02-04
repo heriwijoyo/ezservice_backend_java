@@ -12,6 +12,9 @@ import id.ezclouds.biz.arahindonesia.model.BizStatus;
  */
 public class BizMember {
 
+    //AppExtension
+    private BizSubOrganization subOrganization;
+
     //CoreMember
     private String memberId;
     private String referrerId;
@@ -44,6 +47,14 @@ public class BizMember {
     private String rukunWarga;
     private String rukunTetangga;
     private String tpsNumber;
+
+    public BizSubOrganization getSubOrganization() {
+        return subOrganization;
+    }
+
+    public void setSubOrganization(BizSubOrganization subOrganization) {
+        this.subOrganization = subOrganization;
+    }
 
     public String getMemberId() {
         return memberId;

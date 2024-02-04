@@ -7,6 +7,7 @@ package id.ezclouds.biz.arahindonesia.converter;
 import id.ezclouds.biz.arahindonesia.constant.AppConstant;
 import id.ezclouds.biz.arahindonesia.model.*;
 import id.ezclouds.biz.arahindonesia.model.authentication.AppMemberClient;
+import id.ezclouds.biz.arahindonesia.model.member.BizSubOrganization;
 import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
 import id.ezclouds.biz.arahindonesia.model.profile.CandidateBio;
 import id.ezclouds.biz.arahindonesia.model.profile.CandidateProfileItem;
@@ -14,21 +15,8 @@ import id.ezclouds.common.dal.dataobject.*;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: ModelConverter.java, v 0.1 2023‐12‐10 12:22 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
-public class ModelConverter {
-
-    public static AppClient convert(AppClientDO appClientDO) {
-        if (appClientDO == null) {
-            return null;
-        }
-        AppClient appClient = new AppClient();
-        appClient.setOrgId(appClientDO.getOrgId());
-        appClient.setAppId(appClientDO.getAppId());
-        appClient.setClientId(appClientDO.getClientId());
-        appClient.setClientSecret(appClientDO.getClientSecret());
-        appClient.setStatus(appClientDO.getStatus());
-        return appClient;
-    }
+ * @version $Id: BizModelConverter.java, v 0.1 2023‐12‐10 12:22 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
+public class BizModelConverter {
 
     public static AppConfig convert(AppConfigDO appConfigDO) {
         if (appConfigDO == null) {
@@ -51,6 +39,14 @@ public class ModelConverter {
         appConfig.setAppUpdateInfo(appUpdateInfo);
 
         return appConfig;
+    }
+
+    public static BizSubOrganization convert(AppSubOrganizationDO subOrganizationDO) {
+        if (subOrganizationDO == null) { return null; }
+        BizSubOrganization subOrganization = new BizSubOrganization();
+        subOrganization.setSubOrgId(subOrganizationDO.getSubOrgId());
+        subOrganization.setName(subOrganizationDO.getName());
+        return subOrganization;
     }
 
     public static ImageSlide convert(ImageSlideDO slideDO) {
@@ -114,17 +110,5 @@ public class ModelConverter {
         candidateBio.setLabel(bioDO.getLabel());
         candidateBio.setValue(bioDO.getValue());
         return candidateBio;
-    }
-
-    public static AppMemberClient convert(AppMemberClientDO clientDO) {
-        if (clientDO == null) {
-            return null;
-        }
-        AppMemberClient memberClient = new AppMemberClient();
-        memberClient.setClientId(clientDO.getClientId());
-        memberClient.setOrgId(clientDO.getOrgId());
-        memberClient.setAppId(clientDO.getAppId());
-        memberClient.setMemberId(clientDO.getMemberId());
-        return memberClient;
     }
 }

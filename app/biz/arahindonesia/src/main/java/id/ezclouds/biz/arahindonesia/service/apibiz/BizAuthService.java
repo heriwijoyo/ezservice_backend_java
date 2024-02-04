@@ -6,6 +6,7 @@ package id.ezclouds.biz.arahindonesia.service.apibiz;
 
 import id.ezclouds.biz.arahindonesia.constant.AppConstant;
 import id.ezclouds.biz.arahindonesia.converter.BizMemberConverter;
+import id.ezclouds.biz.arahindonesia.service.data.AppSubOrganizationService;
 import id.ezclouds.biz.arahindonesia.service.result.BizMemberLoginResult;
 import id.ezclouds.biz.arahindonesia.model.member.BizMember;
 import id.ezclouds.biz.arahindonesia.model.member.MemberBase;
@@ -44,6 +45,9 @@ public class BizAuthService {
 
     @Autowired
     private CoreMemberService coreMemberService;
+
+    @Autowired
+    private AppSubOrganizationService appSubOrganizationService;
 
     public CoreAuthResult<String> authAppClient(String orgId, String appId, String clientId, String clientSecret) {
         CoreAuthResult<String> bizAuthResult = new CoreAuthResult<>();
@@ -112,6 +116,7 @@ public class BizAuthService {
 
                     if (appVersionNo >= AppConstant.APP_V2_START_VERSION_NO) {
                         BizMember bizMember = BizMemberConverter.convert(coreMember, coreMemberExtension);
+                        bizMember.setSubOrganization(appSubOrganizationService.getSubOrganizationById(coreMember.getSubOrgId()));
                         loginResult.setBizMember(bizMember);
                     }
                     else {

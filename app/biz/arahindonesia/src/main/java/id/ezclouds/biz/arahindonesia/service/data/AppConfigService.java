@@ -4,7 +4,7 @@
  */
 package id.ezclouds.biz.arahindonesia.service.data;
 
-import id.ezclouds.biz.arahindonesia.converter.ModelConverter;
+import id.ezclouds.biz.arahindonesia.converter.BizModelConverter;
 import id.ezclouds.biz.arahindonesia.model.AppConfig;
 import id.ezclouds.common.dal.repo.AppConfigRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class AppConfigService {
         return appConfigRepository
                 .findAll()
                 .stream()
-                .map(ModelConverter::convert)
+                .map(BizModelConverter::convert)
                 .collect(Collectors.toList());
     }
 }

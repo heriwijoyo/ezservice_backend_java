@@ -4,7 +4,7 @@
  */
 package id.ezclouds.biz.arahindonesia.service.data;
 
-import id.ezclouds.biz.arahindonesia.converter.ModelConverter;
+import id.ezclouds.biz.arahindonesia.converter.BizModelConverter;
 import id.ezclouds.biz.arahindonesia.model.profile.CandidateBio;
 import id.ezclouds.common.dal.repo.CandidateBioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class CandidateBioService {
         return candidateBioRepository
                 .getActiveCandidateBios()
                 .stream()
-                .map(ModelConverter::convert)
+                .map(BizModelConverter::convert)
                 .collect(Collectors.toList());
     }
 }

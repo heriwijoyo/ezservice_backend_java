@@ -5,7 +5,7 @@
 package id.ezclouds.biz.arahindonesia.service.data;
 
 import id.ezclouds.biz.arahindonesia.constant.AppConstant;
-import id.ezclouds.biz.arahindonesia.converter.ModelConverter;
+import id.ezclouds.biz.arahindonesia.converter.BizModelConverter;
 import id.ezclouds.biz.arahindonesia.model.ImageSlide;
 import id.ezclouds.common.dal.repo.ImageSlideRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class ImageSlideService {
         return imageSlideRepository
                 .findActiveSectionImageSlide(AppConstant.IMAGE_SLIDE_SECTION_HOME)
                 .stream()
-                .map(ModelConverter::convert)
+                .map(BizModelConverter::convert)
                 .collect(Collectors.toList());
     }
 
@@ -39,7 +39,7 @@ public class ImageSlideService {
         return imageSlideRepository
                 .findActiveSectionImageSlide(AppConstant.IMAGE_SLIDE_HOME_POSTER)
                 .stream()
-                .map(ModelConverter::convert)
+                .map(BizModelConverter::convert)
                 .collect(Collectors.toList());
     }
 
@@ -48,7 +48,7 @@ public class ImageSlideService {
         return imageSlideRepository
                 .findActiveSectionImageSlide(AppConstant.IMAGE_SLIDE_PORTFOLIO)
                 .stream()
-                .map(ModelConverter::convert)
+                .map(BizModelConverter::convert)
                 .collect(Collectors.toList());
     }
 }

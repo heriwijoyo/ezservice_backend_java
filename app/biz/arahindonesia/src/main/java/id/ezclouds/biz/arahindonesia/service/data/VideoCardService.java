@@ -4,7 +4,7 @@
  */
 package id.ezclouds.biz.arahindonesia.service.data;
 
-import id.ezclouds.biz.arahindonesia.converter.ModelConverter;
+import id.ezclouds.biz.arahindonesia.converter.BizModelConverter;
 import id.ezclouds.biz.arahindonesia.model.VideoCard;
 import id.ezclouds.common.dal.repo.VideoCardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class VideoCardService {
         return videoCardRepository
                 .findAllActive()
                 .stream()
-                .map(ModelConverter::convert)
+                .map(BizModelConverter::convert)
                 .collect(Collectors.toList());
     }
 }
