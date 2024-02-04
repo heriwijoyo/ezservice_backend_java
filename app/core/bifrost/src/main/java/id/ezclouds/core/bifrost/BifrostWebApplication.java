@@ -17,10 +17,10 @@ import java.util.TimeZone;
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BifrostWebApplication.java, v 0.1 2023‐06‐18 11:31 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
-@SpringBootApplication(scanBasePackages = {"id.ezclouds.core.bifrost", "id.ezclouds.biz.arahindonesia", "id.ezclouds.core.shared", "id.ezclouds.core.member", "id.ezclouds.core.auth"})
+@SpringBootApplication(scanBasePackages = {"id.ezclouds.core.bifrost", "id.ezclouds.biz.arahindonesia", "id.ezclouds.core.shared", "id.ezclouds.core.member", "id.ezclouds.core.auth", "id.ezclouds.core.integration"})
 @ImportResource({ "classpath:/META-INF/ezclouds/spring/config.xml" })
-@EnableJpaRepositories(basePackages = {"id.ezclouds.common.dal", "id.ezclouds.core.shared", "id.ezclouds.core.member", "id.ezclouds.core.auth", "id.ezclouds.biz.arahindonesia.service.dataservice.repo"})
-@EntityScan(basePackages = {"id.ezclouds.common.dal", "id.ezclouds.core.shared", "id.ezclouds.core.member", "id.ezclouds.core.auth", "id.ezclouds.biz.arahindonesia.service.dataservice.dataobject"})
+@EnableJpaRepositories(basePackages = {"id.ezclouds.common.dal", "id.ezclouds.core.shared", "id.ezclouds.core.member", "id.ezclouds.core.auth", "id.ezclouds.biz.arahindonesia.service.dataservice.repo", "id.ezclouds.core.integration.dataservice.repo"})
+@EntityScan(basePackages = {"id.ezclouds.common.dal", "id.ezclouds.core.shared", "id.ezclouds.core.member", "id.ezclouds.core.auth", "id.ezclouds.biz.arahindonesia.service.dataservice.dataobject", "id.ezclouds.core.integration.dataservice.dataobject"})
 @EnableCaching
 public class BifrostWebApplication {
 

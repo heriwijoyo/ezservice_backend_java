@@ -29,6 +29,7 @@ import id.ezclouds.core.auth.result.CoreAuthMemberCommonSessionInfo;
 import id.ezclouds.core.auth.result.CoreAuthResult;
 import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
 import id.ezclouds.core.auth.service.CoreAuthService;
+import id.ezclouds.core.integration.service.CoreIntegrationService;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
 import id.ezclouds.core.member.service.CoreMemberService;
@@ -58,6 +59,9 @@ public class BizAuthService extends BizBaseService {
 
     @Autowired
     private AppMemberFlagService appMemberFlagService;
+
+    @Autowired
+    private CoreIntegrationService coreIntegrationService;
 
     public CoreAuthResult<String> authAppClient(String orgId, String appId, String clientId, String clientSecret) {
         CoreAuthResult<String> bizAuthResult = new CoreAuthResult<>();
@@ -178,6 +182,8 @@ public class BizAuthService extends BizBaseService {
                 commonSession.setScene(sessionInfo.getScene());
                 commonSession.setVerifyStrategy(sessionInfo.getVerifyStrategy());
                 commonSession.setVerifyTarget(sessionInfo.getVerifyTarget());
+
+                coreIntegrationService.sendWhatsappMessage(null);
 
                 bizResult.setObject(commonSession);
                 bizResult.setSuccess(true);
