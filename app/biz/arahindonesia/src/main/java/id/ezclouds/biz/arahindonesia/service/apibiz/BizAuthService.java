@@ -183,7 +183,7 @@ public class BizAuthService extends BizBaseService {
                 commonSession.setVerifyStrategy(sessionInfo.getVerifyStrategy());
                 commonSession.setVerifyTarget(sessionInfo.getVerifyTarget());
 
-                coreIntegrationService.sendWhatsappMessage(null);
+                memberCommonSessionSendWhatsapp(commonSession);
 
                 bizResult.setObject(commonSession);
                 bizResult.setSuccess(true);
@@ -295,5 +295,9 @@ public class BizAuthService extends BizBaseService {
         });
 
         return bizResult;
+    }
+
+    private void memberCommonSessionSendWhatsapp(BizMemberCommonSession commonSession) {
+
     }
 }

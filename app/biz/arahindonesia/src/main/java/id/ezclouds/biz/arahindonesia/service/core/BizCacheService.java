@@ -75,9 +75,8 @@ public class BizCacheService {
         coreAuthService.getActiveAppClients();
         appSubOrganizationService.getAllSubOrganization();
         coreConfigService.getCoreConfigs();
-
-        /*
         appConfigService.getAppConfigs();
+        appConfigService.getMessageTemplates();
         imageSlideService.getImageSlideHome();
         imageSlideService.getHomePosterImage();
         imageSlideService.getPortfolioImage();
@@ -86,7 +85,6 @@ public class BizCacheService {
         videoCardService.getAllVideoCards();
         candidateBioService.getActiveCandidateBios();
         appProfileService.getAllAppProfile();
-         */
 
         cacheManager
                 .getCacheNames()

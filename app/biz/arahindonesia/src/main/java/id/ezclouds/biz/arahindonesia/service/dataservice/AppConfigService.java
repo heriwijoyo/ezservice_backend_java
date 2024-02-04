@@ -6,6 +6,8 @@ package id.ezclouds.biz.arahindonesia.service.dataservice;
 
 import id.ezclouds.biz.arahindonesia.converter.BizModelConverter;
 import id.ezclouds.biz.arahindonesia.model.AppConfig;
+import id.ezclouds.biz.arahindonesia.service.dataservice.model.AppMessageTemplate;
+import id.ezclouds.biz.arahindonesia.service.dataservice.repo.AppCommonMessageTemplateRepository;
 import id.ezclouds.common.dal.repo.AppConfigRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -24,12 +26,24 @@ public class AppConfigService {
     @Autowired
     private AppConfigRepository appConfigRepository;
 
+    @Autowired
+    private AppCommonMessageTemplateRepository appCommonMessageTemplateRepository;
+
     @Cacheable("app_configs")
     public List<AppConfig> getAppConfigs() {
         return appConfigRepository
                 .findAll()
                 .stream()
                 .map(BizModelConverter::convert)
+                .collect(Collectors.toList());
+    }
+
+    @Cacheable("app_message_template")
+    public List<AppMessageTemplate> getMessageTemplates() {
+        return appCommonMessageTemplateRepository
+                .findAll()
+                .stream()
+                .map(templateDO -> new AppMessageTemplate(templateDO.getTemplateId(), templateDO.getTemplateValue()))
                 .collect(Collectors.toList());
     }
 }
