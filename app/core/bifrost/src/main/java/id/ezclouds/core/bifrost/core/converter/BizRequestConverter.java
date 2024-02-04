@@ -8,9 +8,9 @@ import id.ezclouds.biz.arahindonesia.model.member.BizGender;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberRegisterRequest;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberUpdatePasswordRequest;
 import id.ezclouds.biz.arahindonesia.service.request.BizRequest;
+import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
 import id.ezclouds.core.bifrost.app.api.request.MemberRegisterRequest;
 import id.ezclouds.core.bifrost.app.api.request.MemberUpdatePasswordRequest;
-import id.ezclouds.core.bifrost.core.BaseRequest;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -23,7 +23,7 @@ public class BizRequestConverter<T extends BizRequest> {
         this.handler = handler;
     }
 
-    public T convert(BaseRequest input) {
+    public T convert(ApiRequest input) {
         return handler.convert(input);
     }
 
@@ -60,10 +60,11 @@ public class BizRequestConverter<T extends BizRequest> {
         return bizRequest;
     }
 
-    public static Handler<BizMemberUpdatePasswordRequest> UPDATE_PASSWORD = baseRequest -> {
-        if (baseRequest instanceof MemberUpdatePasswordRequest) {
-            MemberUpdatePasswordRequest request = (MemberUpdatePasswordRequest) baseRequest;
+    public static Handler<BizMemberUpdatePasswordRequest> UPDATE_PASSWORD = apiRequest -> {
+        if (apiRequest instanceof MemberUpdatePasswordRequest) {
+            MemberUpdatePasswordRequest request = (MemberUpdatePasswordRequest) apiRequest;
             BizMemberUpdatePasswordRequest bizRequest = new BizMemberUpdatePasswordRequest();
+            bizRequest.getExtendInfo().putAll(apiRequest.getExtendInfo());
             bizRequest.setMode(request.getMode());
             bizRequest.setNewPassword(request.getNewPassword());
             return bizRequest;
@@ -72,6 +73,6 @@ public class BizRequestConverter<T extends BizRequest> {
     };
 
     interface Handler<T extends BizRequest> {
-        T convert(BaseRequest baseRequest);
+        T convert(ApiRequest apiRequest);
     }
 }

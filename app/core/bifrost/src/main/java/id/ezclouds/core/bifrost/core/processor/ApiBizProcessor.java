@@ -14,6 +14,7 @@ import id.ezclouds.biz.arahindonesia.service.result.BizResult;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
+import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
 import id.ezclouds.core.bifrost.app.api.request.MemberLoginRequest;
 import id.ezclouds.core.bifrost.app.api.request.MemberRegisterRequest;
 import id.ezclouds.core.bifrost.core.BaseRequest;
@@ -51,39 +52,44 @@ public class ApiBizProcessor implements BizProcessor {
 
     @Override
     public BizResult process(EzAppEvent appEvent, BaseRequest request) throws EzErrorException {
-        ApiEvent apiEvent = (ApiEvent) appEvent;
 
-        switch (apiEvent) {
-            case API_APP_SETTING:
-                return bizAppSettingService.getAppSetting();
+        if (appEvent instanceof ApiEvent) {
+            ApiEvent apiEvent = (ApiEvent) appEvent;
+            ApiRequest apiRequest = (ApiRequest) request;
 
-            case API_CANDIDATE_PROFILE:
-                return bizCandidateProfileService.getCandidateProfile();
+            switch (apiEvent) {
+                case API_APP_SETTING:
+                    return bizAppSettingService.getAppSetting();
 
-            case API_NEWS:
-                return bizNewsService.getActiveNews();
+                case API_CANDIDATE_PROFILE:
+                    return bizCandidateProfileService.getCandidateProfile();
 
-            case API_MEMBER_PROFILE:
-                return bizMemberService.getMemberProfile();
+                case API_NEWS:
+                    return bizNewsService.getActiveNews();
 
-            case API_MEMBER_LOGIN:
-                return bizAuthService.memberLogin(composeMemberLogin((MemberLoginRequest)request));
+                case API_MEMBER_PROFILE:
+                    return bizMemberService.getMemberProfile();
 
-            case API_SESSION_CHECK:
-                return bizAuthService.memberSessionCheck();
+                case API_MEMBER_LOGIN:
+                    return bizAuthService.memberLogin(composeMemberLogin((MemberLoginRequest)request));
 
-            case API_MEMBER_LOGOUT:
-                return bizAuthService.memberLogout();
+                case API_SESSION_CHECK:
+                    return bizAuthService.memberSessionCheck();
 
-            case API_MEMBER_UPDATE_PASSWORD:
-                BizRequestConverter<BizMemberUpdatePasswordRequest> converter = new BizRequestConverter<>(BizRequestConverter.UPDATE_PASSWORD);
-                return bizAuthService.memberUpdatePassword(converter.convert(request));
+                case API_MEMBER_LOGOUT:
+                    return bizAuthService.memberLogout();
 
-            case API_MEMBER_REGISTER:
-                BizMemberRegisterRequest bizRequest = BizRequestConverter.convert((MemberRegisterRequest) request);
-                bizRequest.getExtendInfo().put(AppConstant.ExtKey.SOURCE_ID, SOURCE_ID);
-                return bizMemberService.registerMember(bizRequest);
+                case API_MEMBER_UPDATE_PASSWORD:
+                    BizRequestConverter<BizMemberUpdatePasswordRequest> converter = new BizRequestConverter<>(BizRequestConverter.UPDATE_PASSWORD);
+                    return bizAuthService.memberUpdatePassword(converter.convert(apiRequest));
+
+                case API_MEMBER_REGISTER:
+                    BizMemberRegisterRequest bizRequest = BizRequestConverter.convert((MemberRegisterRequest) request);
+                    bizRequest.getExtendInfo().put(AppConstant.ExtKey.SOURCE_ID, SOURCE_ID);
+                    return bizMemberService.registerMember(bizRequest);
+            }
         }
+
 
         BizResult bizResult = new BizResult();
         bizResult.setErrorCode(EzErrorCode.SYSTEM_ERROR);
