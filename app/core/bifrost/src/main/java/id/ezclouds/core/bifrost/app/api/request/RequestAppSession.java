@@ -12,11 +12,21 @@ public class RequestAppSession {
 
     private String memberSessionCode;
 
+    private String memberSessionId;
+
     public String getMemberSessionCode() {
         return memberSessionCode;
     }
 
     public void setMemberSessionCode(String memberSessionCode) {
         this.memberSessionCode = memberSessionCode;
+    }
+
+    public String getMemberSessionId() {
+        return memberSessionId;
+    }
+
+    public void setMemberSessionId(String memberSessionId) {
+        this.memberSessionId = memberSessionId;
     }
 }

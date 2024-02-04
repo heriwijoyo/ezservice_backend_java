@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.bifrost.core.processor;
 
+import id.ezclouds.biz.arahindonesia.constant.AppConstant;
 import id.ezclouds.biz.arahindonesia.service.apibiz.BizAuthService;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
@@ -57,7 +58,11 @@ public class PreBizProcessor {
             EzAppContextHolder.getContext().setAppVersionNo(reqClient.getAppVersionNo());
 
             if (apiRequest.getAppSession() != null) {
-                EzAppContextHolder.getContext().setMemberSessionId(apiRequest.getAppSession().getMemberSessionCode());
+                if (reqClient.getAppVersionNo() >= AppConstant.APP_V2_START_VERSION_NO) {
+                    EzAppContextHolder.getContext().setMemberSessionId(apiRequest.getAppSession().getMemberSessionId());
+                } else {
+                    EzAppContextHolder.getContext().setMemberSessionId(apiRequest.getAppSession().getMemberSessionCode());
+                }
             }
         }
     }

@@ -111,6 +111,10 @@ public class BizAuthService {
                     loginResult.setMemberSessionId(sessionInfo.getSessionId());
                     loginResult.setSuccessMessage(AppConstant.MEMBER_LOGIN_MESSAGE_SUCCESS);
 
+                    //support old version
+                    //TODO: remove when all client updated into newer version
+                    loginResult.setMemberSessionCode(sessionInfo.getSessionId());
+
                     CoreMember coreMember = coreMemberService.getOptimisticCoreMember(sessionInfo.getMemberId());
                     CoreMemberExtension coreMemberExtension = coreMemberService.getOptimisticCoreMemberExtension(sessionInfo.getMemberId());
 

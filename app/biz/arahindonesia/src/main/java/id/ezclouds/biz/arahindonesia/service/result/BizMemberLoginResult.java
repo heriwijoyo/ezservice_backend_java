@@ -14,6 +14,7 @@ import id.ezclouds.biz.arahindonesia.model.member.MemberBase;
 public class BizMemberLoginResult {
 
     private String memberSessionId;
+    private String memberSessionCode;
     private String memberRoleCode;
     private String successMessage;
     private MemberBase memberBase;
@@ -25,6 +26,14 @@ public class BizMemberLoginResult {
 
     public void setMemberSessionId(String memberSessionId) {
         this.memberSessionId = memberSessionId;
+    }
+
+    public String getMemberSessionCode() {
+        return memberSessionCode;
+    }
+
+    public void setMemberSessionCode(String memberSessionCode) {
+        this.memberSessionCode = memberSessionCode;
     }
 
     public String getMemberRoleCode() {
