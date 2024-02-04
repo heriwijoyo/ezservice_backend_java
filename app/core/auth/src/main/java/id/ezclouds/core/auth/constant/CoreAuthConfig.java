@@ -10,9 +10,8 @@ package id.ezclouds.core.auth.constant;
  */
 public class CoreAuthConfig {
 
-    public static class MemberClient {
-
-        public static final boolean allowMultipleAuthSession = false;
-        public static final int sessionExpiryDays = 3;
+    public static class Key {
+        public static final String MEMBER_CLIENT_ALLOW_MULTIPLE_SESSION = "MEMBER_CLIENT_ALLOW_MULTIPLE_SESSION";
+        public static final String MEMBER_CLIENT_SESSION_EXPIRY_DAYS = "MEMBER_CLIENT_SESSION_EXPIRY_DAYS";
     }
 }

@@ -4,7 +4,9 @@
  */
 package id.ezclouds.core.shared.converter;
 
+import id.ezclouds.core.shared.model.CoreConfig;
 import id.ezclouds.core.shared.model.CoreOrganization;
+import id.ezclouds.core.shared.repo.dataobject.EzCoreConfigDO;
 import id.ezclouds.core.shared.repo.dataobject.EzCoreOrganizationDO;
 
 /**
@@ -20,5 +22,14 @@ public class CoreModelConverter {
         coreOrganization.setName(organizationDO.getName());
         coreOrganization.setCode(organizationDO.getCode());
         return coreOrganization;
+    }
+
+    public static CoreConfig convert(EzCoreConfigDO coreConfigDO) {
+        if (coreConfigDO == null) { return null; }
+        CoreConfig coreConfig = new CoreConfig();
+        coreConfig.setConfigId(coreConfigDO.getConfigId());
+        coreConfig.setOrgId(coreConfigDO.getOrgId());
+        coreConfig.setConfigValue(coreConfigDO.getConfigValue());
+        return coreConfig;
     }
 }

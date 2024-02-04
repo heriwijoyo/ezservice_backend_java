@@ -6,6 +6,7 @@ package id.ezclouds.biz.arahindonesia.service.core;
 
 import id.ezclouds.biz.arahindonesia.service.data.*;
 import id.ezclouds.core.auth.service.CoreAuthService;
+import id.ezclouds.core.shared.service.CoreConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.cache.CacheManager;
@@ -33,6 +34,9 @@ public class BizCacheService {
 
     @Autowired
     private CoreAuthService coreAuthService;
+
+    @Autowired
+    private CoreConfigService coreConfigService;
 
     @Autowired
     private AppConfigService appConfigService;
@@ -70,6 +74,7 @@ public class BizCacheService {
         bizOrganizationService.getActiveOrganizations();
         coreAuthService.getActiveAppClients();
         appSubOrganizationService.getAllSubOrganization();
+        coreConfigService.getCoreConfigs();
 
         /*
         appConfigService.getAppConfigs();
@@ -82,6 +87,12 @@ public class BizCacheService {
         candidateBioService.getActiveCandidateBios();
         appProfileService.getAllAppProfile();
          */
+
+        cacheManager
+                .getCacheNames()
+                .forEach(cacheName -> {
+                    System.out.println("refreshed cache: " + cacheName);
+                });
 
         return cacheNames;
     }

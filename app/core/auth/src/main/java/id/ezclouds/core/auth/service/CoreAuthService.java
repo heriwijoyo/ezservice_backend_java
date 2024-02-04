@@ -24,6 +24,7 @@ import id.ezclouds.core.auth.request.CoreAppClientAuthRequest;
 import id.ezclouds.core.auth.request.CoreMemberClientAuthRequest;
 import id.ezclouds.core.auth.result.CoreAuthResult;
 import id.ezclouds.core.auth.result.CoreAuthSessionInfo;
+import id.ezclouds.core.shared.service.CoreConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -49,6 +50,9 @@ public class CoreAuthService {
 
     @Autowired
     private EzAuthMemberClientSessionRepository ezAuthMemberClientSessionRepository;
+
+    @Autowired
+    private CoreConfigService coreConfigService;
 
     public CoreAuthResult<Void> authAppClient(CoreAppClientAuthRequest request) {
         CoreAuthResult<Void> authResult = new CoreAuthResult<>();
@@ -94,7 +98,8 @@ public class CoreAuthService {
 
     @Transactional
     public EzAuthMemberClientSessionDO startMemberClientSession(CoreAuthMemberClient memberClient, String deviceId) {
-        boolean allowMultipleSession = CoreAuthConfig.MemberClient.allowMultipleAuthSession;
+        String configValue = coreConfigService.getConfigValue(CoreAuthConfig.Key.MEMBER_CLIENT_ALLOW_MULTIPLE_SESSION, memberClient.getOrgId());
+        boolean allowMultipleSession = Boolean.getBoolean(configValue);
         if (!allowMultipleSession) {
             List<EzAuthMemberClientSessionDO> activeSessions = ezAuthMemberClientSessionRepository.findAllByClientId(memberClient.getOrgId(), memberClient.getClientId());
             activeSessions.forEach(session -> session.setStatus(CoreAuthConstant.MEMBER_CLIENT_STATUS_NOT_ACTIVE));
@@ -115,7 +120,7 @@ public class CoreAuthService {
         sessionDO.setCreatedTime(DateUtil.getCurrentFormattedDate());
         sessionDO.setStatus(CoreAuthConstant.MEMBER_CLIENT_STATUS_ACTIVE);
 
-        Date expiryDate = DateUtil.getDateAfterDays(new Date(), CoreAuthConfig.MemberClient.sessionExpiryDays);
+        Date expiryDate = DateUtil.getDateAfterDays(new Date(), getMemberClientSessionExpDays(memberClient.getOrgId()));
         sessionDO.setExpiryTime(DateUtil.getFormattedDate(expiryDate));
 
         ezAuthMemberClientSessionRepository.save(sessionDO);
@@ -144,7 +149,7 @@ public class CoreAuthService {
         AssertUtil.notNull(sessionDO, EzErrorCode.SESSION_INVALID);
         AssertUtil.isNotTrue(sessionDO.getStatus() < CoreAuthConstant.MEMBER_CLIENT_STATUS_ACTIVE, EzErrorCode.SESSION_EXPIRED);
 
-        Date newExpiry = DateUtil.getDateAfterDays(new Date(), CoreAuthConfig.MemberClient.sessionExpiryDays);
+        Date newExpiry = DateUtil.getDateAfterDays(new Date(), getMemberClientSessionExpDays(sessionDO.getOrgId()));
         sessionDO.setExpiryTime(DateUtil.getFormattedDate(newExpiry));
 
         ezAuthMemberClientSessionRepository.saveAndFlush(sessionDO);
@@ -174,5 +179,10 @@ public class CoreAuthService {
                 .stream()
                 .map(CoreAuthModelConverter::convert)
                 .collect(Collectors.toList());
+    }
+
+    private int getMemberClientSessionExpDays(String orgId) {
+        String expDays = coreConfigService.getConfigValue(CoreAuthConfig.Key.MEMBER_CLIENT_SESSION_EXPIRY_DAYS, orgId);
+        return Integer.parseInt(expDays);
     }
 }
