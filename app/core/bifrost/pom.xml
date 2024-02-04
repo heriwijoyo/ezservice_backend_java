@@ -32,12 +32,6 @@
         </dependency>
 
         <dependency>
-            <groupId>id.ezclouds.core</groupId>
-            <artifactId>ezclouds-common-facade</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
-        <dependency>
             <groupId>id.ezclouds.biz</groupId>
             <artifactId>biz-arahindonesia</artifactId>
             <version>1.0.0</version>
