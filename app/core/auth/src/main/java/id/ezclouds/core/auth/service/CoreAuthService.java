@@ -22,8 +22,8 @@ import id.ezclouds.core.auth.repo.EzAuthMemberClientRepository;
 import id.ezclouds.core.auth.repo.EzAuthMemberClientSessionRepository;
 import id.ezclouds.core.auth.request.CoreAppClientAuthRequest;
 import id.ezclouds.core.auth.request.CoreMemberClientAuthRequest;
+import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
 import id.ezclouds.core.auth.result.CoreAuthResult;
-import id.ezclouds.core.auth.result.CoreAuthSessionInfo;
 import id.ezclouds.core.shared.service.CoreConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -74,7 +74,7 @@ public class CoreAuthService {
         return authResult;
     }
 
-    public CoreAuthSessionInfo authMemberClient(CoreMemberClientAuthRequest request) throws Exception {
+    public CoreAuthMemberSessionInfo authMemberClient(CoreMemberClientAuthRequest request) throws Exception {
         EzAuthMemberClientDO memberClientDO = ezAuthMemberClientRepository.findByLoginRequest(request.getOrgId(), request.getAppId(), request.getLoginType(), request.getLoginId());
         AssertUtil.notNull(memberClientDO, EzErrorCode.MEMBER_CLIENT_NOT_FOUND);
 
@@ -90,7 +90,7 @@ public class CoreAuthService {
         CoreAuthMemberClient memberClient = CoreAuthModelConverter.convert(memberClientDO);
         EzAuthMemberClientSessionDO sessionDO = startMemberClientSession(memberClient, request.getDeviceId());
 
-        CoreAuthSessionInfo sessionInfo = new CoreAuthSessionInfo();
+        CoreAuthMemberSessionInfo sessionInfo = new CoreAuthMemberSessionInfo();
         sessionInfo.setSessionId(sessionDO.getSessionId());
         sessionInfo.setMemberId(memberClientDO.getMemberId());
         return sessionInfo;

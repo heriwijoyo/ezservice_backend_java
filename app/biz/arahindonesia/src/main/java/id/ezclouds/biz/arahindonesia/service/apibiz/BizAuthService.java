@@ -5,6 +5,7 @@
 package id.ezclouds.biz.arahindonesia.service.apibiz;
 
 import id.ezclouds.biz.arahindonesia.constant.AppConstant;
+import id.ezclouds.biz.arahindonesia.constant.BizConstant;
 import id.ezclouds.biz.arahindonesia.converter.BizMemberConverter;
 import id.ezclouds.biz.arahindonesia.service.dataservice.AppMemberFlagService;
 import id.ezclouds.biz.arahindonesia.service.dataservice.AppSubOrganizationService;
@@ -22,7 +23,7 @@ import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.auth.request.CoreAppClientAuthRequest;
 import id.ezclouds.core.auth.request.CoreMemberClientAuthRequest;
 import id.ezclouds.core.auth.result.CoreAuthResult;
-import id.ezclouds.core.auth.result.CoreAuthSessionInfo;
+import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
 import id.ezclouds.core.auth.service.CoreAuthService;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
@@ -104,7 +105,7 @@ public class BizAuthService extends BizBaseService {
                 authRequest.setLoginPass(request.getLoginPassword());
                 authRequest.setDeviceId(deviceId);
 
-                CoreAuthSessionInfo sessionInfo = coreAuthService.authMemberClient(authRequest);
+                CoreAuthMemberSessionInfo sessionInfo = coreAuthService.authMemberClient(authRequest);
 
                 BizMemberLoginResult loginResult = new BizMemberLoginResult();
                 loginResult.setMemberSessionId(sessionInfo.getSessionId());
@@ -199,11 +200,17 @@ public class BizAuthService extends BizBaseService {
         BizServiceTemplate.execute(request, bizResult, new BizServiceTemplate.Handler() {
             @Override
             public void onRequestCheck() throws EzErrorException {
-
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getMode(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getNewPassword(), EzErrorCode.ILLEGAL_PARAM);
             }
 
             @Override
             public void onBizProcess() throws Exception {
+                if (BizConstant.UPDATE_PASSWORD_MODE_MEMBER_SESSION.equals(request.getMode())) {
+                    String memberSessionId = EzAppContextHolder.getContext().getMemberSessionId();
+                    String memberId = coreAuthService.authMemberSession(memberSessionId);
+                }
 
             }
 
