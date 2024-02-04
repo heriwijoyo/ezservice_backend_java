@@ -20,7 +20,7 @@ import java.util.List;
 public interface EzAuthMemberClientSessionRepository extends JpaRepository<EzAuthMemberClientSessionDO, String> {
 
     @Query("SELECT ms FROM EzAuthMemberClientSessionDO ms WHERE ms.orgId = :orgId AND ms.clientId = :clientId AND ms.status = 1")
-    List<EzAuthMemberClientSessionDO> findAllByClientId(
+    List<EzAuthMemberClientSessionDO> findAllActiveByClientId(
             @Param("orgId") String orgId,
             @Param("clientId") String clientId
     );

@@ -13,5 +13,6 @@ public class CoreAuthConfig {
     public static class Key {
         public static final String MEMBER_CLIENT_ALLOW_MULTIPLE_SESSION = "MEMBER_CLIENT_ALLOW_MULTIPLE_SESSION";
         public static final String MEMBER_CLIENT_SESSION_EXPIRY_DAYS = "MEMBER_CLIENT_SESSION_EXPIRY_DAYS";
+        public static final String MEMBER_COMMON_SESSION_EXPIRY_MINS = "MEMBER_COMMON_SESSION_EXPIRY_MINS";
     }
 }

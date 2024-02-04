@@ -15,13 +15,17 @@ import id.ezclouds.core.auth.constant.CoreAuthConstant;
 import id.ezclouds.core.auth.converter.CoreAuthModelConverter;
 import id.ezclouds.core.auth.dataobject.EzAuthMemberClientDO;
 import id.ezclouds.core.auth.dataobject.EzAuthMemberClientSessionDO;
+import id.ezclouds.core.auth.dataobject.EzAuthMemberCommonSessionDO;
 import id.ezclouds.core.auth.model.CoreAuthAppClient;
 import id.ezclouds.core.auth.model.CoreAuthMemberClient;
 import id.ezclouds.core.auth.repo.EzAuthAppClientRepository;
 import id.ezclouds.core.auth.repo.EzAuthMemberClientRepository;
 import id.ezclouds.core.auth.repo.EzAuthMemberClientSessionRepository;
+import id.ezclouds.core.auth.repo.EzAuthMemberCommonSessionRepository;
 import id.ezclouds.core.auth.request.CoreAppClientAuthRequest;
 import id.ezclouds.core.auth.request.CoreMemberClientAuthRequest;
+import id.ezclouds.core.auth.request.CoreMemberCommonSessionRequest;
+import id.ezclouds.core.auth.result.CoreAuthMemberCommonSessionInfo;
 import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
 import id.ezclouds.core.auth.result.CoreAuthResult;
 import id.ezclouds.core.shared.service.CoreConfigService;
@@ -33,6 +37,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
@@ -50,6 +55,9 @@ public class CoreAuthService {
 
     @Autowired
     private EzAuthMemberClientSessionRepository ezAuthMemberClientSessionRepository;
+
+    @Autowired
+    private EzAuthMemberCommonSessionRepository ezAuthMemberCommonSessionRepository;
 
     @Autowired
     private CoreConfigService coreConfigService;
@@ -87,8 +95,7 @@ public class CoreAuthService {
         boolean isPassMatch = bCryptPasswordEncoder.matches(request.getLoginPass(), memberClientDO.getLoginPassword());
         AssertUtil.isTrue(isPassMatch, EzErrorCode.MEMBER_LOGIN_FAILED);
 
-        CoreAuthMemberClient memberClient = CoreAuthModelConverter.convert(memberClientDO);
-        EzAuthMemberClientSessionDO sessionDO = startMemberClientSession(memberClient, request.getDeviceId());
+        EzAuthMemberClientSessionDO sessionDO = startMemberClientSession(memberClientDO, request.getDeviceId());
 
         CoreAuthMemberSessionInfo sessionInfo = new CoreAuthMemberSessionInfo();
         sessionInfo.setSessionId(sessionDO.getSessionId());
@@ -98,35 +105,90 @@ public class CoreAuthService {
     }
 
     @Transactional
-    public EzAuthMemberClientSessionDO startMemberClientSession(CoreAuthMemberClient memberClient, String deviceId) {
-        String configValue = coreConfigService.getConfigValue(CoreAuthConfig.Key.MEMBER_CLIENT_ALLOW_MULTIPLE_SESSION, memberClient.getOrgId());
+    public EzAuthMemberClientSessionDO startMemberClientSession(EzAuthMemberClientDO memberClientDO, String deviceId) {
+        String configValue = coreConfigService.getConfigValue(
+                CoreAuthConfig.Key.MEMBER_CLIENT_ALLOW_MULTIPLE_SESSION,
+                memberClientDO.getOrgId()
+        );
         boolean allowMultipleSession = Boolean.parseBoolean(configValue);
+
         if (!allowMultipleSession) {
-            List<EzAuthMemberClientSessionDO> activeSessions = ezAuthMemberClientSessionRepository.findAllByClientId(memberClient.getOrgId(), memberClient.getClientId());
+            List<EzAuthMemberClientSessionDO> activeSessions = ezAuthMemberClientSessionRepository
+                    .findAllActiveByClientId(memberClientDO.getOrgId(), memberClientDO.getClientId());
             activeSessions.forEach(session -> session.setStatus(CoreAuthConstant.MEMBER_CLIENT_STATUS_NOT_ACTIVE));
             ezAuthMemberClientSessionRepository.saveAllAndFlush(activeSessions);
         }
 
         String currentDateTime = DateUtil.getCurrentFormattedDate();
-        String sessionId = HashUtil.createHash(memberClient.getOrgId(), memberClient.getAppId(), memberClient.getClientId(), currentDateTime);
+        String sessionId = HashUtil.createHash(
+                memberClientDO.getOrgId(),
+                memberClientDO.getAppId(),
+                memberClientDO.getClientId(),
+                memberClientDO.getMemberId(),
+                currentDateTime
+        );
 
         EzAuthMemberClientSessionDO sessionDO = new EzAuthMemberClientSessionDO();
         sessionDO.setSessionId(sessionId);
-        sessionDO.setOrgId(memberClient.getOrgId());
-        sessionDO.setShard(ShardUtil.getShardId(memberClient.getMemberId()));
-        sessionDO.setAppId(memberClient.getAppId());
-        sessionDO.setClientId(memberClient.getClientId());
-        sessionDO.setMemberId(memberClient.getMemberId());
+        sessionDO.setOrgId(memberClientDO.getOrgId());
+        sessionDO.setShard(ShardUtil.getShardId(memberClientDO.getMemberId()));
+        sessionDO.setAppId(memberClientDO.getAppId());
+        sessionDO.setClientId(memberClientDO.getClientId());
+        sessionDO.setMemberId(memberClientDO.getMemberId());
         sessionDO.setDeviceId(deviceId);
         sessionDO.setCreatedTime(DateUtil.getCurrentFormattedDate());
         sessionDO.setStatus(CoreAuthConstant.MEMBER_CLIENT_STATUS_ACTIVE);
 
-        Date expiryDate = DateUtil.getDateAfterDays(new Date(), getMemberClientSessionExpDays(memberClient.getOrgId()));
+        Date expiryDate = DateUtil.getDateAfterDays(new Date(), getMemberClientSessionExpDays(memberClientDO.getOrgId()));
         sessionDO.setExpiryTime(DateUtil.getFormattedDate(expiryDate));
 
         ezAuthMemberClientSessionRepository.save(sessionDO);
 
         return sessionDO;
+    }
+
+    @Transactional
+    public CoreAuthMemberCommonSessionInfo createMemberCommonSession(CoreMemberCommonSessionRequest request) throws Exception {
+        EzAuthMemberClientDO memberClientDO = ezAuthMemberClientRepository.findByLoginRequest(request.getOrgId(), request.getAppId(), request.getLoginType(), request.getLoginId());
+        AssertUtil.notNull(memberClientDO, EzErrorCode.MEMBER_CLIENT_NOT_FOUND);
+
+        int clientStatus = memberClientDO.getStatus();
+        AssertUtil.isNotTrue(clientStatus == CoreAuthConstant.MEMBER_CLIENT_STATUS_NOT_ACTIVE, EzErrorCode.MEMBER_CLIENT_NOT_ACTIVE);
+        AssertUtil.isNotTrue(clientStatus == CoreAuthConstant.MEMBER_CLIENT_STATUS_FROZEN, EzErrorCode.MEMBER_CLIENT_FROZEN);
+        AssertUtil.isTrue(clientStatus == CoreAuthConstant.MEMBER_CLIENT_STATUS_ACTIVE, EzErrorCode.MEMBER_CLIENT_ABNORMAL);
+
+        String currentDateTime = DateUtil.getCurrentFormattedDate();
+        String sessionId = HashUtil.createHash(
+                memberClientDO.getOrgId(),
+                memberClientDO.getAppId(),
+                memberClientDO.getClientId(),
+                memberClientDO.getMemberId(),
+                currentDateTime
+        );
+        int verifyCodeNumber = new Random().nextInt(9000) + 1000;
+        String verifyCode = String.valueOf(verifyCodeNumber);
+
+        EzAuthMemberCommonSessionDO sessionDO = new EzAuthMemberCommonSessionDO();
+        sessionDO.setSessionId(sessionId);
+        sessionDO.setOrgId(memberClientDO.getOrgId());
+        sessionDO.setShard(ShardUtil.getShardId(memberClientDO.getMemberId()));
+        sessionDO.setScene(request.getScene());
+        sessionDO.setVerifyStrategy(request.getVerifyStrategy());
+        sessionDO.setVerifyCode(verifyCode);
+        sessionDO.setAppId(memberClientDO.getAppId());
+        sessionDO.setClientId(memberClientDO.getClientId());
+        sessionDO.setMemberId(memberClientDO.getMemberId());
+        sessionDO.setDeviceId(request.getDeviceId());
+        sessionDO.setCreatedTime(DateUtil.getCurrentFormattedDate());
+        sessionDO.setStatus(CoreAuthConstant.MEMBER_CLIENT_STATUS_ACTIVE);
+
+        ezAuthMemberCommonSessionRepository.saveAndFlush(sessionDO);
+
+        CoreAuthMemberCommonSessionInfo sessionInfo = new CoreAuthMemberCommonSessionInfo();
+        sessionInfo.setSessionId(sessionId);
+        sessionInfo.setScene(request.getScene());
+        sessionInfo.setVerifyStrategy(request.getVerifyStrategy());
+        return sessionInfo;
     }
 
     public void createMemberClient(CoreAuthMemberClient memberClient) {
@@ -192,6 +254,8 @@ public class CoreAuthService {
         ezAuthMemberClientRepository.saveAndFlush(clientDO);
     }
 
+
+
     @Cacheable("core_auth_app_client")
     public List<CoreAuthAppClient> getActiveAppClients() {
         return ezAuthAppClientRepository
@@ -204,5 +268,10 @@ public class CoreAuthService {
     private int getMemberClientSessionExpDays(String orgId) {
         String expDays = coreConfigService.getConfigValue(CoreAuthConfig.Key.MEMBER_CLIENT_SESSION_EXPIRY_DAYS, orgId);
         return Integer.parseInt(expDays);
+    }
+
+    private int getMemberCommonSessionExpMins(String orgId) {
+        String expMins = coreConfigService.getConfigValue(CoreAuthConfig.Key.MEMBER_COMMON_SESSION_EXPIRY_MINS, orgId);
+        return Integer.parseInt(expMins);
     }
 }

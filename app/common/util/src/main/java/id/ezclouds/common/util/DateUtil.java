@@ -47,4 +47,11 @@ public class DateUtil {
         calendar.add(Calendar.DATE, daysAfter);
         return calendar.getTime();
     }
+
+    public static Date getDateAfterMins(Date originalDate, int minsAfter) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(originalDate);
+        calendar.add(Calendar.MINUTE, minsAfter);
+        return calendar.getTime();
+    }
 }
