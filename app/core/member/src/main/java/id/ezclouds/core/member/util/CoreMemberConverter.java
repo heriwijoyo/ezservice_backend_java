@@ -23,6 +23,7 @@ public class CoreMemberConverter {
         member.setMemberId(memberDO.getMemberId());
         member.setReferrerId(memberDO.getReferrerId());
         member.setOrgId(memberDO.getOrgId());
+        member.setSubOrgId(memberDO.getSubOrgId());
         member.setShard(memberDO.getShard());
         member.setName(memberDO.getName());
         member.setNickname(memberDO.getNickname());

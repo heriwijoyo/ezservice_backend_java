@@ -11,7 +11,6 @@ import id.ezclouds.biz.arahindonesia.model.member.BizMember;
 import id.ezclouds.biz.arahindonesia.model.member.BizMemberClient;
 import id.ezclouds.biz.arahindonesia.model.member.BizMemberInfo;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberRegisterRequest;
-import id.ezclouds.common.dal.repo.member.AppMemberRepository;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.ShardUtil;
 import id.ezclouds.core.auth.model.CoreAuthMemberClient;
@@ -36,9 +35,6 @@ import javax.transaction.Transactional;
 public class MemberService {
 
     private static final String DEFAULT_LOGIN_TYPE = "PHONE";
-
-    @Autowired
-    private AppMemberRepository appMemberRepository;
 
     @Autowired
     private CoreSequenceService coreSequenceService;

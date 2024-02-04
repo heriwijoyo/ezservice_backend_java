@@ -12,6 +12,7 @@ public class CoreMember {
 
     private String memberId;
     private String orgId;
+    private String subOrgId;
     private String shard;
     private String sourceId;
     private String referrerId;
@@ -45,6 +46,14 @@ public class CoreMember {
 
     public void setOrgId(String orgId) {
         this.orgId = orgId;
+    }
+
+    public String getSubOrgId() {
+        return subOrgId;
+    }
+
+    public void setSubOrgId(String subOrgId) {
+        this.subOrgId = subOrgId;
     }
 
     public String getShard() {
