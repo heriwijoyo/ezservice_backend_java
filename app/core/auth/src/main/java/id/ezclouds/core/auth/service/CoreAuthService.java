@@ -99,7 +99,7 @@ public class CoreAuthService {
     @Transactional
     public EzAuthMemberClientSessionDO startMemberClientSession(CoreAuthMemberClient memberClient, String deviceId) {
         String configValue = coreConfigService.getConfigValue(CoreAuthConfig.Key.MEMBER_CLIENT_ALLOW_MULTIPLE_SESSION, memberClient.getOrgId());
-        boolean allowMultipleSession = Boolean.getBoolean(configValue);
+        boolean allowMultipleSession = Boolean.parseBoolean(configValue);
         if (!allowMultipleSession) {
             List<EzAuthMemberClientSessionDO> activeSessions = ezAuthMemberClientSessionRepository.findAllByClientId(memberClient.getOrgId(), memberClient.getClientId());
             activeSessions.forEach(session -> session.setStatus(CoreAuthConstant.MEMBER_CLIENT_STATUS_NOT_ACTIVE));

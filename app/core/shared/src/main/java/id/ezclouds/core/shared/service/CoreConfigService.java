@@ -34,7 +34,6 @@ public class CoreConfigService {
                 .findFirst()
                 .orElse(CoreConfig.EMPTY)
                 .getConfigValue();
-
     }
 
     @Cacheable("core_config")
