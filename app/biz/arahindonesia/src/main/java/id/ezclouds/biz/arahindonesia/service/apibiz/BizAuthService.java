@@ -35,7 +35,7 @@ import org.springframework.stereotype.Service;
  * @version $Id: BizAuthService.java, v 0.1 2024‐01‐28 5:29 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class BizAuthService {
+public class BizAuthService extends BizBaseService {
 
     @Autowired
     private BizOrganizationService bizOrganizationService;
@@ -85,7 +85,7 @@ public class BizAuthService {
             }
 
             @Override
-            public void onBizProcess() throws EzErrorException {
+            public void onBizProcess() throws Exception {
                 String orgId = EzAppContextHolder.getContext().getOrgId();
                 String appId = EzAppContextHolder.getContext().getAppId();
                 String deviceId = EzAppContextHolder.getContext().getDeviceId();
@@ -98,39 +98,37 @@ public class BizAuthService {
                 authRequest.setLoginId(request.getLoginId());
                 authRequest.setLoginPass(request.getLoginPassword());
                 authRequest.setDeviceId(deviceId);
-                CoreAuthResult<CoreAuthSessionInfo> authResult = coreAuthService.authMemberClient(authRequest);
 
-                if (!authResult.isSuccess()) {
-                    bizResult.setErrorCode(authResult.getEzErrorCode());
-                    bizResult.setErrorMessage(composeErrorMessage(authResult.getEzErrorCode()));
-                    bizResult.setErrorLocation(BizAuthService.class.getSimpleName());
-                } else {
-                    CoreAuthSessionInfo sessionInfo = authResult.getData();
+                CoreAuthSessionInfo sessionInfo = coreAuthService.authMemberClient(authRequest);
 
-                    BizMemberLoginResult loginResult = new BizMemberLoginResult();
-                    loginResult.setMemberSessionId(sessionInfo.getSessionId());
-                    loginResult.setSuccessMessage(AppConstant.MEMBER_LOGIN_MESSAGE_SUCCESS);
+                BizMemberLoginResult loginResult = new BizMemberLoginResult();
+                loginResult.setMemberSessionId(sessionInfo.getSessionId());
+                loginResult.setSuccessMessage(AppConstant.MEMBER_LOGIN_MESSAGE_SUCCESS);
 
-                    //support old version
-                    //TODO: remove when all client updated into newer version
-                    loginResult.setMemberSessionCode(sessionInfo.getSessionId());
+                //support old version
+                //TODO: remove when all client updated into newer version
+                loginResult.setMemberSessionCode(sessionInfo.getSessionId());
 
-                    CoreMember coreMember = coreMemberService.getOptimisticCoreMember(sessionInfo.getMemberId());
-                    CoreMemberExtension coreMemberExtension = coreMemberService.getOptimisticCoreMemberExtension(sessionInfo.getMemberId());
+                CoreMember coreMember = coreMemberService.getOptimisticCoreMember(sessionInfo.getMemberId());
+                CoreMemberExtension coreMemberExtension = coreMemberService.getOptimisticCoreMemberExtension(sessionInfo.getMemberId());
 
-                    if (appVersionNo >= AppConstant.APP_V2_START_VERSION_NO) {
-                        BizMember bizMember = BizMemberConverter.convert(coreMember, coreMemberExtension);
-                        bizMember.setSubOrganization(appSubOrganizationService.getSubOrganizationById(coreMember.getSubOrgId()));
-                        loginResult.setBizMember(bizMember);
-                    }
-                    else {
-                        MemberBase memberBase = BizMemberConverter.convert(coreMember);
-                        loginResult.setMemberBase(memberBase);
-                    }
-
-                    bizResult.setObject(loginResult);
+                if (appVersionNo >= AppConstant.APP_V2_START_VERSION_NO) {
+                    BizMember bizMember = BizMemberConverter.convert(coreMember, coreMemberExtension);
+                    bizMember.setSubOrganization(appSubOrganizationService.getSubOrganizationById(coreMember.getSubOrgId()));
+                    loginResult.setBizMember(bizMember);
                 }
-                bizResult.setSuccess(authResult.isSuccess());
+                else {
+                    MemberBase memberBase = BizMemberConverter.convert(coreMember);
+                    loginResult.setMemberBase(memberBase);
+                }
+
+                bizResult.setObject(loginResult);
+                bizResult.setSuccess(true);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
             }
         });
 
@@ -151,6 +149,11 @@ public class BizAuthService {
 
                 bizResult.setSuccess(authResult.isSuccess());
             }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return null;
+            }
         });
 
         return bizResult;
@@ -168,15 +171,16 @@ public class BizAuthService {
             }
 
             @Override
-            public void onBizProcess() throws EzErrorException {
-                CoreAuthResult<String> authResult = coreAuthService.authMemberSession(sessionId);
+            public void onBizProcess() throws Exception {
+                String memberId = coreAuthService.authMemberSession(sessionId);
 
-                bizResult.setSuccess(authResult.isSuccess());
-                if (authResult.isSuccess()) {
-                    bizResult.setObject(authResult.getData());
-                } else {
-                    bizResult.setErrorCode(authResult.getEzErrorCode());
-                }
+                bizResult.setSuccess(true);
+                bizResult.setObject(memberId);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return null;
             }
         });
 

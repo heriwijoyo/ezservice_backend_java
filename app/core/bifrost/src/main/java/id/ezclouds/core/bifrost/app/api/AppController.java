@@ -113,7 +113,7 @@ public abstract class AppController {
         ErrorResult errorResult = new ErrorResult();
         errorResult.setErrorCode(ezException.getEzErrorCode().getCode());
         errorResult.setErrorContext(ezException.getEzErrorCode().getDescription());
-        errorResult.setErrorMessage(ezException.getErrorMessage());
+        errorResult.setErrorMessage(ezException.getErrorMessage() != null ? ezException.getErrorMessage() : ezException.getEzErrorCode().getDescription() );
         return errorResult;
     }
 

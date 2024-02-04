@@ -18,7 +18,6 @@ import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
-import id.ezclouds.core.auth.result.CoreAuthResult;
 import id.ezclouds.core.auth.service.CoreAuthService;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
@@ -32,7 +31,7 @@ import org.springframework.stereotype.Service;
  * @version $Id: BizMemberService.java, v 0.1 2023‐12‐31 12:24 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class BizMemberService {
+public class BizMemberService extends BizBaseService {
 
     @Autowired
     private BizMemberInnerService bizMemberInnerService;
@@ -63,28 +62,29 @@ public class BizMemberService {
             public void onRequestCheck() throws EzErrorException {}
 
             @Override
-            public void onBizProcess() throws EzErrorException {
-                CoreAuthResult<String> authResult = coreAuthService.authMemberSession(sessionId);
-                if (!authResult.isSuccess()) {
-                    bizResult.setErrorCode(authResult.getEzErrorCode());
+            public void onBizProcess() throws Exception {
+                String memberId = coreAuthService.authMemberSession(sessionId);
+
+                CoreMember coreMember = coreMemberService.getOptimisticCoreMember(memberId);
+                CoreMemberExtension coreMemberExtension = coreMemberService.getOptimisticCoreMemberExtension(memberId);
+                BizMember bizMember = BizMemberConverter.convert(coreMember, coreMemberExtension);
+
+                MemberProfile memberProfile = new MemberProfile();
+                memberProfile.setAppProfiles(appProfileService.getAppProfile(orgId));
+                memberProfile.setBizMember(bizMember);
+
+                //support older client version
+                if (appVersionNo < AppConstant.APP_V2_START_VERSION_NO) {
+                    memberProfile.setMemberBase(BizMemberConverter.convert(coreMember));
                 }
-                else {
-                    MemberProfile memberProfile = new MemberProfile();
-                    memberProfile.setAppProfiles(appProfileService.getAppProfile(orgId));
 
-                    String memberId = authResult.getData();
-                    CoreMember coreMember = coreMemberService.getOptimisticCoreMember(memberId);
-                    CoreMemberExtension coreMemberExtension = coreMemberService.getOptimisticCoreMemberExtension(memberId);
-                    BizMember bizMember = BizMemberConverter.convert(coreMember, coreMemberExtension);
+                bizResult.setSuccess(true);
+                bizResult.setObject(memberProfile);
+            }
 
-                    memberProfile.setBizMember(bizMember);
-                    if (appVersionNo < AppConstant.APP_V2_START_VERSION_NO) {
-                        memberProfile.setMemberBase(BizMemberConverter.convert(coreMember));
-                    }
-
-                    bizResult.setSuccess(true);
-                    bizResult.setObject(memberProfile);
-                }
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
             }
         });
 
@@ -109,10 +109,18 @@ public class BizMemberService {
             }
 
             @Override
-            public void onBizProcess() throws EzErrorException {
+            public void onBizProcess() throws Exception {
                 BizMemberInfo bizMemberInfo = bizMemberInnerService.processRegisterMember(request);
                 bizResult.setObject(bizMemberInfo);
                 bizResult.setSuccess(true);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                if (ezErrorCode == EzErrorCode.IDEMPOTENT_ERROR) {
+                    return AppConstant.MEMBER_REGISTER_IDEMPOTENT;
+                }
+                return getBizErrorMessage(ezErrorCode);
             }
         });
 

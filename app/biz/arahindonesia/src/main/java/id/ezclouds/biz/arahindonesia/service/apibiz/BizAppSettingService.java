@@ -13,6 +13,7 @@ import id.ezclouds.biz.arahindonesia.service.data.ImageSlideService;
 import id.ezclouds.biz.arahindonesia.service.data.VideoCardService;
 import id.ezclouds.biz.arahindonesia.service.result.BizResult;
 import id.ezclouds.biz.arahindonesia.service.template.BizServiceTemplate;
+import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
  * @version $Id: AppSettingService.java, v 0.1 2023‐12‐09 12:53 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class BizAppSettingService {
+public class BizAppSettingService extends BizBaseService {
 
     @Autowired
     private AppConfigService appConfigService;
@@ -63,6 +64,11 @@ public class BizAppSettingService {
                 appSetting.setHomeData(composeHomeData(orgId));
                 bizResult.setSuccess(true);
                 bizResult.setObject(appSetting);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
             }
         });
 

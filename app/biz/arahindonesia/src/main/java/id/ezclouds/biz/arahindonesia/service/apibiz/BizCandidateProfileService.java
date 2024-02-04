@@ -13,6 +13,7 @@ import id.ezclouds.biz.arahindonesia.service.data.CandidateBioService;
 import id.ezclouds.biz.arahindonesia.service.data.CandidateProfileItemService;
 import id.ezclouds.biz.arahindonesia.service.result.BizResult;
 import id.ezclouds.biz.arahindonesia.service.template.BizServiceTemplate;
+import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
  * @version $Id: CandidateProfileService.java, v 0.1 2023‐12‐10 3:09 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class BizCandidateProfileService {
+public class BizCandidateProfileService extends BizBaseService {
 
     private static final String KEY_CONTACT_NUMBER = "contactNumber";
     private static final String KEY_VISION = "vision";
@@ -56,6 +57,11 @@ public class BizCandidateProfileService {
 
                 bizResult.setSuccess(true);
                 bizResult.setObject(profile);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
             }
         });
 

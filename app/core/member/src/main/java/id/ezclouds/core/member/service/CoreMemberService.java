@@ -8,6 +8,7 @@ import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
+import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.member.dataobject.CoreMemberDO;
 import id.ezclouds.core.member.dataobject.CoreMemberExtensionDO;
 import id.ezclouds.core.member.model.CoreMember;
@@ -46,7 +47,7 @@ public class CoreMemberService {
         coreMemberExtensionRepository.save(extensionDO);
     }
 
-    public CoreMember getOptimisticCoreMember(String memberId) {
+    public CoreMember getOptimisticCoreMember(String memberId) throws EzErrorException {
         CoreMemberDO coreMemberDO = coreMemberRepository.findById(memberId).orElse(null);
         AssertUtil.notNull(coreMemberDO, EzErrorCode.MEMBER_NOT_FOUND, "Member not found");
         return CoreMemberConverter.convert(coreMemberDO);

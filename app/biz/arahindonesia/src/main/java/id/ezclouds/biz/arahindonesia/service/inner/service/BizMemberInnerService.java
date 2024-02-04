@@ -45,7 +45,7 @@ public class BizMemberInnerService {
     private CoreAuthService coreAuthService;
 
     @Transactional
-    public BizMemberInfo processRegisterMember(BizMemberRegisterRequest request) {
+    public BizMemberInfo processRegisterMember(BizMemberRegisterRequest request) throws Exception {
         String orgId = EzAppContextHolder.getContext().getOrgId();
         String orgCode = EzAppContextHolder.getContext().getOrgCode();
         String appId = EzAppContextHolder.getContext().getAppId();

@@ -70,36 +70,18 @@ public class CoreAuthService {
         return authResult;
     }
 
-    public CoreAuthResult<CoreAuthSessionInfo> authMemberClient(CoreMemberClientAuthRequest request) {
-        CoreAuthResult<CoreAuthSessionInfo> authResult = new CoreAuthResult<>();
-
+    public CoreAuthSessionInfo authMemberClient(CoreMemberClientAuthRequest request) throws Exception {
         EzAuthMemberClientDO memberClientDO = ezAuthMemberClientRepository.findByLoginRequest(request.getOrgId(), request.getAppId(), request.getLoginType(), request.getLoginId());
-        if (memberClientDO == null) {
-            authResult.setEzErrorCode(EzErrorCode.MEMBER_CLIENT_NOT_FOUND);
-            return authResult;
-        }
+        AssertUtil.notNull(memberClientDO, EzErrorCode.MEMBER_CLIENT_NOT_FOUND);
 
         int clientStatus = memberClientDO.getStatus();
-        if (clientStatus == CoreAuthConstant.MEMBER_CLIENT_STATUS_NOT_ACTIVE) {
-            authResult.setEzErrorCode(EzErrorCode.MEMBER_CLIENT_NOT_ACTIVE);
-            return authResult;
-        }
-        if (clientStatus == CoreAuthConstant.MEMBER_CLIENT_STATUS_FROZEN) {
-            authResult.setEzErrorCode(EzErrorCode.MEMBER_CLIENT_FROZEN);
-            return authResult;
-        }
-        if (clientStatus != CoreAuthConstant.MEMBER_CLIENT_STATUS_ACTIVE) {
-            authResult.setEzErrorCode(EzErrorCode.MEMBER_CLIENT_ABNORMAL);
-            //TODO: print error into core logger
-            return authResult;
-        }
+        AssertUtil.isNotTrue(clientStatus == CoreAuthConstant.MEMBER_CLIENT_STATUS_NOT_ACTIVE, EzErrorCode.MEMBER_CLIENT_NOT_ACTIVE);
+        AssertUtil.isNotTrue(clientStatus == CoreAuthConstant.MEMBER_CLIENT_STATUS_FROZEN, EzErrorCode.MEMBER_CLIENT_FROZEN);
+        AssertUtil.isTrue(clientStatus == CoreAuthConstant.MEMBER_CLIENT_STATUS_ACTIVE, EzErrorCode.MEMBER_CLIENT_ABNORMAL);
 
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         boolean isPassMatch = bCryptPasswordEncoder.matches(request.getLoginPass(), memberClientDO.getLoginPassword());
-        if (!isPassMatch) {
-            authResult.setEzErrorCode(EzErrorCode.MEMBER_LOGIN_FAILED);
-            return authResult;
-        }
+        AssertUtil.isTrue(isPassMatch, EzErrorCode.MEMBER_LOGIN_FAILED);
 
         CoreAuthMemberClient memberClient = CoreAuthModelConverter.convert(memberClientDO);
         EzAuthMemberClientSessionDO sessionDO = startMemberClientSession(memberClient, request.getDeviceId());
@@ -107,10 +89,7 @@ public class CoreAuthService {
         CoreAuthSessionInfo sessionInfo = new CoreAuthSessionInfo();
         sessionInfo.setSessionId(sessionDO.getSessionId());
         sessionInfo.setMemberId(memberClientDO.getMemberId());
-
-        authResult.setSuccess(true);
-        authResult.setData(sessionInfo);
-        return authResult;
+        return sessionInfo;
     }
 
     @Transactional
@@ -160,28 +139,17 @@ public class CoreAuthService {
     }
 
     @Transactional
-    public CoreAuthResult<String> authMemberSession(String sessionId) {
-        CoreAuthResult<String> authResult = new CoreAuthResult<>();
+    public String authMemberSession(String sessionId) throws Exception {
         EzAuthMemberClientSessionDO sessionDO = ezAuthMemberClientSessionRepository.findById(sessionId).orElse(null);
-
-        if (sessionDO == null ) {
-            authResult.setEzErrorCode(EzErrorCode.SESSION_INVALID);
-            return authResult;
-        }
-
-        if (sessionDO.getStatus() < CoreAuthConstant.MEMBER_CLIENT_STATUS_ACTIVE) {
-            authResult.setEzErrorCode(EzErrorCode.SESSION_EXPIRED);
-            return authResult;
-        }
+        AssertUtil.notNull(sessionDO, EzErrorCode.SESSION_INVALID);
+        AssertUtil.isNotTrue(sessionDO.getStatus() < CoreAuthConstant.MEMBER_CLIENT_STATUS_ACTIVE, EzErrorCode.SESSION_EXPIRED);
 
         Date newExpiry = DateUtil.getDateAfterDays(new Date(), CoreAuthConfig.MemberClient.sessionExpiryDays);
         sessionDO.setExpiryTime(DateUtil.getFormattedDate(newExpiry));
 
         ezAuthMemberClientSessionRepository.saveAndFlush(sessionDO);
 
-        authResult.setSuccess(true);
-        authResult.setData(sessionDO.getMemberId());
-        return authResult;
+        return sessionDO.getMemberId();
     }
 
     @Transactional
