@@ -11,6 +11,8 @@ package id.ezclouds.core.bifrost.app.api.request;
  */
 public class MemberRegisterRequest extends ApiRequest {
 
+    private String subOrgId;
+
     private String referrerId;
     private String roles;
     private String name;
@@ -35,6 +37,14 @@ public class MemberRegisterRequest extends ApiRequest {
     private String rukunWarga;
     private String rukunTetangga;
     private String tpsNumber;
+
+    public String getSubOrgId() {
+        return subOrgId;
+    }
+
+    public void setSubOrgId(String subOrgId) {
+        this.subOrgId = subOrgId;
+    }
 
     public String getReferrerId() {
         return referrerId;

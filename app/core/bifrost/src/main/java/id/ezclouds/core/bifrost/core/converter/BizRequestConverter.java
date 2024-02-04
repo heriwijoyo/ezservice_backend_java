@@ -17,6 +17,7 @@ public class BizRequestConverter {
     public static BizMemberRegisterRequest convert(MemberRegisterRequest request) {
         if (request == null) { return null; }
         BizMemberRegisterRequest bizRequest = new BizMemberRegisterRequest();
+        bizRequest.setSubOrgId(request.getSubOrgId());
         bizRequest.setReferrerId(request.getReferrerId());
         bizRequest.setRoles(request.getRoles());
         bizRequest.setName(request.getName());
@@ -30,7 +31,6 @@ public class BizRequestConverter {
         if (bizGender != null) {
             bizRequest.setBizGender(bizGender);
         }
-
 
         bizRequest.setProvinceId(request.getProvinceId());
         bizRequest.setProvinceName(request.getProvinceName());

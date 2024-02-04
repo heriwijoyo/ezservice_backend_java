@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2023 All Rights Reserved.
  */
-package id.ezclouds.biz.arahindonesia.service.core;
+package id.ezclouds.biz.arahindonesia.service.inner.service;
 
 import id.ezclouds.biz.arahindonesia.converter.BizMemberClientConverter;
 import id.ezclouds.biz.arahindonesia.converter.BizMemberConverter;
@@ -10,14 +10,13 @@ import id.ezclouds.biz.arahindonesia.model.BizStatus;
 import id.ezclouds.biz.arahindonesia.model.member.BizMember;
 import id.ezclouds.biz.arahindonesia.model.member.BizMemberClient;
 import id.ezclouds.biz.arahindonesia.model.member.BizMemberInfo;
+import id.ezclouds.biz.arahindonesia.service.inner.converter.BizMemberRequestConverter;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberRegisterRequest;
-import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.ShardUtil;
 import id.ezclouds.core.auth.model.CoreAuthMemberClient;
 import id.ezclouds.core.auth.service.CoreAuthService;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
-import id.ezclouds.core.member.model.MemberStatus;
 import id.ezclouds.core.member.service.CoreMemberService;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.enums.CoreSequenceScene;
@@ -29,10 +28,10 @@ import javax.transaction.Transactional;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: MemberService.java, v 0.1 2023‐12‐11 11:46 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: BizMemberInnerService.java, v 0.1 2023‐12‐11 11:46 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class MemberService {
+public class BizMemberInnerService {
 
     private static final String DEFAULT_LOGIN_TYPE = "PHONE";
 
@@ -54,43 +53,16 @@ public class MemberService {
         String memberId = coreSequenceService.generateSequence(orgId, orgCode, CoreSequenceScene.CORE_MEMBER_ID.getCode());
         String shard = ShardUtil.getShardId(memberId);
 
-        CoreMember coreMember = new CoreMember();
+        CoreMember coreMember = BizMemberRequestConverter.getCoreMember(request);
         coreMember.setMemberId(memberId);
         coreMember.setOrgId(orgId);
         coreMember.setShard(shard);
-        coreMember.setSourceId(request.getSourceId());
-        coreMember.setReferrerId(request.getReferrerId());
-        coreMember.setRoles(request.getRoles());
-        coreMember.setName(request.getName());
-        coreMember.setNickname(request.getNickname());
-        coreMember.setGender(request.getBizGender().getCode());
-        coreMember.setDateOfBirth(request.getDateOfBirth());
-        coreMember.setPhone(request.getPhone());
-        coreMember.setEmail(request.getEmail());
-        coreMember.setAvatarUrl(request.getAvatarUrl());
-        coreMember.setAddress(request.getAddress());
-        coreMember.setCreatedTime(DateUtil.getCurrentFormattedDate());
-        coreMember.setModifiedTime(DateUtil.getCurrentFormattedDate());
-        coreMember.setMemberStatus(MemberStatus.ACTIVE);
         coreMemberService.store(coreMember);
 
-        CoreMemberExtension memberExtension = new CoreMemberExtension();
+        CoreMemberExtension memberExtension = BizMemberRequestConverter.getCoreMemberExt(request);
         memberExtension.setMemberId(memberId);
         memberExtension.setOrgId(orgId);
         memberExtension.setShard(shard);
-        memberExtension.setIdCardNumber(request.getIdCardNumber());
-        memberExtension.setFamilyCardNumber(request.getFamilyCardNumber());
-        memberExtension.setProvinceId(request.getProvinceId());
-        memberExtension.setProvinceName(request.getProvinceName());
-        memberExtension.setRegencyId(request.getRegencyId());
-        memberExtension.setRegencyName(request.getRegencyName());
-        memberExtension.setDistrictId(request.getDistrictId());
-        memberExtension.setDistrictName(request.getDistrictName());
-        memberExtension.setVillageId(request.getVillageId());
-        memberExtension.setVillageName(request.getVillageName());
-        memberExtension.setRukunWarga(request.getRukunWarga());
-        memberExtension.setRukunTetangga(request.getRukunTetangga());
-        memberExtension.setTpsNumber(request.getTpsNumber());
         coreMemberService.store(memberExtension);
 
         CoreAuthMemberClient memberClient = new CoreAuthMemberClient();

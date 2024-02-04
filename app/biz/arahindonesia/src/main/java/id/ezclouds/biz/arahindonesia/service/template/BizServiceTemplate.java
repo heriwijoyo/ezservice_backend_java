@@ -11,6 +11,7 @@ import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
+import jdk.internal.reflect.Reflection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -26,6 +27,8 @@ public final class BizServiceTemplate {
     public static void execute(BizRequest request, BizResult bizResult, Handler handler) {
         bizResult.setSuccess(false);
 
+        String callerLocation = Reflection.getCallerClass().getSimpleName();
+
         try {
             handler.onRequestCheck();
             handler.onBizProcess();
@@ -34,16 +37,19 @@ public final class BizServiceTemplate {
             bizResult.setSuccess(false);
             bizResult.setErrorCode(ezException.getEzErrorCode());
             bizResult.setErrorMessage(ezException.getErrorMessage());
+            bizResult.setErrorLocation(callerLocation);
             EzAppContextHolder.getContext().appendErrorStackTrace(ExceptionUtil.getStackTrace(ezException));
         } catch (DataIntegrityViolationException exception) {
             bizResult.setSuccess(false);
             bizResult.setErrorCode(EzErrorCode.IDEMPOTENT_ERROR);
             bizResult.setErrorMessage(EzErrorCode.IDEMPOTENT_ERROR.getDescription());
+            bizResult.setErrorLocation(callerLocation);
             EzAppContextHolder.getContext().appendErrorStackTrace(ExceptionUtil.getStackTrace(exception));
         } catch (Exception exception) {
             bizResult.setSuccess(false);
             bizResult.setErrorCode(EzErrorCode.SYSTEM_ERROR);
             bizResult.setErrorMessage(EzErrorCode.SYSTEM_ERROR.getDescription());
+            bizResult.setErrorLocation(callerLocation);
             EzAppContextHolder.getContext().appendErrorStackTrace(ExceptionUtil.getStackTrace(exception));
         }
         finally {

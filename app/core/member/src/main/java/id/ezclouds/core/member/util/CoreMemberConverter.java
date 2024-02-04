@@ -47,6 +47,7 @@ public class CoreMemberConverter {
         CoreMemberDO memberDO = new CoreMemberDO();
         memberDO.setMemberId(coreMember.getMemberId());
         memberDO.setOrgId(coreMember.getOrgId());
+        memberDO.setSubOrgId(coreMember.getSubOrgId());
         memberDO.setShard(coreMember.getShard());
         memberDO.setSourceId(coreMember.getSourceId());
         memberDO.setReferrerId(coreMember.getReferrerId());

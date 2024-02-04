@@ -9,7 +9,7 @@ import id.ezclouds.biz.arahindonesia.converter.BizMemberConverter;
 import id.ezclouds.biz.arahindonesia.model.member.BizMember;
 import id.ezclouds.biz.arahindonesia.model.member.BizMemberInfo;
 import id.ezclouds.biz.arahindonesia.model.profile.MemberProfile;
-import id.ezclouds.biz.arahindonesia.service.core.MemberService;
+import id.ezclouds.biz.arahindonesia.service.inner.service.BizMemberInnerService;
 import id.ezclouds.biz.arahindonesia.service.data.AppProfileService;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberRegisterRequest;
 import id.ezclouds.biz.arahindonesia.service.result.BizResult;
@@ -35,7 +35,7 @@ import org.springframework.stereotype.Service;
 public class BizMemberService {
 
     @Autowired
-    private MemberService memberService;
+    private BizMemberInnerService bizMemberInnerService;
 
     @Autowired
     private CoreAuthService coreAuthService;
@@ -110,7 +110,7 @@ public class BizMemberService {
 
             @Override
             public void onBizProcess() throws EzErrorException {
-                BizMemberInfo bizMemberInfo = memberService.processRegisterMember(request);
+                BizMemberInfo bizMemberInfo = bizMemberInnerService.processRegisterMember(request);
                 bizResult.setObject(bizMemberInfo);
                 bizResult.setSuccess(true);
             }
