@@ -14,6 +14,8 @@ public class CoreAuthMemberCommonSessionInfo {
     private String scene;
     private String verifyStrategy;
     private String verifyTarget;
+    private String verifyCode;
+    private String expiryTime;
 
     public String getSessionId() {
         return sessionId;
@@ -45,5 +47,21 @@ public class CoreAuthMemberCommonSessionInfo {
 
     public void setVerifyTarget(String verifyTarget) {
         this.verifyTarget = verifyTarget;
+    }
+
+    public String getVerifyCode() {
+        return verifyCode;
+    }
+
+    public void setVerifyCode(String verifyCode) {
+        this.verifyCode = verifyCode;
+    }
+
+    public String getExpiryTime() {
+        return expiryTime;
+    }
+
+    public void setExpiryTime(String expiryTime) {
+        this.expiryTime = expiryTime;
     }
 }

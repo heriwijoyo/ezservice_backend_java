@@ -19,7 +19,7 @@ public class CoreIntegrationServiceTemplate {
             handler.onRequestCheck();
             handler.onProcess();
         } catch (Exception exception) {
-
+            exception.printStackTrace();
         } finally {
             //TODO: add logging here
         }

@@ -24,4 +24,8 @@ public class BizConstant {
         public static final String COMMON_SESSION_SCENE_RESET_MEMBER_PASSWORD = "RESET_MEMBER_PASSWORD";
         public static final String COMMON_SESSION_VERIFY_STRATEGY_WHATSAPP = "WHATSAPP";
     }
+
+    public static final class TemplateKey {
+        public static final String WA_RESET_PASS_VERIFY_CODE = "WA_RESET_PASS_VERIFY_CODE";
+    }
 }

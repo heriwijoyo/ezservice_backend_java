@@ -42,7 +42,10 @@ public class CoreIntegrationService {
                 WatzapSendRequest sendRequest = new WatzapSendRequest();
                 sendRequest.setPhone_no(request.getPhoneNumber());
                 sendRequest.setMessage(request.getMessage());
-                watzapClientService.sendWatzap(sendRequest);
+                watzapClientService.sendWatzap(sendRequest)
+                        .subscribe(responseEntity -> {
+                            System.out.println(responseEntity);
+                        });
                 result.setSuccess(true);
             }
         });

@@ -6,6 +6,8 @@ package id.ezclouds.core.auth.repo;
 
 import id.ezclouds.core.auth.dataobject.EzAuthMemberCommonSessionDO;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -14,4 +16,12 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface EzAuthMemberCommonSessionRepository extends JpaRepository<EzAuthMemberCommonSessionDO, String> {
+
+    @Query("SELECT cs FROM EzAuthMemberCommonSessionDO cs WHERE cs.orgId = :orgId AND cs.scene = :scene AND cs.verifyStrategy = :verifyStrategy AND cs.memberId = :memberId AND cs.status = 1")
+    EzAuthMemberCommonSessionDO findBySceneLoginId(
+            @Param("orgId") String orgId,
+            @Param("scene") String scene,
+            @Param("verifyStrategy") String verifyStrategy,
+            @Param("memberId") String memberId
+    );
 }

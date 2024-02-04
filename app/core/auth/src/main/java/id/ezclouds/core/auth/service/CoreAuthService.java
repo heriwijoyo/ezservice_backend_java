@@ -157,41 +157,54 @@ public class CoreAuthService {
         AssertUtil.isNotTrue(clientStatus == CoreAuthConstant.MEMBER_CLIENT_STATUS_FROZEN, EzErrorCode.MEMBER_CLIENT_FROZEN);
         AssertUtil.isTrue(clientStatus == CoreAuthConstant.MEMBER_CLIENT_STATUS_ACTIVE, EzErrorCode.MEMBER_CLIENT_ABNORMAL);
 
-        String currentDateTime = DateUtil.getCurrentFormattedDate();
-        String sessionId = HashUtil.createHash(
-                memberClientDO.getOrgId(),
-                memberClientDO.getAppId(),
-                memberClientDO.getClientId(),
-                memberClientDO.getMemberId(),
-                currentDateTime
+        Date currentTime = new Date();
+        EzAuthMemberCommonSessionDO sessionDO = ezAuthMemberCommonSessionRepository.findBySceneLoginId(
+                request.getOrgId(),
+                request.getScene(),
+                request.getVerifyStrategy(),
+                memberClientDO.getMemberId()
         );
-        int verifyCodeNumber = new Random().nextInt(9000) + 1000;
-        String verifyCode = String.valueOf(verifyCodeNumber);
 
-        EzAuthMemberCommonSessionDO sessionDO = new EzAuthMemberCommonSessionDO();
-        sessionDO.setSessionId(sessionId);
-        sessionDO.setOrgId(memberClientDO.getOrgId());
-        sessionDO.setShard(ShardUtil.getShardId(memberClientDO.getMemberId()));
-        sessionDO.setScene(request.getScene());
-        sessionDO.setVerifyStrategy(request.getVerifyStrategy());
-        sessionDO.setVerifyCode(verifyCode);
-        sessionDO.setAppId(memberClientDO.getAppId());
-        sessionDO.setClientId(memberClientDO.getClientId());
-        sessionDO.setMemberId(memberClientDO.getMemberId());
-        sessionDO.setDeviceId(request.getDeviceId());
-        sessionDO.setCreatedTime(DateUtil.getCurrentFormattedDate());
-        sessionDO.setStatus(CoreAuthConstant.MEMBER_CLIENT_STATUS_ACTIVE);
+        if (sessionDO == null || currentTime.getTime() > DateUtil.parseFormattedDate(sessionDO.getExpiryTime()).getTime()) {
+            String currentDateTime = DateUtil.getFormattedDate(currentTime);
+            String sessionId = HashUtil.createHash(
+                    memberClientDO.getOrgId(),
+                    memberClientDO.getAppId(),
+                    memberClientDO.getClientId(),
+                    memberClientDO.getMemberId(),
+                    currentDateTime
+            );
+            int verifyCodeNumber = new Random().nextInt(9000) + 1000;
+            String verifyCode = String.valueOf(verifyCodeNumber);
 
-        Date expiryDate = DateUtil.getDateAfterMins(new Date(), getMemberCommonSessionExpMins(memberClientDO.getOrgId()));
-        sessionDO.setExpiryTime(DateUtil.getFormattedDate(expiryDate));
+            sessionDO = new EzAuthMemberCommonSessionDO();
+            sessionDO.setSessionId(sessionId);
+            sessionDO.setOrgId(memberClientDO.getOrgId());
+            sessionDO.setShard(ShardUtil.getShardId(memberClientDO.getMemberId()));
+            sessionDO.setScene(request.getScene());
+            sessionDO.setVerifyStrategy(request.getVerifyStrategy());
+            sessionDO.setVerifyCode(verifyCode);
+            sessionDO.setAppId(memberClientDO.getAppId());
+            sessionDO.setClientId(memberClientDO.getClientId());
+            sessionDO.setMemberId(memberClientDO.getMemberId());
+            sessionDO.setDeviceId(request.getDeviceId());
+            sessionDO.setCreatedTime(DateUtil.getCurrentFormattedDate());
+            sessionDO.setStatus(CoreAuthConstant.MEMBER_CLIENT_STATUS_ACTIVE);
 
-        ezAuthMemberCommonSessionRepository.saveAndFlush(sessionDO);
+            int expiryMins = getMemberCommonSessionExpMins(memberClientDO.getOrgId());
+            Date expiryDate = DateUtil.getDateAfterMins(new Date(), expiryMins);
+            sessionDO.setExpiryTime(DateUtil.getFormattedDate(expiryDate));
+
+            ezAuthMemberCommonSessionRepository.saveAndFlush(sessionDO);
+        }
 
         CoreAuthMemberCommonSessionInfo sessionInfo = new CoreAuthMemberCommonSessionInfo();
-        sessionInfo.setSessionId(sessionId);
+        sessionInfo.setSessionId(sessionDO.getSessionId());
         sessionInfo.setScene(request.getScene());
         sessionInfo.setVerifyStrategy(request.getVerifyStrategy());
         sessionInfo.setVerifyTarget(request.getLoginId());
+        sessionInfo.setVerifyCode(sessionDO.getVerifyCode());
+        sessionInfo.setExpiryTime(sessionDO.getExpiryTime());
         return sessionInfo;
     }
 

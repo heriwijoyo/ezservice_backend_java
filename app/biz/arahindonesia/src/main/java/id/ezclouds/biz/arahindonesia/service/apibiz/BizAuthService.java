@@ -7,7 +7,9 @@ package id.ezclouds.biz.arahindonesia.service.apibiz;
 import id.ezclouds.biz.arahindonesia.constant.AppConstant;
 import id.ezclouds.biz.arahindonesia.constant.BizConstant;
 import id.ezclouds.biz.arahindonesia.converter.BizMemberConverter;
+import id.ezclouds.biz.arahindonesia.converter.BizMessageTemplateConverter;
 import id.ezclouds.biz.arahindonesia.model.authentication.BizMemberCommonSession;
+import id.ezclouds.biz.arahindonesia.service.dataservice.AppConfigService;
 import id.ezclouds.biz.arahindonesia.service.dataservice.AppMemberFlagService;
 import id.ezclouds.biz.arahindonesia.service.dataservice.AppSubOrganizationService;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberResetPasswordRequest;
@@ -29,6 +31,7 @@ import id.ezclouds.core.auth.result.CoreAuthMemberCommonSessionInfo;
 import id.ezclouds.core.auth.result.CoreAuthResult;
 import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
 import id.ezclouds.core.auth.service.CoreAuthService;
+import id.ezclouds.core.integration.request.WhatsappSendRequest;
 import id.ezclouds.core.integration.service.CoreIntegrationService;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
@@ -37,6 +40,9 @@ import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.model.CoreOrganization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -59,6 +65,9 @@ public class BizAuthService extends BizBaseService {
 
     @Autowired
     private AppMemberFlagService appMemberFlagService;
+
+    @Autowired
+    private AppConfigService appConfigService;
 
     @Autowired
     private CoreIntegrationService coreIntegrationService;
@@ -183,7 +192,7 @@ public class BizAuthService extends BizBaseService {
                 commonSession.setVerifyStrategy(sessionInfo.getVerifyStrategy());
                 commonSession.setVerifyTarget(sessionInfo.getVerifyTarget());
 
-                memberCommonSessionSendWhatsapp(commonSession);
+                memberCommonSessionSendWhatsapp(sessionInfo);
 
                 bizResult.setObject(commonSession);
                 bizResult.setSuccess(true);
@@ -297,7 +306,22 @@ public class BizAuthService extends BizBaseService {
         return bizResult;
     }
 
-    private void memberCommonSessionSendWhatsapp(BizMemberCommonSession commonSession) {
+    private void memberCommonSessionSendWhatsapp(CoreAuthMemberCommonSessionInfo commonSession) {
+        String messageTemplate = appConfigService.getMessageTemplate(BizConstant.TemplateKey.WA_RESET_PASS_VERIFY_CODE);
+        Map<String, String> values = new HashMap<>();
+        values.put("VERIFY_CODE", commonSession.getVerifyCode());
+        values.put("EXPIRY_LABEL", commonSession.getExpiryTime());
 
+        String whatsappMessage = BizMessageTemplateConverter.getMessage(messageTemplate, values);
+        if (whatsappMessage != null) {
+            System.out.println(whatsappMessage);
+            WhatsappSendRequest request = new WhatsappSendRequest();
+            request.setPhoneNumber(commonSession.getVerifyTarget());
+            request.setMessage(whatsappMessage);
+
+            coreIntegrationService.sendWhatsappMessage(request);
+        } else {
+            System.out.println("==============> ASUUUUUUUUUUUUU");
+        }
     }
 }

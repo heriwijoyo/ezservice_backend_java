@@ -12,8 +12,8 @@ import id.ezclouds.core.integration.service.client.config.WatzapConfig;
  */
 public class WatzapSendRequest {
 
-    private String api_key;// = WatzapConfig.Credential.API_KEY;
-    private String number_key;// = WatzapConfig.Credential.NUMBER_KEY;
+    private String api_key;
+    private String number_key;
     private String phone_no;
     private String message;
 

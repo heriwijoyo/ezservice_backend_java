@@ -46,4 +46,13 @@ public class AppConfigService {
                 .map(templateDO -> new AppMessageTemplate(templateDO.getTemplateId(), templateDO.getTemplateValue()))
                 .collect(Collectors.toList());
     }
+
+    public String getMessageTemplate(String templateId) {
+        return getMessageTemplates()
+                .stream()
+                .filter(template -> templateId.equals(template.getId()))
+                .findFirst()
+                .orElse(new AppMessageTemplate(null, null))
+                .getValue();
+    }
 }
