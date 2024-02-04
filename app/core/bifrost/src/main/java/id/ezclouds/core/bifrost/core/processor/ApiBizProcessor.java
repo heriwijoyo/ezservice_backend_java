@@ -4,10 +4,12 @@
  */
 package id.ezclouds.core.bifrost.core.processor;
 
+import id.ezclouds.biz.arahindonesia.constant.AppConstant;
 import id.ezclouds.biz.arahindonesia.service.apibiz.*;
 import id.ezclouds.biz.arahindonesia.service.apibiz.BizAuthService;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberLoginRequest;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberRegisterRequest;
+import id.ezclouds.biz.arahindonesia.service.request.BizMemberUpdatePasswordRequest;
 import id.ezclouds.biz.arahindonesia.service.result.BizResult;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
@@ -73,9 +75,13 @@ public class ApiBizProcessor implements BizProcessor {
             case API_MEMBER_LOGOUT:
                 return bizAuthService.memberLogout();
 
+            case API_MEMBER_UPDATE_PASSWORD:
+                BizRequestConverter<BizMemberUpdatePasswordRequest> converter = new BizRequestConverter<>(BizRequestConverter.UPDATE_PASSWORD);
+                return bizAuthService.memberUpdatePassword(converter.convert(request));
+
             case API_MEMBER_REGISTER:
                 BizMemberRegisterRequest bizRequest = BizRequestConverter.convert((MemberRegisterRequest) request);
-                bizRequest.setSourceId(SOURCE_ID);
+                bizRequest.getExtendInfo().put(AppConstant.ExtKey.SOURCE_ID, SOURCE_ID);
                 return bizMemberService.registerMember(bizRequest);
         }
 
@@ -87,6 +93,7 @@ public class ApiBizProcessor implements BizProcessor {
     }
 
     private BizMemberLoginRequest composeMemberLogin(MemberLoginRequest loginRequest) {
+        if (loginRequest == null) { return null; }
         BizMemberLoginRequest memberLogin = new BizMemberLoginRequest();
         memberLogin.setLoginType(loginRequest.getLoginType());
         memberLogin.setLoginId(loginRequest.getLoginId());

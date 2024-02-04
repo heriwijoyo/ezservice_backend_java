@@ -22,14 +22,12 @@ public abstract class BaseDigestLog<T> extends DigestLog {
     public abstract void composeDigest(ApiRequest request, ApiResult<T> result);
 
     protected String getErrorMessage(ApiResult<T> result) {
-        String errorMessage = "";
-        if (result.getErrorResult() != null) {
-            errorMessage = StringUtil.concateStrings(
-                    result.getErrorResult().getErrorContext(),
-                    "::",
-                    result.getErrorResult().getErrorMessage()
-            );
+        String errorContext;
+        if (result.getErrorResult() == null) {
+            errorContext = "NULL";
+        } else {
+            errorContext = result.getErrorResult().getErrorContext();
         }
-        return errorMessage;
+        return errorContext;
     }
 }

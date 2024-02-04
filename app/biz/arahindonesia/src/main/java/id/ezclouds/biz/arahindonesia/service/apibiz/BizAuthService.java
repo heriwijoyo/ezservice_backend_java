@@ -6,7 +6,9 @@ package id.ezclouds.biz.arahindonesia.service.apibiz;
 
 import id.ezclouds.biz.arahindonesia.constant.AppConstant;
 import id.ezclouds.biz.arahindonesia.converter.BizMemberConverter;
+import id.ezclouds.biz.arahindonesia.service.dataservice.AppMemberFlagService;
 import id.ezclouds.biz.arahindonesia.service.dataservice.AppSubOrganizationService;
+import id.ezclouds.biz.arahindonesia.service.request.BizMemberUpdatePasswordRequest;
 import id.ezclouds.biz.arahindonesia.service.result.BizMemberLoginResult;
 import id.ezclouds.biz.arahindonesia.model.member.BizMember;
 import id.ezclouds.biz.arahindonesia.model.member.MemberBase;
@@ -48,6 +50,9 @@ public class BizAuthService extends BizBaseService {
 
     @Autowired
     private AppSubOrganizationService appSubOrganizationService;
+
+    @Autowired
+    private AppMemberFlagService appMemberFlagService;
 
     public CoreAuthResult<String> authAppClient(String orgId, String appId, String clientId, String clientSecret) {
         CoreAuthResult<String> bizAuthResult = new CoreAuthResult<>();
@@ -104,6 +109,7 @@ public class BizAuthService extends BizBaseService {
                 BizMemberLoginResult loginResult = new BizMemberLoginResult();
                 loginResult.setMemberSessionId(sessionInfo.getSessionId());
                 loginResult.setSuccessMessage(AppConstant.MEMBER_LOGIN_MESSAGE_SUCCESS);
+                loginResult.setMemberFlags(appMemberFlagService.getAppMemberFlag(orgId, sessionInfo.getMemberId()));
 
                 //support old version
                 //TODO: remove when all client updated into newer version
@@ -183,6 +189,12 @@ public class BizAuthService extends BizBaseService {
                 return null;
             }
         });
+
+        return bizResult;
+    }
+
+    public BizResult memberUpdatePassword(BizMemberUpdatePasswordRequest request) {
+        final BizResult bizResult = new BizResult();
 
         return bizResult;
     }

@@ -34,4 +34,8 @@ public class AppConstant {
     public static final String MEMBER_REGISTER_IDEMPOTENT = "Nomor HP yang anda masukkan telah terdaftar, silakan periksa kembali dataservice yang anda masukkan";
 
     public static final int APP_V2_START_VERSION_NO = 15;
+
+    public static final class ExtKey {
+        public static final String SOURCE_ID = "SOURCE_ID";
+    }
 }

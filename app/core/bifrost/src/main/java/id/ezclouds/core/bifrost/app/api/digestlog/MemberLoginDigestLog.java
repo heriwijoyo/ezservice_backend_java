@@ -32,12 +32,6 @@ public class MemberLoginDigestLog extends BaseDigestLog<BizMemberLoginResult> {
         String requestInfo = "request(" + requestData + ")";
         setDigestMessage(requestInfo);
 
-        String errorContext;
-        if (result.getErrorResult() == null) {
-            errorContext = "NULL";
-        } else {
-            errorContext = result.getErrorResult().getErrorContext();
-        }
-        setErrorMessage("errorContext=" + errorContext);
+        setErrorMessage(getErrorMessage(result));
     }
 }

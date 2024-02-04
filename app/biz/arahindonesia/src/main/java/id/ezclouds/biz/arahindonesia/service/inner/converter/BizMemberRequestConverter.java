@@ -4,6 +4,7 @@
  */
 package id.ezclouds.biz.arahindonesia.service.inner.converter;
 
+import id.ezclouds.biz.arahindonesia.constant.AppConstant;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberRegisterRequest;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.core.member.model.CoreMember;
@@ -19,7 +20,7 @@ public class BizMemberRequestConverter {
     public static CoreMember getCoreMember(BizMemberRegisterRequest request) {
         CoreMember coreMember = new CoreMember();
         coreMember.setSubOrgId(request.getSubOrgId());
-        coreMember.setSourceId(request.getSourceId());
+        coreMember.setSourceId(request.getExtendInfo().get(AppConstant.ExtKey.SOURCE_ID));
         coreMember.setReferrerId(request.getReferrerId());
         coreMember.setRoles(request.getRoles());
         coreMember.setName(request.getName());

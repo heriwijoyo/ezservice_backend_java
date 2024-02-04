@@ -6,13 +6,26 @@ package id.ezclouds.core.bifrost.core.converter;
 
 import id.ezclouds.biz.arahindonesia.model.member.BizGender;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberRegisterRequest;
+import id.ezclouds.biz.arahindonesia.service.request.BizMemberUpdatePasswordRequest;
+import id.ezclouds.biz.arahindonesia.service.request.BizRequest;
 import id.ezclouds.core.bifrost.app.api.request.MemberRegisterRequest;
+import id.ezclouds.core.bifrost.app.api.request.MemberUpdatePasswordRequest;
+import id.ezclouds.core.bifrost.core.BaseRequest;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizRequestConverter.java, v 0.1 2024‐01‐01 11:42 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class BizRequestConverter {
+public class BizRequestConverter<T extends BizRequest> {
+
+    private Handler<T> handler;
+    public BizRequestConverter(Handler<T> handler) {
+        this.handler = handler;
+    }
+
+    public T convert(BaseRequest input) {
+        return handler.convert(input);
+    }
 
     public static BizMemberRegisterRequest convert(MemberRegisterRequest request) {
         if (request == null) { return null; }
@@ -45,5 +58,20 @@ public class BizRequestConverter {
         bizRequest.setTpsNumber(request.getTpsNumber());
 
         return bizRequest;
+    }
+
+    public static Handler<BizMemberUpdatePasswordRequest> UPDATE_PASSWORD = baseRequest -> {
+        if (baseRequest instanceof MemberUpdatePasswordRequest) {
+            MemberUpdatePasswordRequest request = (MemberUpdatePasswordRequest) baseRequest;
+            BizMemberUpdatePasswordRequest bizRequest = new BizMemberUpdatePasswordRequest();
+            bizRequest.setMode(request.getMode());
+            bizRequest.setNewPassword(request.getNewPassword());
+            return bizRequest;
+        }
+        return null;
+    };
+
+    interface Handler<T extends BizRequest> {
+        T convert(BaseRequest baseRequest);
     }
 }

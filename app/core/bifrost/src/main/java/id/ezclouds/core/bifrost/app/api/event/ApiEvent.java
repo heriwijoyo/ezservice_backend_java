@@ -15,14 +15,18 @@ public enum ApiEvent implements EzAppEvent {
     API_CANDIDATE_PROFILE("API_CANDIDATE_PROFILE", "CandidateProfile"),
     API_NEWS("API_NEWS", "News"),
     API_MEMBER_PROFILE("API_MEMBER_PROFILE", "MemberProfile"),
+
+    // TRANSACTIONAL APIs
     API_MEMBER_LOGIN("API_MEMBER_LOGIN", "MemberLogin"),
     API_MEMBER_LOGOUT("API_MEMBER_LOGOUT", "MemberLogout"),
     API_MEMBER_REGISTER("API_MEMBER_REGISTER", "MemberRegister"),
-    API_SESSION_CHECK("API_SESSION_CHECK", "Session Check"),
+    API_SESSION_CHECK("API_SESSION_CHECK", "SessionCheck"),
+    API_MEMBER_UPDATE_PASSWORD("API_MEMBER_UPDATE_PASSWORD", "MemberUpdatePassword"),
     GENERATE_SEQUENCE("", "GenerateSequence"),
     UNKNOWN_EVENT("UNKNOWN_EVENT", "Undefined event"),
-    SAMPLE_EVENT("SAMPLE_EVENT", "Sample event"),
 
+    // SAMPLE
+    SAMPLE_EVENT("SAMPLE_EVENT", "Sample event"),
     ;
 
     private String code;
