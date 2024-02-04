@@ -2,9 +2,9 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2023 All Rights Reserved.
  */
-package id.ezclouds.common.dal;
+package id.ezclouds.common.dal.repo;
 
-import id.ezclouds.common.dal.model.AppConfigDO;
+import id.ezclouds.common.dal.dataobject.AppConfigDO;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

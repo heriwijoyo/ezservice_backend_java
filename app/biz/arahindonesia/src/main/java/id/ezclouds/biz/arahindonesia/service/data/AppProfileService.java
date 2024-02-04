@@ -4,8 +4,8 @@
  */
 package id.ezclouds.biz.arahindonesia.service.data;
 
-import id.ezclouds.common.dal.model.AppProfileDO;
-import id.ezclouds.common.dal.profile.AppProfileRepository;
+import id.ezclouds.common.dal.dataobject.AppProfileDO;
+import id.ezclouds.common.dal.repo.AppProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;

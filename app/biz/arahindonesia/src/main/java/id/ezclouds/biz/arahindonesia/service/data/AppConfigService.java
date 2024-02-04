@@ -6,7 +6,7 @@ package id.ezclouds.biz.arahindonesia.service.data;
 
 import id.ezclouds.biz.arahindonesia.converter.ModelConverter;
 import id.ezclouds.biz.arahindonesia.model.AppConfig;
-import id.ezclouds.common.dal.AppConfigRepository;
+import id.ezclouds.common.dal.repo.AppConfigRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;

@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2023 All Rights Reserved.
  */
-package id.ezclouds.common.dal.model;
+package id.ezclouds.common.dal.dataobject;
 
 import id.ezclouds.common.dal.DOConstant;
 

@@ -6,7 +6,7 @@ package id.ezclouds.biz.arahindonesia.service.core;
 
 import id.ezclouds.biz.arahindonesia.converter.ModelConverter;
 import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
-import id.ezclouds.common.dal.NewsRepository;
+import id.ezclouds.common.dal.repo.NewsRepository;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;

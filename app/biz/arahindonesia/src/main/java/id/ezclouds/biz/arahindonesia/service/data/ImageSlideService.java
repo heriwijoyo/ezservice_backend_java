@@ -7,7 +7,7 @@ package id.ezclouds.biz.arahindonesia.service.data;
 import id.ezclouds.biz.arahindonesia.constant.AppConstant;
 import id.ezclouds.biz.arahindonesia.converter.ModelConverter;
 import id.ezclouds.biz.arahindonesia.model.ImageSlide;
-import id.ezclouds.common.dal.ImageSlideRepository;
+import id.ezclouds.common.dal.repo.ImageSlideRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;

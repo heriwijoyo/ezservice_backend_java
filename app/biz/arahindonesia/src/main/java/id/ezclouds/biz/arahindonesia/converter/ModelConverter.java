@@ -10,7 +10,7 @@ import id.ezclouds.biz.arahindonesia.model.authentication.AppMemberClient;
 import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
 import id.ezclouds.biz.arahindonesia.model.profile.CandidateBio;
 import id.ezclouds.biz.arahindonesia.model.profile.CandidateProfileItem;
-import id.ezclouds.common.dal.model.*;
+import id.ezclouds.common.dal.dataobject.*;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
