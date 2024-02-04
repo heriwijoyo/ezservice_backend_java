@@ -196,6 +196,23 @@ public class BizAuthService extends BizBaseService {
     public BizResult memberUpdatePassword(BizMemberUpdatePasswordRequest request) {
         final BizResult bizResult = new BizResult();
 
+        BizServiceTemplate.execute(request, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return null;
+            }
+        });
+
         return bizResult;
     }
 

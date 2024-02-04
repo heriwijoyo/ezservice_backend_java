@@ -27,26 +27,7 @@ public final class BizServiceTemplate {
         try {
             handler.onRequestCheck();
             handler.onBizProcess();
-//        }
-//        catch (EzErrorException ezException) {
-//            bizResult.setSuccess(false);
-//            bizResult.setErrorCode(ezException.getEzErrorCode());
-//            bizResult.setErrorMessage(handler.getBizErrorMessage(ezException));
-//            bizResult.setErrorLocation(ExceptionUtil.getErrorContext(ezException));
-//            EzAppContextHolder.getContext().appendErrorStackTrace(ExceptionUtil.getStackTrace(ezException));
-//        } catch (DataIntegrityViolationException exception) {
-//            bizResult.setSuccess(false);
-//            bizResult.setErrorCode(EzErrorCode.IDEMPOTENT_ERROR);
-//            bizResult.setErrorMessage(handler.getBizErrorMessage(exception));
-//            bizResult.setErrorLocation(ExceptionUtil.getErrorContext(exception));
-//            EzAppContextHolder.getContext().appendErrorStackTrace(ExceptionUtil.getStackTrace(exception));
         } catch (Exception exception) {
-//            bizResult.setSuccess(false);
-//            bizResult.setErrorCode(EzErrorCode.SYSTEM_ERROR);
-//            bizResult.setErrorMessage(EzErrorCode.SYSTEM_ERROR.getDescription());
-//            bizResult.setErrorLocation(ExceptionUtil.getErrorContext(exception));
-//            EzAppContextHolder.getContext().appendErrorStackTrace(ExceptionUtil.getStackTrace(exception));
-
             EzErrorCode ezErrorCode = getEzErrorCode(exception);
             composeBizResultError(bizResult, exception, handler.getErrorMessage(ezErrorCode));
             EzAppContextHolder.getContext().appendErrorStackTrace(ExceptionUtil.getStackTrace(exception));
