@@ -4,11 +4,14 @@
  */
 package id.ezclouds.biz.arahindonesia.service.dataservice;
 
+import id.ezclouds.biz.arahindonesia.model.BizStatus;
+import id.ezclouds.biz.arahindonesia.service.dataservice.dataobject.AppMemberFlagDO;
 import id.ezclouds.biz.arahindonesia.service.dataservice.model.AppMemberFlag;
 import id.ezclouds.biz.arahindonesia.service.dataservice.repo.AppMemberFlagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,5 +41,17 @@ public class AppMemberFlagService {
                 });
 
         return memberFlagMap;
+    }
+
+    @Transactional
+    public void invalidateAppMemberFlag(String orgId, String memberId, String flagCode) {
+        AppMemberFlagDO memberFlagDO = appMemberFlagRepository
+                .findByMemberFlagCode(orgId, memberId, flagCode)
+                .orElse(null);
+
+        if (memberFlagDO != null) {
+            memberFlagDO.setStatus(BizStatus.NOT_ACTIVE.getCode());
+            appMemberFlagRepository.saveAndFlush(memberFlagDO);
+        }
     }
 }

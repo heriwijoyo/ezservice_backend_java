@@ -179,10 +179,10 @@ public class BizAuthService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                String memberId = coreAuthService.authMemberSession(sessionId);
+                CoreAuthMemberSessionInfo sessionInfo = coreAuthService.authMemberSession(sessionId);
 
                 bizResult.setSuccess(true);
-                bizResult.setObject(memberId);
+                bizResult.setObject(sessionInfo.getMemberId());
             }
 
             @Override
@@ -207,16 +207,30 @@ public class BizAuthService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
+                CoreAuthMemberSessionInfo sessionInfo = null;
                 if (BizConstant.UPDATE_PASSWORD_MODE_MEMBER_SESSION.equals(request.getMode())) {
                     String memberSessionId = EzAppContextHolder.getContext().getMemberSessionId();
-                    String memberId = coreAuthService.authMemberSession(memberSessionId);
+                    sessionInfo = coreAuthService.authMemberSession(memberSessionId);
+                }
+                if (BizConstant.UPDATE_PASSWORD_MODE_RESET_SESSION.equals(request.getMode())) {
+                    //TODO: add this capability later
                 }
 
+                coreAuthService.updateMemberClientPassword(sessionInfo.getClientId(), request.getNewPassword());
+
+                String extForceUpdate = request.getExtendInfo().get("FORCED_UPDATE_PASSWORD");
+                if (Boolean.parseBoolean(extForceUpdate)) {
+                    String orgId = EzAppContextHolder.getContext().getOrgId();
+                    appMemberFlagService.invalidateAppMemberFlag(orgId, sessionInfo.getMemberId(), BizConstant.MemberFlags.NEED_UPDATE_PASSWORD);
+                }
+
+                bizResult.setSuccess(true);
+                bizResult.setObject(BizConstant.Message.UPDATE_PASSWORD_SUCCESS);
             }
 
             @Override
             public String getErrorMessage(EzErrorCode ezErrorCode) {
-                return null;
+                return getBizErrorMessage(ezErrorCode);
             }
         });
 

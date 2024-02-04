@@ -93,6 +93,7 @@ public class CoreAuthService {
         CoreAuthMemberSessionInfo sessionInfo = new CoreAuthMemberSessionInfo();
         sessionInfo.setSessionId(sessionDO.getSessionId());
         sessionInfo.setMemberId(memberClientDO.getMemberId());
+        sessionInfo.setClientId(memberClientDO.getClientId());
         return sessionInfo;
     }
 
@@ -144,7 +145,7 @@ public class CoreAuthService {
     }
 
     @Transactional
-    public String authMemberSession(String sessionId) throws Exception {
+    public CoreAuthMemberSessionInfo authMemberSession(String sessionId) throws Exception {
         EzAuthMemberClientSessionDO sessionDO = ezAuthMemberClientSessionRepository.findById(sessionId).orElse(null);
         AssertUtil.notNull(sessionDO, EzErrorCode.SESSION_INVALID);
         AssertUtil.isNotTrue(sessionDO.getStatus() < CoreAuthConstant.MEMBER_CLIENT_STATUS_ACTIVE, EzErrorCode.SESSION_EXPIRED);
@@ -154,7 +155,12 @@ public class CoreAuthService {
 
         ezAuthMemberClientSessionRepository.saveAndFlush(sessionDO);
 
-        return sessionDO.getMemberId();
+        CoreAuthMemberSessionInfo sessionInfo = new CoreAuthMemberSessionInfo();
+        sessionInfo.setMemberId(sessionDO.getMemberId());
+        sessionInfo.setSessionId(sessionDO.getSessionId());
+        sessionInfo.setClientId(sessionDO.getClientId());
+
+        return sessionInfo;
     }
 
     @Transactional
@@ -170,6 +176,20 @@ public class CoreAuthService {
 
         authResult.setSuccess(true);
         return authResult;
+    }
+
+    @Transactional
+    public void updateMemberClientPassword(String clientId, String newPassword) throws Exception {
+        EzAuthMemberClientDO clientDO = ezAuthMemberClientRepository
+                .findById(clientId)
+                .orElse(null);
+        AssertUtil.notNull(clientDO, EzErrorCode.MEMBER_CLIENT_NOT_FOUND);
+
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        String newEncryptPass = bCryptPasswordEncoder.encode(newPassword);
+        clientDO.setLoginPassword(newEncryptPass);
+
+        ezAuthMemberClientRepository.saveAndFlush(clientDO);
     }
 
     @Cacheable("core_auth_app_client")

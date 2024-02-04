@@ -11,6 +11,7 @@ package id.ezclouds.core.auth.result;
 public class CoreAuthMemberSessionInfo {
     private String sessionId;
     private String memberId;
+    private String clientId;
 
     public String getSessionId() {
         return sessionId;
@@ -26,5 +27,13 @@ public class CoreAuthMemberSessionInfo {
 
     public void setMemberId(String memberId) {
         this.memberId = memberId;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
     }
 }

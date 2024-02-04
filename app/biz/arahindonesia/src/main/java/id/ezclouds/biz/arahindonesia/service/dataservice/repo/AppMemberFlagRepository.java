@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -23,5 +24,12 @@ public interface AppMemberFlagRepository extends JpaRepository<AppMemberFlagDO, 
     List<AppMemberFlagDO> getActiveMemberFlags(
             @Param("orgId") String orgId,
             @Param("memberId") String memberId
+    );
+
+    @Query("SELECT mf FROM AppMemberFlagDO mf WHERE mf.orgId = :orgId AND mf.memberId = :memberId AND mf.flagCode = :flagCode")
+    Optional<AppMemberFlagDO> findByMemberFlagCode(
+            @Param("orgId") String orgId,
+            @Param("memberId") String memberId,
+            @Param("flagCode") String flagCode
     );
 }

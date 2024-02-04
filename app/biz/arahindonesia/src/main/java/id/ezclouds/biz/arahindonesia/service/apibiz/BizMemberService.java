@@ -18,6 +18,7 @@ import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
+import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
 import id.ezclouds.core.auth.service.CoreAuthService;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
@@ -63,10 +64,10 @@ public class BizMemberService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                String memberId = coreAuthService.authMemberSession(sessionId);
+                CoreAuthMemberSessionInfo sessionInfo = coreAuthService.authMemberSession(sessionId);
 
-                CoreMember coreMember = coreMemberService.getOptimisticCoreMember(memberId);
-                CoreMemberExtension coreMemberExtension = coreMemberService.getOptimisticCoreMemberExtension(memberId);
+                CoreMember coreMember = coreMemberService.getOptimisticCoreMember(sessionInfo.getMemberId());
+                CoreMemberExtension coreMemberExtension = coreMemberService.getOptimisticCoreMemberExtension(sessionInfo.getMemberId());
                 BizMember bizMember = BizMemberConverter.convert(coreMember, coreMemberExtension);
 
                 MemberProfile memberProfile = new MemberProfile();
