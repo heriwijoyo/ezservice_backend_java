@@ -182,12 +182,16 @@ public class CoreAuthService {
         sessionDO.setCreatedTime(DateUtil.getCurrentFormattedDate());
         sessionDO.setStatus(CoreAuthConstant.MEMBER_CLIENT_STATUS_ACTIVE);
 
+        Date expiryDate = DateUtil.getDateAfterMins(new Date(), getMemberCommonSessionExpMins(memberClientDO.getOrgId()));
+        sessionDO.setExpiryTime(DateUtil.getFormattedDate(expiryDate));
+
         ezAuthMemberCommonSessionRepository.saveAndFlush(sessionDO);
 
         CoreAuthMemberCommonSessionInfo sessionInfo = new CoreAuthMemberCommonSessionInfo();
         sessionInfo.setSessionId(sessionId);
         sessionInfo.setScene(request.getScene());
         sessionInfo.setVerifyStrategy(request.getVerifyStrategy());
+        sessionInfo.setVerifyTarget(request.getLoginId());
         return sessionInfo;
     }
 

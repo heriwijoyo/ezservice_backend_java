@@ -2,13 +2,13 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.core.auth.result;
+package id.ezclouds.biz.arahindonesia.model.authentication;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: CoreAuthMemberCommonSessionInfo.java, v 0.1 2024‐02‐05 12:03 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: BizMemberCommonSession.java, v 0.1 2024‐02‐05 12:43 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class CoreAuthMemberCommonSessionInfo {
+public class BizMemberCommonSession {
 
     private String sessionId;
     private String scene;

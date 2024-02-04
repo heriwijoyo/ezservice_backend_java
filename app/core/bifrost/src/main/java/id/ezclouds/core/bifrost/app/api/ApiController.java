@@ -5,19 +5,18 @@
 package id.ezclouds.core.bifrost.app.api;
 
 import id.ezclouds.biz.arahindonesia.model.AppSetting;
+import id.ezclouds.biz.arahindonesia.model.authentication.BizMemberCommonSession;
 import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
 import id.ezclouds.biz.arahindonesia.model.profile.CandidateProfile;
 import id.ezclouds.biz.arahindonesia.model.profile.MemberProfile;
 import id.ezclouds.biz.arahindonesia.service.result.BizMemberLoginResult;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
-import id.ezclouds.core.bifrost.app.api.digestlog.EmptyDigestLog;
-import id.ezclouds.core.bifrost.app.api.digestlog.MemberLoginDigestLog;
-import id.ezclouds.core.bifrost.app.api.digestlog.MemberUpdatePasswordDigestLog;
-import id.ezclouds.core.bifrost.app.api.digestlog.SampleDigestLog;
+import id.ezclouds.core.bifrost.app.api.digestlog.*;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
 import id.ezclouds.core.bifrost.app.api.request.MemberLoginRequest;
+import id.ezclouds.core.bifrost.app.api.request.MemberResetPasswordRequest;
 import id.ezclouds.core.bifrost.app.api.request.MemberUpdatePasswordRequest;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
 import id.ezclouds.core.shared.result.ListResult;
@@ -166,7 +165,7 @@ public class ApiController extends AppController {
     }
 
     @PostMapping(value = "/api/update_password.php")
-    private ApiResult<String> resetPassword(@RequestBody MemberUpdatePasswordRequest request) {
+    private ApiResult<String> updatePassword(@RequestBody MemberUpdatePasswordRequest request) {
         return executeInTemplate(ApiEvent.API_MEMBER_UPDATE_PASSWORD, request, new RequestHandler<String>() {
             @Override
             public String convertResult(Object resultObject) {
@@ -181,6 +180,24 @@ public class ApiController extends AppController {
             }
         });
     }
+
+    @PostMapping(value = "/api/reset_password.php")
+    private ApiResult<BizMemberCommonSession> resetPassword(@RequestBody MemberResetPasswordRequest request) {
+        return executeInTemplate(ApiEvent.API_MEMBER_RESET_PASSWORD, request, new RequestHandler<BizMemberCommonSession>() {
+            @Override
+            public BizMemberCommonSession convertResult(Object resultObject) {
+                return (BizMemberCommonSession) resultObject;
+            }
+
+            @Override
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<BizMemberCommonSession> result) {
+                MemberResetPasswordDigestLog digestLog = new MemberResetPasswordDigestLog(result.isSuccess(), result.getResultCode());
+                digestLog.composeDigest(request, result);
+                return digestLog;
+            }
+        });
+    }
+
 
 
     @PostMapping(value = "/api/sample.json", consumes = {MediaType.APPLICATION_JSON_VALUE})

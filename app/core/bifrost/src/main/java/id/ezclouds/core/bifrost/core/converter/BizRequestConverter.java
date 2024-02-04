@@ -6,10 +6,12 @@ package id.ezclouds.core.bifrost.core.converter;
 
 import id.ezclouds.biz.arahindonesia.model.member.BizGender;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberRegisterRequest;
+import id.ezclouds.biz.arahindonesia.service.request.BizMemberResetPasswordRequest;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberUpdatePasswordRequest;
 import id.ezclouds.biz.arahindonesia.service.request.BizRequest;
 import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
 import id.ezclouds.core.bifrost.app.api.request.MemberRegisterRequest;
+import id.ezclouds.core.bifrost.app.api.request.MemberResetPasswordRequest;
 import id.ezclouds.core.bifrost.app.api.request.MemberUpdatePasswordRequest;
 
 /**
@@ -67,6 +69,17 @@ public class BizRequestConverter<T extends BizRequest> {
             bizRequest.getExtendInfo().putAll(apiRequest.getExtendInfo());
             bizRequest.setMode(request.getMode());
             bizRequest.setNewPassword(request.getNewPassword());
+            return bizRequest;
+        }
+        return null;
+    };
+
+    public static Handler<BizMemberResetPasswordRequest> RESET_PASSWORD = apiRequest -> {
+        if (apiRequest instanceof MemberResetPasswordRequest) {
+            MemberResetPasswordRequest request = (MemberResetPasswordRequest) apiRequest;
+            BizMemberResetPasswordRequest bizRequest = new BizMemberResetPasswordRequest();
+            bizRequest.setLoginType(request.getLoginType());
+            bizRequest.setLoginId(request.getLoginId());
             return bizRequest;
         }
         return null;

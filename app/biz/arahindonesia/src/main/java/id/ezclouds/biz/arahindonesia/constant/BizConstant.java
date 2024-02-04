@@ -12,11 +12,16 @@ public class BizConstant {
     public static final String UPDATE_PASSWORD_MODE_MEMBER_SESSION = "MEMBER_SESSION";
     public static final String UPDATE_PASSWORD_MODE_RESET_SESSION = "RESET_SESSION";
 
-    public static final class MemberFlags {
+    public static final class MemberFlag {
         public static final String NEED_UPDATE_PASSWORD = "NEED_UPDATE_PASSWORD";
     }
 
     public static final class Message {
         public static final String UPDATE_PASSWORD_SUCCESS = "Kata sandi berhasil di perbarui. Silakan LOGIN kembali menggunakan sandi baru anda";
+    }
+
+    public static final class Auth {
+        public static final String COMMON_SESSION_SCENE_RESET_MEMBER_PASSWORD = "RESET_MEMBER_PASSWORD";
+        public static final String COMMON_SESSION_VERIFY_STRATEGY_WHATSAPP = "WHATSAPP";
     }
 }

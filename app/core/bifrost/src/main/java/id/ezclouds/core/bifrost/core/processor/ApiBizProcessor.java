@@ -9,6 +9,7 @@ import id.ezclouds.biz.arahindonesia.service.apibiz.*;
 import id.ezclouds.biz.arahindonesia.service.apibiz.BizAuthService;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberLoginRequest;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberRegisterRequest;
+import id.ezclouds.biz.arahindonesia.service.request.BizMemberResetPasswordRequest;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberUpdatePasswordRequest;
 import id.ezclouds.biz.arahindonesia.service.result.BizResult;
 import id.ezclouds.common.util.exception.EzErrorCode;
@@ -82,6 +83,10 @@ public class ApiBizProcessor implements BizProcessor {
                 case API_MEMBER_UPDATE_PASSWORD:
                     BizRequestConverter<BizMemberUpdatePasswordRequest> converter = new BizRequestConverter<>(BizRequestConverter.UPDATE_PASSWORD);
                     return bizAuthService.memberUpdatePassword(converter.convert(apiRequest));
+
+                case API_MEMBER_RESET_PASSWORD:
+                    BizRequestConverter<BizMemberResetPasswordRequest> resetConverter = new BizRequestConverter<>(BizRequestConverter.RESET_PASSWORD);
+                    return bizAuthService.memberResetPassword(resetConverter.convert(apiRequest));
 
                 case API_MEMBER_REGISTER:
                     BizMemberRegisterRequest bizRequest = BizRequestConverter.convert((MemberRegisterRequest) request);

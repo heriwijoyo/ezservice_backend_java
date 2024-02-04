@@ -7,8 +7,10 @@ package id.ezclouds.biz.arahindonesia.service.apibiz;
 import id.ezclouds.biz.arahindonesia.constant.AppConstant;
 import id.ezclouds.biz.arahindonesia.constant.BizConstant;
 import id.ezclouds.biz.arahindonesia.converter.BizMemberConverter;
+import id.ezclouds.biz.arahindonesia.model.authentication.BizMemberCommonSession;
 import id.ezclouds.biz.arahindonesia.service.dataservice.AppMemberFlagService;
 import id.ezclouds.biz.arahindonesia.service.dataservice.AppSubOrganizationService;
+import id.ezclouds.biz.arahindonesia.service.request.BizMemberResetPasswordRequest;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberUpdatePasswordRequest;
 import id.ezclouds.biz.arahindonesia.service.result.BizMemberLoginResult;
 import id.ezclouds.biz.arahindonesia.model.member.BizMember;
@@ -22,6 +24,8 @@ import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.auth.request.CoreAppClientAuthRequest;
 import id.ezclouds.core.auth.request.CoreMemberClientAuthRequest;
+import id.ezclouds.core.auth.request.CoreMemberCommonSessionRequest;
+import id.ezclouds.core.auth.result.CoreAuthMemberCommonSessionInfo;
 import id.ezclouds.core.auth.result.CoreAuthResult;
 import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
 import id.ezclouds.core.auth.service.CoreAuthService;
@@ -142,6 +146,52 @@ public class BizAuthService extends BizBaseService {
         return bizResult;
     }
 
+    public BizResult memberResetPassword(BizMemberResetPasswordRequest request) {
+        final BizResult bizResult = new BizResult();
+
+        BizServiceTemplate.execute(request, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM, "Invalid request");
+                AssertUtil.notBlank(request.getLoginType(), EzErrorCode.ILLEGAL_PARAM, "Invalid request");
+                AssertUtil.notBlank(request.getLoginId(), EzErrorCode.ILLEGAL_PARAM, "Invalid request");
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                String orgId = EzAppContextHolder.getContext().getOrgId();
+                String appId = EzAppContextHolder.getContext().getAppId();
+                String deviceId = EzAppContextHolder.getContext().getDeviceId();
+
+                CoreMemberCommonSessionRequest authRequest = new CoreMemberCommonSessionRequest();
+                authRequest.setOrgId(orgId);
+                authRequest.setAppId(appId);
+                authRequest.setLoginType(request.getLoginType());
+                authRequest.setLoginId(request.getLoginId());
+                authRequest.setDeviceId(deviceId);
+                authRequest.setScene(BizConstant.Auth.COMMON_SESSION_SCENE_RESET_MEMBER_PASSWORD);
+                authRequest.setVerifyStrategy(BizConstant.Auth.COMMON_SESSION_VERIFY_STRATEGY_WHATSAPP);
+
+                CoreAuthMemberCommonSessionInfo sessionInfo = coreAuthService.createMemberCommonSession(authRequest);
+                BizMemberCommonSession commonSession = new BizMemberCommonSession();
+                commonSession.setSessionId(sessionInfo.getSessionId());
+                commonSession.setScene(sessionInfo.getScene());
+                commonSession.setVerifyStrategy(sessionInfo.getVerifyStrategy());
+                commonSession.setVerifyTarget(sessionInfo.getVerifyTarget());
+
+                bizResult.setObject(commonSession);
+                bizResult.setSuccess(true);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+
+        return bizResult;
+    }
+
     public BizResult memberLogout() {
         final BizResult bizResult = new BizResult();
 
@@ -159,7 +209,7 @@ public class BizAuthService extends BizBaseService {
 
             @Override
             public String getErrorMessage(EzErrorCode ezErrorCode) {
-                return null;
+                return getBizErrorMessage(ezErrorCode);
             }
         });
 
@@ -187,7 +237,7 @@ public class BizAuthService extends BizBaseService {
 
             @Override
             public String getErrorMessage(EzErrorCode ezErrorCode) {
-                return null;
+                return getBizErrorMessage(ezErrorCode);
             }
         });
 
@@ -221,7 +271,11 @@ public class BizAuthService extends BizBaseService {
                 String extForceUpdate = request.getExtendInfo().get("FORCED_UPDATE_PASSWORD");
                 if (Boolean.parseBoolean(extForceUpdate)) {
                     String orgId = EzAppContextHolder.getContext().getOrgId();
-                    appMemberFlagService.invalidateAppMemberFlag(orgId, sessionInfo.getMemberId(), BizConstant.MemberFlags.NEED_UPDATE_PASSWORD);
+                    appMemberFlagService.invalidateAppMemberFlag(
+                            orgId,
+                            sessionInfo.getMemberId(),
+                            BizConstant.MemberFlag.NEED_UPDATE_PASSWORD
+                    );
                 }
 
                 bizResult.setSuccess(true);
@@ -235,17 +289,5 @@ public class BizAuthService extends BizBaseService {
         });
 
         return bizResult;
-    }
-
-    private String composeErrorMessage(EzErrorCode ezErrorCode) {
-        switch (ezErrorCode) {
-            case MEMBER_CLIENT_NOT_FOUND:
-                return AppConstant.MEMBER_LOGIN_MESSAGE_NOT_FOUND;
-            case MEMBER_CLIENT_NOT_ACTIVE:
-            case MEMBER_CLIENT_FROZEN:
-                return AppConstant.MEMBER_LOGIN_MESSAGE_SUSPEND;
-            default:
-                return AppConstant.MEMBER_LOGIN_MESSAGE_FAILED;
-        }
     }
 }
