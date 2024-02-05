@@ -26,6 +26,16 @@ public class BizBaseService {
             case MEMBER_LOGIN_FAILED:
                 return AppConstant.MEMBER_LOGIN_MESSAGE_FAILED;
 
+            //Session Error
+            case SESSION_INVALID:
+                return AppConstant.BizMessage.SESSION_INVALID;
+            case SESSION_UNAVAILABLE:
+                return AppConstant.BizMessage.SESSION_UNAVAILABLE;
+            case SESSION_EXPIRED:
+                return AppConstant.BizMessage.SESSION_EXPIRED;
+            case SESSION_VERIFY_FAILED:
+                return AppConstant.BizMessage.SESSION_VERIFY_FAILED;
+
 
             default:
                 return AppConstant.MESSAGE_SYSTEM_ABNORMAL;

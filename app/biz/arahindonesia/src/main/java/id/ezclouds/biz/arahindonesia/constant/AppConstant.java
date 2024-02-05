@@ -35,6 +35,13 @@ public class AppConstant {
 
     public static final int APP_V2_START_VERSION_NO = 15;
 
+    public static final class BizMessage {
+        public static final String SESSION_INVALID = "Session aplikasi tidak valid, silakan ulangi kembali proses anda";
+        public static final String SESSION_UNAVAILABLE = "Kode verifikasi telah digunakan sebelumnya, silakan ulangi kembali proses anda";
+        public static final String SESSION_EXPIRED = "Kode verifikasi telah kadaluarsa, silakan ulangi kembali proses anda";
+        public static final String SESSION_VERIFY_FAILED = "Kode verifikasi anda salah, masukkan kembali kode verifikasi yang benar";
+    }
+
     public static final class ExtKey {
         public static final String SOURCE_ID = "SOURCE_ID";
     }
