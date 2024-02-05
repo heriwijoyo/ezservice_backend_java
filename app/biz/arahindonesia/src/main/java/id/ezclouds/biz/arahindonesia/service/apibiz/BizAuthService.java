@@ -12,6 +12,7 @@ import id.ezclouds.biz.arahindonesia.model.authentication.BizMemberCommonSession
 import id.ezclouds.biz.arahindonesia.service.dataservice.AppConfigService;
 import id.ezclouds.biz.arahindonesia.service.dataservice.AppMemberFlagService;
 import id.ezclouds.biz.arahindonesia.service.dataservice.AppSubOrganizationService;
+import id.ezclouds.biz.arahindonesia.service.request.BizCommonSessionVerifyRequest;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberResetPasswordRequest;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberUpdatePasswordRequest;
 import id.ezclouds.biz.arahindonesia.service.result.BizMemberLoginResult;
@@ -27,7 +28,7 @@ import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.auth.request.CoreAppClientAuthRequest;
 import id.ezclouds.core.auth.request.CoreMemberClientAuthRequest;
 import id.ezclouds.core.auth.request.CoreMemberCommonSessionRequest;
-import id.ezclouds.core.auth.result.CoreAuthMemberCommonSessionInfo;
+import id.ezclouds.core.auth.result.CoreCommonSession;
 import id.ezclouds.core.auth.result.CoreAuthResult;
 import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
 import id.ezclouds.core.auth.service.CoreAuthService;
@@ -185,7 +186,7 @@ public class BizAuthService extends BizBaseService {
                 authRequest.setScene(BizConstant.Auth.COMMON_SESSION_SCENE_RESET_MEMBER_PASSWORD);
                 authRequest.setVerifyStrategy(BizConstant.Auth.COMMON_SESSION_VERIFY_STRATEGY_WHATSAPP);
 
-                CoreAuthMemberCommonSessionInfo sessionInfo = coreAuthService.createMemberCommonSession(authRequest);
+                CoreCommonSession sessionInfo = coreAuthService.createMemberCommonSession(authRequest);
                 BizMemberCommonSession commonSession = new BizMemberCommonSession();
                 commonSession.setSessionId(sessionInfo.getSessionId());
                 commonSession.setScene(sessionInfo.getScene());
@@ -195,6 +196,40 @@ public class BizAuthService extends BizBaseService {
                 memberCommonSessionSendWhatsapp(sessionInfo);
 
                 bizResult.setObject(commonSession);
+                bizResult.setSuccess(true);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+
+        return bizResult;
+    }
+
+    public BizResult memberVerifyCommonSession(BizCommonSessionVerifyRequest request) {
+        final BizResult bizResult = new BizResult();
+
+        BizServiceTemplate.execute(request, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getScene(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getVerifyStrategy(), EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreCommonSession commonSession = new CoreCommonSession();
+                commonSession.setSessionId(request.getSessionId());
+                commonSession.setScene(request.getScene());
+                commonSession.setVerifyStrategy(request.getVerifyStrategy());
+                commonSession.setVerifyCode(request.getVerifyCode());
+                coreAuthService.verifyCommonSession(commonSession);
+                coreAuthService.invalidateCommonSession(commonSession);
+
                 bizResult.setSuccess(true);
             }
 
@@ -306,7 +341,7 @@ public class BizAuthService extends BizBaseService {
         return bizResult;
     }
 
-    private void memberCommonSessionSendWhatsapp(CoreAuthMemberCommonSessionInfo commonSession) {
+    private void memberCommonSessionSendWhatsapp(CoreCommonSession commonSession) {
         String messageTemplate = appConfigService.getMessageTemplate(BizConstant.TemplateKey.WA_RESET_PASS_VERIFY_CODE);
         Map<String, String> values = new HashMap<>();
         values.put("VERIFY_CODE", commonSession.getVerifyCode());

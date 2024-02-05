@@ -33,6 +33,10 @@ public class DateUtil {
         return date;
     }
 
+    public static long getTimeNow() {
+        return new Date().getTime();
+    }
+
     public static String getFormattedDate(Date date) {
         return getFormattedDate(date, FORMAT_DATETIME_DEFAULT);
     }

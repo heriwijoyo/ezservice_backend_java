@@ -36,6 +36,9 @@ public class EzAuthMemberCommonSessionDO {
     @Column(name = "verify_code")
     private String verifyCode;
 
+    @Column(name = "verify_time")
+    private String verifyTime;
+
     @Column(name = "app_id")
     private String appId;
 
@@ -103,6 +106,14 @@ public class EzAuthMemberCommonSessionDO {
 
     public void setVerifyCode(String verifyCode) {
         this.verifyCode = verifyCode;
+    }
+
+    public String getVerifyTime() {
+        return verifyTime;
+    }
+
+    public void setVerifyTime(String verifyTime) {
+        this.verifyTime = verifyTime;
     }
 
     public String getAppId() {

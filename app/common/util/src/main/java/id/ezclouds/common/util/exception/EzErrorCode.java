@@ -22,6 +22,8 @@ public enum EzErrorCode {
     MEMBER_CLIENT_ABNORMAL("MEMBER_CLIENT_ABNORMAL", "Member Client Abnormal"),
     SESSION_INVALID("SESSION_INVALID", "Session Invalid"),
     SESSION_EXPIRED("SESSION_EXPIRED", "Session Expired"),
+    SESSION_UNAVAILABLE("SESSION_UNAVAILABLE", "Session Unavailable"),
+    SESSION_VERIFY_FAILED("SESSION_VERIFY_FAILED", "Session Verify Failed"),
     CORE_SEQUENCE_ERROR("CORE_SEQUENCE_ERROR", "Core Sequence Error"),
     IDEMPOTENT_ERROR("IDEMPOTENT_ERROR", "Idempotent Error"),
 
