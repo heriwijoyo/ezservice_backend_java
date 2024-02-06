@@ -8,20 +8,20 @@ import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.integration.request.WhatsappSendRequest;
+import id.ezclouds.core.integration.result.EzConnectResult;
 import id.ezclouds.core.integration.service.client.WatzapClientService;
 import id.ezclouds.core.integration.service.client.request.WatzapSendRequest;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.service.CoreConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: CoreIntegrationService.java, v 0.1 2024‐02‐05 1:29 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: EzConnectService.java, v 0.1 2024‐02‐05 1:29 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class CoreIntegrationService {
+public class EzConnectService {
 
     @Autowired
     private CoreConfigService coreConfigService;
@@ -29,9 +29,10 @@ public class CoreIntegrationService {
     @Autowired
     private WatzapClientService watzapClientService;
 
-    @Async
-    public void sendWhatsappMessage(WhatsappSendRequest request) {
-        CoreIntegrationServiceTemplate.executeAsync(request, new CoreIntegrationServiceTemplate.Handler() {
+    public EzConnectResult sendWhatsappMessage(WhatsappSendRequest request) throws Exception {
+        final EzConnectResult result = new EzConnectResult();
+
+        CoreIntegrationServiceTemplate.execute(request, result, new CoreIntegrationServiceTemplate.Handler() {
             @Override
             public void onRequestCheck() throws EzErrorException {
                 AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM, "WhatsappSendRequest is null");
@@ -45,13 +46,15 @@ public class CoreIntegrationService {
                     WatzapSendRequest sendRequest = new WatzapSendRequest();
                     sendRequest.setPhone_no(request.getPhoneNumber());
                     sendRequest.setMessage(request.getMessage());
-                    watzapClientService.sendWatzap(sendRequest)
-                            .subscribe(responseEntity -> {
-                                System.out.println(responseEntity);
-                            });
+                    watzapClientService.sendWatzap(sendRequest);
+                } else {
+                    System.out.println("WatzapSend config is disabled");
                 }
+                result.setSuccess(true);
             }
         });
+
+        return result;
     }
 
     private boolean isWatzapSendEnable() {

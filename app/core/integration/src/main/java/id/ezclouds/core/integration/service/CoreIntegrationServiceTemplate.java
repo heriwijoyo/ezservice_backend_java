@@ -6,6 +6,7 @@ package id.ezclouds.core.integration.service;
 
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.integration.request.IntegrationRequest;
+import id.ezclouds.core.integration.result.EzConnectResult;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -13,7 +14,7 @@ import id.ezclouds.core.integration.request.IntegrationRequest;
  */
 public class CoreIntegrationServiceTemplate {
 
-    public static void executeAsync(IntegrationRequest request, Handler handler) {
+    public static void execute(IntegrationRequest request, EzConnectResult result, Handler handler) {
         try {
             handler.onRequestCheck();
             handler.onProcess();

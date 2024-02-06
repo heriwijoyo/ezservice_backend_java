@@ -33,7 +33,7 @@ import id.ezclouds.core.auth.result.CoreAuthResult;
 import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
 import id.ezclouds.core.auth.service.CoreAuthService;
 import id.ezclouds.core.integration.request.WhatsappSendRequest;
-import id.ezclouds.core.integration.service.CoreIntegrationService;
+import id.ezclouds.core.integration.service.EzConnectService;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
 import id.ezclouds.core.member.service.CoreMemberService;
@@ -71,7 +71,7 @@ public class BizAuthService extends BizBaseService {
     private AppConfigService appConfigService;
 
     @Autowired
-    private CoreIntegrationService coreIntegrationService;
+    private EzConnectService ezConnectService;
 
     public CoreAuthResult<String> authAppClient(String orgId, String appId, String clientId, String clientSecret) {
         CoreAuthResult<String> bizAuthResult = new CoreAuthResult<>();
@@ -341,7 +341,7 @@ public class BizAuthService extends BizBaseService {
         return bizResult;
     }
 
-    private void memberCommonSessionSendWhatsapp(CoreCommonSession commonSession) {
+    private void memberCommonSessionSendWhatsapp(CoreCommonSession commonSession) throws Exception {
         String messageTemplate = appConfigService.getMessageTemplate(BizConstant.TemplateKey.WA_RESET_PASS_VERIFY_CODE);
         Map<String, String> values = new HashMap<>();
         values.put(BizConstant.TemplateKey.VERIFY_CODE, commonSession.getVerifyCode());
@@ -349,11 +349,10 @@ public class BizAuthService extends BizBaseService {
 
         String whatsappMessage = BizMessageTemplateConverter.getMessage(messageTemplate, values);
         if (whatsappMessage != null) {
-            System.out.println(whatsappMessage);
             WhatsappSendRequest request = new WhatsappSendRequest();
             request.setPhoneNumber(commonSession.getVerifyTarget());
             request.setMessage(whatsappMessage);
-            coreIntegrationService.sendWhatsappMessage(request);
+            ezConnectService.sendWhatsappMessage(request);
         }
     }
 }

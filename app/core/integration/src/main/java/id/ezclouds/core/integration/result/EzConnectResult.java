@@ -4,16 +4,19 @@
  */
 package id.ezclouds.core.integration.result;
 
+import id.ezclouds.common.util.exception.EzErrorCode;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: IntegrationResult.java, v 0.1 2024‐02‐05 1:39 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: EzConnectResult.java, v 0.1 2024‐02‐05 1:39 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class IntegrationResult {
+public class EzConnectResult {
 
     private boolean success;
+    private EzErrorCode errorCode;
     private Object data;
 
-    public IntegrationResult() {
+    public EzConnectResult() {
         this.success = false;
     }
 
@@ -23,6 +26,14 @@ public class IntegrationResult {
 
     public void setSuccess(boolean success) {
         this.success = success;
+    }
+
+    public EzErrorCode getErrorCode() {
+        return errorCode;
+    }
+
+    public void setErrorCode(EzErrorCode errorCode) {
+        this.errorCode = errorCode;
     }
 
     public Object getData() {
