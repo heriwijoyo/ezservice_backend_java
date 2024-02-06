@@ -23,38 +23,48 @@ public class BizRequestConverter<T extends BizRequest> {
         return handler.convert(input);
     }
 
-    public static BizMemberRegisterRequest convert(MemberRegisterRequest request) {
-        if (request == null) { return null; }
-        BizMemberRegisterRequest bizRequest = new BizMemberRegisterRequest();
-        bizRequest.setSubOrgId(request.getSubOrgId());
-        bizRequest.setReferrerId(request.getReferrerId());
-        bizRequest.setRoles(request.getRoles());
-        bizRequest.setName(request.getName());
-        bizRequest.setNickname(request.getNickname());
-        bizRequest.setDateOfBirth(request.getDateOfBirth());
-        bizRequest.setPhone(request.getPhone());
-        bizRequest.setEmail(request.getEmail());
-        bizRequest.setAvatarUrl(request.getAvatarUrl());
-        bizRequest.setAddress(request.getAddress());
-        BizGender bizGender = BizGender.getByCode(request.getGender());
-        if (bizGender != null) {
-            bizRequest.setBizGender(bizGender);
+    public static Handler<BizMemberLoginRequest> MEMBER_LOGIN = apiRequest -> {
+        if (apiRequest instanceof MemberLoginRequest) {
+            MemberLoginRequest request = (MemberLoginRequest) apiRequest;
+            BizMemberLoginRequest memberLogin = new BizMemberLoginRequest();
+            memberLogin.setLoginType(request.getLoginType());
+            memberLogin.setLoginId(request.getLoginId());
+            memberLogin.setLoginPassword(request.getLoginPassword());
+            return memberLogin;
         }
+        return null;
+    };
 
-        bizRequest.setProvinceId(request.getProvinceId());
-        bizRequest.setProvinceName(request.getProvinceName());
-        bizRequest.setRegencyId(request.getRegencyId());
-        bizRequest.setRegencyName(request.getRegencyName());
-        bizRequest.setDistrictId(request.getDistrictId());
-        bizRequest.setDistrictName(request.getDistrictName());
-        bizRequest.setVillageId(request.getVillageId());
-        bizRequest.setVillageName(request.getVillageName());
-        bizRequest.setRukunWarga(request.getRukunWarga());
-        bizRequest.setRukunTetangga(request.getRukunTetangga());
-        bizRequest.setTpsNumber(request.getTpsNumber());
-
-        return bizRequest;
-    }
+    public static Handler<BizMemberRegisterRequest> MEMBER_REGISTER = apiRequest -> {
+        if (apiRequest instanceof MemberRegisterRequest) {
+            MemberRegisterRequest request = (MemberRegisterRequest) apiRequest;
+            BizMemberRegisterRequest bizRequest = new BizMemberRegisterRequest();
+            bizRequest.setSubOrgId(request.getSubOrgId());
+            bizRequest.setReferrerId(request.getReferrerId());
+            bizRequest.setRoles(request.getRoles());
+            bizRequest.setName(request.getName());
+            bizRequest.setNickname(request.getNickname());
+            bizRequest.setDateOfBirth(request.getDateOfBirth());
+            bizRequest.setPhone(request.getPhone());
+            bizRequest.setEmail(request.getEmail());
+            bizRequest.setAvatarUrl(request.getAvatarUrl());
+            bizRequest.setAddress(request.getAddress());
+            bizRequest.setBizGender(BizGender.getByCode(request.getGender()));
+            bizRequest.setProvinceId(request.getProvinceId());
+            bizRequest.setProvinceName(request.getProvinceName());
+            bizRequest.setRegencyId(request.getRegencyId());
+            bizRequest.setRegencyName(request.getRegencyName());
+            bizRequest.setDistrictId(request.getDistrictId());
+            bizRequest.setDistrictName(request.getDistrictName());
+            bizRequest.setVillageId(request.getVillageId());
+            bizRequest.setVillageName(request.getVillageName());
+            bizRequest.setRukunWarga(request.getRukunWarga());
+            bizRequest.setRukunTetangga(request.getRukunTetangga());
+            bizRequest.setTpsNumber(request.getTpsNumber());
+            return bizRequest;
+        }
+        return null;
+    };
 
     public static Handler<BizMemberUpdatePasswordRequest> UPDATE_PASSWORD = apiRequest -> {
         if (apiRequest instanceof MemberUpdatePasswordRequest) {

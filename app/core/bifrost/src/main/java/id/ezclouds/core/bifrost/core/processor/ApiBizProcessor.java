@@ -13,8 +13,6 @@ import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
-import id.ezclouds.core.bifrost.app.api.request.MemberLoginRequest;
-import id.ezclouds.core.bifrost.app.api.request.MemberRegisterRequest;
 import id.ezclouds.core.bifrost.core.BaseRequest;
 import id.ezclouds.core.bifrost.core.converter.BizRequestConverter;
 import id.ezclouds.core.shared.context.EzAppEvent;
@@ -69,7 +67,8 @@ public class ApiBizProcessor implements BizProcessor {
                     return bizMemberService.getMemberProfile();
 
                 case API_MEMBER_LOGIN:
-                    return bizAuthService.memberLogin(composeMemberLogin((MemberLoginRequest)request));
+                    BizRequestConverter<BizMemberLoginRequest> loginConverter = new BizRequestConverter<>(BizRequestConverter.MEMBER_LOGIN);
+                    return bizAuthService.memberLogin(loginConverter.convert(apiRequest));
 
                 case API_SESSION_CHECK:
                     return bizAuthService.memberSessionCheck();
@@ -90,26 +89,17 @@ public class ApiBizProcessor implements BizProcessor {
                     return bizAuthService.memberVerifyCommonSession(verifyConverter.convert(apiRequest));
 
                 case API_MEMBER_REGISTER:
-                    BizMemberRegisterRequest bizRequest = BizRequestConverter.convert((MemberRegisterRequest) request);
+                    BizRequestConverter<BizMemberRegisterRequest> registerConverter = new BizRequestConverter<>(BizRequestConverter.MEMBER_REGISTER);
+                    BizMemberRegisterRequest bizRequest = registerConverter.convert(apiRequest);
                     bizRequest.getExtendInfo().put(AppConstant.ExtKey.SOURCE_ID, SOURCE_ID);
                     return bizMemberService.registerMember(bizRequest);
             }
         }
-
 
         BizResult bizResult = new BizResult();
         bizResult.setErrorCode(EzErrorCode.SYSTEM_ERROR);
         bizResult.setErrorLocation(getClass().getName());
         bizResult.setErrorMessage("Undefined bizProcessor");
         return bizResult;
-    }
-
-    private BizMemberLoginRequest composeMemberLogin(MemberLoginRequest loginRequest) {
-        if (loginRequest == null) { return null; }
-        BizMemberLoginRequest memberLogin = new BizMemberLoginRequest();
-        memberLogin.setLoginType(loginRequest.getLoginType());
-        memberLogin.setLoginId(loginRequest.getLoginId());
-        memberLogin.setLoginPassword(loginRequest.getLoginPassword());
-        return memberLogin;
     }
 }
