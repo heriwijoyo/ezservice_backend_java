@@ -18,7 +18,7 @@ import id.ezclouds.biz.arahindonesia.service.request.BizMemberUpdatePasswordRequ
 import id.ezclouds.biz.arahindonesia.service.result.BizMemberLoginResult;
 import id.ezclouds.biz.arahindonesia.model.member.BizMember;
 import id.ezclouds.biz.arahindonesia.model.member.MemberBase;
-import id.ezclouds.biz.arahindonesia.service.core.BizOrganizationService;
+import id.ezclouds.biz.arahindonesia.service.dataservice.BizOrganizationService;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberLoginRequest;
 import id.ezclouds.biz.arahindonesia.service.result.BizResult;
 import id.ezclouds.biz.arahindonesia.service.template.BizServiceTemplate;
@@ -344,8 +344,8 @@ public class BizAuthService extends BizBaseService {
     private void memberCommonSessionSendWhatsapp(CoreCommonSession commonSession) {
         String messageTemplate = appConfigService.getMessageTemplate(BizConstant.TemplateKey.WA_RESET_PASS_VERIFY_CODE);
         Map<String, String> values = new HashMap<>();
-        values.put("VERIFY_CODE", commonSession.getVerifyCode());
-        values.put("EXPIRY_LABEL", commonSession.getExpiryTime());
+        values.put(BizConstant.TemplateKey.VERIFY_CODE, commonSession.getVerifyCode());
+        values.put(BizConstant.TemplateKey.EXPIRY_LABEL, commonSession.getExpiryTime());
 
         String whatsappMessage = BizMessageTemplateConverter.getMessage(messageTemplate, values);
         if (whatsappMessage != null) {
@@ -353,10 +353,7 @@ public class BizAuthService extends BizBaseService {
             WhatsappSendRequest request = new WhatsappSendRequest();
             request.setPhoneNumber(commonSession.getVerifyTarget());
             request.setMessage(whatsappMessage);
-
             coreIntegrationService.sendWhatsappMessage(request);
-        } else {
-            System.out.println("==============> ASUUUUUUUUUUUUU");
         }
     }
 }

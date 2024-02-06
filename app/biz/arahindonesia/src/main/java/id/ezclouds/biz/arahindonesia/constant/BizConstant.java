@@ -27,5 +27,7 @@ public class BizConstant {
 
     public static final class TemplateKey {
         public static final String WA_RESET_PASS_VERIFY_CODE = "WA_RESET_PASS_VERIFY_CODE";
+        public static final String VERIFY_CODE = "VERIFY_CODE";
+        public static final String EXPIRY_LABEL = "EXPIRY_LABEL";
     }
 }

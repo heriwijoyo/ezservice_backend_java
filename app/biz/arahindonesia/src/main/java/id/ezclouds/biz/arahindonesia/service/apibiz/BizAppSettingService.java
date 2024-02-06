@@ -7,7 +7,7 @@ package id.ezclouds.biz.arahindonesia.service.apibiz;
 import id.ezclouds.biz.arahindonesia.constant.AppConstant;
 import id.ezclouds.biz.arahindonesia.model.*;
 import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
-import id.ezclouds.biz.arahindonesia.service.core.NewsService;
+import id.ezclouds.biz.arahindonesia.service.dataservice.NewsService;
 import id.ezclouds.biz.arahindonesia.service.dataservice.AppConfigService;
 import id.ezclouds.biz.arahindonesia.service.dataservice.ImageSlideService;
 import id.ezclouds.biz.arahindonesia.service.dataservice.VideoCardService;
