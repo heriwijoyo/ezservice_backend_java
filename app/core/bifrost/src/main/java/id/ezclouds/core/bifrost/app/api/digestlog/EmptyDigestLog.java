@@ -24,7 +24,7 @@ public class EmptyDigestLog extends BaseDigestLog<Void> {
 
         if (request instanceof VerifyCommonSessionRequest) {
             VerifyCommonSessionRequest req = (VerifyCommonSessionRequest) request;
-            requestData = "sessionId=" + req.getSessionId() + ", scene=" + req.getScene() + ", verifyStrategy=" + req.getVerifyStrategy() + ", verifyCode=" + req.getVerifyCode();
+            requestData = "sessionId=" + req.getSessionId() + ",scene=" + req.getScene() + ",verifyStrategy=" + req.getVerifyStrategy() + ",verifyCode=" + req.getVerifyCode();
         }
 
         setDigestMessage("request(" + requestData + ")");

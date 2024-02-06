@@ -303,6 +303,25 @@ public class CoreAuthService {
         return sessionInfo;
     }
 
+    public CoreAuthMemberSessionInfo authCommonSession(String sessionId) throws Exception {
+        EzAuthMemberCommonSessionDO sessionDO = ezAuthMemberCommonSessionRepository
+                .findById(sessionId)
+                .orElse(null);
+        AssertUtil.notNull(sessionDO, EzErrorCode.SESSION_INVALID);
+        AssertUtil.isTrue(sessionDO.getStatus() == CoreAuthConstant.Status.NOT_ACTIVE, EzErrorCode.SESSION_INVALID);
+        AssertUtil.notBlank(sessionDO.getVerifyTime(), EzErrorCode.SESSION_INVALID);
+
+        Date expiryDate = DateUtil.parseFormattedDate(sessionDO.getExpiryTime());
+        AssertUtil.isTrue(expiryDate.getTime() > DateUtil.getTimeNow(), EzErrorCode.SESSION_EXPIRED);
+
+        CoreAuthMemberSessionInfo sessionInfo = new CoreAuthMemberSessionInfo();
+        sessionInfo.setMemberId(sessionDO.getMemberId());
+        sessionInfo.setSessionId(sessionDO.getSessionId());
+        sessionInfo.setClientId(sessionDO.getClientId());
+
+        return sessionInfo;
+    }
+
     @Transactional
     public CoreAuthResult<Void> invalidateMemberSession(String sessionId) {
         CoreAuthResult<Void> authResult = new CoreAuthResult<>();

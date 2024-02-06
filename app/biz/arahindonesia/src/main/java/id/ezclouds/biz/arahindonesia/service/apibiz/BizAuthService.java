@@ -303,22 +303,27 @@ public class BizAuthService extends BizBaseService {
                 AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
                 AssertUtil.notBlank(request.getMode(), EzErrorCode.ILLEGAL_PARAM);
                 AssertUtil.notBlank(request.getNewPassword(), EzErrorCode.ILLEGAL_PARAM);
+
+                if (BizConstant.Key.UPDATE_PASSWORD_MODE_RESET_SESSION.equals(request.getMode())) {
+                    AssertUtil.notBlank(request.getExtendInfo().get(BizConstant.Key.COMMON_SESSION_ID), EzErrorCode.ILLEGAL_PARAM);
+                }
             }
 
             @Override
             public void onBizProcess() throws Exception {
                 CoreAuthMemberSessionInfo sessionInfo = null;
-                if (BizConstant.UPDATE_PASSWORD_MODE_MEMBER_SESSION.equals(request.getMode())) {
+                if (BizConstant.Key.UPDATE_PASSWORD_MODE_MEMBER_SESSION.equals(request.getMode())) {
                     String memberSessionId = EzAppContextHolder.getContext().getMemberSessionId();
                     sessionInfo = coreAuthService.authMemberSession(memberSessionId);
                 }
-                if (BizConstant.UPDATE_PASSWORD_MODE_RESET_SESSION.equals(request.getMode())) {
-                    //TODO: add this capability later
+                if (BizConstant.Key.UPDATE_PASSWORD_MODE_RESET_SESSION.equals(request.getMode())) {
+                    String sesionId = request.getExtendInfo().get(BizConstant.Key.COMMON_SESSION_ID);
+                    sessionInfo = coreAuthService.authCommonSession(sesionId);
                 }
 
                 coreAuthService.updateMemberClientPassword(sessionInfo.getClientId(), request.getNewPassword());
 
-                String extForceUpdate = request.getExtendInfo().get("FORCED_UPDATE_PASSWORD");
+                String extForceUpdate = request.getExtendInfo().get(BizConstant.Key.FORCED_UPDATE_PASSWORD);
                 if (Boolean.parseBoolean(extForceUpdate)) {
                     String orgId = EzAppContextHolder.getContext().getOrgId();
                     appMemberFlagService.invalidateAppMemberFlag(

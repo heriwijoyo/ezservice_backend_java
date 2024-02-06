@@ -9,8 +9,13 @@ package id.ezclouds.biz.arahindonesia.constant;
  * @version $Id: BizConstant.java, v 0.1 2024‐02‐04 10:01 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 public class BizConstant {
-    public static final String UPDATE_PASSWORD_MODE_MEMBER_SESSION = "MEMBER_SESSION";
-    public static final String UPDATE_PASSWORD_MODE_RESET_SESSION = "RESET_SESSION";
+
+    public static final class Key {
+        public static final String UPDATE_PASSWORD_MODE_MEMBER_SESSION = "MEMBER_SESSION";
+        public static final String UPDATE_PASSWORD_MODE_RESET_SESSION = "RESET_SESSION";
+        public static final String FORCED_UPDATE_PASSWORD = "FORCED_UPDATE_PASSWORD";
+        public static final String COMMON_SESSION_ID = "COMMON_SESSION_ID";
+    }
 
     public static final class MemberFlag {
         public static final String NEED_UPDATE_PASSWORD = "NEED_UPDATE_PASSWORD";
