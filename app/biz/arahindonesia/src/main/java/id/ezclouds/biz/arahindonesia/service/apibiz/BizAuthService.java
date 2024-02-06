@@ -218,6 +218,7 @@ public class BizAuthService extends BizBaseService {
                 AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
                 AssertUtil.notBlank(request.getScene(), EzErrorCode.ILLEGAL_PARAM);
                 AssertUtil.notBlank(request.getVerifyStrategy(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.isTrue(BizConstant.commonSessionSceneAllowed().contains(request.getScene()), EzErrorCode.ILLEGAL_ACTION);
             }
 
             @Override
@@ -227,10 +228,17 @@ public class BizAuthService extends BizBaseService {
                 commonSession.setScene(request.getScene());
                 commonSession.setVerifyStrategy(request.getVerifyStrategy());
                 commonSession.setVerifyCode(request.getVerifyCode());
-                coreAuthService.verifyCommonSession(commonSession);
+                CoreAuthMemberSessionInfo sessionInfo = coreAuthService.verifyCommonSession(commonSession);
                 coreAuthService.invalidateCommonSession(commonSession);
 
+                boolean isResetPassScene = request.getScene().equals(BizConstant.Auth.COMMON_SESSION_SCENE_RESET_MEMBER_PASSWORD);
+                boolean isVerifyPhoneScene = request.getScene().equals(BizConstant.Auth.COMMON_SESSION_SCENE_VERIFY_PHONE);
+                if (isResetPassScene || isVerifyPhoneScene) {
+                    coreMemberService.verifyPhone(sessionInfo.getMemberId());
+                }
+
                 bizResult.setSuccess(true);
+                bizResult.setObject(BizConstant.Message.COMMON_SESSION_VERIFY_SUCCESS);
             }
 
             @Override

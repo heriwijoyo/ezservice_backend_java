@@ -196,16 +196,16 @@ public class ApiController extends AppController {
     }
 
     @PostMapping(value = "/api/verify_otp.php")
-    private ApiResult<Void> verifyCommonSession(@RequestBody VerifyCommonSessionRequest request) {
-        return executeInTemplate(ApiEvent.API_MEMBER_VERIFY_COMMON_SESSION, request, new RequestHandler<Void>() {
+    private ApiResult<String> verifyCommonSession(@RequestBody VerifyCommonSessionRequest request) {
+        return executeInTemplate(ApiEvent.API_MEMBER_VERIFY_COMMON_SESSION, request, new RequestHandler<String>() {
             @Override
-            public Void convertResult(Object resultObject) {
-                return null;
+            public String convertResult(Object resultObject) {
+                return (String) resultObject;
             }
 
             @Override
-            public DigestLog composeDigestLog(ApiRequest request, ApiResult<Void> result) {
-                EmptyDigestLog digestLog = new EmptyDigestLog(result.isSuccess(), result.getResultCode());
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<String> result) {
+                SimpleDigestLog digestLog = new SimpleDigestLog(result.isSuccess(), result.getResultCode());
                 digestLog.composeDigest(request, result);
                 return digestLog;
             }
@@ -222,7 +222,7 @@ public class ApiController extends AppController {
             }
             @Override
             public DigestLog composeDigestLog(ApiRequest request, ApiResult<String> result) {
-                SampleDigestLog digestLog = new SampleDigestLog(result.isSuccess(), result.getResultCode());
+                SimpleDigestLog digestLog = new SimpleDigestLog(result.isSuccess(), result.getResultCode());
                 digestLog.composeDigest(request, result);
                 return digestLog;
             }

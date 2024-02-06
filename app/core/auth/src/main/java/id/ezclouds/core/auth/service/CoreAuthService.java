@@ -244,7 +244,7 @@ public class CoreAuthService {
         return sessionInfo;
     }
 
-    public void verifyCommonSession(CoreCommonSession commonSession) throws Exception {
+    public CoreAuthMemberSessionInfo verifyCommonSession(CoreCommonSession commonSession) throws Exception {
         EzAuthMemberCommonSessionDO sessionDO = ezAuthMemberCommonSessionRepository
                 .findById(commonSession.getSessionId())
                 .orElse(null);
@@ -254,6 +254,11 @@ public class CoreAuthService {
         Date sessionExpire = DateUtil.parseFormattedDate(sessionDO.getExpiryTime());
         AssertUtil.isTrue(DateUtil.getTimeNow() < sessionExpire.getTime(), EzErrorCode.SESSION_EXPIRED);
         AssertUtil.isTrue(StringUtil.equalsNotNull(sessionDO.getVerifyCode(), commonSession.getVerifyCode()), EzErrorCode.SESSION_VERIFY_FAILED);
+
+        CoreAuthMemberSessionInfo sessionInfo = new CoreAuthMemberSessionInfo();
+        sessionInfo.setClientId(sessionDO.getClientId());
+        sessionInfo.setMemberId(sessionDO.getMemberId());
+        return sessionInfo;
     }
 
     @Transactional

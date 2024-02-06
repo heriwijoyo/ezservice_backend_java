@@ -36,7 +36,9 @@ public class BizBaseService {
             case SESSION_VERIFY_FAILED:
                 return AppConstant.BizMessage.SESSION_VERIFY_FAILED;
 
-
+            // General Error
+            case ILLEGAL_ACTION:
+                return AppConstant.BizMessage.ILLEGAL_ACTION;
             default:
                 return AppConstant.MESSAGE_SYSTEM_ABNORMAL;
         }
