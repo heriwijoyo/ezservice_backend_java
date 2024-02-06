@@ -5,6 +5,7 @@
 package id.ezclouds.core.bifrost.app.api.request;
 
 import id.ezclouds.core.bifrost.core.BaseRequest;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +21,8 @@ public class ApiRequest extends BaseRequest {
     private RequestAppSession appSession;
 
     private Map<String, String> extendInfo = new HashMap<>();
+
+    private MultipartFile multipartFile;
 
     public RequestAppClient getAppClient() {
         return appClient;
@@ -39,5 +42,13 @@ public class ApiRequest extends BaseRequest {
 
     public Map<String, String> getExtendInfo() {
         return extendInfo;
+    }
+
+    public MultipartFile getMultipartFile() {
+        return multipartFile;
+    }
+
+    public void setMultipartFile(MultipartFile multipartFile) {
+        this.multipartFile = multipartFile;
     }
 }

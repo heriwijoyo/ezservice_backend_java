@@ -12,6 +12,8 @@ import id.ezclouds.biz.arahindonesia.model.profile.MemberProfile;
 import id.ezclouds.biz.arahindonesia.service.inner.service.BizMemberInnerService;
 import id.ezclouds.biz.arahindonesia.service.dataservice.AppProfileService;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberRegisterRequest;
+import id.ezclouds.biz.arahindonesia.service.request.BizMemberUpdateAvatarRequest;
+import id.ezclouds.biz.arahindonesia.service.request.BizRequest;
 import id.ezclouds.biz.arahindonesia.service.result.BizResult;
 import id.ezclouds.biz.arahindonesia.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.StringUtil;
@@ -25,7 +27,14 @@ import id.ezclouds.core.member.model.CoreMemberExtension;
 import id.ezclouds.core.member.service.CoreMemberService;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -45,6 +54,9 @@ public class BizMemberService extends BizBaseService {
 
     @Autowired
     private CoreMemberService coreMemberService;
+
+    @Value("${ezserviceapp.dir.upload.member}")
+    private String uploadPath;
 
     public BizResult getMemberProfile() {
         final BizResult bizResult = new BizResult();
@@ -121,6 +133,36 @@ public class BizMemberService extends BizBaseService {
                 if (ezErrorCode == EzErrorCode.IDEMPOTENT_ERROR) {
                     return AppConstant.MEMBER_REGISTER_IDEMPOTENT;
                 }
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+
+        return bizResult;
+    }
+
+    public BizResult memberUpdateAvatar(BizMemberUpdateAvatarRequest request) {
+        final BizResult bizResult = new BizResult();
+
+        BizServiceTemplate.execute(request, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+
+                MultipartFile file = request.getMultipartFile();
+
+                Path fileLocation = Paths.get(uploadPath).toAbsolutePath().normalize();
+                Path target = fileLocation.resolve(file.getOriginalFilename());
+                Files.copy(file.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
+
+                bizResult.setSuccess(true);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
                 return getBizErrorMessage(ezErrorCode);
             }
         });

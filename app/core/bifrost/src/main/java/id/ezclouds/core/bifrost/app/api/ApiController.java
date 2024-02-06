@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.bifrost.app.api;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.arahindonesia.model.AppSetting;
 import id.ezclouds.biz.arahindonesia.model.authentication.BizMemberCommonSession;
 import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
@@ -19,8 +20,11 @@ import id.ezclouds.core.bifrost.app.api.result.ApiResult;
 import id.ezclouds.core.shared.result.ListResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.json.JsonParser;
+import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -207,6 +211,26 @@ public class ApiController extends AppController {
             public DigestLog composeDigestLog(ApiRequest request, ApiResult<String> result) {
                 SimpleDigestLog digestLog = new SimpleDigestLog(result.isSuccess(), result.getResultCode());
                 digestLog.composeDigest(request, result);
+                return digestLog;
+            }
+        });
+    }
+
+    @PostMapping(value = "/api/member_upload.php", consumes = {MediaType.ALL_VALUE})
+    private ApiResult<String> memberUpload(@RequestPart("memberAvatar") MultipartFile memberAvatarFile, @RequestPart("postData") String postData) throws Exception {
+
+        ObjectMapper mapper = new ObjectMapper();
+        MemberUpdateAvatarRequest request = mapper.readValue(postData, MemberUpdateAvatarRequest.class);
+        request.setMultipartFile(memberAvatarFile);
+        return executeInTemplate(ApiEvent.API_MEMBER_UPDATE_AVATAR, request, new RequestHandler<String>() {
+            @Override
+            public String convertResult(Object resultObject) {
+                return "OK";
+            }
+
+            @Override
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<String> result) {
+                EmptyDigestLog digestLog = new EmptyDigestLog(result.isSuccess(), result.getResultCode());
                 return digestLog;
             }
         });

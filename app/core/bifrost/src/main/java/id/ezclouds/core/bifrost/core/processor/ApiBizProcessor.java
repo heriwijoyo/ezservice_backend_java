@@ -93,6 +93,10 @@ public class ApiBizProcessor implements BizProcessor {
                     BizMemberRegisterRequest bizRequest = registerConverter.convert(apiRequest);
                     bizRequest.getExtendInfo().put(AppConstant.ExtKey.SOURCE_ID, SOURCE_ID);
                     return bizMemberService.registerMember(bizRequest);
+
+                case API_MEMBER_UPDATE_AVATAR:
+                    BizRequestConverter<BizMemberUpdateAvatarRequest> avatarConverter = new BizRequestConverter<>(BizRequestConverter.UPDATE_AVATAR);
+                    return bizMemberService.memberUpdateAvatar(avatarConverter.convert(apiRequest));
             }
         }
 
