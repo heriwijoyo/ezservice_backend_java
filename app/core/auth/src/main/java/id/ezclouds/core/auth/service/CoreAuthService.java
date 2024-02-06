@@ -35,6 +35,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -157,49 +158,81 @@ public class CoreAuthService {
         AssertUtil.isNotTrue(clientStatus == CoreAuthConstant.MEMBER_CLIENT_STATUS_FROZEN, EzErrorCode.MEMBER_CLIENT_FROZEN);
         AssertUtil.isTrue(clientStatus == CoreAuthConstant.MEMBER_CLIENT_STATUS_ACTIVE, EzErrorCode.MEMBER_CLIENT_ABNORMAL);
 
+        List<EzAuthMemberCommonSessionDO> activeSessionDOs = new ArrayList<>();
+        List<EzAuthMemberCommonSessionDO> inActiveSessionDOs = new ArrayList<>();
         List<EzAuthMemberCommonSessionDO> sessionDOs = ezAuthMemberCommonSessionRepository.findBySceneLoginId(
                 request.getOrgId(),
                 request.getScene(),
                 request.getVerifyStrategy(),
                 memberClientDO.getMemberId()
         );
-        if (sessionDOs.size() > 0) {
-            sessionDOs.forEach(sessionDO -> {
-                ezAuthMemberCommonSessionRepository.delete(sessionDO);
-            });
-            ezAuthMemberCommonSessionRepository.flush();
+        sessionDOs.forEach(sessionDO -> {
+            if (sessionDO.getStatus() == CoreAuthConstant.Status.NOT_ACTIVE || isSessionExpired(sessionDO)) {
+                inActiveSessionDOs.add(sessionDO);
+            } else {
+                activeSessionDOs.add(sessionDO);
+            }
+        });
+        EzAuthMemberCommonSessionDO activeSessionDO = null;
+        if (activeSessionDOs.size() > 0) {
+            for (EzAuthMemberCommonSessionDO activeDO : activeSessionDOs) {
+                if (activeSessionDO == null) {
+                    activeSessionDO = activeDO;
+                } else {
+                    Date activeDate = DateUtil.parseFormattedDate(activeSessionDO.getExpiryTime());
+                    Date compareDate = DateUtil.parseFormattedDate(activeDO.getExpiryTime());
+                    if (compareDate.getTime() > activeDate.getTime()) {
+                        inActiveSessionDOs.add(activeSessionDO);
+                        activeSessionDO = activeDO;
+                    }
+                    else {
+                        inActiveSessionDOs.add(activeDO);
+                    }
+                }
+            }
         }
 
-        String currentDateTime = DateUtil.getCurrentFormattedDate();
-        String sessionId = HashUtil.createHash(
-                memberClientDO.getOrgId(),
-                memberClientDO.getClientId(),
-                request.getScene(),
-                request.getVerifyStrategy(),
-                currentDateTime
-        );
-        int verifyCodeNumber = new Random().nextInt(9000) + 1000;
-        String verifyCode = String.valueOf(verifyCodeNumber);
+        if (inActiveSessionDOs.size() > 0) {
+            inActiveSessionDOs.forEach(sessionDO -> {
+                ezAuthMemberCommonSessionRepository.delete(sessionDO);
+            });
+        }
 
-        EzAuthMemberCommonSessionDO sessionDO = new EzAuthMemberCommonSessionDO();
-        sessionDO.setSessionId(sessionId);
-        sessionDO.setOrgId(memberClientDO.getOrgId());
-        sessionDO.setShard(ShardUtil.getShardId(memberClientDO.getMemberId()));
-        sessionDO.setScene(request.getScene());
-        sessionDO.setVerifyStrategy(request.getVerifyStrategy());
-        sessionDO.setVerifyCode(verifyCode);
-        sessionDO.setAppId(memberClientDO.getAppId());
-        sessionDO.setClientId(memberClientDO.getClientId());
-        sessionDO.setMemberId(memberClientDO.getMemberId());
-        sessionDO.setDeviceId(request.getDeviceId());
-        sessionDO.setCreatedTime(DateUtil.getCurrentFormattedDate());
-        sessionDO.setStatus(CoreAuthConstant.MEMBER_CLIENT_STATUS_ACTIVE);
+        EzAuthMemberCommonSessionDO sessionDO;
+        if (activeSessionDO != null) {
+            sessionDO = activeSessionDO;
+        } else {
+            String currentDateTime = DateUtil.getCurrentFormattedDate();
+            String sessionId = HashUtil.createHash(
+                    memberClientDO.getOrgId(),
+                    memberClientDO.getClientId(),
+                    request.getScene(),
+                    request.getVerifyStrategy(),
+                    currentDateTime
+            );
+            int verifyCodeNumber = new Random().nextInt(9000) + 1000;
+            String verifyCode = String.valueOf(verifyCodeNumber);
 
-        int expiryMins = getMemberCommonSessionExpMins(memberClientDO.getOrgId());
-        Date expiryDate = DateUtil.getDateAfterMins(new Date(), expiryMins);
-        sessionDO.setExpiryTime(DateUtil.getFormattedDate(expiryDate));
+            sessionDO = new EzAuthMemberCommonSessionDO();
+            sessionDO.setSessionId(sessionId);
+            sessionDO.setOrgId(memberClientDO.getOrgId());
+            sessionDO.setShard(ShardUtil.getShardId(memberClientDO.getMemberId()));
+            sessionDO.setScene(request.getScene());
+            sessionDO.setVerifyStrategy(request.getVerifyStrategy());
+            sessionDO.setVerifyCode(verifyCode);
+            sessionDO.setAppId(memberClientDO.getAppId());
+            sessionDO.setClientId(memberClientDO.getClientId());
+            sessionDO.setMemberId(memberClientDO.getMemberId());
+            sessionDO.setDeviceId(request.getDeviceId());
+            sessionDO.setCreatedTime(DateUtil.getCurrentFormattedDate());
+            sessionDO.setStatus(CoreAuthConstant.MEMBER_CLIENT_STATUS_ACTIVE);
 
-        ezAuthMemberCommonSessionRepository.saveAndFlush(sessionDO);
+            int expiryMins = getMemberCommonSessionExpMins(memberClientDO.getOrgId());
+            Date expiryDate = DateUtil.getDateAfterMins(new Date(), expiryMins);
+            sessionDO.setExpiryTime(DateUtil.getFormattedDate(expiryDate));
+
+            ezAuthMemberCommonSessionRepository.saveAndFlush(sessionDO);
+        }
 
         CoreCommonSession sessionInfo = new CoreCommonSession();
         sessionInfo.setSessionId(sessionDO.getSessionId());
@@ -318,5 +351,10 @@ public class CoreAuthService {
     private int getMemberCommonSessionExpMins(String orgId) {
         String expMins = coreConfigService.getConfigValue(CoreAuthConfig.Key.MEMBER_COMMON_SESSION_EXPIRY_MINS, orgId);
         return Integer.parseInt(expMins);
+    }
+
+    private boolean isSessionExpired(EzAuthMemberCommonSessionDO sessionDO) {
+        Date sessionExpDate = DateUtil.parseFormattedDate(sessionDO.getExpiryTime());
+        return sessionExpDate.getTime() <= DateUtil.getTimeNow();
     }
 }
