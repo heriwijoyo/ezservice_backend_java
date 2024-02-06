@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import javax.annotation.PostConstruct;
 import java.util.TimeZone;
@@ -22,6 +23,7 @@ import java.util.TimeZone;
 @EnableJpaRepositories(basePackages = {"id.ezclouds.common.dal", "id.ezclouds.core.shared", "id.ezclouds.core.member", "id.ezclouds.core.auth", "id.ezclouds.biz.arahindonesia.service.dataservice.repo", "id.ezclouds.core.integration.dataservice.repo"})
 @EntityScan(basePackages = {"id.ezclouds.common.dal", "id.ezclouds.core.shared", "id.ezclouds.core.member", "id.ezclouds.core.auth", "id.ezclouds.biz.arahindonesia.service.dataservice.dataobject", "id.ezclouds.core.integration.dataservice.dataobject"})
 @EnableCaching
+@EnableAsync
 public class BifrostWebApplication {
 
     @PostConstruct

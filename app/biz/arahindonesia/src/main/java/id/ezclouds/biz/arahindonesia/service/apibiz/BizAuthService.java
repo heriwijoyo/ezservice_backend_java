@@ -12,7 +12,7 @@ import id.ezclouds.biz.arahindonesia.model.authentication.BizMemberCommonSession
 import id.ezclouds.biz.arahindonesia.service.dataservice.AppConfigService;
 import id.ezclouds.biz.arahindonesia.service.dataservice.AppMemberFlagService;
 import id.ezclouds.biz.arahindonesia.service.dataservice.AppSubOrganizationService;
-import id.ezclouds.biz.arahindonesia.service.request.BizCommonSessionVerifyRequest;
+import id.ezclouds.biz.arahindonesia.service.request.BizVerifyCommonSessionRequest;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberResetPasswordRequest;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberUpdatePasswordRequest;
 import id.ezclouds.biz.arahindonesia.service.result.BizMemberLoginResult;
@@ -208,7 +208,7 @@ public class BizAuthService extends BizBaseService {
         return bizResult;
     }
 
-    public BizResult memberVerifyCommonSession(BizCommonSessionVerifyRequest request) {
+    public BizResult memberVerifyCommonSession(BizVerifyCommonSessionRequest request) {
         final BizResult bizResult = new BizResult();
 
         BizServiceTemplate.execute(request, bizResult, new BizServiceTemplate.Handler() {

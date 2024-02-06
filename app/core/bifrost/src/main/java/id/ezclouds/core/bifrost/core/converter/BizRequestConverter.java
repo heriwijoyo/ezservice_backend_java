@@ -5,14 +5,8 @@
 package id.ezclouds.core.bifrost.core.converter;
 
 import id.ezclouds.biz.arahindonesia.model.member.BizGender;
-import id.ezclouds.biz.arahindonesia.service.request.BizMemberRegisterRequest;
-import id.ezclouds.biz.arahindonesia.service.request.BizMemberResetPasswordRequest;
-import id.ezclouds.biz.arahindonesia.service.request.BizMemberUpdatePasswordRequest;
-import id.ezclouds.biz.arahindonesia.service.request.BizRequest;
-import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
-import id.ezclouds.core.bifrost.app.api.request.MemberRegisterRequest;
-import id.ezclouds.core.bifrost.app.api.request.MemberResetPasswordRequest;
-import id.ezclouds.core.bifrost.app.api.request.MemberUpdatePasswordRequest;
+import id.ezclouds.biz.arahindonesia.service.request.*;
+import id.ezclouds.core.bifrost.app.api.request.*;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -80,6 +74,19 @@ public class BizRequestConverter<T extends BizRequest> {
             BizMemberResetPasswordRequest bizRequest = new BizMemberResetPasswordRequest();
             bizRequest.setLoginType(request.getLoginType());
             bizRequest.setLoginId(request.getLoginId());
+            return bizRequest;
+        }
+        return null;
+    };
+
+    public static Handler<BizVerifyCommonSessionRequest> VERIFY_COMMON_SESSION = apiRequest -> {
+        if (apiRequest instanceof VerifyCommonSessionRequest) {
+            VerifyCommonSessionRequest request = (VerifyCommonSessionRequest) apiRequest;
+            BizVerifyCommonSessionRequest bizRequest = new BizVerifyCommonSessionRequest();
+            bizRequest.setSessionId(request.getSessionId());
+            bizRequest.setScene(request.getScene());
+            bizRequest.setVerifyStrategy(request.getVerifyStrategy());
+            bizRequest.setVerifyCode(request.getVerifyCode());
             return bizRequest;
         }
         return null;

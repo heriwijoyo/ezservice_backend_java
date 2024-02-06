@@ -2,13 +2,13 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.biz.arahindonesia.service.request;
+package id.ezclouds.core.bifrost.app.api.request;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: BizCommonSessionVerifyRequest.java, v 0.1 2024‐02‐05 9:57 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: VerifyCommonSessionRequest.java, v 0.1 2024‐02‐05 11:37 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class BizCommonSessionVerifyRequest extends BizRequest {
+public class VerifyCommonSessionRequest extends ApiRequest {
 
     private String sessionId;
     private String scene;

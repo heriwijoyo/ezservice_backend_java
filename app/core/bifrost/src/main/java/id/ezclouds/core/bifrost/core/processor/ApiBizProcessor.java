@@ -7,10 +7,7 @@ package id.ezclouds.core.bifrost.core.processor;
 import id.ezclouds.biz.arahindonesia.constant.AppConstant;
 import id.ezclouds.biz.arahindonesia.service.apibiz.*;
 import id.ezclouds.biz.arahindonesia.service.apibiz.BizAuthService;
-import id.ezclouds.biz.arahindonesia.service.request.BizMemberLoginRequest;
-import id.ezclouds.biz.arahindonesia.service.request.BizMemberRegisterRequest;
-import id.ezclouds.biz.arahindonesia.service.request.BizMemberResetPasswordRequest;
-import id.ezclouds.biz.arahindonesia.service.request.BizMemberUpdatePasswordRequest;
+import id.ezclouds.biz.arahindonesia.service.request.*;
 import id.ezclouds.biz.arahindonesia.service.result.BizResult;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
@@ -87,6 +84,10 @@ public class ApiBizProcessor implements BizProcessor {
                 case API_MEMBER_RESET_PASSWORD:
                     BizRequestConverter<BizMemberResetPasswordRequest> resetConverter = new BizRequestConverter<>(BizRequestConverter.RESET_PASSWORD);
                     return bizAuthService.memberResetPassword(resetConverter.convert(apiRequest));
+
+                case API_MEMBER_VERIFY_COMMON_SESSION:
+                    BizRequestConverter<BizVerifyCommonSessionRequest> verifyConverter = new BizRequestConverter<>(BizRequestConverter.VERIFY_COMMON_SESSION);
+                    return bizAuthService.memberVerifyCommonSession(verifyConverter.convert(apiRequest));
 
                 case API_MEMBER_REGISTER:
                     BizMemberRegisterRequest bizRequest = BizRequestConverter.convert((MemberRegisterRequest) request);

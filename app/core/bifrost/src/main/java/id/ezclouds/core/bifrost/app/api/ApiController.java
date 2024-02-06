@@ -14,10 +14,7 @@ import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.core.bifrost.app.api.digestlog.*;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
-import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
-import id.ezclouds.core.bifrost.app.api.request.MemberLoginRequest;
-import id.ezclouds.core.bifrost.app.api.request.MemberResetPasswordRequest;
-import id.ezclouds.core.bifrost.app.api.request.MemberUpdatePasswordRequest;
+import id.ezclouds.core.bifrost.app.api.request.*;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
 import id.ezclouds.core.shared.result.ListResult;
 import org.slf4j.Logger;
@@ -198,6 +195,22 @@ public class ApiController extends AppController {
         });
     }
 
+    @PostMapping(value = "/api/verify_otp.php")
+    private ApiResult<Void> verifyCommonSession(@RequestBody VerifyCommonSessionRequest request) {
+        return executeInTemplate(ApiEvent.API_MEMBER_VERIFY_COMMON_SESSION, request, new RequestHandler<Void>() {
+            @Override
+            public Void convertResult(Object resultObject) {
+                return null;
+            }
+
+            @Override
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<Void> result) {
+                EmptyDigestLog digestLog = new EmptyDigestLog(result.isSuccess(), result.getResultCode());
+                digestLog.composeDigest(request, result);
+                return digestLog;
+            }
+        });
+    }
 
 
     @PostMapping(value = "/api/sample.json", consumes = {MediaType.APPLICATION_JSON_VALUE})
