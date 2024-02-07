@@ -37,6 +37,10 @@ public class DateUtil {
         return new Date().getTime();
     }
 
+    public static String getTimeNowToString() {
+        return String.valueOf(getTimeNow());
+    }
+
     public static String getFormattedDate(Date date) {
         return getFormattedDate(date, FORMAT_DATETIME_DEFAULT);
     }

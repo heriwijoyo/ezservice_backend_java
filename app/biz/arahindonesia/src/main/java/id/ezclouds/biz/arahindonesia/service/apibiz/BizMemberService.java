@@ -13,9 +13,9 @@ import id.ezclouds.biz.arahindonesia.service.inner.service.BizMemberInnerService
 import id.ezclouds.biz.arahindonesia.service.dataservice.AppProfileService;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberRegisterRequest;
 import id.ezclouds.biz.arahindonesia.service.request.BizMemberUpdateAvatarRequest;
-import id.ezclouds.biz.arahindonesia.service.request.BizRequest;
 import id.ezclouds.biz.arahindonesia.service.result.BizResult;
 import id.ezclouds.biz.arahindonesia.service.template.BizServiceTemplate;
+import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
@@ -26,6 +26,8 @@ import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
 import id.ezclouds.core.member.service.CoreMemberService;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
+import id.ezclouds.core.shared.model.MemberFileInfo;
+import id.ezclouds.core.shared.service.CoreFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -55,8 +57,8 @@ public class BizMemberService extends BizBaseService {
     @Autowired
     private CoreMemberService coreMemberService;
 
-    @Value("${ezserviceapp.dir.upload.member}")
-    private String uploadPath;
+    @Autowired
+    private CoreFileService coreFileService;
 
     public BizResult getMemberProfile() {
         final BizResult bizResult = new BizResult();
@@ -146,17 +148,24 @@ public class BizMemberService extends BizBaseService {
         BizServiceTemplate.execute(request, bizResult, new BizServiceTemplate.Handler() {
             @Override
             public void onRequestCheck() throws EzErrorException {
-
+                request.validateMultipartRequest();
+                //TODO: add image size validation
             }
 
             @Override
             public void onBizProcess() throws Exception {
+                CoreAuthMemberSessionInfo memberSessionInfo = authMemberSession();
+                MemberFileInfo memberFileInfo = coreFileService
+                        .resolveMemberFileInfo(getOrgId(), memberSessionInfo.getMemberId());
 
-                MultipartFile file = request.getMultipartFile();
+                String fileName = DateUtil.getTimeNowToString() + "." + request.getFileExtension();
 
-                Path fileLocation = Paths.get(uploadPath).toAbsolutePath().normalize();
-                Path target = fileLocation.resolve(file.getOriginalFilename());
-                Files.copy(file.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
+                System.out.println(memberFileInfo.getAvatarPath(fileName).toString());
+
+//                MultipartFile file = request.getMultipartFile();
+//                Path fileLocation = Paths.get(uploadPath).toAbsolutePath().normalize();
+//                Path target = fileLocation.resolve(file.getOriginalFilename());
+//                Files.copy(file.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
 
                 bizResult.setSuccess(true);
             }

@@ -56,9 +56,6 @@ public class BizAuthService extends BizBaseService {
     private BizOrganizationService bizOrganizationService;
 
     @Autowired
-    private CoreAuthService coreAuthService;
-
-    @Autowired
     private CoreMemberService coreMemberService;
 
     @Autowired

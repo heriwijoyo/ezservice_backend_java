@@ -5,13 +5,39 @@
 package id.ezclouds.biz.arahindonesia.service.apibiz;
 
 import id.ezclouds.biz.arahindonesia.constant.AppConstant;
+import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
+import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
+import id.ezclouds.core.auth.service.CoreAuthService;
+import id.ezclouds.core.shared.context.EzAppContextHolder;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizBaseService.java, v 0.1 2024‐02‐04 1:28 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 public class BizBaseService {
+
+    @Autowired
+    protected CoreAuthService coreAuthService;
+
+    public String getOrgId() {
+        return EzAppContextHolder.getContext().getOrgId();
+    }
+
+    public String getOrgCode() {
+        return EzAppContextHolder.getContext().getOrgCode();
+    }
+
+    public String getAppId() {
+        return EzAppContextHolder.getContext().getAppId();
+    }
+
+    protected CoreAuthMemberSessionInfo authMemberSession() throws Exception {
+        String sessionId = EzAppContextHolder.getContext().getMemberSessionId();
+        AssertUtil.notBlank(sessionId, EzErrorCode.SESSION_INVALID);
+        return coreAuthService.authMemberSession(sessionId);
+    }
 
     protected String getBizErrorMessage(EzErrorCode ezErrorCode) {
         switch (ezErrorCode) {

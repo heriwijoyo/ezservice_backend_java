@@ -20,8 +20,6 @@ import id.ezclouds.core.bifrost.app.api.result.ApiResult;
 import id.ezclouds.core.shared.result.ListResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.json.JsonParser;
-import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -218,7 +216,6 @@ public class ApiController extends AppController {
 
     @PostMapping(value = "/api/member_upload.php", consumes = {MediaType.ALL_VALUE})
     private ApiResult<String> memberUpload(@RequestPart("memberAvatar") MultipartFile memberAvatarFile, @RequestPart("postData") String postData) throws Exception {
-
         ObjectMapper mapper = new ObjectMapper();
         MemberUpdateAvatarRequest request = mapper.readValue(postData, MemberUpdateAvatarRequest.class);
         request.setMultipartFile(memberAvatarFile);
