@@ -78,4 +78,16 @@ public class CoreMemberService {
             coreMemberRepository.saveAndFlush(coreMemberDO);
         }
     }
+
+    @Transactional
+    public void updateAvatar(String memberId, String avatar) {
+        CoreMemberDO coreMemberDO = coreMemberRepository
+                .findById(memberId)
+                .orElse(null);
+
+        if (coreMemberDO != null) {
+            coreMemberDO.setAvatarUrl(avatar);
+            coreMemberRepository.saveAndFlush(coreMemberDO);
+        }
+    }
 }

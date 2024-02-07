@@ -12,7 +12,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -48,5 +51,13 @@ public class CoreFileService {
                 fileInfo.getFamilyCardLocationWithPrefix()
         );
         return memberFileInfo;
+    }
+
+    public void storeFile(InputStream inputStream, Path targetPath) throws EzErrorException {
+        try {
+            Files.copy(inputStream, targetPath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException exception) {
+            throw new EzErrorException(EzErrorCode.SYSTEM_STORE_FILE_FAILED, "Failed to store member file");
+        }
     }
 }

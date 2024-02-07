@@ -29,14 +29,9 @@ import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.model.MemberFileInfo;
 import id.ezclouds.core.shared.service.CoreFileService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -149,23 +144,20 @@ public class BizMemberService extends BizBaseService {
             @Override
             public void onRequestCheck() throws EzErrorException {
                 request.validateMultipartRequest();
-                //TODO: add image size validation
+                //TODO: add image size and mime type validation
             }
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthMemberSessionInfo memberSessionInfo = authMemberSession();
+                CoreAuthMemberSessionInfo memberSession = authMemberSession();
                 MemberFileInfo memberFileInfo = coreFileService
-                        .resolveMemberFileInfo(getOrgId(), memberSessionInfo.getMemberId());
+                        .resolveMemberFileInfo(getOrgId(), memberSession.getMemberId());
 
-                String fileName = DateUtil.getTimeNowToString() + "." + request.getFileExtension();
+                String avatarFileName = DateUtil.getTimeNowToString() + "." + request.getFileExtension();
+                Path avatarPath = memberFileInfo.getAvatarPath(avatarFileName);
 
-                System.out.println(memberFileInfo.getAvatarPath(fileName).toString());
-
-//                MultipartFile file = request.getMultipartFile();
-//                Path fileLocation = Paths.get(uploadPath).toAbsolutePath().normalize();
-//                Path target = fileLocation.resolve(file.getOriginalFilename());
-//                Files.copy(file.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
+                coreFileService.storeFile(request.getMultipartFile().getInputStream(), avatarPath);
+                coreMemberService.updateAvatar(memberSession.getMemberId(), avatarFileName);
 
                 bizResult.setSuccess(true);
             }
