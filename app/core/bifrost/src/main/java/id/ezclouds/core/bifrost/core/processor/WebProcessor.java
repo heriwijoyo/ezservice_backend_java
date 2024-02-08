@@ -14,5 +14,5 @@ import javax.servlet.http.HttpServletResponse;
  */
 public interface WebProcessor {
 
-    Object process(WebEvent event, Object request, HttpServletResponse servletResponse);
+    Object process(WebEvent event, Object request, HttpServletResponse servletResponse) throws Exception;
 }

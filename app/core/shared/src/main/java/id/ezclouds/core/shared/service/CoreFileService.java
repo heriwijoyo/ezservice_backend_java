@@ -31,8 +31,6 @@ public class CoreFileService {
         CoreMemberFileInfo fileInfo = new CoreMemberFileInfo(orgId, memberId);
         fileInfo.setUploadRootDir(uploadRootDir);
 
-        System.out.println(fileInfo.getMemberFilePath().toString());
-
         try {
             if (Files.notExists(fileInfo.getOrgFilePath())) {
                 Files.createDirectory(fileInfo.getOrgFilePath());

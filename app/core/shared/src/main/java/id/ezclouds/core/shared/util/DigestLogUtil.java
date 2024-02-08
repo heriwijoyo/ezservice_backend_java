@@ -45,4 +45,34 @@ public class DigestLogUtil {
             logger.error(errorLog);
         }
     }
+
+    public static void logWebDigest(Logger logger, DigestLog digestLog) {
+        EzAppContext ezAppContext = EzAppContextHolder.getContext();
+
+        String infoLog = "[" +
+                ezAppContext.getTraceId() +
+                "][" +
+                logger.getName() +
+                "," +
+                ezAppContext.getEzAppEvent().getEventCode() +
+                "," +
+                ezAppContext.getTimeCost() +
+                "," +
+                digestLog.getSuccessFlag() +
+                "," +
+                digestLog.getResultCode() +
+                "][appVersionNo=" +
+                ezAppContext.getAppVersionNo() +
+                "][" +
+                digestLog.getDigestMessage() +
+                "][" +
+                digestLog.getErrorMessage() +
+                "]";
+        logger.info(infoLog);
+
+        if (StringUtil.isNotBlank(ezAppContext.getErrorStackTrace())) {
+            String errorLog = "[" + ezAppContext.getTraceId() + "] - " + ezAppContext.getErrorStackTrace();
+            logger.error(errorLog);
+        }
+    }
 }

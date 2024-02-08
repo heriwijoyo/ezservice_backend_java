@@ -12,6 +12,7 @@ import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.core.bifrost.app.api.ApiBizProcessor;
+import id.ezclouds.core.bifrost.app.api.digestlog.EmptyDigestLog;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
@@ -25,7 +26,6 @@ import id.ezclouds.core.bifrost.core.processor.WebProcessor;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.util.DigestLogUtil;
 import org.slf4j.Logger;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -38,11 +38,6 @@ public abstract class AppController {
     private PreBizProcessor preBizProcessor;
 
     protected abstract Logger getLogger();
-
-    @RequestMapping(value = "/")
-    private String getIndexPage() {
-        return "Welcome to Arah Indonesia";
-    }
 
     protected <T> ApiResult<T> executeInTemplate(ApiEvent ezAppEvent, ApiRequest apiRequest, RequestHandler<T> handler) {
 
@@ -86,15 +81,22 @@ public abstract class AppController {
         EzAppContextHolder.init(webEvent);
         T returnObject = null;
 
+        ErrorResult errorResult = null;
         try {
-            handler.onRequestCheck();
             WebProcessor webProcessor = SpringContextConfig.getBean(WebBizProcessor.class);
             Object result = webProcessor.process(webEvent, request, servletResponse);
             returnObject = handler.convertResult(result);
         } catch (EzErrorException ezException) {
             EzAppContextHolder.getContext().appendErrorStackTrace(ExceptionUtil.getStackTrace(ezException));
+            errorResult = composeErrorResult(ezException);
         } catch (Exception exception) {
             EzAppContextHolder.getContext().appendErrorStackTrace(ExceptionUtil.getStackTrace(exception));
+            errorResult = composeErrorResult();
+        } finally {
+            boolean success = errorResult == null;
+            String resultCode = success ? "RESULT_SUCCESS" : errorResult.getErrorCode();
+            EmptyDigestLog digestLog = new EmptyDigestLog(success, resultCode);
+            DigestLogUtil.logDigest(getLogger(), digestLog);
         }
 
         return returnObject;
@@ -135,7 +137,6 @@ public abstract class AppController {
     }
 
     public interface WebRequestHandler<T> {
-        void onRequestCheck() throws EzErrorException;
         T convertResult(Object resultObject);
     }
 }

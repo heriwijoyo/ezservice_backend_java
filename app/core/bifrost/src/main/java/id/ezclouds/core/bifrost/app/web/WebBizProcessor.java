@@ -5,7 +5,9 @@
 package id.ezclouds.core.bifrost.app.web;
 
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;
+import id.ezclouds.core.bifrost.app.web.innerprocess.WebBizInnerProcessor;
 import id.ezclouds.core.bifrost.core.processor.WebProcessor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
@@ -17,8 +19,15 @@ import javax.servlet.http.HttpServletResponse;
 @Service
 public class WebBizProcessor implements WebProcessor {
 
+    @Autowired
+    private WebBizInnerProcessor innerProcessor;
+
     @Override
-    public Object process(WebEvent event, Object request, HttpServletResponse servletResponse) {
+    public Object process(WebEvent event, Object request, HttpServletResponse servletResponse) throws Exception {
+        switch (event) {
+            case GET_IMAGE_AVATAR:
+                innerProcessor.loadCommonImage(request, servletResponse);
+        }
         return null;
     }
 }

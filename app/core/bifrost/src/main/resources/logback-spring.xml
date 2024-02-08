@@ -81,7 +81,7 @@
     </appender>
     <appender name="API_CONTROLLER_File"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${APP_LOG_ROOT}/${APP_NAME}/controller.log</file>
+        <file>${APP_LOG_ROOT}/${APP_NAME}/controller-api.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/controller-api.log.%d{yyyy-MM-dd}</fileNamePattern>
         </rollingPolicy>
@@ -105,7 +105,7 @@
     </appender>
     <appender name="WEB_CONTROLLER_File"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${APP_LOG_ROOT}/${APP_NAME}/controller.log</file>
+        <file>${APP_LOG_ROOT}/${APP_NAME}/controller-web.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/controller-web.log.%d{yyyy-MM-dd}</fileNamePattern>
         </rollingPolicy>
@@ -146,6 +146,12 @@
     <logger name="API_CONTROLLER" additivity="false">
         <level value="INFO" />
         <appender-ref ref="API_CONTROLLER_${APP_LOG_TYPE}" />
+        <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
+    </logger>
+
+    <logger name="WEB_CONTROLLER" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="WEB_CONTROLLER_${APP_LOG_TYPE}" />
         <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
     </logger>
 

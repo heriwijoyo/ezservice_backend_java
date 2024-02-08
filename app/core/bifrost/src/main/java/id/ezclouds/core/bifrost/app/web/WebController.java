@@ -5,8 +5,11 @@
 package id.ezclouds.core.bifrost.app.web;
 
 import id.ezclouds.biz.ezservice.service.dataservice.BizOrganizationService;
+import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.core.bifrost.app.AppController;
+import id.ezclouds.core.bifrost.app.web.event.WebEvent;
+import id.ezclouds.core.bifrost.app.web.request.WebLoadImageRequest;
 import id.ezclouds.core.shared.service.CoreFileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,9 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -47,6 +48,11 @@ public class WebController extends AppController {
     @Value("${ezserviceapp.download.apk_path}")
     private String downloadApkPath;
 
+    @RequestMapping(value = "/")
+    private String getIndexPage() {
+        return "Welcome to Arah Indonesia";
+    }
+
     @GetMapping(value = "/rjlapp/download/apk")
     public void downloadApk(@RequestParam String file, HttpServletResponse response) throws IOException {
         Path apkFile = Paths.get(downloadApkPath, file);
@@ -65,7 +71,23 @@ public class WebController extends AppController {
     }
 
     @GetMapping(value = "/image/avatar/{orgCode}/{memberId}/{fileName}")
-    private void getAvatarImage(@PathVariable("orgCode") String orgCode, @PathVariable("memberId") String memberId, @PathVariable("fileName") String fileName) {
+    private Void getAvatarImage(
+            @PathVariable("orgCode") String orgCode,
+            @PathVariable("memberId") String memberId,
+            @PathVariable("fileName") String fileName,
+            HttpServletResponse servletResponse) {
 
+        WebLoadImageRequest request = new WebLoadImageRequest();
+        request.setScene("AVATAR");
+        request.setOrgCode(orgCode);
+        request.setMemberId(memberId);
+        request.setFileName(fileName);
+
+        return executeWebTemplate(WebEvent.GET_IMAGE_AVATAR, request, servletResponse, new WebRequestHandler<Void>() {
+            @Override
+            public Void convertResult(Object resultObject) {
+                return null;
+            }
+        });
     }
 }
