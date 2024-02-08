@@ -19,7 +19,7 @@ import java.util.List;
  */
 public abstract class BizMultipartRequest extends BizRequest {
 
-    protected final List<String> imageTypes = Arrays.asList("image/png", "image/jpg", "image/jpeg");
+    protected final List<String> imageTypes = Arrays.asList("image/png", "images/png", "image/jpg", "images/jpg", "image/jpeg", "images/jpeg");
 
     private MultipartFile multipartFile;
 

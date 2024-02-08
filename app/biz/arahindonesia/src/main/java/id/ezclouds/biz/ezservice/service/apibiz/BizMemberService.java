@@ -165,7 +165,7 @@ public class BizMemberService extends BizBaseService {
                 Path avatarPath = memberFileInfo.getAvatarPath(avatarFileName);
 
                 coreFileService.storeFile(request.getMultipartFile().getInputStream(), avatarPath);
-                coreMemberService.updateAvatar(memberSession.getMemberId(), avatarFileName);
+                coreMemberService.updateNicknameAndAvatar(memberSession.getMemberId(), request.getNickname(), avatarFileName);
 
                 bizResult.setSuccess(true);
             }

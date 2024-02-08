@@ -10,7 +10,16 @@ package id.ezclouds.core.bifrost.app.api.request;
  */
 public class MemberUpdateAvatarRequest extends ApiRequest {
 
+    private String section;
     private String nickname;
+
+    public String getSection() {
+        return section;
+    }
+
+    public void setSection(String section) {
+        this.section = section;
+    }
 
     public String getNickname() {
         return nickname;

@@ -25,6 +25,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: ApiController.java, v 0.1 2023‐12‐03 11:46 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -212,10 +214,10 @@ public class ApiController extends AppController {
     }
 
     @PostMapping(value = "/api/member_upload.php", consumes = {MediaType.ALL_VALUE})
-    private ApiResult<String> memberUpload(@RequestPart("memberAvatar") MultipartFile memberAvatarFile, @RequestPart("postData") String postData) throws Exception {
+    private ApiResult<String> memberUpload(@RequestPart("memberAvatar") List<MultipartFile> memberAvatarFiles, @RequestPart("postData") String postData) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         MemberUpdateAvatarRequest request = mapper.readValue(postData, MemberUpdateAvatarRequest.class);
-        request.setMultipartFile(memberAvatarFile);
+        request.setMultipartFile(memberAvatarFiles.get(0));
         return executeInTemplate(ApiEvent.API_MEMBER_UPDATE_AVATAR, request, new RequestHandler<String>() {
             @Override
             public String convertResult(Object resultObject) {

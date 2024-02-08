@@ -11,8 +11,8 @@ package id.ezclouds.core.bifrost.app.api.request;
 public class RequestAppSession {
 
     private String memberSessionCode;
-
     private String memberSessionId;
+    private String deviceId;
 
     public String getMemberSessionCode() {
         return memberSessionCode;
@@ -28,5 +28,13 @@ public class RequestAppSession {
 
     public void setMemberSessionId(String memberSessionId) {
         this.memberSessionId = memberSessionId;
+    }
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
 }

@@ -80,12 +80,13 @@ public class CoreMemberService {
     }
 
     @Transactional
-    public void updateAvatar(String memberId, String avatar) {
+    public void updateNicknameAndAvatar(String memberId, String nickname, String avatar) {
         CoreMemberDO coreMemberDO = coreMemberRepository
                 .findById(memberId)
                 .orElse(null);
 
         if (coreMemberDO != null) {
+            coreMemberDO.setNickname(nickname);
             coreMemberDO.setAvatarUrl(avatar);
             coreMemberRepository.saveAndFlush(coreMemberDO);
         }
