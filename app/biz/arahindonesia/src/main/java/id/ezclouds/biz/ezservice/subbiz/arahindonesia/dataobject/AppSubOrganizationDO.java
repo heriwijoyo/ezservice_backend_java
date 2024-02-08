@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.common.dal.dataobject;
+package id.ezclouds.biz.ezservice.subbiz.arahindonesia.dataobject;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

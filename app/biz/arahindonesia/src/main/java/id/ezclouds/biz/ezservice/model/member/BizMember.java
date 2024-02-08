@@ -5,6 +5,7 @@
 package id.ezclouds.biz.ezservice.model.member;
 
 import id.ezclouds.biz.ezservice.model.BizStatus;
+import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)

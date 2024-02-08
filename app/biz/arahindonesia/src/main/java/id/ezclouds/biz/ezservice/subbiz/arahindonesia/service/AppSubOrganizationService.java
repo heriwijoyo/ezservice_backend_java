@@ -2,11 +2,11 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.biz.ezservice.service.dataservice;
+package id.ezclouds.biz.ezservice.subbiz.arahindonesia.service;
 
 import id.ezclouds.biz.ezservice.converter.BizModelConverter;
-import id.ezclouds.biz.ezservice.model.member.BizSubOrganization;
-import id.ezclouds.common.dal.repo.AppSubOrganizationRepository;
+import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
+import id.ezclouds.biz.ezservice.subbiz.arahindonesia.repo.AppSubOrganizationRepository;
 import id.ezclouds.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;

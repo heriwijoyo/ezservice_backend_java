@@ -11,7 +11,7 @@ import id.ezclouds.biz.ezservice.converter.BizMessageTemplateConverter;
 import id.ezclouds.biz.ezservice.model.authentication.BizMemberCommonSession;
 import id.ezclouds.biz.ezservice.service.dataservice.AppConfigService;
 import id.ezclouds.biz.ezservice.service.dataservice.AppMemberFlagService;
-import id.ezclouds.biz.ezservice.service.dataservice.AppSubOrganizationService;
+import id.ezclouds.biz.ezservice.subbiz.arahindonesia.service.AppSubOrganizationService;
 import id.ezclouds.biz.ezservice.service.request.BizVerifyCommonSessionRequest;
 import id.ezclouds.biz.ezservice.service.request.BizMemberResetPasswordRequest;
 import id.ezclouds.biz.ezservice.service.request.BizMemberUpdatePasswordRequest;

@@ -6,10 +6,11 @@ package id.ezclouds.biz.ezservice.converter;
 
 import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.model.*;
-import id.ezclouds.biz.ezservice.model.member.BizSubOrganization;
+import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.biz.ezservice.model.news.SimpleNews;
 import id.ezclouds.biz.ezservice.model.profile.CandidateBio;
 import id.ezclouds.biz.ezservice.model.profile.CandidateProfileItem;
+import id.ezclouds.biz.ezservice.subbiz.arahindonesia.dataobject.AppSubOrganizationDO;
 import id.ezclouds.common.dal.dataobject.*;
 
 /**
