@@ -38,6 +38,20 @@ public final class BizServiceTemplate {
         }
     }
 
+    public static void execute(BizRequest request, BizResult bizResult, WebHandler handler) {
+        try {
+            handler.onRequestCheck();
+            handler.onBizProcess();
+        } catch (Exception exception) {
+            composeBizResultError(bizResult, exception, null);
+            EzAppContextHolder.getContext().appendErrorStackTrace(ExceptionUtil.getStackTrace(exception));
+        }
+        finally {
+            logRequest(request);
+            logResult(bizResult);
+        }
+    }
+
     private static EzErrorCode getEzErrorCode(Exception exception) {
         if (exception instanceof EzErrorException) {
             return ((EzErrorException) exception).getEzErrorCode();
@@ -76,5 +90,10 @@ public final class BizServiceTemplate {
         void onRequestCheck() throws EzErrorException;
         void onBizProcess() throws Exception;
         String getErrorMessage(EzErrorCode ezErrorCode);
+    }
+
+    public interface WebHandler {
+        void onRequestCheck() throws EzErrorException;
+        void onBizProcess() throws Exception;
     }
 }

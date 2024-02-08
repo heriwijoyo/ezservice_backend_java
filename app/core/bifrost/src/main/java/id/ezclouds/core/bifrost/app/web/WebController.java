@@ -5,7 +5,6 @@
 package id.ezclouds.core.bifrost.app.web;
 
 import id.ezclouds.biz.ezservice.service.dataservice.BizOrganizationService;
-import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.core.bifrost.app.AppController;
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;
@@ -17,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -87,6 +87,11 @@ public class WebController extends AppController {
             @Override
             public Void convertResult(Object resultObject) {
                 return null;
+            }
+
+            @Override
+            public void onException(Exception exception) {
+                servletResponse.setStatus(HttpStatus.NOT_FOUND.value());
             }
 
             @Override

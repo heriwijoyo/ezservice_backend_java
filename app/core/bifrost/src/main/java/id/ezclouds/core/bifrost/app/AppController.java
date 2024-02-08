@@ -89,9 +89,11 @@ public abstract class AppController {
         } catch (EzErrorException ezException) {
             EzAppContextHolder.getContext().appendErrorStackTrace(ExceptionUtil.getStackTrace(ezException));
             errorResult = composeErrorResult(ezException);
+            handler.onException(ezException);
         } catch (Exception exception) {
             EzAppContextHolder.getContext().appendErrorStackTrace(ExceptionUtil.getStackTrace(exception));
             errorResult = composeErrorResult();
+            handler.onException(exception);
         } finally {
             boolean success = errorResult == null;
             String resultCode = success ? "RESULT_SUCCESS" : errorResult.getErrorCode();
@@ -140,6 +142,7 @@ public abstract class AppController {
 
     public interface WebRequestHandler<T> {
         T convertResult(Object resultObject);
+        void onException(Exception exception);
         String composeDigestLog();
     }
 }

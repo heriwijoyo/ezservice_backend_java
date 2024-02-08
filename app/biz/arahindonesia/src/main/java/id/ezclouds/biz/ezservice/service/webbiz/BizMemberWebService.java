@@ -6,15 +6,18 @@ package id.ezclouds.biz.ezservice.service.webbiz;
 
 import id.ezclouds.biz.ezservice.service.dataservice.BizOrganizationService;
 import id.ezclouds.biz.ezservice.service.request.BizImageLoadRequest;
+import id.ezclouds.biz.ezservice.service.result.BizResult;
+import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
+import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.shared.member.MemberFileInfo;
 import id.ezclouds.core.shared.model.CoreOrganization;
 import id.ezclouds.core.shared.service.CoreFileService;
-import id.ezclouds.core.shared.service.CoreOrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
@@ -31,16 +34,34 @@ public class BizMemberWebService {
     private CoreFileService coreFileService;
 
 
-    public Path bizLoadCommonImage(BizImageLoadRequest request) {
-        AssertUtil.notBlank(request.getMemberId(), EzErrorCode.MEDIA_NOT_FOUND);
-        CoreOrganization organization = bizOrganizationService
-                .getOrganizationByCode(request.getOrgCode());
-        AssertUtil.notNull(organization, EzErrorCode.MEDIA_NOT_FOUND);
-        AssertUtil.notBlank(organization.getOrgId(), EzErrorCode.MEDIA_NOT_FOUND);
+    public BizResult bizLoadCommonImage(BizImageLoadRequest request) {
+        BizResult bizResult = new BizResult();
 
-        MemberFileInfo fileInfo = coreFileService
-                .resolveMemberFileInfo(organization.getOrgId(), request.getMemberId());
+        BizServiceTemplate.execute(request, bizResult, new BizServiceTemplate.WebHandler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notBlank(request.getMemberId(), EzErrorCode.MEDIA_NOT_FOUND);
+                CoreOrganization organization = bizOrganizationService
+                        .getOrganizationByCode(request.getOrgCode());
+                AssertUtil.notNull(organization, EzErrorCode.MEDIA_NOT_FOUND);
+                AssertUtil.notBlank(organization.getOrgId(), EzErrorCode.MEDIA_NOT_FOUND);
+            }
 
-        return fileInfo.getAvatarPath(request.getFileName());
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreOrganization organization = bizOrganizationService
+                        .getOrganizationByCode(request.getOrgCode());
+                MemberFileInfo fileInfo = coreFileService
+                        .resolveMemberFileInfo(organization.getOrgId(), request.getMemberId());
+
+                Path imagePath = fileInfo.getAvatarPath(request.getFileName());
+                AssertUtil.isTrue(Files.exists(imagePath), EzErrorCode.MEDIA_NOT_FOUND);
+
+                bizResult.setSuccess(true);
+                bizResult.setObject(imagePath);
+            }
+        });
+
+        return bizResult;
     }
 }
