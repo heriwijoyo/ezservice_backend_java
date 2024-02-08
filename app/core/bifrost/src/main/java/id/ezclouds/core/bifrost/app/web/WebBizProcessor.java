@@ -4,8 +4,8 @@
  */
 package id.ezclouds.core.bifrost.app.web;
 
+import id.ezclouds.core.bifrost.app.web.event.WebEvent;
 import id.ezclouds.core.bifrost.core.processor.WebProcessor;
-import id.ezclouds.core.shared.context.EzAppEvent;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 public class WebBizProcessor implements WebProcessor {
 
     @Override
-    public Object process(EzAppEvent event, Object request, HttpServletResponse servletResponse) {
+    public Object process(WebEvent event, Object request, HttpServletResponse servletResponse) {
         return null;
     }
 }

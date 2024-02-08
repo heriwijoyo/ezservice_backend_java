@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.bifrost.core.processor;
 
+import id.ezclouds.core.bifrost.app.api.ApiBizProcessor;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.core.SpringContextConfig;
 import id.ezclouds.core.shared.context.EzAppEvent;

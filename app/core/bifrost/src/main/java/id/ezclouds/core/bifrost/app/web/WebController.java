@@ -6,7 +6,7 @@ package id.ezclouds.core.bifrost.app.web;
 
 import id.ezclouds.biz.ezservice.service.dataservice.BizOrganizationService;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
-import id.ezclouds.core.bifrost.app.api.AppController;
+import id.ezclouds.core.bifrost.app.AppController;
 import id.ezclouds.core.shared.service.CoreFileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2023 All Rights Reserved.
  */
-package id.ezclouds.core.bifrost.core.processor;
+package id.ezclouds.core.bifrost.app.api;
 
 import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.service.apibiz.*;
@@ -15,6 +15,7 @@ import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
 import id.ezclouds.core.bifrost.core.BaseRequest;
 import id.ezclouds.core.bifrost.core.converter.BizRequestConverter;
+import id.ezclouds.core.bifrost.core.processor.BizProcessor;
 import id.ezclouds.core.shared.context.EzAppEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

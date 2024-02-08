@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.core.bifrost.app.api;
+package id.ezclouds.core.bifrost.app;
 
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.common.util.StringUtil;
@@ -129,12 +129,12 @@ public abstract class AppController {
         return composeErrorResult(ezErrorException);
     }
 
-    interface RequestHandler<T> {
+    public interface RequestHandler<T> {
         T convertResult(Object resultObject);
         DigestLog composeDigestLog(ApiRequest request, ApiResult<T> result);
     }
 
-    interface WebRequestHandler<T> {
+    public interface WebRequestHandler<T> {
         void onRequestCheck() throws EzErrorException;
         T convertResult(Object resultObject);
     }
