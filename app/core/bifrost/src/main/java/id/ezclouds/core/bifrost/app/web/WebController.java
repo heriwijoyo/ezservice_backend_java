@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.bifrost.app.web;
 
+import id.ezclouds.biz.ezservice.constant.WebLoadImageScene;
 import id.ezclouds.biz.ezservice.service.dataservice.BizOrganizationService;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.core.bifrost.app.AppController;
@@ -78,7 +79,7 @@ public class WebController extends AppController {
             HttpServletResponse servletResponse) {
 
         WebLoadImageRequest request = new WebLoadImageRequest();
-        request.setScene("AVATAR");
+        request.setScene(WebLoadImageScene.AVATAR.getCode());
         request.setOrgCode(orgCode);
         request.setMemberId(memberId);
         request.setFileName(fileName);

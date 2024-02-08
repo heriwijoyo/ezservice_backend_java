@@ -4,6 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.service.webbiz;
 
+import id.ezclouds.biz.ezservice.constant.WebLoadImageScene;
 import id.ezclouds.biz.ezservice.service.dataservice.BizOrganizationService;
 import id.ezclouds.biz.ezservice.service.request.BizImageLoadRequest;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
@@ -54,7 +55,17 @@ public class BizMemberWebService {
                 MemberFileInfo fileInfo = coreFileService
                         .resolveMemberFileInfo(organization.getOrgId(), request.getMemberId());
 
-                Path imagePath = fileInfo.getAvatarPath(request.getFileName());
+                Path imagePath;
+                WebLoadImageScene scene = WebLoadImageScene.getByCode(request.getScene());
+                switch (scene) {
+                    case AVATAR:
+                        imagePath = fileInfo.getAvatarPath(request.getFileName());
+                        break;
+
+                    default:
+                        throw new EzErrorException(EzErrorCode.MEDIA_NOT_FOUND);
+                }
+
                 AssertUtil.isTrue(Files.exists(imagePath), EzErrorCode.MEDIA_NOT_FOUND);
 
                 bizResult.setSuccess(true);

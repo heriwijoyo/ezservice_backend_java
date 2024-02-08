@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.bifrost.app.web.innerprocess;
 
+import id.ezclouds.biz.ezservice.constant.WebLoadImageScene;
 import id.ezclouds.biz.ezservice.service.request.BizImageLoadRequest;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.webbiz.BizMemberWebService;
@@ -34,7 +35,9 @@ public class WebBizInnerProcessor {
         AssertUtil.isTrue(request instanceof WebLoadImageRequest, EzErrorCode.MEDIA_NOT_FOUND);
 
         WebLoadImageRequest loadImageRequest = (WebLoadImageRequest) request;
-        AssertUtil.notBlank(loadImageRequest.getScene(), EzErrorCode.MEDIA_NOT_FOUND);
+        WebLoadImageScene imageScene = WebLoadImageScene.getByCode(loadImageRequest.getScene());
+
+        AssertUtil.notNull(imageScene, EzErrorCode.MEDIA_NOT_FOUND);
         AssertUtil.notBlank(loadImageRequest.getOrgCode(), EzErrorCode.MEDIA_NOT_FOUND);
         AssertUtil.notBlank(loadImageRequest.getFileName(), EzErrorCode.MEDIA_NOT_FOUND);
 
