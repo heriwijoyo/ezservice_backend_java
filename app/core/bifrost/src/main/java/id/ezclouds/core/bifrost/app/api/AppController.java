@@ -4,7 +4,7 @@
  */
 package id.ezclouds.core.bifrost.app.api;
 
-import id.ezclouds.biz.arahindonesia.service.result.BizResult;
+import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.ExceptionUtil;

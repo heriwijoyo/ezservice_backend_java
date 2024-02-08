@@ -4,8 +4,8 @@
  */
 package id.ezclouds.core.bifrost.core.converter;
 
-import id.ezclouds.biz.arahindonesia.model.member.BizGender;
-import id.ezclouds.biz.arahindonesia.service.request.*;
+import id.ezclouds.biz.ezservice.model.member.BizGender;
+import id.ezclouds.biz.ezservice.service.request.*;
 import id.ezclouds.core.bifrost.app.api.request.*;
 
 /**

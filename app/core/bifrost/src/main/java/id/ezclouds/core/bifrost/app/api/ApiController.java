@@ -5,12 +5,12 @@
 package id.ezclouds.core.bifrost.app.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import id.ezclouds.biz.arahindonesia.model.AppSetting;
-import id.ezclouds.biz.arahindonesia.model.authentication.BizMemberCommonSession;
-import id.ezclouds.biz.arahindonesia.model.news.SimpleNews;
-import id.ezclouds.biz.arahindonesia.model.profile.CandidateProfile;
-import id.ezclouds.biz.arahindonesia.model.profile.MemberProfile;
-import id.ezclouds.biz.arahindonesia.service.result.BizMemberLoginResult;
+import id.ezclouds.biz.ezservice.model.AppSetting;
+import id.ezclouds.biz.ezservice.model.authentication.BizMemberCommonSession;
+import id.ezclouds.biz.ezservice.model.news.SimpleNews;
+import id.ezclouds.biz.ezservice.model.profile.CandidateProfile;
+import id.ezclouds.biz.ezservice.model.profile.MemberProfile;
+import id.ezclouds.biz.ezservice.service.result.BizMemberLoginResult;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.core.bifrost.app.api.digestlog.*;

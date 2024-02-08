@@ -4,8 +4,8 @@
  */
 package id.ezclouds.core.bifrost.core.processor;
 
-import id.ezclouds.biz.arahindonesia.constant.AppConstant;
-import id.ezclouds.biz.arahindonesia.service.apibiz.BizAuthService;
+import id.ezclouds.biz.ezservice.constant.AppConstant;
+import id.ezclouds.biz.ezservice.service.apibiz.BizAuthService;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;

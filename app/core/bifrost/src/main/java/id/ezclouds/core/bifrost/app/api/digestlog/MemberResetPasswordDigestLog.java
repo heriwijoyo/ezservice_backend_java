@@ -4,7 +4,7 @@
  */
 package id.ezclouds.core.bifrost.app.api.digestlog;
 
-import id.ezclouds.biz.arahindonesia.model.authentication.BizMemberCommonSession;
+import id.ezclouds.biz.ezservice.model.authentication.BizMemberCommonSession;
 import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
 import id.ezclouds.core.bifrost.app.api.request.MemberResetPasswordRequest;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
