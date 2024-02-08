@@ -46,4 +46,8 @@ public class AppConstant {
     public static final class ExtKey {
         public static final String SOURCE_ID = "SOURCE_ID";
     }
+
+    public static final class Annotation {
+        public static final String AVATAR_URL = "AVATAR_URL";
+    }
 }

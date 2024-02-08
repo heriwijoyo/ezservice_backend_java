@@ -4,6 +4,8 @@
  */
 package id.ezclouds.biz.ezservice.model.member;
 
+import id.ezclouds.biz.ezservice.constant.AppConstant;
+import id.ezclouds.biz.ezservice.model.annotation.PublicImageUrl;
 import id.ezclouds.biz.ezservice.model.BizStatus;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 
@@ -32,6 +34,7 @@ public class BizMember {
     private boolean addressVerified;
     private BizStatus status;
 
+    @PublicImageUrl(name = AppConstant.Annotation.AVATAR_URL)
     private String avatarUrl;
 
     //CoreMemberExtension
@@ -169,6 +172,14 @@ public class BizMember {
 
     public void setStatus(BizStatus status) {
         this.status = status;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
     public String getIdCardNumber() {

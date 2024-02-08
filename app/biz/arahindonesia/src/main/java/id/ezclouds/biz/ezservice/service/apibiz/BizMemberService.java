@@ -4,8 +4,10 @@
  */
 package id.ezclouds.biz.ezservice.service.apibiz;
 
+import id.ezclouds.biz.ezservice.config.BizPublicConfig;
 import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.converter.BizMemberConverter;
+import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.model.member.BizMemberInfo;
 import id.ezclouds.biz.ezservice.model.profile.MemberProfile;
@@ -55,6 +57,9 @@ public class BizMemberService extends BizBaseService {
     @Autowired
     private CoreFileService coreFileService;
 
+    @Autowired
+    private BizCommonConfigService bizCommonConfigService;
+
     public BizResult getMemberProfile() {
         final BizResult bizResult = new BizResult();
 
@@ -78,6 +83,9 @@ public class BizMemberService extends BizBaseService {
                 CoreMember coreMember = coreMemberService.getOptimisticCoreMember(sessionInfo.getMemberId());
                 CoreMemberExtension coreMemberExtension = coreMemberService.getOptimisticCoreMemberExtension(sessionInfo.getMemberId());
                 BizMember bizMember = BizMemberConverter.convert(coreMember, coreMemberExtension);
+
+                BizPublicConfig publicConfig = bizCommonConfigService.resolveCommonConfig(getOrgId(), bizMember.getMemberId());
+                BizAnnotationProcessor.annotatePublicConfig(bizMember, publicConfig);
 
                 MemberProfile memberProfile = new MemberProfile();
                 memberProfile.setAppProfiles(appProfileService.getAppProfile(orgId));

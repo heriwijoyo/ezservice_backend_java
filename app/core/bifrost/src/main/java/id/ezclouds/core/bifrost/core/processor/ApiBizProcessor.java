@@ -29,7 +29,7 @@ public class ApiBizProcessor implements BizProcessor {
     private static final String SOURCE_ID = "API";
 
     @Autowired
-    private BizAppSettingService bizAppSettingService;
+    private BizCommonConfigService bizCommonConfigService;
 
     @Autowired
     private BizCandidateProfileService bizCandidateProfileService;
@@ -55,7 +55,7 @@ public class ApiBizProcessor implements BizProcessor {
 
             switch (apiEvent) {
                 case API_APP_SETTING:
-                    return bizAppSettingService.getAppSetting();
+                    return bizCommonConfigService.getAppSetting();
 
                 case API_CANDIDATE_PROFILE:
                     return bizCandidateProfileService.getCandidateProfile();

@@ -4,6 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.service.apibiz;
 
+import id.ezclouds.biz.ezservice.config.BizPublicConfig;
 import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.model.*;
 import id.ezclouds.biz.ezservice.model.news.SimpleNews;
@@ -17,6 +18,7 @@ import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,7 +30,7 @@ import java.util.stream.Collectors;
  * @version $Id: AppSettingService.java, v 0.1 2023‐12‐09 12:53 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class BizAppSettingService extends BizBaseService {
+public class BizCommonConfigService extends BizBaseService {
 
     @Autowired
     private AppConfigService appConfigService;
@@ -41,6 +43,9 @@ public class BizAppSettingService extends BizBaseService {
 
     @Autowired
     private VideoCardService videoCardService;
+
+    @Value("${ezserviceapp.url.public.root}")
+    private String appRootPublicUrl;
 
     public BizResult getAppSetting() {
         final BizResult bizResult = new BizResult();
@@ -73,6 +78,10 @@ public class BizAppSettingService extends BizBaseService {
         });
 
         return bizResult;
+    }
+
+    public BizPublicConfig resolveCommonConfig(String orgId, String memberId) {
+        return new BizPublicConfig(orgId, memberId, appRootPublicUrl);
     }
 
     private HomeData composeHomeData(String orgId) {

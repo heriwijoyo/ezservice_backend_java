@@ -66,6 +66,7 @@ public class BizMemberConverter {
         bizMember.setAddressVerified(member.isAddressVerified());
         BizStatus bizStatus = BizStatus.getByCode(member.getMemberStatus().getCode());
         bizMember.setStatus(bizStatus);
+        bizMember.setAvatarUrl(member.getAvatarUrl());
 
         //memberExt
         if (extension == null) {
