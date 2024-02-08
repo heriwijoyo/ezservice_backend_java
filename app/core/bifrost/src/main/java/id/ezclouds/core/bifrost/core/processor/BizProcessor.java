@@ -6,8 +6,8 @@ package id.ezclouds.core.bifrost.core.processor;
 
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.common.util.exception.EzErrorException;
-import id.ezclouds.core.bifrost.core.BaseRequest;
-import id.ezclouds.core.shared.context.EzAppEvent;
+import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
+import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -15,5 +15,5 @@ import id.ezclouds.core.shared.context.EzAppEvent;
  */
 public interface BizProcessor {
 
-    BizResult process(EzAppEvent event, BaseRequest request) throws EzErrorException;
+    BizResult process(ApiEvent event, ApiRequest request) throws EzErrorException;
 }

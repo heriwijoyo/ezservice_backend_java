@@ -13,7 +13,6 @@ import id.ezclouds.core.auth.result.CoreAuthResult;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
 import id.ezclouds.core.bifrost.app.api.request.RequestAppClient;
-import id.ezclouds.core.bifrost.core.BaseRequest;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.context.EzAppEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +28,9 @@ public class PreBizProcessor {
     @Autowired
     private BizAuthService bizAuthService;
 
-    public void process(EzAppEvent event, BaseRequest request) throws EzErrorException, ClassCastException {
+    public void process(EzAppEvent event, ApiRequest apiRequest) throws EzErrorException, ClassCastException {
 
         if (event instanceof ApiEvent) {
-            AssertUtil.isTrue((request instanceof ApiRequest), EzErrorCode.ILLEGAL_PARAM, "Unsupported request type");
-
-            ApiRequest apiRequest = (ApiRequest) request;
             RequestAppClient reqClient = apiRequest.getAppClient();
             AssertUtil.notNull(reqClient, EzErrorCode.ILLEGAL_PARAM, "Request.AppClient is null");
             AssertUtil.notBlank(reqClient.getOrganizationId(), EzErrorCode.ILLEGAL_PARAM, "Request.AppClient.organizationId is blank");

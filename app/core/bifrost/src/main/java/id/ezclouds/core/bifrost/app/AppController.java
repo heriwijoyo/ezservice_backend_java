@@ -11,6 +11,8 @@ import id.ezclouds.common.util.exception.ExceptionUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.common.util.logger.DigestLog;
+import id.ezclouds.core.bifrost.app.api.ApiBizProcessor;
+import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
 import id.ezclouds.core.bifrost.app.api.result.ErrorResult;
@@ -18,11 +20,9 @@ import id.ezclouds.core.bifrost.app.web.WebBizProcessor;
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;
 import id.ezclouds.core.bifrost.core.SpringContextConfig;
 import id.ezclouds.core.bifrost.core.processor.BizProcessor;
-import id.ezclouds.core.bifrost.core.processor.BizProcessorFactory;
 import id.ezclouds.core.bifrost.core.processor.PreBizProcessor;
 import id.ezclouds.core.bifrost.core.processor.WebProcessor;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
-import id.ezclouds.core.shared.context.EzAppEvent;
 import id.ezclouds.core.shared.util.DigestLogUtil;
 import org.slf4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,7 +44,7 @@ public abstract class AppController {
         return "Welcome to Arah Indonesia";
     }
 
-    protected <T> ApiResult<T> executeInTemplate(EzAppEvent ezAppEvent, ApiRequest apiRequest, RequestHandler<T> handler) {
+    protected <T> ApiResult<T> executeInTemplate(ApiEvent ezAppEvent, ApiRequest apiRequest, RequestHandler<T> handler) {
 
         EzAppContextHolder.init(ezAppEvent);
         ApiResult<T> apiResult = new ApiResult<>();
@@ -58,7 +58,7 @@ public abstract class AppController {
             }
 
             preBizProcessor.process(ezAppEvent, apiRequest);
-            BizProcessor bizProcessor = BizProcessorFactory.getBizProcessor(ezAppEvent);
+            BizProcessor bizProcessor = SpringContextConfig.getBean(ApiBizProcessor.class);
             BizResult bizResult = bizProcessor.process(ezAppEvent, apiRequest);
 
             apiResult.setSuccess(bizResult.isSuccess());
