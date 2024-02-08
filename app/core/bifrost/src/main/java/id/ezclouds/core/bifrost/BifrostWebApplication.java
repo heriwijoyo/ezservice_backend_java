@@ -18,10 +18,33 @@ import java.util.TimeZone;
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BifrostWebApplication.java, v 0.1 2023‐06‐18 11:31 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
-@SpringBootApplication(scanBasePackages = {"id.ezclouds.core.bifrost", "id.ezclouds.biz.ezservice", "id.ezclouds.core.shared", "id.ezclouds.core.member", "id.ezclouds.core.auth", "id.ezclouds.core.integration"})
+@SpringBootApplication(scanBasePackages = {
+        "id.ezclouds.core.bifrost",
+        "id.ezclouds.biz.ezservice",
+        "id.ezclouds.core.shared",
+        "id.ezclouds.core.member",
+        "id.ezclouds.core.auth",
+        "id.ezclouds.core.integration"
+})
 @ImportResource({ "classpath:/META-INF/ezclouds/spring/config.xml" })
-@EnableJpaRepositories(basePackages = {"id.ezclouds.common.dal", "id.ezclouds.core.shared", "id.ezclouds.core.member", "id.ezclouds.core.auth", "id.ezclouds.biz.ezservice.service.dataservice.repo", "id.ezclouds.core.integration.dataservice.repo"})
-@EntityScan(basePackages = {"id.ezclouds.common.dal", "id.ezclouds.core.shared", "id.ezclouds.core.member", "id.ezclouds.core.auth", "id.ezclouds.biz.ezservice.service.dataservice.dataobject", "id.ezclouds.core.integration.dataservice.dataobject"})
+@EnableJpaRepositories(basePackages = {
+        "id.ezclouds.common.dal",
+        "id.ezclouds.core.shared",
+        "id.ezclouds.core.member",
+        "id.ezclouds.core.auth",
+        "id.ezclouds.core.integration.dataservice.repo",
+        "id.ezclouds.biz.ezservice.service.dataservice.repo",
+        "id.ezclouds.biz.ezservice.subbiz.arahindonesia.repo"
+})
+@EntityScan(basePackages = {
+        "id.ezclouds.common.dal",
+        "id.ezclouds.core.shared",
+        "id.ezclouds.core.member",
+        "id.ezclouds.core.auth",
+        "id.ezclouds.core.integration.dataservice.dataobject",
+        "id.ezclouds.biz.ezservice.service.dataservice.dataobject",
+        "id.ezclouds.biz.ezservice.subbiz.arahindonesia.dataobject"
+})
 @EnableCaching
 @EnableAsync
 public class BifrostWebApplication {
