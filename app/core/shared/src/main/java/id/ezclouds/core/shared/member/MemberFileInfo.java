@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.core.shared.model;
+package id.ezclouds.core.shared.member;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

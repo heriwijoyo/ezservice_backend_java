@@ -7,7 +7,7 @@ package id.ezclouds.core.shared.service;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.shared.model.CoreMemberFileInfo;
-import id.ezclouds.core.shared.model.MemberFileInfo;
+import id.ezclouds.core.shared.member.MemberFileInfo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
