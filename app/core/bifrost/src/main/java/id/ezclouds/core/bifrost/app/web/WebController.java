@@ -88,6 +88,19 @@ public class WebController extends AppController {
             public Void convertResult(Object resultObject) {
                 return null;
             }
+
+            @Override
+            public String composeDigestLog() {
+                return "request(scene=" +
+                        request.getScene() +
+                        ",orgCode=" +
+                        request.getOrgCode() +
+                        ",memberId=" +
+                        request.getMemberId() +
+                        ",fileName=" +
+                        request.getFileName() +
+                        ")";
+            }
         });
     }
 }

@@ -22,8 +22,6 @@ public class DigestLogUtil {
         String infoLog = "[" +
                 ezAppContext.getTraceId() +
                 "][" +
-                logger.getName() +
-                "," +
                 ezAppContext.getEzAppEvent().getEventCode() +
                 "," +
                 ezAppContext.getTimeCost() +
@@ -52,8 +50,6 @@ public class DigestLogUtil {
         String infoLog = "[" +
                 ezAppContext.getTraceId() +
                 "][" +
-                logger.getName() +
-                "," +
                 ezAppContext.getEzAppEvent().getEventCode() +
                 "," +
                 ezAppContext.getTimeCost() +
@@ -61,8 +57,6 @@ public class DigestLogUtil {
                 digestLog.getSuccessFlag() +
                 "," +
                 digestLog.getResultCode() +
-                "][appVersionNo=" +
-                ezAppContext.getAppVersionNo() +
                 "][" +
                 digestLog.getDigestMessage() +
                 "][" +

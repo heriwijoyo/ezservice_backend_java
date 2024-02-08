@@ -12,7 +12,7 @@ import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.core.bifrost.app.api.ApiBizProcessor;
-import id.ezclouds.core.bifrost.app.api.digestlog.EmptyDigestLog;
+import id.ezclouds.core.bifrost.app.api.digestlog.CommonWebDigestLog;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
@@ -95,8 +95,10 @@ public abstract class AppController {
         } finally {
             boolean success = errorResult == null;
             String resultCode = success ? "RESULT_SUCCESS" : errorResult.getErrorCode();
-            EmptyDigestLog digestLog = new EmptyDigestLog(success, resultCode);
-            DigestLogUtil.logDigest(getLogger(), digestLog);
+            CommonWebDigestLog webDigestLog = new CommonWebDigestLog(success, resultCode);
+            webDigestLog.setDigestMessage(handler.composeDigestLog());
+            webDigestLog.setErrorMessage(errorResult);
+            DigestLogUtil.logWebDigest(getLogger(), webDigestLog);
         }
 
         return returnObject;
@@ -138,5 +140,6 @@ public abstract class AppController {
 
     public interface WebRequestHandler<T> {
         T convertResult(Object resultObject);
+        String composeDigestLog();
     }
 }
