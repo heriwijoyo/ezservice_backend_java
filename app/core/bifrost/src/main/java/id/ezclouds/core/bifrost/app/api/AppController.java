@@ -14,15 +14,20 @@ import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
 import id.ezclouds.core.bifrost.app.api.result.ErrorResult;
+import id.ezclouds.core.bifrost.app.web.WebBizProcessor;
+import id.ezclouds.core.bifrost.app.web.event.WebEvent;
 import id.ezclouds.core.bifrost.core.SpringContextConfig;
 import id.ezclouds.core.bifrost.core.processor.BizProcessor;
 import id.ezclouds.core.bifrost.core.processor.BizProcessorFactory;
 import id.ezclouds.core.bifrost.core.processor.PreBizProcessor;
+import id.ezclouds.core.bifrost.core.processor.WebProcessor;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.context.EzAppEvent;
 import id.ezclouds.core.shared.util.DigestLogUtil;
 import org.slf4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -77,6 +82,24 @@ public abstract class AppController {
         return apiResult;
     }
 
+    protected <T> T executeWebTemplate(WebEvent webEvent, Object request, HttpServletResponse servletResponse, WebRequestHandler<T> handler) {
+        EzAppContextHolder.init(webEvent);
+        T returnObject = null;
+
+        try {
+            handler.onRequestCheck();
+            WebProcessor webProcessor = SpringContextConfig.getBean(WebBizProcessor.class);
+            Object result = webProcessor.process(webEvent, request, servletResponse);
+            returnObject = handler.convertResult(result);
+        } catch (EzErrorException ezException) {
+            EzAppContextHolder.getContext().appendErrorStackTrace(ExceptionUtil.getStackTrace(ezException));
+        } catch (Exception exception) {
+            EzAppContextHolder.getContext().appendErrorStackTrace(ExceptionUtil.getStackTrace(exception));
+        }
+
+        return returnObject;
+    }
+
     private ErrorResult composeErrorResult(BizResult bizResult) {
         ErrorResult errorResult = new ErrorResult();
         errorResult.setErrorCode(bizResult.getErrorCode().getCode());
@@ -109,5 +132,10 @@ public abstract class AppController {
     interface RequestHandler<T> {
         T convertResult(Object resultObject);
         DigestLog composeDigestLog(ApiRequest request, ApiResult<T> result);
+    }
+
+    interface WebRequestHandler<T> {
+        void onRequestCheck() throws EzErrorException;
+        T convertResult(Object resultObject);
     }
 }

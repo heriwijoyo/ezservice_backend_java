@@ -84,7 +84,7 @@ public class BizMemberService extends BizBaseService {
                 CoreMemberExtension coreMemberExtension = coreMemberService.getOptimisticCoreMemberExtension(sessionInfo.getMemberId());
                 BizMember bizMember = BizMemberConverter.convert(coreMember, coreMemberExtension);
 
-                BizPublicConfig publicConfig = bizCommonConfigService.resolveCommonConfig(getOrgId(), bizMember.getMemberId());
+                BizPublicConfig publicConfig = bizCommonConfigService.resolveCommonConfig(getOrgCode(), bizMember.getMemberId());
                 BizAnnotationProcessor.annotatePublicConfig(bizMember, publicConfig);
 
                 MemberProfile memberProfile = new MemberProfile();

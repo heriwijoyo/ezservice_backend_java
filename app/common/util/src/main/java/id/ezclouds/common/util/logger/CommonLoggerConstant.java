@@ -11,6 +11,7 @@ package id.ezclouds.common.util.logger;
 public class CommonLoggerConstant {
 
     public static final String API_CONTROLLER   = "API_CONTROLLER";
+    public static final String WEB_CONTROLLER   = "WEB_CONTROLLER";
     public static final String APP_BIZ_SERVICE  = "APP_BIZ_SERVICE";
     public static final String APP_CORE_SERVICE = "APP_BIZ_SERVICE";
     public static final String APP_CORE_AUTH    = "APP_CORE_AUTH";

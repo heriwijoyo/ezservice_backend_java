@@ -40,4 +40,12 @@ public class BizOrganizationService {
         }
         return null;
     }
+
+    public CoreOrganization getOrganizationByCode(String orgCode) {
+        return getActiveOrganizations()
+                .stream()
+                .filter(org -> StringUtil.equalsNotNull(orgCode, org.getCode()))
+                .findFirst()
+                .orElse(null);
+    }
 }

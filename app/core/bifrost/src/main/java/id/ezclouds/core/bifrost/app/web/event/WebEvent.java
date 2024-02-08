@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.core.bifrost.app.api.event;
+package id.ezclouds.core.bifrost.app.web.event;
 
 import id.ezclouds.core.shared.context.EzAppEvent;
 
@@ -12,10 +12,18 @@ import id.ezclouds.core.shared.context.EzAppEvent;
  */
 public enum WebEvent implements EzAppEvent {
 
+    GET_IMAGE_AVATAR("GET_IMAGE_AVATAR"),
+
     ;
+
+    private final String code;
+
+    WebEvent(String code) {
+        this.code = code;
+    }
 
     @Override
     public String getEventCode() {
-        return null;
+        return this.code;
     }
 }

@@ -83,7 +83,31 @@
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${APP_LOG_ROOT}/${APP_NAME}/controller.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/controller.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/controller-api.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d --- [%thread]%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="WEB_CONTROLLER_Console"
+              class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>
+                %black(%d{ISO8601}) --- [%blue(%thread)]%m%n
+            </pattern>
+        </layout>
+    </appender>
+    <appender name="WEB_CONTROLLER_File"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/${APP_NAME}/controller.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/controller-web.log.%d{yyyy-MM-dd}</fileNamePattern>
         </rollingPolicy>
         <append>true</append>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
