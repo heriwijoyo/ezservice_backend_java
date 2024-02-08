@@ -25,11 +25,6 @@ public enum ApiEvent implements EzAppEvent {
     API_MEMBER_RESET_PASSWORD("API_MEMBER_RESET_PASSWORD", "MemberResetPassword"),
     API_MEMBER_VERIFY_COMMON_SESSION("API_MEMBER_VERIFY_COMMON_SESSION", "VerifyCommonSession"),
     API_MEMBER_UPDATE_AVATAR("API_MEMBER_UPDATE_AVATAR", "MemberUpdateAvatar"),
-    GENERATE_SEQUENCE("", "GenerateSequence"),
-    UNKNOWN_EVENT("UNKNOWN_EVENT", "Undefined event"),
-
-    // SAMPLE
-    SAMPLE_EVENT("SAMPLE_EVENT", "Sample event"),
     ;
 
     private String code;

@@ -4,7 +4,6 @@
  */
 package id.ezclouds.core.bifrost.app.api;
 
-import id.ezclouds.biz.arahindonesia.service.apibiz.BizSampleService;
 import id.ezclouds.biz.arahindonesia.service.result.BizResult;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
@@ -21,12 +20,8 @@ import id.ezclouds.core.bifrost.core.processor.BizProcessorFactory;
 import id.ezclouds.core.bifrost.core.processor.PreBizProcessor;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.context.EzAppEvent;
-import id.ezclouds.core.shared.model.CoreSample;
 import id.ezclouds.core.shared.util.DigestLogUtil;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -37,25 +32,11 @@ public abstract class AppController {
 
     private PreBizProcessor preBizProcessor;
 
-    @Autowired
-    private BizSampleService bizSampleService;
-
     protected abstract Logger getLogger();
 
     @RequestMapping(value = "/")
     private String getIndexPage() {
         return "Welcome to Arah Indonesia";
-    }
-
-    @GetMapping(value = "/sample.php", consumes = {MediaType.ALL_VALUE})
-    private String getSample() {
-        CoreSample coreSample = bizSampleService.getCoreSample();
-        if (coreSample == null) {
-            getLogger().info("CoreSample is NULL, return static value");
-            return "Static Sample Response";
-        }
-        getLogger().info("CoreSample is not NULL, return DB value");
-        return coreSample.getValue();
     }
 
     protected <T> ApiResult<T> executeInTemplate(EzAppEvent ezAppEvent, ApiRequest apiRequest, RequestHandler<T> handler) {
