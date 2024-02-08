@@ -33,7 +33,7 @@
 
         <dependency>
             <groupId>id.ezclouds.biz</groupId>
-            <artifactId>biz-arahindonesia</artifactId>
+            <artifactId>biz-ezservice</artifactId>
             <version>1.0.0</version>
         </dependency>
     </dependencies>

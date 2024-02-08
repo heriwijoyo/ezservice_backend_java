@@ -31,6 +31,8 @@ public class BizMember {
     private boolean addressVerified;
     private BizStatus status;
 
+    private String avatarUrl;
+
     //CoreMemberExtension
     private String idCardNumber;
     private String idCardDocUrl;
