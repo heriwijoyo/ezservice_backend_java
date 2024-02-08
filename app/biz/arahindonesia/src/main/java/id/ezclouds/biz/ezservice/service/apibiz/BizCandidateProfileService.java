@@ -68,6 +68,13 @@ public class BizCandidateProfileService extends BizBaseService {
         return bizResult;
     }
 
+    public CandidateProfile getCandidateProfileOld() {
+        String orgId = EzAppContextHolder.getContext().getOrgId();
+        CandidateProfile profile = new CandidateProfile();
+        setCandidateProfile(profile, orgId);
+        return profile;
+    }
+
     private void setCandidateProfile(CandidateProfile profile, String orgId) {
         List<CandidateProfileItem> profileItems = candidateProfileItemService
                 .getCandidateProfileItems()

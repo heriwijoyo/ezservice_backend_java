@@ -44,6 +44,9 @@ public class BizCommonConfigService extends BizBaseService {
     @Autowired
     private VideoCardService videoCardService;
 
+    @Autowired
+    private BizCandidateProfileService bizCandidateProfileService;
+
     @Value("${ezserviceapp.url.public.root}")
     private String appRootPublicUrl;
 
@@ -97,6 +100,9 @@ public class BizCommonConfigService extends BizBaseService {
         int appVersionNo = EzAppContextHolder.getContext().getAppVersionNo();
         if (appVersionNo < AppConstant.APP_V2_START_VERSION_NO) {
             //TODO: compose candidate profile
+            homeData.setCandidateProfile(
+                    bizCandidateProfileService.getCandidateProfileOld()
+            );
         }
 
         return homeData;
