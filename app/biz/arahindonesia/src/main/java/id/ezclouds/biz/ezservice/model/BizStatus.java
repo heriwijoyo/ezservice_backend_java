@@ -10,20 +10,26 @@ package id.ezclouds.biz.ezservice.model;
  */
 public enum BizStatus {
 
-    ACTIVE(1),
-    NOT_ACTIVE(0),
-    DELETED(-1),
-    UNKNOWN(-999),
+    ACTIVE(1, "ACTIVE"),
+    NOT_ACTIVE(0, "NOT_ACTIVE"),
+    DELETED(-1, "DELETED"),
+    UNKNOWN(-999, "UNKNOWN"),
 
     ;
     private final int code;
+    private final String description;
 
-    BizStatus(int code) {
+    BizStatus(int code, String description) {
         this.code = code;
+        this.description = description;
     }
 
     public int getCode() {
         return code;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public static BizStatus getByCode(int code) {

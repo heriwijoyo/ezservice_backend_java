@@ -375,7 +375,7 @@ public class CoreAuthService {
                 Date currentDate = new Date();
                 Date expiryDate = DateUtil.getDateAfterMins(currentDate, getAdminCommonSessionExpMins(request.getOrgId()));
 
-                int sessionCodeNumber = new Random().nextInt(9000000) + 1000000;
+                int sessionCodeNumber = new Random().nextInt(900000) + 100000;
                 String sessionCode = String.valueOf(sessionCodeNumber);
                 String sesionId = HashUtil.createHash(sessionCode);
 
@@ -392,6 +392,7 @@ public class CoreAuthService {
                 sessionDO.setMemberRoles(request.getMemberRoles());
                 sessionDO.setCreatedTime(DateUtil.getFormattedDate(currentDate));
                 sessionDO.setExpiryTime(DateUtil.getFormattedDate(expiryDate));
+                sessionDO.setStatus(CoreAuthConstant.Status.ACTIVE);
 
                 innerAuthService.adminCreateSession(sessionDO);
             } catch (Exception e) {

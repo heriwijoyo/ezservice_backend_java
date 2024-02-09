@@ -4,12 +4,19 @@
  */
 package id.ezclouds.biz.ezservice.service.apibiz.admin;
 
+import id.ezclouds.biz.ezservice.model.BizStatus;
+import id.ezclouds.biz.ezservice.model.admin.BizAdminSession;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
+import id.ezclouds.core.auth.model.CoreAuthAdminSession;
+import id.ezclouds.core.auth.request.CoreAdminCommonSessionCreateRequest;
 import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
+import id.ezclouds.core.member.model.CoreMember;
+import id.ezclouds.core.member.service.CoreMemberService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,6 +25,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class BizAdminService extends BizBaseService {
+
+    @Autowired
+    private CoreMemberService coreMemberService;
 
     public BizResult createWebSession() {
         final BizResult bizResult = new BizResult();
@@ -30,8 +40,27 @@ public class BizAdminService extends BizBaseService {
             @Override
             public void onBizProcess() throws Exception {
                 CoreAuthMemberSessionInfo sessionInfo = authMemberSession();
+                CoreMember coreMember = coreMemberService.getOptimisticCoreMember(sessionInfo.getMemberId());
 
+                CoreAdminCommonSessionCreateRequest createRequest = new CoreAdminCommonSessionCreateRequest();
+                createRequest.setOrgId(getOrgId());
+                createRequest.setOrgCode(getOrgCode());
+                createRequest.setScene("WEB_LOGIN_SESSION");
+                createRequest.setAppId(getAppId());
+                createRequest.setClientId(sessionInfo.getClientId());
+                createRequest.setDeviceId(null);
+                createRequest.setMemberId(sessionInfo.getMemberId());
+                createRequest.setMemberRoles(coreMember.getRoles());
 
+                CoreAuthAdminSession adminSession = coreAuthService.adminCreateSession(createRequest);
+                BizAdminSession bizAdminSession = new BizAdminSession();
+                bizAdminSession.setSessionId(adminSession.getSessionId());
+                bizAdminSession.setSessionCode(adminSession.getSessionCode());
+                bizAdminSession.setExpiryTime(adminSession.getExpiryTime());
+                bizAdminSession.setStatus(BizStatus.getByCode(adminSession.getStatus()).getDescription());
+
+                bizResult.setSuccess(true);
+                bizResult.setObject(bizAdminSession);
             }
 
             @Override

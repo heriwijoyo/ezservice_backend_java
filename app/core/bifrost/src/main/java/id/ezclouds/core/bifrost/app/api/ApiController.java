@@ -6,6 +6,7 @@ package id.ezclouds.core.bifrost.app.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.ezservice.model.AppSetting;
+import id.ezclouds.biz.ezservice.model.admin.BizAdminSession;
 import id.ezclouds.biz.ezservice.model.authentication.BizMemberCommonSession;
 import id.ezclouds.biz.ezservice.model.news.SimpleNews;
 import id.ezclouds.biz.ezservice.model.profile.CandidateProfile;
@@ -238,15 +239,15 @@ public class ApiController extends AppController {
     // ================ ADMIN APIs ==================
 
     @PostMapping(value = "/api/admin/create_web_session.json")
-    private ApiResult<String> adminCreateWebSession(@RequestBody ApiRequest request) {
-        return executeInTemplate(ApiEvent.API_ADMIN_CREATE_WEB_SESSION, request, new RequestHandler<String>() {
+    private ApiResult<BizAdminSession> adminCreateWebSession(@RequestBody ApiRequest request) {
+        return executeInTemplate(ApiEvent.API_ADMIN_CREATE_WEB_SESSION, request, new RequestHandler<BizAdminSession>() {
             @Override
-            public String convertResult(Object resultObject) {
-                return (String) resultObject;
+            public BizAdminSession convertResult(Object resultObject) {
+                return (BizAdminSession) resultObject;
             }
 
             @Override
-            public DigestLog composeDigestLog(ApiRequest request, ApiResult<String> result) {
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<BizAdminSession> result) {
                 return new EmptyDigestLog(result.isSuccess(), result.getResultCode());
             }
         });
