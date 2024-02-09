@@ -27,32 +27,44 @@ public class BizAnnotationProcessor {
             if (field.isAnnotationPresent(PublicImageUrl.class)) {
                 PublicImageUrl publicImageUrl = field.getAnnotation(PublicImageUrl.class);
                 if (AppConstant.Annotation.AVATAR_URL.equals(publicImageUrl.name())) {
-                    try {
-                        String fieldName = field.getName();
-                        String upperFieldName = fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
-                        String stdGetterMethod = "get" + upperFieldName;
-                        String stdSetterMethod = "set" + upperFieldName;
+                    updateFieldValue(object, field, publicConfig.getAvatarRootImageUrl());
+                }
 
-                        String currentValue;
-                        Method getterMethod = null;
-                        Method setterMethod = null;
-                        for(Method method : object.getClass().getMethods()) {
-                            if (StringUtil.equalsNotNull(stdGetterMethod, method.getName())) {
-                                getterMethod = method;
-                            }
-                            if (StringUtil.equalsNotNull(stdSetterMethod, method.getName())) {
-                                setterMethod = method;
-                            }
-                        }
+                if (AppConstant.Annotation.IDCARD_URL.equals(publicImageUrl.name())) {
+                    updateFieldValue(object, field, publicConfig.getIdCardRootImageUrl());
+                }
 
-                        if (getterMethod != null && setterMethod != null) {
-                            currentValue = (String) getterMethod.invoke(object);
-                            String newValue = publicConfig.getAvatarRootImageUrl() + currentValue;
-                            setterMethod.invoke(object, newValue);
-                        }
-                    } catch (Exception e) { e.printStackTrace(); }
+                if (AppConstant.Annotation.FAMCARD_URL.equals(publicImageUrl.name())) {
+                    updateFieldValue(object, field, publicConfig.getFamCardRootImageUrl());
                 }
             }
         }
+    }
+
+    private static void updateFieldValue(Object object, Field field, String fieldRootUrl) {
+        try {
+            String fieldName = field.getName();
+            String upperFieldName = fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+            String stdGetterMethod = "get" + upperFieldName;
+            String stdSetterMethod = "set" + upperFieldName;
+
+            String currentValue;
+            Method getterMethod = null;
+            Method setterMethod = null;
+            for(Method method : object.getClass().getMethods()) {
+                if (StringUtil.equalsNotNull(stdGetterMethod, method.getName())) {
+                    getterMethod = method;
+                }
+                if (StringUtil.equalsNotNull(stdSetterMethod, method.getName())) {
+                    setterMethod = method;
+                }
+            }
+
+            if (getterMethod != null && setterMethod != null) {
+                currentValue = (String) getterMethod.invoke(object);
+                String newValue = fieldRootUrl + currentValue;
+                setterMethod.invoke(object, newValue);
+            }
+        } catch (Exception e) {}
     }
 }

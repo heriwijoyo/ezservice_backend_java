@@ -49,5 +49,7 @@ public class AppConstant {
 
     public static final class Annotation {
         public static final String AVATAR_URL = "AVATAR_URL";
+        public static final String IDCARD_URL = "IDCARD_URL";
+        public static final String FAMCARD_URL = "FAMCARD_URL";
     }
 }

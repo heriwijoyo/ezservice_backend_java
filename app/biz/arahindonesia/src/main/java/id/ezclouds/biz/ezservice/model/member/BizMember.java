@@ -39,8 +39,10 @@ public class BizMember {
 
     //CoreMemberExtension
     private String idCardNumber;
+    @PublicImageUrl(name = AppConstant.Annotation.IDCARD_URL)
     private String idCardDocUrl;
     private String familyCardNumber;
+    @PublicImageUrl(name = AppConstant.Annotation.FAMCARD_URL)
     private String familyCardDocUrl;
     private String provinceId;
     private String provinceName;
