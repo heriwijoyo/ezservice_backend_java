@@ -225,7 +225,8 @@ public class ApiController extends AppController {
 
             @Override
             public DigestLog composeDigestLog(ApiRequest request, ApiResult<String> result) {
-                EmptyDigestLog digestLog = new EmptyDigestLog(result.isSuccess(), result.getResultCode());
+                SimpleDigestLog digestLog = new SimpleDigestLog(result.isSuccess(), result.getResultCode());
+                digestLog.composeDigest(request, result);
                 return digestLog;
             }
         });

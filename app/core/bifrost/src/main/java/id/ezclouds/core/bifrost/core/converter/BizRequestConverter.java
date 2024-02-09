@@ -106,6 +106,7 @@ public class BizRequestConverter<T extends BizRequest> {
         if (apiRequest instanceof MemberUploadRequest) {
             MemberUploadRequest request = (MemberUploadRequest) apiRequest;
             BizMemberUploadRequest bizRequest = new BizMemberUploadRequest();
+            bizRequest.getExtendInfo().putAll(request.getExtendInfo());
             bizRequest.setScene(request.getScene());
             return bizRequest;
         }

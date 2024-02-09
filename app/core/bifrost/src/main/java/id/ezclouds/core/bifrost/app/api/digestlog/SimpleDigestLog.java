@@ -5,6 +5,8 @@
 package id.ezclouds.core.bifrost.app.api.digestlog;
 
 import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
+import id.ezclouds.core.bifrost.app.api.request.MemberUploadRequest;
+import id.ezclouds.core.bifrost.app.api.request.VerifyCommonSessionRequest;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
 
 /**
@@ -19,6 +21,21 @@ public class SimpleDigestLog extends BaseDigestLog<String> {
 
     @Override
     public void composeDigest(ApiRequest request, ApiResult<String> result) {
+        String requestData = "NULL";
+        if (request instanceof VerifyCommonSessionRequest) {
+            VerifyCommonSessionRequest vRequest = (VerifyCommonSessionRequest) request;
+            requestData =   "sessionId=" + vRequest.getSessionId() +
+                            ",scene=" + vRequest.getScene() +
+                            ",verifyStrategy=" + vRequest.getVerifyStrategy() +
+                            ",verifyCode" + vRequest.getVerifyCode();
+        }
+
+        if (request instanceof MemberUploadRequest) {
+            MemberUploadRequest mRequest = (MemberUploadRequest) request;
+            requestData = "scene=" + mRequest.getScene();
+        }
+
+        setDigestMessage("request(" + requestData + ")");
         setErrorMessage(getErrorMessage(result));
     }
 }

@@ -6,6 +6,7 @@ package id.ezclouds.core.member.service;
 
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
+import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
@@ -86,7 +87,9 @@ public class CoreMemberService {
                 .orElse(null);
 
         if (coreMemberDO != null) {
-            coreMemberDO.setNickname(nickname);
+            if (StringUtil.isNotBlank(nickname)) {
+                coreMemberDO.setNickname(nickname);
+            }
             coreMemberDO.setAvatarUrl(avatar);
             coreMemberRepository.saveAndFlush(coreMemberDO);
         }
