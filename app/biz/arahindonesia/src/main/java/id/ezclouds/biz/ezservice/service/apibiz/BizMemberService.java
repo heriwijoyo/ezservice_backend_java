@@ -14,7 +14,7 @@ import id.ezclouds.biz.ezservice.model.profile.MemberProfile;
 import id.ezclouds.biz.ezservice.service.inner.service.BizMemberInnerService;
 import id.ezclouds.biz.ezservice.service.dataservice.AppProfileService;
 import id.ezclouds.biz.ezservice.service.request.BizMemberRegisterRequest;
-import id.ezclouds.biz.ezservice.service.request.BizMemberUpdateAvatarRequest;
+import id.ezclouds.biz.ezservice.service.request.BizMemberUploadRequest;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.DateUtil;
@@ -145,7 +145,7 @@ public class BizMemberService extends BizBaseService {
         return bizResult;
     }
 
-    public BizResult memberUpdateAvatar(BizMemberUpdateAvatarRequest request) {
+    public BizResult memberUploadMedia(BizMemberUploadRequest request) {
         final BizResult bizResult = new BizResult();
 
         BizServiceTemplate.execute(request, bizResult, new BizServiceTemplate.Handler() {
@@ -165,7 +165,7 @@ public class BizMemberService extends BizBaseService {
                 Path avatarPath = memberFileInfo.getAvatarPath(avatarFileName);
 
                 coreFileService.storeFile(request.getMultipartFile().getInputStream(), avatarPath);
-                coreMemberService.updateNicknameAndAvatar(memberSession.getMemberId(), request.getNickname(), avatarFileName);
+                //coreMemberService.updateNicknameAndAvatar(memberSession.getMemberId(), request.getNickname(), avatarFileName);
 
                 bizResult.setSuccess(true);
             }

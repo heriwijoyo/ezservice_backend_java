@@ -102,11 +102,11 @@ public class BizRequestConverter<T extends BizRequest> {
         return null;
     };
 
-    public static Handler<BizMemberUpdateAvatarRequest> UPDATE_AVATAR = apiRequest -> {
-        if (apiRequest instanceof MemberUpdateAvatarRequest) {
-            MemberUpdateAvatarRequest request = (MemberUpdateAvatarRequest) apiRequest;
-            BizMemberUpdateAvatarRequest bizRequest = new BizMemberUpdateAvatarRequest();
-            bizRequest.setNickname(request.getNickname());
+    public static Handler<BizMemberUploadRequest> MEDIA_UPLOAD = apiRequest -> {
+        if (apiRequest instanceof MemberUploadRequest) {
+            MemberUploadRequest request = (MemberUploadRequest) apiRequest;
+            BizMemberUploadRequest bizRequest = new BizMemberUploadRequest();
+            bizRequest.setScene(request.getScene());
             return bizRequest;
         }
         return null;

@@ -20,6 +20,15 @@ public class BizConstant {
         public static final String COMMON_SESSION_ID = "COMMON_SESSION_ID";
     }
 
+    public static final class UploadScene {
+        public static final String AVATAR = "AVATAR";
+        public static final String ID_CARD = "ID_CARD";
+        public static final String FAMILY_CARD = "FAMILY_CARD";
+        public static final String REPORT_IMAGE = "REPORT_IMAGE";
+        public static final String REPORT_VIDEO = "REPORT_VIDEO";
+        public static final String REPORT_VOICE = "REPORT_VOICE";
+    }
+
     public static final class MemberFlag {
         public static final String NEED_UPDATE_PASSWORD = "NEED_UPDATE_PASSWORD";
     }

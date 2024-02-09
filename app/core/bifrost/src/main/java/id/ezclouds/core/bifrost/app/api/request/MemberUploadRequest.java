@@ -11,4 +11,12 @@ package id.ezclouds.core.bifrost.app.api.request;
 public class MemberUploadRequest extends ApiRequest {
 
     private String scene;
+
+    public String getScene() {
+        return scene;
+    }
+
+    public void setScene(String scene) {
+        this.scene = scene;
+    }
 }

@@ -91,8 +91,10 @@ public class ApiBizProcessor implements BizProcessor {
                 return bizMemberService.registerMember(bizRequest);
 
             case API_MEMBER_UPDATE_AVATAR:
-                BizRequestConverter<BizMemberUpdateAvatarRequest> avatarConverter = new BizRequestConverter<>(BizRequestConverter.UPDATE_AVATAR);
-                return bizMemberService.memberUpdateAvatar(avatarConverter.convert(apiRequest));
+                BizRequestConverter<BizMemberUploadRequest> uploadConverter = new BizRequestConverter<>(BizRequestConverter.MEDIA_UPLOAD);
+                BizMemberUploadRequest uploadRequest = uploadConverter.convert(apiRequest);
+                uploadRequest.setMultipartFile(file);
+                return bizMemberService.memberUploadMedia(uploadRequest);
         }
 
         BizResult bizResult = new BizResult();

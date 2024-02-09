@@ -11,6 +11,7 @@ import id.ezclouds.biz.ezservice.model.news.SimpleNews;
 import id.ezclouds.biz.ezservice.model.profile.CandidateProfile;
 import id.ezclouds.biz.ezservice.model.profile.MemberProfile;
 import id.ezclouds.biz.ezservice.service.result.BizMemberLoginResult;
+import id.ezclouds.common.util.exception.ExceptionUtil;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.core.bifrost.app.AppController;
@@ -24,8 +25,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -239,6 +238,7 @@ public class ApiController extends AppController {
             memberUploadRequest = objectMapper.readValue(postData, MemberUploadRequest.class);
         } catch (Exception exception) {
             memberUploadRequest = null;
+            getLogger().error(ExceptionUtil.getStackTrace(exception));
         }
         return memberUploadRequest;
     }
