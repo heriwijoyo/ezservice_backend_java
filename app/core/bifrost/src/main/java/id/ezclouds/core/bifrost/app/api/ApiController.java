@@ -217,7 +217,7 @@ public class ApiController extends AppController {
 
         MemberUploadRequest request = convertPostData(postData);
 
-        return executeInTemplate(ApiEvent.API_MEMBER_UPDATE_AVATAR, request, mediaFile, new RequestHandler<String>() {
+        return executeInTemplate(ApiEvent.API_MEMBER_UPLOAD_MEDIA, request, mediaFile, new RequestHandler<String>() {
             @Override
             public String convertResult(Object resultObject) {
                 return "OK";

@@ -11,32 +11,26 @@ import id.ezclouds.core.shared.context.EzAppEvent;
  * @version $Id: ApiEvent.java, v 0.1 2023‐12‐09 2:04 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
 public enum ApiEvent implements EzAppEvent {
 
-    API_APP_SETTING("API_APP_SETTING", "ApiAppSetting"),
-    API_CANDIDATE_PROFILE("API_CANDIDATE_PROFILE", "CandidateProfile"),
-    API_NEWS("API_NEWS", "News"),
-    API_MEMBER_PROFILE("API_MEMBER_PROFILE", "MemberProfile"),
+    API_APP_SETTING("API_APP_SETTING"),
+    API_CANDIDATE_PROFILE("API_CANDIDATE_PROFILE"),
+    API_NEWS("API_NEWS"),
+    API_MEMBER_PROFILE("API_MEMBER_PROFILE"),
 
     // TRANSACTIONAL APIs
-    API_MEMBER_LOGIN("API_MEMBER_LOGIN", "MemberLogin"),
-    API_MEMBER_LOGOUT("API_MEMBER_LOGOUT", "MemberLogout"),
-    API_MEMBER_REGISTER("API_MEMBER_REGISTER", "MemberRegister"),
-    API_SESSION_CHECK("API_SESSION_CHECK", "SessionCheck"),
-    API_MEMBER_UPDATE_PASSWORD("API_MEMBER_UPDATE_PASSWORD", "MemberUpdatePassword"),
-    API_MEMBER_RESET_PASSWORD("API_MEMBER_RESET_PASSWORD", "MemberResetPassword"),
-    API_MEMBER_VERIFY_COMMON_SESSION("API_MEMBER_VERIFY_COMMON_SESSION", "VerifyCommonSession"),
-    API_MEMBER_UPDATE_AVATAR("API_MEMBER_UPDATE_AVATAR", "MemberUpdateAvatar"),
+    API_MEMBER_LOGIN("API_MEMBER_LOGIN"),
+    API_MEMBER_LOGOUT("API_MEMBER_LOGOUT"),
+    API_MEMBER_REGISTER("API_MEMBER_REGISTER"),
+    API_SESSION_CHECK("API_SESSION_CHECK"),
+    API_MEMBER_UPDATE_PASSWORD("API_MEMBER_UPDATE_PASSWORD"),
+    API_MEMBER_RESET_PASSWORD("API_MEMBER_RESET_PASSWORD"),
+    API_MEMBER_VERIFY_COMMON_SESSION("API_MEMBER_VERIFY_COMMON_SESSION"),
+    API_MEMBER_UPLOAD_MEDIA("API_MEMBER_UPLOAD_MEDIA"),
     ;
 
     private String code;
-    private String description;
 
-    ApiEvent(String code, String description) {
+    ApiEvent(String code) {
         this.code = code;
-        this.description = description;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     @Override

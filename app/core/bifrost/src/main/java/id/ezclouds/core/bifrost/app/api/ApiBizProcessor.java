@@ -90,7 +90,7 @@ public class ApiBizProcessor implements BizProcessor {
                 bizRequest.getExtendInfo().put(AppConstant.ExtKey.SOURCE_ID, SOURCE_ID);
                 return bizMemberService.registerMember(bizRequest);
 
-            case API_MEMBER_UPDATE_AVATAR:
+            case API_MEMBER_UPLOAD_MEDIA:
                 BizRequestConverter<BizMemberUploadRequest> uploadConverter = new BizRequestConverter<>(BizRequestConverter.MEDIA_UPLOAD);
                 BizMemberUploadRequest uploadRequest = uploadConverter.convert(apiRequest);
                 uploadRequest.setMultipartFile(file);
