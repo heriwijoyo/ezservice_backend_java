@@ -8,6 +8,7 @@ import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -15,5 +16,5 @@ import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
  */
 public interface BizProcessor {
 
-    BizResult process(ApiEvent event, ApiRequest request) throws EzErrorException;
+    BizResult process(ApiEvent event, ApiRequest request, MultipartFile file) throws EzErrorException;
 }

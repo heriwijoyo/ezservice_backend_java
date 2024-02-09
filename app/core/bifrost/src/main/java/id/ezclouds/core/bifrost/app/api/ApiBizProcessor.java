@@ -17,6 +17,7 @@ import id.ezclouds.core.bifrost.core.converter.BizRequestConverter;
 import id.ezclouds.core.bifrost.core.processor.BizProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -46,7 +47,7 @@ public class ApiBizProcessor implements BizProcessor {
     private BizAuthService bizAuthService;
 
     @Override
-    public BizResult process(ApiEvent apiEvent, ApiRequest apiRequest) throws EzErrorException {
+    public BizResult process(ApiEvent apiEvent, ApiRequest apiRequest, MultipartFile file) throws EzErrorException {
 
         switch (apiEvent) {
             case API_APP_SETTING:

@@ -107,7 +107,6 @@ public class BizRequestConverter<T extends BizRequest> {
             MemberUpdateAvatarRequest request = (MemberUpdateAvatarRequest) apiRequest;
             BizMemberUpdateAvatarRequest bizRequest = new BizMemberUpdateAvatarRequest();
             bizRequest.setNickname(request.getNickname());
-            bizRequest.setMultipartFile(request.getMultipartFile());
             return bizRequest;
         }
         return null;

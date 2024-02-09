@@ -5,6 +5,7 @@
 package id.ezclouds.core.bifrost.app;
 
 import id.ezclouds.biz.ezservice.service.result.BizResult;
+import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.ExceptionUtil;
@@ -26,6 +27,7 @@ import id.ezclouds.core.bifrost.core.processor.WebProcessor;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.util.DigestLogUtil;
 import org.slf4j.Logger;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -39,22 +41,27 @@ public abstract class AppController {
 
     protected abstract Logger getLogger();
 
-    protected <T> ApiResult<T> executeInTemplate(ApiEvent ezAppEvent, ApiRequest apiRequest, RequestHandler<T> handler) {
+    protected <T> ApiResult<T> executeInTemplate(ApiEvent apiEvent, ApiRequest apiRequest, RequestHandler<T> handler) {
+        return executeInTemplate(apiEvent, apiRequest, null, handler);
+    }
 
-        EzAppContextHolder.init(ezAppEvent);
+
+    protected <T> ApiResult<T> executeInTemplate(ApiEvent apiEvent, ApiRequest apiRequest, MultipartFile file, RequestHandler<T> handler) {
+
+        EzAppContextHolder.init(apiEvent);
         ApiResult<T> apiResult = new ApiResult<>();
 
         try {
-            AssertUtil.notNull(ezAppEvent, EzErrorCode.ILLEGAL_ACTION, "Illegal action request");
+            AssertUtil.notNull(apiEvent, EzErrorCode.ILLEGAL_ACTION, "Illegal action request");
             AssertUtil.notNull(apiRequest, EzErrorCode.ILLEGAL_PARAM, "Request could not be null");
 
             if (preBizProcessor == null) {
                 preBizProcessor = SpringContextConfig.getBean(PreBizProcessor.class);
             }
 
-            preBizProcessor.process(ezAppEvent, apiRequest);
+            preBizProcessor.process(apiEvent, apiRequest);
             BizProcessor bizProcessor = SpringContextConfig.getBean(ApiBizProcessor.class);
-            BizResult bizResult = bizProcessor.process(ezAppEvent, apiRequest);
+            BizResult bizResult = bizProcessor.process(apiEvent, apiRequest, file);
 
             apiResult.setSuccess(bizResult.isSuccess());
             if (bizResult.isSuccess()) {
@@ -74,6 +81,10 @@ public abstract class AppController {
             DigestLogUtil.logDigest(getLogger(), digestLog);
         }
 
+        if (apiResult.getErrorResult() != null) {
+            apiResult.getErrorResult().setErrorContext(null);
+        }
+        apiResult.setTimestamp(DateUtil.getCurrentFormattedDate());
         return apiResult;
     }
 

@@ -12,6 +12,7 @@ public class ApiResult<T> {
     private static final String RESULT_SUCCESS = "RESULT_SUCCESS";
 
     private boolean success;
+    private String timestamp;
     private ErrorResult errorResult;
     private T data;
 
@@ -25,6 +26,14 @@ public class ApiResult<T> {
 
     public void setSuccess(boolean success) {
         this.success = success;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 
     public ErrorResult getErrorResult() {

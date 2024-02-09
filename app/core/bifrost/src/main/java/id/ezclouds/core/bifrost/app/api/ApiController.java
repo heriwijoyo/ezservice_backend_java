@@ -214,11 +214,11 @@ public class ApiController extends AppController {
     }
 
     @PostMapping(value = "/api/member_upload.php", consumes = {MediaType.ALL_VALUE})
-    private ApiResult<String> memberUpload(@RequestPart("memberAvatar") List<MultipartFile> memberAvatarFiles, @RequestPart("postData") String postData) throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        MemberUpdateAvatarRequest request = mapper.readValue(postData, MemberUpdateAvatarRequest.class);
-        request.setMultipartFile(memberAvatarFiles.get(0));
-        return executeInTemplate(ApiEvent.API_MEMBER_UPDATE_AVATAR, request, new RequestHandler<String>() {
+    private ApiResult<String> memberUpload(@RequestPart("mediaFile") MultipartFile mediaFile, @RequestPart("postData") String postData) throws Exception {
+
+        MemberUploadRequest request = convertPostData(postData);
+
+        return executeInTemplate(ApiEvent.API_MEMBER_UPDATE_AVATAR, request, mediaFile, new RequestHandler<String>() {
             @Override
             public String convertResult(Object resultObject) {
                 return "OK";
@@ -232,6 +232,16 @@ public class ApiController extends AppController {
         });
     }
 
+    private MemberUploadRequest convertPostData(String postData) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        MemberUploadRequest memberUploadRequest;
+        try {
+            memberUploadRequest = objectMapper.readValue(postData, MemberUploadRequest.class);
+        } catch (Exception exception) {
+            memberUploadRequest = null;
+        }
+        return memberUploadRequest;
+    }
 
     private <T> ApiResult<Void> toEmptyResult(ApiResult<T> apiResult) {
         ApiResult<Void> emptyResult = new ApiResult<>();
