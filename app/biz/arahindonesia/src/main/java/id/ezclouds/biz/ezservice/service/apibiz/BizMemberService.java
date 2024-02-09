@@ -6,6 +6,7 @@ package id.ezclouds.biz.ezservice.service.apibiz;
 
 import id.ezclouds.biz.ezservice.config.BizPublicConfig;
 import id.ezclouds.biz.ezservice.constant.AppConstant;
+import id.ezclouds.biz.ezservice.constant.BizConstant;
 import id.ezclouds.biz.ezservice.converter.BizMemberConverter;
 import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
@@ -32,8 +33,6 @@ import id.ezclouds.core.shared.member.MemberFileInfo;
 import id.ezclouds.core.shared.service.CoreFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.nio.file.Path;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -161,11 +160,18 @@ public class BizMemberService extends BizBaseService {
                 MemberFileInfo memberFileInfo = coreFileService
                         .resolveMemberFileInfo(getOrgId(), memberSession.getMemberId());
 
-                String avatarFileName = DateUtil.getTimeNowToString() + "." + request.getFileExtension();
-                Path avatarPath = memberFileInfo.getAvatarPath(avatarFileName);
+                String fileName = DateUtil.getTimeNowToString() + "." + request.getFileExtension();
 
-                coreFileService.storeFile(request.getMultipartFile().getInputStream(), avatarPath);
-                //coreMemberService.updateNicknameAndAvatar(memberSession.getMemberId(), request.getNickname(), avatarFileName);
+                switch (request.getScene()) {
+                    case BizConstant.UploadScene.AVATAR:
+                        coreFileService.storeFile(
+                                request.getMultipartFile().getInputStream(),
+                                memberFileInfo.getAvatarPath(fileName));
+                        String nickName = request.getExtendInfo().get(BizConstant.ExtKey.NICKNAME);
+                        coreMemberService.updateNicknameAndAvatar(memberSession.getMemberId(), nickName, fileName);
+                        break;
+                    default:
+                }
 
                 bizResult.setSuccess(true);
             }

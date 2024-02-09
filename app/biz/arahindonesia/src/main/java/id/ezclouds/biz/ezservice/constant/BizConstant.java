@@ -13,11 +13,12 @@ import java.util.List;
  */
 public class BizConstant {
 
-    public static final class Key {
+    public static final class ExtKey {
         public static final String UPDATE_PASSWORD_MODE_MEMBER_SESSION = "MEMBER_SESSION";
         public static final String UPDATE_PASSWORD_MODE_RESET_SESSION = "RESET_SESSION";
         public static final String FORCED_UPDATE_PASSWORD = "FORCED_UPDATE_PASSWORD";
         public static final String COMMON_SESSION_ID = "COMMON_SESSION_ID";
+        public static final String NICKNAME = "NICKNAME";
     }
 
     public static final class UploadScene {

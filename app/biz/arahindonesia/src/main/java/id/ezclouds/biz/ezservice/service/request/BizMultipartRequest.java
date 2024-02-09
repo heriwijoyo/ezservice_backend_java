@@ -31,10 +31,15 @@ public abstract class BizMultipartRequest extends BizRequest {
         this.multipartFile = multipartFile;
     }
 
+    protected abstract String getScene();
+
+    protected abstract List<String> getSupportedScene();
+
     protected abstract List<String> getSupportedContentType();
 
     public void validateMultipartRequest() throws EzErrorException {
-
+        AssertUtil.notBlank(getScene(), EzErrorCode.UPLOAD_SCENE_EMPTY);
+        AssertUtil.isTrue(getSupportedScene().contains(getScene()), EzErrorCode.UPLOAD_SCENE_NOT_ALLOWED);
         AssertUtil.notNull(multipartFile, EzErrorCode.MULTIPARTFILE_EMPTY);
         AssertUtil.isTrue(multipartFile.getSize() > 0, EzErrorCode.MULTIPARTFILE_EMPTY);
         AssertUtil.notNull(getSupportedContentType(), EzErrorCode.MULTIPARTFILE_TYPE_UNDEFINED);

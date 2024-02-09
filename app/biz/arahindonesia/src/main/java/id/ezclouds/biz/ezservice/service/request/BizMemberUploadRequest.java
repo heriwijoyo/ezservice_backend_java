@@ -18,12 +18,25 @@ public class BizMemberUploadRequest extends BizMultipartRequest {
 
     private String scene;
 
+    @Override
     public String getScene() {
         return scene;
     }
 
     public void setScene(String scene) {
         this.scene = scene;
+    }
+
+    @Override
+    protected List<String> getSupportedScene() {
+        List<String> supportedScene = new ArrayList<>();
+        supportedScene.add(BizConstant.UploadScene.AVATAR);
+        supportedScene.add(BizConstant.UploadScene.ID_CARD);
+        supportedScene.add(BizConstant.UploadScene.FAMILY_CARD);
+        supportedScene.add(BizConstant.UploadScene.REPORT_IMAGE);
+        supportedScene.add(BizConstant.UploadScene.REPORT_VIDEO);
+        supportedScene.add(BizConstant.UploadScene.REPORT_VOICE);
+        return supportedScene;
     }
 
     @Override
