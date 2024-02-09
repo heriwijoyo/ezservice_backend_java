@@ -109,4 +109,82 @@ public class WebController extends AppController {
             }
         });
     }
+
+    @GetMapping(value = "/image/idcard/{orgCode}/{memberId}/{fileName}")
+    private Void getIdCardImage(
+            @PathVariable("orgCode") String orgCode,
+            @PathVariable("memberId") String memberId,
+            @PathVariable("fileName") String fileName,
+            HttpServletResponse servletResponse) {
+
+        WebLoadImageRequest request = new WebLoadImageRequest();
+        request.setScene(WebLoadImageScene.ID_CARD.getCode());
+        request.setOrgCode(orgCode);
+        request.setMemberId(memberId);
+        request.setFileName(fileName);
+
+        return executeWebTemplate(WebEvent.GET_IMAGE_IDCARD, request, servletResponse, new WebRequestHandler<Void>() {
+            @Override
+            public Void convertResult(Object resultObject) {
+                return null;
+            }
+
+            @Override
+            public void onException(Exception exception) {
+                servletResponse.setStatus(HttpStatus.NOT_FOUND.value());
+            }
+
+            @Override
+            public String composeDigestLog() {
+                return "request(scene=" +
+                        request.getScene() +
+                        ",orgCode=" +
+                        request.getOrgCode() +
+                        ",memberId=" +
+                        request.getMemberId() +
+                        ",fileName=" +
+                        request.getFileName() +
+                        ")";
+            }
+        });
+    }
+
+    @GetMapping(value = "/image/famcard/{orgCode}/{memberId}/{fileName}")
+    private Void getFamCardImage(
+            @PathVariable("orgCode") String orgCode,
+            @PathVariable("memberId") String memberId,
+            @PathVariable("fileName") String fileName,
+            HttpServletResponse servletResponse) {
+
+        WebLoadImageRequest request = new WebLoadImageRequest();
+        request.setScene(WebLoadImageScene.FAMILY_CARD.getCode());
+        request.setOrgCode(orgCode);
+        request.setMemberId(memberId);
+        request.setFileName(fileName);
+
+        return executeWebTemplate(WebEvent.GET_IMAGE_IDCARD, request, servletResponse, new WebRequestHandler<Void>() {
+            @Override
+            public Void convertResult(Object resultObject) {
+                return null;
+            }
+
+            @Override
+            public void onException(Exception exception) {
+                servletResponse.setStatus(HttpStatus.NOT_FOUND.value());
+            }
+
+            @Override
+            public String composeDigestLog() {
+                return "request(scene=" +
+                        request.getScene() +
+                        ",orgCode=" +
+                        request.getOrgCode() +
+                        ",memberId=" +
+                        request.getMemberId() +
+                        ",fileName=" +
+                        request.getFileName() +
+                        ")";
+            }
+        });
+    }
 }

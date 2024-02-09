@@ -13,6 +13,8 @@ import id.ezclouds.core.shared.context.EzAppEvent;
 public enum WebEvent implements EzAppEvent {
 
     GET_IMAGE_AVATAR("GET_IMAGE_AVATAR"),
+    GET_IMAGE_IDCARD("GET_IMAGE_IDCARD"),
+    GET_IMAGE_FAMCARD("GET_IMAGE_FAMCARD"),
 
     ;
 

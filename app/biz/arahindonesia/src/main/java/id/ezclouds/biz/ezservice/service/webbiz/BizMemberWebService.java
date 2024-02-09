@@ -62,6 +62,14 @@ public class BizMemberWebService {
                         imagePath = fileInfo.getAvatarPath(request.getFileName());
                         break;
 
+                    case ID_CARD:
+                        imagePath = fileInfo.getIdCardPath(request.getFileName());
+                        break;
+
+                    case FAMILY_CARD:
+                        imagePath = fileInfo.getFamilyCardPath(request.getFileName());
+                        break;
+
                     default:
                         throw new EzErrorException(EzErrorCode.MEDIA_NOT_FOUND);
                 }
