@@ -4,8 +4,10 @@
  */
 package id.ezclouds.core.auth.converter;
 
+import id.ezclouds.core.auth.dataobject.EzAuthAdminCommonSessionDO;
 import id.ezclouds.core.auth.dataobject.EzAuthAppClientDO;
 import id.ezclouds.core.auth.dataobject.EzAuthMemberClientDO;
+import id.ezclouds.core.auth.model.CoreAuthAdminSession;
 import id.ezclouds.core.auth.model.CoreAuthAppClient;
 import id.ezclouds.core.auth.model.CoreAuthMemberClient;
 
@@ -55,5 +57,23 @@ public class CoreAuthModelConverter {
         clientDO.setLoginPin(client.getLoginPin());
         clientDO.setStatus(client.getStatus());
         return clientDO;
+    }
+
+    public static CoreAuthAdminSession convert(EzAuthAdminCommonSessionDO sessionDO) {
+        if (sessionDO == null) { return null; }
+        CoreAuthAdminSession session = new CoreAuthAdminSession();
+        session.setSessionId(sessionDO.getSessionId());
+        session.setSessionCode(sessionDO.getSessionCode());
+        session.setScene(sessionDO.getScene());
+        session.setOrgId(sessionDO.getOrgId());
+        session.setOrgCode(sessionDO.getOrgCode());
+        session.setAppId(sessionDO.getAppId());
+        session.setClientId(sessionDO.getClientId());
+        session.setMemberId(sessionDO.getMemberId());
+        session.setMemberRoles(sessionDO.getMemberRoles());
+        session.setCreatedTime(sessionDO.getCreatedTime());
+        session.setExpiryTime(sessionDO.getExpiryTime());
+        session.setStatus(sessionDO.getStatus());
+        return session;
     }
 }

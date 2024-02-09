@@ -18,11 +18,14 @@ import javax.persistence.Table;
 public class EzCoreConfigDO {
 
     @Id
-    @Column(name = "core_config_id")
+    @Column(name = "config_id")
     private String configId;
 
     @Column(name = "org_id")
     private String orgId;
+
+    @Column(name = "config_key")
+    private String configKey;
 
     @Column(name = "config_value")
     private String configValue;
@@ -41,6 +44,14 @@ public class EzCoreConfigDO {
 
     public void setOrgId(String orgId) {
         this.orgId = orgId;
+    }
+
+    public String getConfigKey() {
+        return configKey;
+    }
+
+    public void setConfigKey(String configKey) {
+        this.configKey = configKey;
     }
 
     public String getConfigValue() {

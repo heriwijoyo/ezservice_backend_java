@@ -7,6 +7,7 @@ package id.ezclouds.core.bifrost.app.api;
 import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.service.apibiz.*;
 import id.ezclouds.biz.ezservice.service.apibiz.BizAuthService;
+import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
 import id.ezclouds.biz.ezservice.service.request.*;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.common.util.exception.EzErrorCode;
@@ -45,6 +46,9 @@ public class ApiBizProcessor implements BizProcessor {
 
     @Autowired
     private BizAuthService bizAuthService;
+
+    @Autowired
+    private BizAdminService bizAdminService;
 
     @Override
     public BizResult process(ApiEvent apiEvent, ApiRequest apiRequest, MultipartFile file) throws EzErrorException {
@@ -95,6 +99,13 @@ public class ApiBizProcessor implements BizProcessor {
                 BizMemberUploadRequest uploadRequest = uploadConverter.convert(apiRequest);
                 uploadRequest.setMultipartFile(file);
                 return bizMemberService.memberUploadMedia(uploadRequest);
+
+
+
+
+            // =========== ADMIN BIZ PROCESS =============
+            case API_ADMIN_CREATE_WEB_SESSION:
+                return bizAdminService.createWebSession();
         }
 
         BizResult bizResult = new BizResult();

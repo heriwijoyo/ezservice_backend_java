@@ -232,6 +232,46 @@ public class ApiController extends AppController {
         });
     }
 
+
+
+
+    // ================ ADMIN APIs ==================
+
+    @PostMapping(value = "/api/admin/create_web_session.json")
+    private ApiResult<String> adminCreateWebSession(@RequestBody ApiRequest request) {
+        return executeInTemplate(ApiEvent.API_ADMIN_CREATE_WEB_SESSION, request, new RequestHandler<String>() {
+            @Override
+            public String convertResult(Object resultObject) {
+                return (String) resultObject;
+            }
+
+            @Override
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<String> result) {
+                return new EmptyDigestLog(result.isSuccess(), result.getResultCode());
+            }
+        });
+    }
+
+    @PostMapping(value = "/api/admin_upload.php", consumes = {MediaType.ALL_VALUE})
+    private ApiResult<String> adminUpload(@RequestPart("mediaFile") MultipartFile mediaFile, @RequestPart("postData") String postData) throws Exception {
+
+        AdminUploadRequest request = convertAdminPostData(postData);
+
+        return executeInTemplate(ApiEvent.API_ADMIN_UPLOAD_MEDIA, request, mediaFile, new RequestHandler<String>() {
+            @Override
+            public String convertResult(Object resultObject) {
+                return "OK";
+            }
+
+            @Override
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<String> result) {
+                SimpleDigestLog digestLog = new SimpleDigestLog(result.isSuccess(), result.getResultCode());
+                digestLog.composeDigest(request, result);
+                return digestLog;
+            }
+        });
+    }
+
     private MemberUploadRequest convertPostData(String postData) {
         ObjectMapper objectMapper = new ObjectMapper();
         MemberUploadRequest memberUploadRequest;
@@ -242,6 +282,18 @@ public class ApiController extends AppController {
             getLogger().error(ExceptionUtil.getStackTrace(exception));
         }
         return memberUploadRequest;
+    }
+
+    private AdminUploadRequest convertAdminPostData(String postData) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        AdminUploadRequest adminUploadRequest;
+        try {
+            adminUploadRequest = objectMapper.readValue(postData, AdminUploadRequest.class);
+        } catch (Exception exception) {
+            adminUploadRequest = null;
+            getLogger().error(ExceptionUtil.getStackTrace(exception));
+        }
+        return adminUploadRequest;
     }
 
     private <T> ApiResult<Void> toEmptyResult(ApiResult<T> apiResult) {

@@ -13,6 +13,7 @@ public class CoreConfig {
 
     private String configId;
     private String orgId;
+    private String configKey;
     private String configValue;
 
     public String getConfigId() {
@@ -29,6 +30,14 @@ public class CoreConfig {
 
     public void setOrgId(String orgId) {
         this.orgId = orgId;
+    }
+
+    public String getConfigKey() {
+        return configKey;
+    }
+
+    public void setConfigKey(String configKey) {
+        this.configKey = configKey;
     }
 
     public String getConfigValue() {

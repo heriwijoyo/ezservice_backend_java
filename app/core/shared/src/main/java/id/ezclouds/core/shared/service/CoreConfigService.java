@@ -5,6 +5,7 @@
 package id.ezclouds.core.shared.service;
 
 import id.ezclouds.common.util.StringUtil;
+import id.ezclouds.core.shared.constant.CoreConstant;
 import id.ezclouds.core.shared.converter.CoreModelConverter;
 import id.ezclouds.core.shared.model.CoreConfig;
 import id.ezclouds.core.shared.repo.CoreConfigRepository;
@@ -25,15 +26,20 @@ public class CoreConfigService {
     @Autowired
     private CoreConfigRepository coreConfigRepository;
 
-    public String getConfigValue(String configId, String orgId) {
+    public String getConfigValue(String configKey, String orgId) {
         return getCoreConfigs()
                 .stream()
-                .filter(config -> StringUtil.equalsNotNull(configId, config.getConfigId()) &&
+                .filter(config -> StringUtil.equalsNotNull(configKey, config.getConfigKey()) &&
                         StringUtil.equalsNotNull(orgId, config.getOrgId())
                 )
                 .findFirst()
                 .orElse(CoreConfig.EMPTY)
                 .getConfigValue();
+    }
+
+    public boolean isWatzapSendEnable(String orgId) {
+        String configValue = getConfigValue(CoreConstant.ConfigKey.WATZAP_SEND_ENABLE, orgId);
+        return Boolean.parseBoolean(configValue);
     }
 
     @Cacheable("core_config")

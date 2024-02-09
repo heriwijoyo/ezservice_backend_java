@@ -17,4 +17,8 @@ public class CoreConstant {
         public static final String PREFIX_ID_CARD = "IDCARD_";
         public static final String PREFIX_FAMILY_CARD = "FAMCARD_";
     }
+
+    public static final class ConfigKey {
+        public static final String WATZAP_SEND_ENABLE = "WATZAP_SEND_ENABLE";
+    }
 }

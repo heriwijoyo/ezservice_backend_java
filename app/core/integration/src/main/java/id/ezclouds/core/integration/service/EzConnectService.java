@@ -42,24 +42,17 @@ public class EzConnectService {
 
             @Override
             public void onProcess() throws Exception {
-                if (isWatzapSendEnable()) {
+                String orgId = EzAppContextHolder.getContext().getOrgId();
+                if (coreConfigService.isWatzapSendEnable(orgId)) {
                     WatzapSendRequest sendRequest = new WatzapSendRequest();
                     sendRequest.setPhone_no(request.getPhoneNumber());
                     sendRequest.setMessage(request.getMessage());
                     watzapClientService.sendWatzap(sendRequest);
-                } else {
-                    System.out.println("WatzapSend config is disabled");
                 }
                 result.setSuccess(true);
             }
         });
 
         return result;
-    }
-
-    private boolean isWatzapSendEnable() {
-        String orgId = EzAppContextHolder.getContext().getOrgId();
-        String configValue = coreConfigService.getConfigValue("WATZAP_SEND_ENABLE", orgId);
-        return Boolean.parseBoolean(configValue);
     }
 }

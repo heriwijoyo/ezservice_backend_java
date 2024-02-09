@@ -29,6 +29,7 @@ public class CoreModelConverter {
         CoreConfig coreConfig = new CoreConfig();
         coreConfig.setConfigId(coreConfigDO.getConfigId());
         coreConfig.setOrgId(coreConfigDO.getOrgId());
+        coreConfig.setConfigKey(coreConfigDO.getConfigKey());
         coreConfig.setConfigValue(coreConfigDO.getConfigValue());
         return coreConfig;
     }

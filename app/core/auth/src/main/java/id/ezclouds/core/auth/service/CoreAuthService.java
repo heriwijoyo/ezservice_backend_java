@@ -13,21 +13,25 @@ import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.core.auth.constant.CoreAuthConfig;
 import id.ezclouds.core.auth.constant.CoreAuthConstant;
 import id.ezclouds.core.auth.converter.CoreAuthModelConverter;
+import id.ezclouds.core.auth.dataobject.EzAuthAdminCommonSessionDO;
 import id.ezclouds.core.auth.dataobject.EzAuthMemberClientDO;
 import id.ezclouds.core.auth.dataobject.EzAuthMemberClientSessionDO;
 import id.ezclouds.core.auth.dataobject.EzAuthMemberCommonSessionDO;
+import id.ezclouds.core.auth.model.CoreAuthAdminSession;
 import id.ezclouds.core.auth.model.CoreAuthAppClient;
 import id.ezclouds.core.auth.model.CoreAuthMemberClient;
 import id.ezclouds.core.auth.repo.EzAuthAppClientRepository;
 import id.ezclouds.core.auth.repo.EzAuthMemberClientRepository;
 import id.ezclouds.core.auth.repo.EzAuthMemberClientSessionRepository;
 import id.ezclouds.core.auth.repo.EzAuthMemberCommonSessionRepository;
+import id.ezclouds.core.auth.request.CoreAdminCommonSessionCreateRequest;
 import id.ezclouds.core.auth.request.CoreAppClientAuthRequest;
 import id.ezclouds.core.auth.request.CoreMemberClientAuthRequest;
 import id.ezclouds.core.auth.request.CoreMemberCommonSessionRequest;
 import id.ezclouds.core.auth.result.CoreCommonSession;
 import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
 import id.ezclouds.core.auth.result.CoreAuthResult;
+import id.ezclouds.core.auth.service.inner.InnerAuthService;
 import id.ezclouds.core.shared.service.CoreConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -62,6 +66,9 @@ public class CoreAuthService {
 
     @Autowired
     private CoreConfigService coreConfigService;
+
+    @Autowired
+    private InnerAuthService innerAuthService;
 
     public CoreAuthResult<Void> authAppClient(CoreAppClientAuthRequest request) {
         CoreAuthResult<Void> authResult = new CoreAuthResult<>();
@@ -356,7 +363,48 @@ public class CoreAuthService {
         ezAuthMemberClientRepository.saveAndFlush(clientDO);
     }
 
+    public CoreAuthAdminSession adminCreateSession(CoreAdminCommonSessionCreateRequest request) throws Exception {
+        EzAuthAdminCommonSessionDO sessionDO = null;
 
+        int maxRetry = 10;
+        int retryCount = 0;
+        boolean createError = false;
+
+        while (retryCount < 1 || (createError && (retryCount < maxRetry))) {
+            try {
+                Date currentDate = new Date();
+                Date expiryDate = DateUtil.getDateAfterMins(currentDate, getAdminCommonSessionExpMins(request.getOrgId()));
+
+                int sessionCodeNumber = new Random().nextInt(9000000) + 1000000;
+                String sessionCode = String.valueOf(sessionCodeNumber);
+                String sesionId = HashUtil.createHash(sessionCode);
+
+                sessionDO = new EzAuthAdminCommonSessionDO();
+                sessionDO.setSessionId(sesionId);
+                sessionDO.setSessionCode(sessionCode);
+                sessionDO.setScene(request.getScene());
+                sessionDO.setOrgId(request.getOrgId());
+                sessionDO.setOrgCode(request.getOrgCode());
+                sessionDO.setAppId(request.getAppId());
+                sessionDO.setClientId(request.getClientId());
+                sessionDO.setDeviceId(request.getDeviceId());
+                sessionDO.setMemberId(request.getMemberId());
+                sessionDO.setMemberRoles(request.getMemberRoles());
+                sessionDO.setCreatedTime(DateUtil.getFormattedDate(currentDate));
+                sessionDO.setExpiryTime(DateUtil.getFormattedDate(expiryDate));
+
+                innerAuthService.adminCreateSession(sessionDO);
+            } catch (Exception e) {
+                createError = true;
+            }
+            retryCount++;
+        }
+
+        if (sessionDO != null) {
+            return CoreAuthModelConverter.convert(sessionDO);
+        }
+        return null;
+    }
 
     @Cacheable("core_auth_app_client")
     public List<CoreAuthAppClient> getActiveAppClients() {
@@ -376,6 +424,12 @@ public class CoreAuthService {
         String expMins = coreConfigService.getConfigValue(CoreAuthConfig.Key.MEMBER_COMMON_SESSION_EXPIRY_MINS, orgId);
         return Integer.parseInt(expMins);
     }
+
+    private int getAdminCommonSessionExpMins(String orgId) {
+        String expMins = coreConfigService.getConfigValue(CoreAuthConfig.Key.ADMIN_COMMON_SESSION_EXPIRY_MINS, orgId);
+        return Integer.parseInt(expMins);
+    }
+
 
     private boolean isSessionExpired(EzAuthMemberCommonSessionDO sessionDO) {
         Date sessionExpDate = DateUtil.parseFormattedDate(sessionDO.getExpiryTime());
