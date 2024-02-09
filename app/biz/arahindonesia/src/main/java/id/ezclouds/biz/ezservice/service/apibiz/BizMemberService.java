@@ -25,6 +25,7 @@ import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
 import id.ezclouds.core.auth.service.CoreAuthService;
+import id.ezclouds.core.member.constant.CoreMemberField;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
 import id.ezclouds.core.member.service.CoreMemberService;
@@ -33,6 +34,9 @@ import id.ezclouds.core.shared.member.MemberFileInfo;
 import id.ezclouds.core.shared.service.CoreFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -162,14 +166,34 @@ public class BizMemberService extends BizBaseService {
 
                 String fileName = DateUtil.getTimeNowToString() + "." + request.getFileExtension();
 
+                Map<String, String> updateField = new HashMap<>();
                 switch (request.getScene()) {
                     case BizConstant.UploadScene.AVATAR:
                         coreFileService.storeFile(
                                 request.getMultipartFile().getInputStream(),
                                 memberFileInfo.getAvatarPath(fileName));
                         String nickName = request.getExtendInfo().get(BizConstant.ExtKey.NICKNAME);
-                        coreMemberService.updateNicknameAndAvatar(memberSession.getMemberId(), nickName, fileName);
+                        updateField.put(CoreMemberField.AVATAR, fileName);
+                        updateField.put(CoreMemberField.NICKNAME, nickName);
+                        coreMemberService.updateMemberField(memberSession.getMemberId(), updateField);
                         break;
+
+                    case BizConstant.UploadScene.ID_CARD:
+                        coreFileService.storeFile(
+                                request.getMultipartFile().getInputStream(),
+                                memberFileInfo.getIdCardPath(fileName));
+                        updateField.put(CoreMemberField.ID_CARD, fileName);
+                        coreMemberService.updateMemberField(memberSession.getMemberId(), updateField);
+                        break;
+
+                    case BizConstant.UploadScene.FAMILY_CARD:
+                        coreFileService.storeFile(
+                                request.getMultipartFile().getInputStream(),
+                                memberFileInfo.getFamilyCardPath(fileName));
+                        updateField.put(CoreMemberField.FAMILY_CARD, fileName);
+                        coreMemberService.updateMemberField(memberSession.getMemberId(), updateField);
+                        break;
+
                     default:
                 }
 

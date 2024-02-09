@@ -10,6 +10,7 @@ import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
+import id.ezclouds.core.member.constant.CoreMemberField;
 import id.ezclouds.core.member.dataobject.CoreMemberDO;
 import id.ezclouds.core.member.dataobject.CoreMemberExtensionDO;
 import id.ezclouds.core.member.model.CoreMember;
@@ -22,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Map;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -81,17 +83,49 @@ public class CoreMemberService {
     }
 
     @Transactional
-    public void updateNicknameAndAvatar(String memberId, String nickname, String avatar) {
+    public void updateMemberField(String memberId, Map<String, String> fieldMap) {
+        if (StringUtil.isBlank(memberId) || fieldMap == null || fieldMap.isEmpty()) {
+            return;
+        }
         CoreMemberDO coreMemberDO = coreMemberRepository
                 .findById(memberId)
                 .orElse(null);
 
+        CoreMemberExtensionDO coreMemberExtensionDO = coreMemberExtensionRepository
+                .findByMemberId(memberId);
+
+        updateMemberDO(coreMemberDO, coreMemberExtensionDO, fieldMap);
+
         if (coreMemberDO != null) {
-            if (StringUtil.isNotBlank(nickname)) {
-                coreMemberDO.setNickname(nickname);
-            }
-            coreMemberDO.setAvatarUrl(avatar);
             coreMemberRepository.saveAndFlush(coreMemberDO);
+        }
+        if (coreMemberExtensionDO != null) {
+            coreMemberExtensionRepository.saveAndFlush(coreMemberExtensionDO);
+        }
+    }
+
+    private void updateMemberDO(CoreMemberDO coreMemberDO, CoreMemberExtensionDO extensionDO, Map<String, String> fieldMap) {
+
+        for (Map.Entry<String, String> entry : fieldMap.entrySet()) {
+            switch (entry.getKey()) {
+                case CoreMemberField.AVATAR:
+                    if (coreMemberDO != null && StringUtil.isNotBlank(entry.getValue())) {
+                        coreMemberDO.setAvatarUrl(entry.getValue());
+                    }
+                    break;
+
+                case CoreMemberField.ID_CARD:
+                    if (extensionDO != null && StringUtil.isNotBlank(entry.getValue())) {
+                        extensionDO.setIdCardDocUrl(entry.getValue());
+                    }
+                    break;
+
+                case CoreMemberField.FAMILY_CARD:
+                    if (extensionDO != null && StringUtil.isNotBlank(entry.getValue())) {
+                        extensionDO.setFamilyCardDocUrl(entry.getValue());
+                    }
+                    break;
+            }
         }
     }
 }
