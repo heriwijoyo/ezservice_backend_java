@@ -41,6 +41,8 @@ public class AppConstant {
         public static final String SESSION_EXPIRED = "Kode verifikasi telah kadaluarsa, silakan ulangi kembali proses anda";
         public static final String SESSION_VERIFY_FAILED = "Kode verifikasi anda salah, masukkan kembali kode verifikasi yang benar";
         public static final String ILLEGAL_ACTION = "Sistem membatasi akses pada proses tersebut";
+
+        public static final String MEMBER_UNAUTHORIZED = "Anda tidak memiliki akses untuk membuka halaman ini";
     }
 
     public static final class ExtKey {

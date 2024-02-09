@@ -27,6 +27,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: ApiController.java, v 0.1 2023‐12‐03 11:46 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -248,6 +250,21 @@ public class ApiController extends AppController {
 
             @Override
             public DigestLog composeDigestLog(ApiRequest request, ApiResult<BizAdminSession> result) {
+                return new EmptyDigestLog(result.isSuccess(), result.getResultCode());
+            }
+        });
+    }
+
+    @PostMapping(value = "/api/admin/web_session.json")
+    private ApiResult<List<BizAdminSession>> adminGetWebSession(@RequestBody ApiRequest request) {
+        return executeInTemplate(ApiEvent.API_ADMIN_CREATE_WEB_SESSION, request, new RequestHandler<List<BizAdminSession>>() {
+            @Override
+            public List<BizAdminSession> convertResult(Object resultObject) {
+                return (List<BizAdminSession>) resultObject;
+            }
+
+            @Override
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<List<BizAdminSession>> result) {
                 return new EmptyDigestLog(result.isSuccess(), result.getResultCode());
             }
         });

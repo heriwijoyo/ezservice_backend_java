@@ -9,6 +9,7 @@ import id.ezclouds.biz.ezservice.model.admin.BizAdminSession;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
+import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.auth.model.CoreAuthAdminSession;
@@ -18,6 +19,9 @@ import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.service.CoreMemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -41,6 +45,8 @@ public class BizAdminService extends BizBaseService {
             public void onBizProcess() throws Exception {
                 CoreAuthMemberSessionInfo sessionInfo = authMemberSession();
                 CoreMember coreMember = coreMemberService.getOptimisticCoreMember(sessionInfo.getMemberId());
+                List<String> memberRoles = Arrays.asList(coreMember.getRoles().split(","));
+                AssertUtil.isTrue(memberRoles.contains("ORG_ADMIN"), EzErrorCode.MEMBER_UNAUTHORIZED);
 
                 CoreAdminCommonSessionCreateRequest createRequest = new CoreAdminCommonSessionCreateRequest();
                 createRequest.setOrgId(getOrgId());
@@ -68,6 +74,12 @@ public class BizAdminService extends BizBaseService {
                 return getBizErrorMessage(ezErrorCode);
             }
         });
+
+        return bizResult;
+    }
+
+    public BizResult getWebSession() {
+        final BizResult bizResult = new BizResult();
 
         return bizResult;
     }

@@ -52,6 +52,9 @@ public class BizBaseService {
             case MEMBER_LOGIN_FAILED:
                 return AppConstant.MEMBER_LOGIN_MESSAGE_FAILED;
 
+            case MEMBER_UNAUTHORIZED:
+                return AppConstant.BizMessage.MEMBER_UNAUTHORIZED;
+
             //Session Error
             case SESSION_INVALID:
                 return AppConstant.BizMessage.SESSION_INVALID;
