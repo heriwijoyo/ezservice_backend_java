@@ -6,7 +6,11 @@ package id.ezclouds.core.auth.repo;
 
 import id.ezclouds.core.auth.dataobject.EzAuthAdminCommonSessionDO;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -14,4 +18,10 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface EzAuthAdminCommonSessionRepository extends JpaRepository<EzAuthAdminCommonSessionDO, String> {
+
+    @Query("SELECT adms FROM EzAuthAdminCommonSessionDO adms WHERE adms.orgId = :orgId AND adms.memberId = :memberId")
+    List<EzAuthAdminCommonSessionDO> fetchByMemberId(
+            @Param("orgId") String orgId,
+            @Param("memberId") String memberId
+    );
 }

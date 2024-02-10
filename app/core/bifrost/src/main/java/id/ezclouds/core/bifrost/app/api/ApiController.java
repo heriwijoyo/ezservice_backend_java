@@ -256,15 +256,15 @@ public class ApiController extends AppController {
     }
 
     @PostMapping(value = "/api/admin/web_session.json")
-    private ApiResult<List<BizAdminSession>> adminGetWebSession(@RequestBody ApiRequest request) {
-        return executeInTemplate(ApiEvent.API_ADMIN_CREATE_WEB_SESSION, request, new RequestHandler<List<BizAdminSession>>() {
+    private ApiResult<ListResult<BizAdminSession>> adminGetWebSession(@RequestBody ApiRequest request) {
+        return executeInTemplate(ApiEvent.API_ADMIN_GET_WEB_SESSION, request, new RequestHandler<ListResult<BizAdminSession>>() {
             @Override
-            public List<BizAdminSession> convertResult(Object resultObject) {
-                return (List<BizAdminSession>) resultObject;
+            public ListResult<BizAdminSession> convertResult(Object resultObject) {
+                return (ListResult<BizAdminSession>) resultObject;
             }
 
             @Override
-            public DigestLog composeDigestLog(ApiRequest request, ApiResult<List<BizAdminSession>> result) {
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<ListResult<BizAdminSession>> result) {
                 return new EmptyDigestLog(result.isSuccess(), result.getResultCode());
             }
         });

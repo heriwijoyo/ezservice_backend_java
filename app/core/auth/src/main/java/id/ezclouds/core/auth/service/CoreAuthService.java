@@ -407,6 +407,14 @@ public class CoreAuthService {
         return null;
     }
 
+    public List<CoreAuthAdminSession> getAdminSession(String orgId, String memberId) {
+        return innerAuthService
+                .getAdminSession(orgId, memberId)
+                .stream()
+                .map(CoreAuthModelConverter::convert)
+                .collect(Collectors.toList());
+    }
+
     @Cacheable("core_auth_app_client")
     public List<CoreAuthAppClient> getActiveAppClients() {
         return ezAuthAppClientRepository

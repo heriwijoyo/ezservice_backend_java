@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -24,5 +25,9 @@ public class InnerAuthService {
     @Transactional
     public void adminCreateSession(EzAuthAdminCommonSessionDO sessionDO) {
         ezAuthAdminCommonSessionRepository.saveAndFlush(sessionDO);
+    }
+
+    public List<EzAuthAdminCommonSessionDO> getAdminSession(String orgId, String memberId) {
+        return ezAuthAdminCommonSessionRepository.fetchByMemberId(orgId, memberId);
     }
 }

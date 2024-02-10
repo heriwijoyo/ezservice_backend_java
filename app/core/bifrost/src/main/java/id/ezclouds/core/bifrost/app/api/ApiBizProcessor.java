@@ -106,6 +106,9 @@ public class ApiBizProcessor implements BizProcessor {
             // =========== ADMIN BIZ PROCESS =============
             case API_ADMIN_CREATE_WEB_SESSION:
                 return bizAdminService.createWebSession();
+
+            case API_ADMIN_GET_WEB_SESSION:
+                return bizAdminService.getWebSession();
         }
 
         BizResult bizResult = new BizResult();
