@@ -111,6 +111,8 @@
 
         if (allBoxFilled) {
             disableAllInputs();
+            $('#failed').hide();
+            $('#success').hide();
             $('#loader').show();
 
             $.ajax({

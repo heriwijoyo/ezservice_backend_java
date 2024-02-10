@@ -36,6 +36,7 @@ public class InnerAuthService {
         return ezAuthAdminCommonSessionRepository.fetchByMemberId(orgId, memberId);
     }
 
+    @Transactional
     public String adminLoginBySessionCode(String sessionCode) throws Exception {
         EzAuthAdminCommonSessionDO sessionDO = ezAuthAdminCommonSessionRepository
                 .findBySessionCode(sessionCode);
@@ -45,6 +46,10 @@ public class InnerAuthService {
         Date currentDate = new Date();
         Date expiryDate = DateUtil.parseFormattedDate(sessionDO.getExpiryTime());
         AssertUtil.isTrue(expiryDate.getTime() > currentDate.getTime(), EzErrorCode.SESSION_CODE_INVALID);
+
+        sessionDO.setLoginTime(DateUtil.getFormattedDate(currentDate));
+        sessionDO.setStatus(CoreAuthConstant.Status.NOT_ACTIVE);
+        ezAuthAdminCommonSessionRepository.saveAndFlush(sessionDO);
 
         return sessionDO.getSessionId();
     }
