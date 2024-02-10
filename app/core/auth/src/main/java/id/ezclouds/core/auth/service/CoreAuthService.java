@@ -91,7 +91,8 @@ public class CoreAuthService {
     }
 
     public CoreAuthMemberSessionInfo authMemberClient(CoreMemberClientAuthRequest request) throws Exception {
-        EzAuthMemberClientDO memberClientDO = ezAuthMemberClientRepository.findByLoginRequest(request.getOrgId(), request.getAppId(), request.getLoginType(), request.getLoginId());
+        EzAuthMemberClientDO memberClientDO = ezAuthMemberClientRepository
+                .findByLoginRequest(request.getOrgId(), request.getAppId(), request.getLoginType(), request.getLoginId());
         AssertUtil.notNull(memberClientDO, EzErrorCode.MEMBER_CLIENT_NOT_FOUND);
 
         int clientStatus = memberClientDO.getStatus();
@@ -153,6 +154,16 @@ public class CoreAuthService {
         ezAuthMemberClientSessionRepository.save(sessionDO);
 
         return sessionDO;
+    }
+
+    @Transactional
+    public void updateMemberSessionRoles(String sessionId, String memberRoles) {
+        EzAuthMemberClientSessionDO sessionDO = ezAuthMemberClientSessionRepository
+                .findById(sessionId).orElse(null);
+        if (sessionDO != null && StringUtil.isNotBlank(memberRoles)) {
+            sessionDO.setMemberRoles(memberRoles);
+            ezAuthMemberClientSessionRepository.saveAndFlush(sessionDO);
+        }
     }
 
     @Transactional
@@ -309,6 +320,7 @@ public class CoreAuthService {
 
         CoreAuthMemberSessionInfo sessionInfo = new CoreAuthMemberSessionInfo();
         sessionInfo.setMemberId(sessionDO.getMemberId());
+        sessionInfo.setMemberRoles(sessionDO.getMemberRoles());
         sessionInfo.setSessionId(sessionDO.getSessionId());
         sessionInfo.setClientId(sessionDO.getClientId());
 
@@ -407,12 +419,16 @@ public class CoreAuthService {
         return null;
     }
 
-    public List<CoreAuthAdminSession> getAdminSession(String orgId, String memberId) {
+    public List<CoreAuthAdminSession> adminGetSession(String orgId, String memberId) {
         return innerAuthService
                 .getAdminSession(orgId, memberId)
                 .stream()
                 .map(CoreAuthModelConverter::convert)
                 .collect(Collectors.toList());
+    }
+
+    public void adminLogoutSession(String sessionId) {
+        innerAuthService.adminLogoutSession(sessionId);
     }
 
     @Cacheable("core_auth_app_client")

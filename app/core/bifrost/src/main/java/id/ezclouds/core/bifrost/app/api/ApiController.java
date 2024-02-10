@@ -240,7 +240,7 @@ public class ApiController extends AppController {
 
     // ================ ADMIN APIs ==================
 
-    @PostMapping(value = "/api/admin/create_web_session.json")
+    @PostMapping(value = "/api/admin/web_session_create.json")
     private ApiResult<BizAdminSession> adminCreateWebSession(@RequestBody ApiRequest request) {
         return executeInTemplate(ApiEvent.API_ADMIN_CREATE_WEB_SESSION, request, new RequestHandler<BizAdminSession>() {
             @Override
@@ -265,6 +265,21 @@ public class ApiController extends AppController {
 
             @Override
             public DigestLog composeDigestLog(ApiRequest request, ApiResult<ListResult<BizAdminSession>> result) {
+                return new EmptyDigestLog(result.isSuccess(), result.getResultCode());
+            }
+        });
+    }
+
+    @PostMapping(value = "/api/admin/web_session_logout.json")
+    private ApiResult<String> adminLogoutWebSession(@RequestBody ApiRequest request) {
+        return executeInTemplate(ApiEvent.API_ADMIN_LOGOUT_WEB_SESSION, request, new RequestHandler<String>() {
+            @Override
+            public String convertResult(Object resultObject) {
+                return (String) resultObject;
+            }
+
+            @Override
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<String> result) {
                 return new EmptyDigestLog(result.isSuccess(), result.getResultCode());
             }
         });

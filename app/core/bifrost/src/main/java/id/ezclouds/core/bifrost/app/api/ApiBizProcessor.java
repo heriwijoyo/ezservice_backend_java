@@ -109,6 +109,10 @@ public class ApiBizProcessor implements BizProcessor {
 
             case API_ADMIN_GET_WEB_SESSION:
                 return bizAdminService.getWebSession();
+
+            case API_ADMIN_LOGOUT_WEB_SESSION:
+                return bizAdminService.logoutWebSession(apiRequest.getExtendInfo().get("WEB_SESSION_ID"));
+
         }
 
         BizResult bizResult = new BizResult();

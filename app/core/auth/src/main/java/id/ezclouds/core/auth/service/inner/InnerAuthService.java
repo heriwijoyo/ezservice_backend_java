@@ -30,4 +30,16 @@ public class InnerAuthService {
     public List<EzAuthAdminCommonSessionDO> getAdminSession(String orgId, String memberId) {
         return ezAuthAdminCommonSessionRepository.fetchByMemberId(orgId, memberId);
     }
+
+    @Transactional
+    public void adminLogoutSession(String sessionId) {
+        EzAuthAdminCommonSessionDO sessionDO = ezAuthAdminCommonSessionRepository
+                .findById(sessionId)
+                .orElse(null);
+
+        if (sessionDO != null) {
+            ezAuthAdminCommonSessionRepository.delete(sessionDO);
+            ezAuthAdminCommonSessionRepository.flush();
+        }
+    }
 }

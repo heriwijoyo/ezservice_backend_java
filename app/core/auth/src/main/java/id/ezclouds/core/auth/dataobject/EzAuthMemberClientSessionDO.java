@@ -36,6 +36,9 @@ public class EzAuthMemberClientSessionDO {
     @Column(name = "member_id")
     private String memberId;
 
+    @Column(name = "member_roles")
+    private String memberRoles;
+
     @Column(name = "device_id")
     private String deviceId;
 
@@ -94,6 +97,14 @@ public class EzAuthMemberClientSessionDO {
 
     public void setMemberId(String memberId) {
         this.memberId = memberId;
+    }
+
+    public String getMemberRoles() {
+        return memberRoles;
+    }
+
+    public void setMemberRoles(String memberRoles) {
+        this.memberRoles = memberRoles;
     }
 
     public String getDeviceId() {

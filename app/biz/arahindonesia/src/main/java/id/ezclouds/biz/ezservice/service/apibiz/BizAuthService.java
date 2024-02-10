@@ -133,6 +133,9 @@ public class BizAuthService extends BizBaseService {
                 CoreMember coreMember = coreMemberService.getOptimisticCoreMember(sessionInfo.getMemberId());
                 CoreMemberExtension coreMemberExtension = coreMemberService.getOptimisticCoreMemberExtension(sessionInfo.getMemberId());
 
+                //assign session with roles
+                coreAuthService.updateMemberSessionRoles(sessionInfo.getSessionId(), coreMember.getRoles());
+
                 if (appVersionNo >= AppConstant.APP_V2_START_VERSION_NO) {
                     BizMember bizMember = BizMemberConverter.convert(coreMember, coreMemberExtension);
                     bizMember.setSubOrganization(appSubOrganizationService.getSubOrganizationById(coreMember.getSubOrgId()));

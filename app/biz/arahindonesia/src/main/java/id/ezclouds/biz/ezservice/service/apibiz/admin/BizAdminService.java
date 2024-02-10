@@ -4,6 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.service.apibiz.admin;
 
+import id.ezclouds.biz.ezservice.constant.BizConstant;
 import id.ezclouds.biz.ezservice.converter.BizAdminConverter;
 import id.ezclouds.biz.ezservice.model.admin.BizAdminSession;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
@@ -15,10 +16,7 @@ import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.auth.model.CoreAuthAdminSession;
 import id.ezclouds.core.auth.request.CoreAdminCommonSessionCreateRequest;
 import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
-import id.ezclouds.core.member.model.CoreMember;
-import id.ezclouds.core.member.service.CoreMemberService;
 import id.ezclouds.core.shared.result.ListResult;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -32,9 +30,6 @@ import java.util.stream.Collectors;
 @Service
 public class BizAdminService extends BizBaseService {
 
-    @Autowired
-    private CoreMemberService coreMemberService;
-
     public BizResult createWebSession() {
         final BizResult bizResult = new BizResult();
 
@@ -46,8 +41,7 @@ public class BizAdminService extends BizBaseService {
             @Override
             public void onBizProcess() throws Exception {
                 CoreAuthMemberSessionInfo sessionInfo = authMemberSession();
-                CoreMember coreMember = coreMemberService.getOptimisticCoreMember(sessionInfo.getMemberId());
-                authorizeMember(coreMember);
+                authorizeAdminMember(sessionInfo.getMemberRoles());
 
                 CoreAdminCommonSessionCreateRequest createRequest = new CoreAdminCommonSessionCreateRequest();
                 createRequest.setOrgId(getOrgId());
@@ -57,7 +51,7 @@ public class BizAdminService extends BizBaseService {
                 createRequest.setClientId(sessionInfo.getClientId());
                 createRequest.setDeviceId(null);
                 createRequest.setMemberId(sessionInfo.getMemberId());
-                createRequest.setMemberRoles(coreMember.getRoles());
+                createRequest.setMemberRoles(sessionInfo.getMemberRoles());
 
                 CoreAuthAdminSession adminSession = coreAuthService.adminCreateSession(createRequest);
                 BizAdminSession bizAdminSession = BizAdminConverter.convert(adminSession);
@@ -85,11 +79,10 @@ public class BizAdminService extends BizBaseService {
             @Override
             public void onBizProcess() throws Exception {
                 CoreAuthMemberSessionInfo sessionInfo = authMemberSession();
-                CoreMember coreMember = coreMemberService.getOptimisticCoreMember(sessionInfo.getMemberId());
-                authorizeMember(coreMember);
+                authorizeAdminMember(sessionInfo.getMemberRoles());
 
                 List<BizAdminSession> adminSessions = coreAuthService
-                        .getAdminSession(getOrgId(), coreMember.getMemberId())
+                        .adminGetSession(getOrgId(), sessionInfo.getMemberId())
                         .stream()
                         .map(BizAdminConverter::convert)
                         .collect(Collectors.toList());
@@ -112,8 +105,36 @@ public class BizAdminService extends BizBaseService {
         return bizResult;
     }
 
-    private void authorizeMember(CoreMember coreMember) throws EzErrorException {
-        List<String> memberRoles = Arrays.asList(coreMember.getRoles().split(","));
-        AssertUtil.isTrue(memberRoles.contains("ORG_ADMIN"), EzErrorCode.MEMBER_UNAUTHORIZED);
+    public BizResult logoutWebSession(String webSessionId) {
+        final BizResult bizResult = new BizResult();
+
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notBlank(webSessionId, EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthMemberSessionInfo sessionInfo = authMemberSession();
+                authorizeAdminMember(sessionInfo.getMemberRoles());
+
+                coreAuthService.adminLogoutSession(webSessionId);
+                bizResult.setSuccess(true);
+                bizResult.setObject(BizConstant.Message.SUCCESS_LOGOUT);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
+    private void authorizeAdminMember(String memberRoles) throws EzErrorException {
+        AssertUtil.notBlank(memberRoles, EzErrorCode.MEMBER_UNAUTHORIZED);
+        List<String> roles = Arrays.asList(memberRoles.split(","));
+        AssertUtil.isTrue(roles.contains(BizConstant.MemberRole.ORG_ADMIN), EzErrorCode.MEMBER_UNAUTHORIZED);
     }
 }
