@@ -4,12 +4,17 @@
  */
 package id.ezclouds.core.auth.service.inner;
 
+import id.ezclouds.common.util.DateUtil;
+import id.ezclouds.common.util.assertion.AssertUtil;
+import id.ezclouds.common.util.exception.EzErrorCode;
+import id.ezclouds.core.auth.constant.CoreAuthConstant;
 import id.ezclouds.core.auth.dataobject.EzAuthAdminCommonSessionDO;
 import id.ezclouds.core.auth.repo.EzAuthAdminCommonSessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,6 +34,19 @@ public class InnerAuthService {
 
     public List<EzAuthAdminCommonSessionDO> getAdminSession(String orgId, String memberId) {
         return ezAuthAdminCommonSessionRepository.fetchByMemberId(orgId, memberId);
+    }
+
+    public String adminLoginBySessionCode(String sessionCode) throws Exception {
+        EzAuthAdminCommonSessionDO sessionDO = ezAuthAdminCommonSessionRepository
+                .findBySessionCode(sessionCode);
+        AssertUtil.notNull(sessionDO, EzErrorCode.SESSION_CODE_INVALID);
+        AssertUtil.isTrue(sessionDO.getStatus() == CoreAuthConstant.Status.ACTIVE, EzErrorCode.SESSION_CODE_INVALID);
+
+        Date currentDate = new Date();
+        Date expiryDate = DateUtil.parseFormattedDate(sessionDO.getExpiryTime());
+        AssertUtil.isTrue(expiryDate.getTime() > currentDate.getTime(), EzErrorCode.SESSION_CODE_INVALID);
+
+        return sessionDO.getSessionId();
     }
 
     @Transactional

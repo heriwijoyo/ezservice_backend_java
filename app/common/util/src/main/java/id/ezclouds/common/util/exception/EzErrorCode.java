@@ -21,6 +21,7 @@ public enum EzErrorCode {
     MEMBER_CLIENT_FROZEN("MEMBER_CLIENT_FROZEN", "Member Client Frozen"),
     MEMBER_CLIENT_ABNORMAL("MEMBER_CLIENT_ABNORMAL", "Member Client Abnormal"),
     MEMBER_UNAUTHORIZED("MEMBER_UNAUTHORIZED", "Member Unauthorized"),
+    SESSION_CODE_INVALID("SESSION_CODE_INVALID", "Session Code Invalid"),
     SESSION_INVALID("SESSION_INVALID", "Session Invalid"),
     SESSION_EXPIRED("SESSION_EXPIRED", "Session Expired"),
     SESSION_UNAVAILABLE("SESSION_UNAVAILABLE", "Session Unavailable"),

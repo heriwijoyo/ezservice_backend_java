@@ -132,6 +132,31 @@ public class BizAdminService extends BizBaseService {
         return bizResult;
     }
 
+    public BizResult loginWebSession(String sessionCode) {
+        BizResult bizResult = new BizResult();
+
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notBlank(sessionCode, EzErrorCode.SESSION_CODE_INVALID);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                String sessionId = coreAuthService.adminLoginBySessionCode(sessionCode);
+                bizResult.setSuccess(true);
+                bizResult.setObject(sessionId);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+
+        return bizResult;
+    }
+
     private void authorizeAdminMember(String memberRoles) throws EzErrorException {
         AssertUtil.notBlank(memberRoles, EzErrorCode.MEMBER_UNAUTHORIZED);
         List<String> roles = Arrays.asList(memberRoles.split(","));

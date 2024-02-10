@@ -427,6 +427,10 @@ public class CoreAuthService {
                 .collect(Collectors.toList());
     }
 
+    public String adminLoginBySessionCode(String sessionCode) throws Exception {
+        return innerAuthService.adminLoginBySessionCode(sessionCode);
+    }
+
     public void adminLogoutSession(String sessionId) {
         innerAuthService.adminLogoutSession(sessionId);
     }

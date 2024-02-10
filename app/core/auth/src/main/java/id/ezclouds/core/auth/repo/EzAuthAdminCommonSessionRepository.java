@@ -24,4 +24,7 @@ public interface EzAuthAdminCommonSessionRepository extends JpaRepository<EzAuth
             @Param("orgId") String orgId,
             @Param("memberId") String memberId
     );
+
+    @Query("SELECT adms FROM EzAuthAdminCommonSessionDO adms WHERE adms.sessionCode = :sessionCode")
+    EzAuthAdminCommonSessionDO findBySessionCode(@Param("sessionCode") String sessionCode);
 }

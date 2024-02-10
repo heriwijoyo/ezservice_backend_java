@@ -16,6 +16,8 @@ public enum WebEvent implements EzAppEvent {
     GET_IMAGE_IDCARD("GET_IMAGE_IDCARD"),
     GET_IMAGE_FAMCARD("GET_IMAGE_FAMCARD"),
 
+    WEB_LOGIN_BY_SESSION_CODE("WEB_LOGIN_BY_SESSION_CODE"),
+
     ;
 
     private final String code;
