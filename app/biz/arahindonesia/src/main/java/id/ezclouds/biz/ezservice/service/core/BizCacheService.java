@@ -7,6 +7,7 @@ package id.ezclouds.biz.ezservice.service.core;
 import id.ezclouds.biz.ezservice.service.dataservice.*;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.service.AppSubOrganizationService;
 import id.ezclouds.core.auth.service.CoreAuthService;
+import id.ezclouds.core.shared.service.CoreAdminService;
 import id.ezclouds.core.shared.service.CoreConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -60,6 +61,9 @@ public class BizCacheService {
     @Autowired
     private AppProfileService appProfileService;
 
+    @Autowired
+    private CoreAdminService coreAdminService;
+
     @EventListener(ApplicationReadyEvent.class)
     public List<String> refreshAllCache() {
         List<String> cacheNames = new ArrayList<>();
@@ -86,6 +90,8 @@ public class BizCacheService {
         videoCardService.getAllVideoCards();
         candidateBioService.getActiveCandidateBios();
         appProfileService.getAllAppProfile();
+        coreAdminService.getAdminBOPermissionAllActive();
+        coreAdminService.getAdminBoMenuAllActive();
 
         cacheManager
                 .getCacheNames()

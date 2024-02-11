@@ -198,7 +198,7 @@ public class BizAdminService extends BizBaseService {
                 CoreAuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(sessionId);
                 BizAdminAppData adminAppData = new BizAdminAppData();
                 adminAppData.setMemberId(adminSession.getMemberId());
-                adminAppData.setMenu(new ArrayList<>());
+                adminAppData.setBoMenu(new ArrayList<>());
 
                 bizResult.setSuccess(true);
                 bizResult.setObject(adminAppData);

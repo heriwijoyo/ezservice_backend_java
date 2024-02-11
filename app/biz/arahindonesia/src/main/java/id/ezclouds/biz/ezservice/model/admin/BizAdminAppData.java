@@ -13,7 +13,7 @@ import java.util.List;
 public class BizAdminAppData {
 
     private String memberId;
-    private List<String> menu;
+    private List<String> boMenu;
 
     public String getMemberId() {
         return memberId;
@@ -23,11 +23,11 @@ public class BizAdminAppData {
         this.memberId = memberId;
     }
 
-    public List<String> getMenu() {
-        return menu;
+    public List<String> getBoMenu() {
+        return boMenu;
     }
 
-    public void setMenu(List<String> menu) {
-        this.menu = menu;
+    public void setBoMenu(List<String> boMenu) {
+        this.boMenu = boMenu;
     }
 }

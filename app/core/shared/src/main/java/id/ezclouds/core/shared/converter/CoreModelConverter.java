@@ -4,8 +4,12 @@
  */
 package id.ezclouds.core.shared.converter;
 
+import id.ezclouds.core.shared.model.CoreAdminBOMenu;
+import id.ezclouds.core.shared.model.CoreAdminBOPermission;
 import id.ezclouds.core.shared.model.CoreConfig;
 import id.ezclouds.core.shared.model.CoreOrganization;
+import id.ezclouds.core.shared.repo.dataobject.EzCoreAdminBOMenuDO;
+import id.ezclouds.core.shared.repo.dataobject.EzCoreAdminBOPermissionDO;
 import id.ezclouds.core.shared.repo.dataobject.EzCoreConfigDO;
 import id.ezclouds.core.shared.repo.dataobject.EzCoreOrganizationDO;
 
@@ -32,5 +36,26 @@ public class CoreModelConverter {
         coreConfig.setConfigKey(coreConfigDO.getConfigKey());
         coreConfig.setConfigValue(coreConfigDO.getConfigValue());
         return coreConfig;
+    }
+
+    public static CoreAdminBOMenu convert(EzCoreAdminBOMenuDO menuDO) {
+        if (menuDO == null) { return null; }
+        CoreAdminBOMenu menu = new CoreAdminBOMenu();
+        menu.setOrgId(menuDO.getOrgId());
+        menu.setPermissionMain(menuDO.getPermissionMain());
+        menu.setMenuName(menuDO.getMenuName());
+        menu.setMenuUrl(menuDO.getMenuUrl());
+        menu.setSorting(menuDO.getSorting());
+        return menu;
+    }
+
+    public static CoreAdminBOPermission convert(EzCoreAdminBOPermissionDO permissionDO) {
+        if (permissionDO == null) { return null; }
+        CoreAdminBOPermission permission = new CoreAdminBOPermission();
+        permission.setOrgId(permissionDO.getOrgId());
+        permission.setRoleName(permissionDO.getRoleName());
+        permission.setPermissionMain(permissionDO.getPermissionMain());
+        permission.setPermissionSub(permissionDO.getPermissionSub());
+        return permission;
     }
 }
