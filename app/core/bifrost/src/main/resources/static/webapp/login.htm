@@ -124,7 +124,7 @@
                     $('#failed').hide();
                     $('#success').show();
                     $('#message').html('Login success, redirecting...');
-                    document.cookie = EzCookieName + '=' + sessionId;
+                    document.cookie = EzCookieName + '=' + sessionId +'; Path=/webapp;';
                     window.location.replace('home.htm');
                 },
                 error: function(xhr) {

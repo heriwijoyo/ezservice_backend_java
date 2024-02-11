@@ -24,7 +24,7 @@
     <!-- Bootstrap Material Datetime Picker Css -->
     <link href="assets/css/time-picker.css" rel="stylesheet" />
     <link href="assets/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
-    <link href="assets/css/sticky-footer.css" rel="stylesheet">
+    <!--link href="assets/css/sticky-footer.css" rel="stylesheet"-->
     <link href="assets/plugins/dropify/css/dropify.css" rel="stylesheet">
     <link href="assets/css/styles.min.css" rel="stylesheet">
     <script src="assets/js/jquery-1.9.1.min.js"></script>
@@ -346,250 +346,208 @@
 
 </section>
 
+<!--div class='alert alert-info alert-dismissible corner-radius bottom-offset' role='alert'>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>&nbsp;&nbsp;</button>
+    Goblok AH
+</div-->
 
-<div class="modal fade" id="modal-package-name" tabindex="-1" role="dialog">
+<div class="modal fade" id="common-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="largeModalLabel">What is my package name?</h4>
+                <h4 class="modal-title" id="common-modal-title"></h4>
             </div>
             <div class="modal-body">
-                <li>Open Android Studio Project</li>
-                <li>Select <b></> Gradle Scripts > build.gradle (Module: app)</b><img src="assets/images/package_name.jpg" class="img-responsive"></li>
+                <h3 id="common-modal-message"></h3>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">OK, I AM UNDERSTAND</button>
+                <button id="common-modal-close" type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="modal-server-key" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="largeModalLabel">Obtaining your Firebase Server API Key</h4>
-            </div>
-            <div class="modal-body">
-                <p>Firebase provides Server API Key to identify your firebase app. To obtain your Server API Key, go to firebase console, select the project and go to settings, select Cloud Messaging tab and copy your Server key.</p>
-                <img src="assets/images/fcm-server-key.jpg" class="img-responsive">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">OK, I AM UNDERSTAND</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="modal-api-key" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="largeModalLabel">Where I have to put my API Key?</h4>
-            </div>
-            <div class="modal-body">
-                <ol>
-                    <li>for security needed, Update <b>API_KEY</b> String value.</li>
-                    <li>Open Android Studio Project.</li>
-                    <li>Click <b>CHANGE API KEY</b> to generate new API Key.</li>
-                    <li>go to app > java > yourpackage name > config > <b>AppConfig.java</b>, and update with your own Server Key and Rest API Key. <img src="assets/images/api_key.jpg" class="img-responsive"></li>
-                </ol>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">OK, I AM UNDERSTAND</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="modal-youtube-api-key" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="largeModalLabel">Get YouTube API Key</h4>
-            </div>
-            <div class="modal-body">
-                <ol>
-                    <li>Go to <a href="https://console.developers.google.com/" target="_blank"><b>Google Developers Console</b></a> and log in with your Google account.</li>
-                    <li>Create the new project (name does not matter for the plugin).</li>
-                    <li>Go to your project (by clicking on its name in the list).</li>
-                    <li>In the sidebar on the left, expand APIs & Services → Library. In the list of APIs go to <b>YouTube Data API (v3)</b> and make sure that it’s <b>enabled (Enable API)</b>.</li>
-                    <li>In the same sidebar click Credentials. Then click on Create New Key and choose API key.</li>
-                    <li>Copy API key and paste it in the admin panel youtube api key settings form.</li>
-                    <li>For video tutorial, klik this link <a href="https://youtu.be/eAkyaEHMJUE" target="_blank"><b>HERE</b></a></li>
-                </ol>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">OK, I AM UNDERSTAND</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="modal-onesignal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="largeModalLabel">Where do I get my OneSignal APP ID and Rest API Key?</h4>
-            </div>
-            <div class="modal-body">
-                <ol>
-                    <li>Login to your <a href="https://onesignal.com/" target="_blank"><b>OneSignal</b></a> Account and select your app</li>
-                    <li>Select <b></> SETTINGS > Keys & IDs.</b> <img src="assets/images/onesignal_key.jpg" class="img-responsive"></li>
-                </ol>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">OK, I AM UNDERSTAND</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="modal-admob-app-id" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="largeModalLabel">Update your AdMob App ID</h4>
-            </div>
-            <div class="modal-body">
-                <p>Put your <b>AdMob App ID</b> to <b>res/value/ads.xml</b> in the <b>admob_app_id</b> string tag.</p>
-                <img src="assets/images/admob_app_id.jpg" class="img-responsive">
-                <p><b>Important:</b> This step is required! Failure to add your app id in the string tag results in a crash with the message: The Google Mobile Ads SDK was initialized incorrectly.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">OK, I AM UNDERSTAND</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="modal-applovin-sdk-key" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="largeModalLabel">Update your AppLovin SDK Key</h4>
-            </div>
-            <div class="modal-body">
-                <p>Put your <b>AppLovin SDK Key</b> to <b>res/value/ads.xml</b> in the <b>applovin_sdk_key</b> string tag.</p>
-                <img src="assets/images/admob_app_id.jpg" class="img-responsive">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">OK, I AM UNDERSTAND</button>
-            </div>
-        </div>
-    </div>
-</div>        <!-- Jquery Core Js -->
 <script src="assets/js/jquery.min.js"></script>
-
-<!-- Bootstrap Core Js -->
 <script src="assets/plugins/bootstrap/js/bootstrap.js"></script>
-
-<!-- Select Plugin Js -->
 <script src="assets/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-
-<!-- Slimscroll Plugin Js -->
 <script src="assets/js/jquery.slimscroll.js"></script>
-
-<!-- Waves Effect Plugin Js -->
 <script src="assets/js/waves.js"></script>
-
-<!-- Autosize Plugin Js -->
 <!-- <script src="assets/plugins/autosize/autosize.js"></script> -->
-
-<!-- Jquery Validation Plugin Css -->
 <script src="assets/js/jquery.validate.js"></script>
-
 <script src="assets/plugins/dropify/js/dropify.js"></script>
-
-<!-- Custom Js -->
 <script src="assets/js/admin.js"></script>
 <script src="assets/js/form-validation.js"></script>
 <script src="assets/js/bootstrap-tagsinput.min.js"></script>
 <script src="assets/js/demo.js"></script>
 
 <script type="text/javascript">
-        $(".clickable-row").click(function() {
-            window.location = $(this).data("href");
-        });
-    </script>
-
-<script type="text/javascript">
-        $(document).ready(function(){
-            $('#chk_all').click(function(){
-                if(this.checked)
-                    $(".chkbox").prop("checked", true);
-                else
-                    $(".chkbox").prop("checked", false);
+    var EzApiUrl = {
+        GET_APP_DATA: 'api/getAppData.json'
+    };
+    var EzWebAppClient = {
+        sessionIdCookieName: 'EzWebappCookieSessionId',
+        modalScene: '',
+        start: function() {
+            EzWebAppClient.startElementListener();
+            EzWebAppClient.callApiService(EzApiUrl.GET_APP_DATA, {});
+        },
+        startElementListener: function() {
+            $('#common-modal-close').click(function(){
+                $('#common-modal').removeClass('show');
+                $('#common-modal').addClass('fade');
+                EzWebAppClient.onModalClose();
             });
-        });
-    </script>
+        },
+        callApiService: function(url, data) {
+            let sessionId = EzWebAppClient.getSessionId();
+            if (sessionId.length == 32) {
+                data.sessionId = sessionId;
+                EzWebAppClient.callApi(url, data);
+            } else {
+                EzWebAppClient.showModalAlert('SESSION_EXPIRED');
+            }
+        },
+        handleApiSuccessResult: function(url, data) {
+            console.log('handleApiFailedResult - url: ' + url);
+            console.log(data);
+        },
+        handleApiFailedResult: function(url, message) {
+            console.log('handleApiFailedResult - url: ' + url + ', message: ' + message);
+        },
+        startLoadPage: function() {
 
-<script type="text/javascript">
-        $(document).ready(function(){
-            // Basic
-            $('.dropify').dropify();
-
-            $('.dropify-image').dropify({
-                messages: {
-                    default : '<center>Drag and drop a image here or click</center>',
-                    error   : 'Ooops, something wrong appended.'
+        },
+        callApi: function(url, data) {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: data,
+                success: function(response) {
+                    EzWebAppClient.apiCallSuccessHandler(url, response);
                 },
-                error: {
-                    'fileSize': '<center>The file size is too big broo ({{ value }} max).</center>',
-                    'minWidth': '<center>The image width is too small ({{ value }}}px min).</center>',
-                    'maxWidth': '<center>The image width is too big ({{ value }}}px max).</center>',
-                    'minHeight': '<center>The image height is too small ({{ value }}}px min).</center>',
-                    'maxHeight': '<center>The image height is too big ({{ value }}px max).</center>',
-                    'imageFormat': '<center>The image format is not allowed ({{ value }} only).</center>',
-                    'fileExtension': '<center>The file is not allowed ({{ value }} only).</center>'
-                },
-            });
-
-            $('.dropify-pdf').dropify({
-                messages: {
-                    default: '<center>Drag and drop a <b>PDF</b> here or click</center>'
+                error: function(xhr) {
+                    EzWebAppClient.apiCallErrorHandler(xhr);
                 }
             });
-
-            $('.dropify-video').dropify({
-                messages: {
-                    default: '<center>Drag and drop a video here or click</center>'
-                }
-            });
-
-            $('.dropify-notification').dropify({
-                messages: {
-                    default : '<center>Drag and drop a image here or click<br>(Optional)</center>',
-                }
-            });
-
-            // Used events
-            var drEvent = $('#input-file-events').dropify();
-
-            drEvent.on('dropify.beforeClear', function(event, element){
-                return confirm("Do you really want to delete \"" + element.file.name + "\" ?");
-            });
-
-            drEvent.on('dropify.afterClear', function(event, element){
-                alert('File deleted');
-            });
-
-            drEvent.on('dropify.errors', function(event, element){
-                console.log('Has Errors');
-            });
-
-            var drDestroy = $('#input-file-to-destroy').dropify();
-            drDestroy = drDestroy.data('dropify')
-            $('#toggleDropify').on('click', function(e){
-                e.preventDefault();
-                if (drDestroy.isDropified()) {
-                    drDestroy.destroy();
+        },
+        apiCallSuccessHandler: function(url, respData) {
+            //console.log(response);
+            //let respData = jQuery.parseJSON(response);
+            if (respData.sessionExpired) {
+                EzWebAppClient.showModalAlert('SESSION_EXPIRED');
+            } else {
+                if (respData.success) {
+                    EzWebAppClient.handleApiSuccessResult(url, respData);
                 } else {
-                    drDestroy.init();
+                    EzWebAppClient.handleApiFailedResult(url, respData.message);
                 }
-            })
+            }
+        },
+        apiCallErrorHandler: function(url, xhr) {
+            alert('API call error for URL: ' + url);
+        },
+        showModalAlert: function(scene) {
+            EzWebAppClient.modalScene = scene;
+            if (scene === 'SESSION_EXPIRED') {
+                $('#common-modal-title').html('Application Error');
+                $('#common-modal-message').html('Login session has been expired, please re-login');
+            }
+            $('#common-modal').removeClass('fade');
+            $('#common-modal').addClass('show');
+        },
+        onModalClose: function() {
+            if (EzWebAppClient.modalScene === 'SESSION_EXPIRED') {
+                EzWebAppClient.removeSessionCookie();
+                window.location.replace('login.htm');
+            }
+        },
+        getSessionId: function() {
+            let name = EzWebAppClient.sessionIdCookieName + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for(let i = 0; i <ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        },
+        removeSessionCookie: function() {
+            document.cookie = EzWebAppClient.sessionIdCookieName +'=; Path=/webapp; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        }
+    };
+
+    $(document).ready(function(){
+        EzWebAppClient.start();
+
+        // Basic
+        $('.dropify').dropify();
+
+        $('.dropify-image').dropify({
+            messages: {
+                default : '<center>Drag and drop a image here or click</center>',
+                error   : 'Ooops, something wrong appended.'
+            },
+            error: {
+                'fileSize': '<center>The file size is too big broo ({{ value }} max).</center>',
+                'minWidth': '<center>The image width is too small ({{ value }}}px min).</center>',
+                'maxWidth': '<center>The image width is too big ({{ value }}}px max).</center>',
+                'minHeight': '<center>The image height is too small ({{ value }}}px min).</center>',
+                'maxHeight': '<center>The image height is too big ({{ value }}px max).</center>',
+                'imageFormat': '<center>The image format is not allowed ({{ value }} only).</center>',
+                'fileExtension': '<center>The file is not allowed ({{ value }} only).</center>'
+            },
         });
-    </script>
+
+        $('.dropify-pdf').dropify({
+            messages: {
+                default: '<center>Drag and drop a <b>PDF</b> here or click</center>'
+            }
+        });
+
+        $('.dropify-video').dropify({
+            messages: {
+                default: '<center>Drag and drop a video here or click</center>'
+            }
+        });
+
+        $('.dropify-notification').dropify({
+            messages: {
+                default : '<center>Drag and drop a image here or click<br>(Optional)</center>',
+            }
+        });
+
+        // Used events
+        var drEvent = $('#input-file-events').dropify();
+
+        drEvent.on('dropify.beforeClear', function(event, element){
+            return confirm("Do you really want to delete \"" + element.file.name + "\" ?");
+        });
+
+        drEvent.on('dropify.afterClear', function(event, element){
+            alert('File deleted');
+        });
+
+        drEvent.on('dropify.errors', function(event, element){
+            console.log('Has Errors');
+        });
+
+        var drDestroy = $('#input-file-to-destroy').dropify();
+        drDestroy = drDestroy.data('dropify')
+        $('#toggleDropify').on('click', function(e){
+            e.preventDefault();
+            if (drDestroy.isDropified()) {
+                drDestroy.destroy();
+            } else {
+                drDestroy.init();
+            }
+        })
+    });
+</script>
 </body>
 
 </html>

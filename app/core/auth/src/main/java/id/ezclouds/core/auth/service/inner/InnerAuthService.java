@@ -83,6 +83,28 @@ public class InnerAuthService {
         return sessionDO.getSessionId();
     }
 
+    public EzAuthAdminCommonSessionDO authWebSessionId(String sessionId) {
+        EzAuthAdminCommonSessionDO sessionDO = ezAuthAdminCommonSessionRepository
+                .findById(sessionId)
+                .orElse(null);
+        AssertUtil.notNull(sessionDO, EzErrorCode.SESSION_INVALID);
+
+        Date currentDate = new Date();
+        Date expiryDate = DateUtil.parseFormattedDate(sessionDO.getExpiryTime());
+        if (currentDate.getTime() >= expiryDate.getTime()) {
+            ezAuthAdminCommonSessionRepository.delete(sessionDO);
+            ezAuthAdminCommonSessionRepository.flush();
+            throw new EzErrorException(EzErrorCode.SESSION_INVALID);
+        }
+
+        int expiryExtensionMins = getAdminCommonSessionExpMins(sessionDO.getOrgId());
+        Date newExpiryDate = DateUtil.getDateAfterMins(currentDate, expiryExtensionMins);
+        sessionDO.setExpiryTime(DateUtil.getFormattedDate(newExpiryDate));
+        ezAuthAdminCommonSessionRepository.saveAndFlush(sessionDO);
+
+        return sessionDO;
+    }
+
     @Transactional
     public void adminLogoutSession(String sessionId) {
         EzAuthAdminCommonSessionDO sessionDO = ezAuthAdminCommonSessionRepository

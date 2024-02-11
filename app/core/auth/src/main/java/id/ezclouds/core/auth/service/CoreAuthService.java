@@ -435,6 +435,16 @@ public class CoreAuthService {
         return innerAuthService.adminValidateSessionId(sessionId);
     }
 
+    public CoreAuthAdminSession adminAuthWebSessionId(String sessionId) throws Exception {
+        EzAuthAdminCommonSessionDO sessionDO = innerAuthService.authWebSessionId(sessionId);
+        CoreAuthAdminSession session = new CoreAuthAdminSession();
+        session.setOrgId(sessionDO.getOrgId());
+        session.setOrgCode(sessionDO.getOrgCode());
+        session.setMemberId(sessionDO.getMemberId());
+        session.setMemberRoles(sessionDO.getMemberRoles());
+        return session;
+    }
+
     public void adminLogoutSession(String sessionId) {
         innerAuthService.adminLogoutSession(sessionId);
     }

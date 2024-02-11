@@ -6,6 +6,7 @@ package id.ezclouds.biz.ezservice.service.apibiz.admin;
 
 import id.ezclouds.biz.ezservice.constant.BizConstant;
 import id.ezclouds.biz.ezservice.converter.BizAdminConverter;
+import id.ezclouds.biz.ezservice.model.admin.BizAdminAppData;
 import id.ezclouds.biz.ezservice.model.admin.BizAdminSession;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
@@ -19,6 +20,7 @@ import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
 import id.ezclouds.core.shared.result.ListResult;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -171,6 +173,35 @@ public class BizAdminService extends BizBaseService {
                 String respSessionId = coreAuthService.adminValidateSessionId(sessionId);
                 bizResult.setSuccess(true);
                 bizResult.setObject(respSessionId);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+
+        return bizResult;
+    }
+
+    public BizResult getAppData(String sessionId) {
+        BizResult bizResult = new BizResult();
+
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notBlank(sessionId, EzErrorCode.SESSION_INVALID);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(sessionId);
+                BizAdminAppData adminAppData = new BizAdminAppData();
+                adminAppData.setMemberId(adminSession.getMemberId());
+                adminAppData.setMenu(new ArrayList<>());
+
+                bizResult.setSuccess(true);
+                bizResult.setObject(adminAppData);
             }
 
             @Override
