@@ -32,7 +32,6 @@
 
 <body class="theme-blue poppins">
 
-<!-- Top Bar -->
 <nav class="navbar">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -43,11 +42,11 @@
         <div class="collapse navbar-collapse" id="navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <a href="comment.php">
+                    <a href="#">
                         <i class="material-icons">comment</i>
                     </a>
                 </li>
-                <li><a href="notification.php"><i class="material-icons">notifications</i></a></li>
+                <li><a href="#"><i class="material-icons">notifications</i></a></li>
                 <li class="dropdown">
                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
                         <i class="material-icons">more_vert</i>
@@ -62,12 +61,10 @@
         </div>
     </div>
 </nav>
-<!-- #Top Bar -->
 
 <section>
     <!-- Left Sidebar -->
     <aside id="leftsidebar" class="sidebar">
-        <!-- User Info -->
         <div class="user-info">
             <div class="info-container">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
@@ -78,271 +75,38 @@
                 <div class="btn-group user-helper-dropdown">
                     <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                     <ul class="dropdown-menu pull-right">
-                        <li><a href="admin-edit.php?id=1"><i class="material-icons">person</i>Profile</a></li>
-                        <li><a href="logout.php"><i class="material-icons">power_settings_new</i>Logout</a></li>
+                        <li><a href="#"><i class="material-icons">person</i>Profile</a></li>
+                        <li><a href="#"><i class="material-icons">power_settings_new</i>Logout</a></li>
                     </ul>
                 </div>
             </div>
         </div>
-        <!-- #User Info -->
-        <!-- Menu -->
         <div class="menu">
             <ul id="left-menu-container" class="list">
                 <li class="header">MENU</li>
-
-
-                <!--li class="active">
-                    <a href="dashboard.php">
-                        <i class="material-icons">dashboard</i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-
-                <li class="noactive">
-                    <a href="category.php">
-                        <i class="material-icons">view_list</i>
-                        <span>Manage Category</span>
-                    </a>
-                </li>
-
-                <li class="noactive">
-                    <a href="news.php">
-                        <i class="material-icons">library_books</i>
-                        <span>Manage News</span>
-                    </a>
-                </li>
-
-                <li class="noactive">
-                    <a href="ads.php">
-                        <i class="material-icons">monetization_on</i>
-                        <span>Manage Ads</span>
-                    </a>
-                </li>
-
-
-                <li class="noactive">
-                    <a href="comment.php">
-                        <i class="material-icons">comment</i>
-                        <span>Comments</span>
-                    </a>
-                </li>
-
-                <li class="noactive">
-                    <a href="report.php">
-                        <i class="material-icons">report</i>
-                        <span>Report & Feedback</span>
-                    </a>
-                </li>
-
-                <li class="noactive">
-                    <a href="user.php">
-                        <i class="material-icons">verified_user</i>
-                        <span>Registered Users</span>
-                    </a>
-                </li>
-
-
-                <li class="noactive">
-                    <a href="notification.php">
-                        <i class="material-icons">notifications</i>
-                        <span>Notification</span>
-                    </a>
-                </li>
-
-                <li class="active">
-                    <a href="admin.php">
-                        <i class="material-icons">people</i>
-                        <span>Administrators</span>
-                    </a>
-                </li>
-
-                <li class="noactive">
-                    <a href="settings.php">
-                        <i class="material-icons">settings</i>
-                        <span>Settings</span>
-                    </a>
-                </li>
-
-                <li class="noactive">
-                    <a href="apps.php">
-                        <i class="material-icons">adb</i>
-                        <span>Apps</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="logout.php" onclick="return confirm('Are you sure want to logout?')">
-                        <i class="material-icons">power_settings_new</i>
-                        <span>Logout</span>
-                    </a>
-                </li-->
-
             </ul>
         </div>
-        <!-- #Menu -->
-        <!-- Footer -->
         <div class="legal">
             <div class="copyright">
-                Copyright © 2023 Tanah Lado ID                </div>
+                Copyright © 2023 EzService Tech
+            </div>
             <div class="version">
-                <b>Version: </b> 1.0.0-DEV                </div>
+                <b>Version: </b> 1.0.0-DEV
+            </div>
         </div>
-        <!-- #Footer -->
     </aside>
-    <!-- #END# Left Sidebar -->
-
 </section>
 
 
 <section class="content">
-
     <ol class="breadcrumb breadcrumb-offset">
-        <li><a href="dashboard.php">Dashboard</a></li>
+        <li><a href="home.htm">Dashboard</a></li>
         <li class="active">Home</a></li>
     </ol>
 
     <div class="container-fluid" id="fade-in">
-
-        <div id="dashboard-container" class="row">
-
-            <!--a href="category.php">
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <br>
-                        <div class="color-name uppercase">Manage Category</div>
-                        <div class="color-name"><i class="material-icons">view_list</i></div>
-                        <div class="color-class-name">Total 9 Categories</div>
-                        <br>
-                    </div>
-                </div>
-            </a>
-
-            <a href="news.php">
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <br>
-                        <div class="color-name uppercase">Manage News</div>
-                        <div class="color-name"><i class="material-icons">library_books</i></div>
-                        <div class="color-class-name">Total 34 News</div>
-                        <br>
-                    </div>
-                </div>
-            </a>
-
-            <a href="ads.php">
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <br>
-                        <div class="color-name uppercase">Manage Ads</div>
-                        <div class="color-name"><i class="material-icons">monetization_on</i></div>
-                        <div class="color-class-name">App Monetization</div>
-                        <br>
-                    </div>
-                </div>
-            </a>
-
-
-            <a href="comment.php">
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <br>
-                        <div class="color-name uppercase">Comments</div>
-                        <div class="color-name"><i class="material-icons">comment</i></div>
-                        <div class="color-class-name">Users Comment</div>
-                        <br>
-                    </div>
-                </div>
-            </a>
-
-            <a href="report.php">
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <br>
-                        <div class="color-name uppercase">Report & Feedback</div>
-                        <div class="color-name"><i class="material-icons">report</i></div>
-                        <div class="color-class-name">Users feedbacks & reports</div>
-                        <br>
-                    </div>
-                </div>
-            </a>
-
-            <a href="user.php">
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <br>
-                        <div class="color-name uppercase">Registered Users</div>
-                        <div class="color-name"><i class="material-icons">verified_user</i></div>
-                        <div class="color-class-name">Total 2 Users</div>
-                        <br>
-                    </div>
-                </div>
-            </a>
-
-
-            <a href="notification.php">
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <br>
-                        <div class="color-name uppercase">Notification</div>
-                        <div class="color-name"><i class="material-icons">notifications</i></div>
-                        <div class="color-class-name">Total 1 Templates</div>
-                        <br>
-                    </div>
-                </div>
-            </a>
-
-            <a href="admin.php">
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <br>
-                        <div class="color-name uppercase">Administrators</div>
-                        <div class="color-name"><i class="material-icons">people</i></div>
-                        <div class="color-class-name">Admin Panel Privileges</div>
-                        <br>
-                    </div>
-                </div>
-            </a>
-
-            <a href="settings.php">
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <br>
-                        <div class="color-name uppercase">Settings</div>
-                        <div class="color-name"><i class="material-icons">settings</i></div>
-                        <div class="color-class-name">Key and Privacy Settings</div>
-                        <br>
-                    </div>
-                </div>
-            </a>
-
-            <a href="apps.php">
-                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                    <div class="card demo-color-box bg-blue waves-effect corner-radius col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <br>
-                        <div class="color-name uppercase">Apps</div>
-                        <div class="color-name"><i class="material-icons">adb</i></div>
-                        <div class="color-class-name">Apps and Redirect</div>
-                        <br>
-                    </div>
-                </div>
-            </a>
-
-            <a href="logout.php">
-                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                    <div class="card demo-color-box bg-blue waves-effect corner-radius col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <br>
-                        <div class="color-name uppercase">Logout</div>
-                        <div class="color-name"><i class="material-icons">power_settings_new</i></div>
-                        <div class="color-class-name">Logout admin panel</div>
-                        <br>
-                    </div>
-                </div>
-            </a-->
-
-        </div>
-
+        <div id="dashboard-container" class="row"></div>
     </div>
-
 </section>
 
 <!--div class='alert alert-info alert-dismissible corner-radius bottom-offset' role='alert'>
@@ -386,7 +150,6 @@
     };
     var EzWebAppBizService = {
         handleAppData: function(response) {
-            console.log(response);
             $('#app-info-name').html(response.data.orgName);
             $('#user-info-name').html('<b>'+response.data.memberName+'</b>');
             $('#user-info-phone').html('<b>'+response.data.memberPhone+'</b>');
@@ -403,7 +166,8 @@
         handleDashboardData: function(response) {
             for (let i=0; i<response.data.length; i++) {
                 let dashboard = $.parseHTML(EzWebAppHTMLTemplate.dashboard);
-                $(dashboard).find('a.dashboard-url').attr('href', response.data[i].url);
+                console.log(dashboard);
+                $(dashboard).attr('href', response.data[i].url);
                 $(dashboard).find('#dashboard-name').html(response.data[i].displayName);
                 $(dashboard).find('#dashboard-icon').html(response.data[i].icon);
                 $(dashboard).find('#dashboard-label').html(response.data[i].countValue +' '+ response.data[i].countLabel);
@@ -585,7 +349,7 @@
                 '</a>' +
             '</li>',
         dashboard: ''+
-            '<a class="dashboard-url" href="">'+
+            '<a href="">'+
                 '<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">'+
                     '<div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">'+
                         '<br>'+
