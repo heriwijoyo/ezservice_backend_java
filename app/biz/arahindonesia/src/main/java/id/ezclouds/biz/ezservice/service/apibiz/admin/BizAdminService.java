@@ -8,7 +8,9 @@ import id.ezclouds.biz.ezservice.constant.BizConstant;
 import id.ezclouds.biz.ezservice.converter.BizAdminConverter;
 import id.ezclouds.biz.ezservice.model.admin.BizAdminAppData;
 import id.ezclouds.biz.ezservice.model.admin.BizAdminSession;
+import id.ezclouds.biz.ezservice.model.admin.BizDashboardData;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
+import id.ezclouds.biz.ezservice.service.dataservice.BizOrganizationService;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.StringUtil;
@@ -22,6 +24,8 @@ import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.service.CoreMemberService;
 import id.ezclouds.core.shared.model.CoreAdminBOMenu;
 import id.ezclouds.core.shared.model.CoreAdminBOPermission;
+import id.ezclouds.core.shared.model.CoreAdminDashboard;
+import id.ezclouds.core.shared.model.CoreOrganization;
 import id.ezclouds.core.shared.result.ListResult;
 import id.ezclouds.core.shared.service.CoreAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +48,9 @@ public class BizAdminService extends BizBaseService {
 
     @Autowired
     private CoreMemberService coreMemberService;
+
+    @Autowired
+    private BizOrganizationService bizOrganizationService;
 
     public BizResult createWebSession() {
         final BizResult bizResult = new BizResult();
@@ -209,6 +216,7 @@ public class BizAdminService extends BizBaseService {
             @Override
             public void onBizProcess() throws Exception {
                 CoreAuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(sessionId);
+                CoreOrganization organization = bizOrganizationService.getOrganizationById(adminSession.getOrgId());
                 CoreMember coreMember = coreMemberService.getOptimisticCoreMember(adminSession.getMemberId());
 
                 List<String> memberRoles;
@@ -222,12 +230,14 @@ public class BizAdminService extends BizBaseService {
                         .getPermissionByRoles(adminSession.getOrgId(), memberRoles);
                 List<String> permissionMain = permission
                         .stream()
-                        .map(perm -> perm.getPermissionMain())
+                        .map(CoreAdminBOPermission::getPermissionMain)
                         .collect(Collectors.toList());
                 List<CoreAdminBOMenu> menu = coreAdminService
                         .getBOMenuByPermission(adminSession.getOrgId(), permissionMain);
 
                 BizAdminAppData adminAppData = new BizAdminAppData();
+                adminAppData.setOrgCode(adminSession.getOrgCode());
+                adminAppData.setOrgName(organization.getName());
                 adminAppData.setMemberId(adminSession.getMemberId());
                 adminAppData.setMemberName(coreMember.getName());
                 adminAppData.setMemberPhone(coreMember.getPhone());
@@ -236,6 +246,48 @@ public class BizAdminService extends BizBaseService {
 
                 bizResult.setSuccess(true);
                 bizResult.setObject(adminAppData);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+
+        return bizResult;
+    }
+
+    public BizResult getDashboardData(String sessionId) {
+        final BizResult bizResult = new BizResult();
+
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notBlank(sessionId, EzErrorCode.SESSION_INVALID);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthAdminSession session = coreAuthService.adminAuthWebSessionId(sessionId);
+                List<CoreAdminDashboard> dashboards =  coreAdminService.getAdminDashboardAllActive(session.getOrgId());
+
+                List<BizDashboardData> bizDashboard = dashboards
+                        .stream()
+                        .map(dashboard -> {
+                            BizDashboardData bizData = new BizDashboardData();
+                            bizData.setKeyName(dashboard.getKeyName());
+                            bizData.setDisplayName(dashboard.getDisplayName());
+                            bizData.setIcon(dashboard.getIcon());
+                            bizData.setUrl(dashboard.getUrl());
+                            bizData.setCountValue(dashboard.getCountValue());
+                            bizData.setCountLabel(dashboard.getCountLabel());
+                            bizData.setLastUpdate(dashboard.getLastUpdate());
+                            return bizData;
+                        })
+                        .collect(Collectors.toList());
+
+                bizResult.setSuccess(true);
+                bizResult.setObject(bizDashboard);
             }
 
             @Override

@@ -14,6 +14,7 @@ public class CoreAdminBOMenu {
     private String permissionMain;
     private String menuName;
     private String menuUrl;
+    private String menuIcon;
     private int sorting;
 
     public String getOrgId() {
@@ -46,6 +47,14 @@ public class CoreAdminBOMenu {
 
     public void setMenuUrl(String menuUrl) {
         this.menuUrl = menuUrl;
+    }
+
+    public String getMenuIcon() {
+        return menuIcon;
+    }
+
+    public void setMenuIcon(String menuIcon) {
+        this.menuIcon = menuIcon;
     }
 
     public int getSorting() {

@@ -4,14 +4,8 @@
  */
 package id.ezclouds.core.shared.converter;
 
-import id.ezclouds.core.shared.model.CoreAdminBOMenu;
-import id.ezclouds.core.shared.model.CoreAdminBOPermission;
-import id.ezclouds.core.shared.model.CoreConfig;
-import id.ezclouds.core.shared.model.CoreOrganization;
-import id.ezclouds.core.shared.repo.dataobject.EzCoreAdminBOMenuDO;
-import id.ezclouds.core.shared.repo.dataobject.EzCoreAdminBOPermissionDO;
-import id.ezclouds.core.shared.repo.dataobject.EzCoreConfigDO;
-import id.ezclouds.core.shared.repo.dataobject.EzCoreOrganizationDO;
+import id.ezclouds.core.shared.model.*;
+import id.ezclouds.core.shared.repo.dataobject.*;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -45,6 +39,7 @@ public class CoreModelConverter {
         menu.setPermissionMain(menuDO.getPermissionMain());
         menu.setMenuName(menuDO.getMenuName());
         menu.setMenuUrl(menuDO.getMenuUrl());
+        menu.setMenuIcon(menuDO.getMenuIcon());
         menu.setSorting(menuDO.getSorting());
         return menu;
     }
@@ -57,5 +52,20 @@ public class CoreModelConverter {
         permission.setPermissionMain(permissionDO.getPermissionMain());
         permission.setPermissionSub(permissionDO.getPermissionSub());
         return permission;
+    }
+
+    public static CoreAdminDashboard convert(EzCoreAdminDashboardDO dashboardDO) {
+        if (dashboardDO == null) { return null; }
+        CoreAdminDashboard dashboard = new CoreAdminDashboard();
+        dashboard.setOrgId(dashboardDO.getOrgId());
+        dashboard.setKeyName(dashboardDO.getKeyName());
+        dashboard.setDisplayName(dashboardDO.getDisplayName());
+        dashboard.setIcon(dashboardDO.getIcon());
+        dashboard.setUrl(dashboardDO.getUrl());
+        dashboard.setCountValue(dashboardDO.getCountValue());
+        dashboard.setCountLabel(dashboardDO.getCountLabel());
+        dashboard.setLastUpdate(dashboardDO.getLastUpdate());
+        dashboard.setSorting(dashboardDO.getSorting());
+        return dashboard;
     }
 }

@@ -8,8 +8,10 @@ import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.shared.converter.CoreModelConverter;
 import id.ezclouds.core.shared.model.CoreAdminBOMenu;
 import id.ezclouds.core.shared.model.CoreAdminBOPermission;
+import id.ezclouds.core.shared.model.CoreAdminDashboard;
 import id.ezclouds.core.shared.repo.EzCoreAdminBOMenuRepository;
 import id.ezclouds.core.shared.repo.EzCoreAdminBOPermissionRepository;
+import id.ezclouds.core.shared.repo.EzCoreAdminDashboardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,8 @@ public class CoreAdminService {
     @Autowired
     private EzCoreAdminBOMenuRepository ezCoreAdminBOMenuRepository;
 
+    @Autowired
+    private EzCoreAdminDashboardRepository ezCoreAdminDashboardRepository;
 
     public List<CoreAdminBOPermission> getPermissionByRoles(String orgId, List<String> roles) {
         if (StringUtil.isBlank(orgId) || roles == null || roles.isEmpty()) {
@@ -67,6 +71,14 @@ public class CoreAdminService {
     public List<CoreAdminBOMenu> getAdminBoMenuAllActive() {
         return ezCoreAdminBOMenuRepository
                 .findAllActive()
+                .stream()
+                .map(CoreModelConverter::convert)
+                .collect(Collectors.toList());
+    }
+
+    public List<CoreAdminDashboard> getAdminDashboardAllActive(String orgId) {
+        return ezCoreAdminDashboardRepository
+                .findByOrgIdActive(orgId)
                 .stream()
                 .map(CoreModelConverter::convert)
                 .collect(Collectors.toList());

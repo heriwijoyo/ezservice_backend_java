@@ -33,6 +33,9 @@ public class EzCoreAdminBOMenuDO {
     @Column(name = "menu_url")
     private String menuUrl;
 
+    @Column(name = "menu_icon")
+    private String menuIcon;
+
     @Column(name = "sorting")
     private int sorting;
 
@@ -77,6 +80,14 @@ public class EzCoreAdminBOMenuDO {
 
     public void setMenuUrl(String menuUrl) {
         this.menuUrl = menuUrl;
+    }
+
+    public String getMenuIcon() {
+        return menuIcon;
+    }
+
+    public void setMenuIcon(String menuIcon) {
+        this.menuIcon = menuIcon;
     }
 
     public int getSorting() {

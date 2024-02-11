@@ -5,6 +5,7 @@
 package id.ezclouds.core.bifrost.app.web;
 
 import id.ezclouds.biz.ezservice.model.admin.BizAdminAppData;
+import id.ezclouds.biz.ezservice.model.admin.BizDashboardData;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.common.util.assertion.AssertUtil;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: WebApiController.java, v 0.1 2024‐02‐11 11:00 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -36,10 +39,8 @@ public class WebApiController {
     private BizAdminService bizAdminService;
 
     @PostMapping(value = "/webapp/api/getAppData.json")
-    private WebApiResult<BizAdminAppData> getAppData(@RequestParam("sessionId") String sessionId) {
-
+    private WebApiResult<BizAdminAppData> getAppData(@RequestParam(name = "sessionId", required = false) String sessionId) {
         final WebApiResult<BizAdminAppData> result = new WebApiResult<>();
-
         WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_APP_DATA, result, new WebApiControllerTemplate.Handler<BizAdminAppData>() {
             @Override
             public void onRequestCheck() throws Exception {
@@ -64,7 +65,36 @@ public class WebApiController {
                 DigestLogUtil.logWebDigest(LOGGER, digestLog);
             }
         });
+        return result;
+    }
 
+    @PostMapping(value = "/webapp/api/getDashboardData.json")
+    private WebApiResult<List<BizDashboardData>> getDashboardData(@RequestParam(name = "sessionId", required = false) String sessionId) {
+        final WebApiResult<List<BizDashboardData>> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_DASHBOARD, result, new WebApiControllerTemplate.Handler<List<BizDashboardData>>() {
+            @Override
+            public void onRequestCheck() throws Exception {
+                AssertUtil.notBlank(sessionId, EzErrorCode.SESSION_INVALID);
+            }
+
+            @Override
+            public BizResult onProcess() throws Exception {
+                return bizAdminService.getDashboardData(sessionId);
+            }
+
+            @Override
+            public List<BizDashboardData> convertResult(Object object) {
+                if (object instanceof List) {
+                    return (List<BizDashboardData>) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
         return result;
     }
 

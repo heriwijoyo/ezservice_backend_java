@@ -15,11 +15,29 @@ import java.util.List;
  */
 public class BizAdminAppData {
 
+    private String orgName;
+    private String orgCode;
     private String memberId;
     private String memberName;
     private String memberPhone;
     private List<CoreAdminBOPermission> permission;
     private List<CoreAdminBOMenu> menu;
+
+    public String getOrgName() {
+        return orgName;
+    }
+
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
+    }
+
+    public String getOrgCode() {
+        return orgCode;
+    }
+
+    public void setOrgCode(String orgCode) {
+        this.orgCode = orgCode;
+    }
 
     public String getMemberId() {
         return memberId;
