@@ -431,6 +431,10 @@ public class CoreAuthService {
         return innerAuthService.adminLoginBySessionCode(sessionCode);
     }
 
+    public String adminValidateSessionId(String sessionId) throws Exception {
+        return innerAuthService.adminValidateSessionId(sessionId);
+    }
+
     public void adminLogoutSession(String sessionId) {
         innerAuthService.adminLogoutSession(sessionId);
     }

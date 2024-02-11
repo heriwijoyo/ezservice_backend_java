@@ -7,6 +7,7 @@ package id.ezclouds.core.bifrost.app.web;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -17,4 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class WebApiController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CommonLoggerConstant.WEB_API_CONTROLLER);
+
+
 }

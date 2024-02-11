@@ -7,9 +7,12 @@ package id.ezclouds.core.auth.service.inner;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
+import id.ezclouds.common.util.exception.EzErrorException;
+import id.ezclouds.core.auth.constant.CoreAuthConfig;
 import id.ezclouds.core.auth.constant.CoreAuthConstant;
 import id.ezclouds.core.auth.dataobject.EzAuthAdminCommonSessionDO;
 import id.ezclouds.core.auth.repo.EzAuthAdminCommonSessionRepository;
+import id.ezclouds.core.shared.service.CoreConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +29,9 @@ public class InnerAuthService {
 
     @Autowired
     private EzAuthAdminCommonSessionRepository ezAuthAdminCommonSessionRepository;
+
+    @Autowired
+    private CoreConfigService coreConfigService;
 
     @Transactional
     public void adminCreateSession(EzAuthAdminCommonSessionDO sessionDO) {
@@ -55,6 +61,29 @@ public class InnerAuthService {
     }
 
     @Transactional
+    public String adminValidateSessionId(String sessionId) {
+        EzAuthAdminCommonSessionDO sessionDO = ezAuthAdminCommonSessionRepository
+                .findById(sessionId)
+                .orElse(null);
+        AssertUtil.notNull(sessionDO, EzErrorCode.SESSION_INVALID);
+
+        Date currentDate = new Date();
+        Date expiryDate = DateUtil.parseFormattedDate(sessionDO.getExpiryTime());
+        if (currentDate.getTime() >= expiryDate.getTime()) {
+            ezAuthAdminCommonSessionRepository.delete(sessionDO);
+            ezAuthAdminCommonSessionRepository.flush();
+            throw new EzErrorException(EzErrorCode.SESSION_INVALID);
+        }
+
+        int expiryExtensionMins = getAdminCommonSessionExpMins(sessionDO.getOrgId());
+        Date newExpiryDate = DateUtil.getDateAfterMins(currentDate, expiryExtensionMins);
+        sessionDO.setExpiryTime(DateUtil.getFormattedDate(newExpiryDate));
+        ezAuthAdminCommonSessionRepository.saveAndFlush(sessionDO);
+
+        return sessionDO.getSessionId();
+    }
+
+    @Transactional
     public void adminLogoutSession(String sessionId) {
         EzAuthAdminCommonSessionDO sessionDO = ezAuthAdminCommonSessionRepository
                 .findById(sessionId)
@@ -64,5 +93,10 @@ public class InnerAuthService {
             ezAuthAdminCommonSessionRepository.delete(sessionDO);
             ezAuthAdminCommonSessionRepository.flush();
         }
+    }
+
+    private int getAdminCommonSessionExpMins(String orgId) {
+        String expMins = coreConfigService.getConfigValue(CoreAuthConfig.Key.ADMIN_COMMON_SESSION_EXPIRY_MINS, orgId);
+        return Integer.parseInt(expMins);
     }
 }
