@@ -1,11 +1,33 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>EzService Admin Dashboard</title>
+    <title>EzService - Admin Dashboard</title>
+    <!-- Favicon-->
+    <link rel="icon" href="assets/images/favicon.png" type="image/x-icon">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <!-- Bootstrap Core Css -->
+    <link href="assets/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <!-- Waves Effect Css -->
+    <link href="assets/css/waves.css" rel="stylesheet" />
+    <!-- Animation Css -->
+    <link href="assets/css/animate.css" rel="stylesheet" />
+    <!-- tags input -->
+    <link href="assets/css/bootstrap-tagsinput.css" rel="stylesheet">
+    <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+    <link href="assets/css/theme.css" rel="stylesheet" />
+    <!-- Bootstrap Material Datetime Picker Css -->
+    <link href="assets/css/time-picker.css" rel="stylesheet" />
+    <link href="assets/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+    <link href="assets/css/sticky-footer.css" rel="stylesheet">
+    <link href="assets/plugins/dropify/css/dropify.css" rel="stylesheet">
+    <link href="assets/css/styles.min.css" rel="stylesheet">
+    <script src="assets/js/jquery-1.9.1.min.js"></script>
 </head>
 
 <body class="theme-blue poppins">
@@ -16,14 +38,13 @@
         <div class="navbar-header">
             <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
             <a href="javascript:void(0);" class="bars"></a>
-            <a class="navbar-brand" href="dashboard.php"><div class="uppercase">admin</div></a>
+            <a class="navbar-brand" href="dashboard.php"><div class="uppercase">TanahLado.ID</div></a>
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
                 <li>
                     <a href="comment.php">
                         <i class="material-icons">comment</i>
-                        <span class="label-count">0</span>
                     </a>
                 </li>
                 <li><a href="notification.php"><i class="material-icons">notifications</i></a></li>
@@ -32,10 +53,11 @@
                         <i class="material-icons">more_vert</i>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="admin-edit.php?id="><i class="material-icons">person</i>Profile</a></li>
+                        <li><a href="admin-edit.php?id=1"><i class="material-icons">person</i>Profile</a></li>
                         <li><a href="logout.php"><i class="material-icons">power_settings_new</i>Logout</a></li>
                     </ul>
                 </li>
+
             </ul>
         </div>
     </div>
@@ -53,13 +75,13 @@
                     <img src="assets/images/ic_launcher.png" width="40px" height="40px" />
                 </div>
                 <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <b>USERNAME</b>
+                    <b>admin</b>
                 </div>
-                <div class="email"><b>EMAIL</b></div>
+                <div class="email"><b>admin@gmail.com</b></div>
                 <div class="btn-group user-helper-dropdown">
                     <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                     <ul class="dropdown-menu pull-right">
-                        <li><a href="admin-edit.php?id="><i class="material-icons">person</i>Profile</a></li>
+                        <li><a href="admin-edit.php?id=1"><i class="material-icons">person</i>Profile</a></li>
                         <li><a href="logout.php"><i class="material-icons">power_settings_new</i>Logout</a></li>
                     </ul>
                 </div>
@@ -70,31 +92,89 @@
         <div class="menu">
             <ul class="list">
                 <li class="header">MENU</li>
-                <li class="">
+                <li class="active">
                     <a href="dashboard.php">
                         <i class="material-icons">dashboard</i>
-                        <span>dashboard</span>
+                        <span>Dashboard</span>
                     </a>
                 </li>
 
-                <li class="active">
+                <li class="noactive">
                     <a href="category.php">
                         <i class="material-icons">view_list</i>
-                        <span>Category</span>
+                        <span>Manage Category</span>
                     </a>
                 </li>
 
-                <li class="news">
+                <li class="noactive">
                     <a href="news.php">
                         <i class="material-icons">library_books</i>
-                        <span>news</span>
+                        <span>Manage News</span>
+                    </a>
+                </li>
+
+                <li class="noactive">
+                    <a href="ads.php">
+                        <i class="material-icons">monetization_on</i>
+                        <span>Manage Ads</span>
+                    </a>
+                </li>
+
+
+                <li class="noactive">
+                    <a href="comment.php">
+                        <i class="material-icons">comment</i>
+                        <span>Comments</span>
+                    </a>
+                </li>
+
+                <li class="noactive">
+                    <a href="report.php">
+                        <i class="material-icons">report</i>
+                        <span>Report & Feedback</span>
+                    </a>
+                </li>
+
+                <li class="noactive">
+                    <a href="user.php">
+                        <i class="material-icons">verified_user</i>
+                        <span>Registered Users</span>
+                    </a>
+                </li>
+
+
+                <li class="noactive">
+                    <a href="notification.php">
+                        <i class="material-icons">notifications</i>
+                        <span>Notification</span>
                     </a>
                 </li>
 
                 <li class="active">
-                    <a href="ads.php">
-                        <i class="material-icons">monetization_on</i>
-                        <span>ads</span>
+                    <a href="admin.php">
+                        <i class="material-icons">people</i>
+                        <span>Administrators</span>
+                    </a>
+                </li>
+
+                <li class="noactive">
+                    <a href="settings.php">
+                        <i class="material-icons">settings</i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+
+                <li class="noactive">
+                    <a href="apps.php">
+                        <i class="material-icons">adb</i>
+                        <span>Apps</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="logout.php" onclick="return confirm('Are you sure want to logout?')">
+                        <i class="material-icons">power_settings_new</i>
+                        <span>Logout</span>
                     </a>
                 </li>
 
@@ -104,106 +184,166 @@
         <!-- Footer -->
         <div class="legal">
             <div class="copyright">
-                copyright here
-            </div>
+                Copyright © 2023 Tanah Lado ID                </div>
             <div class="version">
-                <b>Version: </b> appVersionHere
-            </div>
+                <b>Version: </b> 1.0.0-DEV                </div>
         </div>
         <!-- #Footer -->
     </aside>
     <!-- #END# Left Sidebar -->
+
 </section>
+
 
 <section class="content">
 
-    <ol class="breadcrumb">
+    <ol class="breadcrumb breadcrumb-offset">
         <li><a href="dashboard.php">Dashboard</a></li>
-        <li class="active">Manage Admin</a></li>
+        <li class="active">Home</a></li>
     </ol>
 
-    <div class="container-fluid">
+    <div class="container-fluid" id="fade-in">
 
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card corner-radius">
-                    <div class="header">
-                        <h2>MANAGE ADMIN</h2>
-                        <div class="header-dropdown m-r--5">
-                            <a href="admin-add.php"><button type="button" class="button button-rounded btn-offset waves-effect waves-float">ADD NEW ADMIN</button></a>
-                        </div>
+        <div class="row">
+
+            <a href="category.php">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase">Manage Category</div>
+                        <div class="color-name"><i class="material-icons">view_list</i></div>
+                        <div class="color-class-name">Total 9 Categories</div>
+                        <br>
                     </div>
-
-                    <div style="margin-top: -10px;" class="body table-responsive">
-
-                        <div class='alert alert-info alert-dismissible corner-radius bottom-offset' role='alert'>
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>&nbsp;&nbsp;</button>
-                            Alert Message HERE!
-                        </div>
-
-                        <form method="get" id="form_validation">
-                            <table class='table'>
-                                <tr>
-                                    <td>
-                                        <div class="form-group form-float">
-                                            <div class="form-line">
-                                                <input type="text" class="form-control" name="keyword" placeholder="Search..." required>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td width="1%"><a href="admin.php"><button type="button" class="button button-rounded waves-effect waves-float">RESET</button></a></td>
-                                    <td width="1%"><button type="submit" class="btn bg-blue btn-circle waves-effect waves-circle waves-float"><i class="material-icons">search</i></button></td>
-                                </tr>
-                            </table>
-                        </form>
-
-                        <p align="center" style="font-size: 110%;">There are no admins.</p>
-
-                        <!--table class='table table-hover table-striped table-offset'>
-                            <thead>
-                            <tr>
-                                <th>Username</th>
-                                <th>Full Name</th>
-                                <th>Email</th>
-                                <th width="15%">Action</th>
-                            </tr>
-                            </thead>
-                            <tr>
-                                <td><span class="label label-rounded bg-blue"><?php echo $data['username'];?></span></td>
-                                <td><?php echo $data['full_name'];?></td>
-                                <td><?php echo $data['email'];?></td>
-                                <td>
-                                    <a href="admin-edit.php?id=<?php echo $data['id']; ?>">
-                                        <i class="material-icons">mode_edit</i>
-                                    </a>
-
-                                    <?php
-										if ($data['id'] == 1) {
-
-										} else {
-											?>
-                                    <a href="admin-delete.php?id=<?php echo $data['id'];?>" onclick="return confirm('Are you sure want to delete this user?')" >
-                                        <i class="material-icons">delete</i>
-                                    </a>
-                                    <?php
-										}
-										?>
-
-                                </td>
-                            </tr>
-                            <?php
-								$i++;
-								$count++;
-							}
-							?>
-                        </table-->
-
-                    </div>
-
                 </div>
-            </div>
+            </a>
+
+            <a href="news.php">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase">Manage News</div>
+                        <div class="color-name"><i class="material-icons">library_books</i></div>
+                        <div class="color-class-name">Total 34 News</div>
+                        <br>
+                    </div>
+                </div>
+            </a>
+
+            <a href="ads.php">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase">Manage Ads</div>
+                        <div class="color-name"><i class="material-icons">monetization_on</i></div>
+                        <div class="color-class-name">App Monetization</div>
+                        <br>
+                    </div>
+                </div>
+            </a>
+
+
+            <a href="comment.php">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase">Comments</div>
+                        <div class="color-name"><i class="material-icons">comment</i></div>
+                        <div class="color-class-name">Users Comment</div>
+                        <br>
+                    </div>
+                </div>
+            </a>
+
+            <a href="report.php">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase">Report & Feedback</div>
+                        <div class="color-name"><i class="material-icons">report</i></div>
+                        <div class="color-class-name">Users feedbacks & reports</div>
+                        <br>
+                    </div>
+                </div>
+            </a>
+
+            <a href="user.php">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase">Registered Users</div>
+                        <div class="color-name"><i class="material-icons">verified_user</i></div>
+                        <div class="color-class-name">Total 2 Users</div>
+                        <br>
+                    </div>
+                </div>
+            </a>
+
+
+            <a href="notification.php">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase">Notification</div>
+                        <div class="color-name"><i class="material-icons">notifications</i></div>
+                        <div class="color-class-name">Total 1 Templates</div>
+                        <br>
+                    </div>
+                </div>
+            </a>
+
+            <a href="admin.php">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase">Administrators</div>
+                        <div class="color-name"><i class="material-icons">people</i></div>
+                        <div class="color-class-name">Admin Panel Privileges</div>
+                        <br>
+                    </div>
+                </div>
+            </a>
+
+            <a href="settings.php">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase">Settings</div>
+                        <div class="color-name"><i class="material-icons">settings</i></div>
+                        <div class="color-class-name">Key and Privacy Settings</div>
+                        <br>
+                    </div>
+                </div>
+            </a>
+
+            <a href="apps.php">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="card demo-color-box bg-blue waves-effect corner-radius col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase">Apps</div>
+                        <div class="color-name"><i class="material-icons">adb</i></div>
+                        <div class="color-class-name">Apps and Redirect</div>
+                        <br>
+                    </div>
+                </div>
+            </a>
+
+            <a href="logout.php">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="card demo-color-box bg-blue waves-effect corner-radius col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase">Logout</div>
+                        <div class="color-name"><i class="material-icons">power_settings_new</i></div>
+                        <div class="color-class-name">Logout admin panel</div>
+                        <br>
+                    </div>
+                </div>
+            </a>
+
         </div>
+
     </div>
+
 </section>
 
 
@@ -338,9 +478,7 @@
             </div>
         </div>
     </div>
-</div>
-
-<!-- Jquery Core Js -->
+</div>        <!-- Jquery Core Js -->
 <script src="assets/js/jquery.min.js"></script>
 
 <!-- Bootstrap Core Js -->
@@ -451,8 +589,7 @@
                 }
             })
         });
-</script>
-
+    </script>
 </body>
 
 </html>

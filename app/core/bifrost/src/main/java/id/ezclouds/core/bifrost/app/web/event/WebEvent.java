@@ -18,6 +18,7 @@ public enum WebEvent implements EzAppEvent {
 
     WEB_LOGIN_BY_SESSION_CODE("WEB_LOGIN_BY_SESSION_CODE"),
 
+
     ;
 
     private final String code;
