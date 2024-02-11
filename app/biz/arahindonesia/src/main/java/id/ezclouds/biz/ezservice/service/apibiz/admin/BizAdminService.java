@@ -11,13 +11,20 @@ import id.ezclouds.biz.ezservice.model.admin.BizAdminSession;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
+import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.auth.model.CoreAuthAdminSession;
 import id.ezclouds.core.auth.request.CoreAdminCommonSessionCreateRequest;
 import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
+import id.ezclouds.core.member.model.CoreMember;
+import id.ezclouds.core.member.service.CoreMemberService;
+import id.ezclouds.core.shared.model.CoreAdminBOMenu;
+import id.ezclouds.core.shared.model.CoreAdminBOPermission;
 import id.ezclouds.core.shared.result.ListResult;
+import id.ezclouds.core.shared.service.CoreAdminService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -31,6 +38,12 @@ import java.util.stream.Collectors;
  */
 @Service
 public class BizAdminService extends BizBaseService {
+
+    @Autowired
+    private CoreAdminService coreAdminService;
+
+    @Autowired
+    private CoreMemberService coreMemberService;
 
     public BizResult createWebSession() {
         final BizResult bizResult = new BizResult();
@@ -196,9 +209,30 @@ public class BizAdminService extends BizBaseService {
             @Override
             public void onBizProcess() throws Exception {
                 CoreAuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(sessionId);
+                CoreMember coreMember = coreMemberService.getOptimisticCoreMember(adminSession.getMemberId());
+
+                List<String> memberRoles;
+                if (StringUtil.isBlank(adminSession.getMemberRoles())) {
+                    memberRoles = new ArrayList<>();
+                } else {
+                    memberRoles = Arrays.asList(adminSession.getMemberRoles().split(","));
+                }
+
+                List<CoreAdminBOPermission> permission = coreAdminService
+                        .getPermissionByRoles(adminSession.getOrgId(), memberRoles);
+                List<String> permissionMain = permission
+                        .stream()
+                        .map(perm -> perm.getPermissionMain())
+                        .collect(Collectors.toList());
+                List<CoreAdminBOMenu> menu = coreAdminService
+                        .getBOMenuByPermission(adminSession.getOrgId(), permissionMain);
+
                 BizAdminAppData adminAppData = new BizAdminAppData();
                 adminAppData.setMemberId(adminSession.getMemberId());
-                adminAppData.setBoMenu(new ArrayList<>());
+                adminAppData.setMemberName(coreMember.getName());
+                adminAppData.setMemberPhone(coreMember.getPhone());
+                adminAppData.setPermission(permission);
+                adminAppData.setMenu(menu);
 
                 bizResult.setSuccess(true);
                 bizResult.setObject(adminAppData);

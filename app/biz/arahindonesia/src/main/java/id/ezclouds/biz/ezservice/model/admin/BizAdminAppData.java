@@ -4,6 +4,9 @@
  */
 package id.ezclouds.biz.ezservice.model.admin;
 
+import id.ezclouds.core.shared.model.CoreAdminBOMenu;
+import id.ezclouds.core.shared.model.CoreAdminBOPermission;
+
 import java.util.List;
 
 /**
@@ -13,7 +16,10 @@ import java.util.List;
 public class BizAdminAppData {
 
     private String memberId;
-    private List<String> boMenu;
+    private String memberName;
+    private String memberPhone;
+    private List<CoreAdminBOPermission> permission;
+    private List<CoreAdminBOMenu> menu;
 
     public String getMemberId() {
         return memberId;
@@ -23,11 +29,35 @@ public class BizAdminAppData {
         this.memberId = memberId;
     }
 
-    public List<String> getBoMenu() {
-        return boMenu;
+    public String getMemberName() {
+        return memberName;
     }
 
-    public void setBoMenu(List<String> boMenu) {
-        this.boMenu = boMenu;
+    public void setMemberName(String memberName) {
+        this.memberName = memberName;
+    }
+
+    public String getMemberPhone() {
+        return memberPhone;
+    }
+
+    public void setMemberPhone(String memberPhone) {
+        this.memberPhone = memberPhone;
+    }
+
+    public List<CoreAdminBOPermission> getPermission() {
+        return permission;
+    }
+
+    public void setPermission(List<CoreAdminBOPermission> permission) {
+        this.permission = permission;
+    }
+
+    public List<CoreAdminBOMenu> getMenu() {
+        return menu;
+    }
+
+    public void setMenu(List<CoreAdminBOMenu> menu) {
+        this.menu = menu;
     }
 }

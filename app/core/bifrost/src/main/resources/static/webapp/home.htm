@@ -69,15 +69,12 @@
     <aside id="leftsidebar" class="sidebar">
         <!-- User Info -->
         <div class="user-info">
-
             <div class="info-container">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
                     <img src="assets/images/ic_launcher.png" width="40px" height="40px" />
                 </div>
-                <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <b>admin</b>
-                </div>
-                <div class="email"><b>admin@gmail.com</b></div>
+                <div id="user-info-name" class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></div>
+                <div id="user-info-phone" class="email"></div>
                 <div class="btn-group user-helper-dropdown">
                     <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                     <ul class="dropdown-menu pull-right">
@@ -90,9 +87,11 @@
         <!-- #User Info -->
         <!-- Menu -->
         <div class="menu">
-            <ul class="list">
+            <ul id="left-menu-container" class="list">
                 <li class="header">MENU</li>
-                <li class="active">
+
+
+                <!--li class="active">
                     <a href="dashboard.php">
                         <i class="material-icons">dashboard</i>
                         <span>Dashboard</span>
@@ -176,7 +175,7 @@
                         <i class="material-icons">power_settings_new</i>
                         <span>Logout</span>
                     </a>
-                </li>
+                </li-->
 
             </ul>
         </div>
@@ -384,6 +383,21 @@
     var EzApiUrl = {
         GET_APP_DATA: 'api/getAppData.json'
     };
+    var EzWebAppBizService = {
+        handleAppData: function(response) {
+            console.log(response);
+            $('#user-info-name').html('<b>'+response.data.memberName+'</b>');
+            $('#user-info-phone').html('<b>'+response.data.memberPhone+'</b>');
+
+            for (let i = 0; i < response.data.menu.length; i++) {
+                let menu = $.parseHTML(EzWebAppHTMLTemplate.leftMenu);
+                $(menu).find('#left-menu-url').attr('href', response.data.menu[i].menuUrl);
+                $(menu).find('#left-menu-name').html(response.data.menu[i].menuName);
+
+                $('#left-menu-container').append(menu);
+            }
+        }
+    };
     var EzWebAppClient = {
         sessionIdCookieName: 'EzWebappCookieSessionId',
         modalScene: '',
@@ -408,14 +422,12 @@
             }
         },
         handleApiSuccessResult: function(url, data) {
-            console.log('handleApiFailedResult - url: ' + url);
-            console.log(data);
+            if (url === EzApiUrl.GET_APP_DATA) {
+                EzWebAppBizService.handleAppData(data);
+            }
         },
         handleApiFailedResult: function(url, message) {
             console.log('handleApiFailedResult - url: ' + url + ', message: ' + message);
-        },
-        startLoadPage: function() {
-
         },
         callApi: function(url, data) {
             $.ajax({
@@ -547,6 +559,16 @@
             }
         })
     });
+
+    var EzWebAppHTMLTemplate = {
+        leftMenu: '' +
+            '<li class="active">' +
+                '<a id="left-menu-url" href="">' +
+                    '<i id="left-menu-icon" class="material-icons"></i>' +
+                    '<span id="left-menu-name"></span>' +
+                '</a>' +
+            '</li>'
+    };
 </script>
 </body>
 
