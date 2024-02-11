@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>EzService - Admin Dashboard</title>
+    <link rel="icon" href="assets/images/favicon.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link href="assets/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/waves.css" rel="stylesheet" />
+    <link href="assets/css/animate.css" rel="stylesheet" />
+    <link href="assets/css/bootstrap-tagsinput.css" rel="stylesheet">
+    <link href="assets/css/theme.css" rel="stylesheet" />
+    <link href="assets/css/time-picker.css" rel="stylesheet" />
+    <link href="assets/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+    <link href="assets/plugins/dropify/css/dropify.css" rel="stylesheet">
+    <link href="assets/css/styles.min.css" rel="stylesheet">
+    <script src="assets/js/jquery-1.9.1.min.js"></script>
+</head>
+
+<body class="theme-blue poppins">
+
+<nav class="navbar">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
+            <a href="javascript:void(0);" class="bars"></a>
+            <a class="navbar-brand" href="home.htm"><div id="app-info-name" class="uppercase"></div></a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#">
+                        <i class="material-icons">comment</i>
+                    </a>
+                </li>
+                <li><a href="#"><i class="material-icons">notifications</i></a></li>
+                <li class="dropdown">
+                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                        <i class="material-icons">more_vert</i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#"><i class="material-icons">person</i>Profile</a></li>
+                        <li><a href="#"><i class="material-icons">power_settings_new</i>Logout</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<section>
+    <!-- Left Sidebar -->
+    <aside id="leftsidebar" class="sidebar">
+        <div class="user-info">
+            <div class="info-container">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                    <img src="assets/images/ic_launcher.png" width="40px" height="40px" />
+                </div>
+                <div id="user-info-name" class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></div>
+                <div id="user-info-phone" class="email"></div>
+                <div class="btn-group user-helper-dropdown">
+                    <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
+                    <ul class="dropdown-menu pull-right">
+                        <li><a href="#"><i class="material-icons">person</i>Profile</a></li>
+                        <li><a href="#"><i class="material-icons">power_settings_new</i>Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="menu">
+            <ul id="left-menu-container" class="list">
+                <li class="header">MENU</li>
+            </ul>
+        </div>
+        <div class="legal">
+            <div class="copyright">
+                Copyright © 2023 EzService Tech
+            </div>
+            <div class="version">
+                <b>Version: </b> 1.0.0-DEV
+            </div>
+        </div>
+    </aside>
+</section>
+
+
+<section class="content">
+    <ol class="breadcrumb breadcrumb-offset">
+        <li><a href="home.htm">Dashboard</a></li>
+        <li class="active">App Gallery</a></li>
+    </ol>
+
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card corner-radius">
+                    <div class="header">
+                        <h2>MANAGE GALLERY</h2>
+                        <div class="header-dropdown m-r--5">
+                            <!--label for="form-add-new-file" class="button button-rounded btn-offset waves-effect waves-float">ADD NEW GALLERY</label>
+                            <input type="file" accept="image/*" id="form-add-new-file" style="opacity: 0; height: 0; width: 0; margin: 0; display: inline;" onchange="previewImage()"-->
+                            <button id="form-add-new-btn" type="button" class="button button-rounded btn-offset waves-effect waves-float">ADD NEW GALLERY</button>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: -10px;" class="body table-responsive">
+
+                        <form method="get" id="form_validation" novalidate="novalidate">
+                            <table class="table">
+                                <tbody><tr>
+                                    <td>
+                                        <div class="form-group form-float">
+                                            <div class="form-line">
+                                                <input type="text" class="form-control" name="keyword" placeholder="Search..." required="" aria-required="true">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td width="1%"><a href="news.php"><button type="button" class="button button-rounded waves-effect waves-float">RESET</button></a></td>
+                                    <td width="1%"><button type="submit" class="btn bg-blue btn-circle waves-effect waves-circle waves-float"><i class="material-icons">search</i></button></td>
+                                </tr>
+                                </tbody></table>
+                        </form>
+
+                        <form method="post" action="">
+
+                            <div style="margin-left: 8px; margin-top: -36px; margin-bottom: 10px;">
+                                <button type="submit" name="submit" id="submit" class="button button-rounded waves-effect waves-float" onclick="return confirm('Are you sure want to delete all selected news?')">Delete selected items(s)</button>&nbsp;&nbsp;
+                                <a href="" data-toggle="modal" data-target="#modal-jump-to-page"><button type="button" class="button button-rounded waves-effect waves-float">Jump to Page</button></a>
+                            </div>
+
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                <tr>
+                                    <th width="1%">
+                                        <div style="margin-bottom: -15px">
+                                            <input id="chk_all" name="chk_all" type="checkbox" class="filled-in chk-col-blue">
+                                            <label for="chk_all"></label>
+                                        </div>
+                                    </th>
+                                    <th width="40%">Title</th>
+                                    <th width="1%">Image</th>
+                                    <th width="15%">Date</th>
+                                    <th width="5%">Category</th>
+                                    <th width="1%"><center>Comment</center></th>
+                                    <th width="1%"><center>View</center></th>
+                                    <th width="10%"><center>Type</center></th>
+                                    <th width="30%"><center>Action</center></th>
+                                </tr>
+                                </thead>
+                                <tbody><tr>
+
+                                    <td style="vertical-align: middle;" width="1%">
+                                        <div style="margin-top: 10px;">
+                                            <input type="checkbox" name="chk_id[]" id="36" class="chkbox filled-in chk-col-blue" value="36">
+                                            <label for="36"></label>
+                                        </div>
+                                    </td>
+
+                                    <td style="vertical-align: middle;">US safety body to probe Tesla on in-car gameplay</td>
+
+                                    <td style="vertical-align: middle;">
+                                        <img class="img-rounded" style="object-fit:cover;" src="upload/1686220313_tesla.jpg" height="60px" width="80px">
+                                    </td>
+
+                                    <td style="vertical-align: middle;">2023-06-08 06:31:42</td>
+                                    <td style="vertical-align: middle;">Technology</td>
+                                    <td style="vertical-align: middle;">
+                                        <center>
+                                            0												</center>
+                                    </td>
+                                    <td style="vertical-align: middle;"><center>11.212</center></td>
+                                    <td style="vertical-align: middle;"><center>
+                                        <span class="label label-rounded bg-blue">NEWS</span>
+
+                                    </center></td>
+                                    <td style="vertical-align: middle;"><center>
+
+                                        <a href="news.php?page=1&amp;disable=36" onclick="return confirm('Are you sure want to disable this news?')">
+                                            <i class="material-icons">visibility</i>
+                                        </a>
+
+                                        <a href="news-send.php?id=36">
+                                            <i class="material-icons">notifications_active</i>
+                                        </a>
+
+                                        <a href="news-detail.php?id=36">
+                                            <i class="material-icons">launch</i>
+                                        </a>
+
+                                        <a href="news-edit.php?id=36">
+                                            <i class="material-icons">mode_edit</i>
+                                        </a>
+
+                                        <a href="news-delete.php?id=36" onclick="return confirm('Are you sure want to delete this News?')">
+                                            <i class="material-icons">delete</i>
+                                        </a></center>
+                                    </td>
+                                </tr>
+                                </tbody></table>
+
+                        </form>
+
+                        <ul class="pager"><li class="previous disabled"><a><div class="padding-pagination button-grey button-rounded"><span aria-hidden="true">←</span>&nbsp;&nbsp;Previous</div></a></li><li><a><div class="padding-pagination">Page 1 of 4</div></a></li><li class="next"><a href="news.php?page=2&amp;keyword= "><div class="padding-pagination button button-rounded waves-effect waves-float">Next&nbsp;&nbsp;<span aria-hidden="true">→</span></div></a></li></ul>					</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade" id="common-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="common-modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <h3 id="common-modal-message"></h3>
+            </div>
+            <div class="modal-footer">
+                <button id="common-modal-close" type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-form-new" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="largeModalLabel">Obtaining your Firebase Server API Key</h4>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="row clearfix">
+                    <div class="form-group form-float col-sm-12">
+                        <div class="form-line">
+                            <div class="font-12">Category Name</div>
+                            <input type="text" class="form-control" name="category_name" id="category_name" placeholder="Category Name" required>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6" style="margin-bottom: 0px;">
+                        <div class="form-group">
+                            <div class="font-12 ex1">Image ( JPG, JPEG, PNG or GIF )</div>
+                            <input type="file" accept="image/*" name="category_image" oninput="imagePreview.src=window.URL.createObjectURL(this.files[0])" data-max-file-size="3M" data-allowed-file-extensions="jpg jpeg png gif" required/>
+                            <img id="imagePreview" style="max-width:100%">
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <button class="button button-rounded waves-effect waves-float pull-right" type="submit" name="submit">SUBMIT</button>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/plugins/bootstrap/js/bootstrap.js"></script>
+<!--script src="assets/plugins/bootstrap-select/js/bootstrap-select.js"></script-->
+<script src="assets/js/jquery.slimscroll.js"></script>
+<script src="assets/js/waves.js"></script>
+<!-- <script src="assets/plugins/autosize/autosize.js"></script> -->
+<!--script src="assets/js/jquery.validate.js"></script-->
+<!--script src="assets/plugins/dropify/js/dropify.js"></script-->
+<script src="assets/js/admin.js"></script>
+<!--script src="assets/js/form-validation.js"></script-->
+<script src="assets/js/bootstrap-tagsinput.min.js"></script>
+<!--script src="assets/js/demo.js"></script-->
+<script src="assets/js/ezappclient.js"></script>
+
+<script type="text/javascript">
+    var EzDashboadBizService = {
+        start: function() {
+            //EzWebAppClient.callApiService(EzApiUrl.GET_APP_GALLERY, {});
+        },
+        handleApiBizResult: function(url, response) {
+        }
+    };
+
+    $(document).ready(function(){
+        EzWebAppClient.onApiBizSuccess(function(url, response){
+            EzDashboadBizService.handleApiBizResult(url, response);
+        });
+        EzWebAppClient.onApiBizFailed(function(url, message){
+            console.log(url +' --- '+ message);
+        });
+        EzWebAppClient.onApiCallError(function(xhr){
+            console.log(xhr);
+        });
+        EzWebAppClient.onReady(function(){
+            EzDashboadBizService.start();
+        });
+        EzWebAppClient.start();
+
+        $('#form-add-new-btn').click(function(){
+            $('#modal-form-new').removeClass('fade');
+            $('#modal-form-new').addClass('show');
+        });
+    });
+
+    var DashTemplate = ''+
+        '<a href="">'+
+            '<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">'+
+                '<div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">'+
+                    '<br>'+
+                    '<div id="dashboard-name" class="color-name uppercase"></div>'+
+                    '<div class="color-name"><i id="dashboard-icon" class="material-icons"></i></div>'+
+                    '<div id="dashboard-label" class="color-class-name">Total 9 item</div>'+
+                    '<br>'+
+                '</div>'+
+            '</div>'+
+        '</a>';
+
+</script>
+</body>
+
+</html>

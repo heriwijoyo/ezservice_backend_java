@@ -98,4 +98,34 @@ public class WebApiController {
         return result;
     }
 
+    @PostMapping(value = "/webapp/api/getAppGallery.json")
+    private WebApiResult<List<BizDashboardData>> getAppGallery(@RequestParam(name = "sessionId", required = false) String sessionId) {
+        final WebApiResult<List<BizDashboardData>> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_DASHBOARD, result, new WebApiControllerTemplate.Handler<List<BizDashboardData>>() {
+            @Override
+            public void onRequestCheck() throws Exception {
+                AssertUtil.notBlank(sessionId, EzErrorCode.SESSION_INVALID);
+            }
+
+            @Override
+            public BizResult onProcess() throws Exception {
+                return bizAdminService.getDashboardData(sessionId);
+            }
+
+            @Override
+            public List<BizDashboardData> convertResult(Object object) {
+                if (object instanceof List) {
+                    return (List<BizDashboardData>) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
 }

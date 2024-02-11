@@ -143,7 +143,6 @@
         handleApiBizResult: function(url, response) {
             for (let i=0; i<response.data.length; i++) {
                 let dashboard = $.parseHTML(DashTemplate);
-                console.log(dashboard);
                 $(dashboard).attr('href', response.data[i].url);
                 $(dashboard).find('#dashboard-name').html(response.data[i].displayName);
                 $(dashboard).find('#dashboard-icon').html(response.data[i].icon);
