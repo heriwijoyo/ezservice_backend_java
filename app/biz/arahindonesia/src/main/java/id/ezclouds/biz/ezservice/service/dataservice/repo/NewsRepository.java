@@ -19,7 +19,7 @@ import java.util.List;
 @Repository
 public interface NewsRepository extends JpaRepository<NewsDO, String> {
 
-    @Query(value = "SELECT news FROM NewsDO news WHERE news.status = 1 AND news.highlight = 1 LIMIT 3 ORDER BY news.publishDate DESC")
+    @Query(value = "SELECT news FROM NewsDO news WHERE news.status = 1 AND news.highlight = 1 ORDER BY news.publishDate DESC")
     List<NewsDO> findHighlightedNews();
 
     @Query(value = "SELECT * FROM app_news WHERE org_id = :orgId AND status = 1 ORDER BY publish_date DESC LIMIT :limit", nativeQuery = true)

@@ -39,7 +39,7 @@ public class BizCommonConfigService extends BizBaseService {
     private AppImageGalleryService appImageGalleryService;
 
     @Autowired
-    private NewsService newsService;
+    private NewsInnerService newsInnerService;
 
     @Autowired
     private VideoCardService videoCardService;
@@ -126,7 +126,7 @@ public class BizCommonConfigService extends BizBaseService {
     }
 
     private List<BizSimpleNews> fetchSimpleNews(String orgId) {
-        return newsService
+        return newsInnerService
                 .getHighlightedNews()
                 .stream()
                 .filter(simpleNews -> orgId.equals(simpleNews.getOrgId()))

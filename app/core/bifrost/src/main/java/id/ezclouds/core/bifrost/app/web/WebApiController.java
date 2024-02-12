@@ -114,14 +114,14 @@ public class WebApiController {
         return result;
     }
 
-    @PostMapping(value = "/webapp/api/adminUpload.json")
+    @PostMapping(value = "/webapp/api/adminCommonPost.json")
     private WebApiResult<String> adminUpload(@RequestPart("imageFile") MultipartFile multipartFile, @RequestPart("postData") String postData) {
         WebApiResult<String> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebEvent.APP_IMAGE_GALLERY, result, new WebApiControllerTemplate.Handler<String>() {
+        WebApiControllerTemplate.execute(WebEvent.ADMIN_COMMON_POST_WITH_FILE_UPLOAD, result, new WebApiControllerTemplate.Handler<String>() {
             @Override
             public BizResult onProcess() throws Exception {
                 BizAdminUploadRequest uploadRequest = composeUploadRequest(multipartFile, postData);
-                return bizAdminService.adminMediaUpload(uploadRequest);
+                return bizAdminService.adminCommonPostWithFileUpload(uploadRequest);
             }
 
             @Override

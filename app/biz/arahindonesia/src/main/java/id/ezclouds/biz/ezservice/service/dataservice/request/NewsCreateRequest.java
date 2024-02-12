@@ -1,67 +1,26 @@
 /**
  * Ezclouds.id
- * Copyright (c) 2020‐2023 All Rights Reserved.
+ * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.biz.ezservice.service.dataservice.dataobject;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.io.Serializable;
+package id.ezclouds.biz.ezservice.service.dataservice.request;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: NewsDO.java, v 0.1 2023‐12‐10 11:07 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: NewsCreateRequest.java, v 0.1 2024‐02‐13 2:14 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-@Entity
-@Table(name = "app_news")
-public class NewsDO implements Serializable {
+public class NewsCreateRequest {
 
-    @Id
-    @Column(name = "news_id")
-    private String newsId;
-
-    @Column(name = "org_id")
     private String orgId;
-
-    @Column(name = "category")
     private String category;
-
-    @Column(name = "title")
     private String title;
-
-    @Column(name = "image_url")
     private String imageUrl;
-
-    @Column(name = "description")
     private String description;
-
-    @Column(name = "content")
     private String content;
-
-    @Column(name = "source")
     private String source;
-
-    @Column(name = "source_url")
     private String sourceUrl;
-
-    @Column(name = "publish_date")
     private String publishDate;
-
-    @Column(name = "status")
-    private Integer status;
-
-    @Column(name = "highlight")
-    private Integer highlight;
-
-    public String getNewsId() {
-        return newsId;
-    }
-
-    public void setNewsId(String newsId) {
-        this.newsId = newsId;
-    }
+    private int status = 0;
+    private int highlight = 0;
 
     public String getOrgId() {
         return orgId;
@@ -135,19 +94,19 @@ public class NewsDO implements Serializable {
         this.publishDate = publishDate;
     }
 
-    public Integer getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
-    public Integer getHighlight() {
+    public int getHighlight() {
         return highlight;
     }
 
-    public void setHighlight(Integer highlight) {
+    public void setHighlight(int highlight) {
         this.highlight = highlight;
     }
 }

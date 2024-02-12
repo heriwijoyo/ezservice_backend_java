@@ -58,7 +58,7 @@ public class BizModelConverter {
         bizSimpleNews.setNewsId(newsDO.getNewsId());
         bizSimpleNews.setOrgId(newsDO.getOrgId());
         bizSimpleNews.setTitle(newsDO.getTitle());
-        bizSimpleNews.setThumbnail(newsDO.getThumbnail());
+        bizSimpleNews.setImageUrl(newsDO.getImageUrl());
         bizSimpleNews.setDescription(newsDO.getDescription());
         return bizSimpleNews;
     }

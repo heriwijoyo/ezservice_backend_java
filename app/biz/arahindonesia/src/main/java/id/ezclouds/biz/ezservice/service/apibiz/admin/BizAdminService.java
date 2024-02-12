@@ -10,9 +10,8 @@ import id.ezclouds.biz.ezservice.model.admin.BizAdminAppData;
 import id.ezclouds.biz.ezservice.model.admin.BizAdminSession;
 import id.ezclouds.biz.ezservice.model.admin.BizDashboardData;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
-import id.ezclouds.biz.ezservice.service.dataservice.AppImageGalleryService;
 import id.ezclouds.biz.ezservice.service.dataservice.BizOrganizationService;
-import id.ezclouds.biz.ezservice.service.dataservice.request.AppImageGalleryRequest;
+import id.ezclouds.biz.ezservice.service.inner.service.BizAdminInnerService;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
@@ -41,7 +40,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -64,7 +62,7 @@ public class BizAdminService extends BizBaseService {
     private BizOrganizationService bizOrganizationService;
 
     @Autowired
-    private AppImageGalleryService appImageGalleryService;
+    private BizAdminInnerService bizAdminInnerService;
 
     public BizResult createWebSession() {
         final BizResult bizResult = new BizResult();
@@ -313,7 +311,7 @@ public class BizAdminService extends BizBaseService {
         return bizResult;
     }
 
-    public BizResult adminMediaUpload(BizAdminUploadRequest request) {
+    public BizResult adminCommonPostWithFileUpload(BizAdminUploadRequest request) {
         final BizResult bizResult = new BizResult();
 
         BizServiceTemplate.execute(request, bizResult, new BizServiceTemplate.Handler() {
@@ -337,11 +335,13 @@ public class BizAdminService extends BizBaseService {
                     case BizConstant.UploadScene.ADMIN_APP_GALLERY:
                         filePath = fileInfo.getAppGalleryPath(fileName);
                         coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
-                        createAppImageGallery(session.getOrgId(), fileName, request.getExtendInfo());
+                        bizAdminInnerService.createAppImageGallery(session.getOrgId(), fileName, request.getExtendInfo());
                         break;
 
                     case BizConstant.UploadScene.ADMIN_NEWS_GALLERY:
                         filePath = fileInfo.getNewsGalleryPath(fileName);
+                        coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
+                        bizAdminInnerService.createNews(session.getOrgId(), fileName, request.getExtendInfo());
                         break;
 
                     case BizConstant.UploadScene.ADMIN_EVENT_GALLERY:
@@ -367,16 +367,6 @@ public class BizAdminService extends BizBaseService {
         });
 
         return bizResult;
-    }
-
-    private void createAppImageGallery(String orgId, String fileName, Map<String, String> extInfo) {
-        AppImageGalleryRequest request = new AppImageGalleryRequest();
-        request.setOrgId(orgId);
-        request.setImageUrl(fileName);
-        if (extInfo != null && !extInfo.isEmpty()) {
-            //TODO: compose other request information
-        }
-        appImageGalleryService.createImageGallery(request);
     }
 
     private void authorizeAdminMember(String memberRoles) throws EzErrorException {

@@ -5,7 +5,7 @@
 package id.ezclouds.biz.ezservice.service.apibiz;
 
 import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
-import id.ezclouds.biz.ezservice.service.dataservice.NewsService;
+import id.ezclouds.biz.ezservice.service.dataservice.NewsInnerService;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.exception.EzErrorCode;
@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 public class BizNewsService extends BizBaseService {
 
     @Autowired
-    private NewsService newsService;
+    private NewsInnerService newsInnerService;
 
     public BizResult getActiveNews() {
         final BizResult bizResult = new BizResult();
@@ -36,7 +36,7 @@ public class BizNewsService extends BizBaseService {
                 ListResult<BizSimpleNews> result = new ListResult<>();
                 result.setPageNumber(1);
                 result.setHasMore(false);
-                result.setItems(newsService.getActiveListNews());
+                result.setItems(newsInnerService.getActiveListNews());
 
                 bizResult.setSuccess(true);
                 bizResult.setObject(result);

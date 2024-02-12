@@ -47,7 +47,7 @@ public class BizCacheService {
     private AppImageGalleryService appImageGalleryService;
 
     @Autowired
-    private NewsService newsService;
+    private NewsInnerService newsInnerService;
 
     @Autowired
     private CandidateProfileItemService candidateProfileItemService;
@@ -83,7 +83,7 @@ public class BizCacheService {
         coreConfigService.getCoreConfigs();
         appConfigService.getAppConfigs();
         appConfigService.getMessageTemplates();
-        newsService.getHighlightedNews();
+        newsInnerService.getHighlightedNews();
         candidateProfileItemService.getCandidateProfileItems();
         videoCardService.getAllVideoCards();
         candidateBioService.getActiveCandidateBios();

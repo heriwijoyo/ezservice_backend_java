@@ -12,7 +12,7 @@ public class BizSimpleNews {
     private String newsId;
     private String orgId;
     private String title;
-    private String thumbnail;
+    private String imageUrl;
     private String description;
 
     public String getNewsId() {
@@ -39,12 +39,12 @@ public class BizSimpleNews {
         this.title = title;
     }
 
-    public String getThumbnail() {
-        return thumbnail;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getDescription() {
