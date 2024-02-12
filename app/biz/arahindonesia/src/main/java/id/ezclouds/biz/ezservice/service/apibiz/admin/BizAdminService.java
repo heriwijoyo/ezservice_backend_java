@@ -10,9 +10,13 @@ import id.ezclouds.biz.ezservice.model.admin.BizAdminAppData;
 import id.ezclouds.biz.ezservice.model.admin.BizAdminSession;
 import id.ezclouds.biz.ezservice.model.admin.BizDashboardData;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
+import id.ezclouds.biz.ezservice.service.dataservice.AppImageGalleryService;
 import id.ezclouds.biz.ezservice.service.dataservice.BizOrganizationService;
+import id.ezclouds.biz.ezservice.service.dataservice.request.AppImageGalleryRequest;
+import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
+import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
@@ -22,18 +26,22 @@ import id.ezclouds.core.auth.request.CoreAdminCommonSessionCreateRequest;
 import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.service.CoreMemberService;
+import id.ezclouds.core.shared.member.PublicFileInfo;
 import id.ezclouds.core.shared.model.CoreAdminBOMenu;
 import id.ezclouds.core.shared.model.CoreAdminBOPermission;
 import id.ezclouds.core.shared.model.CoreAdminDashboard;
 import id.ezclouds.core.shared.model.CoreOrganization;
 import id.ezclouds.core.shared.result.ListResult;
 import id.ezclouds.core.shared.service.CoreAdminService;
+import id.ezclouds.core.shared.service.CoreFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -50,7 +58,13 @@ public class BizAdminService extends BizBaseService {
     private CoreMemberService coreMemberService;
 
     @Autowired
+    private CoreFileService coreFileService;
+
+    @Autowired
     private BizOrganizationService bizOrganizationService;
+
+    @Autowired
+    private AppImageGalleryService appImageGalleryService;
 
     public BizResult createWebSession() {
         final BizResult bizResult = new BizResult();
@@ -297,6 +311,72 @@ public class BizAdminService extends BizBaseService {
         });
 
         return bizResult;
+    }
+
+    public BizResult adminMediaUpload(BizAdminUploadRequest request) {
+        final BizResult bizResult = new BizResult();
+
+        BizServiceTemplate.execute(request, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.SESSION_INVALID);
+                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.SESSION_INVALID);
+                request.validateMultipartRequest();
+                //TODO: add real mimeType validation (i.e with apache Tika)
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthAdminSession session = coreAuthService.adminAuthWebSessionId(request.getSessionId());
+                PublicFileInfo fileInfo = coreFileService.resolvePublicFileInfo(session.getOrgId());
+
+                String fileName = DateUtil.getTimeNowToString() + "." + request.getFileExtension();
+
+                Path filePath;
+                switch (request.getScene()) {
+                    case BizConstant.UploadScene.ADMIN_APP_GALLERY:
+                        filePath = fileInfo.getAppGalleryPath(fileName);
+                        coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
+                        createAppImageGallery(session.getOrgId(), fileName, request.getExtendInfo());
+                        break;
+
+                    case BizConstant.UploadScene.ADMIN_NEWS_GALLERY:
+                        filePath = fileInfo.getNewsGalleryPath(fileName);
+                        break;
+
+                    case BizConstant.UploadScene.ADMIN_EVENT_GALLERY:
+                        filePath = fileInfo.getEventGalleryPath(fileName);
+                        break;
+
+                    case BizConstant.UploadScene.ADMIN_OTHER_GALLERY:
+                        filePath = fileInfo.getOtherGalleryPath(fileName);
+                        break;
+
+                    default:
+                        filePath = null;
+                }
+
+                bizResult.setSuccess(true);
+                bizResult.setObject(BizConstant.Message.SUCCESS_COMMON);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+
+        return bizResult;
+    }
+
+    private void createAppImageGallery(String orgId, String fileName, Map<String, String> extInfo) {
+        AppImageGalleryRequest request = new AppImageGalleryRequest();
+        request.setOrgId(orgId);
+        request.setImageUrl(fileName);
+        if (extInfo != null && !extInfo.isEmpty()) {
+            //TODO: compose other request information
+        }
+        appImageGalleryService.createImageGallery(request);
     }
 
     private void authorizeAdminMember(String memberRoles) throws EzErrorException {

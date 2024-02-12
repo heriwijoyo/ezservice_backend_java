@@ -28,6 +28,10 @@ public class BizConstant {
         public static final String REPORT_IMAGE = "REPORT_IMAGE";
         public static final String REPORT_VIDEO = "REPORT_VIDEO";
         public static final String REPORT_VOICE = "REPORT_VOICE";
+        public static final String ADMIN_APP_GALLERY = "ADMIN_APP_GALLERY";
+        public static final String ADMIN_NEWS_GALLERY = "ADMIN_NEWS_GALLERY";
+        public static final String ADMIN_EVENT_GALLERY = "ADMIN_EVENT_GALLERY";
+        public static final String ADMIN_OTHER_GALLERY = "ADMIN_OTHER_GALLERY";
     }
 
     public static final class MemberFlag {
@@ -46,6 +50,7 @@ public class BizConstant {
         public static final String UPDATE_PASSWORD_SUCCESS = "Kata sandi berhasil di perbarui. Silakan LOGIN kembali menggunakan sandi baru anda";
         public static final String COMMON_SESSION_VERIFY_SUCCESS = "Verifikasi kode OTP berhasil";
         public static final String SUCCESS_LOGOUT = "Logout Berhasil";
+        public static final String SUCCESS_COMMON = "Proses Berhasil";
     }
 
     public static final class Auth {

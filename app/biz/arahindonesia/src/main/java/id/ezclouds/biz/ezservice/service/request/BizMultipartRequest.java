@@ -31,7 +31,7 @@ public abstract class BizMultipartRequest extends BizRequest {
         this.multipartFile = multipartFile;
     }
 
-    protected abstract String getScene();
+    public abstract String getScene();
 
     protected abstract List<String> getSupportedScene();
 

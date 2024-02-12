@@ -12,7 +12,6 @@ import id.ezclouds.core.bifrost.app.api.digestlog.EmptyDigestLog;
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;
 import id.ezclouds.core.bifrost.app.web.result.WebApiResult;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
-import id.ezclouds.core.shared.util.DigestLogUtil;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -25,7 +24,6 @@ public class WebApiControllerTemplate {
         EzAppContextHolder.init(webEvent);
         BizResult bizResult = new BizResult();
         try {
-            handler.onRequestCheck();
             bizResult = handler.onProcess();
             apiResult.setSuccess(bizResult.isSuccess());
 
@@ -59,7 +57,6 @@ public class WebApiControllerTemplate {
     }
 
     interface Handler<T> {
-        void onRequestCheck() throws Exception;
         BizResult onProcess() throws Exception;
         T convertResult(Object object);
         void onDigestLog(DigestLog digestLog);
