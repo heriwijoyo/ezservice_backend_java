@@ -4,22 +4,24 @@
  */
 package id.ezclouds.biz.ezservice.service.request;
 
+import id.ezclouds.biz.ezservice.constant.WebLoadImageScene;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizImageLoadRequest.java, v 0.1 2024‐02‐08 11:52 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 public class BizImageLoadRequest extends BizRequest {
 
-    private String scene;
+    private WebLoadImageScene scene;
     private String orgCode;
     private String memberId;
     private String fileName;
 
-    public String getScene() {
+    public WebLoadImageScene getScene() {
         return scene;
     }
 
-    public void setScene(String scene) {
+    public void setScene(WebLoadImageScene scene) {
         this.scene = scene;
     }
 

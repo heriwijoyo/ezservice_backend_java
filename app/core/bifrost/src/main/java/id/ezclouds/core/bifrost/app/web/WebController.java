@@ -79,7 +79,7 @@ public class WebController extends AppController {
             HttpServletResponse servletResponse) {
 
         WebLoadImageRequest request = new WebLoadImageRequest();
-        request.setScene(WebLoadImageScene.AVATAR.getCode());
+        request.setScene(WebLoadImageScene.AVATAR);
         request.setOrgCode(orgCode);
         request.setMemberId(memberId);
         request.setFileName(fileName);
@@ -118,7 +118,7 @@ public class WebController extends AppController {
             HttpServletResponse servletResponse) {
 
         WebLoadImageRequest request = new WebLoadImageRequest();
-        request.setScene(WebLoadImageScene.ID_CARD.getCode());
+        request.setScene(WebLoadImageScene.ID_CARD);
         request.setOrgCode(orgCode);
         request.setMemberId(memberId);
         request.setFileName(fileName);
@@ -157,7 +157,7 @@ public class WebController extends AppController {
             HttpServletResponse servletResponse) {
 
         WebLoadImageRequest request = new WebLoadImageRequest();
-        request.setScene(WebLoadImageScene.FAMILY_CARD.getCode());
+        request.setScene(WebLoadImageScene.FAMILY_CARD);
         request.setOrgCode(orgCode);
         request.setMemberId(memberId);
         request.setFileName(fileName);
@@ -188,5 +188,41 @@ public class WebController extends AppController {
         });
     }
 
+    @GetMapping(value = "/image/public/{scene}/{orgCode}/{fileName}")
+    private Void getPublicImageGallery(
+            @PathVariable("scene") String scene,
+            @PathVariable("orgCode") String orgCode,
+            @PathVariable("fileName") String fileName,
+            HttpServletResponse servletResponse) {
 
+        WebLoadImageRequest request = new WebLoadImageRequest();
+        request.setScene(WebLoadImageScene.getByCode(scene));
+        request.setOrgCode(orgCode);
+        request.setFileName(fileName);
+
+        return executeWebTemplate(WebEvent.GET_IMAGE_PUBLIC, request, servletResponse, new WebRequestHandler<Void>() {
+            @Override
+            public Void convertResult(Object resultObject) {
+                return null;
+            }
+
+            @Override
+            public void onException(Exception exception) {
+                servletResponse.setStatus(HttpStatus.NOT_FOUND.value());
+            }
+
+            @Override
+            public String composeDigestLog() {
+                return "request(scene=" +
+                        request.getScene() +
+                        ",orgCode=" +
+                        request.getOrgCode() +
+                        ",memberId=" +
+                        request.getMemberId() +
+                        ",fileName=" +
+                        request.getFileName() +
+                        ")";
+            }
+        });
+    }
 }

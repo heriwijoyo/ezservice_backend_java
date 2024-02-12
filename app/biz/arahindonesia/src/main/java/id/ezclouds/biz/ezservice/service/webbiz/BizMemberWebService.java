@@ -4,6 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.service.webbiz;
 
+import id.ezclouds.biz.ezservice.constant.ImageRestriction;
 import id.ezclouds.biz.ezservice.constant.WebLoadImageScene;
 import id.ezclouds.biz.ezservice.service.dataservice.BizOrganizationService;
 import id.ezclouds.biz.ezservice.service.request.BizImageLoadRequest;
@@ -13,6 +14,7 @@ import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.shared.member.MemberFileInfo;
+import id.ezclouds.core.shared.member.PublicFileInfo;
 import id.ezclouds.core.shared.model.CoreOrganization;
 import id.ezclouds.core.shared.service.CoreFileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,37 +43,61 @@ public class BizMemberWebService {
         BizServiceTemplate.execute(request, bizResult, new BizServiceTemplate.WebHandler() {
             @Override
             public void onRequestCheck() throws EzErrorException {
-                AssertUtil.notBlank(request.getMemberId(), EzErrorCode.MEDIA_NOT_FOUND);
+                AssertUtil.isNotTrue(request.getScene() == WebLoadImageScene.UNKNOWN, EzErrorCode.MEDIA_NOT_FOUND);
+                AssertUtil.notBlank(request.getOrgCode(), EzErrorCode.MEDIA_NOT_FOUND);
+
                 CoreOrganization organization = bizOrganizationService
                         .getOrganizationByCode(request.getOrgCode());
                 AssertUtil.notNull(organization, EzErrorCode.MEDIA_NOT_FOUND);
                 AssertUtil.notBlank(organization.getOrgId(), EzErrorCode.MEDIA_NOT_FOUND);
+
+                if (request.getScene().getRestriction() == ImageRestriction.PRIVATE) {
+                    AssertUtil.notBlank(request.getMemberId(), EzErrorCode.MEDIA_NOT_FOUND);
+                }
             }
 
             @Override
             public void onBizProcess() throws Exception {
                 CoreOrganization organization = bizOrganizationService
                         .getOrganizationByCode(request.getOrgCode());
-                MemberFileInfo fileInfo = coreFileService
-                        .resolveMemberFileInfo(organization.getOrgId(), request.getMemberId());
 
                 Path imagePath;
-                WebLoadImageScene scene = WebLoadImageScene.getByCode(request.getScene());
-                switch (scene) {
-                    case AVATAR:
-                        imagePath = fileInfo.getAvatarPath(request.getFileName());
-                        break;
+                if (request.getScene().getRestriction() == ImageRestriction.PRIVATE) {
+                    MemberFileInfo fileInfo = coreFileService
+                            .resolveMemberFileInfo(organization.getOrgId(), request.getMemberId());
 
-                    case ID_CARD:
-                        imagePath = fileInfo.getIdCardPath(request.getFileName());
-                        break;
+                    switch (request.getScene()) {
+                        case AVATAR:
+                            imagePath = fileInfo.getAvatarPath(request.getFileName());
+                            break;
 
-                    case FAMILY_CARD:
-                        imagePath = fileInfo.getFamilyCardPath(request.getFileName());
-                        break;
+                        case ID_CARD:
+                            imagePath = fileInfo.getIdCardPath(request.getFileName());
+                            break;
 
-                    default:
-                        throw new EzErrorException(EzErrorCode.MEDIA_NOT_FOUND);
+                        case FAMILY_CARD:
+                            imagePath = fileInfo.getFamilyCardPath(request.getFileName());
+                            break;
+
+                        default:
+                            throw new EzErrorException(EzErrorCode.MEDIA_NOT_FOUND);
+                    }
+
+                } else if (request.getScene().getRestriction() == ImageRestriction.PUBLIC){
+                    PublicFileInfo fileInfo = coreFileService
+                            .resolvePublicFileInfo(organization.getOrgId());
+
+                    switch (request.getScene()) {
+                        case APP_GALLERY:
+                            imagePath = fileInfo.getAppGalleryPath(request.getFileName());
+                            break;
+
+                        default:
+                            throw new EzErrorException(EzErrorCode.MEDIA_NOT_FOUND);
+                    }
+
+                } else {
+                    imagePath = null;
                 }
 
                 AssertUtil.isTrue(Files.exists(imagePath), EzErrorCode.MEDIA_NOT_FOUND);

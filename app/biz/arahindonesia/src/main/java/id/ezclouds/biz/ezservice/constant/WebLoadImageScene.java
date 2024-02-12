@@ -12,27 +12,34 @@ import id.ezclouds.common.util.StringUtil;
  */
 public enum WebLoadImageScene {
 
-    AVATAR("AVATAR"),
-    ID_CARD("ID_CARD"),
-    FAMILY_CARD("FAMILY_CARD"),
+    AVATAR("AVATAR", ImageRestriction.PRIVATE),
+    ID_CARD("ID_CARD", ImageRestriction.PRIVATE),
+    FAMILY_CARD("FAMILY_CARD", ImageRestriction.PRIVATE),
 
-    PUBLIC_SLIDE("PUBLIC_SLIDE"),
-    PUBLIC_NEWS("PUBLIC_NEWS"),
-    PUBLIC_EVENT("PUBLIC_EVENT"),
-    PUBLIC_REPORT_IMAGE("PUBLIC_REPORT_IMAGE"),
-    PUBLIC_REPORT_VIDEO("PUBLIC_REPORT_VIDEO"),
-    PUBLIC_REPORT_VOICE("PUBLIC_REPORT_VOICE"),
+    APP_GALLERY("app", ImageRestriction.PUBLIC),
+    PUBLIC_NEWS("PUBLIC_NEWS", ImageRestriction.PUBLIC),
+    PUBLIC_EVENT("PUBLIC_EVENT", ImageRestriction.PUBLIC),
+    PUBLIC_REPORT_IMAGE("PUBLIC_REPORT_IMAGE", ImageRestriction.PRIVATE),
+    PUBLIC_REPORT_VIDEO("PUBLIC_REPORT_VIDEO", ImageRestriction.PRIVATE),
+    PUBLIC_REPORT_VOICE("PUBLIC_REPORT_VOICE", ImageRestriction.PRIVATE),
 
+    UNKNOWN("UNKNOWN", ImageRestriction.PUBLIC),
     ;
 
     private final String code;
+    private final ImageRestriction restriction;
 
-    WebLoadImageScene(String code) {
+    WebLoadImageScene(String code, ImageRestriction restriction) {
         this.code = code;
+        this.restriction = restriction;
     }
 
     public String getCode() {
         return code;
+    }
+
+    public ImageRestriction getRestriction() {
+        return restriction;
     }
 
     public static WebLoadImageScene getByCode(String code) {
@@ -44,6 +51,6 @@ public enum WebLoadImageScene {
                 return scene;
             }
         }
-        return null;
+        return UNKNOWN;
     }
 }

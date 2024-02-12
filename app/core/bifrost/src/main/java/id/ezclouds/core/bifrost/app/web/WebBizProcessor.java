@@ -28,6 +28,7 @@ public class WebBizProcessor implements WebProcessor {
             case GET_IMAGE_AVATAR:
             case GET_IMAGE_IDCARD:
             case GET_IMAGE_FAMCARD:
+            case GET_IMAGE_PUBLIC:
                 innerProcessor.loadCommonImage(request, servletResponse);
                 break;
 

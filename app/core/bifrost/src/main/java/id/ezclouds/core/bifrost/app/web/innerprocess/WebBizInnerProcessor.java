@@ -31,18 +31,10 @@ public class WebBizInnerProcessor {
 
     public void loadCommonImage(Object request, HttpServletResponse response) throws Exception {
 
-        AssertUtil.notNull(request, EzErrorCode.MEDIA_NOT_FOUND);
-        AssertUtil.isTrue(request instanceof WebLoadImageRequest, EzErrorCode.MEDIA_NOT_FOUND);
-
+        AssertUtil.isTrue((request instanceof WebLoadImageRequest), EzErrorCode.MEDIA_NOT_FOUND);
         WebLoadImageRequest loadImageRequest = (WebLoadImageRequest) request;
-        WebLoadImageScene imageScene = WebLoadImageScene.getByCode(loadImageRequest.getScene());
-
-        AssertUtil.notNull(imageScene, EzErrorCode.MEDIA_NOT_FOUND);
-        AssertUtil.notBlank(loadImageRequest.getOrgCode(), EzErrorCode.MEDIA_NOT_FOUND);
-        AssertUtil.notBlank(loadImageRequest.getFileName(), EzErrorCode.MEDIA_NOT_FOUND);
 
         BizImageLoadRequest bizImageLoadRequest = new BizImageLoadRequest();
-
         bizImageLoadRequest.setScene(loadImageRequest.getScene());
         bizImageLoadRequest.setOrgCode(loadImageRequest.getOrgCode());
         bizImageLoadRequest.setMemberId(loadImageRequest.getMemberId());
