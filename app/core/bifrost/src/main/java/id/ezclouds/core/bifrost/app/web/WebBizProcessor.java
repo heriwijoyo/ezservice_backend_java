@@ -25,10 +25,8 @@ public class WebBizProcessor implements WebProcessor {
     @Override
     public Object process(WebEvent event, Object request, HttpServletResponse servletResponse) throws Exception {
         switch (event) {
-            case GET_IMAGE_AVATAR:
-            case GET_IMAGE_IDCARD:
-            case GET_IMAGE_FAMCARD:
             case GET_IMAGE_PUBLIC:
+            case GET_IMAGE_PRIVATE:
                 innerProcessor.loadCommonImage(request, servletResponse);
                 break;
 

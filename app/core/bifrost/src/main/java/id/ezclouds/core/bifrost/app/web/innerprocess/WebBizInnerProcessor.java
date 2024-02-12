@@ -4,7 +4,6 @@
  */
 package id.ezclouds.core.bifrost.app.web.innerprocess;
 
-import id.ezclouds.biz.ezservice.constant.WebLoadImageScene;
 import id.ezclouds.biz.ezservice.service.request.BizImageLoadRequest;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.webbiz.BizMemberWebService;

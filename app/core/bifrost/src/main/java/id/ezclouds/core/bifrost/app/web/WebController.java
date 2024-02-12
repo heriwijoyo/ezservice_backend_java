@@ -54,9 +54,9 @@ public class WebController extends AppController {
         return "Welcome to Arah Indonesia";
     }
 
-    @GetMapping(value = "/rjlapp/download/apk")
-    public void downloadApk(@RequestParam String file, HttpServletResponse response) throws IOException {
-        Path apkFile = Paths.get(downloadApkPath, file);
+    @GetMapping(value = "/rjlapp/download/apk/{file}")
+    public void downloadApk(@PathVariable("file") String file, HttpServletResponse response) throws IOException {
+        Path apkFile = Paths.get(downloadApkPath, file).toAbsolutePath().normalize();
 
         response.setContentType("application/vnd.android.package-archive");
         response.setContentLengthLong(Files.size(apkFile));
@@ -71,98 +71,21 @@ public class WebController extends AppController {
         Files.copy(apkFile, response.getOutputStream());
     }
 
-    @GetMapping(value = "/image/avatar/{orgCode}/{memberId}/{fileName}")
-    private Void getAvatarImage(
-            @PathVariable("orgCode") String orgCode,
-            @PathVariable("memberId") String memberId,
-            @PathVariable("fileName") String fileName,
-            HttpServletResponse servletResponse) {
-
-        WebLoadImageRequest request = new WebLoadImageRequest();
-        request.setScene(WebLoadImageScene.AVATAR);
-        request.setOrgCode(orgCode);
-        request.setMemberId(memberId);
-        request.setFileName(fileName);
-
-        return executeWebTemplate(WebEvent.GET_IMAGE_AVATAR, request, servletResponse, new WebRequestHandler<Void>() {
-            @Override
-            public Void convertResult(Object resultObject) {
-                return null;
-            }
-
-            @Override
-            public void onException(Exception exception) {
-                servletResponse.setStatus(HttpStatus.NOT_FOUND.value());
-            }
-
-            @Override
-            public String composeDigestLog() {
-                return "request(scene=" +
-                        request.getScene() +
-                        ",orgCode=" +
-                        request.getOrgCode() +
-                        ",memberId=" +
-                        request.getMemberId() +
-                        ",fileName=" +
-                        request.getFileName() +
-                        ")";
-            }
-        });
-    }
-
-    @GetMapping(value = "/image/idcard/{orgCode}/{memberId}/{fileName}")
-    private Void getIdCardImage(
-            @PathVariable("orgCode") String orgCode,
-            @PathVariable("memberId") String memberId,
-            @PathVariable("fileName") String fileName,
-            HttpServletResponse servletResponse) {
-
-        WebLoadImageRequest request = new WebLoadImageRequest();
-        request.setScene(WebLoadImageScene.ID_CARD);
-        request.setOrgCode(orgCode);
-        request.setMemberId(memberId);
-        request.setFileName(fileName);
-
-        return executeWebTemplate(WebEvent.GET_IMAGE_IDCARD, request, servletResponse, new WebRequestHandler<Void>() {
-            @Override
-            public Void convertResult(Object resultObject) {
-                return null;
-            }
-
-            @Override
-            public void onException(Exception exception) {
-                servletResponse.setStatus(HttpStatus.NOT_FOUND.value());
-            }
-
-            @Override
-            public String composeDigestLog() {
-                return "request(scene=" +
-                        request.getScene() +
-                        ",orgCode=" +
-                        request.getOrgCode() +
-                        ",memberId=" +
-                        request.getMemberId() +
-                        ",fileName=" +
-                        request.getFileName() +
-                        ")";
-            }
-        });
-    }
-
-    @GetMapping(value = "/image/famcard/{orgCode}/{memberId}/{fileName}")
+    @GetMapping(value = "/image/private/{scene}/{orgCode}/{memberId}/{fileName}")
     private Void getFamCardImage(
+            @PathVariable("scene") String scene,
             @PathVariable("orgCode") String orgCode,
             @PathVariable("memberId") String memberId,
             @PathVariable("fileName") String fileName,
             HttpServletResponse servletResponse) {
 
         WebLoadImageRequest request = new WebLoadImageRequest();
-        request.setScene(WebLoadImageScene.FAMILY_CARD);
+        request.setScene(WebLoadImageScene.getByCode(scene));
         request.setOrgCode(orgCode);
         request.setMemberId(memberId);
         request.setFileName(fileName);
 
-        return executeWebTemplate(WebEvent.GET_IMAGE_IDCARD, request, servletResponse, new WebRequestHandler<Void>() {
+        return executeWebTemplate(WebEvent.GET_IMAGE_PRIVATE, request, servletResponse, new WebRequestHandler<Void>() {
             @Override
             public Void convertResult(Object resultObject) {
                 return null;

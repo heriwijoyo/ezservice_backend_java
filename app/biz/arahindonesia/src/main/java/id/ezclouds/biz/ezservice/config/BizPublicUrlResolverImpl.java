@@ -12,14 +12,14 @@ public class BizPublicUrlResolverImpl implements BizPublicUrlResolver {
 
     private static final String SLASH = "/";
     private static final String PATH_IMAGE = "/image";
-    private static final String PATH_AVATAR = "/avatar";
-    private static final String PATH_IDCARD = "/idcard";
-    private static final String PATH_FAMCARD = "/famcard";
+    private static final String PATH_AVATAR = "/private/avatar";
+    private static final String PATH_IDCARD = "/private/idcard";
+    private static final String PATH_FAMCARD = "/private/famcard";
 
-    private static final String PATH_APP_GALLERY = "/app";
-    private static final String PATH_NEWS_GALLERY = "/news";
-    private static final String PATH_EVENT_GALLERY = "/event";
-    private static final String PATH_OTHER_GALLERY = "/other";
+    private static final String PATH_APP_GALLERY = "/public/app";
+    private static final String PATH_NEWS_GALLERY = "/public/news";
+    private static final String PATH_EVENT_GALLERY = "/public/event";
+    private static final String PATH_OTHER_GALLERY = "/public/other";
 
     private final String rootPublicImageUrl;
     private final String orgCode;

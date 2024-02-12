@@ -12,9 +12,9 @@ import id.ezclouds.common.util.StringUtil;
  */
 public enum WebLoadImageScene {
 
-    AVATAR("AVATAR", ImageRestriction.PRIVATE),
-    ID_CARD("ID_CARD", ImageRestriction.PRIVATE),
-    FAMILY_CARD("FAMILY_CARD", ImageRestriction.PRIVATE),
+    AVATAR("avatar", ImageRestriction.PRIVATE),
+    ID_CARD("idcard", ImageRestriction.PRIVATE),
+    FAMILY_CARD("famcard", ImageRestriction.PRIVATE),
 
     APP_GALLERY("app", ImageRestriction.PUBLIC),
     PUBLIC_NEWS("PUBLIC_NEWS", ImageRestriction.PUBLIC),
