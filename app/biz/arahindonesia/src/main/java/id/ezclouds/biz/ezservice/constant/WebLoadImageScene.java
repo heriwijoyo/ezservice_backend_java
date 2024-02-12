@@ -16,9 +16,10 @@ public enum WebLoadImageScene {
     ID_CARD("idcard", ImageRestriction.PRIVATE),
     FAMILY_CARD("famcard", ImageRestriction.PRIVATE),
 
-    APP_GALLERY("app", ImageRestriction.PUBLIC),
-    PUBLIC_NEWS("PUBLIC_NEWS", ImageRestriction.PUBLIC),
-    PUBLIC_EVENT("PUBLIC_EVENT", ImageRestriction.PUBLIC),
+    PUBLIC_APP_GALLERY("app", ImageRestriction.PUBLIC),
+    PUBLIC_NEWS_GALLERY("news", ImageRestriction.PUBLIC),
+    PUBLIC_EVENT_GALLERY("event", ImageRestriction.PUBLIC),
+
     PUBLIC_REPORT_IMAGE("PUBLIC_REPORT_IMAGE", ImageRestriction.PRIVATE),
     PUBLIC_REPORT_VIDEO("PUBLIC_REPORT_VIDEO", ImageRestriction.PRIVATE),
     PUBLIC_REPORT_VOICE("PUBLIC_REPORT_VOICE", ImageRestriction.PRIVATE),

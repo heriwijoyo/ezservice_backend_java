@@ -88,8 +88,14 @@ public class BizMemberWebService {
                             .resolvePublicFileInfo(organization.getOrgId());
 
                     switch (request.getScene()) {
-                        case APP_GALLERY:
+                        case PUBLIC_APP_GALLERY:
                             imagePath = fileInfo.getAppGalleryPath(request.getFileName());
+                            break;
+                        case PUBLIC_NEWS_GALLERY:
+                            imagePath = fileInfo.getNewsGalleryPath(request.getFileName());
+                            break;
+                        case PUBLIC_EVENT_GALLERY:
+                            imagePath = fileInfo.getEventGalleryPath(request.getFileName());
                             break;
 
                         default:

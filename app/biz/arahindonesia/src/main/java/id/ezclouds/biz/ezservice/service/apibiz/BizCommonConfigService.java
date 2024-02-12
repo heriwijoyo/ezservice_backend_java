@@ -126,12 +126,19 @@ public class BizCommonConfigService extends BizBaseService {
     }
 
     private List<BizSimpleNews> fetchSimpleNews(String orgId) {
-        return newsInnerService
+        List<BizSimpleNews> news = newsInnerService
                 .getHighlightedNews()
                 .stream()
                 .filter(simpleNews -> orgId.equals(simpleNews.getOrgId()))
                 .limit(AppConstant.HIGHLIGHTED_NEWS_LIMIT)
                 .collect(Collectors.toList());
+
+        String orgCode = EzAppContextHolder.getContext().getOrgCode();
+        BizPublicUrlResolver resolver = resolvePublicUrl(orgCode);
+        news.forEach(newsItem -> {
+            BizAnnotationProcessor.annotatePublicConfig(newsItem, resolver);
+        });
+        return news;
     }
 
     private List<VideoSection> composeVideoSections(String orgId) {
