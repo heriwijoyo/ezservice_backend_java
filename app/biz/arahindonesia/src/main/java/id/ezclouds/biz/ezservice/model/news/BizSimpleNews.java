@@ -6,8 +6,8 @@ package id.ezclouds.biz.ezservice.model.news;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: SimpleNews.java, v 0.1 2023‐12‐10 11:20 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
-public class SimpleNews {
+ * @version $Id: BizSimpleNews.java, v 0.1 2023‐12‐10 11:20 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
+public class BizSimpleNews {
 
     private String newsId;
     private String orgId;

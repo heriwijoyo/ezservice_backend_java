@@ -4,7 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.model;
 
-import id.ezclouds.biz.ezservice.model.news.SimpleNews;
+import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
 import id.ezclouds.biz.ezservice.model.profile.CandidateProfile;
 import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
 
@@ -18,7 +18,7 @@ import java.util.List;
 public class HomeData {
 
     private List<AppImageGallery> highlightBanners;
-    private List<SimpleNews> highlightNews;
+    private List<BizSimpleNews> highlightNews;
     private List<AppImageGallery> homePosters;
     private List<VideoSection> videoSections;
     private String pemiluDeadline;
@@ -42,11 +42,11 @@ public class HomeData {
         this.highlightBanners = highlightBanners;
     }
 
-    public List<SimpleNews> getHighlightNews() {
+    public List<BizSimpleNews> getHighlightNews() {
         return highlightNews;
     }
 
-    public void setHighlightNews(List<SimpleNews> highlightNews) {
+    public void setHighlightNews(List<BizSimpleNews> highlightNews) {
         this.highlightNews = highlightNews;
     }
 

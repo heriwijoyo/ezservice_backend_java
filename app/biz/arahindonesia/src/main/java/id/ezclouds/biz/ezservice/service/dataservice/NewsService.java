@@ -5,8 +5,8 @@
 package id.ezclouds.biz.ezservice.service.dataservice;
 
 import id.ezclouds.biz.ezservice.converter.BizModelConverter;
-import id.ezclouds.biz.ezservice.model.news.SimpleNews;
-import id.ezclouds.common.dal.repo.NewsRepository;
+import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
+import id.ezclouds.biz.ezservice.service.dataservice.repo.NewsRepository;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -27,8 +27,8 @@ public class NewsService {
     @Autowired
     private NewsRepository newsRepository;
 
-    @Cacheable("highlighted_news")
-    public List<SimpleNews> getHighlightedNews() {
+    @Cacheable("newsHighlighted")
+    public List<BizSimpleNews> getHighlightedNews() {
         return newsRepository
                 .findHighlightedNews()
                 .stream()
@@ -36,7 +36,7 @@ public class NewsService {
                 .collect(Collectors.toList());
     }
 
-    public List<SimpleNews> getActiveListNews() {
+    public List<BizSimpleNews> getActiveListNews() {
         String orgId = EzAppContextHolder.getContext().getOrgId();
         return newsRepository
                 .findActiveNews(orgId, NEWS_LIMIT)

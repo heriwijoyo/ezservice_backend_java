@@ -6,8 +6,9 @@ package id.ezclouds.biz.ezservice.converter;
 
 import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.model.*;
+import id.ezclouds.biz.ezservice.service.dataservice.dataobject.NewsDO;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
-import id.ezclouds.biz.ezservice.model.news.SimpleNews;
+import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
 import id.ezclouds.biz.ezservice.model.profile.CandidateBio;
 import id.ezclouds.biz.ezservice.model.profile.CandidateProfileItem;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.dataobject.AppSubOrganizationDO;
@@ -49,17 +50,17 @@ public class BizModelConverter {
         return subOrganization;
     }
 
-    public static SimpleNews convert(NewsDO newsDO) {
+    public static BizSimpleNews convert(NewsDO newsDO) {
         if (newsDO == null) {
             return null;
         }
-        SimpleNews simpleNews = new SimpleNews();
-        simpleNews.setNewsId(newsDO.getNewsId());
-        simpleNews.setOrgId(newsDO.getOrgId());
-        simpleNews.setTitle(newsDO.getTitle());
-        simpleNews.setThumbnail(newsDO.getThumbnail());
-        simpleNews.setDescription(newsDO.getDescription());
-        return simpleNews;
+        BizSimpleNews bizSimpleNews = new BizSimpleNews();
+        bizSimpleNews.setNewsId(newsDO.getNewsId());
+        bizSimpleNews.setOrgId(newsDO.getOrgId());
+        bizSimpleNews.setTitle(newsDO.getTitle());
+        bizSimpleNews.setThumbnail(newsDO.getThumbnail());
+        bizSimpleNews.setDescription(newsDO.getDescription());
+        return bizSimpleNews;
     }
 
     public static VideoCard convert(VideoCardDO cardDO) {

@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.ezservice.model.AppSetting;
 import id.ezclouds.biz.ezservice.model.admin.BizAdminSession;
 import id.ezclouds.biz.ezservice.model.authentication.BizMemberCommonSession;
-import id.ezclouds.biz.ezservice.model.news.SimpleNews;
+import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
 import id.ezclouds.biz.ezservice.model.profile.CandidateProfile;
 import id.ezclouds.biz.ezservice.model.profile.MemberProfile;
 import id.ezclouds.biz.ezservice.service.result.BizMemberLoginResult;
@@ -91,15 +91,15 @@ public class ApiController extends AppController {
     }
 
     @PostMapping(value = "/api/news.php")
-    private ApiResult<ListResult<SimpleNews>> getNews(@RequestBody ApiRequest request) {
-        return executeInTemplate(ApiEvent.API_NEWS, request, new RequestHandler<ListResult<SimpleNews>>() {
+    private ApiResult<ListResult<BizSimpleNews>> getNews(@RequestBody ApiRequest request) {
+        return executeInTemplate(ApiEvent.API_NEWS, request, new RequestHandler<ListResult<BizSimpleNews>>() {
             @Override
-            public ListResult<SimpleNews> convertResult(Object resultObject) {
-                return (ListResult<SimpleNews>) resultObject;
+            public ListResult<BizSimpleNews> convertResult(Object resultObject) {
+                return (ListResult<BizSimpleNews>) resultObject;
             }
 
             @Override
-            public DigestLog composeDigestLog(ApiRequest request, ApiResult<ListResult<SimpleNews>> result) {
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<ListResult<BizSimpleNews>> result) {
                 EmptyDigestLog digestLog = new EmptyDigestLog(result.isSuccess(), result.getResultCode());
                 digestLog.composeDigest(request, toEmptyResult(result));
                 return digestLog;

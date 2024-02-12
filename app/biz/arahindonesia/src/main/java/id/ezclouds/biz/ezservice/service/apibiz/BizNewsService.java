@@ -4,7 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.service.apibiz;
 
-import id.ezclouds.biz.ezservice.model.news.SimpleNews;
+import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
 import id.ezclouds.biz.ezservice.service.dataservice.NewsService;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
@@ -33,7 +33,7 @@ public class BizNewsService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws EzErrorException {
-                ListResult<SimpleNews> result = new ListResult<>();
+                ListResult<BizSimpleNews> result = new ListResult<>();
                 result.setPageNumber(1);
                 result.setHasMore(false);
                 result.setItems(newsService.getActiveListNews());

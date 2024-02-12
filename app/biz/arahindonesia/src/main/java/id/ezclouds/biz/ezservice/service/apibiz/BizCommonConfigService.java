@@ -9,7 +9,7 @@ import id.ezclouds.biz.ezservice.config.BizPublicUrlResolverImpl;
 import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.model.*;
 import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
-import id.ezclouds.biz.ezservice.model.news.SimpleNews;
+import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
 import id.ezclouds.biz.ezservice.service.dataservice.*;
 import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
@@ -125,7 +125,7 @@ public class BizCommonConfigService extends BizBaseService {
         return galleries;
     }
 
-    private List<SimpleNews> fetchSimpleNews(String orgId) {
+    private List<BizSimpleNews> fetchSimpleNews(String orgId) {
         return newsService
                 .getHighlightedNews()
                 .stream()
