@@ -53,9 +53,9 @@ public class AppConstant {
         public static final String AVATAR_URL = "AVATAR_URL";
         public static final String IDCARD_URL = "IDCARD_URL";
         public static final String FAMCARD_URL = "FAMCARD_URL";
-        public static final String APP_IMAGE_GALLERY = "APP_IMAGE_GALLERY";
-        public static final String APP_NEWS_GALLERY = "APP_NEWS_GALLERY";
-        public static final String APP_EVENT_GALLERY = "APP_EVENT_GALLERY";
-        public static final String APP_OTHER_GALLERY = "APP_OTHER_GALLERY";
+        public static final String APP_GALLERY_URL = "APP_GALLERY_URL";
+        public static final String NEWS_GALLERY_URL = "NEWS_GALLERY_URL";
+        public static final String EVENT_GALLERY_URL = "EVENT_GALLERY_URL";
+        public static final String OTHER_GALLERY_URL = "OTHER_GALLERY_URL";
     }
 }

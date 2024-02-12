@@ -4,11 +4,14 @@
  */
 package id.ezclouds.biz.ezservice.service.apibiz;
 
-import id.ezclouds.biz.ezservice.config.BizPublicConfig;
+import id.ezclouds.biz.ezservice.config.BizPublicUrlResolver;
+import id.ezclouds.biz.ezservice.config.BizPublicUrlResolverImpl;
 import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.model.*;
+import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
 import id.ezclouds.biz.ezservice.model.news.SimpleNews;
 import id.ezclouds.biz.ezservice.service.dataservice.*;
+import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.exception.EzErrorCode;
@@ -80,14 +83,18 @@ public class BizCommonConfigService extends BizBaseService {
         return bizResult;
     }
 
-    public BizPublicConfig resolveCommonConfig(String orgId, String memberId) {
-        return new BizPublicConfig(orgId, memberId, appRootPublicUrl);
+    public BizPublicUrlResolver resolvePublicUrl(String orgCode, String memberId) {
+        return new BizPublicUrlResolverImpl(appRootPublicUrl, orgCode, memberId);
+    }
+
+    public BizPublicUrlResolver resolvePublicUrl(String orgCode) {
+        return new BizPublicUrlResolverImpl(appRootPublicUrl, orgCode);
     }
 
     private HomeData composeHomeData(String orgId) {
         HomeData homeData = new HomeData();
         homeData.setPemiluDeadline("2024-02-14 00:00:00");
-        homeData.setHighlightBanners(appImageGalleryService.getAppGalleryHomeSlide(orgId));
+        homeData.setHighlightBanners(fetchHomeSlideGallery(orgId));
         homeData.setHighlightNews(fetchSimpleNews(orgId));
         homeData.setHomePosters(new ArrayList<>());
         homeData.setVideoSections(composeVideoSections(orgId));
@@ -103,6 +110,19 @@ public class BizCommonConfigService extends BizBaseService {
         }
 
         return homeData;
+    }
+
+    private List<AppImageGallery> fetchHomeSlideGallery(String orgId) {
+        List<AppImageGallery> galleries = appImageGalleryService
+                .getAppGalleryHomeSlide(orgId);
+
+        String orgCode = EzAppContextHolder.getContext().getOrgCode();
+        BizPublicUrlResolver resolver = resolvePublicUrl(orgCode);
+        galleries.forEach(gall -> {
+            BizAnnotationProcessor.annotatePublicConfig(gall, resolver);
+        });
+
+        return galleries;
     }
 
     private List<SimpleNews> fetchSimpleNews(String orgId) {

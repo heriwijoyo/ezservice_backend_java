@@ -4,7 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.model.annotation;
 
-import id.ezclouds.biz.ezservice.config.BizPublicConfig;
+import id.ezclouds.biz.ezservice.config.BizPublicUrlResolver;
 import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.common.util.StringUtil;
 
@@ -17,7 +17,7 @@ import java.lang.reflect.Method;
  */
 public class BizAnnotationProcessor {
 
-    public static void annotatePublicConfig(Object object, BizPublicConfig publicConfig) {
+    public static void annotatePublicConfig(Object object, BizPublicUrlResolver publicConfig) {
         if (object == null) {
             return;
         }
@@ -26,16 +26,28 @@ public class BizAnnotationProcessor {
         for (Field field : fields) {
             if (field.isAnnotationPresent(PublicImageUrl.class)) {
                 PublicImageUrl publicImageUrl = field.getAnnotation(PublicImageUrl.class);
-                if (AppConstant.Annotation.AVATAR_URL.equals(publicImageUrl.name())) {
-                    updateFieldValue(object, field, publicConfig.getAvatarRootImageUrl());
-                }
-
-                if (AppConstant.Annotation.IDCARD_URL.equals(publicImageUrl.name())) {
-                    updateFieldValue(object, field, publicConfig.getIdCardRootImageUrl());
-                }
-
-                if (AppConstant.Annotation.FAMCARD_URL.equals(publicImageUrl.name())) {
-                    updateFieldValue(object, field, publicConfig.getFamCardRootImageUrl());
+                switch (publicImageUrl.name()) {
+                    case AppConstant.Annotation.AVATAR_URL:
+                        updateFieldValue(object, field, publicConfig.getAvatarRootImageUrl());
+                        break;
+                    case AppConstant.Annotation.IDCARD_URL:
+                        updateFieldValue(object, field, publicConfig.getIdCardRootImageUrl());
+                        break;
+                    case AppConstant.Annotation.FAMCARD_URL:
+                        updateFieldValue(object, field, publicConfig.getFamCardRootImageUrl());
+                        break;
+                    case AppConstant.Annotation.APP_GALLERY_URL:
+                        updateFieldValue(object, field, publicConfig.getAppGalleryRootImageUrl());
+                        break;
+                    case AppConstant.Annotation.NEWS_GALLERY_URL:
+                        updateFieldValue(object, field, publicConfig.getNewsGalleryRootImageUrl());
+                        break;
+                    case AppConstant.Annotation.EVENT_GALLERY_URL:
+                        updateFieldValue(object, field, publicConfig.getEventGalleryRootImageUrl());
+                        break;
+                    case AppConstant.Annotation.OTHER_GALLERY_URL:
+                        updateFieldValue(object, field, publicConfig.getOtherGalleryRootImageUrl());
+                        break;
                 }
             }
         }

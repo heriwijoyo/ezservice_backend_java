@@ -4,7 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.service.apibiz;
 
-import id.ezclouds.biz.ezservice.config.BizPublicConfig;
+import id.ezclouds.biz.ezservice.config.BizPublicUrlResolver;
 import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.constant.BizConstant;
 import id.ezclouds.biz.ezservice.converter.BizMemberConverter;
@@ -87,7 +87,7 @@ public class BizMemberService extends BizBaseService {
                 CoreMemberExtension coreMemberExtension = coreMemberService.getOptimisticCoreMemberExtension(sessionInfo.getMemberId());
                 BizMember bizMember = BizMemberConverter.convert(coreMember, coreMemberExtension);
 
-                BizPublicConfig publicConfig = bizCommonConfigService.resolveCommonConfig(getOrgCode(), bizMember.getMemberId());
+                BizPublicUrlResolver publicConfig = bizCommonConfigService.resolvePublicUrl(getOrgCode(), bizMember.getMemberId());
                 BizAnnotationProcessor.annotatePublicConfig(bizMember, publicConfig);
 
                 MemberProfile memberProfile = new MemberProfile();

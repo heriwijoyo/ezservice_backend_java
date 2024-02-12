@@ -17,7 +17,7 @@ public class AppImageGallery {
     @JsonIgnore
     private String orgId;
     private String title;
-    @PublicImageUrl(name = AppConstant.Annotation.APP_IMAGE_GALLERY)
+    @PublicImageUrl(name = AppConstant.Annotation.APP_GALLERY_URL)
     private String imageUrl;
     private String targetType;
     private String targetUrl;
