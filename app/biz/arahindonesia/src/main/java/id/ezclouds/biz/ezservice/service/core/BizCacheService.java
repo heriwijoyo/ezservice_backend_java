@@ -44,7 +44,7 @@ public class BizCacheService {
     private AppConfigService appConfigService;
 
     @Autowired
-    private ImageSlideService imageSlideService;
+    private AppImageGalleryService appImageGalleryService;
 
     @Autowired
     private NewsService newsService;
@@ -76,15 +76,13 @@ public class BizCacheService {
                     }
                 });
 
+        appImageGalleryService.getImageGalleryAllActive();
         bizOrganizationService.getActiveOrganizations();
         coreAuthService.getActiveAppClients();
         appSubOrganizationService.getAllSubOrganization();
         coreConfigService.getCoreConfigs();
         appConfigService.getAppConfigs();
         appConfigService.getMessageTemplates();
-        imageSlideService.getImageSlideHome();
-        imageSlideService.getHomePosterImage();
-        imageSlideService.getPortfolioImage();
         newsService.getHighlightedNews();
         candidateProfileItemService.getCandidateProfileItems();
         videoCardService.getAllVideoCards();

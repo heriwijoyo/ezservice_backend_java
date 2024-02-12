@@ -49,20 +49,6 @@ public class BizModelConverter {
         return subOrganization;
     }
 
-    public static ImageSlide convert(ImageSlideDO slideDO) {
-        if (slideDO == null) {
-            return null;
-        }
-        ImageSlide imageSlide = new ImageSlide();
-        imageSlide.setOrgId(slideDO.getOrgId());
-        imageSlide.setTitle(slideDO.getTitle());
-        imageSlide.setImageUrl(slideDO.getImageUrl());
-        imageSlide.setTargetType(slideDO.getTargetType());
-        imageSlide.setTargetUrl(slideDO.getTargetUrl());
-
-        return imageSlide;
-    }
-
     public static SimpleNews convert(NewsDO newsDO) {
         if (newsDO == null) {
             return null;
