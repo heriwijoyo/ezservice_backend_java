@@ -6,7 +6,10 @@ package id.ezclouds.biz.ezservice.service.dataservice.repo;
 
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.AppImageGalleryDO;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -14,4 +17,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface AppImageGalleryRepository extends JpaRepository<AppImageGalleryDO, Long> {
+
+    @Query("SELECT ig FROM AppImageGalleryDO ig WHERE ig.status = 1")
+    List<AppImageGalleryDO> findAllActive();
 }

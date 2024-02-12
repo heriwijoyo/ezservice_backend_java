@@ -4,11 +4,10 @@
  */
 package id.ezclouds.biz.ezservice.service.apibiz;
 
-import id.ezclouds.biz.ezservice.model.ImageSlide;
 import id.ezclouds.biz.ezservice.model.profile.CandidateBio;
 import id.ezclouds.biz.ezservice.model.profile.CandidateProfile;
 import id.ezclouds.biz.ezservice.model.profile.CandidateProfileItem;
-import id.ezclouds.biz.ezservice.service.dataservice.ImageSlideService;
+import id.ezclouds.biz.ezservice.service.dataservice.AppImageGalleryService;
 import id.ezclouds.biz.ezservice.service.dataservice.CandidateBioService;
 import id.ezclouds.biz.ezservice.service.dataservice.CandidateProfileItemService;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
@@ -37,7 +36,7 @@ public class BizCandidateProfileService extends BizBaseService {
     private CandidateProfileItemService candidateProfileItemService;
 
     @Autowired
-    private ImageSlideService imageSlideService;
+    private AppImageGalleryService appImageGalleryService;
 
     @Autowired
     private CandidateBioService candidateBioService;
@@ -97,12 +96,7 @@ public class BizCandidateProfileService extends BizBaseService {
                     }
                 });
 
-        List<ImageSlide> portfolioImages = imageSlideService
-                .getPortfolioImage()
-                .stream()
-                .filter(imageSlide -> orgId.equals(imageSlide.getOrgId()))
-                .collect(Collectors.toList());
-        profile.setPortfolios(portfolioImages);
+        profile.setPortfolios(appImageGalleryService.getAppGalleryPortfolioSlide(orgId));
 
         List<CandidateBio> candidateBios = candidateBioService
                 .getActiveCandidateBios()

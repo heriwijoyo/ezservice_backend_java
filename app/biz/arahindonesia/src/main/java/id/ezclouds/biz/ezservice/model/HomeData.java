@@ -6,6 +6,7 @@ package id.ezclouds.biz.ezservice.model;
 
 import id.ezclouds.biz.ezservice.model.news.SimpleNews;
 import id.ezclouds.biz.ezservice.model.profile.CandidateProfile;
+import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +17,9 @@ import java.util.List;
  */
 public class HomeData {
 
-    private List<ImageSlide> highlightBanners;
+    private List<AppImageGallery> highlightBanners;
     private List<SimpleNews> highlightNews;
-    private List<ImageSlide> homePosters;
+    private List<AppImageGallery> homePosters;
     private List<VideoSection> videoSections;
     private String pemiluDeadline;
     private List<String> communities = new ArrayList<>();
@@ -33,11 +34,11 @@ public class HomeData {
         this.communities = communities;
     }
 
-    public List<ImageSlide> getHighlightBanners() {
+    public List<AppImageGallery> getHighlightBanners() {
         return highlightBanners;
     }
 
-    public void setHighlightBanners(List<ImageSlide> highlightBanners) {
+    public void setHighlightBanners(List<AppImageGallery> highlightBanners) {
         this.highlightBanners = highlightBanners;
     }
 
@@ -49,11 +50,11 @@ public class HomeData {
         this.highlightNews = highlightNews;
     }
 
-    public List<ImageSlide> getHomePosters() {
+    public List<AppImageGallery> getHomePosters() {
         return homePosters;
     }
 
-    public void setHomePosters(List<ImageSlide> homePosters) {
+    public void setHomePosters(List<AppImageGallery> homePosters) {
         this.homePosters = homePosters;
     }
 

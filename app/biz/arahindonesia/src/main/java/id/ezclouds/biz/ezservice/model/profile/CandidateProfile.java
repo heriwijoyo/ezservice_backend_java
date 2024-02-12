@@ -4,7 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.model.profile;
 
-import id.ezclouds.biz.ezservice.model.ImageSlide;
+import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -19,7 +19,7 @@ public class CandidateProfile {
     private String contactNumber;
     private String vision;
     private String mission;
-    private List<ImageSlide> portfolios;
+    private List<AppImageGallery> portfolios;
     private List<CandidateBio> candidateBios;
 
     public String getContactNumber() {
@@ -46,11 +46,11 @@ public class CandidateProfile {
         this.mission = mission;
     }
 
-    public List<ImageSlide> getPortfolios() {
+    public List<AppImageGallery> getPortfolios() {
         return portfolios;
     }
 
-    public void setPortfolios(List<ImageSlide> portfolios) {
+    public void setPortfolios(List<AppImageGallery> portfolios) {
         this.portfolios = portfolios;
     }
 

@@ -8,10 +8,7 @@ import id.ezclouds.biz.ezservice.config.BizPublicConfig;
 import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.model.*;
 import id.ezclouds.biz.ezservice.model.news.SimpleNews;
-import id.ezclouds.biz.ezservice.service.dataservice.NewsService;
-import id.ezclouds.biz.ezservice.service.dataservice.AppConfigService;
-import id.ezclouds.biz.ezservice.service.dataservice.ImageSlideService;
-import id.ezclouds.biz.ezservice.service.dataservice.VideoCardService;
+import id.ezclouds.biz.ezservice.service.dataservice.*;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.exception.EzErrorCode;
@@ -36,7 +33,7 @@ public class BizCommonConfigService extends BizBaseService {
     private AppConfigService appConfigService;
 
     @Autowired
-    private ImageSlideService imageSlideService;
+    private AppImageGalleryService appImageGalleryService;
 
     @Autowired
     private NewsService newsService;
@@ -59,7 +56,7 @@ public class BizCommonConfigService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws EzErrorException {
-                String orgId = EzAppContextHolder.getContext().getOrgId();
+                String orgId = getOrgId();
                 AppConfig appConfig = appConfigService
                         .getAppConfigs()
                         .stream()
@@ -90,9 +87,9 @@ public class BizCommonConfigService extends BizBaseService {
     private HomeData composeHomeData(String orgId) {
         HomeData homeData = new HomeData();
         homeData.setPemiluDeadline("2024-02-14 00:00:00");
-        homeData.setHighlightBanners(fetchHomeImageSlide(orgId));
+        homeData.setHighlightBanners(appImageGalleryService.getAppGalleryHomeSlide(orgId));
         homeData.setHighlightNews(fetchSimpleNews(orgId));
-        homeData.setHomePosters(fetchHomePoster(orgId));
+        homeData.setHomePosters(new ArrayList<>());
         homeData.setVideoSections(composeVideoSections(orgId));
         homeData.setMidBannerUrl(AppConstant.TMP_MID_BANNER_URL);
 
@@ -106,23 +103,6 @@ public class BizCommonConfigService extends BizBaseService {
         }
 
         return homeData;
-    }
-
-    private List<ImageSlide> fetchHomeImageSlide(String orgId) {
-        return imageSlideService
-                .getImageSlideHome()
-                .stream()
-                .filter(imageSlide -> orgId.equals(imageSlide.getOrgId()))
-                .collect(Collectors.toList());
-    }
-
-    private List<ImageSlide> fetchHomePoster(String orgId) {
-        return imageSlideService
-                .getHomePosterImage()
-                .stream()
-                .filter(imageSlide -> orgId.equals(imageSlide.getOrgId()))
-                .limit(1)
-                .collect(Collectors.toList());
     }
 
     private List<SimpleNews> fetchSimpleNews(String orgId) {
