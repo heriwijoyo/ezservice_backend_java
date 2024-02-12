@@ -43,6 +43,7 @@ public class BizAdminUploadRequest extends BizMultipartRequest {
         supportedScene.add(BizConstant.UploadScene.ADMIN_APP_GALLERY);
         supportedScene.add(BizConstant.UploadScene.ADMIN_NEWS_GALLERY);
         supportedScene.add(BizConstant.UploadScene.ADMIN_EVENT_GALLERY);
+        supportedScene.add(BizConstant.UploadScene.ADMIN_VIDEO_CARD_GALLERY);
         supportedScene.add(BizConstant.UploadScene.ADMIN_OTHER_GALLERY);
         return supportedScene;
     }
@@ -54,6 +55,7 @@ public class BizAdminUploadRequest extends BizMultipartRequest {
                 case BizConstant.UploadScene.ADMIN_APP_GALLERY:
                 case BizConstant.UploadScene.ADMIN_NEWS_GALLERY:
                 case BizConstant.UploadScene.ADMIN_EVENT_GALLERY:
+                case BizConstant.UploadScene.ADMIN_VIDEO_CARD_GALLERY:
                     return imageTypes;
             }
         }

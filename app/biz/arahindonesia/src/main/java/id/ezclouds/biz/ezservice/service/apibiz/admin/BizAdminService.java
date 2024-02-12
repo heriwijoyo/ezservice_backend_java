@@ -348,6 +348,12 @@ public class BizAdminService extends BizBaseService {
                         filePath = fileInfo.getEventGalleryPath(fileName);
                         break;
 
+                    case BizConstant.UploadScene.ADMIN_VIDEO_CARD_GALLERY:
+                        filePath = fileInfo.getVideoCardGalleryPath(fileName);
+                        coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
+                        bizAdminInnerService.createVideoCard(session.getOrgId(), fileName, request.getExtendInfo());
+                        break;
+
                     case BizConstant.UploadScene.ADMIN_OTHER_GALLERY:
                         filePath = fileInfo.getOtherGalleryPath(fileName);
                         break;

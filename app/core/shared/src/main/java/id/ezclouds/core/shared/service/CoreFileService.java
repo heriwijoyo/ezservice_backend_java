@@ -37,10 +37,14 @@ public class CoreFileService {
             if (Files.notExists(fileInfo.getOrgFilePath())) {
                 Files.createDirectory(fileInfo.getOrgFilePath());
             }
+            if (Files.notExists(fileInfo.getMemberRootPath())) {
+                Files.createDirectory(fileInfo.getMemberRootPath());
+            }
             if (Files.notExists(fileInfo.getMemberFilePath())) {
                 Files.createDirectory(fileInfo.getMemberFilePath());
             }
         } catch (IOException exception) {
+            exception.printStackTrace();
             throw new EzErrorException(EzErrorCode.SYSTEM_FILE_ERROR, "Error creating member directory");
         }
 
@@ -67,6 +71,9 @@ public class CoreFileService {
             }
             if (Files.notExists(fileInfo.getEventGalleryPath())) {
                 Files.createDirectory(fileInfo.getEventGalleryPath());
+            }
+            if (Files.notExists(fileInfo.getVideoCardGalleryPath())) {
+                Files.createDirectory(fileInfo.getVideoCardGalleryPath());
             }
             if (Files.notExists(fileInfo.getOtherGalleryPath())) {
                 Files.createDirectory(fileInfo.getOtherGalleryPath());

@@ -6,8 +6,10 @@ package id.ezclouds.biz.ezservice.service.inner.service;
 
 import id.ezclouds.biz.ezservice.service.dataservice.AppImageGalleryService;
 import id.ezclouds.biz.ezservice.service.dataservice.NewsInnerService;
+import id.ezclouds.biz.ezservice.service.dataservice.VideoCardService;
 import id.ezclouds.biz.ezservice.service.dataservice.request.AppImageGalleryRequest;
 import id.ezclouds.biz.ezservice.service.dataservice.request.NewsCreateRequest;
+import id.ezclouds.biz.ezservice.service.dataservice.request.VideoCardCreateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,9 @@ public class BizAdminInnerService {
 
     @Autowired
     private NewsInnerService newsInnerService;
+
+    @Autowired
+    private VideoCardService videoCardService;
 
     public void createAppImageGallery(String orgId, String fileName, Map<String, String> extInfo) {
         AppImageGalleryRequest request = new AppImageGalleryRequest();
@@ -51,5 +56,21 @@ public class BizAdminInnerService {
             request.setPublishDate(extInfo.get("PUBLISH_DATE"));
         }
         newsInnerService.createNews(request);
+    }
+
+    public void createVideoCard(String orgId, String imageUrl, Map<String, String> extInfo) {
+        VideoCardCreateRequest request = new VideoCardCreateRequest();
+        request.setOrgId(orgId);
+        request.setThumbnail(imageUrl);
+
+        if (extInfo != null && !extInfo.isEmpty()) {
+            request.setSection(extInfo.get("SECTION"));
+            request.setSectionName(extInfo.get("SECTION_NAME"));
+            request.setTitle(extInfo.get("TITLE"));
+            request.setDescription(extInfo.get("DESCRIPTION"));
+            request.setTargetType(extInfo.get("TARGET_TYPE"));
+            request.setTargetUrl(extInfo.get("TARGET_URL"));
+        }
+        videoCardService.createVideoCard(request);
     }
 }

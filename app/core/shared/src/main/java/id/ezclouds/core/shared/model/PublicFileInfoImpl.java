@@ -18,6 +18,7 @@ public class PublicFileInfoImpl implements PublicFileInfo {
     private static final String DIR_APP_GALLERY = "APP_GALLERY";
     private static final String DIR_NEWS_GALLERY = "NEWS_GALLERY";
     private static final String DIR_EVENT_GALLERY = "EVENT_GALLERY";
+    private static final String DIR_VIDEO_CARD_GALLERY = "VIDEO_CARD_GALLERY";
     private static final String DIR_OTHER_GALLERY = "OTHER_GALLERY";
 
     private final String orgId;
@@ -48,6 +49,10 @@ public class PublicFileInfoImpl implements PublicFileInfo {
         return Paths.get(getOrgFiledDir(), DIR_EVENT_GALLERY).toAbsolutePath().normalize();
     }
 
+    public Path getVideoCardGalleryPath() {
+        return Paths.get(getOrgFiledDir(), DIR_VIDEO_CARD_GALLERY).toAbsolutePath().normalize();
+    }
+
     public Path getOtherGalleryPath() {
         return Paths.get(getOrgFiledDir(), DIR_OTHER_GALLERY).toAbsolutePath().normalize();
     }
@@ -65,6 +70,11 @@ public class PublicFileInfoImpl implements PublicFileInfo {
     @Override
     public Path getEventGalleryPath(String fileName) {
         return Paths.get(getOrgFiledDir(), DIR_EVENT_GALLERY, fileName).toAbsolutePath().normalize();
+    }
+
+    @Override
+    public Path getVideoCardGalleryPath(String fileName) {
+        return Paths.get(getOrgFiledDir(), DIR_VIDEO_CARD_GALLERY, fileName).toAbsolutePath().normalize();
     }
 
     @Override

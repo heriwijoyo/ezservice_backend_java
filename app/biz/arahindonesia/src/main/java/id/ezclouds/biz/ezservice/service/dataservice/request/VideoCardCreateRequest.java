@@ -1,61 +1,25 @@
 /**
  * Ezclouds.id
- * Copyright (c) 2020‐2023 All Rights Reserved.
+ * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.common.dal.dataobject;
-
-import javax.persistence.*;
+package id.ezclouds.biz.ezservice.service.dataservice.request;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: VideoCardDO.java, v 0.1 2023‐12‐10 12:08 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: VideoCardCreateRequest.java, v 0.1 2024‐02‐13 3:35 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-@Entity
-@Table(name = "app_video_card")
-public class VideoCardDO {
+public class VideoCardCreateRequest {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
-
-    @Column(name = "org_id")
     private String orgId;
-
-    @Column(name = "section")
     private String section;
-
-    @Column(name = "section_name")
     private String sectionName;
-
-    @Column(name = "title")
     private String title;
-
-    @Column(name = "description")
     private String description;
-
-    @Column(name = "thumbnail")
     private String thumbnail;
-
-    @Column(name = "target_type")
     private String targetType;
-
-    @Column(name = "target_url")
     private String targetUrl;
-
-    @Column(name = "sorting")
-    private int sorting;
-
-    @Column(name = "status")
-    private int status;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private int sorting = 0;
+    private int status = 0;
 
     public String getOrgId() {
         return orgId;

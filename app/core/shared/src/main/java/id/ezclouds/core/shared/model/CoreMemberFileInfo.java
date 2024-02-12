@@ -15,6 +15,8 @@ import java.nio.file.Paths;
  */
 public class CoreMemberFileInfo {
 
+    private static final String PATH_ROOT_MEMBER = "0MEMBER";
+
     private String uploadRootDir;
 
     private final String orgId;
@@ -29,10 +31,6 @@ public class CoreMemberFileInfo {
         return uploadRootDir + "/" + orgId;
     }
 
-    private String getMemberFileDir() {
-        return getOrgFileDir() + "/" + memberId;
-    }
-
     public void setUploadRootDir(String uploadRootDir) {
         this.uploadRootDir = uploadRootDir;
     }
@@ -41,19 +39,23 @@ public class CoreMemberFileInfo {
         return Paths.get(getOrgFileDir()).toAbsolutePath().normalize();
     }
 
+    public Path getMemberRootPath() {
+        return Paths.get(getOrgFileDir(), PATH_ROOT_MEMBER).toAbsolutePath().normalize();
+    }
+
     public Path getMemberFilePath() {
-        return Paths.get(getMemberFileDir()).toAbsolutePath().normalize();
+        return Paths.get(getMemberRootPath().toString(), memberId).toAbsolutePath().normalize();
     }
 
     public String getAvatarLocationWithPrefix() {
-        return getMemberFileDir() +"/"+ CoreConstant.File.PREFIX_AVATAR;
+        return getMemberFilePath().toString() +"/"+ CoreConstant.File.PREFIX_AVATAR;
     }
 
     public String getIdCardLocationWithPrefix() {
-        return getMemberFileDir() +"/"+ CoreConstant.File.PREFIX_ID_CARD;
+        return getMemberFilePath().toString() +"/"+ CoreConstant.File.PREFIX_ID_CARD;
     }
 
     public String getFamilyCardLocationWithPrefix() {
-        return getMemberFileDir() +"/"+ CoreConstant.File.PREFIX_FAMILY_CARD;
+        return getMemberFilePath().toString() +"/"+ CoreConstant.File.PREFIX_FAMILY_CARD;
     }
 }

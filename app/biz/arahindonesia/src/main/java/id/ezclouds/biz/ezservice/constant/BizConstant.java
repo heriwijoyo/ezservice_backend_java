@@ -31,6 +31,7 @@ public class BizConstant {
         public static final String ADMIN_APP_GALLERY = "ADMIN_APP_GALLERY";
         public static final String ADMIN_NEWS_GALLERY = "ADMIN_NEWS_GALLERY";
         public static final String ADMIN_EVENT_GALLERY = "ADMIN_EVENT_GALLERY";
+        public static final String ADMIN_VIDEO_CARD_GALLERY = "ADMIN_VIDEO_CARD_GALLERY";
         public static final String ADMIN_OTHER_GALLERY = "ADMIN_OTHER_GALLERY";
     }
 

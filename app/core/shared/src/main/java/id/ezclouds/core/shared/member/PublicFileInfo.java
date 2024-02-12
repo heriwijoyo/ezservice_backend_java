@@ -18,5 +18,7 @@ public interface PublicFileInfo {
 
     Path getEventGalleryPath(String fileName);
 
+    Path getVideoCardGalleryPath(String fileName);
+
     Path getOtherGalleryPath(String fileName);
 }
