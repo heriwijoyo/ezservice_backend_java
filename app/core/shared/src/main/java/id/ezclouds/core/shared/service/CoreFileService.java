@@ -44,7 +44,6 @@ public class CoreFileService {
                 Files.createDirectory(fileInfo.getMemberFilePath());
             }
         } catch (IOException exception) {
-            exception.printStackTrace();
             throw new EzErrorException(EzErrorCode.SYSTEM_FILE_ERROR, "Error creating member directory");
         }
 
