@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.core.shared.model;
+package id.ezclouds.core.shared.member;
 
 import id.ezclouds.core.shared.constant.CoreConstant;
 

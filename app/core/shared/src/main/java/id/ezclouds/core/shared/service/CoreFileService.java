@@ -8,7 +8,7 @@ import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.shared.member.PrivateFileResolver;
 import id.ezclouds.core.shared.member.PublicFileInfo;
-import id.ezclouds.core.shared.model.CoreMemberFileInfo;
+import id.ezclouds.core.shared.member.CoreMemberFileInfo;
 import id.ezclouds.core.shared.model.PublicFileInfoImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
