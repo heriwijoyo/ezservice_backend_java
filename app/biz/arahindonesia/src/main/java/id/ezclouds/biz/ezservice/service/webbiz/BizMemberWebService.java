@@ -13,7 +13,7 @@ import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
-import id.ezclouds.core.shared.member.PrivateFileResolver;
+import id.ezclouds.core.shared.file.PrivateFileResolver;
 import id.ezclouds.core.shared.member.PublicFileInfo;
 import id.ezclouds.core.shared.model.CoreOrganization;
 import id.ezclouds.core.shared.service.CoreFileService;
