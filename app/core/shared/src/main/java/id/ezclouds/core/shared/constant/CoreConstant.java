@@ -10,14 +10,6 @@ package id.ezclouds.core.shared.constant;
  */
 public class CoreConstant {
 
-    public static final class File {
-        public static final String PATH_MEDIA_IMAGE = "";
-        public static final String PATH_MEDIA_VIDEO = "";
-        public static final String PREFIX_AVATAR = "AVATAR_";
-        public static final String PREFIX_ID_CARD = "IDCARD_";
-        public static final String PREFIX_FAMILY_CARD = "FAMCARD_";
-    }
-
     public static final class ConfigKey {
         public static final String WATZAP_SEND_ENABLE = "WATZAP_SEND_ENABLE";
     }

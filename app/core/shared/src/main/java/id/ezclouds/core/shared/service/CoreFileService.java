@@ -71,6 +71,18 @@ public class CoreFileService {
             if (Files.notExists(fileInfo.getOtherGalleryPath())) {
                 Files.createDirectory(fileInfo.getOtherGalleryPath());
             }
+            if (Files.notExists(fileInfo.getReportPath())) {
+                Files.createDirectory(fileInfo.getReportPath());
+            }
+            if (Files.notExists(fileInfo.getReportImagePath())) {
+                Files.createDirectory(fileInfo.getReportImagePath());
+            }
+            if (Files.notExists(fileInfo.getReportVideoPath())) {
+                Files.createDirectory(fileInfo.getReportVideoPath());
+            }
+            if (Files.notExists(fileInfo.getReportVoicePath())) {
+                Files.createDirectory(fileInfo.getReportVoicePath());
+            }
         } catch (IOException exception) {
             throw new EzErrorException(EzErrorCode.SYSTEM_FILE_ERROR, "Error creating public directory");
         }

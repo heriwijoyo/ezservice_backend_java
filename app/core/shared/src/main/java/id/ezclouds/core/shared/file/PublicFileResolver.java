@@ -21,4 +21,10 @@ public interface PublicFileResolver {
     Path getVideoCardGalleryPath(String fileName);
 
     Path getOtherGalleryPath(String fileName);
+
+    Path getReportImagePath(String fileName);
+
+    Path getReportVideoPath(String fileName);
+
+    Path getReportVoicePath(String fileName);
 }

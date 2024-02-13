@@ -4,8 +4,6 @@
  */
 package id.ezclouds.core.shared.file;
 
-import id.ezclouds.core.shared.file.PublicFileResolver;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -15,11 +13,15 @@ import java.nio.file.Paths;
  */
 public class PublicFileResolverImpl implements PublicFileResolver {
 
-    private static final String DIR_APP_GALLERY = "APP_GALLERY";
-    private static final String DIR_NEWS_GALLERY = "NEWS_GALLERY";
-    private static final String DIR_EVENT_GALLERY = "EVENT_GALLERY";
-    private static final String DIR_VIDEO_CARD_GALLERY = "VIDEO_CARD_GALLERY";
-    private static final String DIR_OTHER_GALLERY = "OTHER_GALLERY";
+    private static final String DIR_APP_GALLERY         = "GALLERY_APP";
+    private static final String DIR_NEWS_GALLERY        = "GALLERY_NEWS";
+    private static final String DIR_EVENT_GALLERY       = "GALLERY_EVENT";
+    private static final String DIR_VIDEO_CARD_GALLERY  = "GALLERY_VIDEO_CARD";
+    private static final String DIR_OTHER_GALLERY       = "GALLERY_OTHER";
+    private static final String DIR_REPORT              = "REPORT";
+    private static final String DIR_REPORT_IMAGE        = "IMAGE";
+    private static final String DIR_REPORT_VIDEO        = "VIDEO";
+    private static final String DIR_REPORT_VOICE        = "VOICE";
 
     private final String orgId;
     private final String uploadRootDir;
@@ -57,6 +59,22 @@ public class PublicFileResolverImpl implements PublicFileResolver {
         return Paths.get(getOrgFiledDir(), DIR_OTHER_GALLERY).toAbsolutePath().normalize();
     }
 
+    public Path getReportPath() {
+        return Paths.get(getOrgFiledDir(), DIR_REPORT).toAbsolutePath().normalize();
+    }
+
+    public Path getReportImagePath() {
+        return Paths.get(getOrgFiledDir(), DIR_REPORT, DIR_REPORT_IMAGE).toAbsolutePath().normalize();
+    }
+
+    public Path getReportVideoPath() {
+        return Paths.get(getOrgFiledDir(), DIR_REPORT, DIR_REPORT_VIDEO).toAbsolutePath().normalize();
+    }
+
+    public Path getReportVoicePath() {
+        return Paths.get(getOrgFiledDir(), DIR_REPORT, DIR_REPORT_VOICE).toAbsolutePath().normalize();
+    }
+
     @Override
     public Path getAppGalleryPath(String fileName) {
         return Paths.get(getOrgFiledDir(), DIR_APP_GALLERY, fileName).toAbsolutePath().normalize();
@@ -80,5 +98,20 @@ public class PublicFileResolverImpl implements PublicFileResolver {
     @Override
     public Path getOtherGalleryPath(String fileName) {
         return Paths.get(getOrgFiledDir(), DIR_OTHER_GALLERY, fileName).toAbsolutePath().normalize();
+    }
+
+    @Override
+    public Path getReportImagePath(String fileName) {
+        return Paths.get(getOrgFiledDir(), DIR_REPORT, DIR_REPORT_IMAGE, fileName).toAbsolutePath().normalize();
+    }
+
+    @Override
+    public Path getReportVideoPath(String fileName) {
+        return Paths.get(getOrgFiledDir(), DIR_REPORT, DIR_REPORT_VIDEO, fileName).toAbsolutePath().normalize();
+    }
+
+    @Override
+    public Path getReportVoicePath(String fileName) {
+        return Paths.get(getOrgFiledDir(), DIR_REPORT, DIR_REPORT_VOICE, fileName).toAbsolutePath().normalize();
     }
 }
