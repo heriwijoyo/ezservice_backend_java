@@ -6,9 +6,9 @@ package id.ezclouds.core.shared.service;
 
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
+import id.ezclouds.core.shared.member.PrivateFileResolver;
 import id.ezclouds.core.shared.member.PublicFileInfo;
 import id.ezclouds.core.shared.model.CoreMemberFileInfo;
-import id.ezclouds.core.shared.member.MemberFileInfo;
 import id.ezclouds.core.shared.model.PublicFileInfoImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ public class CoreFileService {
     @Value("${ezserviceapp.dir.upload.root}")
     private String uploadRootDir;
 
-    public MemberFileInfo resolveMemberFileInfo(String orgId, String memberId) throws EzErrorException {
+    public PrivateFileResolver resolveMemberFileInfo(String orgId, String memberId) throws EzErrorException {
         CoreMemberFileInfo fileInfo = new CoreMemberFileInfo(orgId, memberId);
         fileInfo.setUploadRootDir(uploadRootDir);
 
@@ -47,12 +47,12 @@ public class CoreFileService {
             throw new EzErrorException(EzErrorCode.SYSTEM_FILE_ERROR, "Error creating member directory");
         }
 
-        MemberFileInfo memberFileInfo = new MemberFileInfo(
+        PrivateFileResolver privateFileResolver = new PrivateFileResolver(
                 fileInfo.getAvatarLocationWithPrefix(),
                 fileInfo.getIdCardLocationWithPrefix(),
                 fileInfo.getFamilyCardLocationWithPrefix()
         );
-        return memberFileInfo;
+        return privateFileResolver;
     }
 
     public PublicFileInfo resolvePublicFileInfo(String orgId) {

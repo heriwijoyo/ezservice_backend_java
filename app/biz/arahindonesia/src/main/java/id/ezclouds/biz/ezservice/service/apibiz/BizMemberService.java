@@ -30,7 +30,7 @@ import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
 import id.ezclouds.core.member.service.CoreMemberService;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
-import id.ezclouds.core.shared.member.MemberFileInfo;
+import id.ezclouds.core.shared.member.PrivateFileResolver;
 import id.ezclouds.core.shared.service.CoreFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -161,7 +161,7 @@ public class BizMemberService extends BizBaseService {
             @Override
             public void onBizProcess() throws Exception {
                 CoreAuthMemberSessionInfo memberSession = authMemberSession();
-                MemberFileInfo memberFileInfo = coreFileService
+                PrivateFileResolver privateFileResolver = coreFileService
                         .resolveMemberFileInfo(getOrgId(), memberSession.getMemberId());
 
                 String fileName = DateUtil.getTimeNowToString() + "." + request.getFileExtension();
@@ -171,7 +171,7 @@ public class BizMemberService extends BizBaseService {
                     case AVATAR:
                         coreFileService.storeFile(
                                 request.getMultipartFile().getInputStream(),
-                                memberFileInfo.getAvatarPath(fileName));
+                                privateFileResolver.getAvatarPath(fileName));
                         String nickName = request.getExtendInfo().get(BizConstant.ExtKey.NICKNAME);
                         updateField.put(CoreMemberField.AVATAR, fileName);
                         updateField.put(CoreMemberField.NICKNAME, nickName);
@@ -181,7 +181,7 @@ public class BizMemberService extends BizBaseService {
                     case ID_CARD:
                         coreFileService.storeFile(
                                 request.getMultipartFile().getInputStream(),
-                                memberFileInfo.getIdCardPath(fileName));
+                                privateFileResolver.getIdCardPath(fileName));
                         updateField.put(CoreMemberField.ID_CARD, fileName);
                         coreMemberService.updateMemberField(memberSession.getMemberId(), updateField);
                         break;
@@ -189,7 +189,7 @@ public class BizMemberService extends BizBaseService {
                     case FAMILY_CARD:
                         coreFileService.storeFile(
                                 request.getMultipartFile().getInputStream(),
-                                memberFileInfo.getFamilyCardPath(fileName));
+                                privateFileResolver.getFamilyCardPath(fileName));
                         updateField.put(CoreMemberField.FAMILY_CARD, fileName);
                         coreMemberService.updateMemberField(memberSession.getMemberId(), updateField);
                         break;
