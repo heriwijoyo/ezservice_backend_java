@@ -4,6 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.service.request;
 
+import id.ezclouds.biz.ezservice.constant.BizUploadScene;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
@@ -31,15 +32,17 @@ public abstract class BizMultipartRequest extends BizRequest {
         this.multipartFile = multipartFile;
     }
 
-    public abstract String getScene();
+    public abstract BizUploadScene getScene();
 
-    protected abstract List<String> getSupportedScene();
+    protected abstract List<BizUploadScene> getSupportedScene();
 
     protected abstract List<String> getSupportedContentType();
 
     public void validateMultipartRequest() throws EzErrorException {
-        AssertUtil.notBlank(getScene(), EzErrorCode.UPLOAD_SCENE_EMPTY);
+        AssertUtil.isNotTrue(getScene() == BizUploadScene.UNKNOWN, EzErrorCode.UPLOAD_SCENE_EMPTY);
+        AssertUtil.isTrue(!getSupportedScene().isEmpty(), EzErrorCode.UPLOAD_SCENE_NOT_ALLOWED);
         AssertUtil.isTrue(getSupportedScene().contains(getScene()), EzErrorCode.UPLOAD_SCENE_NOT_ALLOWED);
+
         AssertUtil.notNull(multipartFile, EzErrorCode.MULTIPARTFILE_EMPTY);
         AssertUtil.isTrue(multipartFile.getSize() > 0, EzErrorCode.MULTIPARTFILE_EMPTY);
         AssertUtil.notNull(getSupportedContentType(), EzErrorCode.MULTIPARTFILE_TYPE_UNDEFINED);

@@ -4,8 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.service.request;
 
-import id.ezclouds.biz.ezservice.constant.BizConstant;
-import id.ezclouds.common.util.StringUtil;
+import id.ezclouds.biz.ezservice.constant.BizUploadScene;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,39 +15,37 @@ import java.util.List;
  */
 public class BizMemberUploadRequest extends BizMultipartRequest {
 
-    private String scene;
+    private BizUploadScene scene;
 
     @Override
-    public String getScene() {
+    public BizUploadScene getScene() {
         return scene;
     }
 
-    public void setScene(String scene) {
+    public void setScene(BizUploadScene scene) {
         this.scene = scene;
     }
 
     @Override
-    protected List<String> getSupportedScene() {
-        List<String> supportedScene = new ArrayList<>();
-        supportedScene.add(BizConstant.UploadScene.AVATAR);
-        supportedScene.add(BizConstant.UploadScene.ID_CARD);
-        supportedScene.add(BizConstant.UploadScene.FAMILY_CARD);
-        supportedScene.add(BizConstant.UploadScene.REPORT_IMAGE);
-        supportedScene.add(BizConstant.UploadScene.REPORT_VIDEO);
-        supportedScene.add(BizConstant.UploadScene.REPORT_VOICE);
+    protected List<BizUploadScene> getSupportedScene() {
+        List<BizUploadScene> supportedScene = new ArrayList<>();
+        supportedScene.add(BizUploadScene.AVATAR);
+        supportedScene.add(BizUploadScene.ID_CARD);
+        supportedScene.add(BizUploadScene.FAMILY_CARD);
+        supportedScene.add(BizUploadScene.REPORT_IMAGE);
+        supportedScene.add(BizUploadScene.REPORT_VIDEO);
+        supportedScene.add(BizUploadScene.REPORT_VOICE);
         return supportedScene;
     }
 
     @Override
     protected List<String> getSupportedContentType() {
-        if (StringUtil.isNotBlank(scene)) {
-            switch (scene) {
-                case BizConstant.UploadScene.AVATAR:
-                case BizConstant.UploadScene.ID_CARD:
-                case BizConstant.UploadScene.FAMILY_CARD:
-                case BizConstant.UploadScene.REPORT_IMAGE:
-                    return imageTypes;
-            }
+        switch (scene) {
+            case AVATAR:
+            case ID_CARD:
+            case FAMILY_CARD:
+            case REPORT_IMAGE:
+                return imageTypes;
         }
         return new ArrayList<>();
     }

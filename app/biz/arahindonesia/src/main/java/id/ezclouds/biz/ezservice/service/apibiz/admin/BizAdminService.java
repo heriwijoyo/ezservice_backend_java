@@ -332,29 +332,29 @@ public class BizAdminService extends BizBaseService {
 
                 Path filePath;
                 switch (request.getScene()) {
-                    case BizConstant.UploadScene.ADMIN_APP_GALLERY:
+                    case ADMIN_APP_GALLERY:
                         filePath = fileInfo.getAppGalleryPath(fileName);
                         coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
                         bizAdminInnerService.createAppImageGallery(session.getOrgId(), fileName, request.getExtendInfo());
                         break;
 
-                    case BizConstant.UploadScene.ADMIN_NEWS_GALLERY:
+                    case ADMIN_NEWS_GALLERY:
                         filePath = fileInfo.getNewsGalleryPath(fileName);
                         coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
                         bizAdminInnerService.createNews(session.getOrgId(), fileName, request.getExtendInfo());
                         break;
 
-                    case BizConstant.UploadScene.ADMIN_EVENT_GALLERY:
+                    case ADMIN_EVENT_GALLERY:
                         filePath = fileInfo.getEventGalleryPath(fileName);
                         break;
 
-                    case BizConstant.UploadScene.ADMIN_VIDEO_CARD_GALLERY:
+                    case ADMIN_VIDEO_CARD_GALLERY:
                         filePath = fileInfo.getVideoCardGalleryPath(fileName);
                         coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
                         bizAdminInnerService.createVideoCard(session.getOrgId(), fileName, request.getExtendInfo());
                         break;
 
-                    case BizConstant.UploadScene.ADMIN_OTHER_GALLERY:
+                    case ADMIN_OTHER_GALLERY:
                         filePath = fileInfo.getOtherGalleryPath(fileName);
                         break;
 

@@ -4,9 +4,8 @@
  */
 package id.ezclouds.biz.ezservice.service.request.admin;
 
-import id.ezclouds.biz.ezservice.constant.BizConstant;
+import id.ezclouds.biz.ezservice.constant.BizUploadScene;
 import id.ezclouds.biz.ezservice.service.request.BizMultipartRequest;
-import id.ezclouds.common.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,7 @@ import java.util.List;
 public class BizAdminUploadRequest extends BizMultipartRequest {
 
     private String sessionId;
-    private String scene;
+    private BizUploadScene scene;
 
     public String getSessionId() {
         return sessionId;
@@ -28,36 +27,34 @@ public class BizAdminUploadRequest extends BizMultipartRequest {
         this.sessionId = sessionId;
     }
 
-    public void setScene(String scene) {
+    public void setScene(BizUploadScene scene) {
         this.scene = scene;
     }
 
     @Override
-    public String getScene() {
+    public BizUploadScene getScene() {
         return scene;
     }
 
     @Override
-    protected List<String> getSupportedScene() {
-        List<String> supportedScene = new ArrayList<>();
-        supportedScene.add(BizConstant.UploadScene.ADMIN_APP_GALLERY);
-        supportedScene.add(BizConstant.UploadScene.ADMIN_NEWS_GALLERY);
-        supportedScene.add(BizConstant.UploadScene.ADMIN_EVENT_GALLERY);
-        supportedScene.add(BizConstant.UploadScene.ADMIN_VIDEO_CARD_GALLERY);
-        supportedScene.add(BizConstant.UploadScene.ADMIN_OTHER_GALLERY);
+    protected List<BizUploadScene> getSupportedScene() {
+        List<BizUploadScene> supportedScene = new ArrayList<>();
+        supportedScene.add(BizUploadScene.ADMIN_APP_GALLERY);
+        supportedScene.add(BizUploadScene.ADMIN_NEWS_GALLERY);
+        supportedScene.add(BizUploadScene.ADMIN_EVENT_GALLERY);
+        supportedScene.add(BizUploadScene.ADMIN_VIDEO_CARD_GALLERY);
+        supportedScene.add(BizUploadScene.ADMIN_OTHER_GALLERY);
         return supportedScene;
     }
 
     @Override
     protected List<String> getSupportedContentType() {
-        if (StringUtil.isNotBlank(scene)) {
-            switch (scene) {
-                case BizConstant.UploadScene.ADMIN_APP_GALLERY:
-                case BizConstant.UploadScene.ADMIN_NEWS_GALLERY:
-                case BizConstant.UploadScene.ADMIN_EVENT_GALLERY:
-                case BizConstant.UploadScene.ADMIN_VIDEO_CARD_GALLERY:
-                    return imageTypes;
-            }
+        switch (scene) {
+            case ADMIN_APP_GALLERY:
+            case ADMIN_NEWS_GALLERY:
+            case ADMIN_EVENT_GALLERY:
+            case ADMIN_VIDEO_CARD_GALLERY:
+                return imageTypes;
         }
         return new ArrayList<>();
     }

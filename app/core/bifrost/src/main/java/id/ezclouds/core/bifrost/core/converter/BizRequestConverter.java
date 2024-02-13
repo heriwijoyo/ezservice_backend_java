@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.bifrost.core.converter;
 
+import id.ezclouds.biz.ezservice.constant.BizUploadScene;
 import id.ezclouds.biz.ezservice.model.member.BizGender;
 import id.ezclouds.biz.ezservice.service.request.*;
 import id.ezclouds.core.bifrost.app.api.request.*;
@@ -102,12 +103,12 @@ public class BizRequestConverter<T extends BizRequest> {
         return null;
     };
 
-    public static Handler<BizMemberUploadRequest> MEDIA_UPLOAD = apiRequest -> {
+    public static Handler<BizMemberUploadRequest> BIZ_COMMON_UPLOAD = apiRequest -> {
         if (apiRequest instanceof MemberUploadRequest) {
             MemberUploadRequest request = (MemberUploadRequest) apiRequest;
             BizMemberUploadRequest bizRequest = new BizMemberUploadRequest();
             bizRequest.getExtendInfo().putAll(request.getExtendInfo());
-            bizRequest.setScene(request.getScene());
+            bizRequest.setScene(BizUploadScene.getByCode(request.getScene()));
             return bizRequest;
         }
         return null;

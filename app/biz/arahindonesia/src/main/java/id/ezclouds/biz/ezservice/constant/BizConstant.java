@@ -21,20 +21,6 @@ public class BizConstant {
         public static final String NICKNAME = "NICKNAME";
     }
 
-    public static final class UploadScene {
-        public static final String AVATAR = "AVATAR";
-        public static final String ID_CARD = "ID_CARD";
-        public static final String FAMILY_CARD = "FAMILY_CARD";
-        public static final String REPORT_IMAGE = "REPORT_IMAGE";
-        public static final String REPORT_VIDEO = "REPORT_VIDEO";
-        public static final String REPORT_VOICE = "REPORT_VOICE";
-        public static final String ADMIN_APP_GALLERY = "ADMIN_APP_GALLERY";
-        public static final String ADMIN_NEWS_GALLERY = "ADMIN_NEWS_GALLERY";
-        public static final String ADMIN_EVENT_GALLERY = "ADMIN_EVENT_GALLERY";
-        public static final String ADMIN_VIDEO_CARD_GALLERY = "ADMIN_VIDEO_CARD_GALLERY";
-        public static final String ADMIN_OTHER_GALLERY = "ADMIN_OTHER_GALLERY";
-    }
-
     public static final class MemberFlag {
         public static final String NEED_UPDATE_PASSWORD = "NEED_UPDATE_PASSWORD";
     }

@@ -168,7 +168,7 @@ public class BizMemberService extends BizBaseService {
 
                 Map<String, String> updateField = new HashMap<>();
                 switch (request.getScene()) {
-                    case BizConstant.UploadScene.AVATAR:
+                    case AVATAR:
                         coreFileService.storeFile(
                                 request.getMultipartFile().getInputStream(),
                                 memberFileInfo.getAvatarPath(fileName));
@@ -178,7 +178,7 @@ public class BizMemberService extends BizBaseService {
                         coreMemberService.updateMemberField(memberSession.getMemberId(), updateField);
                         break;
 
-                    case BizConstant.UploadScene.ID_CARD:
+                    case ID_CARD:
                         coreFileService.storeFile(
                                 request.getMultipartFile().getInputStream(),
                                 memberFileInfo.getIdCardPath(fileName));
@@ -186,7 +186,7 @@ public class BizMemberService extends BizBaseService {
                         coreMemberService.updateMemberField(memberSession.getMemberId(), updateField);
                         break;
 
-                    case BizConstant.UploadScene.FAMILY_CARD:
+                    case FAMILY_CARD:
                         coreFileService.storeFile(
                                 request.getMultipartFile().getInputStream(),
                                 memberFileInfo.getFamilyCardPath(fileName));

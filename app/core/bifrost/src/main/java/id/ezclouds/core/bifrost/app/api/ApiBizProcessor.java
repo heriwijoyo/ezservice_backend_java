@@ -95,7 +95,7 @@ public class ApiBizProcessor implements BizProcessor {
                 return bizMemberService.registerMember(bizRequest);
 
             case API_MEMBER_UPLOAD_MEDIA:
-                BizRequestConverter<BizMemberUploadRequest> uploadConverter = new BizRequestConverter<>(BizRequestConverter.MEDIA_UPLOAD);
+                BizRequestConverter<BizMemberUploadRequest> uploadConverter = new BizRequestConverter<>(BizRequestConverter.BIZ_COMMON_UPLOAD);
                 BizMemberUploadRequest uploadRequest = uploadConverter.convert(apiRequest);
                 uploadRequest.setMultipartFile(file);
                 return bizMemberService.memberUploadMedia(uploadRequest);
