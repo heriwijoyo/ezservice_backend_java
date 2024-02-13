@@ -30,12 +30,6 @@ public class CoreFileService {
         PrivateFileResolverImpl privateFileResolver = new PrivateFileResolverImpl(uploadRootDir, orgId, memberId);
 
         try {
-            if (Files.notExists(privateFileResolver.getOrgFilePath())) {
-                Files.createDirectory(privateFileResolver.getOrgFilePath());
-            }
-            if (Files.notExists(privateFileResolver.getMemberRootPath())) {
-                Files.createDirectory(privateFileResolver.getMemberRootPath());
-            }
             if (Files.notExists(privateFileResolver.getMemberFilePath())) {
                 Files.createDirectory(privateFileResolver.getMemberFilePath());
             }
@@ -47,7 +41,7 @@ public class CoreFileService {
     }
 
     public PublicFileResolver resolvePublicFileInfo(String orgId) {
-        return new PublicFileResolverImpl(orgId, uploadRootDir);
+        return new PublicFileResolverImpl(uploadRootDir, orgId);
     }
 
     public void storeFile(InputStream inputStream, Path targetPath) throws EzErrorException {
@@ -59,7 +53,8 @@ public class CoreFileService {
     }
 
     public void initPublicFileDirectory(String orgId) {
-        PublicFileInitializer fileInitializer = new PublicFileInitializer(orgId, uploadRootDir);
+        PublicFileInitializer fileInitializer = new PublicFileInitializer(uploadRootDir, orgId);
+        fileInitializer.initPublicPaths();
 
         for (Path publicPath : fileInitializer.getPublicPaths()) {
             if (Files.notExists(publicPath)) {

@@ -13,20 +13,20 @@ import java.nio.file.Paths;
  */
 public class PublicFileResolverImpl implements PublicFileResolver {
 
-    private static final String DIR_APP_GALLERY         = "GALLERY_APP";
-    private static final String DIR_NEWS_GALLERY        = "GALLERY_NEWS";
-    private static final String DIR_EVENT_GALLERY       = "GALLERY_EVENT";
-    private static final String DIR_VIDEO_CARD_GALLERY  = "GALLERY_VIDEO_CARD";
-    private static final String DIR_OTHER_GALLERY       = "GALLERY_OTHER";
-    private static final String DIR_REPORT              = "REPORT";
-    private static final String DIR_REPORT_IMAGE        = "IMAGE";
-    private static final String DIR_REPORT_VIDEO        = "VIDEO";
-    private static final String DIR_REPORT_VOICE        = "VOICE";
+    private static final String DIR_APP_GALLERY         = PublicFileInitializer.DIR_APP_GALLERY;
+    private static final String DIR_NEWS_GALLERY        = PublicFileInitializer.DIR_NEWS_GALLERY;
+    private static final String DIR_EVENT_GALLERY       = PublicFileInitializer.DIR_EVENT_GALLERY;
+    private static final String DIR_VIDEO_CARD_GALLERY  = PublicFileInitializer.DIR_VIDEO_CARD_GALLERY;
+    private static final String DIR_OTHER_GALLERY       = PublicFileInitializer.DIR_OTHER_GALLERY;
+    private static final String DIR_REPORT              = PublicFileInitializer.DIR_REPORT;
+    private static final String DIR_REPORT_IMAGE        = PublicFileInitializer.DIR_REPORT_IMAGE;
+    private static final String DIR_REPORT_VIDEO        = PublicFileInitializer.DIR_REPORT_VIDEO;
+    private static final String DIR_REPORT_VOICE        = PublicFileInitializer.DIR_REPORT_VOICE;
 
     private final String orgId;
     private final String uploadRootDir;
 
-    public PublicFileResolverImpl(String orgId, String uploadRootDir) {
+    public PublicFileResolverImpl(String uploadRootDir, String orgId) {
         this.orgId = orgId;
         this.uploadRootDir = uploadRootDir;
     }

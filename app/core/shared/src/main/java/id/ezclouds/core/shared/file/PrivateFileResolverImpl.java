@@ -4,8 +4,6 @@
  */
 package id.ezclouds.core.shared.file;
 
-import id.ezclouds.core.shared.file.PrivateFileResolver;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -15,18 +13,17 @@ import java.nio.file.Paths;
  */
 public class PrivateFileResolverImpl implements PrivateFileResolver {
 
-    private static final String PATH_ROOT_MEMBER = "0MEMBER";
+    private static final String DIR_MEMBER_ROOT = PublicFileInitializer.DIR_MEMBER_ROOT;
+
     private static final String PREFIX_AVATAR = "AVATAR_";
     private static final String PREFIX_ID_CARD = "IDCARD_";
     private static final String PREFIX_FAMILY_CARD = "FAMCARD_";
 
-    private final String uploadRootDir;
-    private final String orgId;
+    private PublicFileInitializer publicFileInitializer;
     private final String memberId;
 
     public PrivateFileResolverImpl(String uploadRootDir, String orgId, String memberId) {
-        this.uploadRootDir = uploadRootDir;
-        this.orgId = orgId;
+        this.publicFileInitializer = new PublicFileInitializer(uploadRootDir, orgId);
         this.memberId = memberId;
     }
 
@@ -48,17 +45,8 @@ public class PrivateFileResolverImpl implements PrivateFileResolver {
                 .toAbsolutePath().normalize();
     }
 
-    private String getOrgFileDir() {
-        return uploadRootDir + "/" + orgId;
-    }
-
-
-    public Path getOrgFilePath() {
-        return Paths.get(getOrgFileDir()).toAbsolutePath().normalize();
-    }
-
-    public Path getMemberRootPath() {
-        return Paths.get(getOrgFileDir(), PATH_ROOT_MEMBER).toAbsolutePath().normalize();
+    private Path getMemberRootPath() {
+        return Paths.get(publicFileInitializer.getOrgFiledDir(), DIR_MEMBER_ROOT).toAbsolutePath().normalize();
     }
 
     public Path getMemberFilePath() {

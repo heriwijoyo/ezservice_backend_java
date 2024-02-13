@@ -15,33 +15,32 @@ import java.util.List;
  */
 public class PublicFileInitializer {
 
-    private static final String DIR_APP_GALLERY         = "GALLERY_APP";
-    private static final String DIR_NEWS_GALLERY        = "GALLERY_NEWS";
-    private static final String DIR_EVENT_GALLERY       = "GALLERY_EVENT";
-    private static final String DIR_VIDEO_CARD_GALLERY  = "GALLERY_VIDEO_CARD";
-    private static final String DIR_OTHER_GALLERY       = "GALLERY_OTHER";
-    private static final String DIR_REPORT              = "REPORT";
-    private static final String DIR_REPORT_IMAGE        = "IMAGE";
-    private static final String DIR_REPORT_VIDEO        = "VIDEO";
-    private static final String DIR_REPORT_VOICE        = "VOICE";
+    public static final String DIR_APP_GALLERY         = "GALLERY_APP";
+    public static final String DIR_NEWS_GALLERY        = "GALLERY_NEWS";
+    public static final String DIR_EVENT_GALLERY       = "GALLERY_EVENT";
+    public static final String DIR_VIDEO_CARD_GALLERY  = "GALLERY_VIDEO_CARD";
+    public static final String DIR_OTHER_GALLERY       = "GALLERY_OTHER";
+    public static final String DIR_REPORT              = "REPORT";
+    public static final String DIR_REPORT_IMAGE        = "IMAGE";
+    public static final String DIR_REPORT_VIDEO        = "VIDEO";
+    public static final String DIR_REPORT_VOICE        = "VOICE";
 
-    private static final String DIR_MEMBER_ROOT         = "0MEMBER";
+    public static final String DIR_MEMBER_ROOT         = "0MEMBER";
 
-    private final String orgId;
     private final String uploadRootDir;
+    private final String orgId;
     private List<Path> publicPaths;
 
-    public PublicFileInitializer(String orgId, String uploadRootDir) {
-        this.orgId = orgId;
+    public PublicFileInitializer(String uploadRootDir, String orgId) {
         this.uploadRootDir = uploadRootDir;
-        initPublicPaths();
+        this.orgId = orgId;
     }
 
-    private String getOrgFiledDir() {
+    public String getOrgFiledDir() {
         return uploadRootDir + "/" + orgId;
     }
 
-    private void initPublicPaths() {
+    public void initPublicPaths() {
         publicPaths = new ArrayList<>();
         publicPaths.add(Paths.get(getOrgFiledDir()).toAbsolutePath().normalize());
         publicPaths.add(Paths.get(getOrgFiledDir(), DIR_APP_GALLERY).toAbsolutePath().normalize());
