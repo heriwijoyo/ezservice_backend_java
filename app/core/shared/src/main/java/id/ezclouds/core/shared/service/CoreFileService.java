@@ -8,8 +8,8 @@ import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.shared.file.PrivateFileResolver;
 import id.ezclouds.core.shared.file.PrivateFileResolverImpl;
-import id.ezclouds.core.shared.member.PublicFileInfo;
-import id.ezclouds.core.shared.model.PublicFileInfoImpl;
+import id.ezclouds.core.shared.member.PublicFileResolver;
+import id.ezclouds.core.shared.model.PublicFileResolverImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -49,8 +49,8 @@ public class CoreFileService {
         return privateFileResolver;
     }
 
-    public PublicFileInfo resolvePublicFileInfo(String orgId) {
-        PublicFileInfoImpl fileInfo = new PublicFileInfoImpl(orgId, uploadRootDir);
+    public PublicFileResolver resolvePublicFileInfo(String orgId) {
+        PublicFileResolverImpl fileInfo = new PublicFileResolverImpl(orgId, uploadRootDir);
 
         try {
             if (Files.notExists(fileInfo.getOrgPath())) {

@@ -8,9 +8,9 @@ import java.nio.file.Path;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: PublicFileInfo.java, v 0.1 2024‐02‐09 2:26 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: PublicFileResolver.java, v 0.1 2024‐02‐09 2:26 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public interface PublicFileInfo {
+public interface PublicFileResolver {
 
     Path getAppGalleryPath(String fileName);
 

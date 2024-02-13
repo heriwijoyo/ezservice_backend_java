@@ -14,7 +14,7 @@ import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.shared.file.PrivateFileResolver;
-import id.ezclouds.core.shared.member.PublicFileInfo;
+import id.ezclouds.core.shared.member.PublicFileResolver;
 import id.ezclouds.core.shared.model.CoreOrganization;
 import id.ezclouds.core.shared.service.CoreFileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,7 +84,7 @@ public class BizMemberWebService {
                     }
 
                 } else if (request.getScene().getRestriction() == ImageRestriction.PUBLIC){
-                    PublicFileInfo fileInfo = coreFileService
+                    PublicFileResolver fileInfo = coreFileService
                             .resolvePublicFileInfo(organization.getOrgId());
 
                     switch (request.getScene()) {

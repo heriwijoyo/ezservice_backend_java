@@ -26,7 +26,7 @@ import id.ezclouds.core.auth.request.CoreAdminCommonSessionCreateRequest;
 import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.service.CoreMemberService;
-import id.ezclouds.core.shared.member.PublicFileInfo;
+import id.ezclouds.core.shared.member.PublicFileResolver;
 import id.ezclouds.core.shared.model.CoreAdminBOMenu;
 import id.ezclouds.core.shared.model.CoreAdminBOPermission;
 import id.ezclouds.core.shared.model.CoreAdminDashboard;
@@ -302,7 +302,7 @@ public class BizAdminService extends BizBaseService {
             @Override
             public void onBizProcess() throws Exception {
                 CoreAuthAdminSession session = coreAuthService.adminAuthWebSessionId(request.getSessionId());
-                PublicFileInfo fileInfo = coreFileService.resolvePublicFileInfo(session.getOrgId());
+                PublicFileResolver fileInfo = coreFileService.resolvePublicFileInfo(session.getOrgId());
 
                 String fileName = DateUtil.getTimeNowToString() + "." + request.getFileExtension();
 

@@ -4,16 +4,16 @@
  */
 package id.ezclouds.core.shared.model;
 
-import id.ezclouds.core.shared.member.PublicFileInfo;
+import id.ezclouds.core.shared.member.PublicFileResolver;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: PublicFileInfoImpl.java, v 0.1 2024‐02‐12 9:52 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: PublicFileResolverImpl.java, v 0.1 2024‐02‐12 9:52 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class PublicFileInfoImpl implements PublicFileInfo {
+public class PublicFileResolverImpl implements PublicFileResolver {
 
     private static final String DIR_APP_GALLERY = "APP_GALLERY";
     private static final String DIR_NEWS_GALLERY = "NEWS_GALLERY";
@@ -24,7 +24,7 @@ public class PublicFileInfoImpl implements PublicFileInfo {
     private final String orgId;
     private final String uploadRootDir;
 
-    public PublicFileInfoImpl(String orgId, String uploadRootDir) {
+    public PublicFileResolverImpl(String orgId, String uploadRootDir) {
         this.orgId = orgId;
         this.uploadRootDir = uploadRootDir;
     }
