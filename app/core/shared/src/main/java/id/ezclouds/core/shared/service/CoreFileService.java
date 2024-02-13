@@ -7,8 +7,8 @@ package id.ezclouds.core.shared.service;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.shared.member.PrivateFileResolver;
+import id.ezclouds.core.shared.member.PrivateFileResolverImpl;
 import id.ezclouds.core.shared.member.PublicFileInfo;
-import id.ezclouds.core.shared.member.CoreMemberFileInfo;
 import id.ezclouds.core.shared.model.PublicFileInfoImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -30,28 +30,22 @@ public class CoreFileService {
     private String uploadRootDir;
 
     public PrivateFileResolver resolveMemberFileInfo(String orgId, String memberId) throws EzErrorException {
-        CoreMemberFileInfo fileInfo = new CoreMemberFileInfo(orgId, memberId);
-        fileInfo.setUploadRootDir(uploadRootDir);
+        PrivateFileResolverImpl privateFileResolver = new PrivateFileResolverImpl(uploadRootDir, orgId, memberId);
 
         try {
-            if (Files.notExists(fileInfo.getOrgFilePath())) {
-                Files.createDirectory(fileInfo.getOrgFilePath());
+            if (Files.notExists(privateFileResolver.getOrgFilePath())) {
+                Files.createDirectory(privateFileResolver.getOrgFilePath());
             }
-            if (Files.notExists(fileInfo.getMemberRootPath())) {
-                Files.createDirectory(fileInfo.getMemberRootPath());
+            if (Files.notExists(privateFileResolver.getMemberRootPath())) {
+                Files.createDirectory(privateFileResolver.getMemberRootPath());
             }
-            if (Files.notExists(fileInfo.getMemberFilePath())) {
-                Files.createDirectory(fileInfo.getMemberFilePath());
+            if (Files.notExists(privateFileResolver.getMemberFilePath())) {
+                Files.createDirectory(privateFileResolver.getMemberFilePath());
             }
         } catch (IOException exception) {
             throw new EzErrorException(EzErrorCode.SYSTEM_FILE_ERROR, "Error creating member directory");
         }
 
-        PrivateFileResolver privateFileResolver = new PrivateFileResolver(
-                fileInfo.getAvatarLocationWithPrefix(),
-                fileInfo.getIdCardLocationWithPrefix(),
-                fileInfo.getFamilyCardLocationWithPrefix()
-        );
         return privateFileResolver;
     }
 
