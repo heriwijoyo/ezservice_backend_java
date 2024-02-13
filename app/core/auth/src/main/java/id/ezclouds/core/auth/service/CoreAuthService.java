@@ -449,7 +449,7 @@ public class CoreAuthService {
         innerAuthService.adminLogoutSession(sessionId);
     }
 
-    @Cacheable("core_auth_app_client")
+    @Cacheable("coreAuthAppClient")
     public List<CoreAuthAppClient> getActiveAppClients() {
         return ezAuthAppClientRepository
                 .findActiveAppClients()

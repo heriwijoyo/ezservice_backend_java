@@ -27,7 +27,7 @@ public class VideoCardService {
     @Autowired
     private VideoCardRepository videoCardRepository;
 
-    @Cacheable("video_cards")
+    @Cacheable("videoCard")
     public List<VideoCard> getAllVideoCards() {
         return videoCardRepository
                 .findAllActive()

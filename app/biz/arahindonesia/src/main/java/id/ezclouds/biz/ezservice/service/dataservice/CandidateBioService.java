@@ -24,7 +24,7 @@ public class CandidateBioService {
     @Autowired
     private CandidateBioRepository candidateBioRepository;
 
-    @Cacheable("candidate_bios")
+    @Cacheable("candidateBio")
     public List<CandidateBio> getActiveCandidateBios() {
         return candidateBioRepository
                 .getActiveCandidateBios()

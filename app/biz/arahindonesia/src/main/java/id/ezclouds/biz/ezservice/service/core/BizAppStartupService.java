@@ -108,7 +108,7 @@ public class BizAppStartupService {
         cacheManager
                 .getCacheNames()
                 .forEach(cacheName -> {
-                    System.out.println("refreshed cache: " + cacheName);
+                    System.out.println("Refreshed Cache: " + cacheName);
                 });
 
         return cacheNames;

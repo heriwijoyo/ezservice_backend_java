@@ -33,7 +33,7 @@ public class AppSubOrganizationService {
                 .orElse(null);
     }
 
-    @Cacheable(value = "app_sub_organizations")
+    @Cacheable(value = "appSubOrganization")
     public List<BizSubOrganization> getAllSubOrganization() {
         return appSubOrganizationRepository
                 .findAll()

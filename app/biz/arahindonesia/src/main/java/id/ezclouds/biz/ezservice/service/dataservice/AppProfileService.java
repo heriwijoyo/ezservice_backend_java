@@ -36,7 +36,7 @@ public class AppProfileService {
         return appProfile;
     }
 
-    @Cacheable("app_profile")
+    @Cacheable("appProfile")
     public List<AppProfileDO> getAllAppProfile() {
         return appProfileRepository.findAll();
     }

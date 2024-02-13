@@ -29,7 +29,7 @@ public class AppConfigService {
     @Autowired
     private AppCommonMessageTemplateRepository appCommonMessageTemplateRepository;
 
-    @Cacheable("app_configs")
+    @Cacheable("appConfig")
     public List<AppConfig> getAppConfigs() {
         return appConfigRepository
                 .findAll()
@@ -38,7 +38,7 @@ public class AppConfigService {
                 .collect(Collectors.toList());
     }
 
-    @Cacheable("app_message_template")
+    @Cacheable("appMessageTemplate")
     public List<AppMessageTemplate> getMessageTemplates() {
         return appCommonMessageTemplateRepository
                 .findAll()

@@ -42,7 +42,7 @@ public class CoreConfigService {
         return Boolean.parseBoolean(configValue);
     }
 
-    @Cacheable("core_config")
+    @Cacheable("coreConfig")
     public List<CoreConfig> getCoreConfigs() {
         return coreConfigRepository.findAll()
                 .stream()

@@ -24,7 +24,7 @@ public class CandidateProfileItemService {
     @Autowired
     private CandidateProfileItemRepository candidateProfileItemRepository;
 
-    @Cacheable("candidate_profile_item")
+    @Cacheable("candidateProfileItem")
     public List<CandidateProfileItem> getCandidateProfileItems() {
         return candidateProfileItemRepository
                 .findAll()
