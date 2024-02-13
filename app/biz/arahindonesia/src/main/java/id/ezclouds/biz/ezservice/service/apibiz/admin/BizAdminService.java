@@ -26,7 +26,7 @@ import id.ezclouds.core.auth.request.CoreAdminCommonSessionCreateRequest;
 import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.service.CoreMemberService;
-import id.ezclouds.core.shared.member.PublicFileResolver;
+import id.ezclouds.core.shared.file.PublicFileResolver;
 import id.ezclouds.core.shared.model.CoreAdminBOMenu;
 import id.ezclouds.core.shared.model.CoreAdminBOPermission;
 import id.ezclouds.core.shared.model.CoreAdminDashboard;
