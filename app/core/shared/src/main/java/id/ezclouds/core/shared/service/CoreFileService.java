@@ -6,10 +6,7 @@ package id.ezclouds.core.shared.service;
 
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
-import id.ezclouds.core.shared.file.PrivateFileResolver;
-import id.ezclouds.core.shared.file.PrivateFileResolverImpl;
-import id.ezclouds.core.shared.file.PublicFileResolver;
-import id.ezclouds.core.shared.file.PublicFileResolverImpl;
+import id.ezclouds.core.shared.file.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -50,44 +47,7 @@ public class CoreFileService {
     }
 
     public PublicFileResolver resolvePublicFileInfo(String orgId) {
-        PublicFileResolverImpl fileInfo = new PublicFileResolverImpl(orgId, uploadRootDir);
-
-        try {
-            if (Files.notExists(fileInfo.getOrgPath())) {
-                Files.createDirectory(fileInfo.getOrgPath());
-            }
-            if (Files.notExists(fileInfo.getAppGalleryPath())) {
-                Files.createDirectory(fileInfo.getAppGalleryPath());
-            }
-            if (Files.notExists(fileInfo.getNewsGalleryPath())) {
-                Files.createDirectory(fileInfo.getNewsGalleryPath());
-            }
-            if (Files.notExists(fileInfo.getEventGalleryPath())) {
-                Files.createDirectory(fileInfo.getEventGalleryPath());
-            }
-            if (Files.notExists(fileInfo.getVideoCardGalleryPath())) {
-                Files.createDirectory(fileInfo.getVideoCardGalleryPath());
-            }
-            if (Files.notExists(fileInfo.getOtherGalleryPath())) {
-                Files.createDirectory(fileInfo.getOtherGalleryPath());
-            }
-            if (Files.notExists(fileInfo.getReportPath())) {
-                Files.createDirectory(fileInfo.getReportPath());
-            }
-            if (Files.notExists(fileInfo.getReportImagePath())) {
-                Files.createDirectory(fileInfo.getReportImagePath());
-            }
-            if (Files.notExists(fileInfo.getReportVideoPath())) {
-                Files.createDirectory(fileInfo.getReportVideoPath());
-            }
-            if (Files.notExists(fileInfo.getReportVoicePath())) {
-                Files.createDirectory(fileInfo.getReportVoicePath());
-            }
-        } catch (IOException exception) {
-            throw new EzErrorException(EzErrorCode.SYSTEM_FILE_ERROR, "Error creating public directory");
-        }
-
-        return fileInfo;
+        return new PublicFileResolverImpl(orgId, uploadRootDir);
     }
 
     public void storeFile(InputStream inputStream, Path targetPath) throws EzErrorException {
@@ -95,6 +55,23 @@ public class CoreFileService {
             Files.copy(inputStream, targetPath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException exception) {
             throw new EzErrorException(EzErrorCode.SYSTEM_STORE_FILE_FAILED, "Failed to store member file");
+        }
+    }
+
+    public void initPublicFileDirectory(String orgId) {
+        PublicFileInitializer fileInitializer = new PublicFileInitializer(orgId, uploadRootDir);
+
+        for (Path publicPath : fileInitializer.getPublicPaths()) {
+            if (Files.notExists(publicPath)) {
+                try {
+                    Files.createDirectory(publicPath);
+                    System.out.println("Directory Created Success: " + publicPath.toString());
+                } catch (IOException exception) {
+                    System.out.println("Directory Created Failed: " + publicPath.toString());
+                }
+            } else {
+                System.out.println("Directory Exist: " + publicPath.toString());
+            }
         }
     }
 }

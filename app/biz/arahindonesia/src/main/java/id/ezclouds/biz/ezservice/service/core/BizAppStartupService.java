@@ -9,6 +9,7 @@ import id.ezclouds.biz.ezservice.subbiz.arahindonesia.service.AppSubOrganization
 import id.ezclouds.core.auth.service.CoreAuthService;
 import id.ezclouds.core.shared.service.CoreAdminService;
 import id.ezclouds.core.shared.service.CoreConfigService;
+import id.ezclouds.core.shared.service.CoreFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.cache.CacheManager;
@@ -20,10 +21,10 @@ import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: BizCacheService.java, v 0.1 2023‐12‐07 2:14 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: BizAppStartupService.java, v 0.1 2023‐12‐07 2:14 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class BizCacheService {
+public class BizAppStartupService {
 
     @Autowired
     private CacheManager cacheManager;
@@ -64,7 +65,20 @@ public class BizCacheService {
     @Autowired
     private CoreAdminService coreAdminService;
 
+    @Autowired
+    private CoreFileService coreFileService;
+
     @EventListener(ApplicationReadyEvent.class)
+    public void onEzAppStartup() {
+        refreshAllCache();
+
+        bizOrganizationService
+                .getActiveOrganizations()
+                .forEach(org -> {
+                    coreFileService.initPublicFileDirectory(org.getOrgId());
+                });
+    }
+
     public List<String> refreshAllCache() {
         List<String> cacheNames = new ArrayList<>();
 

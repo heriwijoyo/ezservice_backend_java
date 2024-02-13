@@ -35,46 +35,6 @@ public class PublicFileResolverImpl implements PublicFileResolver {
         return uploadRootDir + "/" + orgId;
     }
 
-    public Path getOrgPath() {
-        return Paths.get(getOrgFiledDir()).toAbsolutePath().normalize();
-    }
-
-    public Path getAppGalleryPath() {
-        return Paths.get(getOrgFiledDir(), DIR_APP_GALLERY).toAbsolutePath().normalize();
-    }
-
-    public Path getNewsGalleryPath() {
-        return Paths.get(getOrgFiledDir(), DIR_NEWS_GALLERY).toAbsolutePath().normalize();
-    }
-
-    public Path getEventGalleryPath() {
-        return Paths.get(getOrgFiledDir(), DIR_EVENT_GALLERY).toAbsolutePath().normalize();
-    }
-
-    public Path getVideoCardGalleryPath() {
-        return Paths.get(getOrgFiledDir(), DIR_VIDEO_CARD_GALLERY).toAbsolutePath().normalize();
-    }
-
-    public Path getOtherGalleryPath() {
-        return Paths.get(getOrgFiledDir(), DIR_OTHER_GALLERY).toAbsolutePath().normalize();
-    }
-
-    public Path getReportPath() {
-        return Paths.get(getOrgFiledDir(), DIR_REPORT).toAbsolutePath().normalize();
-    }
-
-    public Path getReportImagePath() {
-        return Paths.get(getOrgFiledDir(), DIR_REPORT, DIR_REPORT_IMAGE).toAbsolutePath().normalize();
-    }
-
-    public Path getReportVideoPath() {
-        return Paths.get(getOrgFiledDir(), DIR_REPORT, DIR_REPORT_VIDEO).toAbsolutePath().normalize();
-    }
-
-    public Path getReportVoicePath() {
-        return Paths.get(getOrgFiledDir(), DIR_REPORT, DIR_REPORT_VOICE).toAbsolutePath().normalize();
-    }
-
     @Override
     public Path getAppGalleryPath(String fileName) {
         return Paths.get(getOrgFiledDir(), DIR_APP_GALLERY, fileName).toAbsolutePath().normalize();
