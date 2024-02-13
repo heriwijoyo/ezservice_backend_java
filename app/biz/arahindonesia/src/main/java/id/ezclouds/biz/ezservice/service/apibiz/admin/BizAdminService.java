@@ -5,6 +5,7 @@
 package id.ezclouds.biz.ezservice.service.apibiz.admin;
 
 import id.ezclouds.biz.ezservice.constant.BizConstant;
+import id.ezclouds.biz.ezservice.constant.BizMemberRole;
 import id.ezclouds.biz.ezservice.converter.BizAdminConverter;
 import id.ezclouds.biz.ezservice.model.admin.BizAdminAppData;
 import id.ezclouds.biz.ezservice.model.admin.BizAdminSession;
@@ -191,31 +192,6 @@ public class BizAdminService extends BizBaseService {
         return bizResult;
     }
 
-    public BizResult validateWebSessionId(String sessionId) {
-        BizResult bizResult = new BizResult();
-
-        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
-            @Override
-            public void onRequestCheck() throws EzErrorException {
-                AssertUtil.notBlank(sessionId, EzErrorCode.SESSION_INVALID);
-            }
-
-            @Override
-            public void onBizProcess() throws Exception {
-                String respSessionId = coreAuthService.adminValidateSessionId(sessionId);
-                bizResult.setSuccess(true);
-                bizResult.setObject(respSessionId);
-            }
-
-            @Override
-            public String getErrorMessage(EzErrorCode ezErrorCode) {
-                return getBizErrorMessage(ezErrorCode);
-            }
-        });
-
-        return bizResult;
-    }
-
     public BizResult getAppData(String sessionId) {
         BizResult bizResult = new BizResult();
 
@@ -378,6 +354,6 @@ public class BizAdminService extends BizBaseService {
     private void authorizeAdminMember(String memberRoles) throws EzErrorException {
         AssertUtil.notBlank(memberRoles, EzErrorCode.MEMBER_UNAUTHORIZED);
         List<String> roles = Arrays.asList(memberRoles.split(","));
-        AssertUtil.isTrue(roles.contains(BizConstant.MemberRole.ORG_ADMIN), EzErrorCode.MEMBER_UNAUTHORIZED);
+        AssertUtil.isTrue(roles.contains(BizMemberRole.ADMIN_ORG.getCode()), EzErrorCode.MEMBER_UNAUTHORIZED);
     }
 }

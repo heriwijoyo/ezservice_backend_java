@@ -55,21 +55,6 @@ public class AdminWebController {
         return EzErrorCode.SESSION_CODE_INVALID.getCode();
     }
 
-    @PostMapping(value = "/webapp/validate_session.json")
-    @ResponseBody
-    private String validateWebSessionId(@RequestParam(name = "sessionId", required = false) String sessionId, HttpServletResponse response) {
-        EzAppContextHolder.init(WebEvent.WEB_VALIDATE_SESSION_ID);
-        BizResult bizResult = bizAdminService.validateWebSessionId(sessionId);
-        DigestLogUtil.logWebDigest(LOGGER, getDigestLog(bizResult));
-
-        if (bizResult.isSuccess()) {
-            return (String) bizResult.getObject();
-        } else {
-            response.setStatus(404);
-        }
-        return EzErrorCode.SESSION_CODE_INVALID.getCode();
-    }
-
     private DigestLog getDigestLog(BizResult bizResult) {
         return new EmptyDigestLog(bizResult.isSuccess(), getResultCode(bizResult));
     }
