@@ -4,7 +4,9 @@
  */
 package id.ezclouds.common.dal.dataobject;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
@@ -15,10 +17,20 @@ import javax.persistence.Table;
 @Table(name = "app_config")
 public class AppConfigDO {
 
+    @Id
+    @Column(name = "id")
     private String id;
+
+    @Column(name = "org_id")
     private String orgId;
+
+    @Column(name = "config_key")
     private String configKey;
+
+    @Column(name = "config_value")
     private String configValue;
+
+    @Column(name = "status")
     private int status;
 
     public String getId() {
