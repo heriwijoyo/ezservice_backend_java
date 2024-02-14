@@ -2,9 +2,9 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2023 All Rights Reserved.
  */
-package id.ezclouds.common.dal.repo;
+package id.ezclouds.biz.ezservice.service.dataservice.repo;
 
-import id.ezclouds.common.dal.dataobject.CandidateBioDO;
+import id.ezclouds.biz.ezservice.service.dataservice.dataobject.CandidateBioDO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

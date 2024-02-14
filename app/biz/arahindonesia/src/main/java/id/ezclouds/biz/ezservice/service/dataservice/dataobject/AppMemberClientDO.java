@@ -2,9 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2023 All Rights Reserved.
  */
-package id.ezclouds.common.dal.dataobject;
-
-import id.ezclouds.common.dal.DOConstant;
+package id.ezclouds.biz.ezservice.service.dataservice.dataobject;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -119,6 +117,6 @@ public class AppMemberClientDO {
         if (status == null) {
             return false;
         }
-        return DOConstant.COMMON_STATUS_ACTIVE == status;
+        return 1 == status;
     }
 }

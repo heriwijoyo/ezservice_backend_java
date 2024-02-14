@@ -5,13 +5,15 @@
 package id.ezclouds.biz.ezservice.converter;
 
 import id.ezclouds.biz.ezservice.model.*;
+import id.ezclouds.biz.ezservice.service.dataservice.dataobject.CandidateBioDO;
+import id.ezclouds.biz.ezservice.service.dataservice.dataobject.CandidateProfileItemDO;
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.NewsDO;
+import id.ezclouds.biz.ezservice.service.dataservice.dataobject.VideoCardDO;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
 import id.ezclouds.biz.ezservice.model.profile.CandidateBio;
 import id.ezclouds.biz.ezservice.model.profile.CandidateProfileItem;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.dataobject.BizSubOrganizationDO;
-import id.ezclouds.common.dal.dataobject.*;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)

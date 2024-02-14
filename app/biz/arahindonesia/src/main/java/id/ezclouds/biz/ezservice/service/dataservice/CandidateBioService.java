@@ -6,7 +6,7 @@ package id.ezclouds.biz.ezservice.service.dataservice;
 
 import id.ezclouds.biz.ezservice.converter.BizModelConverter;
 import id.ezclouds.biz.ezservice.model.profile.CandidateBio;
-import id.ezclouds.common.dal.repo.CandidateBioRepository;
+import id.ezclouds.biz.ezservice.service.dataservice.repo.CandidateBioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
