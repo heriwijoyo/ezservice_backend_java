@@ -11,7 +11,6 @@
 		<module>app/core/auth</module>
 		<module>app/core/integration</module>
 		<module>app/common/util</module>
-		<module>app/test/common</module>
 		<module>app/test/core</module>
     </modules>
 	<parent>
