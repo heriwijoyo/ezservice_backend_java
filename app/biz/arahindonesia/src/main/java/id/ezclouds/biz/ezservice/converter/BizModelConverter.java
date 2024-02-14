@@ -4,7 +4,6 @@
  */
 package id.ezclouds.biz.ezservice.converter;
 
-import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.model.*;
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.NewsDO;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
@@ -18,29 +17,6 @@ import id.ezclouds.common.dal.dataobject.*;
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizModelConverter.java, v 0.1 2023‐12‐10 12:22 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
 public class BizModelConverter {
-
-    public static AppConfig convert(AppConfigDO appConfigDO) {
-        if (appConfigDO == null) {
-            return null;
-        }
-        AppConfig appConfig = new AppConfig();
-        appConfig.setOrgId(appConfigDO.getOrgId());
-        appConfig.setAppName(appConfigDO.getAppName());
-        appConfig.setVersionCode(appConfigDO.getVersionCode());
-        appConfig.setVersionName(appConfigDO.getVersionName());
-        appConfig.setSliderAnimationDuration(appConfigDO.getSliderAnimationDuration());
-        appConfig.setMaxTpsNumber(appConfigDO.getMaxTpsNumber());
-
-        AppUpdateInfo appUpdateInfo = new AppUpdateInfo();
-        appUpdateInfo.setTitle(AppConstant.APP_UPDATE_TITLE);
-        appUpdateInfo.setMessage(AppConstant.APP_UPDATE_MESSAGE.replace(AppConstant.APP_VERSION_NAME_TAG, appConfigDO.getVersionName()));
-        appUpdateInfo.setNeedForceUpdate(appConfigDO.getNeedForceUpdate() == 1);
-        appUpdateInfo.setUpdateUrl(appConfigDO.getUpdateUrl());
-
-        appConfig.setAppUpdateInfo(appUpdateInfo);
-
-        return appConfig;
-    }
 
     public static BizSubOrganization convert(AppSubOrganizationDO subOrganizationDO) {
         if (subOrganizationDO == null) { return null; }

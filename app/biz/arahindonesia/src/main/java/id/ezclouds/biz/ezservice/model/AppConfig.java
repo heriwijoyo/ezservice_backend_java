@@ -10,21 +10,13 @@ package id.ezclouds.biz.ezservice.model;
  */
 public class AppConfig {
 
-    private String orgId;
     private String appName;
-    private String versionName;
-    private int versionCode;
-    private int sliderAnimationDuration;
-    private int maxTpsNumber;
-    private AppUpdateInfo appUpdateInfo;
-
-    public String getOrgId() {
-        return orgId;
-    }
-
-    public void setOrgId(String orgId) {
-        this.orgId = orgId;
-    }
+    private String androidVersionName;
+    private int androidVersionCode;
+    private String androidUpdateUrl;
+    private String androidUpdateApk;
+    private boolean androidForceUpdate;
+    private int bizMaxTpsNumber;
 
     public String getAppName() {
         return appName;
@@ -34,43 +26,51 @@ public class AppConfig {
         this.appName = appName;
     }
 
-    public int getVersionCode() {
-        return versionCode;
+    public String getAndroidVersionName() {
+        return androidVersionName;
     }
 
-    public void setVersionCode(int versionCode) {
-        this.versionCode = versionCode;
+    public void setAndroidVersionName(String androidVersionName) {
+        this.androidVersionName = androidVersionName;
     }
 
-    public String getVersionName() {
-        return versionName;
+    public int getAndroidVersionCode() {
+        return androidVersionCode;
     }
 
-    public void setVersionName(String versionName) {
-        this.versionName = versionName;
+    public void setAndroidVersionCode(int androidVersionCode) {
+        this.androidVersionCode = androidVersionCode;
     }
 
-    public int getSliderAnimationDuration() {
-        return sliderAnimationDuration;
+    public String getAndroidUpdateUrl() {
+        return androidUpdateUrl;
     }
 
-    public void setSliderAnimationDuration(int sliderAnimationDuration) {
-        this.sliderAnimationDuration = sliderAnimationDuration;
+    public void setAndroidUpdateUrl(String androidUpdateUrl) {
+        this.androidUpdateUrl = androidUpdateUrl;
     }
 
-    public int getMaxTpsNumber() {
-        return maxTpsNumber;
+    public String getAndroidUpdateApk() {
+        return androidUpdateApk;
     }
 
-    public void setMaxTpsNumber(int maxTpsNumber) {
-        this.maxTpsNumber = maxTpsNumber;
+    public void setAndroidUpdateApk(String androidUpdateApk) {
+        this.androidUpdateApk = androidUpdateApk;
     }
 
-    public AppUpdateInfo getAppUpdateInfo() {
-        return appUpdateInfo;
+    public boolean isAndroidForceUpdate() {
+        return androidForceUpdate;
     }
 
-    public void setAppUpdateInfo(AppUpdateInfo appUpdateInfo) {
-        this.appUpdateInfo = appUpdateInfo;
+    public void setAndroidForceUpdate(boolean androidForceUpdate) {
+        this.androidForceUpdate = androidForceUpdate;
+    }
+
+    public int getBizMaxTpsNumber() {
+        return bizMaxTpsNumber;
+    }
+
+    public void setBizMaxTpsNumber(int bizMaxTpsNumber) {
+        this.bizMaxTpsNumber = bizMaxTpsNumber;
     }
 }

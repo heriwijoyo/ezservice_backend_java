@@ -6,7 +6,10 @@ package id.ezclouds.common.dal.repo;
 
 import id.ezclouds.common.dal.dataobject.AppConfigDO;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -14,4 +17,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface AppConfigRepository extends JpaRepository<AppConfigDO, String> {
+
+    @Query("SELECT cfg FROM AppConfigDO cfg WHERE cfg.status = 1")
+    List<AppConfigDO> findAllActive();
 }

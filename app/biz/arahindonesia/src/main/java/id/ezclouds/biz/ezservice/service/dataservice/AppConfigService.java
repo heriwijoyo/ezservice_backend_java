@@ -4,10 +4,11 @@
  */
 package id.ezclouds.biz.ezservice.service.dataservice;
 
-import id.ezclouds.biz.ezservice.converter.BizModelConverter;
+import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.model.AppConfig;
 import id.ezclouds.biz.ezservice.service.dataservice.model.AppMessageTemplate;
 import id.ezclouds.biz.ezservice.service.dataservice.repo.AppCommonMessageTemplateRepository;
+import id.ezclouds.common.dal.dataobject.AppConfigDO;
 import id.ezclouds.common.dal.repo.AppConfigRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -29,22 +30,44 @@ public class AppConfigService {
     @Autowired
     private AppCommonMessageTemplateRepository appCommonMessageTemplateRepository;
 
-    @Cacheable("appConfig")
-    public List<AppConfig> getAppConfigs() {
-        return appConfigRepository
-                .findAll()
-                .stream()
-                .map(BizModelConverter::convert)
-                .collect(Collectors.toList());
-    }
+    public AppConfig getAppConfig(String orgId) {
+        final AppConfig appConfig = new AppConfig();
 
-    @Cacheable("appMessageTemplate")
-    public List<AppMessageTemplate> getMessageTemplates() {
-        return appCommonMessageTemplateRepository
-                .findAll()
+        getAppConfigAllActive()
                 .stream()
-                .map(templateDO -> new AppMessageTemplate(templateDO.getTemplateId(), templateDO.getTemplateValue()))
-                .collect(Collectors.toList());
+                .filter(config -> orgId.equals(config.getOrgId()))
+                .forEach(cfg -> {
+                    switch (cfg.getConfigKey()) {
+                        case AppConstant.CfgKey.APP_NAME:
+                            appConfig.setAppName(cfg.getConfigValue());
+                            break;
+
+                        case AppConstant.CfgKey.ANDROID_VERSION_NAME:
+                            appConfig.setAndroidVersionName(cfg.getConfigValue());
+                            break;
+
+                        case AppConstant.CfgKey.ANDROID_VERSION_CODE:
+                            appConfig.setAndroidVersionCode(Integer.parseInt(cfg.getConfigValue()));
+                            break;
+
+                        case AppConstant.CfgKey.ANDROID_UPDATE_URL:
+                            appConfig.setAndroidUpdateUrl(cfg.getConfigValue());
+                            break;
+
+                        case AppConstant.CfgKey.ANDROID_UPDATE_APK:
+                            appConfig.setAndroidUpdateApk(cfg.getConfigValue());
+                            break;
+
+                        case AppConstant.CfgKey.ANDROID_FORCE_UPDATE:
+                            appConfig.setAndroidForceUpdate(Boolean.parseBoolean(cfg.getConfigValue()));
+                            break;
+
+                        case AppConstant.CfgKey.BIZ_MAX_TPS_NUMBER:
+                            appConfig.setBizMaxTpsNumber(Integer.parseInt(cfg.getConfigValue()));
+                            break;
+                    }
+                });
+        return appConfig;
     }
 
     public String getMessageTemplate(String templateId) {
@@ -54,5 +77,19 @@ public class AppConfigService {
                 .findFirst()
                 .orElse(new AppMessageTemplate(null, null))
                 .getValue();
+    }
+
+    @Cacheable("appConfigAllActive")
+    public List<AppConfigDO> getAppConfigAllActive() {
+        return appConfigRepository.findAllActive();
+    }
+
+    @Cacheable("appMessageTemplate")
+    public List<AppMessageTemplate> getMessageTemplates() {
+        return appCommonMessageTemplateRepository
+                .findAll()
+                .stream()
+                .map(templateDO -> new AppMessageTemplate(templateDO.getTemplateId(), templateDO.getTemplateValue()))
+                .collect(Collectors.toList());
     }
 }

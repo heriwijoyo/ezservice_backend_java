@@ -59,17 +59,9 @@ public class BizCommonConfigService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws EzErrorException {
-                String orgId = getOrgId();
-                AppConfig appConfig = appConfigService
-                        .getAppConfigs()
-                        .stream()
-                        .filter(aConfig -> orgId.equals(aConfig.getOrgId()))
-                        .findFirst()
-                        .get();
-
                 AppSetting appSetting = new AppSetting();
-                appSetting.setAppConfig(appConfig);
-                appSetting.setHomeData(composeHomeData(orgId));
+                appSetting.setAppConfig(appConfigService.getAppConfig(getOrgId()));
+                appSetting.setHomeData(composeHomeData(getOrgId()));
                 bizResult.setSuccess(true);
                 bizResult.setObject(appSetting);
             }

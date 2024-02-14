@@ -4,9 +4,7 @@
  */
 package id.ezclouds.common.dal.dataobject;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
@@ -19,16 +17,10 @@ public class AppConfigDO {
 
     private String id;
     private String orgId;
-    private String appName;
-    private int versionCode;
-    private String versionName;
-    private String updateUrl;
-    private int needForceUpdate;
-    private int sliderAnimationDuration;
-    private int maxTpsNumber;
+    private String configKey;
+    private String configValue;
+    private int status;
 
-    @Id
-    @Column(name = "id")
     public String getId() {
         return id;
     }
@@ -37,7 +29,6 @@ public class AppConfigDO {
         this.id = id;
     }
 
-    @Column(name = "org_id")
     public String getOrgId() {
         return orgId;
     }
@@ -46,66 +37,27 @@ public class AppConfigDO {
         this.orgId = orgId;
     }
 
-    @Column(name = "app_name")
-    public String getAppName() {
-        return appName;
+    public String getConfigKey() {
+        return configKey;
     }
 
-    public void setAppName(String appName) {
-        this.appName = appName;
+    public void setConfigKey(String configKey) {
+        this.configKey = configKey;
     }
 
-    @Column(name = "android_version_code")
-    public int getVersionCode() {
-        return versionCode;
+    public String getConfigValue() {
+        return configValue;
     }
 
-    public void setVersionCode(int versionCode) {
-        this.versionCode = versionCode;
+    public void setConfigValue(String configValue) {
+        this.configValue = configValue;
     }
 
-    @Column(name = "android_version_name")
-    public String getVersionName() {
-        return versionName;
+    public int getStatus() {
+        return status;
     }
 
-    public void setVersionName(String versionName) {
-        this.versionName = versionName;
-    }
-
-    @Column(name = "android_update_url")
-    public String getUpdateUrl() {
-        return updateUrl;
-    }
-
-    public void setUpdateUrl(String updateUrl) {
-        this.updateUrl = updateUrl;
-    }
-
-    @Column(name = "need_force_update")
-    public int getNeedForceUpdate() {
-        return needForceUpdate;
-    }
-
-    public void setNeedForceUpdate(int needForceUpdate) {
-        this.needForceUpdate = needForceUpdate;
-    }
-
-    @Column(name = "slider_animation_duration")
-    public int getSliderAnimationDuration() {
-        return sliderAnimationDuration;
-    }
-
-    public void setSliderAnimationDuration(int sliderAnimationDuration) {
-        this.sliderAnimationDuration = sliderAnimationDuration;
-    }
-
-    @Column(name = "max_tps_number")
-    public int getMaxTpsNumber() {
-        return maxTpsNumber;
-    }
-
-    public void setMaxTpsNumber(int maxTpsNumber) {
-        this.maxTpsNumber = maxTpsNumber;
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

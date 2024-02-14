@@ -95,7 +95,7 @@ public class BizAppStartupService {
         coreAuthService.getActiveAppClients();
         appSubOrganizationService.getAllSubOrganization();
         coreConfigService.getCoreConfigs();
-        appConfigService.getAppConfigs();
+        appConfigService.getAppConfigAllActive();
         appConfigService.getMessageTemplates();
         newsInnerService.getHighlightedNews();
         candidateProfileItemService.getCandidateProfileItems();

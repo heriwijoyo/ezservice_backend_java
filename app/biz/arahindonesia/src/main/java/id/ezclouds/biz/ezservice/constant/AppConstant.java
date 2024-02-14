@@ -10,6 +10,16 @@ package id.ezclouds.biz.ezservice.constant;
  */
 public class AppConstant {
 
+    public static final class CfgKey {
+        public static final String APP_NAME = "APP_NAME";
+        public static final String ANDROID_VERSION_CODE = "ANDROID_VERSION_CODE";
+        public static final String ANDROID_VERSION_NAME = "ANDROID_VERSION_NAME";
+        public static final String ANDROID_UPDATE_URL = "ANDROID_UPDATE_URL";
+        public static final String ANDROID_UPDATE_APK = "ANDROID_UPDATE_APK";
+        public static final String ANDROID_FORCE_UPDATE = "ANDROID_FORCE_UPDATE";
+        public static final String BIZ_MAX_TPS_NUMBER = "BIZ_MAX_TPS_NUMBER";
+    }
+
     public static final String APP_VERSION_NAME_TAG = "APP_VERSION_NAME_TAG";
     public static final String APP_UPDATE_TITLE = "Informasi Pembaruan";
     public static final String APP_UPDATE_MESSAGE = "Pembaruan aplikasi versi "+ APP_VERSION_NAME_TAG +" telah tersedia. Perbarui aplikasi anda untuk mendapatkan keuntungan maksimal dari semua fitur";
