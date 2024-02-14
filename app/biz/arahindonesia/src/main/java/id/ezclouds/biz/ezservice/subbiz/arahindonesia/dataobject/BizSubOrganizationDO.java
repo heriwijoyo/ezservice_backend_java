@@ -11,11 +11,11 @@ import javax.persistence.Table;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: AppSubOrganizationDO.java, v 0.1 2024‐02‐04 9:12 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: BizSubOrganizationDO.java, v 0.1 2024‐02‐04 9:12 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Entity
-@Table(name = "app_sub_organization")
-public class AppSubOrganizationDO {
+@Table(name = "biz_sub_organization")
+public class BizSubOrganizationDO {
 
     @Id
     @Column(name = "sub_org_id")

@@ -4,7 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.subbiz.arahindonesia.repo;
 
-import id.ezclouds.biz.ezservice.subbiz.arahindonesia.dataobject.AppSubOrganizationDO;
+import id.ezclouds.biz.ezservice.subbiz.arahindonesia.dataobject.BizSubOrganizationDO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,5 +13,5 @@ import org.springframework.stereotype.Repository;
  * @version $Id: AppSubOrganizationRepository.java, v 0.1 2024‐02‐04 9:15 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Repository
-public interface AppSubOrganizationRepository extends JpaRepository<AppSubOrganizationDO, String> {
+public interface AppSubOrganizationRepository extends JpaRepository<BizSubOrganizationDO, String> {
 }

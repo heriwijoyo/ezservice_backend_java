@@ -10,7 +10,7 @@ import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
 import id.ezclouds.biz.ezservice.model.profile.CandidateBio;
 import id.ezclouds.biz.ezservice.model.profile.CandidateProfileItem;
-import id.ezclouds.biz.ezservice.subbiz.arahindonesia.dataobject.AppSubOrganizationDO;
+import id.ezclouds.biz.ezservice.subbiz.arahindonesia.dataobject.BizSubOrganizationDO;
 import id.ezclouds.common.dal.dataobject.*;
 
 /**
@@ -18,7 +18,7 @@ import id.ezclouds.common.dal.dataobject.*;
  * @version $Id: BizModelConverter.java, v 0.1 2023‐12‐10 12:22 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
 public class BizModelConverter {
 
-    public static BizSubOrganization convert(AppSubOrganizationDO subOrganizationDO) {
+    public static BizSubOrganization convert(BizSubOrganizationDO subOrganizationDO) {
         if (subOrganizationDO == null) { return null; }
         BizSubOrganization subOrganization = new BizSubOrganization();
         subOrganization.setSubOrgId(subOrganizationDO.getSubOrgId());
