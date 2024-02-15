@@ -4,6 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.service.apibiz;
 
+import id.ezclouds.biz.ezservice.service.result.BizResult;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,5 +14,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class BizAppSurveyService {
 
+    public BizResult getHotSurveyForm(String surveyId) {
+        final BizResult bizResult = new BizResult();
 
+        return bizResult;
+    }
 }
