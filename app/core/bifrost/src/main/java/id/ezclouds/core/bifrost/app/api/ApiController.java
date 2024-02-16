@@ -11,6 +11,7 @@ import id.ezclouds.biz.ezservice.model.authentication.BizMemberCommonSession;
 import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
 import id.ezclouds.biz.ezservice.model.profile.CandidateProfile;
 import id.ezclouds.biz.ezservice.model.profile.MemberProfile;
+import id.ezclouds.biz.ezservice.model.survey.BizSurveyForm;
 import id.ezclouds.biz.ezservice.service.result.BizMemberLoginResult;
 import id.ezclouds.common.util.exception.ExceptionUtil;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
@@ -52,6 +53,24 @@ public class ApiController extends AppController {
                 EmptyDigestLog digestLog = new EmptyDigestLog(result.isSuccess(), result.getResultCode());
                 digestLog.composeDigest(request, toEmptyResult(result));
                 return digestLog;
+            }
+        });
+    }
+
+    @PostMapping(value = "/api/survey_form.php")
+    private ApiResult<BizSurveyForm> getSurveyForm(@RequestBody SurveyFormRequest request) {
+        return executeInTemplate(ApiEvent.API_SURVEY_FORM, request, new RequestHandler<BizSurveyForm>() {
+            @Override
+            public BizSurveyForm convertResult(Object resultObject) {
+                if (resultObject instanceof BizSurveyForm) {
+                    return (BizSurveyForm) resultObject;
+                }
+                return null;
+            }
+
+            @Override
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<BizSurveyForm> result) {
+                return new EmptyDigestLog(result.isSuccess(), result.getResultCode());
             }
         });
     }

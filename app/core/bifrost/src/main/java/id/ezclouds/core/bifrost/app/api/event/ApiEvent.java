@@ -12,6 +12,7 @@ import id.ezclouds.core.shared.context.EzAppEvent;
 public enum ApiEvent implements EzAppEvent {
 
     API_APP_SETTING("API_APP_SETTING"),
+    API_SURVEY_FORM("API_SURVEY_FORM"),
     API_CANDIDATE_PROFILE("API_CANDIDATE_PROFILE"),
     API_NEWS("API_NEWS"),
     API_MEMBER_PROFILE("API_MEMBER_PROFILE"),

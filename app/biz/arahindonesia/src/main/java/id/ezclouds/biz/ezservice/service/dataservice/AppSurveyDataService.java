@@ -42,6 +42,10 @@ public class AppSurveyDataService {
     @Autowired
     private BizSurveyAnswerOptionRepository bizSurveyAnswerOptionRepository;
 
+    public BizSurveyForm getBizSurveyForm(String surveyId) {
+        return getTopSurveyAllOrg().get(surveyId);
+    }
+
     @Cacheable(value = "topBizSurveyData")
     public Map<String, BizSurveyForm> getTopSurveyAllOrg() {
         Map<String, BizSurveyForm> bizSurveyFormMap = new HashMap<>();

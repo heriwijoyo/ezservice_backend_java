@@ -27,6 +27,8 @@ public enum EzErrorCode {
     SESSION_UNAVAILABLE("SESSION_UNAVAILABLE", "Session Unavailable"),
     SESSION_VERIFY_FAILED("SESSION_VERIFY_FAILED", "Session Verify Failed"),
 
+    DATA_NOT_FOUND("DATA_NOT_FOUND", "Data Not Found"),
+
     UPLOAD_SCENE_EMPTY("UPLOAD_SCENE_EMPTY", "Upload Scene Empty"),
     UPLOAD_SCENE_NOT_ALLOWED("UPLOAD_SCENE_NOT_ALLOWED", "Upload Scene Not Allowed"),
     MULTIPARTFILE_EMPTY("MULTIPARTFILE_EMPTY", "MultipartFile Empy"),

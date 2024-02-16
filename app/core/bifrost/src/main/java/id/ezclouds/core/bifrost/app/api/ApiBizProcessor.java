@@ -14,6 +14,7 @@ import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
+import id.ezclouds.core.bifrost.app.api.request.SurveyFormRequest;
 import id.ezclouds.core.bifrost.core.converter.BizRequestConverter;
 import id.ezclouds.core.bifrost.core.processor.BizProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,9 @@ public class ApiBizProcessor implements BizProcessor {
 
     @Autowired
     private BizCommonConfigService bizCommonConfigService;
+
+    @Autowired
+    private BizAppSurveyService bizAppSurveyService;
 
     @Autowired
     private BizCandidateProfileService bizCandidateProfileService;
@@ -56,6 +60,9 @@ public class ApiBizProcessor implements BizProcessor {
         switch (apiEvent) {
             case API_APP_SETTING:
                 return bizCommonConfigService.getAppSetting();
+
+            case API_SURVEY_FORM:
+                return bizAppSurveyService.getSurveyForm(((SurveyFormRequest)apiRequest).getSurveyId());
 
             case API_CANDIDATE_PROFILE:
                 return bizCandidateProfileService.getCandidateProfile();
