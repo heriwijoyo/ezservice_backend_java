@@ -13,7 +13,7 @@ import java.util.List;
 public class BizSurveyForm {
 
     private String surveyId;
-    private String questionnaireVersion;
+    private int questionnaireVersion;
     private List<ResponderForm> responderForms;
     private List<QuestionForm> questionnaireForms;
 
@@ -25,11 +25,11 @@ public class BizSurveyForm {
         this.surveyId = surveyId;
     }
 
-    public String getQuestionnaireVersion() {
+    public int getQuestionnaireVersion() {
         return questionnaireVersion;
     }
 
-    public void setQuestionnaireVersion(String questionnaireVersion) {
+    public void setQuestionnaireVersion(int questionnaireVersion) {
         this.questionnaireVersion = questionnaireVersion;
     }
 

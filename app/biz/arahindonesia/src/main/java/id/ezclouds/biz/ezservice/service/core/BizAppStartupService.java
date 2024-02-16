@@ -68,6 +68,9 @@ public class BizAppStartupService {
     @Autowired
     private CoreFileService coreFileService;
 
+    @Autowired
+    private AppSurveyDataService appSurveyDataService;
+
     @EventListener(ApplicationReadyEvent.class)
     public void onEzAppStartup() {
         refreshAllCache();
@@ -104,6 +107,7 @@ public class BizAppStartupService {
         appProfileService.getAllAppProfile();
         coreAdminService.getAdminBOPermissionAllActive();
         coreAdminService.getAdminBoMenuAllActive();
+        appSurveyDataService.getTopSurveyAllOrg();
 
         cacheManager
                 .getCacheNames()

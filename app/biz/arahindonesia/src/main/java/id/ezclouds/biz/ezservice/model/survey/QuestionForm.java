@@ -12,25 +12,24 @@ import java.util.List;
  */
 public class QuestionForm {
 
-    private String id;
+    private String qid;
     private boolean required;
     private String title;
     private int maxSelectionAllowed;
     private boolean hasOther;
     private String otherRequiredCondition;
     private String otherHint;
-    private String label;
     private String questionnaireNumber;
     private String questionnaireNumberLabel;
     private String labelError;
     private List<AnswerOption> options;
 
-    public String getId() {
-        return id;
+    public String getQid() {
+        return qid;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setQid(String qid) {
+        this.qid = qid;
     }
 
     public boolean isRequired() {
@@ -79,14 +78,6 @@ public class QuestionForm {
 
     public void setOtherHint(String otherHint) {
         this.otherHint = otherHint;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
     }
 
     public String getQuestionnaireNumber() {
