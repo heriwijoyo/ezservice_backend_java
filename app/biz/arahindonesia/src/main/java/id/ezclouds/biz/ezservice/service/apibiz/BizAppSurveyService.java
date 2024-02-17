@@ -31,11 +31,11 @@ public class BizAppSurveyService extends BizBaseService {
             @Override
             public void onRequestCheck() throws EzErrorException {
                 AssertUtil.notBlank(surveyId, EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(getMemberSessionId(), EzErrorCode.SESSION_INVALID);
             }
 
             @Override
             public void onBizProcess() throws Exception {
+                authMemberSession();
                 BizSurveyForm bizSurveyForm = appSurveyDataService.getBizSurveyForm(surveyId);
                 AssertUtil.notNull(bizSurveyForm, EzErrorCode.DATA_NOT_FOUND);
 
