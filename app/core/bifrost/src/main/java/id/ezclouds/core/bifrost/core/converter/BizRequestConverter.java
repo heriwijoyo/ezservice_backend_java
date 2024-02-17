@@ -103,6 +103,19 @@ public class BizRequestConverter<T extends BizRequest> {
         return null;
     };
 
+    public static Handler<BizSurveySubmitRequest> SURVEY_SUBMIT =  apiRequest -> {
+        if (apiRequest instanceof SurveySubmitRequest) {
+            SurveySubmitRequest request = (SurveySubmitRequest) apiRequest;
+            BizSurveySubmitRequest bizRequest = new BizSurveySubmitRequest();
+            bizRequest.setSurveyId(request.getSurveyId());
+            bizRequest.setQuestionVersion(request.getQuestionVersion());
+            bizRequest.setResponderDataEncoded(request.getResponderDataEncoded());
+            bizRequest.setResponseDataEncoded(request.getResponseDataEncoded());
+            return bizRequest;
+        }
+        return null;
+    };
+
     public static Handler<BizMemberUploadRequest> BIZ_COMMON_UPLOAD = apiRequest -> {
         if (apiRequest instanceof MemberUploadRequest) {
             MemberUploadRequest request = (MemberUploadRequest) apiRequest;

@@ -252,7 +252,23 @@ public class ApiController extends AppController {
         });
     }
 
+    @PostMapping(value = "/api/survey_submit.php")
+    private ApiResult<String> surveySubmit(@RequestBody SurveySubmitRequest request) {
+        return executeInTemplate(ApiEvent.API_SURVEY_SUBMIT, request, new RequestHandler<String>() {
+            @Override
+            public String convertResult(Object resultObject) {
+                if (resultObject instanceof String) {
+                    return (String) resultObject;
+                }
+                return null;
+            }
 
+            @Override
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<String> result) {
+                return new SimpleDigestLog(result.isSuccess(), result.getResultCode());
+            }
+        });
+    }
 
 
     // ================ ADMIN APIs ==================
