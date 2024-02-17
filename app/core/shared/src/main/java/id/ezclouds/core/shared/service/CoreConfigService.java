@@ -37,9 +37,32 @@ public class CoreConfigService {
                 .getConfigValue();
     }
 
+    public String getConfigValue(String configKey) {
+        return getCoreConfigs()
+                .stream()
+                .filter(config -> StringUtil.equalsNotNull(configKey, config.getConfigKey()) &&
+                        StringUtil.equalsNotNull("ALL", config.getOrgId())
+                )
+                .findFirst()
+                .orElse(CoreConfig.EMPTY)
+                .getConfigValue();
+    }
+
     public boolean isWatzapSendEnable(String orgId) {
         String configValue = getConfigValue(CoreConstant.ConfigKey.WATZAP_SEND_ENABLE, orgId);
         return Boolean.parseBoolean(configValue);
+    }
+
+    public String getWatzapApiKey(String orgId) {
+        return getConfigValue(CoreConstant.ConfigKey.WATZAP_API_KEY, orgId);
+    }
+
+    public String getWatzapNumberKey(String orgId) {
+        return getConfigValue(CoreConstant.ConfigKey.WATZAP_NUMBER_KEY, orgId);
+    }
+
+    public String getWatzapApiUri() {
+        return getConfigValue(CoreConstant.ConfigKey.WATZAP_API_URI);
     }
 
     @Cacheable("coreConfig")

@@ -9,7 +9,7 @@ import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.integration.request.WhatsappSendRequest;
 import id.ezclouds.core.integration.result.EzConnectResult;
-import id.ezclouds.core.integration.service.client.WatzapClientService;
+import id.ezclouds.core.integration.service.client.service.WatzapClientService;
 import id.ezclouds.core.integration.service.client.request.WatzapSendRequest;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.service.CoreConfigService;
@@ -45,6 +45,9 @@ public class EzConnectService {
                 String orgId = EzAppContextHolder.getContext().getOrgId();
                 if (coreConfigService.isWatzapSendEnable(orgId)) {
                     WatzapSendRequest sendRequest = new WatzapSendRequest();
+                    sendRequest.setApi_key(coreConfigService.getWatzapApiKey(orgId));
+                    sendRequest.setNumber_key(coreConfigService.getWatzapNumberKey(orgId));
+                    sendRequest.setApiUri(coreConfigService.getWatzapApiUri());
                     sendRequest.setPhone_no(request.getPhoneNumber());
                     sendRequest.setMessage(request.getMessage());
                     watzapClientService.sendWatzap(sendRequest);

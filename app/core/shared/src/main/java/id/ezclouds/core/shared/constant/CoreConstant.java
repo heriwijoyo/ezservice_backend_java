@@ -12,5 +12,8 @@ public class CoreConstant {
 
     public static final class ConfigKey {
         public static final String WATZAP_SEND_ENABLE = "WATZAP_SEND_ENABLE";
+        public static final String WATZAP_API_KEY = "WATZAP_API_KEY";
+        public static final String WATZAP_NUMBER_KEY = "WATZAP_NUMBER_KEY";
+        public static final String WATZAP_API_URI = "WATZAP_API_URI";
     }
 }

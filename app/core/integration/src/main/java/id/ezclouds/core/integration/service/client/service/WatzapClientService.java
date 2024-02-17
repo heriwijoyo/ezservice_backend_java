@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.core.integration.service.client;
+package id.ezclouds.core.integration.service.client.service;
 
 import id.ezclouds.core.integration.service.client.config.WatzapConfig;
 import id.ezclouds.core.integration.service.client.request.WatzapSendRequest;
@@ -17,6 +17,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
+import javax.annotation.PostConstruct;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: WatzapClientService.java, v 0.1 2024‐02‐05 1:37 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -30,14 +32,16 @@ public class WatzapClientService {
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .build();
 
+    @PostConstruct
+    public void initWebClient() {
+
+    }
+
     @Async
     public void sendWatzap(WatzapSendRequest request) {
-        request.setApi_key(WatzapConfig.Credential.API_KEY);
-        request.setNumber_key(WatzapConfig.Credential.NUMBER_KEY);
-
         Mono<ResponseEntity<WatzapResponse>> watzapResponse = webClient
                 .post()
-                .uri(WatzapConfig.EndPoint.SEND_MESSAGE)
+                .uri(request.getApiUri())
                 .body(Mono.just(request), WatzapSendRequest.class)
                 .retrieve()
                 .onStatus(HttpStatus::is4xxClientError, response -> {

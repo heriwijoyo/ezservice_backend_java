@@ -14,6 +14,7 @@ public class WatzapSendRequest {
 
     private String api_key;
     private String number_key;
+    private String apiUri;
     private String phone_no;
     private String message;
 
@@ -31,6 +32,14 @@ public class WatzapSendRequest {
 
     public void setNumber_key(String number_key) {
         this.number_key = number_key;
+    }
+
+    public String getApiUri() {
+        return apiUri;
+    }
+
+    public void setApiUri(String apiUri) {
+        this.apiUri = apiUri;
     }
 
     public String getPhone_no() {

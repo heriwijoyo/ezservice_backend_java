@@ -9,18 +9,8 @@ package id.ezclouds.core.integration.service.client.config;
  * @version $Id: WatzapConfig.java, v 0.1 2024‐02‐05 2:02 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 public class WatzapConfig {
-    public static final class Key {
-        public static final String API_KEY = "API_KEY";
-        public static final String NUMBER_KEY = "NUMBER_KEY";
-    }
-
     public static final class EndPoint {
         public static final String BASE_URL = "https://api.watzap.id/v1";
         public static final String SEND_MESSAGE = "/send_message";
-    }
-
-    public static final class Credential {
-        public static final String API_KEY = "JOYIPBNV4SKUE4VZ";
-        public static final String NUMBER_KEY = "9wKPWbPcmJqo5gct";
     }
 }
