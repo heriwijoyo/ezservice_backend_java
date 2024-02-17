@@ -4,8 +4,6 @@
  */
 package id.ezclouds.core.integration.service.client.request;
 
-import id.ezclouds.core.integration.service.client.config.WatzapConfig;
-
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: WatzapSendRequest.java, v 0.1 2024‐02‐05 2:12 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$

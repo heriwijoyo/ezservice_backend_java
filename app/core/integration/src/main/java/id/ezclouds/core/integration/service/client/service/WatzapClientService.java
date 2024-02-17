@@ -4,7 +4,7 @@
  */
 package id.ezclouds.core.integration.service.client.service;
 
-import id.ezclouds.core.integration.service.client.config.WatzapConfig;
+import id.ezclouds.core.integration.service.client.config.EzConnectConfig;
 import id.ezclouds.core.integration.service.client.request.WatzapSendRequest;
 import id.ezclouds.core.integration.service.client.response.WatzapResponse;
 import org.springframework.http.HttpHeaders;
@@ -17,8 +17,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
-import javax.annotation.PostConstruct;
-
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: WatzapClientService.java, v 0.1 2024‐02‐05 1:37 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -28,14 +26,9 @@ public class WatzapClientService {
 
     private WebClient webClient = WebClient
             .builder()
-            .baseUrl(WatzapConfig.EndPoint.BASE_URL)
+            .baseUrl(EzConnectConfig.WATZAP_BASE_URL)
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .build();
-
-    @PostConstruct
-    public void initWebClient() {
-
-    }
 
     @Async
     public void sendWatzap(WatzapSendRequest request) {
