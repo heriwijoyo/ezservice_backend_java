@@ -12,19 +12,16 @@ import id.ezclouds.biz.ezservice.service.dataservice.comparator.AnswerOptionComp
 import id.ezclouds.biz.ezservice.service.dataservice.comparator.QuestionComparator;
 import id.ezclouds.biz.ezservice.service.dataservice.comparator.ResponderComparator;
 import id.ezclouds.biz.ezservice.service.dataservice.converter.DataObjectConverter;
-import id.ezclouds.biz.ezservice.service.dataservice.dataobject.BizSurveyAnswerOptionDO;
-import id.ezclouds.biz.ezservice.service.dataservice.dataobject.BizSurveyDO;
-import id.ezclouds.biz.ezservice.service.dataservice.dataobject.BizSurveyQuestionDO;
-import id.ezclouds.biz.ezservice.service.dataservice.dataobject.BizSurveyResponderDO;
-import id.ezclouds.biz.ezservice.service.dataservice.repo.BizSurveyAnswerOptionRepository;
-import id.ezclouds.biz.ezservice.service.dataservice.repo.BizSurveyQuestionRepository;
-import id.ezclouds.biz.ezservice.service.dataservice.repo.BizSurveyRepository;
-import id.ezclouds.biz.ezservice.service.dataservice.repo.BizSurveyResponderRepository;
+import id.ezclouds.biz.ezservice.service.dataservice.dataobject.*;
+import id.ezclouds.biz.ezservice.service.dataservice.repo.*;
+import id.ezclouds.biz.ezservice.service.dataservice.request.AppSurveyResponseRequest;
+import id.ezclouds.common.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,6 +45,23 @@ public class AppSurveyDataService {
 
     @Autowired
     private BizSurveyAnswerOptionRepository bizSurveyAnswerOptionRepository;
+
+    @Autowired
+    private BizSurveyResponseRepository bizSurveyResponseRepository;
+
+    @Transactional
+    public void submitSurvey(AppSurveyResponseRequest request) {
+        BizSurveyResponseDO responseDO = new BizSurveyResponseDO();
+        responseDO.setOrgId(request.getOrgId());
+        responseDO.setSurveyId(request.getSurveyId());
+        responseDO.setQuestionVersion(request.getQuestionVersion());
+        responseDO.setSubmitterMemberId(request.getSubmitterMemberId());
+        responseDO.setResponderData(request.getResponderDataEncoded());
+        responseDO.setResponseData(request.getResponseDataEncoded());
+        responseDO.setCreatedTime(DateUtil.getCurrentFormattedDate());
+
+        bizSurveyResponseRepository.saveAndFlush(responseDO);
+    }
 
     public BizSurveyForm getBizSurveyForm(String surveyId) {
         return getTopSurveyAllOrg().get(surveyId);
