@@ -31,6 +31,7 @@ public class BizAppSurveyService extends BizBaseService {
             @Override
             public void onRequestCheck() throws EzErrorException {
                 AssertUtil.notBlank(surveyId, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(getMemberSessionId(), EzErrorCode.SESSION_INVALID);
             }
 
             @Override

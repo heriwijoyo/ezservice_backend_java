@@ -7,15 +7,19 @@ package id.ezclouds.biz.ezservice.service.dataservice;
 import id.ezclouds.biz.ezservice.model.survey.AnswerOption;
 import id.ezclouds.biz.ezservice.model.survey.BizSurveyForm;
 import id.ezclouds.biz.ezservice.model.survey.QuestionForm;
+import id.ezclouds.biz.ezservice.model.survey.ResponderForm;
 import id.ezclouds.biz.ezservice.service.dataservice.comparator.AnswerOptionComparator;
 import id.ezclouds.biz.ezservice.service.dataservice.comparator.QuestionComparator;
+import id.ezclouds.biz.ezservice.service.dataservice.comparator.ResponderComparator;
 import id.ezclouds.biz.ezservice.service.dataservice.converter.DataObjectConverter;
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.BizSurveyAnswerOptionDO;
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.BizSurveyDO;
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.BizSurveyQuestionDO;
+import id.ezclouds.biz.ezservice.service.dataservice.dataobject.BizSurveyResponderDO;
 import id.ezclouds.biz.ezservice.service.dataservice.repo.BizSurveyAnswerOptionRepository;
 import id.ezclouds.biz.ezservice.service.dataservice.repo.BizSurveyQuestionRepository;
 import id.ezclouds.biz.ezservice.service.dataservice.repo.BizSurveyRepository;
+import id.ezclouds.biz.ezservice.service.dataservice.repo.BizSurveyResponderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
@@ -35,6 +39,9 @@ public class AppSurveyDataService {
 
     @Autowired
     private BizSurveyRepository bizSurveyRepository;
+
+    @Autowired
+    private BizSurveyResponderRepository bizSurveyResponderRepository;
 
     @Autowired
     private BizSurveyQuestionRepository bizSurveyQuestionRepository;
@@ -58,12 +65,14 @@ public class AppSurveyDataService {
                 .map(BizSurveyDO::getSurveyId)
                 .collect(Collectors.toList());
 
+        final List<BizSurveyResponderDO> allResponders = fetchAllResponder(availSurveyIds);
         final List<BizSurveyQuestionDO> allQuestions = fetchAllSurveysQuestion(availSurveyIds);
         final List<BizSurveyAnswerOptionDO> allAnswerOptions = fetchAllSurveysAnswerOption(availSurveyIds);
 
         for (BizSurveyDO surveyDO : bizSurveys) {
             BizSurveyForm bizSurveyForm = new BizSurveyForm();
             bizSurveyForm.setSurveyId(surveyDO.getSurveyId());
+            bizSurveyForm.setResponderForms(getSortedResponderForm(surveyDO.getSurveyId(), allResponders));
             bizSurveyForm.setQuestionnaireVersion(surveyDO.getQuestionVersion());
             bizSurveyForm.setQuestionnaireForms(getSortedQuestionForm(surveyDO.getSurveyId(), allQuestions, allAnswerOptions));
 
@@ -71,6 +80,11 @@ public class AppSurveyDataService {
         }
 
         return bizSurveyFormMap;
+    }
+
+    private List<BizSurveyResponderDO> fetchAllResponder(List<String> surveyIds) {
+        return bizSurveyResponderRepository
+                .findBySurveyIdInAndStatus(surveyIds, 1);
     }
 
     private List<BizSurveyQuestionDO> fetchAllSurveysQuestion(List<String> surveyIds) {
@@ -81,6 +95,15 @@ public class AppSurveyDataService {
     private List<BizSurveyAnswerOptionDO> fetchAllSurveysAnswerOption(List<String> surveyIds) {
         return bizSurveyAnswerOptionRepository
                 .findBySurveyIdInAndStatus(surveyIds, 1);
+    }
+
+    private List<ResponderForm> getSortedResponderForm(String surveyId, List<BizSurveyResponderDO> responders) {
+        return responders
+                .stream()
+                .filter(responder -> surveyId.equals(responder.getSurveyId()))
+                .sorted(new ResponderComparator())
+                .map(DataObjectConverter::convert)
+                .collect(Collectors.toList());
     }
 
     private List<QuestionForm> getSortedQuestionForm(String surveyId, List<BizSurveyQuestionDO> questions, List<BizSurveyAnswerOptionDO> answerOptions) {
