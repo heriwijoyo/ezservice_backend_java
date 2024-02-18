@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.ezservice.model.AppSetting;
 import id.ezclouds.biz.ezservice.model.admin.BizAdminSession;
 import id.ezclouds.biz.ezservice.model.authentication.BizMemberCommonSession;
+import id.ezclouds.biz.ezservice.model.member.BizMemberRegisterResult;
 import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
 import id.ezclouds.biz.ezservice.model.profile.CandidateProfile;
 import id.ezclouds.biz.ezservice.model.profile.MemberProfile;
@@ -168,6 +169,24 @@ public class ApiController extends AppController {
 
 
     // ================ TRANSACTIONAL APIs ==================
+
+    @PostMapping(value = "/api/member_register.json")
+    private ApiResult<BizMemberRegisterResult> memberRegister(@RequestBody MemberRegisterRequest request) {
+        return executeInTemplate(ApiEvent.API_MEMBER_REGISTER, request, new RequestHandler<BizMemberRegisterResult>() {
+            @Override
+            public BizMemberRegisterResult convertResult(Object resultObject) {
+                if (resultObject instanceof BizMemberRegisterResult) {
+                    return (BizMemberRegisterResult) resultObject;
+                }
+                return null;
+            }
+
+            @Override
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<BizMemberRegisterResult> result) {
+                return new EmptyDigestLog(result.isSuccess(), result.getResultCode());
+            }
+        });
+    }
 
     @PostMapping(value = "/api/login.php")
     private ApiResult<BizMemberLoginResult> memberLogin(@RequestBody MemberLoginRequest request) {

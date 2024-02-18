@@ -53,6 +53,8 @@ public class AppConstant {
         public static final String ILLEGAL_ACTION = "Sistem membatasi akses pada proses tersebut";
 
         public static final String MEMBER_UNAUTHORIZED = "Anda tidak memiliki akses untuk membuka halaman ini";
+
+        public static final String MEMBER_REGISTE_SUCCESS = "Pendaftaran anggota berhasil!";
     }
 
     public static final class ExtKey {

@@ -11,6 +11,7 @@ import id.ezclouds.biz.ezservice.converter.BizMemberConverter;
 import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.model.member.BizMemberInfo;
+import id.ezclouds.biz.ezservice.model.member.BizMemberRegisterResult;
 import id.ezclouds.biz.ezservice.model.profile.MemberProfile;
 import id.ezclouds.biz.ezservice.service.inner.service.BizMemberInnerService;
 import id.ezclouds.biz.ezservice.service.dataservice.AppProfileService;
@@ -132,7 +133,11 @@ public class BizMemberService extends BizBaseService {
             @Override
             public void onBizProcess() throws Exception {
                 BizMemberInfo bizMemberInfo = bizMemberInnerService.processRegisterMember(request);
-                bizResult.setObject(bizMemberInfo);
+                BizMemberRegisterResult result = new BizMemberRegisterResult();
+                result.setMemberId(bizMemberInfo.getBizMember().getMemberId());
+                result.setMessage(AppConstant.BizMessage.MEMBER_REGISTE_SUCCESS);
+
+                bizResult.setObject(result);
                 bizResult.setSuccess(true);
             }
 
