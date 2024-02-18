@@ -15,5 +15,8 @@ public class CoreConstant {
         public static final String WATZAP_API_KEY = "WATZAP_API_KEY";
         public static final String WATZAP_NUMBER_KEY = "WATZAP_NUMBER_KEY";
         public static final String WATZAP_API_URI = "WATZAP_API_URI";
+
+        public static final String CORE_AREA_LEVEL_ROOT = "CORE_AREA_LEVEL_ROOT";
+        public static final String CORE_AREA_ROOT_IDS = "CORE_AREA_ROOT_IDS";
     }
 }

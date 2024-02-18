@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.shared.converter;
 
+import id.ezclouds.core.shared.enums.CoreAreaLevel;
 import id.ezclouds.core.shared.model.*;
 import id.ezclouds.core.shared.repo.dataobject.*;
 
@@ -67,5 +68,41 @@ public class CoreModelConverter {
         dashboard.setLastUpdate(dashboardDO.getLastUpdate());
         dashboard.setSorting(dashboardDO.getSorting());
         return dashboard;
+    }
+
+    public static CoreArea convert(EzCoreAppProvinceDO provinceDO) {
+        if (provinceDO == null) { return null; }
+        CoreArea coreArea = new CoreArea();
+        coreArea.setId(provinceDO.getId());
+        coreArea.setName(provinceDO.getName());
+        coreArea.setAreaLevel(CoreAreaLevel.PROVINCE);
+        return coreArea;
+    }
+
+    public static CoreArea convert(EzCoreAppRegencyDO regencyDO) {
+        if (regencyDO == null) { return null; }
+        CoreArea coreArea = new CoreArea();
+        coreArea.setId(regencyDO.getId());
+        coreArea.setName(regencyDO.getName());
+        coreArea.setAreaLevel(CoreAreaLevel.REGENCY);
+        return coreArea;
+    }
+
+    public static CoreArea convert(EzCoreAppDistrictDO districtDO) {
+        if (districtDO == null) { return null; }
+        CoreArea coreArea = new CoreArea();
+        coreArea.setId(districtDO.getId());
+        coreArea.setName(districtDO.getName());
+        coreArea.setAreaLevel(CoreAreaLevel.DISTRICT);
+        return coreArea;
+    }
+
+    public static CoreArea convert(EzCoreAppVillageDO villageDO) {
+        if (villageDO == null) { return null; }
+        CoreArea coreArea = new CoreArea();
+        coreArea.setId(villageDO.getId());
+        coreArea.setName(villageDO.getName());
+        coreArea.setAreaLevel(CoreAreaLevel.VILLAGE);
+        return coreArea;
     }
 }

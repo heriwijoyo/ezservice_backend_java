@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,6 +64,15 @@ public class CoreConfigService {
 
     public String getWatzapApiUri() {
         return getConfigValue(CoreConstant.ConfigKey.WATZAP_API_URI);
+    }
+
+    public String getCoreAreaLevelRoot(String orgId) {
+        return getConfigValue(CoreConstant.ConfigKey.CORE_AREA_LEVEL_ROOT, orgId);
+    }
+
+    public List<String> getCoreAreaRootIds(String orgId) {
+        String configValue = getConfigValue(CoreConstant.ConfigKey.CORE_AREA_ROOT_IDS, orgId);
+        return Arrays.asList(configValue.split(","));
     }
 
     @Cacheable("coreConfig")
