@@ -35,6 +35,14 @@ public class CoreAreaService {
     @Autowired
     private CoreAppVillageRepository coreAppVillageRepository;
 
+    public List<CoreArea> getAllProvince() {
+        return coreAppProvinceRepository
+                .findAll()
+                .stream()
+                .map(CoreModelConverter::convert)
+                .collect(Collectors.toList());
+    }
+
     public List<CoreArea> getProvinceByIds(List<String> ids) {
         return coreAppProvinceRepository
                 .findByIdIn(ids)
@@ -59,9 +67,25 @@ public class CoreAreaService {
                 .collect(Collectors.toList());
     }
 
+    public List<CoreArea> getDistrictByIds(List<String> ids) {
+        return coreAppDistrictRepository
+                .findByIdIn(ids)
+                .stream()
+                .map(CoreModelConverter::convert)
+                .collect(Collectors.toList());
+    }
+
     public List<CoreArea> getDistrictByRegencyIds(List<String> regencyIds) {
         return coreAppDistrictRepository
                 .findByRegencyIdIn(regencyIds)
+                .stream()
+                .map(CoreModelConverter::convert)
+                .collect(Collectors.toList());
+    }
+
+    public List<CoreArea> getVillageByIds(List<String> ids) {
+        return coreAppVillageRepository
+                .findByIdIn(ids)
                 .stream()
                 .map(CoreModelConverter::convert)
                 .collect(Collectors.toList());

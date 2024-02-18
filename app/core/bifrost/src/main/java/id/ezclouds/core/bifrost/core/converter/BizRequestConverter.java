@@ -127,6 +127,18 @@ public class BizRequestConverter<T extends BizRequest> {
         return null;
     };
 
+    public static Handler<BizLocalAreaRequest> LOCAL_AREA = apiRequest -> {
+        if (apiRequest instanceof LocalAreaRequest) {
+            LocalAreaRequest request = (LocalAreaRequest) apiRequest;
+            BizLocalAreaRequest bizRequest = new BizLocalAreaRequest();
+            bizRequest.setAreaLevel(request.getAreaLevel());
+            bizRequest.setAreaIds(request.getAreaIds());
+            bizRequest.setParentIds(request.getParentIds());
+            return bizRequest;
+        }
+        return null;
+    };
+
     interface Handler<T extends BizRequest> {
         T convert(ApiRequest apiRequest);
     }

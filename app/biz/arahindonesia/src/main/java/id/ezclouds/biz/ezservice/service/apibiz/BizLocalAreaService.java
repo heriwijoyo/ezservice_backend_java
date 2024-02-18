@@ -47,8 +47,8 @@ public class BizLocalAreaService extends BizBaseService {
             public void onBizProcess() throws Exception {
                 CoreAreaLevel coreAreaLevel = CoreAreaLevel.getByCode(request.getAreaLevel());
                 List<String> areaIds = request.getAreaIds();
-                List<String> areaParentIds = request.getParentIds();
-                if (coreAreaLevel == null || areaIds == null || areaIds.isEmpty()) {
+                List<String> parentIds = request.getParentIds();
+                if (coreAreaLevel == null) {
                     coreAreaLevel = CoreAreaLevel.getByCode(coreConfigService.getCoreAreaLevelRoot(getOrgId()));
                     areaIds = coreConfigService.getCoreAreaRootIds(getOrgId());
                 }
@@ -56,27 +56,37 @@ public class BizLocalAreaService extends BizBaseService {
                 List<CoreArea> coreAreas = new ArrayList<>();
                 switch (coreAreaLevel) {
                     case PROVINCE:
-                        coreAreas = coreAreaService.getProvinceByIds(areaIds);
+                        if (CollectionUtil.isNotEmpty(areaIds)) {
+                            coreAreas = coreAreaService.getProvinceByIds(areaIds);
+                        } else {
+                            coreAreas = coreAreaService.getAllProvince();
+                        }
                         break;
 
                     case REGENCY:
                         if (CollectionUtil.isNotEmpty(areaIds)) {
                             coreAreas = coreAreaService.getRegencyByIds(areaIds);
                         }
-                        if (CollectionUtil.isNotEmpty(areaParentIds)) {
-                            coreAreas = coreAreaService.getRegencyByProvinceIds(areaParentIds);
+                        else if (CollectionUtil.isNotEmpty(parentIds)) {
+                            coreAreas = coreAreaService.getRegencyByProvinceIds(parentIds);
                         }
                         break;
 
                     case DISTRICT:
-                        if (CollectionUtil.isNotEmpty(areaParentIds)) {
-                            coreAreas = coreAreaService.getDistrictByRegencyIds(areaParentIds);
+                        if (CollectionUtil.isNotEmpty(areaIds)) {
+                            coreAreas = coreAreaService.getDistrictByIds(areaIds);
+                        }
+                        else if (CollectionUtil.isNotEmpty(parentIds)) {
+                            coreAreas = coreAreaService.getDistrictByRegencyIds(parentIds);
                         }
                         break;
 
                     case VILLAGE:
-                        if (CollectionUtil.isNotEmpty(areaParentIds)) {
-                            coreAreas = coreAreaService.getVillageByDistrictIds(areaParentIds);
+                        if (CollectionUtil.isNotEmpty(areaIds)) {
+                            coreAreas = coreAreaService.getVillageByIds(areaIds);
+                        }
+                        else if (CollectionUtil.isNotEmpty(parentIds)) {
+                            coreAreas = coreAreaService.getVillageByDistrictIds(parentIds);
                         }
                         break;
                 }

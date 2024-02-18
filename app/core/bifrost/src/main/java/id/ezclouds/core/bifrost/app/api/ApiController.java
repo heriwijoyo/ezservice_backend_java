@@ -21,12 +21,16 @@ import id.ezclouds.core.bifrost.app.api.digestlog.*;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.*;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
+import id.ezclouds.core.shared.model.CoreArea;
 import id.ezclouds.core.shared.result.ListResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -139,6 +143,24 @@ public class ApiController extends AppController {
                 EmptyDigestLog digestLog = new EmptyDigestLog(result.isSuccess(), result.getResultCode());
                 digestLog.composeDigest(request, toEmptyResult(result));
                 return digestLog;
+            }
+        });
+    }
+
+    @PostMapping(value = "/api/local_area.php")
+    private ApiResult<List<CoreArea>> getLocalArea(@RequestBody LocalAreaRequest request) {
+        return executeInTemplate(ApiEvent.API_GET_LOCAL_AREA, request, new RequestHandler<List<CoreArea>>() {
+            @Override
+            public List<CoreArea> convertResult(Object resultObject) {
+                if (resultObject instanceof ArrayList) {
+                    return (List<CoreArea>) resultObject;
+                }
+                return null;
+            }
+
+            @Override
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<List<CoreArea>> result) {
+                return new EmptyDigestLog(result.isSuccess(), result.getResultCode());
             }
         });
     }

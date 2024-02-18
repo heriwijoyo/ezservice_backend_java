@@ -54,6 +54,9 @@ public class ApiBizProcessor implements BizProcessor {
     @Autowired
     private BizAdminService bizAdminService;
 
+    @Autowired
+    private BizLocalAreaService bizLocalAreaService;
+
     @Override
     public BizResult process(ApiEvent apiEvent, ApiRequest apiRequest, MultipartFile file) throws EzErrorException {
 
@@ -110,6 +113,10 @@ public class ApiBizProcessor implements BizProcessor {
                 BizMemberUploadRequest uploadRequest = uploadConverter.convert(apiRequest);
                 uploadRequest.setMultipartFile(file);
                 return bizMemberService.memberUploadMedia(uploadRequest);
+
+            case API_GET_LOCAL_AREA:
+                BizRequestConverter<BizLocalAreaRequest> localAreaConverter = new BizRequestConverter<>(BizRequestConverter.LOCAL_AREA);
+                return bizLocalAreaService.getLocalArea(localAreaConverter.convert(apiRequest));
 
 
 
