@@ -49,11 +49,6 @@ public class WebController extends AppController {
     @Value("${ezserviceapp.download.apk_path}")
     private String downloadApkPath;
 
-    @RequestMapping(value = "/")
-    private String getIndexPage() {
-        return "Welcome to Arah Indonesia";
-    }
-
     @GetMapping(value = "/rjlapp/download/apk/{file}")
     public void downloadApk(@PathVariable("file") String file, HttpServletResponse response) throws IOException {
         Path apkFile = Paths.get(downloadApkPath, file).toAbsolutePath().normalize();

@@ -30,6 +30,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +45,11 @@ public class ApiController extends AppController {
     @Override
     protected Logger getLogger() {
         return LoggerFactory.getLogger(CommonLoggerConstant.API_CONTROLLER);
+    }
+
+    @GetMapping(value = "/")
+    private void index(HttpServletResponse response) throws IOException {
+        response.sendRedirect("index.html");
     }
 
     @PostMapping(value = "/api/setting.php")
