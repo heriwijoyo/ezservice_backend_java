@@ -13,7 +13,16 @@ import java.util.Map;
  */
 public class BizRequest {
 
+    private String requestId;
     private Map<String, String> extendInfo = new HashMap<>();
+
+    public String getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
+    }
 
     public Map<String, String> getExtendInfo() {
         return extendInfo;

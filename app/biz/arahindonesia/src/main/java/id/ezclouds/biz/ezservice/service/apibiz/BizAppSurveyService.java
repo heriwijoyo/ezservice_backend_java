@@ -62,6 +62,7 @@ public class BizAppSurveyService extends BizBaseService {
             @Override
             public void onRequestCheck() throws EzErrorException {
                 AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getRequestId(), EzErrorCode.ILLEGAL_PARAM);
                 AssertUtil.notBlank(request.getSurveyId(), EzErrorCode.ILLEGAL_PARAM);
                 AssertUtil.notBlank(request.getQuestionVersion(), EzErrorCode.ILLEGAL_PARAM);
                 AssertUtil.notBlank(request.getResponderDataEncoded(), EzErrorCode.ILLEGAL_PARAM);

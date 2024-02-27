@@ -6,7 +6,6 @@ package id.ezclouds.core.shared.service;
 
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
-import id.ezclouds.core.shared.enums.CoreUniqueScene;
 import id.ezclouds.core.shared.repo.CoreUniqueRepository;
 import id.ezclouds.core.shared.repo.dataobject.CoreUniqueDO;
 import id.ezclouds.core.shared.result.CoreResult;
@@ -24,14 +23,14 @@ public class CoreUniqueService {
     @Autowired
     private CoreUniqueRepository coreUniqueRepository;
 
-    public CoreResult<Boolean> insertAndCheck(CoreUniqueScene uniqueScene, String orgId, String uniqueValue) {
+    public CoreResult<Boolean> insertAndCheck(String orgId, String scene, String uniqueValue) {
         CoreResult<Boolean> coreResult = new CoreResult<>();
 
-        String uniqueId = orgId + uniqueScene.getCode() + uniqueValue;
+        String uniqueId = orgId + scene + uniqueValue;
         CoreUniqueDO coreUniqueDO = new CoreUniqueDO();
         coreUniqueDO.setUniqueId(uniqueId);
         coreUniqueDO.setOrgId(orgId);
-        coreUniqueDO.setScene(uniqueScene.getCode());
+        coreUniqueDO.setScene(scene);
         coreUniqueDO.setUniqueValue(uniqueValue);
         coreUniqueDO.setCreatedTime(DateUtil.getCurrentFormattedDate());
 
