@@ -1,3 +1,27 @@
+var EzWebAppViewHelper = {
+    start: function() {
+        $('#common-modal-close').click(function(){
+            $('#common-modal').removeClass('show');
+            $('#common-modal').addClass('fade');
+            EzWebAppViewHelper.onModalClose();
+        });
+    },
+    showModalAlert: function(title,message,onClose) {
+        EzWebAppViewHelper.onCustomModalClose = onClose;
+        $('#common-modal-title').html(title);
+        $('#common-modal-message').html(message);
+        $('#common-modal').removeClass('fade');
+        $('#common-modal').addClass('show');
+    },
+    onModalClose: function() {
+        $('#common-modal').removeClass('show');
+        $('#common-modal').addClass('fade');
+        if (EzWebAppViewHelper.onCustomModalClose !== undefined) {
+            EzWebAppViewHelper.onCustomModalClose();
+        }
+    },
+    onCustomModalClose: function() {},
+};
 var EzApiUrl = {
     GET_APP_DATA: 'api/getAppData.json',
     GET_DASHBOARD_DATA: 'api/getDashboardData.json',
@@ -25,18 +49,11 @@ var EzWebAppClient = {
     sessionIdCookieName: 'EzWebappCookieSessionId',
     modalScene: '',
     start: function() {
-        EzWebAppClient.startElementListener();
+        EzWebAppViewHelper.start();
         EzWebAppClient.callApiService(EzApiUrl.GET_APP_DATA, {});
     },
     onReady: function(handler) {
         EzWebAppClient.onReadyHandler = handler;
-    },
-    startElementListener: function() {
-        $('#common-modal-close').click(function(){
-            $('#common-modal').removeClass('show');
-            $('#common-modal').addClass('fade');
-            EzWebAppClient.onModalClose();
-        });
     },
     onApiBizSuccess: function(handler) {
         EzWebAppClient.apiBizSuccessHandler = handler;
@@ -53,7 +70,7 @@ var EzWebAppClient = {
             data.sessionId = sessionId;
             EzWebAppClient.callApi(url, data);
         } else {
-            EzWebAppClient.showModalAlert('SESSION_EXPIRED');
+            EzWebAppViewHelper.alertSessionExpired();
         }
     },
     handleApiSuccessResult: function(url, data) {
@@ -86,7 +103,7 @@ var EzWebAppClient = {
     },
     apiCallSuccessHandler: function(url, respData) {
         if (respData.sessionExpired) {
-            EzWebAppClient.showModalAlert('SESSION_EXPIRED');
+            EzWebAppClient.alertSessionExpired();
         } else {
             if (respData.success) {
                 EzWebAppClient.handleApiSuccessResult(url, respData);
@@ -95,20 +112,15 @@ var EzWebAppClient = {
             }
         }
     },
-    showModalAlert: function(scene) {
-        EzWebAppClient.modalScene = scene;
-        if (scene === 'SESSION_EXPIRED') {
-            $('#common-modal-title').html('Application Error');
-            $('#common-modal-message').html('Login session has been expired, please re-login');
-        }
-        $('#common-modal').removeClass('fade');
-        $('#common-modal').addClass('show');
-    },
-    onModalClose: function() {
-        if (EzWebAppClient.modalScene === 'SESSION_EXPIRED') {
-            EzWebAppClient.removeSessionCookie();
-            window.location.replace('login.htm');
-        }
+    alertSessionExpired: function() {
+        EzWebAppViewHelper.showModalAlert(
+            'Application Error',
+            'Login session has been expired, please re-login',
+            function() {
+                EzWebAppClient.removeSessionCookie();
+                window.location.replace('login.htm');
+            }
+        );
     },
     getSessionId: function() {
         let name = EzWebAppClient.sessionIdCookieName + "=";
