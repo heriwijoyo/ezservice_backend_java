@@ -156,7 +156,18 @@
             EzWebAppClient.callApiService(EzConfigApiUrl.GET_REFRESH_ALL_CACHES, {});
         },
         handleApiBizResult: function(url, response) {
-
+            if (url === EzConfigApiUrl.GET_REFRESH_ALL_CACHES) {
+                var message = 'Refreshed caches:<br><ul>';
+                for (var i=0; i<response.data.length; i++) {
+                    message += '<li>' + response.data[i] + '</li>';
+                }
+                message += '</ul>';
+                EzWebAppViewHelper.showModalAlert(
+                    'Operation Success',
+                    message,
+                    function(){}
+                );
+            }
         }
     };
 

@@ -140,6 +140,31 @@ public class WebApiController {
         return result;
     }
 
+    @PostMapping(value = "/webapp/api/refreshAllCaches.json")
+    private WebApiResult<List<String>> refreshAllCaches(@RequestParam(name = "sessionId", required = false) String sessionId) {
+        final WebApiResult<List<String>> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_REFRESH_ALL_CACHES, result, new WebApiControllerTemplate.Handler<List<String>>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                return bizAdminService.refreshAllCaches(sessionId);
+            }
+
+            @Override
+            public List<String> convertResult(Object object) {
+                if (object instanceof List) {
+                    return (List<String>) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
     private BizAdminUploadRequest composeUploadRequest(MultipartFile multipartFile, String postData) {
         BizAdminUploadRequest request;
 

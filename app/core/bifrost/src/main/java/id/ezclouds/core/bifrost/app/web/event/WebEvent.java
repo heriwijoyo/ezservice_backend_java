@@ -23,6 +23,8 @@ public enum WebEvent implements EzAppEvent {
     APP_IMAGE_GALLERY("APP_IMAGE_GALLERY"),
     ADMIN_COMMON_POST_WITH_FILE_UPLOAD("ADMIN_COMMON_POST_WITH_FILE_UPLOAD"),
 
+    WEB_API_REFRESH_ALL_CACHES("WEB_API_REFRESH_ALL_CACHES"),
+
     ;
 
     private final String code;
