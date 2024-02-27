@@ -107,6 +107,7 @@ public class BizRequestConverter<T extends BizRequest> {
         if (apiRequest instanceof SurveySubmitRequest) {
             SurveySubmitRequest request = (SurveySubmitRequest) apiRequest;
             BizSurveySubmitRequest bizRequest = new BizSurveySubmitRequest();
+            bizRequest.setRequestId(request.getExtendInfo().get("REQUEST_ID"));
             bizRequest.setSurveyId(request.getSurveyId());
             bizRequest.setQuestionVersion(request.getQuestionVersion());
             bizRequest.setResponderDataEncoded(request.getResponderDataEncoded());
