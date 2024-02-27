@@ -4,7 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.service.request.admin;
 
-import id.ezclouds.biz.ezservice.constant.BizUploadScene;
+import id.ezclouds.biz.ezservice.enums.BizUploadScene;
 import id.ezclouds.biz.ezservice.service.request.BizMultipartRequest;
 
 import java.util.ArrayList;

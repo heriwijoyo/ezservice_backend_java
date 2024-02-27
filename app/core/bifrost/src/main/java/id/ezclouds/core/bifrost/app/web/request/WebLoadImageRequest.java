@@ -4,7 +4,7 @@
  */
 package id.ezclouds.core.bifrost.app.web.request;
 
-import id.ezclouds.biz.ezservice.constant.WebLoadImageScene;
+import id.ezclouds.biz.ezservice.enums.WebLoadImageScene;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)

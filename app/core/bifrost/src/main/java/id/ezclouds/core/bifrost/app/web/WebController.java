@@ -4,7 +4,7 @@
  */
 package id.ezclouds.core.bifrost.app.web;
 
-import id.ezclouds.biz.ezservice.constant.WebLoadImageScene;
+import id.ezclouds.biz.ezservice.enums.WebLoadImageScene;
 import id.ezclouds.biz.ezservice.service.dataservice.BizOrganizationService;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.core.bifrost.app.AppController;

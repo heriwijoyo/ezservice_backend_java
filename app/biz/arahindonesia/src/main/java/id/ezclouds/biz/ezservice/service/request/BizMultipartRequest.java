@@ -4,7 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.service.request;
 
-import id.ezclouds.biz.ezservice.constant.BizUploadScene;
+import id.ezclouds.biz.ezservice.enums.BizUploadScene;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;

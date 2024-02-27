@@ -4,8 +4,8 @@
  */
 package id.ezclouds.biz.ezservice.service.webbiz;
 
-import id.ezclouds.biz.ezservice.constant.ImageRestriction;
-import id.ezclouds.biz.ezservice.constant.WebLoadImageScene;
+import id.ezclouds.biz.ezservice.enums.ImageRestriction;
+import id.ezclouds.biz.ezservice.enums.WebLoadImageScene;
 import id.ezclouds.biz.ezservice.service.dataservice.BizOrganizationService;
 import id.ezclouds.biz.ezservice.service.request.BizImageLoadRequest;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
