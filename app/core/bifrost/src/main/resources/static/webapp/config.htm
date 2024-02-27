@@ -165,10 +165,13 @@
             EzSystemConfigService.handleApiBizResult(url, response);
         });
         EzWebAppClient.onApiBizFailed(function(url, message){
-            console.log(url +' --- '+ message);
+            EzWebAppViewHelper.showModalAlert(
+                'API Biz Failed',
+                message,
+                function(){}
+            );
         });
         EzWebAppClient.onApiCallError(function(xhr){
-            console.log(xhr);
             EzWebAppViewHelper.showModalAlert(
                 'Application Error',
                 xhr.responseText,
