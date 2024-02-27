@@ -5,13 +5,14 @@
 package id.ezclouds.core.shared.service;
 
 import id.ezclouds.common.util.DateUtil;
+import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.core.shared.enums.CoreUniqueScene;
 import id.ezclouds.core.shared.repo.CoreUniqueRepository;
 import id.ezclouds.core.shared.repo.dataobject.CoreUniqueDO;
+import id.ezclouds.core.shared.result.CoreResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-
-import java.sql.SQLIntegrityConstraintViolationException;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -23,10 +24,10 @@ public class CoreUniqueService {
     @Autowired
     private CoreUniqueRepository coreUniqueRepository;
 
-    public boolean insertAndCheck(CoreUniqueScene uniqueScene, String orgId, String uniqueValue) {
-        boolean result;
-        String uniqueId = orgId + uniqueScene.getCode() + uniqueValue;
+    public CoreResult<Boolean> insertAndCheck(CoreUniqueScene uniqueScene, String orgId, String uniqueValue) {
+        CoreResult<Boolean> coreResult = new CoreResult<>();
 
+        String uniqueId = orgId + uniqueScene.getCode() + uniqueValue;
         CoreUniqueDO coreUniqueDO = new CoreUniqueDO();
         coreUniqueDO.setUniqueId(uniqueId);
         coreUniqueDO.setOrgId(orgId);
@@ -36,12 +37,13 @@ public class CoreUniqueService {
 
         try {
             coreUniqueRepository.save(coreUniqueDO);
-            result = true;
+            coreResult.setSuccess(true);
+        } catch (DataIntegrityViolationException integrityException) {
+            coreResult.setErrorCode(EzErrorCode.IDEMPOTENT_ERROR);
         } catch (Exception e) {
-            result = false;
-            e.printStackTrace();
+            coreResult.setErrorCode(EzErrorCode.SYSTEM_ERROR);
         }
 
-        return result;
+        return coreResult;
     }
 }
