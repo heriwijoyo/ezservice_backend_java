@@ -29,6 +29,8 @@ public class WebApiControllerTemplate {
 
             if (bizResult.isSuccess()) {
                 apiResult.setData(handler.convertResult(bizResult.getObject()));
+            } else {
+                apiResult.setMessage(bizResult.getErrorMessage());
             }
         } catch (Exception exception) {
             if (exception instanceof EzErrorException) {

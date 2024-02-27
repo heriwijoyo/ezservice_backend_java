@@ -366,6 +366,9 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
+                CoreAuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(sessionId);
+                authorizeSuperUserMember(adminSession.getMemberRoles());
+
                 bizResult.setSuccess(true);
                 bizResult.setObject(bizAppCacheService.refreshAllCaches());
             }
@@ -383,5 +386,11 @@ public class BizAdminService extends BizBaseService {
         AssertUtil.notBlank(memberRoles, EzErrorCode.MEMBER_UNAUTHORIZED);
         List<String> roles = Arrays.asList(memberRoles.split(","));
         AssertUtil.isTrue(roles.contains(BizMemberRole.ADMIN_ORG.getCode()), EzErrorCode.MEMBER_UNAUTHORIZED);
+    }
+
+    private void authorizeSuperUserMember(String memberRoles) throws EzErrorException {
+        AssertUtil.notBlank(memberRoles, EzErrorCode.MEMBER_UNAUTHORIZED);
+        List<String> roles = Arrays.asList(memberRoles.split(","));
+        AssertUtil.isTrue(roles.contains(BizMemberRole.SUPERUSER.getCode()), EzErrorCode.MEMBER_UNAUTHORIZED);
     }
 }
