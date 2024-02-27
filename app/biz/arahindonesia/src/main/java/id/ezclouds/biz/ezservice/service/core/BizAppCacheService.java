@@ -11,9 +11,7 @@ import id.ezclouds.core.shared.service.CoreAdminService;
 import id.ezclouds.core.shared.service.CoreConfigService;
 import id.ezclouds.core.shared.service.CoreFileService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.cache.CacheManager;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -71,18 +69,11 @@ public class BizAppCacheService {
     @Autowired
     private AppSurveyDataService appSurveyDataService;
 
-    @EventListener(ApplicationReadyEvent.class)
-    public void onEzAppStartup() {
-        refreshAllCache();
-
-        bizOrganizationService
-                .getActiveOrganizations()
-                .forEach(org -> {
-                    coreFileService.initPublicFileDirectory(org.getOrgId());
-                });
+    public List<String> refreshAllCaches() {
+        return refreshAllCaches(false);
     }
 
-    public List<String> refreshAllCache() {
+    public List<String> refreshAllCaches(boolean fromStartup) {
         List<String> cacheNames = new ArrayList<>();
 
         cacheManager.getCacheNames()
@@ -112,7 +103,9 @@ public class BizAppCacheService {
         cacheManager
                 .getCacheNames()
                 .forEach(cacheName -> {
-                    System.out.println("Refreshed Cache: " + cacheName);
+                    if (fromStartup) {
+                        System.out.println("Refreshed Cache: " + cacheName);
+                    }
                 });
 
         return cacheNames;

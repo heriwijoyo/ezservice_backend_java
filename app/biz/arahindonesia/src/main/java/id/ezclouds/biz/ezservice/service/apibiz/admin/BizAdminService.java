@@ -11,6 +11,7 @@ import id.ezclouds.biz.ezservice.model.admin.BizAdminAppData;
 import id.ezclouds.biz.ezservice.model.admin.BizAdminSession;
 import id.ezclouds.biz.ezservice.model.admin.BizDashboardData;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
+import id.ezclouds.biz.ezservice.service.core.BizAppCacheService;
 import id.ezclouds.biz.ezservice.service.dataservice.BizOrganizationService;
 import id.ezclouds.biz.ezservice.service.inner.service.BizAdminInnerService;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
@@ -64,6 +65,9 @@ public class BizAdminService extends BizBaseService {
 
     @Autowired
     private BizAdminInnerService bizAdminInnerService;
+
+    @Autowired
+    private BizAppCacheService bizAppCacheService;
 
     public BizResult createWebSession() {
         final BizResult bizResult = new BizResult();
@@ -363,7 +367,7 @@ public class BizAdminService extends BizBaseService {
             @Override
             public void onBizProcess() throws Exception {
                 bizResult.setSuccess(true);
-                bizResult.setObject(Arrays.asList("ONE", "TWO", "THREE"));
+                bizResult.setObject(bizAppCacheService.refreshAllCaches());
             }
 
             @Override
