@@ -4,6 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.service.apibiz;
 
+import id.ezclouds.biz.ezservice.enums.BizUniqueScene;
 import id.ezclouds.biz.ezservice.model.survey.BizSurveyForm;
 import id.ezclouds.biz.ezservice.service.dataservice.AppSurveyDataService;
 import id.ezclouds.biz.ezservice.service.dataservice.request.AppSurveyResponseRequest;
@@ -14,6 +15,8 @@ import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
+import id.ezclouds.core.shared.result.CoreResult;
+import id.ezclouds.core.shared.service.CoreUniqueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +26,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class BizAppSurveyService extends BizBaseService {
+
+    @Autowired
+    private CoreUniqueService coreUniqueService;
 
     @Autowired
     private AppSurveyDataService appSurveyDataService;
@@ -63,6 +69,7 @@ public class BizAppSurveyService extends BizBaseService {
             public void onRequestCheck() throws EzErrorException {
                 AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
                 AssertUtil.notBlank(request.getRequestId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.isTrue(request.getRequestId().length() <= 32, EzErrorCode.ILLEGAL_PARAM);
                 AssertUtil.notBlank(request.getSurveyId(), EzErrorCode.ILLEGAL_PARAM);
                 AssertUtil.notBlank(request.getQuestionVersion(), EzErrorCode.ILLEGAL_PARAM);
                 AssertUtil.notBlank(request.getResponderDataEncoded(), EzErrorCode.ILLEGAL_PARAM);
@@ -72,15 +79,35 @@ public class BizAppSurveyService extends BizBaseService {
             @Override
             public void onBizProcess() throws Exception {
                 CoreAuthMemberSessionInfo sessionInfo = authMemberSession();
-                AppSurveyResponseRequest surveyRequest = new AppSurveyResponseRequest();
-                surveyRequest.setOrgId(getOrgId());
-                surveyRequest.setSurveyId(request.getSurveyId());
-                surveyRequest.setSubmitterMemberId(sessionInfo.getMemberId());
-                surveyRequest.setQuestionVersion(request.getQuestionVersion());
-                surveyRequest.setResponderDataEncoded(request.getResponderDataEncoded());
-                surveyRequest.setResponseDataEncoded(request.getResponseDataEncoded());
 
-                appSurveyDataService.submitSurvey(surveyRequest);
+                CoreResult<Boolean> uniqueResult = coreUniqueService.insertUnique(
+                        getOrgId(), BizUniqueScene.BIZ_SURVEY_RESPONSE.getCode(), request.getRequestId());
+
+                if (uniqueResult.isSuccess()) {
+                    AppSurveyResponseRequest surveyRequest = new AppSurveyResponseRequest();
+                    surveyRequest.setOrgId(getOrgId());
+                    surveyRequest.setSurveyId(request.getSurveyId());
+                    surveyRequest.setSubmitterMemberId(sessionInfo.getMemberId());
+                    surveyRequest.setQuestionVersion(request.getQuestionVersion());
+                    surveyRequest.setResponderDataEncoded(request.getResponderDataEncoded());
+                    surveyRequest.setResponseDataEncoded(request.getResponseDataEncoded());
+
+                    try {
+                        appSurveyDataService.submitSurvey(surveyRequest);
+                        bizResult.setSuccess(true);
+                    } catch (Exception e) {
+                        coreUniqueService.revertUnique(
+                                getOrgId(), BizUniqueScene.BIZ_SURVEY_RESPONSE.getCode(), request.getRequestId());
+                        throw new EzErrorException(EzErrorCode.SYSTEM_ERROR);
+                    }
+
+                } else {
+                    if (uniqueResult.getErrorCode() == EzErrorCode.IDEMPOTENT_ERROR) {
+                        bizResult.setSuccess(true);
+                    } else {
+                        throw new EzErrorException(EzErrorCode.SYSTEM_ERROR);
+                    }
+                }
             }
 
             @Override

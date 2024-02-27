@@ -6,9 +6,9 @@ package id.ezclouds.biz.ezservice.enums;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: BizSequenceScene.java, v 0.1 2024‐02‐27 9:17 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: BizUniqueScene.java, v 0.1 2024‐02‐27 9:17 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public enum  BizSequenceScene {
+public enum BizUniqueScene {
 
     BIZ_SURVEY_RESPONSE("BIZ_SURVEY_RESPONSE"),
 
@@ -16,7 +16,7 @@ public enum  BizSequenceScene {
 
     private final String code;
 
-    BizSequenceScene(String code) {
+    BizUniqueScene(String code) {
         this.code = code;
     }
 
