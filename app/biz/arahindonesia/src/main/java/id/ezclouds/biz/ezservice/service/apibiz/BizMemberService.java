@@ -135,7 +135,7 @@ public class BizMemberService extends BizBaseService {
                 BizMemberInfo bizMemberInfo = bizMemberInnerService.processRegisterMember(request);
                 BizMemberRegisterResult result = new BizMemberRegisterResult();
                 result.setMemberId(bizMemberInfo.getBizMember().getMemberId());
-                result.setMessage(AppConstant.BizMessage.MEMBER_REGISTE_SUCCESS);
+                result.setMessage(AppConstant.BizMessage.MEMBER_REGISTER_SUCCESS);
 
                 bizResult.setObject(result);
                 bizResult.setSuccess(true);

@@ -69,6 +69,10 @@ public class BizBaseService {
             case SESSION_VERIFY_FAILED:
                 return AppConstant.BizMessage.SESSION_VERIFY_FAILED;
 
+            // Multipart Common Upload
+            case MULTIPARTFILE_EMPTY:
+                return AppConstant.BizMessage.MULTIPARTFILE_EMPTY;
+
             // General Error
             case ILLEGAL_ACTION:
                 return AppConstant.BizMessage.ILLEGAL_ACTION;

@@ -233,32 +233,31 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="largeModalLabel">Obtaining your Firebase Server API Key</h4>
+                <h4 class="modal-title" id="largeModalLabel">Upload New Image</h4>
             </div>
             <div class="modal-body">
-
-
                 <div class="row clearfix">
                     <div class="form-group form-float col-sm-12">
                         <div class="form-line">
-                            <div class="font-12">Category Name</div>
-                            <input type="text" class="form-control" name="category_name" id="category_name" placeholder="Category Name" required>
+                            <div class="font-12">Image Title</div>
+                            <input type="text" class="form-control" id="imageTitle" placeholder="Image Title" required>
                         </div>
                     </div>
-
                     <div class="col-sm-6" style="margin-bottom: 0px;">
                         <div class="form-group">
                             <div class="font-12 ex1">Image ( JPG, JPEG, PNG or GIF )</div>
-                            <input type="file" accept="image/*" name="category_image" oninput="imagePreview.src=window.URL.createObjectURL(this.files[0])" data-max-file-size="3M" data-allowed-file-extensions="jpg jpeg png gif" required/>
+                            <form id="newImageForm" enctype="multipart/form-data" method="post">
+                                <input type="file" accept="image/*" name="imageFile" id="imageFile" oninput="imagePreview.src=window.URL.createObjectURL(this.files[0]);imagePreview.style.display='block';" data-max-file-size="3M" data-allowed-file-extensions="jpg jpeg png gif" required/>
+                            </form>
                             <img id="imagePreview" style="max-width:100%">
                         </div>
                     </div>
                     <div class="col-sm-12">
-                        <button class="button button-rounded waves-effect waves-float pull-right" type="submit" name="submit">SUBMIT</button>
+                        <img id="newImageSubmitLoader" src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right">
+                        <button id="newImageSubmitButton" class="button button-rounded waves-effect waves-float pull-right" type="submit" name="submit">SUBMIT</button>
+                        <button id="newImageCancelButton" class="button button-rounded button-light waves-effect waves-float pull-right" type="submit" name="submit">CANCEL</button>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </div>
@@ -267,16 +266,10 @@
 
 <script src="assets/js/jquery.min.js"></script>
 <script src="assets/plugins/bootstrap/js/bootstrap.js"></script>
-<!--script src="assets/plugins/bootstrap-select/js/bootstrap-select.js"></script-->
 <script src="assets/js/jquery.slimscroll.js"></script>
 <script src="assets/js/waves.js"></script>
-<!-- <script src="assets/plugins/autosize/autosize.js"></script> -->
-<!--script src="assets/js/jquery.validate.js"></script-->
-<!--script src="assets/plugins/dropify/js/dropify.js"></script-->
 <script src="assets/js/admin.js"></script>
-<!--script src="assets/js/form-validation.js"></script-->
 <script src="assets/js/bootstrap-tagsinput.min.js"></script>
-<!--script src="assets/js/demo.js"></script-->
 <script src="assets/js/ezappclient.js"></script>
 
 <script type="text/javascript">
@@ -285,6 +278,65 @@
             //EzWebAppClient.callApiService(EzApiUrl.GET_APP_GALLERY, {});
         },
         handleApiBizResult: function(url, response) {
+        },
+        postNewImage: function() {
+            let sessionId = EzWebAppClient.getSessionId();
+            let title = $('#imageTitle').val();
+            let postData = {
+                sessionId: sessionId,
+                scene: 'ADMIN_APP_GALLERY',
+                extendInfo: {
+                    TITLE: title
+                }
+            };
+
+            let form = $('#newImageForm')[0];
+            let data = new FormData(form);
+            data.append('postData', JSON.stringify(postData));
+
+            $.ajax({
+                type: 'POST',
+                enctype: 'multipart/form-data',
+                url: 'api/adminCommonPost.json',
+                data: data,
+                processData: false,
+                contentType: false,
+                cache: false,
+                timeout: 600000,
+                success: function(response) {
+                    if (response.sessionExpired) {
+                        EzWebAppClient.alertSessionExpired();
+                    }
+                    else if (!response.success) {
+                        alert(response.message);
+                        EzDashboadBizService.resetFormNewImage();
+                    }
+                    else {
+                        alert(response.data);
+                        EzDashboadBizService.hideFormNewImage();
+                        EzDashboadBizService.resetFormNewImage();
+                    }
+                },
+                error: function(e) {
+                    console.log(e);
+                }
+            });
+        },
+        showFormNewImage: function() {
+            $('#modal-form-new').removeClass('fade');
+            $('#modal-form-new').addClass('show');
+        },
+        hideFormNewImage: function() {
+            $('#modal-form-new').removeClass('show');
+            $('#modal-form-new').addClass('fade');
+        },
+        resetFormNewImage: function() {
+            $('#imageTitle').val('');
+            $('#imageFile').val('');
+            $('#imagePreview').hide();
+            $('#newImageSubmitLoader').hide();
+            $('#newImageSubmitButton').show();
+            $('#newImageCancelButton').show();
         }
     };
 
@@ -304,8 +356,17 @@
         EzWebAppClient.start();
 
         $('#form-add-new-btn').click(function(){
-            $('#modal-form-new').removeClass('fade');
-            $('#modal-form-new').addClass('show');
+            EzDashboadBizService.showFormNewImage();
+        });
+        $('#newImageCancelButton').click(function(){
+            EzDashboadBizService.hideFormNewImage();
+        });
+        $('#newImageSubmitButton').click(function(event){
+            event.preventDefault();
+            $('#newImageSubmitButton').hide();
+            $('#newImageCancelButton').hide();
+            $('#newImageSubmitLoader').show();
+            EzDashboadBizService.postNewImage();
         });
     });
 

@@ -54,7 +54,9 @@ public class AppConstant {
 
         public static final String MEMBER_UNAUTHORIZED = "Anda tidak memiliki akses untuk proses tersebut";
 
-        public static final String MEMBER_REGISTE_SUCCESS = "Pendaftaran anggota berhasil!";
+        public static final String MEMBER_REGISTER_SUCCESS = "Pendaftaran anggota berhasil!";
+
+        public static final String MULTIPARTFILE_EMPTY = "File yang anda pilih tidak valid";
     }
 
     public static final class ExtKey {

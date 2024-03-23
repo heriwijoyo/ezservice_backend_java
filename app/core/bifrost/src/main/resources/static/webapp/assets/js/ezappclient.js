@@ -113,11 +113,11 @@ var EzWebAppClient = {
         }
     },
     alertSessionExpired: function() {
+        EzWebAppClient.removeSessionCookie();
         EzWebAppViewHelper.showModalAlert(
             'Application Error',
             'Login session has been expired, please re-login',
             function() {
-                EzWebAppClient.removeSessionCookie();
                 window.location.replace('login.htm');
             }
         );

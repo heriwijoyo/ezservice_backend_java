@@ -36,7 +36,7 @@ public class BizAdminInnerService {
         request.setOrgId(orgId);
         request.setImageUrl(fileName);
         if (extInfo != null && !extInfo.isEmpty()) {
-            //TODO: compose other request information
+            request.setTitle(extInfo.get("TITLE"));
         }
         appImageGalleryService.createImageGallery(request);
     }
