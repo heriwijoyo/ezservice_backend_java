@@ -16,6 +16,7 @@ import id.ezclouds.common.util.exception.ExceptionUtil;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;
+import id.ezclouds.core.bifrost.app.web.result.WebApiPageResult;
 import id.ezclouds.core.bifrost.app.web.result.WebApiResult;
 import id.ezclouds.core.shared.util.DigestLogUtil;
 import org.slf4j.Logger;
@@ -92,13 +93,13 @@ public class WebApiController {
     }
 
     @PostMapping(value = "/webapp/api/getAppGallery.json")
-    private WebApiResult<PageResult<AppImageGallery>> getAppGallery(
+    private WebApiPageResult<AppImageGallery> getAppGallery(
             @RequestParam(name = "sessionId", required = false) String sessionId,
             @RequestParam(name = "pageNumber", required = false) int pageNumber,
             @RequestParam(name = "pageSize", required = false) int pageSize
     ) {
-        final WebApiResult<PageResult<AppImageGallery>> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_IMAGE_GALLERY, result, new WebApiControllerTemplate.Handler<PageResult<AppImageGallery>>() {
+        final WebApiPageResult<AppImageGallery> result = new WebApiPageResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_IMAGE_GALLERY, result, new WebApiControllerTemplate.PageHandler<AppImageGallery>() {
             @Override
             public BizResult onProcess() throws Exception {
                 return bizAdminService.getAppGallery(sessionId, pageNumber, pageSize);
@@ -106,7 +107,7 @@ public class WebApiController {
 
             @Override
             public PageResult<AppImageGallery> convertResult(Object object) {
-                if (object instanceof List) {
+                if (object instanceof PageResult) {
                     return (PageResult<AppImageGallery>) object;
                 }
                 return null;
