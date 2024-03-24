@@ -85,6 +85,10 @@ public class BizAdminInnerService {
     }
 
     private PageRequest buildPageRequest(int page, int size, String sortBy, String sort) {
+        if (StringUtil.isBlank(sortBy)) {
+            return PageRequest.of(page - 1, size);
+        }
+
         Sort.Direction sortDirection = Sort.Direction.ASC;
         if (StringUtil.equalsIgnoreCase("DESC", sort)) {
             sortDirection = Sort.Direction.DESC;

@@ -10,6 +10,7 @@ import id.ezclouds.biz.ezservice.model.admin.BizDashboardData;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
 import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
+import id.ezclouds.biz.ezservice.service.request.web.BizWebPageRequest;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.result.PageResult;
 import id.ezclouds.common.util.exception.ExceptionUtil;
@@ -102,7 +103,11 @@ public class WebApiController {
         WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_IMAGE_GALLERY, result, new WebApiControllerTemplate.PageHandler<AppImageGallery>() {
             @Override
             public BizResult onProcess() throws Exception {
-                return bizAdminService.getAppGallery(sessionId, pageNumber, pageSize);
+                BizWebPageRequest request = new BizWebPageRequest();
+                request.setSessionId(sessionId);
+                request.setPageNumber(pageNumber);
+                request.setPageSize(pageSize);
+                return bizAdminService.getAppGallery(request);
             }
 
             @Override

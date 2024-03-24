@@ -19,6 +19,7 @@ import id.ezclouds.biz.ezservice.service.dataservice.BizOrganizationService;
 import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.inner.service.BizAdminInnerService;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
+import id.ezclouds.biz.ezservice.service.request.web.BizWebPageRequest;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.result.PageResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
@@ -302,22 +303,32 @@ public class BizAdminService extends BizBaseService {
         return bizResult;
     }
 
-    public BizResult getAppGallery(String sessionId, int pageNumber, int pageSize) {
+    public BizResult getAppGallery(BizWebPageRequest request) {
         final BizResult bizResult = new BizResult();
 
         BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
             @Override
             public void onRequestCheck() throws EzErrorException {
-                AssertUtil.notBlank(sessionId, EzErrorCode.SESSION_INVALID);
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notNull(request.getPageNumber(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notNull(request.getPageSize(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.isTrue(request.getPageNumber() > 0, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.isTrue(request.getPageSize() > 0, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.SESSION_INVALID);
             }
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(sessionId);
+                CoreAuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(request.getSessionId());
                 authorizeAdminMember(adminSession.getMemberRoles());
 
                 BizPublicUrlResolver urlResolver = new BizPublicUrlResolverImpl(appRootPublicUrl, adminSession.getOrgCode());
-                PageResult<AppImageGallery> pageResult = bizAdminInnerService.getImageGalleryAll(pageNumber, pageSize, "createdTime", "desc");
+                PageResult<AppImageGallery> pageResult = bizAdminInnerService.getImageGalleryAll(
+                        request.getPageNumber(),
+                        request.getPageSize(),
+                        request.getSortBy(),
+                        request.getSort()
+                );
                 pageResult.getData().forEach(gallery -> {
                     BizAnnotationProcessor.annotatePublicConfig(gallery, urlResolver);
                 });
