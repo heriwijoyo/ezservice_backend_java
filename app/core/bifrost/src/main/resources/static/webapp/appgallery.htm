@@ -201,12 +201,10 @@
         },
         handleApiBizResult: function(url, response) {
             if (url === EzApiUrl.GET_APP_GALLERY) {
-                console.log(response);
                 EzDashboadBizService.data.result = response.pageResult;
                 EzDashboadBizService.reloadPageResultView(response);
             }
             if (url === EzApiUrl.UPDATE_APP_GALLERY) {
-                console.log(response);
                 EzDashboadBizService.fetchGalleries();
             }
         },
@@ -246,6 +244,7 @@
                         alert(response.data);
                         EzDashboadBizService.hideFormNewImage();
                         EzDashboadBizService.resetFormNewImage();
+                        EzDashboadBizService.fetchGalleries();
                     }
                 },
                 error: function(e) {
@@ -265,7 +264,7 @@
                 $(itemRow).find('.rowActive').html(EzDashboadBizService.renderFlag(rowData.status,'status',rowData.id));
                 $(itemRow).find('.rowHome').html(EzDashboadBizService.renderFlag(rowData.flagHomeSlide,'home',rowData.id));
                 $(itemRow).find('.rowPortfolio').html(EzDashboadBizService.renderFlag(rowData.flagPortfolioSlide,'portfolio',rowData.id));
-                $(itemRow).find('.rowSorting').html('<center>'+rowData.sorting+'</center>');
+                $(itemRow).find('.rowSorting').html('<center><input type="text" class="border" value="'+rowData.sorting+'" onchange="EzDashboadBizService.swithFlag(\''+rowData.id+'\',\'sorting\',this.value)"/></center>');
                 $('#rowsContainer').append(itemRow);
             }
             $('.pager').html(EzWebAppClient.renderPager(response.pageResult));
@@ -309,7 +308,7 @@
         },
         data: {
             pageNumber: 1,
-            pageSize: 3,
+            pageSize: 5,
             result: null
         }
     };
