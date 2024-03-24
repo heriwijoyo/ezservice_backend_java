@@ -102,111 +102,26 @@
                     <div class="header">
                         <h2>MANAGE GALLERY</h2>
                         <div class="header-dropdown m-r--5">
-                            <!--label for="form-add-new-file" class="button button-rounded btn-offset waves-effect waves-float">ADD NEW GALLERY</label>
-                            <input type="file" accept="image/*" id="form-add-new-file" style="opacity: 0; height: 0; width: 0; margin: 0; display: inline;" onchange="previewImage()"-->
                             <button id="form-add-new-btn" type="button" class="button button-rounded btn-offset waves-effect waves-float">ADD NEW GALLERY</button>
                         </div>
                     </div>
 
                     <div style="margin-top: -10px;" class="body table-responsive">
-
-                        <form method="get" id="form_validation" novalidate="novalidate">
-                            <table class="table">
-                                <tbody><tr>
-                                    <td>
-                                        <div class="form-group form-float">
-                                            <div class="form-line">
-                                                <input type="text" class="form-control" name="keyword" placeholder="Search..." required="" aria-required="true">
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td width="1%"><a href="news.php"><button type="button" class="button button-rounded waves-effect waves-float">RESET</button></a></td>
-                                    <td width="1%"><button type="submit" class="btn bg-blue btn-circle waves-effect waves-circle waves-float"><i class="material-icons">search</i></button></td>
-                                </tr>
-                                </tbody></table>
-                        </form>
-
-                        <form method="post" action="">
-
-                            <div style="margin-left: 8px; margin-top: -36px; margin-bottom: 10px;">
-                                <button type="submit" name="submit" id="submit" class="button button-rounded waves-effect waves-float" onclick="return confirm('Are you sure want to delete all selected news?')">Delete selected items(s)</button>&nbsp;&nbsp;
-                                <a href="" data-toggle="modal" data-target="#modal-jump-to-page"><button type="button" class="button button-rounded waves-effect waves-float">Jump to Page</button></a>
-                            </div>
-
-                            <table class="table table-hover table-striped">
-                                <thead>
-                                <tr>
-                                    <th width="1%">
-                                        <div style="margin-bottom: -15px">
-                                            <input id="chk_all" name="chk_all" type="checkbox" class="filled-in chk-col-blue">
-                                            <label for="chk_all"></label>
-                                        </div>
-                                    </th>
-                                    <th width="40%">Title</th>
-                                    <th width="1%">Image</th>
-                                    <th width="15%">Date</th>
-                                    <th width="5%">Category</th>
-                                    <th width="1%"><center>Comment</center></th>
-                                    <th width="1%"><center>View</center></th>
-                                    <th width="10%"><center>Type</center></th>
-                                    <th width="30%"><center>Action</center></th>
-                                </tr>
-                                </thead>
-                                <tbody><tr>
-
-                                    <td style="vertical-align: middle;" width="1%">
-                                        <div style="margin-top: 10px;">
-                                            <input type="checkbox" name="chk_id[]" id="36" class="chkbox filled-in chk-col-blue" value="36">
-                                            <label for="36"></label>
-                                        </div>
-                                    </td>
-
-                                    <td style="vertical-align: middle;">US safety body to probe Tesla on in-car gameplay</td>
-
-                                    <td style="vertical-align: middle;">
-                                        <img class="img-rounded" style="object-fit:cover;" src="upload/1686220313_tesla.jpg" height="60px" width="80px">
-                                    </td>
-
-                                    <td style="vertical-align: middle;">2023-06-08 06:31:42</td>
-                                    <td style="vertical-align: middle;">Technology</td>
-                                    <td style="vertical-align: middle;">
-                                        <center>
-                                            0												</center>
-                                    </td>
-                                    <td style="vertical-align: middle;"><center>11.212</center></td>
-                                    <td style="vertical-align: middle;"><center>
-                                        <span class="label label-rounded bg-blue">NEWS</span>
-
-                                    </center></td>
-                                    <td style="vertical-align: middle;"><center>
-
-                                        <a href="news.php?page=1&amp;disable=36" onclick="return confirm('Are you sure want to disable this news?')">
-                                            <i class="material-icons">visibility</i>
-                                        </a>
-
-                                        <a href="news-send.php?id=36">
-                                            <i class="material-icons">notifications_active</i>
-                                        </a>
-
-                                        <a href="news-detail.php?id=36">
-                                            <i class="material-icons">launch</i>
-                                        </a>
-
-                                        <a href="news-edit.php?id=36">
-                                            <i class="material-icons">mode_edit</i>
-                                        </a>
-
-                                        <a href="news-delete.php?id=36" onclick="return confirm('Are you sure want to delete this News?')">
-                                            <i class="material-icons">delete</i>
-                                        </a></center>
-                                    </td>
-                                </tr>
-                                </tbody></table>
-
-                        </form>
-
-                        <ul class="pager"><li class="previous disabled"><a><div class="padding-pagination button-grey button-rounded"><span aria-hidden="true">←</span>&nbsp;&nbsp;Previous</div></a></li><li><a><div class="padding-pagination">Page 1 of 4</div></a></li><li class="next"><a href="news.php?page=2&amp;keyword= "><div class="padding-pagination button button-rounded waves-effect waves-float">Next&nbsp;&nbsp;<span aria-hidden="true">→</span></div></a></li></ul>					</div>
-
+                        <table class="table table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th width="20%">Image</th>
+                                <th width="40%">Title</th>
+                                <th width="10%" class="text-center">Active</th>
+                                <th width="10%" class="text-center">HOME</th>
+                                <th width="10%" class="text-center">PORTFOLIO</th>
+                                <th width="10%" class="text-center">SORTING</th>
+                            </tr>
+                            </thead>
+                            <tbody id="rowsContainer"></tbody>
+                        </table>
+                        <ul class="pager"></ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -287,6 +202,8 @@
         handleApiBizResult: function(url, response) {
             if (url === EzApiUrl.GET_APP_GALLERY) {
                 console.log(response);
+                EzDashboadBizService.data.result = response.pageResult;
+                EzDashboadBizService.reloadPageResultView(response);
             }
         },
         postNewImage: function() {
@@ -332,6 +249,30 @@
                 }
             });
         },
+        reloadPageResultView: function(response) {
+            $('#rowsContainer').html('');
+            for(let i=0; i<response.pageResult.data.length; i++) {
+                let rowData = response.pageResult.data[i];
+                let title = '<b>'+ rowData.title +'</b><br>Uploaded: '+ rowData.createdTime;
+                let flags = 'HOME_SLIDE: <b>NO</b>'+ '<br>PORTFOLIO_SLIDE: <b>NO</b>';
+                let itemRow = $.parseHTML(DashTemplate);
+                $(itemRow).find('.img-rounded').attr('src', rowData.imageUrl);
+                $(itemRow).find('.rowTitle').html(title);
+                $(itemRow).find('.rowActive').html(EzDashboadBizService.renderFlag(rowData.status,'status',rowData.id));
+                $(itemRow).find('.rowHome').html(EzDashboadBizService.renderFlag(rowData.flagHomeSlide,'home',rowData.id));
+                $(itemRow).find('.rowPortfolio').html(EzDashboadBizService.renderFlag(rowData.flagPortfolioSlide,'portfolio',rowData.id));
+                $(itemRow).find('.rowSorting').html('<center>'+rowData.sorting+'</center>');
+                $('#rowsContainer').append(itemRow);
+            }
+            $('.pager').html(EzWebAppClient.renderPager(response.pageResult));
+        },
+        renderFlag: function(flag,section,id) {
+            let flagText = flag == 1 ? 'YES' : 'NO';
+            return '<center>'+ flagText + '<br><button onClick="EzDashboadBizService.swithFlag(\''+section+'\',\''+id+'\')" class="button button-rounded waves-effect waves-float" type="submit">SWITCH</button></center>';
+        },
+        swithFlag: function(section, id) {
+            alert(section +' - '+ id);
+        },
         showFormNewImage: function() {
             $('#modal-form-new').removeClass('fade');
             $('#modal-form-new').addClass('show');
@@ -348,9 +289,18 @@
             $('#newImageSubmitButton').show();
             $('#newImageCancelButton').show();
         },
+        prev: function() {
+            EzDashboadBizService.data.pageNumber--;
+            EzDashboadBizService.fetchGalleries();
+        },
+        next: function() {
+            EzDashboadBizService.data.pageNumber++;
+            EzDashboadBizService.fetchGalleries();
+        },
         data: {
             pageNumber: 1,
-            pageSize: 10
+            pageSize: 3,
+            result: null
         }
     };
 
@@ -366,6 +316,12 @@
         });
         EzWebAppClient.onReady(function(){
             EzDashboadBizService.start();
+        });
+        EzWebAppClient.onPrev(function(){
+            EzDashboadBizService.prev();
+        });
+        EzWebAppClient.onNext(function(){
+            EzDashboadBizService.next();
         });
         EzWebAppClient.start();
 
@@ -385,17 +341,16 @@
     });
 
     var DashTemplate = ''+
-        '<a href="">'+
-            '<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">'+
-                '<div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">'+
-                    '<br>'+
-                    '<div id="dashboard-name" class="color-name uppercase"></div>'+
-                    '<div class="color-name"><i id="dashboard-icon" class="material-icons"></i></div>'+
-                    '<div id="dashboard-label" class="color-class-name">Total 9 item</div>'+
-                    '<br>'+
-                '</div>'+
-            '</div>'+
-        '</a>';
+        '<tr>'+
+            '<td style="vertical-align: middle;">'+
+                '<img class="img-rounded" style="object-fit:cover;" height="180px" width="240px">'+
+            '</td>'+
+            '<td class="rowTitle" style="vertical-align: middle;"></td>'+
+            '<td class="rowActive" style="vertical-align: middle;"></td>'+
+            '<td class="rowHome" style="vertical-align: middle;"></td>'+
+            '<td class="rowPortfolio" style="vertical-align: middle;"></td>'+
+            '<td class="rowSorting" style="vertical-align: middle;"></td>'+
+        '</tr>';
 
 </script>
 </body>

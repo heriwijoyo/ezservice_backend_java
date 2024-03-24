@@ -16,24 +16,25 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public class WebImageGallery {
 
-    private String orgId;
+    private String id;
     private String title;
     @PublicImageUrl(name = AppConstant.Annotation.APP_GALLERY_URL)
     private String imageUrl;
     private String targetType;
     private String targetUrl;
 
-    private int flagHomeSlide = 0;
-    private int flagPortfolioSlide = 0;
+    private int flagHomeSlide;
+    private int flagPortfolioSlide;
     private String createdTime;
-    private int sorting = 0;
+    private int sorting;
+    private int status;
 
-    public String getOrgId() {
-        return orgId;
+    public String getId() {
+        return id;
     }
 
-    public void setOrgId(String orgId) {
-        this.orgId = orgId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -98,6 +99,14 @@ public class WebImageGallery {
 
     public void setSorting(int sorting) {
         this.sorting = sorting;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     @Override

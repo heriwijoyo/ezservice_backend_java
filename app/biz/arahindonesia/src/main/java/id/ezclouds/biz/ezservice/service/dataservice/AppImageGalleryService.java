@@ -93,7 +93,7 @@ public class AppImageGalleryService {
                 .stream()
                 .map(modelDO -> {
                     WebImageGallery gallery = new WebImageGallery();
-                    gallery.setOrgId(modelDO.getOrgId());
+                    gallery.setId(modelDO.getId());
                     gallery.setTitle(modelDO.getTitle());
                     gallery.setImageUrl(modelDO.getImageUrl());
                     gallery.setTargetType(modelDO.getTargetType());
@@ -102,6 +102,7 @@ public class AppImageGalleryService {
                     gallery.setFlagPortfolioSlide(modelDO.getFlagPortfolioSlide());
                     gallery.setCreatedTime(modelDO.getCreatedTime());
                     gallery.setSorting(modelDO.getSorting());
+                    gallery.setStatus(modelDO.getStatus());
                     return gallery;
                 })
                 .collect(Collectors.toList());
@@ -112,6 +113,8 @@ public class AppImageGalleryService {
         pageResult.setNumberRecord(findResult.getNumberOfElements());
         pageResult.setTotalPage(findResult.getTotalPages());
         pageResult.setTotalRecord((int)findResult.getTotalElements());
+        pageResult.setHasNext(findResult.hasNext());
+        pageResult.setHasPrevious(findResult.hasPrevious());
         pageResult.setData(resultData);
 
         return pageResult;

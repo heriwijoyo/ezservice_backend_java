@@ -55,6 +55,22 @@ var EzWebAppClient = {
     onReady: function(handler) {
         EzWebAppClient.onReadyHandler = handler;
     },
+    onPrev: function(handler) {
+        EzWebAppClient.onPrevHandler = handler;
+    },
+    prev: function() {
+        if (EzWebAppClient.onPrevHandler!==undefined) {
+            EzWebAppClient.onPrevHandler();
+        }
+    },
+    onNext: function(handler) {
+        EzWebAppClient.onNextHandler = handler;
+    },
+    next: function() {
+        if (EzWebAppClient.onNextHandler!==undefined) {
+            EzWebAppClient.onNextHandler();
+        }
+    },
     onApiBizSuccess: function(handler) {
         EzWebAppClient.apiBizSuccessHandler = handler;
     },
@@ -139,6 +155,21 @@ var EzWebAppClient = {
     },
     removeSessionCookie: function() {
         document.cookie = EzWebAppClient.sessionIdCookieName +'=; Path=/webapp; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    },
+    renderPager: function(pageResult) {
+        let prevDisabled = pageResult.hasPrevious ? '' : 'disabled';
+        let prevClass = pageResult.hasPrevious ? 'button button-rounded waves-effect waves-float' : 'button-grey';
+        let prevOnClick = pageResult.hasPrevious ? 'onClick="EzWebAppClient.prev()"' : '';
+
+        let nextDisabled = pageResult.hasNext ? '' : 'disabled';
+        let nextClass = pageResult.hasNext ? 'button button-rounded waves-effect waves-float' : 'button-grey';
+        let nextOnClick = pageResult.hasNext ? 'onClick="EzWebAppClient.next()"' : '';
+
+        let pagerHTML = ''+
+        '<li class="previous '+prevDisabled+'"><a '+prevOnClick+'><div class="padding-pagination '+prevClass+'"><span aria-hidden="true">←</span>&nbsp;&nbsp;Previous</div></a></li>'+
+        '<li><a><div class="padding-pagination">Page '+pageResult.pageNumber+' of '+pageResult.totalPage+'</div></a></li>'+
+        '<li class="next '+nextDisabled+'"><a '+nextOnClick+'><div class="padding-pagination '+nextClass+'">Next&nbsp;&nbsp;<span aria-hidden="true">→</span></div></a></li>';
+        return pagerHTML;
     }
 };
 

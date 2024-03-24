@@ -20,6 +20,8 @@ public class PageResult<T> {
     private int numberRecord;
     private int totalPage;
     private int totalRecord;
+    private boolean hasNext;
+    private boolean hasPrevious;
     private List<T> data;
 
     public int getPageNumber() {
@@ -60,6 +62,22 @@ public class PageResult<T> {
 
     public void setTotalRecord(int totalRecord) {
         this.totalRecord = totalRecord;
+    }
+
+    public boolean isHasNext() {
+        return hasNext;
+    }
+
+    public void setHasNext(boolean hasNext) {
+        this.hasNext = hasNext;
+    }
+
+    public boolean isHasPrevious() {
+        return hasPrevious;
+    }
+
+    public void setHasPrevious(boolean hasPrevious) {
+        this.hasPrevious = hasPrevious;
     }
 
     public List<T> getData() {
