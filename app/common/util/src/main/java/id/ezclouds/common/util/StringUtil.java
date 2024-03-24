@@ -44,6 +44,13 @@ public class StringUtil {
         return str1 == null ? str2 == null : str1.equals(str2);
     }
 
+    public static boolean equalsIgnoreCase(String str1, String str2) {
+        if (isBlank(str1) || isBlank(str2)) {
+            return false;
+        }
+        return equals(str1.toUpperCase(), str2.toUpperCase());
+    }
+
     public static boolean equalsNotNull(String str1, String str2) {
         if (str1 == null || str2 == null) {
             return false;

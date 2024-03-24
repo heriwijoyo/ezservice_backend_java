@@ -4,18 +4,23 @@
  */
 package id.ezclouds.biz.ezservice.service.apibiz.admin;
 
+import id.ezclouds.biz.ezservice.config.BizPublicUrlResolver;
+import id.ezclouds.biz.ezservice.config.BizPublicUrlResolverImpl;
 import id.ezclouds.biz.ezservice.constant.BizConstant;
 import id.ezclouds.biz.ezservice.enums.BizMemberRole;
 import id.ezclouds.biz.ezservice.converter.BizAdminConverter;
 import id.ezclouds.biz.ezservice.model.admin.BizAdminAppData;
 import id.ezclouds.biz.ezservice.model.admin.BizAdminSession;
 import id.ezclouds.biz.ezservice.model.admin.BizDashboardData;
+import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
 import id.ezclouds.biz.ezservice.service.core.BizAppCacheService;
 import id.ezclouds.biz.ezservice.service.dataservice.BizOrganizationService;
+import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.inner.service.BizAdminInnerService;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
+import id.ezclouds.biz.ezservice.service.result.PageResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.StringUtil;
@@ -36,6 +41,7 @@ import id.ezclouds.core.shared.result.ListResult;
 import id.ezclouds.core.shared.service.CoreAdminService;
 import id.ezclouds.core.shared.service.CoreFileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
@@ -68,6 +74,9 @@ public class BizAdminService extends BizBaseService {
 
     @Autowired
     private BizAppCacheService bizAppCacheService;
+
+    @Value("${ezserviceapp.url.public.root}")
+    private String appRootPublicUrl;
 
     public BizResult createWebSession() {
         final BizResult bizResult = new BizResult();
@@ -208,6 +217,7 @@ public class BizAdminService extends BizBaseService {
             @Override
             public void onBizProcess() throws Exception {
                 CoreAuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(sessionId);
+                authorizeAdminMember(adminSession.getMemberRoles());
                 CoreOrganization organization = bizOrganizationService.getOrganizationById(adminSession.getOrgId());
                 CoreMember coreMember = coreMemberService.getOptimisticCoreMember(adminSession.getMemberId());
 
@@ -261,6 +271,7 @@ public class BizAdminService extends BizBaseService {
             @Override
             public void onBizProcess() throws Exception {
                 CoreAuthAdminSession session = coreAuthService.adminAuthWebSessionId(sessionId);
+                authorizeAdminMember(session.getMemberRoles());
                 List<CoreAdminDashboard> dashboards =  coreAdminService.getAdminDashboardAllActive(session.getOrgId());
 
                 List<BizDashboardData> bizDashboard = dashboards
@@ -280,6 +291,39 @@ public class BizAdminService extends BizBaseService {
 
                 bizResult.setSuccess(true);
                 bizResult.setObject(bizDashboard);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+
+        return bizResult;
+    }
+
+    public BizResult getAppGallery(String sessionId, int pageNumber, int pageSize) {
+        final BizResult bizResult = new BizResult();
+
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notBlank(sessionId, EzErrorCode.SESSION_INVALID);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(sessionId);
+                authorizeAdminMember(adminSession.getMemberRoles());
+
+                BizPublicUrlResolver urlResolver = new BizPublicUrlResolverImpl(appRootPublicUrl, adminSession.getOrgCode());
+                PageResult<AppImageGallery> pageResult = bizAdminInnerService.getImageGalleryAll(pageNumber, pageSize, "createdTime", "desc");
+                pageResult.getData().forEach(gallery -> {
+                    BizAnnotationProcessor.annotatePublicConfig(gallery, urlResolver);
+                });
+
+                bizResult.setSuccess(true);
+                bizResult.setObject(pageResult);
             }
 
             @Override

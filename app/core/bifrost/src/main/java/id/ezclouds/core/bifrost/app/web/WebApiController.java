@@ -8,8 +8,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.ezservice.model.admin.BizAdminAppData;
 import id.ezclouds.biz.ezservice.model.admin.BizDashboardData;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
+import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
+import id.ezclouds.biz.ezservice.service.result.PageResult;
 import id.ezclouds.common.util.exception.ExceptionUtil;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
@@ -90,18 +92,22 @@ public class WebApiController {
     }
 
     @PostMapping(value = "/webapp/api/getAppGallery.json")
-    private WebApiResult<List<BizDashboardData>> getAppGallery(@RequestParam(name = "sessionId", required = false) String sessionId) {
-        final WebApiResult<List<BizDashboardData>> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_DASHBOARD, result, new WebApiControllerTemplate.Handler<List<BizDashboardData>>() {
+    private WebApiResult<PageResult<AppImageGallery>> getAppGallery(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "pageNumber", required = false) int pageNumber,
+            @RequestParam(name = "pageSize", required = false) int pageSize
+    ) {
+        final WebApiResult<PageResult<AppImageGallery>> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_IMAGE_GALLERY, result, new WebApiControllerTemplate.Handler<PageResult<AppImageGallery>>() {
             @Override
             public BizResult onProcess() throws Exception {
-                return bizAdminService.getDashboardData(sessionId);
+                return bizAdminService.getAppGallery(sessionId, pageNumber, pageSize);
             }
 
             @Override
-            public List<BizDashboardData> convertResult(Object object) {
+            public PageResult<AppImageGallery> convertResult(Object object) {
                 if (object instanceof List) {
-                    return (List<BizDashboardData>) object;
+                    return (PageResult<AppImageGallery>) object;
                 }
                 return null;
             }

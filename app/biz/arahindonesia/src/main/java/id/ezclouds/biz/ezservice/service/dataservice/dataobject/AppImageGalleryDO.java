@@ -15,9 +15,8 @@ import javax.persistence.*;
 public class AppImageGalleryDO {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private String id;
 
     @Column(name = "org_id")
     private String orgId;
@@ -40,17 +39,20 @@ public class AppImageGalleryDO {
     @Column(name = "flag_portfolio_slide")
     private int flagPortfolioSlide = 0;
 
+    @Column(name = "created_time")
+    private String createdTime;
+
     @Column(name = "sorting")
     private int sorting = 0;
 
     @Column(name = "status")
     private int status = 1;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -108,6 +110,14 @@ public class AppImageGalleryDO {
 
     public void setFlagPortfolioSlide(int flagPortfolioSlide) {
         this.flagPortfolioSlide = flagPortfolioSlide;
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
     }
 
     public int getSorting() {

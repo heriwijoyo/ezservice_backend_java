@@ -7,10 +7,15 @@ package id.ezclouds.biz.ezservice.service.inner.service;
 import id.ezclouds.biz.ezservice.service.dataservice.AppImageGalleryService;
 import id.ezclouds.biz.ezservice.service.dataservice.NewsInnerService;
 import id.ezclouds.biz.ezservice.service.dataservice.VideoCardService;
+import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.dataservice.request.AppImageGalleryRequest;
 import id.ezclouds.biz.ezservice.service.dataservice.request.NewsCreateRequest;
 import id.ezclouds.biz.ezservice.service.dataservice.request.VideoCardCreateRequest;
+import id.ezclouds.biz.ezservice.service.result.PageResult;
+import id.ezclouds.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -39,6 +44,11 @@ public class BizAdminInnerService {
             request.setTitle(extInfo.get("TITLE"));
         }
         appImageGalleryService.createImageGallery(request);
+    }
+
+    public PageResult<AppImageGallery> getImageGalleryAll(int pageNumber, int pageSize, String sortBy, String sort) {
+        PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortBy, sort);
+        return appImageGalleryService.getImageGalleryAll(pageRequest);
     }
 
     public void createNews(String orgId, String imageUrl, Map<String, String> extInfo) {
@@ -72,5 +82,13 @@ public class BizAdminInnerService {
             request.setTargetUrl(extInfo.get("TARGET_URL"));
         }
         videoCardService.createVideoCard(request);
+    }
+
+    private PageRequest buildPageRequest(int page, int size, String sortBy, String sort) {
+        Sort.Direction sortDirection = Sort.Direction.ASC;
+        if (StringUtil.equalsIgnoreCase("DESC", sort)) {
+            sortDirection = Sort.Direction.DESC;
+        }
+        return PageRequest.of(page - 1, size, Sort.by(sortDirection, sortBy));
     }
 }

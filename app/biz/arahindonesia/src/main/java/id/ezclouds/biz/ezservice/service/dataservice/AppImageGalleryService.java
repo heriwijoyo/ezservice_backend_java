@@ -8,8 +8,14 @@ import id.ezclouds.biz.ezservice.service.dataservice.dataobject.AppImageGalleryD
 import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.dataservice.repo.AppImageGalleryRepository;
 import id.ezclouds.biz.ezservice.service.dataservice.request.AppImageGalleryRequest;
+import id.ezclouds.biz.ezservice.service.result.PageResult;
+import id.ezclouds.common.util.DateUtil;
+import id.ezclouds.common.util.HashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -29,6 +35,8 @@ public class AppImageGalleryService {
     @Transactional
     public void createImageGallery(AppImageGalleryRequest request) {
         AppImageGalleryDO galleryDO = new AppImageGalleryDO();
+        String currentTime = DateUtil.getCurrentFormattedDate();
+        galleryDO.setId(HashUtil.createHash(request.getOrgId(), currentTime));
         galleryDO.setOrgId(request.getOrgId());
         galleryDO.setTitle(request.getTitle());
         galleryDO.setImageUrl(request.getImageUrl());
@@ -36,6 +44,7 @@ public class AppImageGalleryService {
         galleryDO.setTargetUrl(request.getTargetUrl());
         galleryDO.setFlagHomeSlide(request.getFlagHomeSlide());
         galleryDO.setFlagPortfolioSlide(request.getFlagPortfolioSlide());
+        galleryDO.setCreatedTime(currentTime);
         galleryDO.setSorting(request.getSorting());
         galleryDO.setStatus(request.getStatus());
 
@@ -74,5 +83,37 @@ public class AppImageGalleryService {
                     return gallery;
                 })
                 .collect(Collectors.toList());
+    }
+
+    public PageResult<AppImageGallery> getImageGalleryAll(PageRequest pageRequest) {
+        Page<AppImageGalleryDO> findResult = appImageGalleryRepository.findAll(pageRequest);
+
+        List<AppImageGallery> resultData = findResult
+                .getContent()
+                .stream()
+                .map(modelDO -> {
+                    AppImageGallery gallery = new AppImageGallery();
+                    gallery.setOrgId(modelDO.getOrgId());
+                    gallery.setTitle(modelDO.getTitle());
+                    gallery.setImageUrl(modelDO.getImageUrl());
+                    gallery.setTargetType(modelDO.getTargetType());
+                    gallery.setTargetUrl(modelDO.getTargetUrl());
+                    gallery.setFlagHomeSlide(modelDO.getFlagHomeSlide());
+                    gallery.setFlagPortfolioSlide(modelDO.getFlagPortfolioSlide());
+                    gallery.setCreatedTime(modelDO.getCreatedTime());
+                    gallery.setSorting(modelDO.getSorting());
+                    return gallery;
+                })
+                .collect(Collectors.toList());
+
+        PageResult<AppImageGallery> pageResult = new PageResult<>();
+        pageResult.setPageNumber(findResult.getPageable().getPageNumber() + 1);
+        pageResult.setPageSize(findResult.getPageable().getPageSize());
+        pageResult.setNumberRecord(findResult.getNumberOfElements());
+        pageResult.setTotalPage(findResult.getTotalPages());
+        pageResult.setTotalRecord((int)findResult.getTotalElements());
+        pageResult.setData(resultData);
+
+        return pageResult;
     }
 }

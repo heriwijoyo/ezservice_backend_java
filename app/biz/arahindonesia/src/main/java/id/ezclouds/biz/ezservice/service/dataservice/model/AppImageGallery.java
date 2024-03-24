@@ -7,6 +7,8 @@ package id.ezclouds.biz.ezservice.service.dataservice.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.model.annotation.PublicImageUrl;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -26,6 +28,7 @@ public class AppImageGallery {
     private int flagHomeSlide = 0;
     @JsonIgnore
     private int flagPortfolioSlide = 0;
+    private String createdTime;
     @JsonIgnore
     private int sorting = 0;
 
@@ -85,11 +88,24 @@ public class AppImageGallery {
         this.flagPortfolioSlide = flagPortfolioSlide;
     }
 
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
     public int getSorting() {
         return sorting;
     }
 
     public void setSorting(int sorting) {
         this.sorting = sorting;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }
