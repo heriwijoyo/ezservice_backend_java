@@ -5,9 +5,10 @@
 package id.ezclouds.biz.ezservice.service.dataservice.repo;
 
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.AppImageGalleryDO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,4 +22,6 @@ public interface AppImageGalleryRepository extends JpaRepository<AppImageGallery
 
     @Query("SELECT ig FROM AppImageGalleryDO ig WHERE ig.status = 1")
     List<AppImageGalleryDO> findAllActive();
+
+    Page<AppImageGalleryDO> findByOrgId(String orgId, Pageable pageable);
 }

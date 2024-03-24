@@ -17,6 +17,7 @@ import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
 import id.ezclouds.biz.ezservice.service.core.BizAppCacheService;
 import id.ezclouds.biz.ezservice.service.dataservice.BizOrganizationService;
 import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
+import id.ezclouds.biz.ezservice.service.dataservice.model.WebImageGallery;
 import id.ezclouds.biz.ezservice.service.inner.service.BizAdminInnerService;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.BizWebPageRequest;
@@ -322,8 +323,14 @@ public class BizAdminService extends BizBaseService {
                 CoreAuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(request.getSessionId());
                 authorizeAdminMember(adminSession.getMemberRoles());
 
+                if (StringUtil.isBlank(request.getSortBy())) {
+                    request.setSortBy("createdTime");
+                    request.setSort("desc");
+                }
+
                 BizPublicUrlResolver urlResolver = new BizPublicUrlResolverImpl(appRootPublicUrl, adminSession.getOrgCode());
-                PageResult<AppImageGallery> pageResult = bizAdminInnerService.getImageGalleryAll(
+                PageResult<WebImageGallery> pageResult = bizAdminInnerService.getImageGalleryAll(
+                        adminSession.getOrgId(),
                         request.getPageNumber(),
                         request.getPageSize(),
                         request.getSortBy(),

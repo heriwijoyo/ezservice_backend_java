@@ -8,6 +8,7 @@ import id.ezclouds.biz.ezservice.service.dataservice.AppImageGalleryService;
 import id.ezclouds.biz.ezservice.service.dataservice.NewsInnerService;
 import id.ezclouds.biz.ezservice.service.dataservice.VideoCardService;
 import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
+import id.ezclouds.biz.ezservice.service.dataservice.model.WebImageGallery;
 import id.ezclouds.biz.ezservice.service.dataservice.request.AppImageGalleryRequest;
 import id.ezclouds.biz.ezservice.service.dataservice.request.NewsCreateRequest;
 import id.ezclouds.biz.ezservice.service.dataservice.request.VideoCardCreateRequest;
@@ -46,9 +47,9 @@ public class BizAdminInnerService {
         appImageGalleryService.createImageGallery(request);
     }
 
-    public PageResult<AppImageGallery> getImageGalleryAll(int pageNumber, int pageSize, String sortBy, String sort) {
+    public PageResult<WebImageGallery> getImageGalleryAll(String orgId, int pageNumber, int pageSize, String sortBy, String sort) {
         PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortBy, sort);
-        return appImageGalleryService.getImageGalleryAll(pageRequest);
+        return appImageGalleryService.getImageGalleryAll(orgId, pageRequest);
     }
 
     public void createNews(String orgId, String imageUrl, Map<String, String> extInfo) {

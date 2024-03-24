@@ -275,9 +275,19 @@
 <script type="text/javascript">
     var EzDashboadBizService = {
         start: function() {
-            //EzWebAppClient.callApiService(EzApiUrl.GET_APP_GALLERY, {});
+            EzDashboadBizService.fetchGalleries();
+        },
+        fetchGalleries: function() {
+            EzWebAppClient.callApiService(EzApiUrl.GET_APP_GALLERY, {
+                sessionId: EzWebAppClient.getSessionId(),
+                pageNumber: EzDashboadBizService.data.pageNumber,
+                pageSize: EzDashboadBizService.data.pageSize
+            });
         },
         handleApiBizResult: function(url, response) {
+            if (url === EzApiUrl.GET_APP_GALLERY) {
+                console.log(response);
+            }
         },
         postNewImage: function() {
             let sessionId = EzWebAppClient.getSessionId();
@@ -337,6 +347,10 @@
             $('#newImageSubmitLoader').hide();
             $('#newImageSubmitButton').show();
             $('#newImageCancelButton').show();
+        },
+        data: {
+            pageNumber: 1,
+            pageSize: 10
         }
     };
 

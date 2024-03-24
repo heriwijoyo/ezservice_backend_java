@@ -6,6 +6,7 @@ package id.ezclouds.biz.ezservice.service.dataservice;
 
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.AppImageGalleryDO;
 import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
+import id.ezclouds.biz.ezservice.service.dataservice.model.WebImageGallery;
 import id.ezclouds.biz.ezservice.service.dataservice.repo.AppImageGalleryRepository;
 import id.ezclouds.biz.ezservice.service.dataservice.request.AppImageGalleryRequest;
 import id.ezclouds.biz.ezservice.service.result.PageResult;
@@ -15,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -85,14 +85,14 @@ public class AppImageGalleryService {
                 .collect(Collectors.toList());
     }
 
-    public PageResult<AppImageGallery> getImageGalleryAll(PageRequest pageRequest) {
-        Page<AppImageGalleryDO> findResult = appImageGalleryRepository.findAll(pageRequest);
+    public PageResult<WebImageGallery> getImageGalleryAll(String orgId, PageRequest pageRequest) {
+        Page<AppImageGalleryDO> findResult = appImageGalleryRepository.findByOrgId(orgId, pageRequest);
 
-        List<AppImageGallery> resultData = findResult
+        List<WebImageGallery> resultData = findResult
                 .getContent()
                 .stream()
                 .map(modelDO -> {
-                    AppImageGallery gallery = new AppImageGallery();
+                    WebImageGallery gallery = new WebImageGallery();
                     gallery.setOrgId(modelDO.getOrgId());
                     gallery.setTitle(modelDO.getTitle());
                     gallery.setImageUrl(modelDO.getImageUrl());
@@ -106,7 +106,7 @@ public class AppImageGalleryService {
                 })
                 .collect(Collectors.toList());
 
-        PageResult<AppImageGallery> pageResult = new PageResult<>();
+        PageResult<WebImageGallery> pageResult = new PageResult<>();
         pageResult.setPageNumber(findResult.getPageable().getPageNumber() + 1);
         pageResult.setPageSize(findResult.getPageable().getPageSize());
         pageResult.setNumberRecord(findResult.getNumberOfElements());
