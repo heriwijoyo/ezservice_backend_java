@@ -52,6 +52,10 @@ public class BizAdminInnerService {
         return appImageGalleryService.getImageGalleryAll(orgId, pageRequest);
     }
 
+    public String updateImageGallery(String orgId, String itemId, String section, String value) {
+        return appImageGalleryService.updateImageGallery(orgId, itemId, section, value);
+    }
+
     public void createNews(String orgId, String imageUrl, Map<String, String> extInfo) {
         NewsCreateRequest request = new NewsCreateRequest();
         request.setOrgId(orgId);

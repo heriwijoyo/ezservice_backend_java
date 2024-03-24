@@ -25,7 +25,8 @@ var EzWebAppViewHelper = {
 var EzApiUrl = {
     GET_APP_DATA: 'api/getAppData.json',
     GET_DASHBOARD_DATA: 'api/getDashboardData.json',
-    GET_APP_GALLERY: 'api/getAppGallery.json'
+    GET_APP_GALLERY: 'api/getAppGallery.json',
+    UPDATE_APP_GALLERY: 'api/updateAppGallery.json'
 };
 var EzWebAppBizService = {
     handleAppData: function(response) {

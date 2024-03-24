@@ -24,4 +24,6 @@ public interface AppImageGalleryRepository extends JpaRepository<AppImageGallery
     List<AppImageGalleryDO> findAllActive();
 
     Page<AppImageGalleryDO> findByOrgId(String orgId, Pageable pageable);
+
+    AppImageGalleryDO findByIdAndOrgId(String id, String orgId);
 }

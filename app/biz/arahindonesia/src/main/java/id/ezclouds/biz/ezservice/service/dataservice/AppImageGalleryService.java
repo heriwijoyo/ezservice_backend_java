@@ -12,6 +12,9 @@ import id.ezclouds.biz.ezservice.service.dataservice.request.AppImageGalleryRequ
 import id.ezclouds.biz.ezservice.service.result.PageResult;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
+import id.ezclouds.common.util.StringUtil;
+import id.ezclouds.common.util.assertion.AssertUtil;
+import id.ezclouds.common.util.exception.EzErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -118,5 +121,16 @@ public class AppImageGalleryService {
         pageResult.setData(resultData);
 
         return pageResult;
+    }
+
+    public String updateImageGallery(String orgId, String itemId, String section, String value) {
+        AppImageGalleryDO appImageGalleryDO = appImageGalleryRepository.findByIdAndOrgId(itemId, orgId);
+        AssertUtil.notNull(appImageGalleryDO, EzErrorCode.DATA_NOT_FOUND);
+
+        if (StringUtil.equals(section, "home")) {
+            appImageGalleryDO.setFlagHomeSlide(Integer.parseInt(value));
+        }
+        appImageGalleryRepository.saveAndFlush(appImageGalleryDO);
+        return appImageGalleryDO.getId();
     }
 }

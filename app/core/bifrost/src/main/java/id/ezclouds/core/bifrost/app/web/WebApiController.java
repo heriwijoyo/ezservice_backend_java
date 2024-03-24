@@ -11,6 +11,7 @@ import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
 import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.BizWebPageRequest;
+import id.ezclouds.biz.ezservice.service.request.web.BizWebUpdateRequest;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.result.PageResult;
 import id.ezclouds.common.util.exception.ExceptionUtil;
@@ -114,6 +115,41 @@ public class WebApiController {
             public PageResult<AppImageGallery> convertResult(Object object) {
                 if (object instanceof PageResult) {
                     return (PageResult<AppImageGallery>) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/updateAppGallery.json")
+    private WebApiResult<String> updateAppGallery(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "itemId", required = false) String itemId,
+            @RequestParam(name = "section", required = false) String section,
+            @RequestParam(name = "value", required = false) String value
+    ) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_UPDATE_IMAGE_GALLERY, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizWebUpdateRequest request = new BizWebUpdateRequest();
+                request.setSessionId(sessionId);
+                request.setItemId(itemId);
+                request.setSection(section);
+                request.setValue(value);
+                return bizAdminService.updateAppGallery(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                if (object instanceof String) {
+                    return (String) object;
                 }
                 return null;
             }

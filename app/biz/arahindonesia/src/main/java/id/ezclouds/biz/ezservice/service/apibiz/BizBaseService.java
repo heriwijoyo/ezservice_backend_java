@@ -76,6 +76,8 @@ public class BizBaseService {
             // General Error
             case ILLEGAL_ACTION:
                 return AppConstant.BizMessage.ILLEGAL_ACTION;
+            case DATA_NOT_FOUND:
+                return "Data not found";
             default:
                 return AppConstant.MESSAGE_SYSTEM_ABNORMAL;
         }

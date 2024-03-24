@@ -21,6 +21,7 @@ import id.ezclouds.biz.ezservice.service.dataservice.model.WebImageGallery;
 import id.ezclouds.biz.ezservice.service.inner.service.BizAdminInnerService;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.BizWebPageRequest;
+import id.ezclouds.biz.ezservice.service.request.web.BizWebUpdateRequest;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.result.PageResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
@@ -342,6 +343,44 @@ public class BizAdminService extends BizBaseService {
 
                 bizResult.setSuccess(true);
                 bizResult.setObject(pageResult);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+
+        return bizResult;
+    }
+
+    public BizResult updateAppGallery(BizWebUpdateRequest request) {
+        final BizResult bizResult = new BizResult();
+
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getItemId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getSection(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getValue(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.SESSION_INVALID);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(request.getSessionId());
+                authorizeAdminMember(adminSession.getMemberRoles());
+
+                String result = bizAdminInnerService.updateImageGallery(
+                        adminSession.getOrgId(),
+                        request.getItemId(),
+                        request.getSection(),
+                        request.getValue()
+                );
+
+                bizResult.setSuccess(true);
+                bizResult.setObject(result);
             }
 
             @Override

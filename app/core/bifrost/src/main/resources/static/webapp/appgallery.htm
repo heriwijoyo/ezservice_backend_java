@@ -205,6 +205,10 @@
                 EzDashboadBizService.data.result = response.pageResult;
                 EzDashboadBizService.reloadPageResultView(response);
             }
+            if (url === EzApiUrl.UPDATE_APP_GALLERY) {
+                console.log(response);
+                EzDashboadBizService.fetchGalleries();
+            }
         },
         postNewImage: function() {
             let sessionId = EzWebAppClient.getSessionId();
@@ -268,10 +272,16 @@
         },
         renderFlag: function(flag,section,id) {
             let flagText = flag == 1 ? 'YES' : 'NO';
-            return '<center>'+ flagText + '<br><button onClick="EzDashboadBizService.swithFlag(\''+section+'\',\''+id+'\')" class="button button-rounded waves-effect waves-float" type="submit">SWITCH</button></center>';
+            let switchFlag = flag == 1 ? '0' : '1';
+            return '<center>'+ flagText + '<br><button onClick="EzDashboadBizService.swithFlag(\''+id+'\',\''+section+'\',\''+switchFlag+'\')" class="button button-rounded waves-effect waves-float" type="submit">SWITCH</button></center>';
         },
-        swithFlag: function(section, id) {
-            alert(section +' - '+ id);
+        swithFlag: function(itemId,section,value) {
+            EzWebAppClient.callApiService(EzApiUrl.UPDATE_APP_GALLERY, {
+                sessionId: EzWebAppClient.getSessionId(),
+                itemId: itemId,
+                section: section,
+                value: value
+            });
         },
         showFormNewImage: function() {
             $('#modal-form-new').removeClass('fade');
