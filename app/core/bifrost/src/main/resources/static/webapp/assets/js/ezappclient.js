@@ -87,7 +87,7 @@ var EzWebAppClient = {
             data.sessionId = sessionId;
             EzWebAppClient.callApi(url, data);
         } else {
-            EzWebAppViewHelper.alertSessionExpired();
+            EzWebAppClient.alertSessionExpired();
         }
     },
     handleApiSuccessResult: function(url, data) {

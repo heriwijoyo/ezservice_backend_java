@@ -6,6 +6,7 @@ package id.ezclouds.biz.ezservice.service.apibiz.admin;
 
 import id.ezclouds.biz.ezservice.config.BizPublicUrlResolver;
 import id.ezclouds.biz.ezservice.config.BizPublicUrlResolverImpl;
+import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.constant.BizConstant;
 import id.ezclouds.biz.ezservice.enums.BizMemberRole;
 import id.ezclouds.biz.ezservice.converter.BizAdminConverter;
@@ -220,9 +221,18 @@ public class BizAdminService extends BizBaseService {
             @Override
             public void onBizProcess() throws Exception {
                 CoreAuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(sessionId);
-                authorizeAdminMember(adminSession.getMemberRoles());
+                authorizeSuperUserOrAdminMember(adminSession.getMemberRoles());
                 CoreOrganization organization = bizOrganizationService.getOrganizationById(adminSession.getOrgId());
-                CoreMember coreMember = coreMemberService.getOptimisticCoreMember(adminSession.getMemberId());
+
+                String memberName, memberPhone;
+                if (StringUtil.equals(organization.getOrgId(), AppConstant.Admin.SU_ORG_ID)) {
+                    memberName = BizMemberRole.SUPERUSER.getCode();
+                    memberPhone = "-";
+                } else {
+                    CoreMember coreMember = coreMemberService.getOptimisticCoreMember(adminSession.getMemberId());
+                    memberName = coreMember.getName();
+                    memberPhone = coreMember.getPhone();
+                }
 
                 List<String> memberRoles;
                 if (StringUtil.isBlank(adminSession.getMemberRoles())) {
@@ -232,20 +242,20 @@ public class BizAdminService extends BizBaseService {
                 }
 
                 List<CoreAdminBOPermission> permission = coreAdminService
-                        .getPermissionByRoles(adminSession.getOrgId(), memberRoles);
+                        .getPermissionByRoles(organization.getOrgId(), memberRoles);
                 List<String> permissionMain = permission
                         .stream()
                         .map(CoreAdminBOPermission::getPermissionMain)
                         .collect(Collectors.toList());
                 List<CoreAdminBOMenu> menu = coreAdminService
-                        .getBOMenuByPermission(adminSession.getOrgId(), permissionMain);
+                        .getBOMenuByPermission(organization.getOrgId(), permissionMain);
 
                 BizAdminAppData adminAppData = new BizAdminAppData();
                 adminAppData.setOrgCode(adminSession.getOrgCode());
                 adminAppData.setOrgName(organization.getName());
                 adminAppData.setMemberId(adminSession.getMemberId());
-                adminAppData.setMemberName(coreMember.getName());
-                adminAppData.setMemberPhone(coreMember.getPhone());
+                adminAppData.setMemberName(memberName);
+                adminAppData.setMemberPhone(memberPhone);
                 adminAppData.setPermission(permission);
                 adminAppData.setMenu(menu);
 
@@ -493,5 +503,13 @@ public class BizAdminService extends BizBaseService {
         AssertUtil.notBlank(memberRoles, EzErrorCode.MEMBER_UNAUTHORIZED);
         List<String> roles = Arrays.asList(memberRoles.split(","));
         AssertUtil.isTrue(roles.contains(BizMemberRole.SUPERUSER.getCode()), EzErrorCode.MEMBER_UNAUTHORIZED);
+    }
+
+
+    private void authorizeSuperUserOrAdminMember(String memberRoles) throws EzErrorException {
+        AssertUtil.notBlank(memberRoles, EzErrorCode.MEMBER_UNAUTHORIZED);
+        List<String> roles = Arrays.asList(memberRoles.split(","));
+        boolean isAdminOrSuperUser = roles.contains(BizMemberRole.ADMIN_ORG.getCode()) || roles.contains(BizMemberRole.SUPERUSER.getCode());
+        AssertUtil.isTrue(isAdminOrSuperUser, EzErrorCode.MEMBER_UNAUTHORIZED);
     }
 }

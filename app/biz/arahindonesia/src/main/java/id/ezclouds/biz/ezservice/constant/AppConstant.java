@@ -72,4 +72,8 @@ public class AppConstant {
         public static final String EVENT_GALLERY_URL = "EVENT_GALLERY_URL";
         public static final String OTHER_GALLERY_URL = "OTHER_GALLERY_URL";
     }
+
+    public static final class Admin {
+        public static final String SU_ORG_ID = "SU00";
+    }
 }

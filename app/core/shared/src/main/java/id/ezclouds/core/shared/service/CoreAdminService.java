@@ -6,6 +6,7 @@ package id.ezclouds.core.shared.service;
 
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.shared.converter.CoreModelConverter;
+import id.ezclouds.core.shared.model.BoMenuComparator;
 import id.ezclouds.core.shared.model.CoreAdminBOMenu;
 import id.ezclouds.core.shared.model.CoreAdminBOPermission;
 import id.ezclouds.core.shared.model.CoreAdminDashboard;
@@ -55,6 +56,7 @@ public class CoreAdminService {
         return getAdminBoMenuAllActive()
                 .stream()
                 .filter(menu -> orgId.equals(menu.getOrgId()) && permissions.contains(menu.getPermissionMain()))
+                .sorted(new BoMenuComparator())
                 .collect(Collectors.toList());
     }
 
