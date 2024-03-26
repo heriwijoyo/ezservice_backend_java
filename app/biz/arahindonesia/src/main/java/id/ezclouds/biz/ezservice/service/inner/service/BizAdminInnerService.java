@@ -13,6 +13,7 @@ import id.ezclouds.biz.ezservice.service.dataservice.request.AppImageGalleryRequ
 import id.ezclouds.biz.ezservice.service.dataservice.request.NewsCreateRequest;
 import id.ezclouds.biz.ezservice.service.dataservice.request.VideoCardCreateRequest;
 import id.ezclouds.biz.ezservice.service.result.PageResult;
+import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.shared.model.CoreOrganization;
 import id.ezclouds.core.shared.repo.dataobject.EzCoreOrganizationDO;
@@ -122,6 +123,21 @@ public class BizAdminInnerService {
         composePageResult(pageResult, findResult);
         pageResult.setData(resultData);
         return pageResult;
+    }
+
+    public void createOrganization(BizOrganization org) {
+        EzCoreOrganizationDO modelDO = new EzCoreOrganizationDO();
+        modelDO.setOrgId(org.getOrgId());
+        modelDO.setCode(org.getCode());
+        modelDO.setName(org.getName());
+        modelDO.setAddress(org.getAddress());
+        modelDO.setContactName(org.getContactName());
+        modelDO.setContactPhone(org.getContactPhone());
+        modelDO.setContactEmail(org.getContactEmail());
+        modelDO.setCreatedTime(DateUtil.getCurrentFormattedDate());
+        modelDO.setModifiedTime(DateUtil.getCurrentFormattedDate());
+        modelDO.setStatus(1);
+        coreOrganizationService.createOrganization(modelDO);
     }
 
     private PageRequest buildPageRequest(int page, int size, String sortBy, String sort) {

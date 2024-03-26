@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,5 +38,10 @@ public class CoreOrganizationService {
     public Page<EzCoreOrganizationDO> getOrganizationAll(PageRequest pageRequest) {
         return coreOrganizationRepository
                 .findAll(pageRequest);
+    }
+
+    @Transactional
+    public void createOrganization(EzCoreOrganizationDO ezCoreOrganizationDO) {
+        coreOrganizationRepository.saveAndFlush(ezCoreOrganizationDO);
     }
 }

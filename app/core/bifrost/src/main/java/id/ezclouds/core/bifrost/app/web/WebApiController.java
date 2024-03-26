@@ -11,6 +11,7 @@ import id.ezclouds.biz.ezservice.model.admin.BizOrganization;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
 import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
+import id.ezclouds.biz.ezservice.service.request.web.BizWebCreateRequest;
 import id.ezclouds.biz.ezservice.service.request.web.BizWebPageRequest;
 import id.ezclouds.biz.ezservice.service.request.web.BizWebUpdateRequest;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
@@ -210,6 +211,52 @@ public class WebApiController {
             public PageResult<BizOrganization> convertResult(Object object) {
                 if (object instanceof PageResult) {
                     return (PageResult<BizOrganization>) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/createOrganization.json")
+    private WebApiResult<String> createOrganization(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "orgId", required = false) String orgId,
+            @RequestParam(name = "orgCode", required = false) String orgCode,
+            @RequestParam(name = "address", required = false) String address,
+            @RequestParam(name = "contactName", required = false) String contactName,
+            @RequestParam(name = "contactPhone", required = false) String contactPhone,
+            @RequestParam(name = "contactEmail", required = false) String contactEmail
+    ) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_CREATE_ORGANIZATION, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizOrganization organization = new BizOrganization();
+                organization.setName(name);
+                organization.setOrgId(orgId);
+                organization.setCode(orgCode);
+                organization.setAddress(address);
+                organization.setContactName(contactName);
+                organization.setContactPhone(contactPhone);
+                organization.setContactEmail(contactEmail);
+
+                BizWebCreateRequest<BizOrganization> request = new BizWebCreateRequest<>();
+                request.setSessionId(sessionId);
+                request.setData(organization);
+                return bizAdminService.createOrganization(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                if (object instanceof String) {
+                    return (String) object;
                 }
                 return null;
             }

@@ -109,57 +109,55 @@
                             <div class="form-group col-sm-12">
                                 <div class="form-line">
                                     <div class="font-12">Organization Name</div>
-                                    <input type="text" class="form-control" name="orgName" placeholder="Organization Name" required="" aria-required="true">
+                                    <input type="text" class="form-control" id="orgName" placeholder="Organization Name" required="" aria-required="true">
                                 </div>
                             </div>
 
                             <div class="form-group col-sm-12">
                                 <div class="form-line">
                                     <div class="font-12">Organization ID</div>
-                                    <input type="text" class="form-control" name="orgId" placeholder="Organization ID" required="" aria-required="true">
+                                    <input type="text" class="form-control" id="orgId" placeholder="Organization ID" required="" aria-required="true">
                                 </div>
                             </div>
 
                             <div class="form-group col-sm-12">
                                 <div class="form-line">
                                     <div class="font-12">Organization Code</div>
-                                    <input type="text" class="form-control" name="code" placeholder="Organization Code" required="" aria-required="true">
+                                    <input type="text" class="form-control" id="orgCode" placeholder="Organization Code" required="" aria-required="true">
                                 </div>
                             </div>
 
                             <div class="form-group col-sm-12">
                                 <div class="form-line">
                                     <div class="font-12">Organization Address</div>
-                                    <input type="text" class="form-control" name="address" placeholder="Address" required="" aria-required="true">
+                                    <input type="text" class="form-control" id="address" placeholder="Address" required="" aria-required="true">
                                 </div>
                             </div>
 
                             <div class="form-group col-sm-12">
                                 <div class="form-line">
                                     <div class="font-12">Contact Name</div>
-                                    <input type="text" class="form-control" name="contactName" placeholder="Contact Name" required="" aria-required="true">
+                                    <input type="text" class="form-control" id="contactName" placeholder="Contact Name" required="" aria-required="true">
                                 </div>
                             </div>
 
                             <div class="form-group col-sm-12">
                                 <div class="form-line">
                                     <div class="font-12">Contact Phone</div>
-                                    <input type="text" class="form-control" name="contactPhone" placeholder="Contact Phone" required="" aria-required="true">
+                                    <input type="text" class="form-control" id="contactPhone" placeholder="Contact Phone" required="" aria-required="true">
                                 </div>
                             </div>
 
                             <div class="form-group col-sm-12">
                                 <div class="form-line">
                                     <div class="font-12">Contact Email</div>
-                                    <input type="text" class="form-control" name="contactEmail" placeholder="Contact Email" required="" aria-required="true">
+                                    <input type="text" class="form-control" id="contactEmail" placeholder="Contact Email" required="" aria-required="true">
                                 </div>
                             </div>
 
-                            <input type="hidden" name="status" value="1">
-
                             <div class="col-sm-12">
                                 <img id="submitLoader" src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right">
-                                <button class="button button-rounded waves-effect waves-float pull-right" type="submit" name="submit">SUBMIT</button>
+                                <button id="submitBtn" class="button button-rounded waves-effect waves-float pull-right" type="submit">SUBMIT</button>
                             </div>
 
                         </div>
@@ -197,83 +195,28 @@
 
 <script type="text/javascript">
     var EzAdminUrl = {
-        GET_ORGANIZATIONS: 'api/getOrganization.json'
+        CREATE_ORGANIZATION: 'api/createOrganization.json'
     };
     var EzDashboadBizService = {
         start: function() {
-            EzDashboadBizService.fetchOrganizations();
         },
-        fetchOrganizations: function() {
-            EzWebAppClient.callApiService(EzAdminUrl.GET_ORGANIZATIONS, {
-                sessionId: EzWebAppClient.getSessionId(),
-                pageNumber: EzDashboadBizService.data.pageNumber,
-                pageSize: EzDashboadBizService.data.pageSize
+        postNewOrganization: function() {
+            EzWebAppClient.callApiService(EzAdminUrl.CREATE_ORGANIZATION, {
+                name: $('#orgName').val(),
+                orgId: $('#orgId').val(),
+                orgCode: $('#orgCode').val(),
+                address: $('#address').val(),
+                contactName: $('#contactName').val(),
+                contactPhone: $('#contactPhone').val(),
+                contactEmail: $('#contactEmail').val()
             });
         },
         handleApiBizResult: function(url, response) {
-            if (url === EzAdminUrl.GET_ORGANIZATIONS) {
-                console.log(response);
-                EzDashboadBizService.data.result = response.pageResult;
-                EzDashboadBizService.reloadPageResultView(response);
+            console.log(response);
+            if (url === EzAdminUrl.CREATE_ORGANIZATION) {
+                alert(response.data);
+                window.location = 'organization.htm';
             }
-        },
-        reloadPageResultView: function(response) {
-            $('#rowsContainer').html('');
-            for(let i=0; i<response.pageResult.data.length; i++) {
-                let rowData = response.pageResult.data[i];
-                let itemRow = $.parseHTML(DashTemplate);
-                $(itemRow).find('.rowName').html(rowData.name);
-                $(itemRow).find('.rowId').html(rowData.orgId);
-                $(itemRow).find('.rowCode').html(rowData.code);
-                $(itemRow).find('.rowAddress').html(rowData.address);
-                $(itemRow).find('.rowContact').html('phone: '+ rowData.contactPhone +'<br>email: '+ rowData.contactEmail);
-                $(itemRow).find('.rowTime').html('created: '+ rowData.createdTime +'<br>modified: '+ rowData.modifiedTime);
-                $(itemRow).find('.rowStatus').html(EzDashboadBizService.renderFlag(rowData.status,rowData.orgId));
-                $('#rowsContainer').append(itemRow);
-            }
-            $('.pager').html(EzWebAppClient.renderPager(response.pageResult));
-        },
-        renderFlag: function(flag,id) {
-            let flagText = flag == 1 ? 'YES' : 'NO';
-            let switchFlag = flag == 1 ? '0' : '1';
-            return '<center>'+ flagText + '<br><button onClick="EzDashboadBizService.swithFlag(\''+id+'\',\''+switchFlag+'\')" class="button button-rounded waves-effect waves-float" type="submit">SWITCH</button></center>';
-        },
-        swithFlag: function(itemId,section,value) {
-            EzWebAppClient.callApiService(EzApiUrl.UPDATE_APP_GALLERY, {
-                sessionId: EzWebAppClient.getSessionId(),
-                itemId: itemId,
-                section: section,
-                value: value
-            });
-        },
-        showFormNewImage: function() {
-            $('#modal-form-new').removeClass('fade');
-            $('#modal-form-new').addClass('show');
-        },
-        hideFormNewImage: function() {
-            $('#modal-form-new').removeClass('show');
-            $('#modal-form-new').addClass('fade');
-        },
-        resetFormNewImage: function() {
-            $('#imageTitle').val('');
-            $('#imageFile').val('');
-            $('#imagePreview').hide();
-            $('#newImageSubmitLoader').hide();
-            $('#newImageSubmitButton').show();
-            $('#newImageCancelButton').show();
-        },
-        prev: function() {
-            EzDashboadBizService.data.pageNumber--;
-            EzDashboadBizService.fetchGalleries();
-        },
-        next: function() {
-            EzDashboadBizService.data.pageNumber++;
-            EzDashboadBizService.fetchGalleries();
-        },
-        data: {
-            pageNumber: 1,
-            pageSize: 10,
-            result: null
         }
     };
 
@@ -283,6 +226,7 @@
         });
         EzWebAppClient.onApiBizFailed(function(url, message){
             console.log(url +' --- '+ message);
+            alert(message);
         });
         EzWebAppClient.onApiCallError(function(xhr){
             console.log(xhr);
@@ -298,18 +242,10 @@
         });
         EzWebAppClient.start();
 
-        $('#form-add-new-btn').click(function(){
-            EzDashboadBizService.showFormNewImage();
-        });
-        $('#newImageCancelButton').click(function(){
-            EzDashboadBizService.hideFormNewImage();
-        });
-        $('#newImageSubmitButton').click(function(event){
-            event.preventDefault();
-            $('#newImageSubmitButton').hide();
-            $('#newImageCancelButton').hide();
-            $('#newImageSubmitLoader').show();
-            EzDashboadBizService.postNewImage();
+        $('#submitBtn').click(function(event){
+            $('#submitBtn').hide();
+            $('#submitLoader').show();
+            EzDashboadBizService.postNewOrganization();
         });
     });
 
