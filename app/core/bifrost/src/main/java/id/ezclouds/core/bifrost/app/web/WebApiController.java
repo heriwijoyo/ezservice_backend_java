@@ -7,6 +7,7 @@ package id.ezclouds.core.bifrost.app.web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.ezservice.model.admin.BizAdminAppData;
 import id.ezclouds.biz.ezservice.model.admin.BizDashboardData;
+import id.ezclouds.biz.ezservice.model.admin.BizOrganization;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
 import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
@@ -176,6 +177,39 @@ public class WebApiController {
             public String convertResult(Object object) {
                 if (object instanceof String) {
                     return (String) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/getOrganization.json")
+    private WebApiPageResult<BizOrganization> getOrganization(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "pageNumber", required = false) int pageNumber,
+            @RequestParam(name = "pageSize", required = false) int pageSize
+    ) {
+        final WebApiPageResult<BizOrganization> result = new WebApiPageResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_ORGANIZATION, result, new WebApiControllerTemplate.PageHandler<BizOrganization>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizWebPageRequest request = new BizWebPageRequest();
+                request.setSessionId(sessionId);
+                request.setPageNumber(pageNumber);
+                request.setPageSize(pageSize);
+                return bizAdminService.getOrganization(request);
+            }
+
+            @Override
+            public PageResult<BizOrganization> convertResult(Object object) {
+                if (object instanceof PageResult) {
+                    return (PageResult<BizOrganization>) object;
                 }
                 return null;
             }

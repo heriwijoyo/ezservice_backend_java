@@ -2,50 +2,23 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.core.shared.repo.dataobject;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+package id.ezclouds.biz.ezservice.model.admin;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: EzCoreOrganizationDO.java, v 0.1 2024‐01‐28 6:12 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: BizOrganization.java, v 0.1 2024‐03‐27 12:36 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-@Entity
-@Table(name = "ez_core_organization")
-public class EzCoreOrganizationDO {
+public class BizOrganization {
 
-    @Id
-    @Column(name = "org_id")
     private String orgId;
-
-    @Column(name = "name")
     private String name;
-
-    @Column(name = "code")
     private String code;
-
-    @Column(name = "address")
     private String address;
-
-    @Column(name = "contact_name")
     private String contactName;
-
-    @Column(name = "contact_phone")
     private String contactPhone;
-
-    @Column(name = "contact_email")
     private String contactEmail;
-
-    @Column(name = "created_time")
     private String createdTime;
-
-    @Column(name = "modified_time")
     private String modifiedTime;
-
-    @Column(name = "status")
     private int status;
 
     public String getOrgId() {

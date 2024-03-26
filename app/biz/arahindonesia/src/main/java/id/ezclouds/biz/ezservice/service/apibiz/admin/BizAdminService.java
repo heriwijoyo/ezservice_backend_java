@@ -13,6 +13,7 @@ import id.ezclouds.biz.ezservice.converter.BizAdminConverter;
 import id.ezclouds.biz.ezservice.model.admin.BizAdminAppData;
 import id.ezclouds.biz.ezservice.model.admin.BizAdminSession;
 import id.ezclouds.biz.ezservice.model.admin.BizDashboardData;
+import id.ezclouds.biz.ezservice.model.admin.BizOrganization;
 import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
 import id.ezclouds.biz.ezservice.service.core.BizAppCacheService;
@@ -455,6 +456,50 @@ public class BizAdminService extends BizBaseService {
 
                 bizResult.setSuccess(true);
                 bizResult.setObject(BizConstant.Message.SUCCESS_COMMON);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+
+        return bizResult;
+    }
+
+    public BizResult getOrganization(BizWebPageRequest request) {
+        final BizResult bizResult = new BizResult();
+
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notNull(request.getPageNumber(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notNull(request.getPageSize(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.isTrue(request.getPageNumber() > 0, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.isTrue(request.getPageSize() > 0, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.SESSION_INVALID);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(request.getSessionId());
+                authorizeSuperUserMember(adminSession.getMemberRoles());
+
+                if (StringUtil.isBlank(request.getSortBy())) {
+                    request.setSortBy("code");
+                    request.setSort("asc");
+                }
+
+                PageResult<BizOrganization> pageResult = bizAdminInnerService.getOrganizationAll(
+                        request.getPageNumber(),
+                        request.getPageSize(),
+                        request.getSortBy(),
+                        request.getSort()
+                );
+
+                bizResult.setSuccess(true);
+                bizResult.setObject(pageResult);
             }
 
             @Override

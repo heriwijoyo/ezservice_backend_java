@@ -4,22 +4,28 @@
  */
 package id.ezclouds.biz.ezservice.service.inner.service;
 
+import id.ezclouds.biz.ezservice.model.admin.BizOrganization;
 import id.ezclouds.biz.ezservice.service.dataservice.AppImageGalleryService;
 import id.ezclouds.biz.ezservice.service.dataservice.NewsInnerService;
 import id.ezclouds.biz.ezservice.service.dataservice.VideoCardService;
-import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.dataservice.model.WebImageGallery;
 import id.ezclouds.biz.ezservice.service.dataservice.request.AppImageGalleryRequest;
 import id.ezclouds.biz.ezservice.service.dataservice.request.NewsCreateRequest;
 import id.ezclouds.biz.ezservice.service.dataservice.request.VideoCardCreateRequest;
 import id.ezclouds.biz.ezservice.service.result.PageResult;
 import id.ezclouds.common.util.StringUtil;
+import id.ezclouds.core.shared.model.CoreOrganization;
+import id.ezclouds.core.shared.repo.dataobject.EzCoreOrganizationDO;
+import id.ezclouds.core.shared.service.CoreOrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -36,6 +42,9 @@ public class BizAdminInnerService {
 
     @Autowired
     private VideoCardService videoCardService;
+
+    @Autowired
+    private CoreOrganizationService coreOrganizationService;
 
     public void createAppImageGallery(String orgId, String fileName, Map<String, String> extInfo) {
         AppImageGalleryRequest request = new AppImageGalleryRequest();
@@ -89,6 +98,32 @@ public class BizAdminInnerService {
         videoCardService.createVideoCard(request);
     }
 
+    public PageResult<BizOrganization> getOrganizationAll(int pageNumber, int pageSize, String sortBy, String sort) {
+        PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortBy, sort);
+        Page<EzCoreOrganizationDO> findResult = coreOrganizationService.getOrganizationAll(pageRequest);
+        List<BizOrganization> resultData = findResult
+                .getContent()
+                .stream()
+                .map(model -> {
+                    BizOrganization organization = new BizOrganization();
+                    organization.setOrgId(model.getOrgId());
+                    organization.setName(model.getName());
+                    organization.setCode(model.getCode());
+                    organization.setAddress(model.getAddress());
+                    organization.setContactName(model.getContactName());
+                    organization.setContactPhone(model.getContactPhone());
+                    organization.setContactEmail(model.getContactEmail());
+                    organization.setStatus(model.getStatus());
+                    return organization;
+                })
+                .collect(Collectors.toList());
+
+        PageResult<BizOrganization> pageResult = new PageResult<>();
+        composePageResult(pageResult, findResult);
+        pageResult.setData(resultData);
+        return pageResult;
+    }
+
     private PageRequest buildPageRequest(int page, int size, String sortBy, String sort) {
         if (StringUtil.isBlank(sortBy)) {
             return PageRequest.of(page - 1, size);
@@ -99,5 +134,15 @@ public class BizAdminInnerService {
             sortDirection = Sort.Direction.DESC;
         }
         return PageRequest.of(page - 1, size, Sort.by(sortDirection, sortBy));
+    }
+
+    private void composePageResult(PageResult pageResult, Page page) {
+        pageResult.setPageNumber(page.getPageable().getPageNumber() + 1);
+        pageResult.setPageSize(page.getPageable().getPageSize());
+        pageResult.setNumberRecord(page.getNumberOfElements());
+        pageResult.setTotalPage(page.getTotalPages());
+        pageResult.setTotalRecord((int) page.getTotalElements());
+        pageResult.setHasNext(page.hasNext());
+        pageResult.setHasPrevious(page.hasPrevious());
     }
 }
