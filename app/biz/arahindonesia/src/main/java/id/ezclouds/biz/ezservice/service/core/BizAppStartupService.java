@@ -32,7 +32,9 @@ public class BizAppStartupService {
         bizOrganizationService
                 .getActiveOrganizations()
                 .forEach(org -> {
-                    coreFileService.initPublicFileDirectory(org.getOrgId());
+                    if (!"SU00".equals(org.getOrgId())) {
+                        coreFileService.initPublicFileDirectory(org.getOrgId());
+                    }
                 });
 
         bizAppCacheService.refreshAllCaches(true);

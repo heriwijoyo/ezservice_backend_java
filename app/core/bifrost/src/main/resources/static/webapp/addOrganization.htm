@@ -212,10 +212,16 @@
             });
         },
         handleApiBizResult: function(url, response) {
-            console.log(response);
             if (url === EzAdminUrl.CREATE_ORGANIZATION) {
                 alert(response.data);
                 window.location = 'organization.htm';
+            }
+        },
+        handleApiBizFailed: function(url, message) {
+            if (url === EzAdminUrl.CREATE_ORGANIZATION) {
+                alert(message);
+                $('#submitLoader').hide();
+                $('#submitBtn').show();
             }
         }
     };
@@ -226,7 +232,7 @@
         });
         EzWebAppClient.onApiBizFailed(function(url, message){
             console.log(url +' --- '+ message);
-            alert(message);
+            EzDashboadBizService.handleApiBizFailed(url, message);
         });
         EzWebAppClient.onApiCallError(function(xhr){
             console.log(xhr);

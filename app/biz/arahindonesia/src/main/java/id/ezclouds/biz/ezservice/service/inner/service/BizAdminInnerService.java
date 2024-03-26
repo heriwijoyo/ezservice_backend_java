@@ -114,6 +114,8 @@ public class BizAdminInnerService {
                     organization.setContactName(model.getContactName());
                     organization.setContactPhone(model.getContactPhone());
                     organization.setContactEmail(model.getContactEmail());
+                    organization.setCreatedTime(model.getCreatedTime());
+                    organization.setModifiedTime(model.getModifiedTime());
                     organization.setStatus(model.getStatus());
                     return organization;
                 })
