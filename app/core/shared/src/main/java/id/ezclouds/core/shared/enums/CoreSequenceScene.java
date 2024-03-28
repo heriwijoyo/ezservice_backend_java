@@ -10,17 +10,24 @@ package id.ezclouds.core.shared.enums;
  */
 public enum CoreSequenceScene {
 
-    CORE_MEMBER_ID("CORE_MEMBER_ID"),
+    CORE_MEMBER_ID("CORE_MEMBER_ID", "10"),
+    APP_SUB_ORG("APP_SUB_ORG", "11"),
 
     ;
 
     private final String code;
+    private final String sceneCode;
 
-    CoreSequenceScene(String code) {
+    CoreSequenceScene(String code, String sceneCode) {
         this.code = code;
+        this.sceneCode = sceneCode;
     }
 
     public String getCode() {
         return code;
+    }
+
+    public String getSceneCode() {
+        return sceneCode;
     }
 }

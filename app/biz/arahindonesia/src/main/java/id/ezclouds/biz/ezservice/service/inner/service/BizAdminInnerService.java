@@ -5,6 +5,7 @@
 package id.ezclouds.biz.ezservice.service.inner.service;
 
 import id.ezclouds.biz.ezservice.model.admin.BizOrganization;
+import id.ezclouds.biz.ezservice.model.admin.BizOrganizationDetail;
 import id.ezclouds.biz.ezservice.service.dataservice.AppImageGalleryService;
 import id.ezclouds.biz.ezservice.service.dataservice.NewsInnerService;
 import id.ezclouds.biz.ezservice.service.dataservice.VideoCardService;
@@ -15,15 +16,20 @@ import id.ezclouds.biz.ezservice.service.dataservice.request.VideoCardCreateRequ
 import id.ezclouds.biz.ezservice.service.result.PageResult;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.StringUtil;
-import id.ezclouds.core.shared.model.CoreOrganization;
+import id.ezclouds.common.util.assertion.AssertUtil;
+import id.ezclouds.common.util.exception.EzErrorCode;
+import id.ezclouds.core.shared.enums.CoreSequenceScene;
+import id.ezclouds.core.shared.model.CoreSequenceConfig;
 import id.ezclouds.core.shared.repo.dataobject.EzCoreOrganizationDO;
 import id.ezclouds.core.shared.service.CoreOrganizationService;
+import id.ezclouds.core.shared.service.CoreSequenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -46,6 +52,9 @@ public class BizAdminInnerService {
 
     @Autowired
     private CoreOrganizationService coreOrganizationService;
+
+    @Autowired
+    private CoreSequenceService coreSequenceService;
 
     public void createAppImageGallery(String orgId, String fileName, Map<String, String> extInfo) {
         AppImageGalleryRequest request = new AppImageGalleryRequest();
@@ -105,20 +114,7 @@ public class BizAdminInnerService {
         List<BizOrganization> resultData = findResult
                 .getContent()
                 .stream()
-                .map(model -> {
-                    BizOrganization organization = new BizOrganization();
-                    organization.setOrgId(model.getOrgId());
-                    organization.setName(model.getName());
-                    organization.setCode(model.getCode());
-                    organization.setAddress(model.getAddress());
-                    organization.setContactName(model.getContactName());
-                    organization.setContactPhone(model.getContactPhone());
-                    organization.setContactEmail(model.getContactEmail());
-                    organization.setCreatedTime(model.getCreatedTime());
-                    organization.setModifiedTime(model.getModifiedTime());
-                    organization.setStatus(model.getStatus());
-                    return organization;
-                })
+                .map(this::convert)
                 .collect(Collectors.toList());
 
         PageResult<BizOrganization> pageResult = new PageResult<>();
@@ -127,6 +123,16 @@ public class BizAdminInnerService {
         return pageResult;
     }
 
+    public BizOrganizationDetail getOrganizationDetail(String orgId) {
+        BizOrganizationDetail detail = new BizOrganizationDetail();
+        EzCoreOrganizationDO organizationDO = coreOrganizationService.getOrganizationById(orgId);
+        AssertUtil.notNull(organizationDO, EzErrorCode.DATA_NOT_FOUND);
+        detail.setBizOrganization(convert(organizationDO));
+
+        return detail;
+    }
+
+    @Transactional
     public void createOrganization(BizOrganization org) {
         EzCoreOrganizationDO modelDO = new EzCoreOrganizationDO();
         modelDO.setOrgId(org.getOrgId());
@@ -140,6 +146,38 @@ public class BizAdminInnerService {
         modelDO.setModifiedTime(DateUtil.getCurrentFormattedDate());
         modelDO.setStatus(1);
         coreOrganizationService.createOrganization(modelDO);
+
+        initiateOrgConfig(modelDO);
+    }
+
+    private void initiateOrgConfig(EzCoreOrganizationDO organizationDO) {
+        String scene = CoreSequenceScene.CORE_MEMBER_ID.getCode();
+        String sceneCode = CoreSequenceScene.CORE_MEMBER_ID.getSceneCode();
+        CoreSequenceConfig memberSeqConfig = new CoreSequenceConfig();
+        memberSeqConfig.setSeqId(organizationDO.getOrgId() +"_"+ scene);
+        memberSeqConfig.setOrgId(organizationDO.getOrgId());
+        memberSeqConfig.setScene(scene);
+        memberSeqConfig.setSceneCode(sceneCode);
+        memberSeqConfig.setStepMin(100);
+        memberSeqConfig.setStepMax(199);
+        memberSeqConfig.setStepValue(100);
+        memberSeqConfig.setSeqLength(9);
+        memberSeqConfig.setSequence(0);
+        coreSequenceService.createSequenceConfig(memberSeqConfig);
+
+        String subOrgscene = CoreSequenceScene.APP_SUB_ORG.getCode();
+        String subOrgsceneCode = CoreSequenceScene.APP_SUB_ORG.getSceneCode();
+        CoreSequenceConfig subOrgSeqConfig = new CoreSequenceConfig();
+        subOrgSeqConfig.setSeqId(organizationDO.getOrgId() +"_"+ subOrgscene);
+        subOrgSeqConfig.setOrgId(organizationDO.getOrgId());
+        subOrgSeqConfig.setScene(subOrgscene);
+        subOrgSeqConfig.setSceneCode(subOrgsceneCode);
+        subOrgSeqConfig.setStepMin(100);
+        subOrgSeqConfig.setStepMax(100);
+        subOrgSeqConfig.setStepValue(100);
+        subOrgSeqConfig.setSeqLength(3);
+        subOrgSeqConfig.setSequence(0);
+        coreSequenceService.createSequenceConfig(subOrgSeqConfig);
     }
 
     private PageRequest buildPageRequest(int page, int size, String sortBy, String sort) {
@@ -162,5 +200,21 @@ public class BizAdminInnerService {
         pageResult.setTotalRecord((int) page.getTotalElements());
         pageResult.setHasNext(page.hasNext());
         pageResult.setHasPrevious(page.hasPrevious());
+    }
+
+    private BizOrganization convert(EzCoreOrganizationDO modelDO) {
+        if (modelDO == null) { return null; }
+        BizOrganization organization = new BizOrganization();
+        organization.setOrgId(modelDO.getOrgId());
+        organization.setName(modelDO.getName());
+        organization.setCode(modelDO.getCode());
+        organization.setAddress(modelDO.getAddress());
+        organization.setContactName(modelDO.getContactName());
+        organization.setContactPhone(modelDO.getContactPhone());
+        organization.setContactEmail(modelDO.getContactEmail());
+        organization.setCreatedTime(modelDO.getCreatedTime());
+        organization.setModifiedTime(modelDO.getModifiedTime());
+        organization.setStatus(modelDO.getStatus());
+        return organization;
     }
 }

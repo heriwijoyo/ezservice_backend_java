@@ -8,10 +8,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.ezservice.model.admin.BizAdminAppData;
 import id.ezclouds.biz.ezservice.model.admin.BizDashboardData;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganization;
+import id.ezclouds.biz.ezservice.model.admin.BizOrganizationDetail;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
 import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.BizWebCreateRequest;
+import id.ezclouds.biz.ezservice.service.request.web.BizWebDetailRequest;
 import id.ezclouds.biz.ezservice.service.request.web.BizWebPageRequest;
 import id.ezclouds.biz.ezservice.service.request.web.BizWebUpdateRequest;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
@@ -257,6 +259,36 @@ public class WebApiController {
             public String convertResult(Object object) {
                 if (object instanceof String) {
                     return (String) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/getOrganizationDetail.json")
+    private WebApiResult<BizOrganizationDetail> getOrganizationDetail(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "orgId", required = false) String orgId) {
+        final WebApiResult<BizOrganizationDetail> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_ORGANIZATION_DETAIL, result, new WebApiControllerTemplate.Handler<BizOrganizationDetail>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizWebDetailRequest<String> request = new BizWebDetailRequest<>();
+                request.setSessionId(sessionId);
+                request.setObject(orgId);
+                return bizAdminService.getOrganizationDetail(request);
+            }
+
+            @Override
+            public BizOrganizationDetail convertResult(Object object) {
+                if (object instanceof BizOrganizationDetail) {
+                    return (BizOrganizationDetail) object;
                 }
                 return null;
             }

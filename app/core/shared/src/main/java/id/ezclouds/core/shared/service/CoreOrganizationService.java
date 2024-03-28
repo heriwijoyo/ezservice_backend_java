@@ -40,7 +40,12 @@ public class CoreOrganizationService {
                 .findAll(pageRequest);
     }
 
-    @Transactional
+    public EzCoreOrganizationDO getOrganizationById(String orgId) {
+        return coreOrganizationRepository
+                .findById(orgId)
+                .orElse(null);
+    }
+
     public void createOrganization(EzCoreOrganizationDO ezCoreOrganizationDO) {
         coreOrganizationRepository.saveAndFlush(ezCoreOrganizationDO);
     }

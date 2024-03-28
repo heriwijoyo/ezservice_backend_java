@@ -6,10 +6,13 @@ package id.ezclouds.core.shared.service;
 
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
+import id.ezclouds.core.shared.model.CoreSequenceConfig;
 import id.ezclouds.core.shared.repo.CoreSequenceRepository;
 import id.ezclouds.core.shared.repo.dataobject.EzCoreSequenceDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 
 
 /**
@@ -21,6 +24,12 @@ public class CoreSequenceService {
 
     @Autowired
     private CoreSequenceRepository coreSequenceRepository;
+
+    @Transactional
+    public void createSequenceConfig(CoreSequenceConfig sequenceConfig) {
+        coreSequenceRepository
+                .saveAndFlush(sequenceConfig.toSequenceDO());
+    }
 
     public String generateSequence(String orgId, String orgCode, String scene) {
         EzCoreSequenceDO currentSequence = coreSequenceRepository.findForUpdateByOrgAndScene(orgId, scene);

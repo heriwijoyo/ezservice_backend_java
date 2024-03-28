@@ -10,19 +10,16 @@ import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.constant.BizConstant;
 import id.ezclouds.biz.ezservice.enums.BizMemberRole;
 import id.ezclouds.biz.ezservice.converter.BizAdminConverter;
-import id.ezclouds.biz.ezservice.model.admin.BizAdminAppData;
-import id.ezclouds.biz.ezservice.model.admin.BizAdminSession;
-import id.ezclouds.biz.ezservice.model.admin.BizDashboardData;
-import id.ezclouds.biz.ezservice.model.admin.BizOrganization;
+import id.ezclouds.biz.ezservice.model.admin.*;
 import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
 import id.ezclouds.biz.ezservice.service.core.BizAppCacheService;
 import id.ezclouds.biz.ezservice.service.dataservice.BizOrganizationService;
-import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.dataservice.model.WebImageGallery;
 import id.ezclouds.biz.ezservice.service.inner.service.BizAdminInnerService;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.BizWebCreateRequest;
+import id.ezclouds.biz.ezservice.service.request.web.BizWebDetailRequest;
 import id.ezclouds.biz.ezservice.service.request.web.BizWebPageRequest;
 import id.ezclouds.biz.ezservice.service.request.web.BizWebUpdateRequest;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
@@ -509,6 +506,34 @@ public class BizAdminService extends BizBaseService {
             }
         });
 
+        return bizResult;
+    }
+
+    public BizResult getOrganizationDetail(BizWebDetailRequest<String> request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getObject(), EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(request.getSessionId());
+                authorizeSuperUserMember(adminSession.getMemberRoles());
+
+                BizOrganizationDetail detail = bizAdminInnerService.getOrganizationDetail(request.getObject());
+                bizResult.setSuccess(true);
+                bizResult.setObject(detail);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
         return bizResult;
     }
 

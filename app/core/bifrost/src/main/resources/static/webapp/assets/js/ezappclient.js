@@ -171,6 +171,30 @@ var EzWebAppClient = {
         '<li><a><div class="padding-pagination">Page '+pageResult.pageNumber+' of '+pageResult.totalPage+'</div></a></li>'+
         '<li class="next '+nextDisabled+'"><a '+nextOnClick+'><div class="padding-pagination '+nextClass+'">Next&nbsp;&nbsp;<span aria-hidden="true">→</span></div></a></li>';
         return pagerHTML;
+    },
+    getUrlParameter: function(sParam) {
+        var sPageURL = window.location.search.substring(1),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+            }
+        }
+        return false;
+    },
+    isBlank: function(param) {
+        if (param === undefined || param == null || param == '') {
+            return true;
+        }
+        return false;
+    },
+    isNotBlank: function(param) {
+        return !EzWebAppClient.isBlank(param);
     }
 };
 
