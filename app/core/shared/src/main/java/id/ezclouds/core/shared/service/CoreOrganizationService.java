@@ -46,7 +46,7 @@ public class CoreOrganizationService {
                 .orElse(null);
     }
 
-    public void createOrganization(EzCoreOrganizationDO ezCoreOrganizationDO) {
+    public void saveOrganization(EzCoreOrganizationDO ezCoreOrganizationDO) {
         coreOrganizationRepository.saveAndFlush(ezCoreOrganizationDO);
     }
 }

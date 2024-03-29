@@ -6,14 +6,12 @@ package id.ezclouds.biz.ezservice.service.request.web;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: BizWebUpdateRequest.java, v 0.1 2024‐03‐25 3:44 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: BizWebUpdateRequest.java, v 0.1 2024‐03‐29 4:49 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class BizWebUpdateRequest {
+public class BizWebUpdateRequest<T> {
 
     private String sessionId;
-    private String itemId;
-    private String section;
-    private String value;
+    private T object;
 
     public String getSessionId() {
         return sessionId;
@@ -23,27 +21,11 @@ public class BizWebUpdateRequest {
         this.sessionId = sessionId;
     }
 
-    public String getItemId() {
-        return itemId;
+    public T getObject() {
+        return object;
     }
 
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
-    }
-
-    public String getSection() {
-        return section;
-    }
-
-    public void setSection(String section) {
-        this.section = section;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
+    public void setObject(T object) {
+        this.object = object;
     }
 }

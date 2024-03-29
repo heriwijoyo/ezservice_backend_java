@@ -12,10 +12,7 @@ import id.ezclouds.biz.ezservice.model.admin.BizOrganizationDetail;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
 import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
-import id.ezclouds.biz.ezservice.service.request.web.BizWebCreateRequest;
-import id.ezclouds.biz.ezservice.service.request.web.BizWebDetailRequest;
-import id.ezclouds.biz.ezservice.service.request.web.BizWebPageRequest;
-import id.ezclouds.biz.ezservice.service.request.web.BizWebUpdateRequest;
+import id.ezclouds.biz.ezservice.service.request.web.*;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.result.PageResult;
 import id.ezclouds.common.util.exception.ExceptionUtil;
@@ -142,7 +139,7 @@ public class WebApiController {
         WebApiControllerTemplate.execute(WebEvent.WEB_API_UPDATE_IMAGE_GALLERY, result, new WebApiControllerTemplate.Handler<String>() {
             @Override
             public BizResult onProcess() throws Exception {
-                BizWebUpdateRequest request = new BizWebUpdateRequest();
+                BizWebUpdateItemRequest request = new BizWebUpdateItemRequest();
                 request.setSessionId(sessionId);
                 request.setItemId(itemId);
                 request.setSection(section);
@@ -298,6 +295,47 @@ public class WebApiController {
                 DigestLogUtil.logWebDigest(LOGGER, digestLog);
             }
         });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/organizationUpdate.json")
+    private WebApiResult<String> organizationUpdate(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "orgId", required = false) String orgId,
+            @RequestParam(name = "address", required = false) String address,
+            @RequestParam(name = "contactName", required = false) String contactName,
+            @RequestParam(name = "contactPhone", required = false) String contactPhone,
+            @RequestParam(name = "contactEmail", required = false) String contactEmail,
+            @RequestParam(name = "status", required = false) int status) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_UPDATE_ORGANIZATION, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizOrganization organization = new BizOrganization();
+                organization.setOrgId(orgId);
+                organization.setAddress(address);
+                organization.setContactName(contactName);
+                organization.setContactPhone(contactPhone);
+                organization.setContactEmail(contactEmail);
+                organization.setStatus(status);
+
+                BizWebUpdateRequest<BizOrganization> request = new BizWebUpdateRequest<>();
+                request.setSessionId(sessionId);
+                request.setObject(organization);
+                return bizAdminService.updateOrganization(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+
         return result;
     }
 

@@ -125,11 +125,22 @@ public class BizAdminInnerService {
 
     public BizOrganizationDetail getOrganizationDetail(String orgId) {
         BizOrganizationDetail detail = new BizOrganizationDetail();
-        EzCoreOrganizationDO organizationDO = coreOrganizationService.getOrganizationById(orgId);
-        AssertUtil.notNull(organizationDO, EzErrorCode.DATA_NOT_FOUND);
-        detail.setBizOrganization(convert(organizationDO));
+        detail.setBizOrganization(getOrganizationById(orgId));
 
         return detail;
+    }
+
+    public BizOrganization getOrganizationById(String orgId) {
+        EzCoreOrganizationDO organizationDO = coreOrganizationService.getOrganizationById(orgId);
+        AssertUtil.notNull(organizationDO, EzErrorCode.DATA_NOT_FOUND);
+        return convert(organizationDO);
+    }
+
+    @Transactional
+    public void updateOrganization(BizOrganization organization) {
+        EzCoreOrganizationDO organizationDO = convert(organization);
+        organizationDO.setModifiedTime(DateUtil.getCurrentFormattedDate());
+        coreOrganizationService.saveOrganization(organizationDO);
     }
 
     @Transactional
@@ -145,7 +156,7 @@ public class BizAdminInnerService {
         modelDO.setCreatedTime(DateUtil.getCurrentFormattedDate());
         modelDO.setModifiedTime(DateUtil.getCurrentFormattedDate());
         modelDO.setStatus(1);
-        coreOrganizationService.createOrganization(modelDO);
+        coreOrganizationService.saveOrganization(modelDO);
 
         initiateOrgConfig(modelDO);
     }
@@ -216,5 +227,20 @@ public class BizAdminInnerService {
         organization.setModifiedTime(modelDO.getModifiedTime());
         organization.setStatus(modelDO.getStatus());
         return organization;
+    }
+
+    private EzCoreOrganizationDO convert(BizOrganization organization) {
+        EzCoreOrganizationDO organizationDO = new EzCoreOrganizationDO();
+        organizationDO.setOrgId(organization.getOrgId());
+        organizationDO.setName(organization.getName());
+        organizationDO.setCode(organization.getCode());
+        organizationDO.setAddress(organization.getAddress());
+        organizationDO.setContactName(organization.getContactName());
+        organizationDO.setContactPhone(organization.getContactPhone());
+        organizationDO.setContactEmail(organization.getContactEmail());
+        organizationDO.setCreatedTime(organization.getCreatedTime());
+        organizationDO.setModifiedTime(organization.getModifiedTime());
+        organizationDO.setStatus(organization.getStatus());
+        return organizationDO;
     }
 }

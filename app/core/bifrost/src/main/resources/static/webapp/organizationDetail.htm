@@ -224,6 +224,9 @@
     };
     var EzDashboadBizService = {
         start: function() {
+            EzDashboadBizService.reloadOrganizationCard();
+        },
+        reloadOrganizationCard: function() {
             let orgId = EzWebAppClient.getUrlParameter('id');
             if (EzWebAppClient.isBlank(orgId)) {
                 EzDashboadBizService.alertInvalidOrg();
@@ -235,6 +238,7 @@
         },
         updateOrganization: function() {
             EzWebAppClient.callApiService(EzAdminUrl.ORGANIZATION_UPDATE, {
+                orgId: EzWebAppClient.getUrlParameter('id'),
                 address: $('#address').val(),
                 contactName: $('#contactName').val(),
                 contactPhone: $('#contactPhone').val(),
@@ -246,10 +250,21 @@
             if (url === EzAdminUrl.GET_ORGANIZATION_DETAIL) {
                 EzDashboadBizService.renderOrganizationCard(response.data.bizOrganization);
             }
+            if (url === EzAdminUrl.ORGANIZATION_UPDATE) {
+                alert(response.data);
+                $('#orgUpdateLoader').hide();
+                $('#orgUpdateBtn').show();
+                EzDashboadBizService.reloadOrganizationCard();
+            }
         },
         handleApiBizFailed: function(url, message) {
             if (url === EzAdminUrl.GET_ORGANIZATION_DETAIL) {
                 EzDashboadBizService.alertInvalidOrg();
+            }
+            if (url === EzAdminUrl.ORGANIZATION_UPDATE) {
+                alert(message);
+                $('#orgUpdateLoader').hide();
+                $('#orgUpdateBtn').show();
             }
         },
         renderOrganizationCard: function(data) {

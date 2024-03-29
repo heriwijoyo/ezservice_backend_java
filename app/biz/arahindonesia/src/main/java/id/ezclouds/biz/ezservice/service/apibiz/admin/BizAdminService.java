@@ -18,10 +18,7 @@ import id.ezclouds.biz.ezservice.service.dataservice.BizOrganizationService;
 import id.ezclouds.biz.ezservice.service.dataservice.model.WebImageGallery;
 import id.ezclouds.biz.ezservice.service.inner.service.BizAdminInnerService;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
-import id.ezclouds.biz.ezservice.service.request.web.BizWebCreateRequest;
-import id.ezclouds.biz.ezservice.service.request.web.BizWebDetailRequest;
-import id.ezclouds.biz.ezservice.service.request.web.BizWebPageRequest;
-import id.ezclouds.biz.ezservice.service.request.web.BizWebUpdateRequest;
+import id.ezclouds.biz.ezservice.service.request.web.*;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.result.PageResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
@@ -363,7 +360,7 @@ public class BizAdminService extends BizBaseService {
         return bizResult;
     }
 
-    public BizResult updateAppGallery(BizWebUpdateRequest request) {
+    public BizResult updateAppGallery(BizWebUpdateItemRequest request) {
         final BizResult bizResult = new BizResult();
 
         BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
@@ -564,6 +561,44 @@ public class BizAdminService extends BizBaseService {
             }
         });
 
+        return bizResult;
+    }
+
+    public BizResult updateOrganization(BizWebUpdateRequest<BizOrganization> request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notNull(request.getObject(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getObject().getOrgId(), EzErrorCode.ILLEGAL_PARAM);
+
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(request.getSessionId());
+                authorizeSuperUserMember(adminSession.getMemberRoles());
+
+                BizOrganization organization = bizAdminInnerService.getOrganizationById(request.getObject().getOrgId());
+                organization.setAddress(request.getObject().getAddress());
+                organization.setContactName(request.getObject().getContactName());
+                organization.setContactPhone(request.getObject().getContactPhone());
+                organization.setContactEmail(request.getObject().getContactEmail());
+                organization.setStatus(request.getObject().getStatus());
+
+                bizAdminInnerService.updateOrganization(organization);
+
+                bizResult.setSuccess(true);
+                bizResult.setObject("UPDATE SUCCESS");
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
         return bizResult;
     }
 
