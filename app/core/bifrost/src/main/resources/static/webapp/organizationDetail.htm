@@ -189,7 +189,6 @@
                 </div>
             </div>
 
-
             <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
                 <div class="card corner-radius">
                     <div class="header">
@@ -251,6 +250,17 @@
                             </div>
 
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                <div class="card corner-radius">
+                    <div class="header">
+                        <h2>CORE ORGANIZATION CONFIG</h2>
+                    </div>
+                    <div class="body">
+                        <div class="row clearfix" id="coreOrgConfigContainer"></div>
                     </div>
                 </div>
             </div>
@@ -332,6 +342,7 @@
             if (url === EzAdminUrl.GET_ORGANIZATION_DETAIL) {
                 EzDashboadBizService.renderOrganizationCard(response.data.bizOrganization);
                 EzDashboadBizService.renderAppConfigCard(response.data.bizApplicationConfig);
+                EzDashboadBizService.renderCoreConfigCard(response.data.coreOrgConfigMap);
             }
             if (url === EzAdminUrl.ORGANIZATION_UPDATE) {
                 alert(response.data);
@@ -383,7 +394,6 @@
             }
         },
         renderAppConfigCard: function(data) {
-            console.log(data);
             if (data.id == null) {
                 $('#clientGenerateBtn').show();
                 $('#clientGenerateBtn').click(function(){
@@ -401,6 +411,15 @@
                 } else {
                     $('#clientStatus option[value="0"]').prop('selected', true);
                 }
+            }
+        },
+        renderCoreConfigCard: function(data) {
+            $('#coreOrgConfigContainer').html('');
+            for (const [key, value] of Object.entries(data)) {
+                let itemRow = $.parseHTML(EzCoreOrgConfigTemplate);
+                $(itemRow).find('.coreConfigKey').html(key);
+                $(itemRow).find('.coreConfigValue').val(value);
+                $('#coreOrgConfigContainer').append(itemRow);
             }
         },
         generateAppConfig: function() {
@@ -463,6 +482,15 @@
             EzDashboadBizService.storeAppConfig();
         });
     });
+
+    var EzCoreOrgConfigTemplate = ''+
+        '<div class="form-group col-sm-12">'+
+            '<div class="form-line">'+
+                '<div class="font-12 coreConfigKey"></div>'+
+                '<input type="text" class="form-control coreConfigValue">'+
+            '</div>'+
+        '</div>';
+
 </script>
 </body>
 
