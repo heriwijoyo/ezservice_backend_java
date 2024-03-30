@@ -23,14 +23,14 @@ public class CoreModelConverter {
         return coreOrganization;
     }
 
-    public static CoreConfig convert(EzCoreConfigDO coreConfigDO) {
+    public static CoreOrgConfig convert(EzCoreOrgConfigDO coreConfigDO) {
         if (coreConfigDO == null) { return null; }
-        CoreConfig coreConfig = new CoreConfig();
-        coreConfig.setConfigId(coreConfigDO.getConfigId());
-        coreConfig.setOrgId(coreConfigDO.getOrgId());
-        coreConfig.setConfigKey(coreConfigDO.getConfigKey());
-        coreConfig.setConfigValue(coreConfigDO.getConfigValue());
-        return coreConfig;
+        CoreOrgConfig coreOrgConfig = new CoreOrgConfig();
+        coreOrgConfig.setConfigId(coreConfigDO.getConfigId());
+        coreOrgConfig.setOrgId(coreConfigDO.getOrgId());
+        coreOrgConfig.setConfigKey(coreConfigDO.getConfigKey());
+        coreOrgConfig.setConfigValue(coreConfigDO.getConfigValue());
+        return coreOrgConfig;
     }
 
     public static CoreAdminBOMenu convert(EzCoreAdminBOMenuDO menuDO) {

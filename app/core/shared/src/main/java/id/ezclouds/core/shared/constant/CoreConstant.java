@@ -10,6 +10,10 @@ package id.ezclouds.core.shared.constant;
  */
 public class CoreConstant {
 
+    public static final String SU_ORG_ID = "SU00";
+    public static final String SU_ORG_CODE = "101";
+    public static final int SU_WEB_SESSION_EXPIRY_MINS = 30;
+
     public static final class ConfigKey {
         public static final String WATZAP_SEND_ENABLE = "WATZAP_SEND_ENABLE";
         public static final String WATZAP_API_KEY = "WATZAP_API_KEY";

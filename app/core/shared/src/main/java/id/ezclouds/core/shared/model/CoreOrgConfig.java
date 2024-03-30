@@ -8,8 +8,8 @@ import id.ezclouds.common.util.StringUtil;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: CoreConfig.java, v 0.1 2024‐02‐04 4:00 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
-public class CoreConfig {
+ * @version $Id: CoreOrgConfig.java, v 0.1 2024‐02‐04 4:00 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
+public class CoreOrgConfig {
 
     private String configId;
     private String orgId;
@@ -48,11 +48,11 @@ public class CoreConfig {
         this.configValue = configValue;
     }
 
-    public static CoreConfig EMPTY = createEmptyCoreConfig();
+    public static CoreOrgConfig EMPTY = createEmptyCoreConfig();
 
-    private static CoreConfig createEmptyCoreConfig() {
-        CoreConfig coreConfig = new CoreConfig();
-        coreConfig.setConfigValue(StringUtil.EMPTY);
-        return coreConfig;
+    private static CoreOrgConfig createEmptyCoreConfig() {
+        CoreOrgConfig coreOrgConfig = new CoreOrgConfig();
+        coreOrgConfig.setConfigValue(StringUtil.EMPTY);
+        return coreOrgConfig;
     }
 }

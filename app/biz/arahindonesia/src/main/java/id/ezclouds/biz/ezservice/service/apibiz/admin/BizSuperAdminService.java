@@ -26,6 +26,7 @@ import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.auth.model.CoreAuthAdminSession;
 import id.ezclouds.core.auth.request.CoreAdminCommonSessionCreateRequest;
+import id.ezclouds.core.shared.constant.CoreConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,24 +54,20 @@ public class BizSuperAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                final String SU00 = "SU00";
-                final String orgCode = "101";
-                final String scene = "WEB_LOGIN_SESSION";
-                final String role = "SUPERUSER";
-
-                List<CoreAuthAdminSession> currentSessions = coreAuthService.adminGetSession(SU00, SU00);
+                List<CoreAuthAdminSession> currentSessions = coreAuthService
+                        .adminGetSession(CoreConstant.SU_ORG_ID, CoreConstant.SU_ORG_ID);
                 for (CoreAuthAdminSession session : currentSessions) {
                     coreAuthService.adminLogoutSession(session.getSessionId());
                 }
 
                 CoreAdminCommonSessionCreateRequest createRequest = new CoreAdminCommonSessionCreateRequest();
-                createRequest.setOrgId(SU00);
-                createRequest.setOrgCode(orgCode);
-                createRequest.setScene(scene);
-                createRequest.setAppId(SU00);
-                createRequest.setClientId(SU00);
-                createRequest.setMemberId(SU00);
-                createRequest.setMemberRoles(role);
+                createRequest.setOrgId(CoreConstant.SU_ORG_ID);
+                createRequest.setOrgCode(CoreConstant.SU_ORG_CODE);
+                createRequest.setScene("WEB_LOGIN_SESSION");
+                createRequest.setAppId(CoreConstant.SU_ORG_ID);
+                createRequest.setClientId(CoreConstant.SU_ORG_ID);
+                createRequest.setMemberId(CoreConstant.SU_ORG_ID);
+                createRequest.setMemberRoles("SUPERUSER");
 
                 coreAuthService.adminCreateSession(createRequest);
 

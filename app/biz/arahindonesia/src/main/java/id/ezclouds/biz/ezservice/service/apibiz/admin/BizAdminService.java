@@ -31,6 +31,7 @@ import id.ezclouds.core.auth.request.CoreAdminCommonSessionCreateRequest;
 import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.service.CoreMemberService;
+import id.ezclouds.core.shared.constant.CoreConstant;
 import id.ezclouds.core.shared.file.PublicFileResolver;
 import id.ezclouds.core.shared.model.CoreAdminBOMenu;
 import id.ezclouds.core.shared.model.CoreAdminBOPermission;
@@ -217,7 +218,7 @@ public class BizAdminService extends BizBaseService {
                 CoreOrganization organization = bizOrganizationService.getOrganizationById(adminSession.getOrgId());
 
                 String memberName, memberPhone;
-                if (StringUtil.equals(organization.getOrgId(), AppConstant.Admin.SU_ORG_ID)) {
+                if (StringUtil.equals(organization.getOrgId(), CoreConstant.SU_ORG_ID)) {
                     memberName = BizMemberRole.SUPERUSER.getCode();
                     memberPhone = "-";
                 } else {

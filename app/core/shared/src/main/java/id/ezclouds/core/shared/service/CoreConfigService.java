@@ -7,7 +7,7 @@ package id.ezclouds.core.shared.service;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.shared.constant.CoreConstant;
 import id.ezclouds.core.shared.converter.CoreModelConverter;
-import id.ezclouds.core.shared.model.CoreConfig;
+import id.ezclouds.core.shared.model.CoreOrgConfig;
 import id.ezclouds.core.shared.repo.CoreConfigRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -34,7 +34,7 @@ public class CoreConfigService {
                         StringUtil.equalsNotNull(orgId, config.getOrgId())
                 )
                 .findFirst()
-                .orElse(CoreConfig.EMPTY)
+                .orElse(CoreOrgConfig.EMPTY)
                 .getConfigValue();
     }
 
@@ -45,7 +45,7 @@ public class CoreConfigService {
                         StringUtil.equalsNotNull("ALL", config.getOrgId())
                 )
                 .findFirst()
-                .orElse(CoreConfig.EMPTY)
+                .orElse(CoreOrgConfig.EMPTY)
                 .getConfigValue();
     }
 
@@ -76,7 +76,7 @@ public class CoreConfigService {
     }
 
     @Cacheable("coreConfig")
-    public List<CoreConfig> getCoreConfigs() {
+    public List<CoreOrgConfig> getCoreConfigs() {
         return coreConfigRepository.findAll()
                 .stream()
                 .map(CoreModelConverter::convert)
