@@ -8,7 +8,6 @@ import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
-import id.ezclouds.core.auth.constant.CoreAuthConfig;
 import id.ezclouds.core.auth.constant.CoreAuthConstant;
 import id.ezclouds.core.auth.dataobject.EzAuthAdminCommonSessionDO;
 import id.ezclouds.core.auth.repo.EzAuthAdminCommonSessionRepository;
@@ -118,11 +117,11 @@ public class InnerAuthService {
         }
     }
 
-    private int getAdminCommonSessionExpMins(String orgId) {
+    public int getAdminCommonSessionExpMins(String orgId) {
         if (CoreConstant.SU_ORG_ID.equals(orgId)) {
             return CoreConstant.SU_WEB_SESSION_EXPIRY_MINS;
         }
-        String expMins = coreConfigService.getOrgConfigValue(CoreAuthConfig.Key.ADMIN_COMMON_SESSION_EXPIRY_MINS, orgId);
+        String expMins = coreConfigService.getOrgConfigValue(CoreConstant.ConfigKey.ADMIN_COMMON_SESSION_EXPIRY_MINS, orgId);
         return Integer.parseInt(expMins);
     }
 }

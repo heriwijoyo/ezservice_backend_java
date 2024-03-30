@@ -10,7 +10,6 @@ import id.ezclouds.common.util.ShardUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
-import id.ezclouds.core.auth.constant.CoreAuthConfig;
 import id.ezclouds.core.auth.constant.CoreAuthConstant;
 import id.ezclouds.core.auth.converter.CoreAuthModelConverter;
 import id.ezclouds.core.auth.dataobject.*;
@@ -29,6 +28,7 @@ import id.ezclouds.core.auth.result.CoreCommonSession;
 import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
 import id.ezclouds.core.auth.result.CoreAuthResult;
 import id.ezclouds.core.auth.service.inner.InnerAuthService;
+import id.ezclouds.core.shared.constant.CoreConstant;
 import id.ezclouds.core.shared.service.CoreConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -113,7 +113,7 @@ public class CoreAuthService {
     @Transactional
     public EzAuthMemberClientSessionDO startMemberClientSession(EzAuthMemberClientDO memberClientDO, String deviceId) {
         String configValue = coreConfigService.getOrgConfigValue(
-                CoreAuthConfig.Key.MEMBER_CLIENT_ALLOW_MULTIPLE_SESSION,
+                CoreConstant.ConfigKey.MEMBER_CLIENT_ALLOW_MULTIPLE_SESSION,
                 memberClientDO.getOrgId()
         );
         boolean allowMultipleSession = Boolean.parseBoolean(configValue);
@@ -382,7 +382,8 @@ public class CoreAuthService {
         while (retryCount < 1 || (createError && (retryCount < maxRetry))) {
             try {
                 Date currentDate = new Date();
-                Date expiryDate = DateUtil.getDateAfterMins(currentDate, getAdminCommonSessionExpMins(request.getOrgId()));
+                int sessionExpiryMins = innerAuthService.getAdminCommonSessionExpMins(request.getOrgId());
+                Date expiryDate = DateUtil.getDateAfterMins(currentDate, sessionExpiryMins);
 
                 int sessionCodeNumber = new Random().nextInt(900000) + 100000;
                 String sessionCode = String.valueOf(sessionCodeNumber);
@@ -470,17 +471,12 @@ public class CoreAuthService {
     }
 
     private int getMemberClientSessionExpDays(String orgId) {
-        String expDays = coreConfigService.getOrgConfigValue(CoreAuthConfig.Key.MEMBER_CLIENT_SESSION_EXPIRY_DAYS, orgId);
+        String expDays = coreConfigService.getOrgConfigValue(CoreConstant.ConfigKey.MEMBER_CLIENT_SESSION_EXPIRY_DAYS, orgId);
         return Integer.parseInt(expDays);
     }
 
     private int getMemberCommonSessionExpMins(String orgId) {
-        String expMins = coreConfigService.getOrgConfigValue(CoreAuthConfig.Key.MEMBER_COMMON_SESSION_EXPIRY_MINS, orgId);
-        return Integer.parseInt(expMins);
-    }
-
-    private int getAdminCommonSessionExpMins(String orgId) {
-        String expMins = coreConfigService.getOrgConfigValue(CoreAuthConfig.Key.ADMIN_COMMON_SESSION_EXPIRY_MINS, orgId);
+        String expMins = coreConfigService.getOrgConfigValue(CoreConstant.ConfigKey.MEMBER_COMMON_SESSION_EXPIRY_MINS, orgId);
         return Integer.parseInt(expMins);
     }
 

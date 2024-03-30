@@ -24,6 +24,7 @@ import id.ezclouds.core.auth.service.CoreAuthService;
 import id.ezclouds.core.shared.enums.CoreSequenceScene;
 import id.ezclouds.core.shared.model.CoreSequenceConfig;
 import id.ezclouds.core.shared.repo.dataobject.EzCoreOrganizationDO;
+import id.ezclouds.core.shared.service.CoreConfigService;
 import id.ezclouds.core.shared.service.CoreOrganizationService;
 import id.ezclouds.core.shared.service.CoreSequenceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +62,9 @@ public class BizAdminInnerService {
 
     @Autowired
     private CoreAuthService coreAuthService;
+
+    @Autowired
+    private CoreConfigService coreConfigService;
 
     public void createAppImageGallery(String orgId, String fileName, Map<String, String> extInfo) {
         AppImageGalleryRequest request = new AppImageGalleryRequest();
@@ -133,7 +137,7 @@ public class BizAdminInnerService {
         BizOrganizationDetail detail = new BizOrganizationDetail();
         detail.setBizOrganization(getOrganizationById(orgId));
         detail.setBizApplicationConfig(getAppConfig(orgId));
-
+        detail.setCoreOrgConfigMap(coreConfigService.getOrgConfigByOrgId(orgId));
         return detail;
     }
 

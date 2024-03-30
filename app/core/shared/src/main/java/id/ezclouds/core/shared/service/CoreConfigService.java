@@ -16,7 +16,9 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -31,6 +33,22 @@ public class CoreConfigService {
 
     @Autowired
     private CoreOrgConfigRepository coreOrgConfigRepository;
+
+    private static final List<String> CORE_ORG_CONFIG_KEYS;
+
+    static {
+        CORE_ORG_CONFIG_KEYS = Arrays.asList(
+                CoreConstant.ConfigKey.MEMBER_CLIENT_ALLOW_MULTIPLE_SESSION,
+                CoreConstant.ConfigKey.MEMBER_CLIENT_SESSION_EXPIRY_DAYS,
+                CoreConstant.ConfigKey.MEMBER_COMMON_SESSION_EXPIRY_MINS,
+                CoreConstant.ConfigKey.ADMIN_COMMON_SESSION_EXPIRY_MINS,
+                CoreConstant.ConfigKey.WATZAP_SEND_ENABLE,
+                CoreConstant.ConfigKey.WATZAP_API_KEY,
+                CoreConstant.ConfigKey.WATZAP_NUMBER_KEY,
+                CoreConstant.ConfigKey.CORE_AREA_LEVEL_ROOT,
+                CoreConstant.ConfigKey.CORE_AREA_ROOT_IDS
+        );
+    }
 
     public String getOrgConfigValue(String configKey, String orgId) {
         return getCoreOrgConfigs()
@@ -78,7 +96,7 @@ public class CoreConfigService {
         return Arrays.asList(configValue.split(","));
     }
 
-    @Cacheable("coreConfig")
+    @Cacheable(CoreConstant.CacheKey.CORE_CONFIG)
     public List<CoreConfig> getCoreConfigs() {
         return coreConfigRepository.findAll()
                 .stream()
@@ -86,11 +104,32 @@ public class CoreConfigService {
                 .collect(Collectors.toList());
     }
 
-    @Cacheable("coreOrgConfig")
+    @Cacheable(CoreConstant.CacheKey.CORE_ORG_CONFIG)
     public List<CoreOrgConfig> getCoreOrgConfigs() {
         return coreOrgConfigRepository.findAll()
                 .stream()
                 .map(CoreModelConverter::convert)
                 .collect(Collectors.toList());
+    }
+
+    public Map<String, String> getOrgConfigByOrgId(String orgId) {
+        Map<String, String> orgConfigMap = new HashMap<>();
+        List<CoreOrgConfig> coreOrgConfigs = coreOrgConfigRepository
+                .findByOrgId(orgId)
+                .stream()
+                .map(CoreModelConverter::convert)
+                .collect(Collectors.toList());
+
+        for (String configKey : CORE_ORG_CONFIG_KEYS) {
+            String configValue = StringUtil.EMPTY;
+            for (CoreOrgConfig orgConfig : coreOrgConfigs) {
+                if (configKey.equals(orgConfig.getConfigKey())) {
+                    configValue = orgConfig.getConfigValue();
+                }
+            }
+            orgConfigMap.put(configKey, configValue);
+        }
+
+        return orgConfigMap;
     }
 }
