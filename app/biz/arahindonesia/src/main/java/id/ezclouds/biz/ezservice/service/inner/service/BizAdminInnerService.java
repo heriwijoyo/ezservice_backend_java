@@ -185,6 +185,19 @@ public class BizAdminInnerService {
         return bizApplicationConfig;
     }
 
+    public void saveBizAppConfig(BizApplicationConfig applicationConfig) {
+        CoreAuthAppClient coreAuthAppClient = new CoreAuthAppClient();
+        coreAuthAppClient.setId(applicationConfig.getId());
+        coreAuthAppClient.setOrgId(applicationConfig.getOrgId());
+        coreAuthAppClient.setAppId(applicationConfig.getAppId());
+        coreAuthAppClient.setClientId(applicationConfig.getClientId());
+        coreAuthAppClient.setClientSecret(applicationConfig.getClientSecret());
+        coreAuthAppClient.setCreatedTime(applicationConfig.getCreatedTime());
+        coreAuthAppClient.setModifiedTime(DateUtil.getCurrentFormattedDate());
+        coreAuthAppClient.setStatus(applicationConfig.getStatus());
+        coreAuthService.saveAuthAppClient(coreAuthAppClient);
+    }
+
     private void initiateOrgConfig(EzCoreOrganizationDO organizationDO) {
         String scene = CoreSequenceScene.CORE_MEMBER_ID.getCode();
         String sceneCode = CoreSequenceScene.CORE_MEMBER_ID.getSceneCode();

@@ -5,10 +5,7 @@
 package id.ezclouds.core.bifrost.app.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import id.ezclouds.biz.ezservice.model.admin.BizAdminAppData;
-import id.ezclouds.biz.ezservice.model.admin.BizDashboardData;
-import id.ezclouds.biz.ezservice.model.admin.BizOrganization;
-import id.ezclouds.biz.ezservice.model.admin.BizOrganizationDetail;
+import id.ezclouds.biz.ezservice.model.admin.*;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
 import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
@@ -335,7 +332,51 @@ public class WebApiController {
                 DigestLogUtil.logWebDigest(LOGGER, digestLog);
             }
         });
+        return result;
+    }
 
+    @PostMapping(value = "/webapp/api/appConfigUpdate.json")
+    private WebApiResult<String> appConfigUpdate(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "orgId", required = false) String orgId,
+            @RequestParam(name = "id", required = false) String id,
+            @RequestParam(name = "appId", required = false) String appId,
+            @RequestParam(name = "clientId", required = false) String clientId,
+            @RequestParam(name = "clientSecret", required = false) String clientSecret,
+            @RequestParam(name = "createdTime", required = false) String createdTime,
+            @RequestParam(name = "status", required = false) int status ) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_UPDATE_APP_CONFIG, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizApplicationConfig applicationConfig = new BizApplicationConfig();
+                applicationConfig.setOrgId(orgId);
+                applicationConfig.setId(id);
+                applicationConfig.setAppId(appId);
+                applicationConfig.setClientId(clientId);
+                applicationConfig.setClientSecret(clientSecret);
+                applicationConfig.setCreatedTime(createdTime);
+                applicationConfig.setStatus(status);
+
+                BizWebUpdateRequest<BizApplicationConfig> request = new BizWebUpdateRequest<>();
+                request.setSessionId(sessionId);
+                request.setObject(applicationConfig);
+                return bizAdminService.updateAppConfig(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                if (object instanceof String) {
+                    return (String) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
         return result;
     }
 

@@ -24,8 +24,24 @@ public class CoreAuthModelConverter {
         appClient.setAppId(appClientDO.getAppId());
         appClient.setClientId(appClientDO.getClientId());
         appClient.setClientSecret(appClientDO.getClientSecret());
+        appClient.setCreatedTime(appClientDO.getCreatedTime());
+        appClient.setModifiedTime(appClientDO.getModifiedTime());
         appClient.setStatus(appClientDO.getStatus());
         return appClient;
+    }
+
+    public static EzAuthAppClientDO convert(CoreAuthAppClient appClient) {
+        if (appClient == null) { return null; }
+        EzAuthAppClientDO appClientDO = new EzAuthAppClientDO();
+        appClientDO.setId(appClient.getId());
+        appClientDO.setOrgId(appClient.getOrgId());
+        appClientDO.setAppId(appClient.getAppId());
+        appClientDO.setClientId(appClient.getClientId());
+        appClientDO.setClientSecret(appClient.getClientSecret());
+        appClientDO.setCreatedTime(appClient.getCreatedTime());
+        appClientDO.setModifiedTime(appClient.getModifiedTime());
+        appClientDO.setStatus(appClient.getStatus());
+        return appClientDO;
     }
 
     public static CoreAuthMemberClient convert(EzAuthMemberClientDO clientDO) {

@@ -230,6 +230,20 @@
                                 </div>
                             </div>
 
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Created Time</div>
+                                    <input type="text" class="form-control" id="clientCreatedTime" placeholder="Created Time" disabled>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Last Modified Time</div>
+                                    <input type="text" class="form-control" id="clientModifiedTime" placeholder="Last Modified Time" disabled>
+                                </div>
+                            </div>
+
                             <div class="col-sm-12">
                                 <img id="clientLoader" src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right">
                                 <button id="clientUpdateBtn" class="button button-rounded waves-effect waves-float pull-right" type="submit">UPDATE</button>
@@ -309,6 +323,7 @@
                     appId: $('#appId').val(),
                     clientId: $('#clientId').val(),
                     clientSecret: $('#clientSecret').val(),
+                    createdTime: $('#clientCreatedTime').val(),
                     status: $('#clientStatus').val()
                 });
             }
@@ -335,15 +350,19 @@
             if (url === EzAdminUrl.GET_ORGANIZATION_DETAIL) {
                 EzDashboadBizService.alertInvalidOrg();
             }
-            if (url === EzAdminUrl.APP_CONFIG_UPDATE) {
+            if (url === EzAdminUrl.ORGANIZATION_UPDATE) {
                 alert(message);
                 $('#orgUpdateLoader').hide();
                 $('#orgUpdateBtn').show();
             }
-            if (url === EzAdminUrl.ORGANIZATION_UPDATE) {
+            if (url === EzAdminUrl.APP_CONFIG_UPDATE) {
                 alert(message);
                 $('#clientLoader').hide();
                 $('#clientUpdateBtn').show();
+                let configId = $('#configId').val();
+                if (EzWebAppClient.isBlank(configId)) {
+                    $('#clientGenerateBtn').show();
+                }
             }
         },
         renderOrganizationCard: function(data) {

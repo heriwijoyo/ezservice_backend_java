@@ -33,6 +33,12 @@ public class EzAuthAppClientDO {
     @Column(name = "client_secret")
     private String clientSecret;
 
+    @Column(name = "created_time")
+    private String createdTime;
+
+    @Column(name = "modified_time")
+    private String modifiedTime;
+
     @Column(name = "status")
     private int status;
 
@@ -74,6 +80,22 @@ public class EzAuthAppClientDO {
 
     public void setClientSecret(String clientSecret) {
         this.clientSecret = clientSecret;
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(String modifiedTime) {
+        this.modifiedTime = modifiedTime;
     }
 
     public int getStatus() {

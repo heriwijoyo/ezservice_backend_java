@@ -15,6 +15,8 @@ public class BizApplicationConfig {
     private String appId;
     private String clientId;
     private String clientSecret;
+    private String createdTime;
+    private String modifiedTime;
     private int status;
 
     public String getId() {
@@ -55,6 +57,22 @@ public class BizApplicationConfig {
 
     public void setClientSecret(String clientSecret) {
         this.clientSecret = clientSecret;
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(String modifiedTime) {
+        this.modifiedTime = modifiedTime;
     }
 
     public int getStatus() {

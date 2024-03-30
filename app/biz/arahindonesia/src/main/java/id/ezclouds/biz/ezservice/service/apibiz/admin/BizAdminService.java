@@ -23,6 +23,7 @@ import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.result.PageResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.DateUtil;
+import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
@@ -478,8 +479,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(request.getSessionId());
-                authorizeSuperUserMember(adminSession.getMemberRoles());
+                authorizeSuperUserMember(request.getSessionId());
 
                 if (StringUtil.isBlank(request.getSortBy())) {
                     request.setSortBy("code");
@@ -518,8 +518,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(request.getSessionId());
-                authorizeSuperUserMember(adminSession.getMemberRoles());
+                authorizeSuperUserMember(request.getSessionId());
 
                 BizOrganizationDetail detail = bizAdminInnerService.getOrganizationDetail(request.getObject());
                 bizResult.setSuccess(true);
@@ -550,6 +549,8 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
+                authorizeSuperUserMember(request.getSessionId());
+
                 bizAdminInnerService.createOrganization(request.getData());
                 bizResult.setSuccess(true);
                 bizResult.setObject("SUCCESS");
@@ -578,8 +579,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(request.getSessionId());
-                authorizeSuperUserMember(adminSession.getMemberRoles());
+                authorizeSuperUserMember(request.getSessionId());
 
                 BizOrganization organization = bizAdminInnerService.getOrganizationById(request.getObject().getOrgId());
                 organization.setAddress(request.getObject().getAddress());
@@ -590,6 +590,44 @@ public class BizAdminService extends BizBaseService {
 
                 bizAdminInnerService.updateOrganization(organization);
 
+                bizResult.setSuccess(true);
+                bizResult.setObject("UPDATE SUCCESS");
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
+    public BizResult updateAppConfig(BizWebUpdateRequest<BizApplicationConfig> request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notNull(request.getObject(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getObject().getOrgId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getObject().getAppId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getObject().getClientId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getObject().getClientSecret(), EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                authorizeSuperUserMember(request.getSessionId());
+                BizApplicationConfig appConfig = request.getObject();
+                if (StringUtil.isBlank(appConfig.getId())) {
+                    String configId = HashUtil.createHash(appConfig.getOrgId(), DateUtil.getTimeNowToString());
+                    appConfig.setId(configId);
+                }
+                if (StringUtil.isBlank(appConfig.getCreatedTime())) {
+                    appConfig.setCreatedTime(DateUtil.getCurrentFormattedDate());
+                }
+                bizAdminInnerService.saveBizAppConfig(appConfig);
                 bizResult.setSuccess(true);
                 bizResult.setObject("UPDATE SUCCESS");
             }
@@ -613,8 +651,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(sessionId);
-                authorizeSuperUserMember(adminSession.getMemberRoles());
+                authorizeSuperUserMember(sessionId);
 
                 bizResult.setSuccess(true);
                 bizResult.setObject(bizAppCacheService.refreshAllCaches());
@@ -635,12 +672,12 @@ public class BizAdminService extends BizBaseService {
         AssertUtil.isTrue(roles.contains(BizMemberRole.ADMIN_ORG.getCode()), EzErrorCode.MEMBER_UNAUTHORIZED);
     }
 
-    private void authorizeSuperUserMember(String memberRoles) throws EzErrorException {
-        AssertUtil.notBlank(memberRoles, EzErrorCode.MEMBER_UNAUTHORIZED);
-        List<String> roles = Arrays.asList(memberRoles.split(","));
+    private void authorizeSuperUserMember(String sessionId) throws Exception {
+        CoreAuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(sessionId);
+        AssertUtil.notBlank(adminSession.getMemberRoles(), EzErrorCode.MEMBER_UNAUTHORIZED);
+        List<String> roles = Arrays.asList(adminSession.getMemberRoles().split(","));
         AssertUtil.isTrue(roles.contains(BizMemberRole.SUPERUSER.getCode()), EzErrorCode.MEMBER_UNAUTHORIZED);
     }
-
 
     private void authorizeSuperUserOrAdminMember(String memberRoles) throws EzErrorException {
         AssertUtil.notBlank(memberRoles, EzErrorCode.MEMBER_UNAUTHORIZED);

@@ -463,6 +463,12 @@ public class CoreAuthService {
         return CoreAuthModelConverter.convert(authAppClientDO);
     }
 
+    @Transactional
+    public void saveAuthAppClient(CoreAuthAppClient appClient) {
+        ezAuthAppClientRepository
+                .saveAndFlush(CoreAuthModelConverter.convert(appClient));
+    }
+
     private int getMemberClientSessionExpDays(String orgId) {
         String expDays = coreConfigService.getConfigValue(CoreAuthConfig.Key.MEMBER_CLIENT_SESSION_EXPIRY_DAYS, orgId);
         return Integer.parseInt(expDays);
