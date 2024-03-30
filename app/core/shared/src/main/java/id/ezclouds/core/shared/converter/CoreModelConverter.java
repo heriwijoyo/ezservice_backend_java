@@ -23,6 +23,15 @@ public class CoreModelConverter {
         return coreOrganization;
     }
 
+    public static CoreConfig convert(EzCoreConfigDO configDO) {
+        if (configDO == null) { return null; }
+        CoreConfig coreConfig = new CoreConfig();
+        coreConfig.setConfigId(configDO.getConfigId());
+        coreConfig.setConfigKey(configDO.getConfigKey());
+        coreConfig.setConfigValue(configDO.getConfigValue());
+        return coreConfig;
+    }
+
     public static CoreOrgConfig convert(EzCoreOrgConfigDO coreConfigDO) {
         if (coreConfigDO == null) { return null; }
         CoreOrgConfig coreOrgConfig = new CoreOrgConfig();

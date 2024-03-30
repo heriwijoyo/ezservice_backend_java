@@ -2,23 +2,30 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.core.shared.model;
+package id.ezclouds.core.shared.repo.dataobject;
 
-import id.ezclouds.common.util.StringUtil;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: CoreOrgConfig.java, v 0.1 2024‐02‐04 4:00 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
-public class CoreOrgConfig {
+ * @version $Id: EzCoreConfigDO.java, v 0.1 2024‐03‐31 3:05 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ */
+@Entity
+@Table(name = "ez_core_config")
+public class EzCoreConfigDO {
 
+    @Id
+    @Column(name = "config_id")
     private String configId;
-    private String orgId;
-    private String configKey;
-    private String configValue;
 
-    public CoreOrgConfig() {
-        configValue = StringUtil.EMPTY;
-    }
+    @Column(name = "config_key")
+    private String configKey;
+
+    @Column(name = "config_value")
+    private String configValue;
 
     public String getConfigId() {
         return configId;
@@ -26,14 +33,6 @@ public class CoreOrgConfig {
 
     public void setConfigId(String configId) {
         this.configId = configId;
-    }
-
-    public String getOrgId() {
-        return orgId;
-    }
-
-    public void setOrgId(String orgId) {
-        this.orgId = orgId;
     }
 
     public String getConfigKey() {

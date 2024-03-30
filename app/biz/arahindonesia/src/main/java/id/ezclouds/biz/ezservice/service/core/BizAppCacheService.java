@@ -88,6 +88,7 @@ public class BizAppCacheService {
         bizOrganizationService.getActiveOrganizations();
         coreAuthService.getActiveAppClients();
         appSubOrganizationService.getAllSubOrganization();
+        coreConfigService.getCoreConfigs();
         coreConfigService.getCoreOrgConfigs();
         appConfigService.getAppConfigAllActive();
         appConfigService.getMessageTemplates();

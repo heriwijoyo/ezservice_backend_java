@@ -7,8 +7,10 @@ package id.ezclouds.core.shared.service;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.shared.constant.CoreConstant;
 import id.ezclouds.core.shared.converter.CoreModelConverter;
+import id.ezclouds.core.shared.model.CoreConfig;
 import id.ezclouds.core.shared.model.CoreOrgConfig;
 import id.ezclouds.core.shared.repo.CoreConfigRepository;
+import id.ezclouds.core.shared.repo.CoreOrgConfigRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,9 @@ public class CoreConfigService {
     @Autowired
     private CoreConfigRepository coreConfigRepository;
 
+    @Autowired
+    private CoreOrgConfigRepository coreOrgConfigRepository;
+
     public String getOrgConfigValue(String configKey, String orgId) {
         return getCoreOrgConfigs()
                 .stream()
@@ -34,18 +39,16 @@ public class CoreConfigService {
                         StringUtil.equalsNotNull(orgId, config.getOrgId())
                 )
                 .findFirst()
-                .orElse(CoreOrgConfig.EMPTY)
+                .orElse(new CoreOrgConfig())
                 .getConfigValue();
     }
 
-    public String getOrgConfigValue(String configKey) {
-        return getCoreOrgConfigs()
+    public String getConfigValue(String configKey) {
+        return getCoreConfigs()
                 .stream()
-                .filter(config -> StringUtil.equalsNotNull(configKey, config.getConfigKey()) &&
-                        StringUtil.equalsNotNull("ALL", config.getOrgId())
-                )
+                .filter(config -> StringUtil.equalsNotNull(configKey, config.getConfigKey()))
                 .findFirst()
-                .orElse(CoreOrgConfig.EMPTY)
+                .orElse(new CoreConfig())
                 .getConfigValue();
     }
 
@@ -63,7 +66,7 @@ public class CoreConfigService {
     }
 
     public String getWatzapApiUri() {
-        return getOrgConfigValue(CoreConstant.ConfigKey.WATZAP_API_URI);
+        return getConfigValue(CoreConstant.ConfigKey.WATZAP_API_URI);
     }
 
     public String getCoreAreaLevelRoot(String orgId) {
@@ -75,9 +78,17 @@ public class CoreConfigService {
         return Arrays.asList(configValue.split(","));
     }
 
+    @Cacheable("coreConfig")
+    public List<CoreConfig> getCoreConfigs() {
+        return coreConfigRepository.findAll()
+                .stream()
+                .map(CoreModelConverter::convert)
+                .collect(Collectors.toList());
+    }
+
     @Cacheable("coreOrgConfig")
     public List<CoreOrgConfig> getCoreOrgConfigs() {
-        return coreConfigRepository.findAll()
+        return coreOrgConfigRepository.findAll()
                 .stream()
                 .map(CoreModelConverter::convert)
                 .collect(Collectors.toList());

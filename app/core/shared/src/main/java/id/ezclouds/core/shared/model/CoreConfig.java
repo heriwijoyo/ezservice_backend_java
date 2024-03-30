@@ -8,15 +8,15 @@ import id.ezclouds.common.util.StringUtil;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: CoreOrgConfig.java, v 0.1 2024‐02‐04 4:00 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
-public class CoreOrgConfig {
+ * @version $Id: CoreConfig.java, v 0.1 2024‐03‐31 3:08 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ */
+public class CoreConfig {
 
     private String configId;
-    private String orgId;
     private String configKey;
     private String configValue;
 
-    public CoreOrgConfig() {
+    public CoreConfig() {
         configValue = StringUtil.EMPTY;
     }
 
@@ -26,14 +26,6 @@ public class CoreOrgConfig {
 
     public void setConfigId(String configId) {
         this.configId = configId;
-    }
-
-    public String getOrgId() {
-        return orgId;
-    }
-
-    public void setOrgId(String orgId) {
-        this.orgId = orgId;
     }
 
     public String getConfigKey() {
