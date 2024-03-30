@@ -35,7 +35,7 @@ public enum ApiEvent implements EzAppEvent {
     API_ADMIN_UPLOAD_MEDIA("API_ADMIN_UPLOAD_MEDIA"),
     ;
 
-    private String code;
+    private final String code;
 
     ApiEvent(String code) {
         this.code = code;
