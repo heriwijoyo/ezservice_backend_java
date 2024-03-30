@@ -389,6 +389,18 @@
                 $('#clientGenerateBtn').click(function(){
                     EzDashboadBizService.generateAppConfig();
                 });
+            } else {
+                $('#configId').val(data.id);
+                $('#appId').val(data.appId);
+                $('#clientId').val(data.clientId);
+                $('#clientSecret').val(data.clientSecret);
+                $('#clientCreatedTime').val(data.createdTime);
+                $('#clientModifiedTime').val(data.modifiedTime);
+                if (data.status == 1) {
+                    $('#clientStatus option[value="1"]').prop('selected', true);
+                } else {
+                    $('#clientStatus option[value="0"]').prop('selected', true);
+                }
             }
         },
         generateAppConfig: function() {

@@ -180,6 +180,8 @@ public class BizAdminInnerService {
         bizApplicationConfig.setAppId(appClient.getAppId());
         bizApplicationConfig.setClientId(appClient.getClientId());
         bizApplicationConfig.setClientSecret(appClient.getClientSecret());
+        bizApplicationConfig.setCreatedTime(appClient.getCreatedTime());
+        bizApplicationConfig.setModifiedTime(appClient.getModifiedTime());
         bizApplicationConfig.setStatus(appClient.getStatus());
 
         return bizApplicationConfig;
