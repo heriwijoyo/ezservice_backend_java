@@ -7,6 +7,7 @@ package id.ezclouds.core.bifrost.app.web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.ezservice.model.admin.*;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
+import id.ezclouds.biz.ezservice.service.apibiz.admin.BizSuperAdminService;
 import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
@@ -41,6 +42,9 @@ public class WebApiController {
 
     @Autowired
     private BizAdminService bizAdminService;
+
+    @Autowired
+    private BizSuperAdminService bizSuperAdminService;
 
     @PostMapping(value = "/webapp/api/getAppData.json")
     private WebApiResult<BizAdminAppData> getAppData(@RequestParam(name = "sessionId", required = false) String sessionId) {
@@ -200,7 +204,7 @@ public class WebApiController {
                 request.setSessionId(sessionId);
                 request.setPageNumber(pageNumber);
                 request.setPageSize(pageSize);
-                return bizAdminService.getOrganization(request);
+                return bizSuperAdminService.getOrganization(request);
             }
 
             @Override
@@ -246,7 +250,7 @@ public class WebApiController {
                 BizWebCreateRequest<BizOrganization> request = new BizWebCreateRequest<>();
                 request.setSessionId(sessionId);
                 request.setData(organization);
-                return bizAdminService.createOrganization(request);
+                return bizSuperAdminService.createOrganization(request);
             }
 
             @Override
@@ -276,7 +280,7 @@ public class WebApiController {
                 BizWebDetailRequest<String> request = new BizWebDetailRequest<>();
                 request.setSessionId(sessionId);
                 request.setObject(orgId);
-                return bizAdminService.getOrganizationDetail(request);
+                return bizSuperAdminService.getOrganizationDetail(request);
             }
 
             @Override
@@ -319,7 +323,7 @@ public class WebApiController {
                 BizWebUpdateRequest<BizOrganization> request = new BizWebUpdateRequest<>();
                 request.setSessionId(sessionId);
                 request.setObject(organization);
-                return bizAdminService.updateOrganization(request);
+                return bizSuperAdminService.updateOrganization(request);
             }
 
             @Override
@@ -361,7 +365,7 @@ public class WebApiController {
                 BizWebUpdateRequest<BizApplicationConfig> request = new BizWebUpdateRequest<>();
                 request.setSessionId(sessionId);
                 request.setObject(applicationConfig);
-                return bizAdminService.updateAppConfig(request);
+                return bizSuperAdminService.updateAppConfig(request);
             }
 
             @Override
@@ -386,7 +390,7 @@ public class WebApiController {
         WebApiControllerTemplate.execute(WebEvent.WEB_API_REFRESH_ALL_CACHES, result, new WebApiControllerTemplate.Handler<List<String>>() {
             @Override
             public BizResult onProcess() throws Exception {
-                return bizAdminService.refreshAllCaches(sessionId);
+                return bizSuperAdminService.refreshAllCaches(sessionId);
             }
 
             @Override

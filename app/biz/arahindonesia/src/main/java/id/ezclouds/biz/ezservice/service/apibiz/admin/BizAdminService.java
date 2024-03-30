@@ -13,7 +13,6 @@ import id.ezclouds.biz.ezservice.converter.BizAdminConverter;
 import id.ezclouds.biz.ezservice.model.admin.*;
 import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
-import id.ezclouds.biz.ezservice.service.core.BizAppCacheService;
 import id.ezclouds.biz.ezservice.service.dataservice.BizOrganizationService;
 import id.ezclouds.biz.ezservice.service.dataservice.model.WebImageGallery;
 import id.ezclouds.biz.ezservice.service.inner.service.BizAdminInnerService;
@@ -23,7 +22,6 @@ import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.result.PageResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.DateUtil;
-import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
@@ -72,9 +70,6 @@ public class BizAdminService extends BizBaseService {
 
     @Autowired
     private BizAdminInnerService bizAdminInnerService;
-
-    @Autowired
-    private BizAppCacheService bizAppCacheService;
 
     @Value("${ezserviceapp.url.public.root}")
     private String appRootPublicUrl;
@@ -463,220 +458,10 @@ public class BizAdminService extends BizBaseService {
         return bizResult;
     }
 
-    public BizResult getOrganization(BizWebPageRequest request) {
-        final BizResult bizResult = new BizResult();
-
-        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
-            @Override
-            public void onRequestCheck() throws EzErrorException {
-                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notNull(request.getPageNumber(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notNull(request.getPageSize(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.isTrue(request.getPageNumber() > 0, EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.isTrue(request.getPageSize() > 0, EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.SESSION_INVALID);
-            }
-
-            @Override
-            public void onBizProcess() throws Exception {
-                authorizeSuperUserMember(request.getSessionId());
-
-                if (StringUtil.isBlank(request.getSortBy())) {
-                    request.setSortBy("code");
-                    request.setSort("asc");
-                }
-
-                PageResult<BizOrganization> pageResult = bizAdminInnerService.getOrganizationAll(
-                        request.getPageNumber(),
-                        request.getPageSize(),
-                        request.getSortBy(),
-                        request.getSort()
-                );
-
-                bizResult.setSuccess(true);
-                bizResult.setObject(pageResult);
-            }
-
-            @Override
-            public String getErrorMessage(EzErrorCode ezErrorCode) {
-                return getBizErrorMessage(ezErrorCode);
-            }
-        });
-
-        return bizResult;
-    }
-
-    public BizResult getOrganizationDetail(BizWebDetailRequest<String> request) {
-        final BizResult bizResult = new BizResult();
-        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
-            @Override
-            public void onRequestCheck() throws EzErrorException {
-                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(request.getObject(), EzErrorCode.ILLEGAL_PARAM);
-            }
-
-            @Override
-            public void onBizProcess() throws Exception {
-                authorizeSuperUserMember(request.getSessionId());
-
-                BizOrganizationDetail detail = bizAdminInnerService.getOrganizationDetail(request.getObject());
-                bizResult.setSuccess(true);
-                bizResult.setObject(detail);
-            }
-
-            @Override
-            public String getErrorMessage(EzErrorCode ezErrorCode) {
-                return getBizErrorMessage(ezErrorCode);
-            }
-        });
-        return bizResult;
-    }
-
-    public BizResult createOrganization(BizWebCreateRequest<BizOrganization> request) {
-        BizResult bizResult = new BizResult();
-
-        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
-            @Override
-            public void onRequestCheck() throws EzErrorException {
-                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notNull(request.getData(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(request.getData().getOrgId(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(request.getData().getCode(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(request.getData().getName(), EzErrorCode.ILLEGAL_PARAM);
-            }
-
-            @Override
-            public void onBizProcess() throws Exception {
-                authorizeSuperUserMember(request.getSessionId());
-
-                bizAdminInnerService.createOrganization(request.getData());
-                bizResult.setSuccess(true);
-                bizResult.setObject("SUCCESS");
-            }
-
-            @Override
-            public String getErrorMessage(EzErrorCode ezErrorCode) {
-                return getBizErrorMessage(ezErrorCode);
-            }
-        });
-
-        return bizResult;
-    }
-
-    public BizResult updateOrganization(BizWebUpdateRequest<BizOrganization> request) {
-        final BizResult bizResult = new BizResult();
-        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
-            @Override
-            public void onRequestCheck() throws EzErrorException {
-                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notNull(request.getObject(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(request.getObject().getOrgId(), EzErrorCode.ILLEGAL_PARAM);
-
-            }
-
-            @Override
-            public void onBizProcess() throws Exception {
-                authorizeSuperUserMember(request.getSessionId());
-
-                BizOrganization organization = bizAdminInnerService.getOrganizationById(request.getObject().getOrgId());
-                organization.setAddress(request.getObject().getAddress());
-                organization.setContactName(request.getObject().getContactName());
-                organization.setContactPhone(request.getObject().getContactPhone());
-                organization.setContactEmail(request.getObject().getContactEmail());
-                organization.setStatus(request.getObject().getStatus());
-
-                bizAdminInnerService.updateOrganization(organization);
-
-                bizResult.setSuccess(true);
-                bizResult.setObject("UPDATE SUCCESS");
-            }
-
-            @Override
-            public String getErrorMessage(EzErrorCode ezErrorCode) {
-                return getBizErrorMessage(ezErrorCode);
-            }
-        });
-        return bizResult;
-    }
-
-    public BizResult updateAppConfig(BizWebUpdateRequest<BizApplicationConfig> request) {
-        final BizResult bizResult = new BizResult();
-        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
-            @Override
-            public void onRequestCheck() throws EzErrorException {
-                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notNull(request.getObject(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(request.getObject().getOrgId(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(request.getObject().getAppId(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(request.getObject().getClientId(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(request.getObject().getClientSecret(), EzErrorCode.ILLEGAL_PARAM);
-            }
-
-            @Override
-            public void onBizProcess() throws Exception {
-                authorizeSuperUserMember(request.getSessionId());
-                BizApplicationConfig appConfig = request.getObject();
-                if (StringUtil.isBlank(appConfig.getId())) {
-                    String configId = HashUtil.createHash(appConfig.getOrgId(), DateUtil.getTimeNowToString());
-                    appConfig.setId(configId);
-                }
-                if (StringUtil.isBlank(appConfig.getCreatedTime())) {
-                    appConfig.setCreatedTime(DateUtil.getCurrentFormattedDate());
-                }
-                bizAdminInnerService.saveBizAppConfig(appConfig);
-                bizResult.setSuccess(true);
-                bizResult.setObject("UPDATE SUCCESS");
-            }
-
-            @Override
-            public String getErrorMessage(EzErrorCode ezErrorCode) {
-                return getBizErrorMessage(ezErrorCode);
-            }
-        });
-        return bizResult;
-    }
-
-    public BizResult refreshAllCaches(String sessionId) {
-        BizResult bizResult = new BizResult();
-
-        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
-            @Override
-            public void onRequestCheck() throws EzErrorException {
-                AssertUtil.notBlank(sessionId, EzErrorCode.SESSION_INVALID);
-            }
-
-            @Override
-            public void onBizProcess() throws Exception {
-                authorizeSuperUserMember(sessionId);
-
-                bizResult.setSuccess(true);
-                bizResult.setObject(bizAppCacheService.refreshAllCaches());
-            }
-
-            @Override
-            public String getErrorMessage(EzErrorCode ezErrorCode) {
-                return getBizErrorMessage(ezErrorCode);
-            }
-        });
-
-        return bizResult;
-    }
-
     private void authorizeAdminMember(String memberRoles) throws EzErrorException {
         AssertUtil.notBlank(memberRoles, EzErrorCode.MEMBER_UNAUTHORIZED);
         List<String> roles = Arrays.asList(memberRoles.split(","));
         AssertUtil.isTrue(roles.contains(BizMemberRole.ADMIN_ORG.getCode()), EzErrorCode.MEMBER_UNAUTHORIZED);
-    }
-
-    private void authorizeSuperUserMember(String sessionId) throws Exception {
-        CoreAuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(sessionId);
-        AssertUtil.notBlank(adminSession.getMemberRoles(), EzErrorCode.MEMBER_UNAUTHORIZED);
-        List<String> roles = Arrays.asList(adminSession.getMemberRoles().split(","));
-        AssertUtil.isTrue(roles.contains(BizMemberRole.SUPERUSER.getCode()), EzErrorCode.MEMBER_UNAUTHORIZED);
     }
 
     private void authorizeSuperUserOrAdminMember(String memberRoles) throws EzErrorException {
