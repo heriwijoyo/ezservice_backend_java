@@ -27,8 +27,8 @@ public class CoreConfigService {
     @Autowired
     private CoreConfigRepository coreConfigRepository;
 
-    public String getConfigValue(String configKey, String orgId) {
-        return getCoreConfigs()
+    public String getOrgConfigValue(String configKey, String orgId) {
+        return getCoreOrgConfigs()
                 .stream()
                 .filter(config -> StringUtil.equalsNotNull(configKey, config.getConfigKey()) &&
                         StringUtil.equalsNotNull(orgId, config.getOrgId())
@@ -38,8 +38,8 @@ public class CoreConfigService {
                 .getConfigValue();
     }
 
-    public String getConfigValue(String configKey) {
-        return getCoreConfigs()
+    public String getOrgConfigValue(String configKey) {
+        return getCoreOrgConfigs()
                 .stream()
                 .filter(config -> StringUtil.equalsNotNull(configKey, config.getConfigKey()) &&
                         StringUtil.equalsNotNull("ALL", config.getOrgId())
@@ -50,33 +50,33 @@ public class CoreConfigService {
     }
 
     public boolean isWatzapSendEnable(String orgId) {
-        String configValue = getConfigValue(CoreConstant.ConfigKey.WATZAP_SEND_ENABLE, orgId);
+        String configValue = getOrgConfigValue(CoreConstant.ConfigKey.WATZAP_SEND_ENABLE, orgId);
         return Boolean.parseBoolean(configValue);
     }
 
     public String getWatzapApiKey(String orgId) {
-        return getConfigValue(CoreConstant.ConfigKey.WATZAP_API_KEY, orgId);
+        return getOrgConfigValue(CoreConstant.ConfigKey.WATZAP_API_KEY, orgId);
     }
 
     public String getWatzapNumberKey(String orgId) {
-        return getConfigValue(CoreConstant.ConfigKey.WATZAP_NUMBER_KEY, orgId);
+        return getOrgConfigValue(CoreConstant.ConfigKey.WATZAP_NUMBER_KEY, orgId);
     }
 
     public String getWatzapApiUri() {
-        return getConfigValue(CoreConstant.ConfigKey.WATZAP_API_URI);
+        return getOrgConfigValue(CoreConstant.ConfigKey.WATZAP_API_URI);
     }
 
     public String getCoreAreaLevelRoot(String orgId) {
-        return getConfigValue(CoreConstant.ConfigKey.CORE_AREA_LEVEL_ROOT, orgId);
+        return getOrgConfigValue(CoreConstant.ConfigKey.CORE_AREA_LEVEL_ROOT, orgId);
     }
 
     public List<String> getCoreAreaRootIds(String orgId) {
-        String configValue = getConfigValue(CoreConstant.ConfigKey.CORE_AREA_ROOT_IDS, orgId);
+        String configValue = getOrgConfigValue(CoreConstant.ConfigKey.CORE_AREA_ROOT_IDS, orgId);
         return Arrays.asList(configValue.split(","));
     }
 
-    @Cacheable("coreConfig")
-    public List<CoreOrgConfig> getCoreConfigs() {
+    @Cacheable("coreOrgConfig")
+    public List<CoreOrgConfig> getCoreOrgConfigs() {
         return coreConfigRepository.findAll()
                 .stream()
                 .map(CoreModelConverter::convert)

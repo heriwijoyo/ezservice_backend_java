@@ -112,7 +112,7 @@ public class CoreAuthService {
 
     @Transactional
     public EzAuthMemberClientSessionDO startMemberClientSession(EzAuthMemberClientDO memberClientDO, String deviceId) {
-        String configValue = coreConfigService.getConfigValue(
+        String configValue = coreConfigService.getOrgConfigValue(
                 CoreAuthConfig.Key.MEMBER_CLIENT_ALLOW_MULTIPLE_SESSION,
                 memberClientDO.getOrgId()
         );
@@ -470,17 +470,17 @@ public class CoreAuthService {
     }
 
     private int getMemberClientSessionExpDays(String orgId) {
-        String expDays = coreConfigService.getConfigValue(CoreAuthConfig.Key.MEMBER_CLIENT_SESSION_EXPIRY_DAYS, orgId);
+        String expDays = coreConfigService.getOrgConfigValue(CoreAuthConfig.Key.MEMBER_CLIENT_SESSION_EXPIRY_DAYS, orgId);
         return Integer.parseInt(expDays);
     }
 
     private int getMemberCommonSessionExpMins(String orgId) {
-        String expMins = coreConfigService.getConfigValue(CoreAuthConfig.Key.MEMBER_COMMON_SESSION_EXPIRY_MINS, orgId);
+        String expMins = coreConfigService.getOrgConfigValue(CoreAuthConfig.Key.MEMBER_COMMON_SESSION_EXPIRY_MINS, orgId);
         return Integer.parseInt(expMins);
     }
 
     private int getAdminCommonSessionExpMins(String orgId) {
-        String expMins = coreConfigService.getConfigValue(CoreAuthConfig.Key.ADMIN_COMMON_SESSION_EXPIRY_MINS, orgId);
+        String expMins = coreConfigService.getOrgConfigValue(CoreAuthConfig.Key.ADMIN_COMMON_SESSION_EXPIRY_MINS, orgId);
         return Integer.parseInt(expMins);
     }
 

@@ -122,7 +122,7 @@ public class InnerAuthService {
         if (CoreConstant.SU_ORG_ID.equals(orgId)) {
             return CoreConstant.SU_WEB_SESSION_EXPIRY_MINS;
         }
-        String expMins = coreConfigService.getConfigValue(CoreAuthConfig.Key.ADMIN_COMMON_SESSION_EXPIRY_MINS, orgId);
+        String expMins = coreConfigService.getOrgConfigValue(CoreAuthConfig.Key.ADMIN_COMMON_SESSION_EXPIRY_MINS, orgId);
         return Integer.parseInt(expMins);
     }
 }
