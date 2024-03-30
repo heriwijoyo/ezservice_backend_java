@@ -188,6 +188,59 @@
                     </div>
                 </div>
             </div>
+
+
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                <div class="card corner-radius">
+                    <div class="header">
+                        <h2>APP CLIENT CONFIG</h2>
+                    </div>
+                    <div class="body">
+                        <div class="row clearfix">
+
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Application ID</div>
+                                    <input type="hidden" id="configId" value="">
+                                    <input type="text" class="form-control" id="appId" placeholder="Application ID" disabled>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Client ID</div>
+                                    <input type="text" class="form-control" id="clientId" placeholder="Client ID" disabled>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Client Secret</div>
+                                    <input type="text" class="form-control" id="clientSecret" placeholder="Client Secret" disabled>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Config Status</div>
+                                    <select class="form-control show-tick" id="clientStatus">
+                                        <option value="0">NOT ACTIVE</option>
+                                        <option value="1">ACTIVE</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <img id="clientLoader" src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right">
+                                <button id="clientUpdateBtn" class="button button-rounded waves-effect waves-float pull-right" type="submit">UPDATE</button>
+                                <button id="clientGenerateBtn" class="button button-rounded waves-effect waves-float pull-right" style="display:none">GENERATE</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -220,13 +273,14 @@
 <script type="text/javascript">
     var EzAdminUrl = {
         GET_ORGANIZATION_DETAIL: 'api/getOrganizationDetail.json',
-        ORGANIZATION_UPDATE: 'api/organizationUpdate.json'
+        ORGANIZATION_UPDATE: 'api/organizationUpdate.json',
+        APP_CONFIG_UPDATE: 'api/appConfigUpdate.json'
     };
     var EzDashboadBizService = {
         start: function() {
-            EzDashboadBizService.reloadOrganizationCard();
+            EzDashboadBizService.fetchOrganization();
         },
-        reloadOrganizationCard: function() {
+        fetchOrganization: function() {
             let orgId = EzWebAppClient.getUrlParameter('id');
             if (EzWebAppClient.isBlank(orgId)) {
                 EzDashboadBizService.alertInvalidOrg();
@@ -246,29 +300,53 @@
                 status: $('#orgStatus').val()
             });
         },
+        storeAppConfig: function() {
+            let orgId = EzWebAppClient.getUrlParameter('id');
+            if (EzWebAppClient.isNotBlank(orgId)) {
+                EzWebAppClient.callApiService(EzAdminUrl.APP_CONFIG_UPDATE, {
+                    orgId: orgId,
+                    id: $('#configId').val(),
+                    appId: $('#appId').val(),
+                    clientId: $('#clientId').val(),
+                    clientSecret: $('#clientSecret').val(),
+                    status: $('#clientStatus').val()
+                });
+            }
+        },
         handleApiBizResult: function(url, response) {
             if (url === EzAdminUrl.GET_ORGANIZATION_DETAIL) {
                 EzDashboadBizService.renderOrganizationCard(response.data.bizOrganization);
+                EzDashboadBizService.renderAppConfigCard(response.data.bizApplicationConfig);
             }
             if (url === EzAdminUrl.ORGANIZATION_UPDATE) {
                 alert(response.data);
                 $('#orgUpdateLoader').hide();
                 $('#orgUpdateBtn').show();
-                EzDashboadBizService.reloadOrganizationCard();
+                EzDashboadBizService.fetchOrganization();
+            }
+            if (url === EzAdminUrl.APP_CONFIG_UPDATE) {
+                alert(response.data);
+                $('#clientLoader').hide();
+                $('#clientUpdateBtn').show();
+                EzDashboadBizService.fetchOrganization();
             }
         },
         handleApiBizFailed: function(url, message) {
             if (url === EzAdminUrl.GET_ORGANIZATION_DETAIL) {
                 EzDashboadBizService.alertInvalidOrg();
             }
-            if (url === EzAdminUrl.ORGANIZATION_UPDATE) {
+            if (url === EzAdminUrl.APP_CONFIG_UPDATE) {
                 alert(message);
                 $('#orgUpdateLoader').hide();
                 $('#orgUpdateBtn').show();
             }
+            if (url === EzAdminUrl.ORGANIZATION_UPDATE) {
+                alert(message);
+                $('#clientLoader').hide();
+                $('#clientUpdateBtn').show();
+            }
         },
         renderOrganizationCard: function(data) {
-            console.log(data)
             $('#orgName').val(data.name);
             $('#orgId').val(data.orgId);
             $('#orgCode').val(data.code);
@@ -284,6 +362,35 @@
             } else {
                 $('#orgStatus option[value="0"]').prop('selected', true);
             }
+        },
+        renderAppConfigCard: function(data) {
+            console.log(data);
+            if (data.id == null) {
+                $('#clientGenerateBtn').show();
+                $('#clientGenerateBtn').click(function(){
+                    EzDashboadBizService.generateAppConfig();
+                });
+            }
+        },
+        generateAppConfig: function() {
+            let appId = EzDashboadBizService.randomText('Native.Android.');
+            let clientId = EzDashboadBizService.randomText('');
+            let clientSecret = EzDashboadBizService.randomText('');
+            $('#appId').val(appId);
+            $('#clientId').val(clientId);
+            $('#clientSecret').val(clientSecret);
+        },
+        randomText: function(prefix) {
+            let length = 32 - prefix.length;
+            let result = '';
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            const charactersLength = characters.length;
+            let counter = 0;
+            while (counter < length) {
+              result += characters.charAt(Math.floor(Math.random() * charactersLength));
+              counter += 1;
+            }
+            return prefix + result;
         },
         alertInvalidOrg: function() {
             alert('Invalid Organization');
@@ -313,24 +420,18 @@
         });
         EzWebAppClient.start();
 
-        $('#orgUpdateBtn').click(function(event){
+        $('#orgUpdateBtn').click(function(){
             $('#orgUpdateBtn').hide();
             $('#orgUpdateLoader').show();
             EzDashboadBizService.updateOrganization();
         });
+        $('#clientUpdateBtn').click(function(){
+            $('#clientUpdateBtn').hide();
+            $('#clientGenerateBtn').hide();
+            $('#clientLoader').show();
+            EzDashboadBizService.storeAppConfig();
+        });
     });
-
-    var DashTemplate = ''+
-        '<tr>'+
-            '<td class="rowName" style="vertical-align: middle;"></td>'+
-            '<td class="rowId" style="vertical-align: middle;"></td>'+
-            '<td class="rowCode" style="vertical-align: middle;"></td>'+
-            '<td class="rowAddress" style="vertical-align: middle;"></td>'+
-            '<td class="rowContact" style="vertical-align: middle;"></td>'+
-            '<td class="rowTime" style="vertical-align: middle;"></td>'+
-            '<td class="rowStatus" style="vertical-align: middle;"></td>'+
-        '</tr>';
-
 </script>
 </body>
 

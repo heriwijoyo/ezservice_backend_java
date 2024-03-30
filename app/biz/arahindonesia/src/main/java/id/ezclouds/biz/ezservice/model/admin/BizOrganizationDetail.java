@@ -11,6 +11,7 @@ package id.ezclouds.biz.ezservice.model.admin;
 public class BizOrganizationDetail {
 
     private BizOrganization bizOrganization;
+    private BizApplicationConfig bizApplicationConfig;
 
     public BizOrganization getBizOrganization() {
         return bizOrganization;
@@ -18,5 +19,13 @@ public class BizOrganizationDetail {
 
     public void setBizOrganization(BizOrganization bizOrganization) {
         this.bizOrganization = bizOrganization;
+    }
+
+    public BizApplicationConfig getBizApplicationConfig() {
+        return bizApplicationConfig;
+    }
+
+    public void setBizApplicationConfig(BizApplicationConfig bizApplicationConfig) {
+        this.bizApplicationConfig = bizApplicationConfig;
     }
 }

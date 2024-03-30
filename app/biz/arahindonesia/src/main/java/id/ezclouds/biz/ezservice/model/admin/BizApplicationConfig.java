@@ -2,13 +2,13 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.core.auth.model;
+package id.ezclouds.biz.ezservice.model.admin;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: CoreAuthAppClient.java, v 0.1 2024‐01‐28 6:38 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: BizApplicationConfig.java, v 0.1 2024‐03‐30 3:02 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class CoreAuthAppClient {
+public class BizApplicationConfig {
 
     private String id;
     private String orgId;

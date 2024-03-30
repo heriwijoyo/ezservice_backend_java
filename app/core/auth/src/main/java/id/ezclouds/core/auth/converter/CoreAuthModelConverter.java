@@ -24,6 +24,7 @@ public class CoreAuthModelConverter {
         appClient.setAppId(appClientDO.getAppId());
         appClient.setClientId(appClientDO.getClientId());
         appClient.setClientSecret(appClientDO.getClientSecret());
+        appClient.setStatus(appClientDO.getStatus());
         return appClient;
     }
 

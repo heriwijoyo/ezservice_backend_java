@@ -13,10 +13,7 @@ import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.core.auth.constant.CoreAuthConfig;
 import id.ezclouds.core.auth.constant.CoreAuthConstant;
 import id.ezclouds.core.auth.converter.CoreAuthModelConverter;
-import id.ezclouds.core.auth.dataobject.EzAuthAdminCommonSessionDO;
-import id.ezclouds.core.auth.dataobject.EzAuthMemberClientDO;
-import id.ezclouds.core.auth.dataobject.EzAuthMemberClientSessionDO;
-import id.ezclouds.core.auth.dataobject.EzAuthMemberCommonSessionDO;
+import id.ezclouds.core.auth.dataobject.*;
 import id.ezclouds.core.auth.model.CoreAuthAdminSession;
 import id.ezclouds.core.auth.model.CoreAuthAppClient;
 import id.ezclouds.core.auth.model.CoreAuthMemberClient;
@@ -458,6 +455,14 @@ public class CoreAuthService {
                 .collect(Collectors.toList());
     }
 
+    public CoreAuthAppClient getAppClientByOrgId(String orgId) {
+        EzAuthAppClientDO authAppClientDO = ezAuthAppClientRepository.findByOrgId(orgId);
+        if (authAppClientDO == null) {
+            return null;
+        }
+        return CoreAuthModelConverter.convert(authAppClientDO);
+    }
+
     private int getMemberClientSessionExpDays(String orgId) {
         String expDays = coreConfigService.getConfigValue(CoreAuthConfig.Key.MEMBER_CLIENT_SESSION_EXPIRY_DAYS, orgId);
         return Integer.parseInt(expDays);
@@ -472,7 +477,6 @@ public class CoreAuthService {
         String expMins = coreConfigService.getConfigValue(CoreAuthConfig.Key.ADMIN_COMMON_SESSION_EXPIRY_MINS, orgId);
         return Integer.parseInt(expMins);
     }
-
 
     private boolean isSessionExpired(EzAuthMemberCommonSessionDO sessionDO) {
         Date sessionExpDate = DateUtil.parseFormattedDate(sessionDO.getExpiryTime());

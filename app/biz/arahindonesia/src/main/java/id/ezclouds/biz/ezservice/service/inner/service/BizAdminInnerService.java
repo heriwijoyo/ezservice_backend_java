@@ -4,6 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.service.inner.service;
 
+import id.ezclouds.biz.ezservice.model.admin.BizApplicationConfig;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganization;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganizationDetail;
 import id.ezclouds.biz.ezservice.service.dataservice.AppImageGalleryService;
@@ -18,6 +19,8 @@ import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
+import id.ezclouds.core.auth.model.CoreAuthAppClient;
+import id.ezclouds.core.auth.service.CoreAuthService;
 import id.ezclouds.core.shared.enums.CoreSequenceScene;
 import id.ezclouds.core.shared.model.CoreSequenceConfig;
 import id.ezclouds.core.shared.repo.dataobject.EzCoreOrganizationDO;
@@ -55,6 +58,9 @@ public class BizAdminInnerService {
 
     @Autowired
     private CoreSequenceService coreSequenceService;
+
+    @Autowired
+    private CoreAuthService coreAuthService;
 
     public void createAppImageGallery(String orgId, String fileName, Map<String, String> extInfo) {
         AppImageGalleryRequest request = new AppImageGalleryRequest();
@@ -126,6 +132,7 @@ public class BizAdminInnerService {
     public BizOrganizationDetail getOrganizationDetail(String orgId) {
         BizOrganizationDetail detail = new BizOrganizationDetail();
         detail.setBizOrganization(getOrganizationById(orgId));
+        detail.setBizApplicationConfig(getAppConfig(orgId));
 
         return detail;
     }
@@ -159,6 +166,23 @@ public class BizAdminInnerService {
         coreOrganizationService.saveOrganization(modelDO);
 
         initiateOrgConfig(modelDO);
+    }
+
+    public BizApplicationConfig getAppConfig(String orgId) {
+        BizApplicationConfig bizApplicationConfig = new BizApplicationConfig();
+
+        CoreAuthAppClient appClient = coreAuthService.getAppClientByOrgId(orgId);
+        if (appClient == null) {
+            return bizApplicationConfig;
+        }
+        bizApplicationConfig.setId(appClient.getId());
+        bizApplicationConfig.setOrgId(appClient.getOrgId());
+        bizApplicationConfig.setAppId(appClient.getAppId());
+        bizApplicationConfig.setClientId(appClient.getClientId());
+        bizApplicationConfig.setClientSecret(appClient.getClientSecret());
+        bizApplicationConfig.setStatus(appClient.getStatus());
+
+        return bizApplicationConfig;
     }
 
     private void initiateOrgConfig(EzCoreOrganizationDO organizationDO) {

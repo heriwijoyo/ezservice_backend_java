@@ -20,4 +20,6 @@ public interface EzAuthAppClientRepository extends JpaRepository<EzAuthAppClient
 
     @Query("SELECT apc FROM EzAuthAppClientDO apc WHERE apc.status = 1")
     List<EzAuthAppClientDO> findActiveAppClients();
+
+    EzAuthAppClientDO findByOrgId(String orgId);
 }
