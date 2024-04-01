@@ -7,14 +7,16 @@ package id.ezclouds.biz.ezservice.service.dataservice;
 import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.model.AppConfig;
 import id.ezclouds.biz.ezservice.service.dataservice.model.AppMessageTemplate;
+import id.ezclouds.biz.ezservice.service.dataservice.model.BizAppConfig;
 import id.ezclouds.biz.ezservice.service.dataservice.repo.AppCommonMessageTemplateRepository;
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.AppConfigDO;
 import id.ezclouds.biz.ezservice.service.dataservice.repo.AppConfigRepository;
+import id.ezclouds.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -29,6 +31,21 @@ public class AppConfigService {
 
     @Autowired
     private AppCommonMessageTemplateRepository appCommonMessageTemplateRepository;
+
+    private static final List<String> APP_CONFIG_KEYS;
+
+    static {
+        APP_CONFIG_KEYS = Arrays.asList(
+                AppConstant.CfgKey.APP_NAME,
+                AppConstant.CfgKey.ANDROID_VERSION_NAME,
+                AppConstant.CfgKey.ANDROID_VERSION_CODE,
+                AppConstant.CfgKey.ANDROID_UPDATE_URL,
+                AppConstant.CfgKey.ANDROID_UPDATE_APK,
+                AppConstant.CfgKey.ANDROID_FORCE_UPDATE,
+                AppConstant.CfgKey.BIZ_MAX_TPS_NUMBER,
+                AppConstant.CfgKey.REPORT_OPTIONS
+        );
+    }
 
     public AppConfig getAppConfig(String orgId) {
         final AppConfig appConfig = new AppConfig();
@@ -77,6 +94,30 @@ public class AppConfigService {
                 .findFirst()
                 .orElse(new AppMessageTemplate(null, null))
                 .getValue();
+    }
+
+    public List<BizAppConfig> getAppConfigByOrgId(String orgId) {
+        List<BizAppConfig> bizAppConfigs = new ArrayList<>();
+        List<AppConfigDO> appConfigDOList = appConfigRepository
+                .findByOrgId(orgId);
+
+        for (String configKey : APP_CONFIG_KEYS) {
+            String configValue = StringUtil.EMPTY;
+            int configStatus = 0;
+            for (AppConfigDO configDO : appConfigDOList) {
+                if (configKey.equals(configDO.getConfigKey())) {
+                    configValue = configDO.getConfigValue();
+                    configStatus = configDO.getStatus();
+                }
+            }
+            BizAppConfig bizAppConfig = new BizAppConfig();
+            bizAppConfig.setConfigKey(configKey);
+            bizAppConfig.setConfigValue(configValue);
+            bizAppConfig.setStatus(configStatus);
+            bizAppConfigs.add(bizAppConfig);
+        }
+
+        return bizAppConfigs;
     }
 
     @Cacheable("appConfigAllActive")

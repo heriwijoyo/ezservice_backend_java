@@ -7,6 +7,7 @@ package id.ezclouds.biz.ezservice.service.inner.service;
 import id.ezclouds.biz.ezservice.model.admin.BizApplicationConfig;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganization;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganizationDetail;
+import id.ezclouds.biz.ezservice.service.dataservice.AppConfigService;
 import id.ezclouds.biz.ezservice.service.dataservice.AppImageGalleryService;
 import id.ezclouds.biz.ezservice.service.dataservice.NewsInnerService;
 import id.ezclouds.biz.ezservice.service.dataservice.VideoCardService;
@@ -62,6 +63,9 @@ public class BizAdminInnerService {
 
     @Autowired
     private CoreAuthService coreAuthService;
+
+    @Autowired
+    private AppConfigService appConfigService;
 
     @Autowired
     private CoreConfigService coreConfigService;
@@ -137,6 +141,7 @@ public class BizAdminInnerService {
         BizOrganizationDetail detail = new BizOrganizationDetail();
         detail.setBizOrganization(getOrganizationById(orgId));
         detail.setBizApplicationConfig(getAppConfig(orgId));
+        detail.setBizAppConfigs(appConfigService.getAppConfigByOrgId(orgId));
         detail.setCoreOrgConfigMap(coreConfigService.getOrgConfigByOrgId(orgId));
         return detail;
     }

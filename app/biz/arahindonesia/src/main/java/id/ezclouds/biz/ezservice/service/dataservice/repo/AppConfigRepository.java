@@ -20,4 +20,6 @@ public interface AppConfigRepository extends JpaRepository<AppConfigDO, String> 
 
     @Query("SELECT cfg FROM AppConfigDO cfg WHERE cfg.status = 1")
     List<AppConfigDO> findAllActive();
+
+    List<AppConfigDO> findByOrgId(String orgId);
 }

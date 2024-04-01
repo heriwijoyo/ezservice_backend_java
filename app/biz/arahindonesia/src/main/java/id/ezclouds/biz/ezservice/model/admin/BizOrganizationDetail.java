@@ -4,6 +4,9 @@
  */
 package id.ezclouds.biz.ezservice.model.admin;
 
+import id.ezclouds.biz.ezservice.service.dataservice.model.BizAppConfig;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,6 +17,7 @@ public class BizOrganizationDetail {
 
     private BizOrganization bizOrganization;
     private BizApplicationConfig bizApplicationConfig;
+    private List<BizAppConfig> bizAppConfigs;
     private Map<String, String> coreOrgConfigMap;
 
     public BizOrganization getBizOrganization() {
@@ -30,6 +34,14 @@ public class BizOrganizationDetail {
 
     public void setBizApplicationConfig(BizApplicationConfig bizApplicationConfig) {
         this.bizApplicationConfig = bizApplicationConfig;
+    }
+
+    public List<BizAppConfig> getBizAppConfigs() {
+        return bizAppConfigs;
+    }
+
+    public void setBizAppConfigs(List<BizAppConfig> bizAppConfigs) {
+        this.bizAppConfigs = bizAppConfigs;
     }
 
     public Map<String, String> getCoreOrgConfigMap() {

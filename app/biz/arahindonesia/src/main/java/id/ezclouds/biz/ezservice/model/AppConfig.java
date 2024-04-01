@@ -17,6 +17,7 @@ public class AppConfig {
     private String androidUpdateApk;
     private boolean androidForceUpdate;
     private int bizMaxTpsNumber;
+    private String reportOptions;
 
     public String getAppName() {
         return appName;
@@ -72,5 +73,13 @@ public class AppConfig {
 
     public void setBizMaxTpsNumber(int bizMaxTpsNumber) {
         this.bizMaxTpsNumber = bizMaxTpsNumber;
+    }
+
+    public String getReportOptions() {
+        return reportOptions;
+    }
+
+    public void setReportOptions(String reportOptions) {
+        this.reportOptions = reportOptions;
     }
 }

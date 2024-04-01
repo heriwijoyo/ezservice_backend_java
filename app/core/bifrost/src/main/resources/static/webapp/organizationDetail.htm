@@ -257,6 +257,34 @@
             <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
                 <div class="card corner-radius">
                     <div class="header">
+                        <h2>ANDROID APP CONFIG</h2>
+                    </div>
+                    <div class="body">
+                        <div class="row clearfix">
+                            <div style="margin-top: -10px;" class="body table-responsive">
+                                <table class="table table-hover table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th width="15%">Config Key</th>
+                                        <th width="75%">Config Value</th>
+                                        <th width="10%" class="text-center">Status</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="bizAppConfigContainer"></tbody>
+                                </table>
+                            </div>
+                            <div class="col-sm-12">
+                                <img id="appConfigLoader" src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right">
+                                <button id="appConfigBtnSubmit" class="button button-rounded waves-effect waves-float pull-right" type="submit">UPDATE</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                <div class="card corner-radius">
+                    <div class="header">
                         <h2>CORE ORGANIZATION CONFIG</h2>
                     </div>
                     <div class="body">
@@ -359,8 +387,9 @@
         handleApiBizResult: function(url, response) {
             if (url === EzAdminUrl.GET_ORGANIZATION_DETAIL) {
                 EzDashboardBizService.renderOrganizationCard(response.data.bizOrganization);
-                EzDashboardBizService.renderAppConfigCard(response.data.bizApplicationConfig);
+                EzDashboardBizService.renderAppClientConfigCard(response.data.bizApplicationConfig);
                 EzDashboardBizService.renderCoreConfigCard(response.data.coreOrgConfigMap);
+                EzDashboardBizService.renderBizAppConfigCard(response.data.bizAppConfigs);
             }
             if (url === EzAdminUrl.ORGANIZATION_UPDATE) {
                 alert(response.data);
@@ -420,7 +449,7 @@
                 $('#orgStatus option[value="0"]').prop('selected', true);
             }
         },
-        renderAppConfigCard: function(data) {
+        renderAppClientConfigCard: function(data) {
             if (data.id == null) {
                 $('#clientGenerateBtn').show();
                 $('#clientGenerateBtn').click(function(){
@@ -438,6 +467,16 @@
                 } else {
                     $('#clientStatus option[value="0"]').prop('selected', true);
                 }
+            }
+        },
+        renderBizAppConfigCard: function(data) {
+            $('#bizAppConfigContainer').html('');
+            for(i = 0; i<data.length; i++) {
+                let rowItem = $.parseHTML(EzBizAppConfigTemplate);
+                $(rowItem).find('.appConfigKey').html(data[i].configKey);
+                $(rowItem).find('.appConfigValue input').val(data[i].configValue);
+                $(rowItem).find('.appConfigStatus input').val(data[i].status);
+                $('#bizAppConfigContainer').append(rowItem);
             }
         },
         renderCoreConfigCard: function(data) {
@@ -514,6 +553,17 @@
             EzDashboardBizService.storeAppConfig();
         });
     });
+
+    var EzBizAppConfigTemplate = ''+
+        '<tr>'+
+            '<td class="appConfigKey" style="vertical-align: middle;"></td>'+
+            '<td class="appConfigValue" style="vertical-align: middle;">'+
+                '<input type="text"/>'+
+            '</td>'+
+            '<td class="appConfigStatus" style="vertical-align: middle;">'+
+                '<input type="text"/>'+
+            '</td>'+
+        '</tr>';
 
     var EzCoreOrgConfigTemplate = ''+
         '<div class="form-group col-sm-12">'+

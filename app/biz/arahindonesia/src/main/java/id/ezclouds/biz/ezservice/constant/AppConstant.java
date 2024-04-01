@@ -18,6 +18,7 @@ public class AppConstant {
         public static final String ANDROID_UPDATE_APK = "ANDROID_UPDATE_APK";
         public static final String ANDROID_FORCE_UPDATE = "ANDROID_FORCE_UPDATE";
         public static final String BIZ_MAX_TPS_NUMBER = "BIZ_MAX_TPS_NUMBER";
+        public static final String REPORT_OPTIONS = "REPORT_OPTIONS";
     }
 
     public static final String APP_VERSION_NAME_TAG = "APP_VERSION_NAME_TAG";
