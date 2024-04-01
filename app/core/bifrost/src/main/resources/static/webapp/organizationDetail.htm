@@ -298,16 +298,17 @@
     var EzAdminUrl = {
         GET_ORGANIZATION_DETAIL: 'api/getOrganizationDetail.json',
         ORGANIZATION_UPDATE: 'api/organizationUpdate.json',
-        APP_CONFIG_UPDATE: 'api/appConfigUpdate.json'
+        APP_CONFIG_UPDATE: 'api/appConfigUpdate.json',
+        CORE_ORG_CONFIG_UPDATE: 'api/coreOrgConfigUpdate.json'
     };
-    var EzDashboadBizService = {
+    var EzDashboardBizService = {
         start: function() {
-            EzDashboadBizService.fetchOrganization();
+            EzDashboardBizService.fetchOrganization();
         },
         fetchOrganization: function() {
             let orgId = EzWebAppClient.getUrlParameter('id');
             if (EzWebAppClient.isBlank(orgId)) {
-                EzDashboadBizService.alertInvalidOrg();
+                EzDashboardBizService.alertInvalidOrg();
             } else {
                  EzWebAppClient.callApiService(EzAdminUrl.GET_ORGANIZATION_DETAIL, {
                     orgId: orgId
@@ -338,28 +339,49 @@
                 });
             }
         },
+        storeCoreOrgConfig: function() {
+            $('.coreOrgConfigBtnSubmit').hide();
+            $('.coreOrgConfigImgLoader').show();
+            let orgId = EzWebAppClient.getUrlParameter('id');
+            if (EzWebAppClient.isNotBlank(orgId)) {
+                var mapData = {};
+                $('.coreConfigItem').each(function(i, obj){
+                    let key = $(obj).find('.coreConfigKey').html();
+                    let val = $(obj).find('.coreConfigValue').val();
+                    mapData[key] = val;
+                });
+                EzWebAppClient.callApiService(EzAdminUrl.CORE_ORG_CONFIG_UPDATE, {
+                    orgId: orgId,
+                    mapData: JSON.stringify(mapData)
+                });
+            }
+        },
         handleApiBizResult: function(url, response) {
             if (url === EzAdminUrl.GET_ORGANIZATION_DETAIL) {
-                EzDashboadBizService.renderOrganizationCard(response.data.bizOrganization);
-                EzDashboadBizService.renderAppConfigCard(response.data.bizApplicationConfig);
-                EzDashboadBizService.renderCoreConfigCard(response.data.coreOrgConfigMap);
+                EzDashboardBizService.renderOrganizationCard(response.data.bizOrganization);
+                EzDashboardBizService.renderAppConfigCard(response.data.bizApplicationConfig);
+                EzDashboardBizService.renderCoreConfigCard(response.data.coreOrgConfigMap);
             }
             if (url === EzAdminUrl.ORGANIZATION_UPDATE) {
                 alert(response.data);
                 $('#orgUpdateLoader').hide();
                 $('#orgUpdateBtn').show();
-                EzDashboadBizService.fetchOrganization();
+                EzDashboardBizService.fetchOrganization();
             }
             if (url === EzAdminUrl.APP_CONFIG_UPDATE) {
                 alert(response.data);
                 $('#clientLoader').hide();
                 $('#clientUpdateBtn').show();
-                EzDashboadBizService.fetchOrganization();
+                EzDashboardBizService.fetchOrganization();
+            }
+            if (url === EzAdminUrl.CORE_ORG_CONFIG_UPDATE) {
+                alert(response.data);
+                EzDashboardBizService.fetchOrganization();
             }
         },
         handleApiBizFailed: function(url, message) {
             if (url === EzAdminUrl.GET_ORGANIZATION_DETAIL) {
-                EzDashboadBizService.alertInvalidOrg();
+                EzDashboardBizService.alertInvalidOrg();
             }
             if (url === EzAdminUrl.ORGANIZATION_UPDATE) {
                 alert(message);
@@ -374,6 +396,11 @@
                 if (EzWebAppClient.isBlank(configId)) {
                     $('#clientGenerateBtn').show();
                 }
+            }
+            if (url === EzAdminUrl.CORE_ORG_CONFIG_UPDATE) {
+                alert(message);
+                $('.coreOrgConfigImgLoader').hide();
+                $('.coreOrgConfigBtnSubmit').show();
             }
         },
         renderOrganizationCard: function(data) {
@@ -397,7 +424,7 @@
             if (data.id == null) {
                 $('#clientGenerateBtn').show();
                 $('#clientGenerateBtn').click(function(){
-                    EzDashboadBizService.generateAppConfig();
+                    EzDashboardBizService.generateAppConfig();
                 });
             } else {
                 $('#configId').val(data.id);
@@ -421,11 +448,16 @@
                 $(itemRow).find('.coreConfigValue').val(value);
                 $('#coreOrgConfigContainer').append(itemRow);
             }
+            let btnSection = $.parseHTML(EzCoreOrgConfigBtnTemplate);
+            $(btnSection).find('.coreOrgConfigBtnSubmit').click(function(){
+                EzDashboardBizService.storeCoreOrgConfig();
+            });
+            $('#coreOrgConfigContainer').append(btnSection);
         },
         generateAppConfig: function() {
-            let appId = EzDashboadBizService.randomText('Native.Android.');
-            let clientId = EzDashboadBizService.randomText('');
-            let clientSecret = EzDashboadBizService.randomText('');
+            let appId = EzDashboardBizService.randomText('Native.Android.');
+            let clientId = EzDashboardBizService.randomText('');
+            let clientSecret = EzDashboardBizService.randomText('');
             $('#appId').val(appId);
             $('#clientId').val(clientId);
             $('#clientSecret').val(clientSecret);
@@ -450,46 +482,53 @@
 
     $(document).ready(function(){
         EzWebAppClient.onApiBizSuccess(function(url, response){
-            EzDashboadBizService.handleApiBizResult(url, response);
+            EzDashboardBizService.handleApiBizResult(url, response);
         });
         EzWebAppClient.onApiBizFailed(function(url, message){
             console.log(url +' --- '+ message);
-            EzDashboadBizService.handleApiBizFailed(url, message);
+            EzDashboardBizService.handleApiBizFailed(url, message);
         });
         EzWebAppClient.onApiCallError(function(xhr){
             console.log(xhr);
         });
         EzWebAppClient.onReady(function(){
-            EzDashboadBizService.start();
+            EzDashboardBizService.start();
         });
         EzWebAppClient.onPrev(function(){
-            EzDashboadBizService.prev();
+            EzDashboardBizService.prev();
         });
         EzWebAppClient.onNext(function(){
-            EzDashboadBizService.next();
+            EzDashboardBizService.next();
         });
         EzWebAppClient.start();
 
         $('#orgUpdateBtn').click(function(){
             $('#orgUpdateBtn').hide();
             $('#orgUpdateLoader').show();
-            EzDashboadBizService.updateOrganization();
+            EzDashboardBizService.updateOrganization();
         });
         $('#clientUpdateBtn').click(function(){
             $('#clientUpdateBtn').hide();
             $('#clientGenerateBtn').hide();
             $('#clientLoader').show();
-            EzDashboadBizService.storeAppConfig();
+            EzDashboardBizService.storeAppConfig();
         });
     });
 
     var EzCoreOrgConfigTemplate = ''+
         '<div class="form-group col-sm-12">'+
-            '<div class="form-line">'+
+            '<div class="form-line coreConfigItem">'+
                 '<div class="font-12 coreConfigKey"></div>'+
                 '<input type="text" class="form-control coreConfigValue">'+
             '</div>'+
         '</div>';
+
+    var EzCoreOrgConfigBtnTemplate = ''+
+        '<div class="col-sm-12">'+
+            '<img src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right coreOrgConfigImgLoader">'+
+            '<button class="button button-rounded waves-effect waves-float pull-right coreOrgConfigBtnSubmit">UPDATE</button>'+
+        '</div>';
+
 
 </script>
 </body>

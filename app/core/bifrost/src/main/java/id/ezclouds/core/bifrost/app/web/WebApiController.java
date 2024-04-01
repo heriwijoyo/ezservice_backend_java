@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.bifrost.app.web;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.ezservice.model.admin.*;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -366,6 +368,38 @@ public class WebApiController {
                 request.setSessionId(sessionId);
                 request.setObject(applicationConfig);
                 return bizSuperAdminService.updateAppConfig(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                if (object instanceof String) {
+                    return (String) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/coreOrgConfigUpdate.json")
+    private WebApiResult<String> coreOrgConfigUpdate(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "orgId", required = false) String orgId,
+            @RequestParam(name = "mapData", required = false) String mapData ) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_UPDATE_CORE_ORG_CONFIG, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizWebUpdateRequest<Map<String, String>> request = new BizWebUpdateRequest<>();
+                request.setSessionId(sessionId);
+                request.setOrgId(orgId);
+                request.setObject(new ObjectMapper().readValue(mapData, new TypeReference<Map<String, String>>(){}));
+                return bizSuperAdminService.updateCoreOrgConfig(request);
             }
 
             @Override

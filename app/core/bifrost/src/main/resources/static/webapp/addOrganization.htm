@@ -197,7 +197,7 @@
     var EzAdminUrl = {
         CREATE_ORGANIZATION: 'api/createOrganization.json'
     };
-    var EzDashboadBizService = {
+    var EzDashboardBizService = {
         start: function() {
         },
         postNewOrganization: function() {
@@ -228,30 +228,30 @@
 
     $(document).ready(function(){
         EzWebAppClient.onApiBizSuccess(function(url, response){
-            EzDashboadBizService.handleApiBizResult(url, response);
+            EzDashboardBizService.handleApiBizResult(url, response);
         });
         EzWebAppClient.onApiBizFailed(function(url, message){
             console.log(url +' --- '+ message);
-            EzDashboadBizService.handleApiBizFailed(url, message);
+            EzDashboardBizService.handleApiBizFailed(url, message);
         });
         EzWebAppClient.onApiCallError(function(xhr){
             console.log(xhr);
         });
         EzWebAppClient.onReady(function(){
-            EzDashboadBizService.start();
+            EzDashboardBizService.start();
         });
         EzWebAppClient.onPrev(function(){
-            EzDashboadBizService.prev();
+            EzDashboardBizService.prev();
         });
         EzWebAppClient.onNext(function(){
-            EzDashboadBizService.next();
+            EzDashboardBizService.next();
         });
         EzWebAppClient.start();
 
         $('#submitBtn').click(function(event){
             $('#submitBtn').hide();
             $('#submitLoader').show();
-            EzDashboadBizService.postNewOrganization();
+            EzDashboardBizService.postNewOrganization();
         });
     });
 

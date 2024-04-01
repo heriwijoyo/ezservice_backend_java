@@ -18,4 +18,6 @@ import java.util.List;
 public interface CoreOrgConfigRepository extends JpaRepository<EzCoreOrgConfigDO, String> {
 
     List<EzCoreOrgConfigDO> findByOrgId(String orgId);
+
+    EzCoreOrgConfigDO findByOrgIdAndConfigKey(String orgId, String configKey);
 }

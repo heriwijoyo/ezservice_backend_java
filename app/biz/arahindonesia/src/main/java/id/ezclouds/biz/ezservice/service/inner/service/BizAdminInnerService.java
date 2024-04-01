@@ -204,6 +204,12 @@ public class BizAdminInnerService {
         coreAuthService.saveAuthAppClient(coreAuthAppClient);
     }
 
+    public void saveCoreOrgConfig(String orgId, Map<String, String> configMap) {
+        for (Map.Entry<String, String> entry : configMap.entrySet()) {
+            coreConfigService.saveCoreOrgConfig(orgId, entry.getKey(), entry.getValue());
+        }
+    }
+
     private void initiateOrgConfig(EzCoreOrganizationDO organizationDO) {
         String scene = CoreSequenceScene.CORE_MEMBER_ID.getCode();
         String sceneCode = CoreSequenceScene.CORE_MEMBER_ID.getSceneCode();

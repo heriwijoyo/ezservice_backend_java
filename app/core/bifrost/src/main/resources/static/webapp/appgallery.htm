@@ -188,24 +188,24 @@
 <script src="assets/js/ezappclient.js"></script>
 
 <script type="text/javascript">
-    var EzDashboadBizService = {
+    var EzDashboardBizService = {
         start: function() {
-            EzDashboadBizService.fetchGalleries();
+            EzDashboardBizService.fetchGalleries();
         },
         fetchGalleries: function() {
             EzWebAppClient.callApiService(EzApiUrl.GET_APP_GALLERY, {
                 sessionId: EzWebAppClient.getSessionId(),
-                pageNumber: EzDashboadBizService.data.pageNumber,
-                pageSize: EzDashboadBizService.data.pageSize
+                pageNumber: EzDashboardBizService.data.pageNumber,
+                pageSize: EzDashboardBizService.data.pageSize
             });
         },
         handleApiBizResult: function(url, response) {
             if (url === EzApiUrl.GET_APP_GALLERY) {
-                EzDashboadBizService.data.result = response.pageResult;
-                EzDashboadBizService.reloadPageResultView(response);
+                EzDashboardBizService.data.result = response.pageResult;
+                EzDashboardBizService.reloadPageResultView(response);
             }
             if (url === EzApiUrl.UPDATE_APP_GALLERY) {
-                EzDashboadBizService.fetchGalleries();
+                EzDashboardBizService.fetchGalleries();
             }
         },
         postNewImage: function() {
@@ -238,13 +238,13 @@
                     }
                     else if (!response.success) {
                         alert(response.message);
-                        EzDashboadBizService.resetFormNewImage();
+                        EzDashboardBizService.resetFormNewImage();
                     }
                     else {
                         alert(response.data);
-                        EzDashboadBizService.hideFormNewImage();
-                        EzDashboadBizService.resetFormNewImage();
-                        EzDashboadBizService.fetchGalleries();
+                        EzDashboardBizService.hideFormNewImage();
+                        EzDashboardBizService.resetFormNewImage();
+                        EzDashboardBizService.fetchGalleries();
                     }
                 },
                 error: function(e) {
@@ -261,10 +261,10 @@
                 let itemRow = $.parseHTML(DashTemplate);
                 $(itemRow).find('.img-rounded').attr('src', rowData.imageUrl);
                 $(itemRow).find('.rowTitle').html(title);
-                $(itemRow).find('.rowActive').html(EzDashboadBizService.renderFlag(rowData.status,'status',rowData.id));
-                $(itemRow).find('.rowHome').html(EzDashboadBizService.renderFlag(rowData.flagHomeSlide,'home',rowData.id));
-                $(itemRow).find('.rowPortfolio').html(EzDashboadBizService.renderFlag(rowData.flagPortfolioSlide,'portfolio',rowData.id));
-                $(itemRow).find('.rowSorting').html('<center><input type="text" class="border" value="'+rowData.sorting+'" onchange="EzDashboadBizService.swithFlag(\''+rowData.id+'\',\'sorting\',this.value)"/></center>');
+                $(itemRow).find('.rowActive').html(EzDashboardBizService.renderFlag(rowData.status,'status',rowData.id));
+                $(itemRow).find('.rowHome').html(EzDashboardBizService.renderFlag(rowData.flagHomeSlide,'home',rowData.id));
+                $(itemRow).find('.rowPortfolio').html(EzDashboardBizService.renderFlag(rowData.flagPortfolioSlide,'portfolio',rowData.id));
+                $(itemRow).find('.rowSorting').html('<center><input type="text" class="border" value="'+rowData.sorting+'" onchange="EzDashboardBizService.swithFlag(\''+rowData.id+'\',\'sorting\',this.value)"/></center>');
                 $('#rowsContainer').append(itemRow);
             }
             $('.pager').html(EzWebAppClient.renderPager(response.pageResult));
@@ -272,7 +272,7 @@
         renderFlag: function(flag,section,id) {
             let flagText = flag == 1 ? 'YES' : 'NO';
             let switchFlag = flag == 1 ? '0' : '1';
-            return '<center>'+ flagText + '<br><button onClick="EzDashboadBizService.swithFlag(\''+id+'\',\''+section+'\',\''+switchFlag+'\')" class="button button-rounded waves-effect waves-float" type="submit">SWITCH</button></center>';
+            return '<center>'+ flagText + '<br><button onClick="EzDashboardBizService.swithFlag(\''+id+'\',\''+section+'\',\''+switchFlag+'\')" class="button button-rounded waves-effect waves-float" type="submit">SWITCH</button></center>';
         },
         swithFlag: function(itemId,section,value) {
             EzWebAppClient.callApiService(EzApiUrl.UPDATE_APP_GALLERY, {
@@ -299,12 +299,12 @@
             $('#newImageCancelButton').show();
         },
         prev: function() {
-            EzDashboadBizService.data.pageNumber--;
-            EzDashboadBizService.fetchGalleries();
+            EzDashboardBizService.data.pageNumber--;
+            EzDashboardBizService.fetchGalleries();
         },
         next: function() {
-            EzDashboadBizService.data.pageNumber++;
-            EzDashboadBizService.fetchGalleries();
+            EzDashboardBizService.data.pageNumber++;
+            EzDashboardBizService.fetchGalleries();
         },
         data: {
             pageNumber: 1,
@@ -315,7 +315,7 @@
 
     $(document).ready(function(){
         EzWebAppClient.onApiBizSuccess(function(url, response){
-            EzDashboadBizService.handleApiBizResult(url, response);
+            EzDashboardBizService.handleApiBizResult(url, response);
         });
         EzWebAppClient.onApiBizFailed(function(url, message){
             console.log(url +' --- '+ message);
@@ -324,28 +324,28 @@
             console.log(xhr);
         });
         EzWebAppClient.onReady(function(){
-            EzDashboadBizService.start();
+            EzDashboardBizService.start();
         });
         EzWebAppClient.onPrev(function(){
-            EzDashboadBizService.prev();
+            EzDashboardBizService.prev();
         });
         EzWebAppClient.onNext(function(){
-            EzDashboadBizService.next();
+            EzDashboardBizService.next();
         });
         EzWebAppClient.start();
 
         $('#form-add-new-btn').click(function(){
-            EzDashboadBizService.showFormNewImage();
+            EzDashboardBizService.showFormNewImage();
         });
         $('#newImageCancelButton').click(function(){
-            EzDashboadBizService.hideFormNewImage();
+            EzDashboardBizService.hideFormNewImage();
         });
         $('#newImageSubmitButton').click(function(event){
             event.preventDefault();
             $('#newImageSubmitButton').hide();
             $('#newImageCancelButton').hide();
             $('#newImageSubmitLoader').show();
-            EzDashboadBizService.postNewImage();
+            EzDashboardBizService.postNewImage();
         });
     });
 

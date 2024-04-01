@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.shared.service;
 
+import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.shared.constant.CoreConstant;
 import id.ezclouds.core.shared.converter.CoreModelConverter;
@@ -11,10 +12,12 @@ import id.ezclouds.core.shared.model.CoreConfig;
 import id.ezclouds.core.shared.model.CoreOrgConfig;
 import id.ezclouds.core.shared.repo.CoreConfigRepository;
 import id.ezclouds.core.shared.repo.CoreOrgConfigRepository;
+import id.ezclouds.core.shared.repo.dataobject.EzCoreOrgConfigDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -131,5 +134,20 @@ public class CoreConfigService {
         }
 
         return orgConfigMap;
+    }
+
+    @Transactional
+    public void saveCoreOrgConfig(String orgId, String configKey, String configValue) {
+        EzCoreOrgConfigDO configDO = coreOrgConfigRepository
+                .findByOrgIdAndConfigKey(orgId, configKey);
+        if (configDO == null) {
+            configDO = new EzCoreOrgConfigDO();
+            configDO.setConfigId(HashUtil.createHash(orgId, configKey));
+            configDO.setOrgId(orgId);
+            configDO.setConfigKey(configKey);
+        }
+
+        configDO.setConfigValue(configValue);
+        coreOrgConfigRepository.saveAndFlush(configDO);
     }
 }

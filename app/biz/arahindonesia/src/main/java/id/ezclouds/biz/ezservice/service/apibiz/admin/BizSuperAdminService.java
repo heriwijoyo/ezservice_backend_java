@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -248,6 +249,33 @@ public class BizSuperAdminService extends BizBaseService {
                     appConfig.setCreatedTime(DateUtil.getCurrentFormattedDate());
                 }
                 bizAdminInnerService.saveBizAppConfig(appConfig);
+                bizResult.setSuccess(true);
+                bizResult.setObject("UPDATE SUCCESS");
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
+    public BizResult updateCoreOrgConfig(BizWebUpdateRequest<Map<String, String>> request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notNull(request.getObject(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getOrgId(), EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                authorizeSuperUserMember(request.getSessionId());
+                bizAdminInnerService.saveCoreOrgConfig(request.getOrgId(), request.getObject());
                 bizResult.setSuccess(true);
                 bizResult.setObject("UPDATE SUCCESS");
             }

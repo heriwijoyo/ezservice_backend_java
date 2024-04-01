@@ -131,7 +131,7 @@
 <script src="assets/js/ezappclient.js"></script>
 
 <script type="text/javascript">
-    var EzDashboadBizService = {
+    var EzDashboardBizService = {
         start: function() {
             EzWebAppClient.callApiService(EzApiUrl.GET_DASHBOARD_DATA, {});
         },
@@ -149,7 +149,7 @@
 
     $(document).ready(function(){
         EzWebAppClient.onApiBizSuccess(function(url, response){
-            EzDashboadBizService.handleApiBizResult(url, response);
+            EzDashboardBizService.handleApiBizResult(url, response);
         });
         EzWebAppClient.onApiBizFailed(function(url, message){
             console.log(url +' --- '+ message);
@@ -158,7 +158,7 @@
             console.log(xhr);
         });
         EzWebAppClient.onReady(function(){
-            EzDashboadBizService.start();
+            EzDashboardBizService.start();
         });
         EzWebAppClient.start();
     });
