@@ -10,6 +10,7 @@ import id.ezclouds.biz.ezservice.model.admin.*;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizSuperAdminService;
 import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
+import id.ezclouds.biz.ezservice.service.dataservice.model.BizAppConfig;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
@@ -341,7 +342,7 @@ public class WebApiController {
         return result;
     }
 
-    @PostMapping(value = "/webapp/api/appConfigUpdate.json")
+    @PostMapping(value = "/webapp/api/appClientConfigUpdate.json")
     private WebApiResult<String> appConfigUpdate(
             @RequestParam(name = "sessionId", required = false) String sessionId,
             @RequestParam(name = "orgId", required = false) String orgId,
@@ -352,7 +353,7 @@ public class WebApiController {
             @RequestParam(name = "createdTime", required = false) String createdTime,
             @RequestParam(name = "status", required = false) int status ) {
         final WebApiResult<String> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_UPDATE_APP_CONFIG, result, new WebApiControllerTemplate.Handler<String>() {
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_UPDATE_CLIENT_APP_CONFIG, result, new WebApiControllerTemplate.Handler<String>() {
             @Override
             public BizResult onProcess() throws Exception {
                 BizApplicationConfig applicationConfig = new BizApplicationConfig();
@@ -368,6 +369,38 @@ public class WebApiController {
                 request.setSessionId(sessionId);
                 request.setObject(applicationConfig);
                 return bizSuperAdminService.updateAppConfig(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                if (object instanceof String) {
+                    return (String) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/appConfigUpdate.json")
+    private WebApiResult<String> appConfigUpdate(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "orgId", required = false) String orgId,
+            @RequestParam(name = "mapData", required = false) String mapData ) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_UPDATE_APP_CONFIG, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizWebUpdateRequest<List<BizAppConfig>> request = new BizWebUpdateRequest<>();
+                request.setSessionId(sessionId);
+                request.setOrgId(orgId);
+                request.setObject(new ObjectMapper().readValue(mapData, new TypeReference<List<BizAppConfig>>(){}));
+                return bizSuperAdminService.updateBizAppConfig(request);
             }
 
             @Override

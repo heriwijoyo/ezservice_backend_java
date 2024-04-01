@@ -11,11 +11,13 @@ import id.ezclouds.biz.ezservice.service.dataservice.model.BizAppConfig;
 import id.ezclouds.biz.ezservice.service.dataservice.repo.AppCommonMessageTemplateRepository;
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.AppConfigDO;
 import id.ezclouds.biz.ezservice.service.dataservice.repo.AppConfigRepository;
+import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -118,6 +120,21 @@ public class AppConfigService {
         }
 
         return bizAppConfigs;
+    }
+
+    @Transactional
+    public void saveBizAppConfig(String orgId, BizAppConfig bizAppConfig) {
+        AppConfigDO configDO = appConfigRepository
+                .findByOrgIdAndConfigKey(orgId, bizAppConfig.getConfigKey());
+        if (configDO == null) {
+            configDO = new AppConfigDO();
+            configDO.setId(HashUtil.createHash(orgId, bizAppConfig.getConfigKey()));
+            configDO.setOrgId(orgId);
+            configDO.setConfigKey(bizAppConfig.getConfigKey());
+        }
+        configDO.setConfigValue(bizAppConfig.getConfigValue());
+        configDO.setStatus(bizAppConfig.getStatus());
+        appConfigRepository.saveAndFlush(configDO);
     }
 
     @Cacheable("appConfigAllActive")

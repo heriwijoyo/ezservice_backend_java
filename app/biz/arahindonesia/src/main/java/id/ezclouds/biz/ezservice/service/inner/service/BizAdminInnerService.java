@@ -11,6 +11,7 @@ import id.ezclouds.biz.ezservice.service.dataservice.AppConfigService;
 import id.ezclouds.biz.ezservice.service.dataservice.AppImageGalleryService;
 import id.ezclouds.biz.ezservice.service.dataservice.NewsInnerService;
 import id.ezclouds.biz.ezservice.service.dataservice.VideoCardService;
+import id.ezclouds.biz.ezservice.service.dataservice.model.BizAppConfig;
 import id.ezclouds.biz.ezservice.service.dataservice.model.WebImageGallery;
 import id.ezclouds.biz.ezservice.service.dataservice.request.AppImageGalleryRequest;
 import id.ezclouds.biz.ezservice.service.dataservice.request.NewsCreateRequest;
@@ -196,7 +197,7 @@ public class BizAdminInnerService {
         return bizApplicationConfig;
     }
 
-    public void saveBizAppConfig(BizApplicationConfig applicationConfig) {
+    public void saveClientAppConfig(BizApplicationConfig applicationConfig) {
         CoreAuthAppClient coreAuthAppClient = new CoreAuthAppClient();
         coreAuthAppClient.setId(applicationConfig.getId());
         coreAuthAppClient.setOrgId(applicationConfig.getOrgId());
@@ -207,6 +208,12 @@ public class BizAdminInnerService {
         coreAuthAppClient.setModifiedTime(DateUtil.getCurrentFormattedDate());
         coreAuthAppClient.setStatus(applicationConfig.getStatus());
         coreAuthService.saveAuthAppClient(coreAuthAppClient);
+    }
+
+    public void saveBizAppConfigs(String orgId, List<BizAppConfig> bizAppConfigs) {
+        for (BizAppConfig bizAppConfig : bizAppConfigs) {
+            appConfigService.saveBizAppConfig(orgId, bizAppConfig);
+        }
     }
 
     public void saveCoreOrgConfig(String orgId, Map<String, String> configMap) {

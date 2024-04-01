@@ -326,6 +326,7 @@
     var EzAdminUrl = {
         GET_ORGANIZATION_DETAIL: 'api/getOrganizationDetail.json',
         ORGANIZATION_UPDATE: 'api/organizationUpdate.json',
+        APP_CLIENT_CONFIG_UPDATE: 'api/appClientConfigUpdate.json',
         APP_CONFIG_UPDATE: 'api/appConfigUpdate.json',
         CORE_ORG_CONFIG_UPDATE: 'api/coreOrgConfigUpdate.json'
     };
@@ -356,7 +357,7 @@
         storeAppConfig: function() {
             let orgId = EzWebAppClient.getUrlParameter('id');
             if (EzWebAppClient.isNotBlank(orgId)) {
-                EzWebAppClient.callApiService(EzAdminUrl.APP_CONFIG_UPDATE, {
+                EzWebAppClient.callApiService(EzAdminUrl.APP_CLIENT_CONFIG_UPDATE, {
                     orgId: orgId,
                     id: $('#configId').val(),
                     appId: $('#appId').val(),
@@ -364,6 +365,26 @@
                     clientSecret: $('#clientSecret').val(),
                     createdTime: $('#clientCreatedTime').val(),
                     status: $('#clientStatus').val()
+                });
+            }
+        },
+        storeBizAppConfig: function() {
+            var mapData = [];
+            $('.appConfigItem').each(function(i, obj){
+                let key = $(obj).find('.appConfigKey').html();
+                let val = $(obj).find('.appConfigValue input').val();
+                let stat = $(obj).find('.appConfigStatus input').val();
+                mapData.push({
+                    configKey: key,
+                    configValue: val,
+                    status: stat
+                });
+            });
+            let orgId = EzWebAppClient.getUrlParameter('id');
+            if (EzWebAppClient.isNotBlank(orgId)) {
+                EzWebAppClient.callApiService(EzAdminUrl.APP_CONFIG_UPDATE, {
+                    orgId: orgId,
+                    mapData: JSON.stringify(mapData)
                 });
             }
         },
@@ -397,10 +418,14 @@
                 $('#orgUpdateBtn').show();
                 EzDashboardBizService.fetchOrganization();
             }
-            if (url === EzAdminUrl.APP_CONFIG_UPDATE) {
+            if (url === EzAdminUrl.APP_CLIENT_CONFIG_UPDATE) {
                 alert(response.data);
                 $('#clientLoader').hide();
                 $('#clientUpdateBtn').show();
+                EzDashboardBizService.fetchOrganization();
+            }
+            if (url === EzAdminUrl.APP_CONFIG_UPDATE) {
+                alert(response.data);
                 EzDashboardBizService.fetchOrganization();
             }
             if (url === EzAdminUrl.CORE_ORG_CONFIG_UPDATE) {
@@ -417,7 +442,7 @@
                 $('#orgUpdateLoader').hide();
                 $('#orgUpdateBtn').show();
             }
-            if (url === EzAdminUrl.APP_CONFIG_UPDATE) {
+            if (url === EzAdminUrl.APP_CLIENT_CONFIG_UPDATE) {
                 alert(message);
                 $('#clientLoader').hide();
                 $('#clientUpdateBtn').show();
@@ -425,6 +450,9 @@
                 if (EzWebAppClient.isBlank(configId)) {
                     $('#clientGenerateBtn').show();
                 }
+            }
+            if (url === EzAdminUrl.APP_CONFIG_UPDATE) {
+                alert(message);
             }
             if (url === EzAdminUrl.CORE_ORG_CONFIG_UPDATE) {
                 alert(message);
@@ -552,10 +580,13 @@
             $('#clientLoader').show();
             EzDashboardBizService.storeAppConfig();
         });
+        $('#appConfigBtnSubmit').click(function(){
+            EzDashboardBizService.storeBizAppConfig();
+        });
     });
 
     var EzBizAppConfigTemplate = ''+
-        '<tr>'+
+        '<tr class="appConfigItem">'+
             '<td class="appConfigKey" style="vertical-align: middle;"></td>'+
             '<td class="appConfigValue" style="vertical-align: middle;">'+
                 '<input type="text"/>'+

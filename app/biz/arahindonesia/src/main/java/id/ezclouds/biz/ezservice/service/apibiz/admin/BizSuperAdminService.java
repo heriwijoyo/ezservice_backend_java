@@ -10,6 +10,7 @@ import id.ezclouds.biz.ezservice.model.admin.BizOrganization;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganizationDetail;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
 import id.ezclouds.biz.ezservice.service.core.BizAppCacheService;
+import id.ezclouds.biz.ezservice.service.dataservice.model.BizAppConfig;
 import id.ezclouds.biz.ezservice.service.inner.service.BizAdminInnerService;
 import id.ezclouds.biz.ezservice.service.request.web.BizWebCreateRequest;
 import id.ezclouds.biz.ezservice.service.request.web.BizWebDetailRequest;
@@ -248,7 +249,34 @@ public class BizSuperAdminService extends BizBaseService {
                 if (StringUtil.isBlank(appConfig.getCreatedTime())) {
                     appConfig.setCreatedTime(DateUtil.getCurrentFormattedDate());
                 }
-                bizAdminInnerService.saveBizAppConfig(appConfig);
+                bizAdminInnerService.saveClientAppConfig(appConfig);
+                bizResult.setSuccess(true);
+                bizResult.setObject("UPDATE SUCCESS");
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
+    public BizResult updateBizAppConfig(BizWebUpdateRequest<List<BizAppConfig>> request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notNull(request.getObject(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getOrgId(), EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                authorizeSuperUserMember(request.getSessionId());
+                bizAdminInnerService.saveBizAppConfigs(request.getOrgId(), request.getObject());
                 bizResult.setSuccess(true);
                 bizResult.setObject("UPDATE SUCCESS");
             }

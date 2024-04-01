@@ -22,4 +22,6 @@ public interface AppConfigRepository extends JpaRepository<AppConfigDO, String> 
     List<AppConfigDO> findAllActive();
 
     List<AppConfigDO> findByOrgId(String orgId);
+
+    AppConfigDO findByOrgIdAndConfigKey(String orgId, String configKey);
 }
