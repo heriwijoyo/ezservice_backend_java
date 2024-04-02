@@ -327,6 +327,43 @@
 
 </section>
 
+<div class="modal fade" id="modal-new-admin" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="largeModalLabel">Add New Admin</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row clearfix">
+                    <div class="form-group form-float col-sm-12">
+                        <div class="form-line">
+                            <div class="font-12">Member Name</div>
+                            <input type="text" class="form-control" id="newMemberName" placeholder="Member Name" required>
+                        </div>
+                    </div>
+                    <div class="form-group form-float col-sm-12">
+                        <div class="form-line">
+                            <div class="font-12">Member Phone</div>
+                            <input type="text" class="form-control" id="newMemberPhone" placeholder="Member Phone" required>
+                        </div>
+                    </div>
+                    <div class="form-group form-float col-sm-12">
+                        <div class="form-line">
+                            <div class="font-12">Member Email</div>
+                            <input type="text" class="form-control" id="newMemberEmail" placeholder="Member Email" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <button id="newAdminSubmitButton" class="button button-rounded waves-effect waves-float pull-right">SUBMIT</button>
+                        <button id="newAdminCancelButton" class="button button-rounded button-light waves-effect waves-float pull-right">CANCEL</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div class="modal fade" id="common-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -357,7 +394,8 @@
         ORGANIZATION_UPDATE: 'api/organizationUpdate.json',
         APP_CLIENT_CONFIG_UPDATE: 'api/appClientConfigUpdate.json',
         APP_CONFIG_UPDATE: 'api/appConfigUpdate.json',
-        CORE_ORG_CONFIG_UPDATE: 'api/coreOrgConfigUpdate.json'
+        CORE_ORG_CONFIG_UPDATE: 'api/coreOrgConfigUpdate.json',
+        ORG_ADMIN_ADD: 'api/coreOrgAdminAdd.json'
     };
     var EzDashboardBizService = {
         start: function() {
@@ -434,6 +472,17 @@
                 });
             }
         },
+        addOrgAdmin: function() {
+            let orgId = EzWebAppClient.getUrlParameter('id');
+            if (EzWebAppClient.isNotBlank(orgId)) {
+                EzWebAppClient.callApiService(EzAdminUrl.ORG_ADMIN_ADD, {
+                    orgId: orgId,
+                    name: $('#newMemberName').val(),
+                    phone: $('#newMemberPhone').val(),
+                    email: $('#newMemberEmail').val()
+                });
+            }
+        },
         handleApiBizResult: function(url, response) {
             if (url === EzAdminUrl.GET_ORGANIZATION_DETAIL) {
                 EzDashboardBizService.renderOrganizationCard(response.data.bizOrganization);
@@ -462,6 +511,10 @@
                 alert(response.data);
                 EzDashboardBizService.fetchOrganization();
             }
+            if (url === EzAdminUrl.ORG_ADMIN_ADD) {
+                alert(response.data);
+                window.location.reload();
+            }
         },
         handleApiBizFailed: function(url, message) {
             if (url === EzAdminUrl.GET_ORGANIZATION_DETAIL) {
@@ -488,6 +541,9 @@
                 alert(message);
                 $('.coreOrgConfigImgLoader').hide();
                 $('.coreOrgConfigBtnSubmit').show();
+            }
+            if (url === EzAdminUrl.ORG_ADMIN_ADD) {
+                alert(message);
             }
         },
         renderOrganizationCard: function(data) {
@@ -571,6 +627,14 @@
             $('#clientId').val(clientId);
             $('#clientSecret').val(clientSecret);
         },
+        showNewAdminForm: function() {
+            $('#modal-new-admin').removeClass('fade');
+            $('#modal-new-admin').addClass('show');
+        },
+        hideNewAdminForm: function() {
+            $('#modal-new-admin').removeClass('show');
+            $('#modal-new-admin').addClass('fade');
+        },
         randomText: function(prefix) {
             let length = 32 - prefix.length;
             let result = '';
@@ -624,6 +688,15 @@
         });
         $('#appConfigBtnSubmit').click(function(){
             EzDashboardBizService.storeBizAppConfig();
+        });
+        $('#addAdminBtnSubmit').click(function(){
+            EzDashboardBizService.showNewAdminForm();
+        });
+        $('#newAdminCancelButton').click(function(){
+            EzDashboardBizService.hideNewAdminForm();
+        });
+        $('#newAdminSubmitButton').click(function(){
+            EzDashboardBizService.addOrgAdmin();
         });
     });
 
