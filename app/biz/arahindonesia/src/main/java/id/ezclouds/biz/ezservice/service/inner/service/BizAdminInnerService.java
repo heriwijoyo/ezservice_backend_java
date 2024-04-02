@@ -23,6 +23,7 @@ import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.core.auth.model.CoreAuthAppClient;
 import id.ezclouds.core.auth.service.CoreAuthService;
+import id.ezclouds.core.shared.constant.CoreConstant;
 import id.ezclouds.core.shared.enums.CoreSequenceScene;
 import id.ezclouds.core.shared.model.CoreSequenceConfig;
 import id.ezclouds.core.shared.repo.dataobject.EzCoreOrganizationDO;
@@ -129,6 +130,7 @@ public class BizAdminInnerService {
         List<BizOrganization> resultData = findResult
                 .getContent()
                 .stream()
+                .filter(modelDO -> !CoreConstant.SU_ORG_ID.equals(modelDO.getOrgId()))
                 .map(this::convert)
                 .collect(Collectors.toList());
 
