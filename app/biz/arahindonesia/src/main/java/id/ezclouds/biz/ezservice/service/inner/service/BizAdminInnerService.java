@@ -4,9 +4,12 @@
  */
 package id.ezclouds.biz.ezservice.service.inner.service;
 
+import id.ezclouds.biz.ezservice.converter.BizMemberConverter;
+import id.ezclouds.biz.ezservice.enums.BizMemberRole;
 import id.ezclouds.biz.ezservice.model.admin.BizApplicationConfig;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganization;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganizationDetail;
+import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.service.dataservice.AppConfigService;
 import id.ezclouds.biz.ezservice.service.dataservice.AppImageGalleryService;
 import id.ezclouds.biz.ezservice.service.dataservice.NewsInnerService;
@@ -23,6 +26,8 @@ import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.core.auth.model.CoreAuthAppClient;
 import id.ezclouds.core.auth.service.CoreAuthService;
+import id.ezclouds.core.member.model.CoreMember;
+import id.ezclouds.core.member.service.CoreMemberService;
 import id.ezclouds.core.shared.constant.CoreConstant;
 import id.ezclouds.core.shared.enums.CoreSequenceScene;
 import id.ezclouds.core.shared.model.CoreSequenceConfig;
@@ -71,6 +76,9 @@ public class BizAdminInnerService {
 
     @Autowired
     private CoreConfigService coreConfigService;
+
+    @Autowired
+    private CoreMemberService coreMemberService;
 
     public void createAppImageGallery(String orgId, String fileName, Map<String, String> extInfo) {
         AppImageGalleryRequest request = new AppImageGalleryRequest();
@@ -146,6 +154,7 @@ public class BizAdminInnerService {
         detail.setBizApplicationConfig(getAppConfig(orgId));
         detail.setBizAppConfigs(appConfigService.getAppConfigByOrgId(orgId));
         detail.setCoreOrgConfigMap(coreConfigService.getOrgConfigByOrgId(orgId));
+        detail.setAdminMembers(getOrgAdminMembers(orgId));
         return detail;
     }
 
@@ -222,6 +231,14 @@ public class BizAdminInnerService {
         for (Map.Entry<String, String> entry : configMap.entrySet()) {
             coreConfigService.saveCoreOrgConfig(orgId, entry.getKey(), entry.getValue());
         }
+    }
+
+    private List<BizMember> getOrgAdminMembers(String orgId) {
+        return coreMemberService
+                .getMemberByOrgIdAndRoles(orgId, BizMemberRole.ADMIN_ORG.getCode())
+                .stream()
+                .map(coreMember -> BizMemberConverter.convert(coreMember, null))
+                .collect(Collectors.toList());
     }
 
     private void initiateOrgConfig(EzCoreOrganizationDO organizationDO) {

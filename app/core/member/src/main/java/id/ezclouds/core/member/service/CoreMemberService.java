@@ -23,7 +23,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -102,6 +104,13 @@ public class CoreMemberService {
         if (coreMemberExtensionDO != null) {
             coreMemberExtensionRepository.saveAndFlush(coreMemberExtensionDO);
         }
+    }
+
+    public List<CoreMember> getMemberByOrgIdAndRoles(String orgId, String roles) {
+        return coreMemberRepository.findByOrgIdAndRolesContains(orgId, roles)
+                .stream()
+                .map(CoreMemberConverter::convert)
+                .collect(Collectors.toList());
     }
 
     private void updateMemberDO(CoreMemberDO coreMemberDO, CoreMemberExtensionDO extensionDO, Map<String, String> fieldMap) {
