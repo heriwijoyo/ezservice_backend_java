@@ -89,4 +89,21 @@ public class BizMemberConverter {
         bizMember.setTpsNumber(extension.getTpsNumber());
         return bizMember;
     }
+
+    public static CoreMember convert(BizMember bizMember) {
+        if (bizMember == null) { return null; }
+        CoreMember coreMember = new CoreMember();
+        coreMember.setName(bizMember.getName());
+        coreMember.setPhone(bizMember.getPhone());
+        coreMember.setEmail(bizMember.getEmail());
+        coreMember.setRoles(bizMember.getRoles());
+        coreMember.setGender(bizMember.getGender().getCode());
+        coreMember.setDateOfBirth(bizMember.getDateOfBirth());
+        coreMember.setPhoneVerified(bizMember.isPhoneVerified());
+        coreMember.setEmailVerified(bizMember.isEmailVerified());
+        coreMember.setAddressVerified(bizMember.isAddressVerified());
+        coreMember.setCreatedTime(bizMember.getCreatedTime());
+        coreMember.setModifiedTime(bizMember.getModifiedTime());
+        return coreMember;
+    }
 }

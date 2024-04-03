@@ -6,10 +6,14 @@ package id.ezclouds.biz.ezservice.service.inner.service;
 
 import id.ezclouds.biz.ezservice.converter.BizMemberConverter;
 import id.ezclouds.biz.ezservice.enums.BizMemberRole;
+import id.ezclouds.biz.ezservice.model.AppConfig;
 import id.ezclouds.biz.ezservice.model.admin.BizApplicationConfig;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganization;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganizationDetail;
+import id.ezclouds.biz.ezservice.model.member.BizGender;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
+import id.ezclouds.biz.ezservice.model.member.BizMemberInfo;
+import id.ezclouds.biz.ezservice.service.apibiz.BizConnectService;
 import id.ezclouds.biz.ezservice.service.dataservice.AppConfigService;
 import id.ezclouds.biz.ezservice.service.dataservice.AppImageGalleryService;
 import id.ezclouds.biz.ezservice.service.dataservice.NewsInnerService;
@@ -21,12 +25,14 @@ import id.ezclouds.biz.ezservice.service.dataservice.request.NewsCreateRequest;
 import id.ezclouds.biz.ezservice.service.dataservice.request.VideoCardCreateRequest;
 import id.ezclouds.biz.ezservice.service.result.PageResult;
 import id.ezclouds.common.util.DateUtil;
+import id.ezclouds.common.util.RandomUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.core.auth.model.CoreAuthAppClient;
 import id.ezclouds.core.auth.service.CoreAuthService;
 import id.ezclouds.core.member.model.CoreMember;
+import id.ezclouds.core.member.model.MemberStatus;
 import id.ezclouds.core.member.service.CoreMemberService;
 import id.ezclouds.core.shared.constant.CoreConstant;
 import id.ezclouds.core.shared.enums.CoreSequenceScene;
@@ -79,6 +85,12 @@ public class BizAdminInnerService {
 
     @Autowired
     private CoreMemberService coreMemberService;
+
+    @Autowired
+    private BizMemberInnerService bizMemberInnerService;
+
+    @Autowired
+    private BizConnectService bizConnectService;
 
     public void createAppImageGallery(String orgId, String fileName, Map<String, String> extInfo) {
         AppImageGalleryRequest request = new AppImageGalleryRequest();
@@ -189,7 +201,7 @@ public class BizAdminInnerService {
         initiateOrgConfig(modelDO);
     }
 
-    public BizApplicationConfig getAppConfig(String orgId) {
+    private BizApplicationConfig getAppConfig(String orgId) {
         BizApplicationConfig bizApplicationConfig = new BizApplicationConfig();
 
         CoreAuthAppClient appClient = coreAuthService.getAppClientByOrgId(orgId);
@@ -231,6 +243,39 @@ public class BizAdminInnerService {
         for (Map.Entry<String, String> entry : configMap.entrySet()) {
             coreConfigService.saveCoreOrgConfig(orgId, entry.getKey(), entry.getValue());
         }
+    }
+
+    public void adminOrgCreateMember(String orgId, BizMember bizMember) throws Exception {
+        BizApplicationConfig bizApplicationConfig = getAppConfig(orgId);
+        String orgCode = getOrganizationById(orgId).getCode();
+        String appId = bizApplicationConfig.getAppId();
+
+        bizMember.setGender(BizGender.MALE);
+        bizMember.setDateOfBirth(DateUtil.getCurrentFormattedDate());
+        bizMember.setRoles(BizMemberRole.ADMIN_ORG.getCode());
+        bizMember.setPhoneVerified(false);
+        bizMember.setEmailVerified(false);
+        bizMember.setAddressVerified(false);
+        bizMember.setCreatedTime(DateUtil.getCurrentFormattedDate());
+        bizMember.setModifiedTime(DateUtil.getCurrentFormattedDate());
+
+        CoreMember coreMember = BizMemberConverter.convert(bizMember);
+        coreMember.setSourceId("BACKOFFICE");
+        coreMember.setMemberStatus(MemberStatus.ACTIVE);
+        BizMemberInfo bizMemberInfo = bizMemberInnerService
+                .adminOrgCreateMember(orgId, orgCode, appId, coreMember);
+
+        //generate member password
+        String newPassword = RandomUtil.generateNumberCode(6);
+        coreAuthService.updateMemberClientPassword(bizMemberInfo.getBizMemberClient().getClientId(), newPassword);
+
+        AppConfig appConfig = appConfigService.getAppConfig(orgId);
+        bizConnectService.memberSendPassword(
+                bizMemberInfo.getBizMember().getPhone(),
+                newPassword,
+                appConfig.getAppName(),
+                appConfig.getAndroidUpdateUrl()
+        );
     }
 
     private List<BizMember> getOrgAdminMembers(String orgId) {

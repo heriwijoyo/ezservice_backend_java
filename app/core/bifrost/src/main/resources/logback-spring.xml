@@ -191,6 +191,30 @@
         </encoder>
     </appender>
 
+    <appender name="INTEGRATION_SERVICE_Console"
+              class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>
+                %black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable
+            </pattern>
+        </layout>
+    </appender>
+    <appender name="INTEGRATION_SERVICE_File"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/${APP_NAME}/integration-service.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/integration-service.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d --- [%thread]%m%n</pattern>
+        </encoder>
+    </appender>
+
     <logger name="API_CONTROLLER" additivity="false">
         <level value="INFO" />
         <appender-ref ref="API_CONTROLLER_${APP_LOG_TYPE}" />
@@ -218,6 +242,12 @@
     <logger name="APP_BIZ_SERVICE" additivity="false">
         <level value="INFO" />
         <appender-ref ref="APP_BIZ_SERVICE_${APP_LOG_TYPE}" />
+        <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
+    </logger>
+
+    <logger name="INTEGRATION_SERVICE" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="INTEGRATION_SERVICE_${APP_LOG_TYPE}" />
         <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
     </logger>
 

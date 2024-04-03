@@ -29,10 +29,10 @@ public class EzConnectService {
     @Autowired
     private WatzapClientService watzapClientService;
 
-    public EzConnectResult sendWhatsappMessage(WhatsappSendRequest request) throws Exception {
+    public EzConnectResult sendWhatsappMessage(WhatsappSendRequest request) {
         final EzConnectResult result = new EzConnectResult();
 
-        CoreIntegrationServiceTemplate.execute(request, result, new CoreIntegrationServiceTemplate.Handler() {
+        ConnectServiceTemplate.execute(request, result, new ConnectServiceTemplate.Handler() {
             @Override
             public void onRequestCheck() throws EzErrorException {
                 AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM, "WhatsappSendRequest is null");
@@ -50,7 +50,12 @@ public class EzConnectService {
                     sendRequest.setApiUri(coreConfigService.getWatzapApiUri());
                     sendRequest.setPhone_no(request.getPhoneNumber());
                     sendRequest.setMessage(request.getMessage());
-                    watzapClientService.sendWatzap(sendRequest);
+                    watzapClientService
+                            .sendWatzap(sendRequest)
+                            .subscribe(response -> {
+                                result.setData(response);
+                                ConnectServiceLogger.logResult(result);
+                            });
                 }
                 result.setSuccess(true);
             }

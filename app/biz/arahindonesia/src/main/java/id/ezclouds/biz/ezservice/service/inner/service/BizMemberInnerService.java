@@ -88,4 +88,36 @@ public class BizMemberInnerService {
 
         return bizMemberInfo;
     }
+
+    @Transactional
+    public BizMemberInfo adminOrgCreateMember(String orgId, String orgCode, String appId, CoreMember coreMember) throws Exception {
+        String memberId = coreSequenceService.generateSequence(orgId, orgCode, CoreSequenceScene.CORE_MEMBER_ID.getCode());
+        String shard = ShardUtil.getShardId(memberId);
+
+        coreMember.setMemberId(memberId);
+        coreMember.setOrgId(orgId);
+        coreMember.setShard(shard);
+        coreMemberService.store(coreMember);
+
+        CoreAuthMemberClient memberClient = new CoreAuthMemberClient();
+        memberClient.setOrgId(orgId);
+        memberClient.setShard(shard);
+        memberClient.setAppId(appId);
+        memberClient.setMemberId(memberId);
+        memberClient.setLoginType(DEFAULT_LOGIN_TYPE);
+        memberClient.setLoginId(coreMember.getPhone());
+        memberClient.setStatus(BizStatus.ACTIVE.getCode());
+        coreAuthService.createMemberClient(memberClient);
+
+        CoreMember storedMember = coreMemberService.getOptimisticCoreMember(memberId);
+        CoreAuthMemberClient storedMemberClient = coreAuthService.getOptimisticMemberClient(DEFAULT_LOGIN_TYPE, memberId);
+
+        BizMember bizMember = BizMemberConverter.convert(storedMember, null);
+        BizMemberClient bizMemberClient = BizMemberClientConverter.convert(storedMemberClient);
+
+        BizMemberInfo bizMemberInfo = new BizMemberInfo();
+        bizMemberInfo.setBizMember(bizMember);
+        bizMemberInfo.setBizMemberClient(bizMemberClient);
+        return bizMemberInfo;
+    }
 }

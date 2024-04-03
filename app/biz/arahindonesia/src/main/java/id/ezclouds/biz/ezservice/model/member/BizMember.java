@@ -32,6 +32,8 @@ public class BizMember {
     private boolean phoneVerified;
     private boolean emailVerified;
     private boolean addressVerified;
+    private String createdTime;
+    private String modifiedTime;
     private BizStatus status;
 
     @PublicImageUrl(name = AppConstant.Annotation.AVATAR_URL)
@@ -174,6 +176,22 @@ public class BizMember {
 
     public void setStatus(BizStatus status) {
         this.status = status;
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(String modifiedTime) {
+        this.modifiedTime = modifiedTime;
     }
 
     public String getAvatarUrl() {

@@ -4,11 +4,15 @@
  */
 package id.ezclouds.core.integration.service.client.request;
 
+import id.ezclouds.core.integration.request.ConnectRequest;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: WatzapSendRequest.java, v 0.1 2024‐02‐05 2:12 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class WatzapSendRequest {
+public class WatzapSendRequest extends ConnectRequest {
 
     private String api_key;
     private String number_key;
@@ -54,5 +58,10 @@ public class WatzapSendRequest {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

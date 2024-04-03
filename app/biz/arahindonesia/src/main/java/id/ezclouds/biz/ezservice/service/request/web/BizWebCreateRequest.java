@@ -11,6 +11,7 @@ package id.ezclouds.biz.ezservice.service.request.web;
 public class BizWebCreateRequest<T> {
 
     private String sessionId;
+    private String orgId;
     private T data;
 
     public String getSessionId() {
@@ -19,6 +20,14 @@ public class BizWebCreateRequest<T> {
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
+    }
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
     }
 
     public T getData() {

@@ -11,7 +11,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -30,9 +29,8 @@ public class WatzapClientService {
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .build();
 
-    @Async
-    public void sendWatzap(WatzapSendRequest request) {
-        Mono<ResponseEntity<WatzapResponse>> watzapResponse = webClient
+    public Mono<ResponseEntity<WatzapResponse>> sendWatzap(WatzapSendRequest request) {
+        return webClient
                 .post()
                 .uri(request.getApiUri())
                 .body(Mono.just(request), WatzapSendRequest.class)
@@ -46,7 +44,5 @@ public class WatzapClientService {
                     return Mono.error(new WebClientResponseException("Server Error", response.statusCode().value(), response.statusCode().getReasonPhrase(), null, null, null));
                 })
                 .toEntity(WatzapResponse.class);
-
-        watzapResponse.subscribe(System.out::println);
     }
 }

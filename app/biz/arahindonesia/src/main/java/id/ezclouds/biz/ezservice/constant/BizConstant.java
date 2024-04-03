@@ -40,8 +40,13 @@ public class BizConstant {
 
     public static final class TemplateKey {
         public static final String WA_RESET_PASS_VERIFY_CODE = "WA_RESET_PASS_VERIFY_CODE";
+        public static final String WA_MEMBER_CREATE_PASSWORD = "WA_MEMBER_CREATE_PASSWORD";
         public static final String VERIFY_CODE = "VERIFY_CODE";
         public static final String EXPIRY_LABEL = "EXPIRY_LABEL";
+        public static final String APP_NAME = "APP_NAME";
+        public static final String PHONE = "PHONE";
+        public static final String PASSWORD = "PASSWORD";
+        public static final String APP_DOWNLOAD_URL = "APP_DOWNLOAD_URL";
     }
 
     public static List<String> commonSessionSceneAllowed() {

@@ -7,6 +7,7 @@ package id.ezclouds.core.bifrost.app.web;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.ezservice.model.admin.*;
+import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizSuperAdminService;
 import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
@@ -433,6 +434,45 @@ public class WebApiController {
                 request.setOrgId(orgId);
                 request.setObject(new ObjectMapper().readValue(mapData, new TypeReference<Map<String, String>>(){}));
                 return bizSuperAdminService.updateCoreOrgConfig(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                if (object instanceof String) {
+                    return (String) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/coreOrgAdminAdd.json")
+    private WebApiResult<String> coreOrgAdminAdd(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "orgId", required = false) String orgId,
+            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "phone", required = false) String phone,
+            @RequestParam(name = "email", required = false) String email ) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_CREATE_ADMIN_ORG, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizMember bizMember = new BizMember();
+                bizMember.setName(name);
+                bizMember.setPhone(phone);
+                bizMember.setEmail(email);
+
+                BizWebCreateRequest<BizMember> request = new BizWebCreateRequest<>();
+                request.setSessionId(sessionId);
+                request.setOrgId(orgId);
+                request.setData(bizMember);
+                return bizSuperAdminService.adminOrgCreateMember(request);
             }
 
             @Override
