@@ -107,6 +107,9 @@
                         <div class="row clearfix">
 
                             <div class="form-group col-sm-12">
+                                <img id="orgIconImg" style="max-width:200px">
+                            </div>
+                            <div class="form-group col-sm-12">
                                 <div class="form-line">
                                     <div class="font-12">Organization Name</div>
                                     <input type="text" class="form-control" id="orgName" placeholder="Organization Name" disabled>
@@ -323,6 +326,35 @@
                 </div>
             </div>
 
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                <div class="card corner-radius">
+                    <div class="header">
+                        <h2>APP BUILD PACKAGE UPLOAD</h2>
+                    </div>
+                    <div class="body">
+                        <div class="row clearfix">
+                            <div style="margin-top: -10px;" class="body table-responsive">
+                                <table class="table table-hover table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th width="20%">Member ID</th>
+                                        <th width="20%">Name</th>
+                                        <th width="20%">Phone</th>
+                                        <th width="20%">Email</th>
+                                        <th width="10%" class="text-center">Roles</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="buildPackageContainer"></tbody>
+                                </table>
+                            </div>
+                            <div class="col-sm-12">
+                                <button id="buildPackageBtnSubmit" class="button button-rounded waves-effect waves-float pull-right">UPLOAD NEW PACKAGE</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -391,7 +423,6 @@
     </div>
 </div>
 
-
 <div class="modal fade" id="common-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -423,7 +454,8 @@
         APP_CLIENT_CONFIG_UPDATE: 'api/appClientConfigUpdate.json',
         APP_CONFIG_UPDATE: 'api/appConfigUpdate.json',
         CORE_ORG_CONFIG_UPDATE: 'api/coreOrgConfigUpdate.json',
-        ORG_ADMIN_ADD: 'api/coreOrgAdminAdd.json'
+        ORG_ADMIN_ADD: 'api/coreOrgAdminAdd.json',
+        ADMIN_COMMON_POST: 'api/adminCommonPost.json'
     };
     var EzDashboardBizService = {
         start: function() {
@@ -512,44 +544,14 @@
             }
         },
         postNewIcon: function() {
-            let sessionId = EzWebAppClient.getSessionId();
             let orgId = EzWebAppClient.getUrlParameter('id');
             let postData = {
-                sessionId: sessionId,
                 scene: 'ADMIN_APP_ICON',
                 extendInfo: {
                     ORG_ID: orgId
                 }
             };
-
-            let form = $('#newIconForm')[0];
-            let data = new FormData(form);
-            data.append('postData', JSON.stringify(postData));
-
-            $.ajax({
-                type: 'POST',
-                enctype: 'multipart/form-data',
-                url: 'api/adminCommonPost.json',
-                data: data,
-                processData: false,
-                contentType: false,
-                cache: false,
-                timeout: 600000,
-                success: function(response) {
-                    if (response.sessionExpired) {
-                        EzWebAppClient.alertSessionExpired();
-                    }
-                    else if (!response.success) {
-                        alert(response.message);
-                    }
-                    else {
-                        alert(response.data);
-                    }
-                },
-                error: function(e) {
-                    console.log(e);
-                }
-            });
+            EzWebAppClient.postMultipartForm('newIconForm', postData, EzAdminUrl.ADMIN_COMMON_POST, '');
         },
         handleApiBizResult: function(url, response) {
             if (url === EzAdminUrl.GET_ORGANIZATION_DETAIL) {
@@ -580,6 +582,10 @@
                 EzDashboardBizService.fetchOrganization();
             }
             if (url === EzAdminUrl.ORG_ADMIN_ADD) {
+                alert(response.data);
+                window.location.reload();
+            }
+            if (url === EzAdminUrl.ADMIN_COMMON_POST) {
                 alert(response.data);
                 window.location.reload();
             }
@@ -615,6 +621,7 @@
             }
         },
         renderOrganizationCard: function(data) {
+            $('#orgIconImg').attr('src', '../app/'+ data.code +'/icon.png?'+ Math.random());
             $('#orgName').val(data.name);
             $('#orgId').val(data.orgId);
             $('#orgCode').val(data.code);

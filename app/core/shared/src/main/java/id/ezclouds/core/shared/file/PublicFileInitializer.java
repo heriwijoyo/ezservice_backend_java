@@ -15,6 +15,7 @@ import java.util.List;
  */
 public class PublicFileInitializer {
 
+    public static final String DIR_APP_PACKAGE         = "APP_PACKAGE";
     public static final String DIR_APP_GALLERY         = "GALLERY_APP";
     public static final String DIR_NEWS_GALLERY        = "GALLERY_NEWS";
     public static final String DIR_EVENT_GALLERY       = "GALLERY_EVENT";
@@ -43,6 +44,7 @@ public class PublicFileInitializer {
     public void initPublicPaths() {
         publicPaths = new ArrayList<>();
         publicPaths.add(Paths.get(getOrgFiledDir()).toAbsolutePath().normalize());
+        publicPaths.add(Paths.get(getOrgFiledDir(), DIR_APP_PACKAGE).toAbsolutePath().normalize());
         publicPaths.add(Paths.get(getOrgFiledDir(), DIR_APP_GALLERY).toAbsolutePath().normalize());
         publicPaths.add(Paths.get(getOrgFiledDir(), DIR_NEWS_GALLERY).toAbsolutePath().normalize());
         publicPaths.add(Paths.get(getOrgFiledDir(), DIR_EVENT_GALLERY).toAbsolutePath().normalize());
