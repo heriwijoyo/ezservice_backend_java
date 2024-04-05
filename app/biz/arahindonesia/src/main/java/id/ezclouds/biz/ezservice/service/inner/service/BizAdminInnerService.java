@@ -18,6 +18,7 @@ import id.ezclouds.biz.ezservice.service.dataservice.AppConfigService;
 import id.ezclouds.biz.ezservice.service.dataservice.AppImageGalleryService;
 import id.ezclouds.biz.ezservice.service.dataservice.NewsInnerService;
 import id.ezclouds.biz.ezservice.service.dataservice.VideoCardService;
+import id.ezclouds.biz.ezservice.service.dataservice.model.BizAppBuildPackage;
 import id.ezclouds.biz.ezservice.service.dataservice.model.BizAppConfig;
 import id.ezclouds.biz.ezservice.service.dataservice.model.WebImageGallery;
 import id.ezclouds.biz.ezservice.service.dataservice.request.AppImageGalleryRequest;
@@ -29,6 +30,7 @@ import id.ezclouds.common.util.RandomUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
+import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.auth.model.CoreAuthAppClient;
 import id.ezclouds.core.auth.service.CoreAuthService;
 import id.ezclouds.core.member.model.CoreMember;
@@ -42,6 +44,7 @@ import id.ezclouds.core.shared.service.CoreConfigService;
 import id.ezclouds.core.shared.service.CoreOrganizationService;
 import id.ezclouds.core.shared.service.CoreSequenceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -91,6 +94,21 @@ public class BizAdminInnerService {
 
     @Autowired
     private BizConnectService bizConnectService;
+
+    public void createAppBuildPackage(String orgId, String platformId, int versionCode, String versionName) throws EzErrorException {
+        BizAppBuildPackage buildPackage = new BizAppBuildPackage();
+        buildPackage.setOrgId(orgId);
+        buildPackage.setPlatform(platformId);
+        buildPackage.setVersionCode(versionCode);
+        buildPackage.setVersionName(versionName);
+        try {
+            appConfigService.createAppBuildPackage(buildPackage);
+        } catch (DataIntegrityViolationException integrityException) {
+            throw new EzErrorException(EzErrorCode.IDEMPOTENT_ERROR);
+        } catch (Exception e) {
+            throw new EzErrorException(EzErrorCode.SYSTEM_ERROR);
+        }
+    }
 
     public void createAppImageGallery(String orgId, String fileName, Map<String, String> extInfo) {
         AppImageGalleryRequest request = new AppImageGalleryRequest();

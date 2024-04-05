@@ -25,6 +25,8 @@ public abstract class BizMultipartRequest extends BizRequest {
 
     protected final List<String> onlyPNG = Collections.singletonList("image/png");
 
+    protected final List<String> onlyAPK = Collections.singletonList("application/vnd.android.package-archive");
+
     private MultipartFile multipartFile;
 
     public MultipartFile getMultipartFile() {

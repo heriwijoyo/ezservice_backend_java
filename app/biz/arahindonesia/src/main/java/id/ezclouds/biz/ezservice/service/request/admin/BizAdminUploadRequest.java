@@ -39,6 +39,7 @@ public class BizAdminUploadRequest extends BizMultipartRequest {
     @Override
     protected List<BizUploadScene> getSupportedScene() {
         List<BizUploadScene> supportedScene = new ArrayList<>();
+        supportedScene.add(BizUploadScene.ADMIN_APP_BUILD_PACKAGE);
         supportedScene.add(BizUploadScene.ADMIN_APP_ICON);
         supportedScene.add(BizUploadScene.ADMIN_APP_GALLERY);
         supportedScene.add(BizUploadScene.ADMIN_NEWS_GALLERY);
@@ -58,6 +59,8 @@ public class BizAdminUploadRequest extends BizMultipartRequest {
                 return imageTypes;
             case ADMIN_APP_ICON:
                 return onlyPNG;
+            case ADMIN_APP_BUILD_PACKAGE:
+                return onlyAPK;
         }
         return new ArrayList<>();
     }

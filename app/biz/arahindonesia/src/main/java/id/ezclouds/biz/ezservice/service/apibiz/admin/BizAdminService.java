@@ -412,15 +412,34 @@ public class BizAdminService extends BizBaseService {
                 PublicFileResolver fileInfo = coreFileService.resolvePublicFileInfo(session.getOrgId());
 
                 String fileName = DateUtil.getTimeNowToString() + "." + request.getFileExtension();
+                String extOrgId;
 
                 Path filePath;
                 switch (request.getScene()) {
+                    case ADMIN_APP_BUILD_PACKAGE:
+                        AssertUtil.notNull(request.getExtendInfo(), EzErrorCode.ILLEGAL_PARAM);
+                        extOrgId = request.getExtendInfo().get("ORG_ID");
+                        String platform = request.getExtendInfo().get("PLATFORM");
+                        String versionCode = request.getExtendInfo().get("VERSION_CODE");
+                        String versionName = request.getExtendInfo().get("VERSION_NAME");
+                        AssertUtil.notBlank(extOrgId, EzErrorCode.ILLEGAL_PARAM);
+                        AssertUtil.notBlank(platform, EzErrorCode.ILLEGAL_PARAM);
+                        AssertUtil.notBlank(versionCode, EzErrorCode.ILLEGAL_PARAM);
+                        AssertUtil.notBlank(versionName, EzErrorCode.ILLEGAL_PARAM);
+
+                        fileName = versionName + ".apk";
+
+                        fileInfo = coreFileService.resolvePublicFileInfo(extOrgId);
+                        filePath = fileInfo.getAppBuildPackagePath(fileName);
+                        coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
+                        bizAdminInnerService.createAppBuildPackage(extOrgId, platform, Integer.parseInt(versionCode), versionName);
+                        break;
                     case ADMIN_APP_ICON:
                         AssertUtil.notNull(request.getExtendInfo(), EzErrorCode.ILLEGAL_PARAM);
-                        String orgId = request.getExtendInfo().get("ORG_ID");
-                        AssertUtil.notBlank(orgId, EzErrorCode.ILLEGAL_PARAM);
+                        extOrgId = request.getExtendInfo().get("ORG_ID");
+                        AssertUtil.notBlank(extOrgId, EzErrorCode.ILLEGAL_PARAM);
 
-                        fileInfo = coreFileService.resolvePublicFileInfo(orgId);
+                        fileInfo = coreFileService.resolvePublicFileInfo(extOrgId);
                         filePath = fileInfo.getAppGalleryPath("icon.png");
                         coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
                         break;
@@ -461,6 +480,9 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public String getErrorMessage(EzErrorCode ezErrorCode) {
+                if (ezErrorCode == EzErrorCode.IDEMPOTENT_ERROR) {
+                    return ezErrorCode.getDescription();
+                }
                 return getBizErrorMessage(ezErrorCode);
             }
         });

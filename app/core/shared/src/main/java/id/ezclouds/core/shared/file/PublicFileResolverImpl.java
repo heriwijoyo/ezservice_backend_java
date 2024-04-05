@@ -13,6 +13,7 @@ import java.nio.file.Paths;
  */
 public class PublicFileResolverImpl implements PublicFileResolver {
 
+    private static final String DIR_APP_PACKAGE         = "APP_PACKAGE";
     private static final String DIR_APP_GALLERY         = PublicFileInitializer.DIR_APP_GALLERY;
     private static final String DIR_NEWS_GALLERY        = PublicFileInitializer.DIR_NEWS_GALLERY;
     private static final String DIR_EVENT_GALLERY       = PublicFileInitializer.DIR_EVENT_GALLERY;
@@ -33,6 +34,11 @@ public class PublicFileResolverImpl implements PublicFileResolver {
 
     private String getOrgFiledDir() {
         return uploadRootDir + "/" + orgId;
+    }
+
+    @Override
+    public Path getAppBuildPackagePath(String fileName) {
+        return Paths.get(getOrgFiledDir(), DIR_APP_PACKAGE, fileName).toAbsolutePath().normalize();
     }
 
     @Override

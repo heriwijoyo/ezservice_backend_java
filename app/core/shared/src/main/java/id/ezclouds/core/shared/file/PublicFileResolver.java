@@ -12,6 +12,8 @@ import java.nio.file.Path;
  */
 public interface PublicFileResolver {
 
+    Path getAppBuildPackagePath(String fileName);
+
     Path getAppGalleryPath(String fileName);
 
     Path getNewsGalleryPath(String fileName);

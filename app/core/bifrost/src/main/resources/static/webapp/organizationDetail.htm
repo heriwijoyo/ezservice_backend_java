@@ -423,6 +423,45 @@
     </div>
 </div>
 
+<div class="modal fade" id="modal-new-build" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Upload New Icon</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row clearfix">
+                    <div class="form-group form-float col-sm-12">
+                        <div class="form-line">
+                            <div class="font-12">Version Code</div>
+                            <input type="text" class="form-control" id="buildVersionCode" placeholder="Version Code" required>
+                        </div>
+                    </div>
+                    <div class="form-group form-float col-sm-12">
+                        <div class="form-line">
+                            <div class="font-12">Version Name</div>
+                            <input type="text" class="form-control" id="buildVersionName" placeholder="Version Name" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-6" style="margin-bottom: 0px;">
+                        <div class="form-group">
+                            <div class="font-12 ex1">APK File</div>
+                            <form id="newBuildPackageForm" enctype="multipart/form-data" method="post">
+                                <input type="file" accept="application/apk" name="imageFile" data-allowed-file-extensions="apk" required/>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <img id="newBuildLoader" src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right">
+                        <button id="newBuildSubmitButton" class="button button-rounded waves-effect waves-float pull-right" type="submit" name="submit">SUBMIT</button>
+                        <button id="newBuildCancelButton" class="button button-rounded button-light waves-effect waves-float pull-right" type="submit" name="submit">CANCEL</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="common-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -553,6 +592,22 @@
             };
             EzWebAppClient.postMultipartForm('newIconForm', postData, EzAdminUrl.ADMIN_COMMON_POST, '');
         },
+        postNewBuildPackage: function() {
+            $('#newBuildSubmitButton').hide();
+            $('#newBuildCancelButton').hide();
+            $('#newBuildLoader').show();
+            let orgId = EzWebAppClient.getUrlParameter('id');
+            let postData = {
+                scene: 'ADMIN_APP_BUILD_PACKAGE',
+                extendInfo: {
+                    ORG_ID: orgId,
+                    PLATFORM: 'ANDROID',
+                    VERSION_CODE: $('#buildVersionCode').val(),
+                    VERSION_NAME: $('#buildVersionName').val()
+                }
+            };
+            EzWebAppClient.postMultipartForm('newBuildPackageForm', postData, EzAdminUrl.ADMIN_COMMON_POST, 'NEW_BUILD');
+        },
         handleApiBizResult: function(url, response) {
             if (url === EzAdminUrl.GET_ORGANIZATION_DETAIL) {
                 EzDashboardBizService.renderOrganizationCard(response.data.bizOrganization);
@@ -616,8 +671,14 @@
                 $('.coreOrgConfigImgLoader').hide();
                 $('.coreOrgConfigBtnSubmit').show();
             }
-            if (url === EzAdminUrl.ORG_ADMIN_ADD) {
+            if (url === EzAdminUrl.ORG_ADMIN_ADD || url === EzAdminUrl.ADMIN_COMMON_POST) {
                 alert(message);
+            }
+            if (url === (EzAdminUrl.ADMIN_COMMON_POST + 'NEW_BUILD')) {
+                alert(message);
+                $('#newBuildSubmitButton').show();
+                $('#newBuildCancelButton').show();
+                $('#newBuildLoader').hide();
             }
         },
         renderOrganizationCard: function(data) {
@@ -710,6 +771,10 @@
             $('#modal-new-admin').removeClass('fade');
             $('#modal-new-admin').addClass('show');
         },
+        showNewBuildForm: function() {
+            $('#modal-new-build').removeClass('fade');
+            $('#modal-new-build').addClass('show');
+        },
         hideNewIconForm: function() {
             $('#modal-new-icon').removeClass('show');
             $('#modal-new-icon').addClass('fade');
@@ -717,6 +782,10 @@
         hideNewAdminForm: function() {
             $('#modal-new-admin').removeClass('show');
             $('#modal-new-admin').addClass('fade');
+        },
+        hideNewBuildForm: function() {
+            $('#modal-new-build').removeClass('show');
+            $('#modal-new-build').addClass('fade');
         },
         randomText: function(prefix) {
             let length = 32 - prefix.length;
@@ -789,6 +858,15 @@
         });
         $('#newAdminSubmitButton').click(function(){
             EzDashboardBizService.addOrgAdmin();
+        });
+        $('#buildPackageBtnSubmit').click(function(){
+            EzDashboardBizService.showNewBuildForm();
+        });
+        $('#newBuildCancelButton').click(function(){
+            EzDashboardBizService.hideNewBuildForm();
+        });
+        $('#newBuildSubmitButton').click(function(){
+            EzDashboardBizService.postNewBuildPackage();
         });
     });
 

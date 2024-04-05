@@ -6,11 +6,15 @@ package id.ezclouds.biz.ezservice.service.dataservice;
 
 import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.model.AppConfig;
+import id.ezclouds.biz.ezservice.service.dataservice.dataobject.AppBuildPackageDO;
 import id.ezclouds.biz.ezservice.service.dataservice.model.AppMessageTemplate;
+import id.ezclouds.biz.ezservice.service.dataservice.model.BizAppBuildPackage;
 import id.ezclouds.biz.ezservice.service.dataservice.model.BizAppConfig;
+import id.ezclouds.biz.ezservice.service.dataservice.repo.AppBuildPackageRepository;
 import id.ezclouds.biz.ezservice.service.dataservice.repo.AppCommonMessageTemplateRepository;
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.AppConfigDO;
 import id.ezclouds.biz.ezservice.service.dataservice.repo.AppConfigRepository;
+import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +31,9 @@ import java.util.stream.Collectors;
  */
 @Service
 public class AppConfigService {
+
+    @Autowired
+    private AppBuildPackageRepository appBuildPackageRepository;
 
     @Autowired
     private AppConfigRepository appConfigRepository;
@@ -47,6 +54,15 @@ public class AppConfigService {
                 AppConstant.CfgKey.BIZ_MAX_TPS_NUMBER,
                 AppConstant.CfgKey.REPORT_OPTIONS
         );
+    }
+
+    @Transactional
+    public void createAppBuildPackage(BizAppBuildPackage buildPackage) throws Exception {
+        AppBuildPackageDO buildPackageDO = convert(buildPackage);
+        String currentTime = DateUtil.getCurrentFormattedDate();
+        buildPackageDO.setId(HashUtil.createHash(buildPackage.getOrgId(), currentTime));
+        buildPackageDO.setCreatedTime(currentTime);
+        appBuildPackageRepository.saveAndFlush(buildPackageDO);
     }
 
     public AppConfig getAppConfig(String orgId) {
@@ -149,5 +165,17 @@ public class AppConfigService {
                 .stream()
                 .map(templateDO -> new AppMessageTemplate(templateDO.getTemplateId(), templateDO.getTemplateValue()))
                 .collect(Collectors.toList());
+    }
+
+    private AppBuildPackageDO convert(BizAppBuildPackage buildPackage) {
+        AppBuildPackageDO buildPackageDO = new AppBuildPackageDO();
+        buildPackageDO.setId(buildPackage.getId());
+        buildPackageDO.setOrgId(buildPackage.getOrgId());
+        buildPackageDO.setPlatform(buildPackage.getPlatform());
+        buildPackageDO.setVersionCode(buildPackage.getVersionCode());
+        buildPackageDO.setVersionName(buildPackage.getVersionName());
+        buildPackageDO.setCreatedTime(buildPackage.getCreatedTime());
+        buildPackageDO.setStatus(buildPackage.getStatus());
+        return buildPackageDO;
     }
 }
