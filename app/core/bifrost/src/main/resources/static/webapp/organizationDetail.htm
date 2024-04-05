@@ -615,6 +615,7 @@
                 EzDashboardBizService.renderCoreConfigCard(response.data.coreOrgConfigMap);
                 EzDashboardBizService.renderBizAppConfigCard(response.data.bizAppConfigs);
                 EzDashboardBizService.renderAdminMemberCard(response.data.adminMembers);
+                EzDashboardBizService.renderAdminBuildCard(response.data.bizAppBuildPackages, response.data.bizOrganization.code);
             }
             if (url === EzAdminUrl.ORGANIZATION_UPDATE) {
                 alert(response.data);
@@ -757,6 +758,19 @@
                 $(rowItem).find('.coreMemberEmail').html(data[i].email);
                 $(rowItem).find('.coreMemberRoles').html(data[i].roles);
                 $('#orgAdminContainer').append(rowItem);
+            }
+        },
+        renderAdminBuildCard: function(data, orgCode) {
+            $('#buildPackageContainer').html('');
+            for(i=0; i<data.length; i++) {
+                let versionName = data[i].versionName;
+                let rowItem = $.parseHTML(EzAdminBuildTemplate);
+                $(rowItem).find('.buildPlatform').html(data[i].platform);
+                $(rowItem).find('.buildVersionCode').html(data[i].versionCode);
+                $(rowItem).find('.buildVersionName').html('<a href="../app/'+ orgCode +'/download/apk/'+ versionName +'" target="_blank">'+ versionName +'</a>');
+                $(rowItem).find('.buildCreatedTime').html(data[i].createdTime);
+                $(rowItem).find('.buildStatus').html(data[i].status);
+                $('#buildPackageContainer').append(rowItem);
             }
         },
         generateAppConfig: function() {
@@ -906,6 +920,15 @@
             '<td class="coreMemberPhone" style="vertical-align: middle;"></td>'+
             '<td class="coreMemberEmail" style="vertical-align: middle;"></td>'+
             '<td class="coreMemberRoles" style="vertical-align: middle;"></td>'+
+        '</tr>';
+
+    var EzAdminBuildTemplate = ''+
+        '<tr class="">'+
+            '<td class="buildPlatform" style="vertical-align: middle;"></td>'+
+            '<td class="buildVersionCode" style="vertical-align: middle;"></td>'+
+            '<td class="buildVersionName" style="vertical-align: middle;"></td>'+
+            '<td class="buildCreatedTime" style="vertical-align: middle;"></td>'+
+            '<td class="buildStatus" style="vertical-align: middle;"></td>'+
         '</tr>';
 
 </script>

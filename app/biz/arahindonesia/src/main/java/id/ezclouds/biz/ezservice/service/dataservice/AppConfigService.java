@@ -65,6 +65,14 @@ public class AppConfigService {
         appBuildPackageRepository.saveAndFlush(buildPackageDO);
     }
 
+    public List<BizAppBuildPackage> getAppBuildPackages(String orgId) {
+        return appBuildPackageRepository
+                .findByOrgId(orgId)
+                .stream()
+                .map(this::convert)
+                .collect(Collectors.toList());
+    }
+
     public AppConfig getAppConfig(String orgId) {
         final AppConfig appConfig = new AppConfig();
 
@@ -177,5 +185,17 @@ public class AppConfigService {
         buildPackageDO.setCreatedTime(buildPackage.getCreatedTime());
         buildPackageDO.setStatus(buildPackage.getStatus());
         return buildPackageDO;
+    }
+
+    private BizAppBuildPackage convert(AppBuildPackageDO buildPackageDO) {
+        BizAppBuildPackage buildPackage = new BizAppBuildPackage();
+        buildPackage.setId(buildPackageDO.getId());
+        buildPackage.setOrgId(buildPackageDO.getOrgId());
+        buildPackage.setPlatform(buildPackageDO.getPlatform());
+        buildPackage.setVersionCode(buildPackageDO.getVersionCode());
+        buildPackage.setVersionName(buildPackageDO.getVersionName());
+        buildPackage.setCreatedTime(buildPackageDO.getCreatedTime());
+        buildPackage.setStatus(buildPackageDO.getStatus());
+        return buildPackage;
     }
 }

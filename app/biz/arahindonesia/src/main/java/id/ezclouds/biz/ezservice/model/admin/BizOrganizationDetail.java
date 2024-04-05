@@ -5,6 +5,7 @@
 package id.ezclouds.biz.ezservice.model.admin;
 
 import id.ezclouds.biz.ezservice.model.member.BizMember;
+import id.ezclouds.biz.ezservice.service.dataservice.model.BizAppBuildPackage;
 import id.ezclouds.biz.ezservice.service.dataservice.model.BizAppConfig;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class BizOrganizationDetail {
     private List<BizAppConfig> bizAppConfigs;
     private Map<String, String> coreOrgConfigMap;
     private List<BizMember> adminMembers;
+    private List<BizAppBuildPackage> bizAppBuildPackages;
 
     public BizOrganization getBizOrganization() {
         return bizOrganization;
@@ -60,5 +62,13 @@ public class BizOrganizationDetail {
 
     public void setAdminMembers(List<BizMember> adminMembers) {
         this.adminMembers = adminMembers;
+    }
+
+    public List<BizAppBuildPackage> getBizAppBuildPackages() {
+        return bizAppBuildPackages;
+    }
+
+    public void setBizAppBuildPackages(List<BizAppBuildPackage> bizAppBuildPackages) {
+        this.bizAppBuildPackages = bizAppBuildPackages;
     }
 }

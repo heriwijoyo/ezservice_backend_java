@@ -186,6 +186,7 @@ public class BizAdminInnerService {
         detail.setBizAppConfigs(appConfigService.getAppConfigByOrgId(orgId));
         detail.setCoreOrgConfigMap(coreConfigService.getOrgConfigByOrgId(orgId));
         detail.setAdminMembers(getOrgAdminMembers(orgId));
+        detail.setBizAppBuildPackages(getAppBuildPackages(orgId));
         return detail;
     }
 
@@ -303,6 +304,10 @@ public class BizAdminInnerService {
                 .stream()
                 .map(coreMember -> BizMemberConverter.convert(coreMember, null))
                 .collect(Collectors.toList());
+    }
+
+    private List<BizAppBuildPackage> getAppBuildPackages(String orgId) {
+        return appConfigService.getAppBuildPackages(orgId);
     }
 
     private void initiateOrgConfig(EzCoreOrganizationDO organizationDO) {
