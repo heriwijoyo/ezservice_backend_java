@@ -8,11 +8,13 @@ import id.ezclouds.biz.ezservice.enums.WebLoadImageScene;
 import id.ezclouds.biz.ezservice.model.AppConfig;
 import id.ezclouds.biz.ezservice.service.dataservice.AppConfigService;
 import id.ezclouds.biz.ezservice.service.dataservice.BizOrganizationService;
+import id.ezclouds.biz.ezservice.service.dataservice.model.BizAppBuildPackage;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.core.bifrost.app.AppController;
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;
 import id.ezclouds.core.bifrost.app.web.request.WebLoadImageRequest;
+import id.ezclouds.core.shared.file.PublicFileResolver;
 import id.ezclouds.core.shared.model.CoreOrganization;
 import id.ezclouds.core.shared.service.CoreFileService;
 import org.slf4j.Logger;
@@ -32,7 +34,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -58,9 +59,23 @@ public class WebController extends AppController {
     @Value("${ezserviceapp.download.apk_path}")
     private String downloadApkPath;
 
-    @GetMapping(value = "/app/{orgCode}/download/apk/{file}")
-    public void downloadApk(@PathVariable("file") String file, HttpServletResponse response) throws IOException {
-        Path apkFile = Paths.get(downloadApkPath, file).toAbsolutePath().normalize();
+    @GetMapping(value = "/app/{orgCode}/download/apk/{versionName}")
+    public void downloadApk(@PathVariable("orgCode") String orgCode, @PathVariable("versionName") String versionName, HttpServletResponse response) throws IOException {
+        CoreOrganization organization = bizOrganizationService.getOrganizationByCode(orgCode);
+        if (organization == null) {
+            writePageNotFound(response);
+            return;
+        }
+
+        BizAppBuildPackage buildPackage = appConfigService
+                .getBuildPackageByVersionName(organization.getOrgId(), "ANDROID", versionName);
+        if (buildPackage == null) {
+            writePageNotFound(response);
+            return;
+        }
+
+        PublicFileResolver publicFileResolver = coreFileService.resolvePublicFileInfo(organization.getOrgId());
+        Path apkFile = publicFileResolver.getAppBuildPackagePath(versionName + ".apk");
 
         response.setContentType("application/vnd.android.package-archive");
         response.setContentLengthLong(Files.size(apkFile));
@@ -162,11 +177,17 @@ public class WebController extends AppController {
             return;
         }
 
+        BizAppBuildPackage buildPackage = appConfigService
+                .getLatestBuildPackage(organization.getOrgId(), "ANDROID");
+        if (buildPackage == null) {
+            writePageNotFound(servletResponse);
+            return;
+        }
+
         AppConfig appConfig = appConfigService.getAppConfig(organization.getOrgId());
         String appName = appConfig.getAppName();
-        String appVersionName = appConfig.getAndroidVersionName();
 
-        if (StringUtil.isBlank(appName) || StringUtil.isBlank(appVersionName)) {
+        if (StringUtil.isBlank(appName)) {
             writePageNotFound(servletResponse);
             return;
         }
@@ -176,7 +197,7 @@ public class WebController extends AppController {
             String htmlContent = new String(Files.readAllBytes(file.toPath()));
             htmlContent = htmlContent
                     .replaceAll("APP_NAME", appName)
-                    .replaceAll("APP_VERSION_NAME", appVersionName);
+                    .replaceAll("APP_VERSION_NAME", buildPackage.getVersionName());
             servletResponse.getWriter().write(htmlContent);
             servletResponse.getWriter().flush();
         } catch (IOException e) {

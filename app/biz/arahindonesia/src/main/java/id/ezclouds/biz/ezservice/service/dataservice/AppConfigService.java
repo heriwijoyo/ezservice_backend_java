@@ -19,6 +19,9 @@ import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -71,6 +74,25 @@ public class AppConfigService {
                 .stream()
                 .map(this::convert)
                 .collect(Collectors.toList());
+    }
+
+    public BizAppBuildPackage getBuildPackageByVersionName(String orgId, String platform, String versionName) {
+        AppBuildPackageDO packageDO = appBuildPackageRepository
+                .findByOrgIdAndPlatformAndVersionName(orgId, platform, versionName);
+        if (packageDO == null) {
+            return null;
+        }
+        return convert(packageDO);
+    }
+
+    public BizAppBuildPackage getLatestBuildPackage(String orgId, String platform) {
+        PageRequest pageRequest = PageRequest.of(0, 1, Sort.by(Sort.Direction.DESC, "createdTime"));
+        Page<AppBuildPackageDO> result = appBuildPackageRepository
+                .findByOrgIdAndPlatform(orgId, platform, pageRequest);
+        if (result != null && result.hasContent()) {
+            return convert(result.getContent().get(0));
+        }
+        return null;
     }
 
     public AppConfig getAppConfig(String orgId) {

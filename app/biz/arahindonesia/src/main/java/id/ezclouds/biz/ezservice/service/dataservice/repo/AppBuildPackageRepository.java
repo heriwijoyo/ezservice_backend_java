@@ -5,6 +5,8 @@
 package id.ezclouds.biz.ezservice.service.dataservice.repo;
 
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.AppBuildPackageDO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,4 +20,8 @@ import java.util.List;
 public interface AppBuildPackageRepository extends JpaRepository<AppBuildPackageDO, String> {
 
     List<AppBuildPackageDO> findByOrgId(String orgId);
+
+    AppBuildPackageDO findByOrgIdAndPlatformAndVersionName(String orgId, String platform, String versionName);
+
+    Page<AppBuildPackageDO> findByOrgIdAndPlatform(String orgId, String platform, Pageable pageable);
 }
