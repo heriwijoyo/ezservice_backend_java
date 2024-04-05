@@ -101,6 +101,7 @@ public class BizAdminInnerService {
         buildPackage.setPlatform(platformId);
         buildPackage.setVersionCode(versionCode);
         buildPackage.setVersionName(versionName);
+        buildPackage.setStatus(1);
         try {
             appConfigService.createAppBuildPackage(buildPackage);
         } catch (DataIntegrityViolationException integrityException) {

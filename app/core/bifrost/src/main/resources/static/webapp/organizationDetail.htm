@@ -644,6 +644,10 @@
                 alert(response.data);
                 window.location.reload();
             }
+            if (url === (EzAdminUrl.ADMIN_COMMON_POST + 'NEW_BUILD')) {
+                alert(response.data);
+                window.location.reload();
+            }
         },
         handleApiBizFailed: function(url, message) {
             if (url === EzAdminUrl.GET_ORGANIZATION_DETAIL) {
