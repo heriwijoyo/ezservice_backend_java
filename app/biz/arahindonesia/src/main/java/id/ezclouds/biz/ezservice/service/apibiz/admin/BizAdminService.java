@@ -415,6 +415,16 @@ public class BizAdminService extends BizBaseService {
 
                 Path filePath;
                 switch (request.getScene()) {
+                    case ADMIN_APP_ICON:
+                        AssertUtil.notNull(request.getExtendInfo(), EzErrorCode.ILLEGAL_PARAM);
+                        String orgId = request.getExtendInfo().get("ORG_ID");
+                        AssertUtil.notBlank(orgId, EzErrorCode.ILLEGAL_PARAM);
+
+                        fileInfo = coreFileService.resolvePublicFileInfo(orgId);
+                        filePath = fileInfo.getAppGalleryPath("icon.png");
+                        coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
+                        break;
+
                     case ADMIN_APP_GALLERY:
                         filePath = fileInfo.getAppGalleryPath(fileName);
                         coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);

@@ -58,6 +58,7 @@ public class AppConstant {
         public static final String MEMBER_REGISTER_SUCCESS = "Pendaftaran anggota berhasil!";
 
         public static final String MULTIPARTFILE_EMPTY = "File yang anda pilih tidak valid";
+        public static final String MULTIPARTFILE_TYPE_UNSUPPORTED = "File yang anda pilih tidak didukung";
     }
 
     public static final class ExtKey {

@@ -182,6 +182,7 @@
                             <div class="col-sm-12">
                                 <img id="orgUpdateLoader" src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right">
                                 <button id="orgUpdateBtn" class="button button-rounded waves-effect waves-float pull-right" type="submit">UPDATE</button>
+                                <button id="orgIconUpdateBtn" class="button button-rounded waves-effect waves-float pull-right" type="submit">UPDATE ICON</button>
                             </div>
 
                         </div>
@@ -327,11 +328,38 @@
 
 </section>
 
+<div class="modal fade" id="modal-new-icon" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Upload New Icon</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row clearfix">
+                    <div class="col-sm-6" style="margin-bottom: 0px;">
+                        <div class="form-group">
+                            <div class="font-12 ex1">Image ( only PNG )</div>
+                            <form id="newIconForm" enctype="multipart/form-data" method="post">
+                                <input type="file" accept="image/*" name="imageFile" id="imageFile" oninput="imagePreview.src=window.URL.createObjectURL(this.files[0]);imagePreview.style.display='block';" data-max-file-size="3M" data-allowed-file-extensions="png" required/>
+                            </form>
+                            <img id="imagePreview" style="max-width:100%">
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <button id="newIconSubmitButton" class="button button-rounded waves-effect waves-float pull-right" type="submit" name="submit">SUBMIT</button>
+                        <button id="newIconCancelButton" class="button button-rounded button-light waves-effect waves-float pull-right" type="submit" name="submit">CANCEL</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="modal-new-admin" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="largeModalLabel">Add New Admin</h4>
+                <h4 class="modal-title">Add New Admin</h4>
             </div>
             <div class="modal-body">
                 <div class="row clearfix">
@@ -483,6 +511,46 @@
                 });
             }
         },
+        postNewIcon: function() {
+            let sessionId = EzWebAppClient.getSessionId();
+            let orgId = EzWebAppClient.getUrlParameter('id');
+            let postData = {
+                sessionId: sessionId,
+                scene: 'ADMIN_APP_ICON',
+                extendInfo: {
+                    ORG_ID: orgId
+                }
+            };
+
+            let form = $('#newIconForm')[0];
+            let data = new FormData(form);
+            data.append('postData', JSON.stringify(postData));
+
+            $.ajax({
+                type: 'POST',
+                enctype: 'multipart/form-data',
+                url: 'api/adminCommonPost.json',
+                data: data,
+                processData: false,
+                contentType: false,
+                cache: false,
+                timeout: 600000,
+                success: function(response) {
+                    if (response.sessionExpired) {
+                        EzWebAppClient.alertSessionExpired();
+                    }
+                    else if (!response.success) {
+                        alert(response.message);
+                    }
+                    else {
+                        alert(response.data);
+                    }
+                },
+                error: function(e) {
+                    console.log(e);
+                }
+            });
+        },
         handleApiBizResult: function(url, response) {
             if (url === EzAdminUrl.GET_ORGANIZATION_DETAIL) {
                 EzDashboardBizService.renderOrganizationCard(response.data.bizOrganization);
@@ -627,9 +695,17 @@
             $('#clientId').val(clientId);
             $('#clientSecret').val(clientSecret);
         },
+        showNewIconForm: function() {
+            $('#modal-new-icon').removeClass('fade');
+            $('#modal-new-icon').addClass('show');
+        },
         showNewAdminForm: function() {
             $('#modal-new-admin').removeClass('fade');
             $('#modal-new-admin').addClass('show');
+        },
+        hideNewIconForm: function() {
+            $('#modal-new-icon').removeClass('show');
+            $('#modal-new-icon').addClass('fade');
         },
         hideNewAdminForm: function() {
             $('#modal-new-admin').removeClass('show');
@@ -679,6 +755,15 @@
             $('#orgUpdateBtn').hide();
             $('#orgUpdateLoader').show();
             EzDashboardBizService.updateOrganization();
+        });
+        $('#orgIconUpdateBtn').click(function(){
+            EzDashboardBizService.showNewIconForm();
+        });
+        $('#newIconCancelButton').click(function(){
+            EzDashboardBizService.hideNewIconForm();
+        });
+        $('#newIconSubmitButton').click(function(){
+            EzDashboardBizService.postNewIcon();
         });
         $('#clientUpdateBtn').click(function(){
             $('#clientUpdateBtn').hide();

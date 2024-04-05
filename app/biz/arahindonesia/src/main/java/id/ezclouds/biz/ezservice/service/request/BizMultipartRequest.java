@@ -12,6 +12,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -21,6 +22,8 @@ import java.util.List;
 public abstract class BizMultipartRequest extends BizRequest {
 
     protected final List<String> imageTypes = Arrays.asList("image/png", "images/png", "image/jpg", "images/jpg", "image/jpeg", "images/jpeg");
+
+    protected final List<String> onlyPNG = Collections.singletonList("image/png");
 
     private MultipartFile multipartFile;
 

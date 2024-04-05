@@ -72,6 +72,8 @@ public class BizBaseService {
             // Multipart Common Upload
             case MULTIPARTFILE_EMPTY:
                 return AppConstant.BizMessage.MULTIPARTFILE_EMPTY;
+            case MULTIPARTFILE_TYPE_UNSUPPORTED:
+                return AppConstant.BizMessage.MULTIPARTFILE_TYPE_UNSUPPORTED;
 
             // General Error
             case ILLEGAL_ACTION:

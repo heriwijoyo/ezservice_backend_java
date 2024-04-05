@@ -5,11 +5,15 @@
 package id.ezclouds.core.bifrost.app.web;
 
 import id.ezclouds.biz.ezservice.enums.WebLoadImageScene;
+import id.ezclouds.biz.ezservice.model.AppConfig;
+import id.ezclouds.biz.ezservice.service.dataservice.AppConfigService;
 import id.ezclouds.biz.ezservice.service.dataservice.BizOrganizationService;
+import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.core.bifrost.app.AppController;
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;
 import id.ezclouds.core.bifrost.app.web.request.WebLoadImageRequest;
+import id.ezclouds.core.shared.model.CoreOrganization;
 import id.ezclouds.core.shared.service.CoreFileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +23,11 @@ import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -46,10 +52,13 @@ public class WebController extends AppController {
     @Autowired
     private CoreFileService coreFileService;
 
+    @Autowired
+    private AppConfigService appConfigService;
+
     @Value("${ezserviceapp.download.apk_path}")
     private String downloadApkPath;
 
-    @GetMapping(value = "/rjlapp/download/apk/{file}")
+    @GetMapping(value = "/app/{orgCode}/download/apk/{file}")
     public void downloadApk(@PathVariable("file") String file, HttpServletResponse response) throws IOException {
         Path apkFile = Paths.get(downloadApkPath, file).toAbsolutePath().normalize();
 
@@ -106,7 +115,7 @@ public class WebController extends AppController {
         });
     }
 
-    @GetMapping(value = "/image/public/{scene}/{orgCode}/{fileName}")
+    @GetMapping(value = {"/image/public/{scene}/{orgCode}/{fileName}", "/{scene}/{orgCode}/{fileName}"})
     private Void getPublicImageGallery(
             @PathVariable("scene") String scene,
             @PathVariable("orgCode") String orgCode,
@@ -142,5 +151,40 @@ public class WebController extends AppController {
                         ")";
             }
         });
+    }
+
+    @GetMapping(value = "/app/{orgCode}/download.htm")
+    private void appDownloadPage(@PathVariable("orgCode") String orgCode, HttpServletResponse servletResponse) {
+
+        CoreOrganization organization = bizOrganizationService.getOrganizationByCode(orgCode);
+        if (organization == null) {
+            writePageNotFound(servletResponse);
+            return;
+        }
+
+        AppConfig appConfig = appConfigService.getAppConfig(organization.getOrgId());
+        String appName = appConfig.getAppName();
+        String appVersionName = appConfig.getAndroidVersionName();
+
+        if (StringUtil.isBlank(appName) || StringUtil.isBlank(appVersionName)) {
+            writePageNotFound(servletResponse);
+            return;
+        }
+
+        try {
+            File file = ResourceUtils.getFile("classpath:download.htm");
+            String htmlContent = new String(Files.readAllBytes(file.toPath()));
+            htmlContent = htmlContent
+                    .replaceAll("APP_NAME", appName)
+                    .replaceAll("APP_VERSION_NAME", appVersionName);
+            servletResponse.getWriter().write(htmlContent);
+            servletResponse.getWriter().flush();
+        } catch (IOException e) {
+            writePageNotFound(servletResponse);
+        }
+    }
+
+    private void writePageNotFound(HttpServletResponse response) {
+        response.setStatus(HttpStatus.NOT_FOUND.value());
     }
 }

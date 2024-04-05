@@ -194,6 +194,32 @@ public class WebApiController {
         return result;
     }
 
+    @PostMapping(value = "/webapp/api/adminIconUpdate.json")
+    private WebApiResult<String> adminIconUpload(@RequestPart("imageFile") MultipartFile multipartFile, @RequestPart("postData") String postData) {
+        WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.ADMIN_COMMON_POST_WITH_FILE_UPLOAD, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizAdminUploadRequest uploadRequest = composeUploadRequest(multipartFile, postData);
+                return bizAdminService.adminCommonPostWithFileUpload(uploadRequest);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                if (object instanceof String) {
+                    return (String) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
     @PostMapping(value = "/webapp/api/getOrganization.json")
     private WebApiPageResult<BizOrganization> getOrganization(
             @RequestParam(name = "sessionId", required = false) String sessionId,
