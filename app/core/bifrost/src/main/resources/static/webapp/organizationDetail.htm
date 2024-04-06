@@ -119,6 +119,7 @@
                             <div class="form-group col-sm-12">
                                 <div class="form-line">
                                     <div class="font-12">Organization ID</div>
+                                    <div class="font-12" id="nativeOrgId"></div>
                                     <input type="text" class="form-control" id="orgId" placeholder="Organization ID" disabled>
                                 </div>
                             </div>
@@ -204,6 +205,7 @@
                             <div class="form-group col-sm-12">
                                 <div class="form-line">
                                     <div class="font-12">Application ID</div>
+                                    <div class="font-12" id="nativeAppId"></div>
                                     <input type="hidden" id="configId" value="">
                                     <input type="text" class="form-control" id="appId" placeholder="Application ID" disabled>
                                 </div>
@@ -212,6 +214,7 @@
                             <div class="form-group col-sm-12">
                                 <div class="form-line">
                                     <div class="font-12">Client ID</div>
+                                    <div class="font-12" id="nativeClientId"></div>
                                     <input type="text" class="form-control" id="clientId" placeholder="Client ID" disabled>
                                 </div>
                             </div>
@@ -219,6 +222,7 @@
                             <div class="form-group col-sm-12">
                                 <div class="form-line">
                                     <div class="font-12">Client Secret</div>
+                                    <div class="font-12" id="nativeClientSecret"></div>
                                     <input type="text" class="form-control" id="clientSecret" placeholder="Client Secret" disabled>
                                 </div>
                             </div>
@@ -690,6 +694,7 @@
             $('#orgIconImg').attr('src', '../app/'+ data.code +'/icon.png?'+ Math.random());
             $('#orgName').val(data.name);
             $('#orgId').val(data.orgId);
+            $('#nativeOrgId').html(EzDashboardBizService.generateNativeCode(data.orgId));
             $('#orgCode').val(data.code);
             $('#createdTime').val(data.createdTime);
             $('#modifiedTime').val(data.modifiedTime);
@@ -713,8 +718,11 @@
             } else {
                 $('#configId').val(data.id);
                 $('#appId').val(data.appId);
+                $('#nativeAppId').html(EzDashboardBizService.generateNativeCode(data.appId));
                 $('#clientId').val(data.clientId);
+                $('#nativeClientId').html(EzDashboardBizService.generateNativeCode(data.clientId));
                 $('#clientSecret').val(data.clientSecret);
+                $('#nativeClientSecret').html(EzDashboardBizService.generateNativeCode(data.clientSecret));
                 $('#clientCreatedTime').val(data.createdTime);
                 $('#clientModifiedTime').val(data.modifiedTime);
                 if (data.status == 1) {
@@ -817,6 +825,21 @@
             }
             return prefix + result;
         },
+        generateNativeCode: function(str) {
+            if (EzWebAppClient.isBlank(str)) {
+                return '';
+            }
+            var nativeCode = '';
+            for (i=0; i<str.length; i++) {
+                let char = str.charAt(i);
+                let indexOf = EzBizNativeAllChars.indexOf(char);
+                nativeCode += indexOf;
+                if (i < str.length -1) {
+                    nativeCode += ',';
+                }
+            }
+            return nativeCode;
+        },
         alertInvalidOrg: function() {
             alert('Invalid Organization');
             window.location.replace('organization.htm');
@@ -887,6 +910,8 @@
             EzDashboardBizService.postNewBuildPackage();
         });
     });
+
+    var EzBizNativeAllChars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789.:/';
 
     var EzBizAppConfigTemplate = ''+
         '<tr class="appConfigItem">'+
