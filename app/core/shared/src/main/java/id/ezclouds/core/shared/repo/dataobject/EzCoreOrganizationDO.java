@@ -39,6 +39,9 @@ public class EzCoreOrganizationDO {
     @Column(name = "contact_email")
     private String contactEmail;
 
+    @Column(name = "extend_config")
+    private String extendConfig;
+
     @Column(name = "created_time")
     private String createdTime;
 
@@ -102,6 +105,14 @@ public class EzCoreOrganizationDO {
 
     public void setContactEmail(String contactEmail) {
         this.contactEmail = contactEmail;
+    }
+
+    public String getExtendConfig() {
+        return extendConfig;
+    }
+
+    public void setExtendConfig(String extendConfig) {
+        this.extendConfig = extendConfig;
     }
 
     public String getCreatedTime() {

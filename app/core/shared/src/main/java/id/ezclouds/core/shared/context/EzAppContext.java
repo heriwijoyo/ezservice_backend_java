@@ -6,6 +6,8 @@ package id.ezclouds.core.shared.context;
 
 import id.ezclouds.common.util.HashUtil;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -19,6 +21,7 @@ public class EzAppContext {
     private String traceId;
     private String orgId;
     private String orgCode;
+    private Map<String, String> orgExtendConfig = new HashMap<>();
     private String appId;
     private String deviceId;
     private int appVersionNo;
@@ -59,6 +62,16 @@ public class EzAppContext {
 
     public void setOrgCode(String orgCode) {
         this.orgCode = orgCode;
+    }
+
+    public Map<String, String> getOrgExtendConfig() {
+        return orgExtendConfig;
+    }
+
+    public void setOrgExtendConfig(Map<String, String> orgExtendConfig) {
+        if (orgExtendConfig != null) {
+            this.orgExtendConfig = orgExtendConfig;
+        }
     }
 
     public String getAppId() {

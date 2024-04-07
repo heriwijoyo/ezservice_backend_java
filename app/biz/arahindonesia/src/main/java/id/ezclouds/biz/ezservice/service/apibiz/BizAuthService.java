@@ -17,7 +17,6 @@ import id.ezclouds.biz.ezservice.service.request.BizMemberResetPasswordRequest;
 import id.ezclouds.biz.ezservice.service.request.BizMemberUpdatePasswordRequest;
 import id.ezclouds.biz.ezservice.service.result.BizMemberLoginResult;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
-import id.ezclouds.biz.ezservice.model.member.MemberBase;
 import id.ezclouds.biz.ezservice.service.dataservice.BizOrganizationService;
 import id.ezclouds.biz.ezservice.service.request.BizMemberLoginRequest;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
@@ -69,8 +68,8 @@ public class BizAuthService extends BizBaseService {
     @Autowired
     private EzConnectService ezConnectService;
 
-    public CoreAuthResult<String> authAppClient(String orgId, String appId, String clientId, String clientSecret) {
-        CoreAuthResult<String> bizAuthResult = new CoreAuthResult<>();
+    public CoreAuthResult<CoreOrganization> authAppClient(String orgId, String appId, String clientId, String clientSecret) {
+        CoreAuthResult<CoreOrganization> bizAuthResult = new CoreAuthResult<>();
 
         CoreOrganization coreOrganization = bizOrganizationService.getOrganizationById(orgId);
         if (coreOrganization == null) {
@@ -88,7 +87,7 @@ public class BizAuthService extends BizBaseService {
         }
 
         bizAuthResult.setSuccess(true);
-        bizAuthResult.setData(coreOrganization.getCode());
+        bizAuthResult.setData(coreOrganization);
         return bizAuthResult;
     }
 
@@ -109,7 +108,7 @@ public class BizAuthService extends BizBaseService {
                 String orgId = EzAppContextHolder.getContext().getOrgId();
                 String appId = EzAppContextHolder.getContext().getAppId();
                 String deviceId = EzAppContextHolder.getContext().getDeviceId();
-                int appVersionNo = EzAppContextHolder.getContext().getAppVersionNo();
+                Map<String, String> orgExtendConfig = EzAppContextHolder.getContext().getOrgExtendConfig();
 
                 CoreMemberClientAuthRequest authRequest = new CoreMemberClientAuthRequest();
                 authRequest.setOrgId(orgId);
@@ -126,24 +125,17 @@ public class BizAuthService extends BizBaseService {
                 loginResult.setSuccessMessage(AppConstant.MEMBER_LOGIN_MESSAGE_SUCCESS);
                 loginResult.setMemberFlags(appMemberFlagService.getAppMemberFlag(orgId, sessionInfo.getMemberId()));
 
-                //support old version
-                //TODO: remove when all client updated into newer version
-                loginResult.setMemberSessionCode(sessionInfo.getSessionId());
-
                 CoreMember coreMember = coreMemberService.getOptimisticCoreMember(sessionInfo.getMemberId());
                 CoreMemberExtension coreMemberExtension = coreMemberService.getOptimisticCoreMemberExtension(sessionInfo.getMemberId());
 
                 //assign session with roles
                 coreAuthService.updateMemberSessionRoles(sessionInfo.getSessionId(), coreMember.getRoles());
 
-                if (appVersionNo >= AppConstant.APP_V2_START_VERSION_NO) {
-                    BizMember bizMember = BizMemberConverter.convert(coreMember, coreMemberExtension);
-                    bizMember.setSubOrganization(appSubOrganizationService.getSubOrganizationById(coreMember.getSubOrgId()));
-                    loginResult.setBizMember(bizMember);
-                }
-                else {
-                    MemberBase memberBase = BizMemberConverter.convert(coreMember);
-                    loginResult.setMemberBase(memberBase);
+                BizMember bizMember = BizMemberConverter.convert(coreMember, coreMemberExtension);
+                loginResult.setBizMember(bizMember);
+
+                if (Boolean.parseBoolean(orgExtendConfig.get(BizConstant.ExtKey.HAS_SUB_ORG))) {
+                    bizMember.setSubOrganization(appSubOrganizationService.getSubOrganization(coreMember.getOrgId(), coreMember.getMemberId()));
                 }
 
                 bizResult.setObject(loginResult);

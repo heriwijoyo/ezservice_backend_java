@@ -6,6 +6,7 @@ package id.ezclouds.biz.ezservice.service.apibiz;
 
 import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
 import id.ezclouds.biz.ezservice.service.dataservice.NewsInnerService;
+import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.exception.EzErrorCode;
@@ -21,8 +22,32 @@ import org.springframework.stereotype.Service;
 @Service
 public class BizNewsService extends BizBaseService {
 
+    private static final int PAGE_NUMBER_DEFAULT = 1;
+    private static final int PAGE_SIZE_DEFAULT = 10;
+
     @Autowired
     private NewsInnerService newsInnerService;
+
+    public BizResult getNews(BizPageRequest request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
 
     public BizResult getActiveNews() {
         final BizResult bizResult = new BizResult();

@@ -5,7 +5,6 @@
 package id.ezclouds.biz.ezservice.service.result;
 
 import id.ezclouds.biz.ezservice.model.member.BizMember;
-import id.ezclouds.biz.ezservice.model.member.MemberBase;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,10 +16,7 @@ import java.util.Map;
 public class BizMemberLoginResult {
 
     private String memberSessionId;
-    private String memberSessionCode;
-    private String memberRoleCode;
     private String successMessage;
-    private MemberBase memberBase;
     private BizMember bizMember;
     private Map<String, String> memberFlags = new HashMap<>();
 
@@ -32,36 +28,12 @@ public class BizMemberLoginResult {
         this.memberSessionId = memberSessionId;
     }
 
-    public String getMemberSessionCode() {
-        return memberSessionCode;
-    }
-
-    public void setMemberSessionCode(String memberSessionCode) {
-        this.memberSessionCode = memberSessionCode;
-    }
-
-    public String getMemberRoleCode() {
-        return memberRoleCode;
-    }
-
-    public void setMemberRoleCode(String memberRoleCode) {
-        this.memberRoleCode = memberRoleCode;
-    }
-
     public String getSuccessMessage() {
         return successMessage;
     }
 
     public void setSuccessMessage(String successMessage) {
         this.successMessage = successMessage;
-    }
-
-    public MemberBase getMemberBase() {
-        return memberBase;
-    }
-
-    public void setMemberBase(MemberBase memberBase) {
-        this.memberBase = memberBase;
     }
 
     public BizMember getBizMember() {

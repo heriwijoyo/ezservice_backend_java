@@ -5,6 +5,8 @@
 package id.ezclouds.biz.ezservice.subbiz.arahindonesia.service;
 
 import id.ezclouds.biz.ezservice.converter.BizModelConverter;
+import id.ezclouds.biz.ezservice.service.dataservice.dataobject.BizMemberDO;
+import id.ezclouds.biz.ezservice.service.dataservice.repo.BizMemberRepository;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.repo.AppSubOrganizationRepository;
 import id.ezclouds.common.util.StringUtil;
@@ -25,12 +27,24 @@ public class AppSubOrganizationService {
     @Autowired
     private AppSubOrganizationRepository appSubOrganizationRepository;
 
+    @Autowired
+    private BizMemberRepository bizMemberRepository;
+
     public BizSubOrganization getSubOrganizationById(String subOrgId) {
         return getAllSubOrganization()
                 .stream()
                 .filter(subOrg -> StringUtil.equalsNotNull(subOrg.getSubOrgId(), subOrgId))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public BizSubOrganization getSubOrganization(String orgId, String memberId) {
+        BizMemberDO bizMemberDO = bizMemberRepository
+                .findByMemberIdAndOrgId(memberId, orgId);
+        if (bizMemberDO == null || StringUtil.isBlank(bizMemberDO.getSubOrgId())) {
+            return null;
+        }
+        return getSubOrganizationById(bizMemberDO.getSubOrgId());
     }
 
     @Cacheable(value = "appSubOrganization")

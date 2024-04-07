@@ -4,9 +4,13 @@
  */
 package id.ezclouds.core.shared.converter;
 
+import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.shared.enums.CoreAreaLevel;
 import id.ezclouds.core.shared.model.*;
 import id.ezclouds.core.shared.repo.dataobject.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -20,6 +24,15 @@ public class CoreModelConverter {
         coreOrganization.setOrgId(organizationDO.getOrgId());
         coreOrganization.setName(organizationDO.getName());
         coreOrganization.setCode(organizationDO.getCode());
+        if (StringUtil.isNotBlank(organizationDO.getExtendConfig())) {
+            Map<String, String> extendConfigMap = new HashMap<>();
+            String[] extendConfigs = organizationDO.getExtendConfig().split(",");
+            for (String extendConfig : extendConfigs) {
+                String[] configs = extendConfig.split("=");
+                extendConfigMap.put(configs[0], configs[1]);
+            }
+            coreOrganization.setExtendInfo(extendConfigMap);
+        }
         return coreOrganization;
     }
 

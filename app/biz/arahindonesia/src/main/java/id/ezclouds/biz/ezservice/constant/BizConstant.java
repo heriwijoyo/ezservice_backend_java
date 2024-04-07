@@ -19,6 +19,7 @@ public class BizConstant {
         public static final String FORCED_UPDATE_PASSWORD = "FORCED_UPDATE_PASSWORD";
         public static final String COMMON_SESSION_ID = "COMMON_SESSION_ID";
         public static final String NICKNAME = "NICKNAME";
+        public static final String HAS_SUB_ORG = "HAS_SUB_ORG";
     }
 
     public static final class MemberFlag {

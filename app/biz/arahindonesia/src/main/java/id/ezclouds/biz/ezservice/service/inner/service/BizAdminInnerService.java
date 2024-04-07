@@ -372,6 +372,7 @@ public class BizAdminInnerService {
         organization.setContactName(modelDO.getContactName());
         organization.setContactPhone(modelDO.getContactPhone());
         organization.setContactEmail(modelDO.getContactEmail());
+        organization.setExtendConfig(modelDO.getExtendConfig());
         organization.setCreatedTime(modelDO.getCreatedTime());
         organization.setModifiedTime(modelDO.getModifiedTime());
         organization.setStatus(modelDO.getStatus());
