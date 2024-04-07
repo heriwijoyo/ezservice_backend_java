@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>EzService - Admin Dashboard</title>
+    <link rel="icon" href="assets/images/favicon.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link href="assets/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/waves.css" rel="stylesheet" />
+    <link href="assets/css/animate.css" rel="stylesheet" />
+    <link href="assets/css/bootstrap-tagsinput.css" rel="stylesheet">
+    <link href="assets/css/theme.css" rel="stylesheet" />
+    <link href="assets/css/time-picker.css" rel="stylesheet" />
+    <link href="assets/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+    <link href="assets/plugins/dropify/css/dropify.css" rel="stylesheet">
+    <link href="assets/css/styles.min.css" rel="stylesheet">
+    <script src="assets/js/jquery-1.9.1.min.js"></script>
+</head>
+
+<body class="theme-blue poppins">
+
+<nav class="navbar">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
+            <a href="javascript:void(0);" class="bars"></a>
+            <a class="navbar-brand" href="home.htm"><div id="app-info-name" class="uppercase"></div></a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#">
+                        <i class="material-icons">comment</i>
+                    </a>
+                </li>
+                <li><a href="#"><i class="material-icons">notifications</i></a></li>
+                <li class="dropdown">
+                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                        <i class="material-icons">more_vert</i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#"><i class="material-icons">person</i>Profile</a></li>
+                        <li><a href="#"><i class="material-icons">power_settings_new</i>Logout</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<section>
+    <!-- Left Sidebar -->
+    <aside id="leftsidebar" class="sidebar">
+        <div class="user-info">
+            <div class="info-container">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                    <img src="assets/images/ic_launcher.png" width="40px" height="40px" />
+                </div>
+                <div id="user-info-name" class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></div>
+                <div id="user-info-phone" class="email"></div>
+                <div class="btn-group user-helper-dropdown">
+                    <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
+                    <ul class="dropdown-menu pull-right">
+                        <li><a href="#"><i class="material-icons">person</i>Profile</a></li>
+                        <li><a href="#"><i class="material-icons">power_settings_new</i>Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="menu">
+            <ul id="left-menu-container" class="list">
+                <li class="header">MENU</li>
+            </ul>
+        </div>
+        <div class="legal">
+            <div class="copyright">
+                Copyright © 2023 EzService Tech
+            </div>
+            <div class="version">
+                <b>Version: </b> 1.0.0-DEV
+            </div>
+        </div>
+    </aside>
+</section>
+
+<script src="assets/plugins/ckeditor/ckeditor.js"></script>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function(e) {
+
+        $("#upload_type").change(function() {
+            var type = $("#upload_type").val();
+
+                if (type == "youtube") {
+                    $("#video_upload").hide();
+                    $("#video_post").hide();
+                    $("#direct_url").hide();
+                    $("#youtube").show();
+                }
+
+                if (type == "Post") {
+                    $("#youtube").hide();
+                    $("#video_upload").hide();
+                    $("#direct_url").hide();
+                    $("#video_post").show();
+
+                    $("#multiple_images").show();
+                }
+
+                if (type == "Url") {
+                    $("#youtube").hide();
+                    $("#video_upload").hide();
+                    $("#video_post").hide();
+                    $("#direct_url").show();
+                }
+
+                if (type == "Upload") {
+                    $("#youtube").hide();
+                    $("#video_post").hide();
+                    $("#direct_url").hide();
+                    $("#video_upload").show();
+                }
+        });
+
+        $( window ).load(function() {
+        var type=$("#upload_type").val();
+
+            if (type == "youtube")  {
+                $("#video_upload").hide();
+                $("#direct_url").hide();
+                $("#video_post").hide();
+                $("#youtube").show();
+            }
+
+            if (type == "Url") {
+                $("#youtube").hide();
+                $("#video_upload").hide();
+                $("#video_post").hide();
+                $("#direct_url").show();
+            }
+
+            if (type == "Upload") {
+                $("#youtube").hide();
+                $("#direct_url").hide();
+                $("#video_post").hide();
+                $("#video_upload").show();
+            }
+
+            if (type == "Post") {
+                $("#youtube").hide();
+                $("#direct_url").hide();
+                $("#video_upload").hide();
+                $("#video_post").show();
+
+                $("#multiple_images").show();
+            }
+
+        });
+
+    });
+
+</script>
+
+<section class="content">
+
+    <ol class="breadcrumb breadcrumb-offset">
+        <li><a href="dashboard.php">Dashboard</a></li>
+        <li><a href="news.php">Manage News</a></li>
+        <li class="active">Add News</a></li>
+    </ol>
+
+    <div class="container-fluid" id="fade-in">
+
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                <form id="form_validation" method="post" enctype="multipart/form-data">
+                    <div class="card corner-radius">
+                        <div class="header">
+                            <h2>ADD NEWS</h2>
+
+                            <div class="header-dropdown m-r--5">
+                                <button type="submit" name="submit" class="button button-rounded btn-offset bg-blue waves-effect pull-right">PUBLISH</button>
+                            </div>
+
+                        </div>
+                        <div class="body">
+
+
+                            <div class="row clearfix">
+
+                                <div class="col-sm-5">
+
+                                    <div class="form-group">
+                                        <div class="font-12">News Title</div>
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" name="news_title" id="news_title" placeholder="News Title" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="font-12">News Date *</div>
+                                        <div class="form-line">
+                                            <input type="text" name="news_date" id="date-format" class="datetimepicker form-control" placeholder="News Date" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="font-12">Category *</div>
+                                        <select class="form-control show-tick" name="cat_id" id="cat_id">
+                                            <option value="9">Politics</option>
+                                            <option value="8">World</option>
+                                            <option value="7">Entertainment</option>
+                                            <option value="6">News</option>
+                                            <option value="5">Sports</option>
+                                            <option value="4">Travel</option>
+                                            <option value="3">Health</option>
+                                            <option value="2">Technology</option>
+                                            <option value="1">Business</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="font-12">Content Type *</div>
+                                        <select class="form-control show-tick" name="upload_type" id="upload_type">
+                                            <option value="Post">Standard Post</option>
+                                            <option value="youtube">Video Post (YouTube)</option>
+                                            <option value="Url">Video Post (Url)</option>
+                                            <option value="Upload">Video Post (Upload)</option>
+                                        </select>
+                                    </div>
+
+                                    <div id="video_post">
+                                        <div class="font-12 ex1">Image Primary ( jpg / png ) *</div>
+                                        <div class="form-group">
+                                            <input type="file" name="post_image" id="post_image" class="dropify-image" data-max-file-size="2M" data-allowed-file-extensions="jpg jpeg png gif" required />
+                                            <!-- <input type="file" name="post_image" id="post_image" required /> -->
+                                        </div>
+
+                                        <div id="multiple_images">
+                                            <div class="font-12 ex1">Image Optional ( jpg / png )</div>
+                                            <div class="form-group">
+                                                <input type="file" name="imageoption[]" id="imageoptions"/>
+                                            </div>
+                                            <div class="multiupload"></div>
+                                            <button type="button" id="addnewUpload" class="button button-rounded bg-blue waves-effect">ADD MORE</button>
+                                        </div>
+
+                                    </div>
+
+                                    <div id="youtube">
+                                        <div class="form-group">
+                                            <div class="font-12">Youtube URL</div>
+                                            <div class="form-line">
+                                                <input type="text" class="form-control" name="youtube" id="youtube" placeholder="https://www.youtube.com/watch?v=33F5DJw3aiU" required>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id="direct_url">
+                                        <div class="form-group">
+                                            <input type="file" name="image" id="image" class="dropify-image" data-max-file-size="2M" data-allowed-file-extensions="jpg jpeg png gif" />
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="font-12">Video URL</div>
+                                            <div class="form-line">
+                                                <input type="text" class="form-control" name="url_source" id="url_source" placeholder="http://www.xyz.com/news_title.mp4" required/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id="video_upload">
+                                        <div class="form-group">
+                                            <input type="file" id="news_image" name="news_image" id="news_image" class="dropify-image" data-max-file-size="2M" data-allowed-file-extensions="jpg jpeg png gif" required />
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input type="file" id="video" name="video" id="video" class="dropify-video" data-allowed-file-extensions="3gp mp4 mpg wmv mkv m4v mov flv" required/>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-sm-7">
+                                    <div class="font-12">Description *</div>
+                                    <div class="form-group" style="margin-top: 6px;">
+                                        <textarea class="form-control" name="news_description" id="news_description" class="form-control" cols="60" rows="10" required></textarea>
+
+                                        <script>
+                                            CKEDITOR.replace( 'news_description' );
+                                            CKEDITOR.config.height = 338;
+                                        </script>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+
+<div class="modal fade" id="modal-package-name" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="largeModalLabel">What is my package name?</h4>
+            </div>
+            <div class="modal-body">
+                <li>Open Android Studio Project</li>
+                <li>Select <b></> Gradle Scripts > build.gradle (Module: app)</b><img src="assets/images/package_name.jpg" class="img-responsive"></li>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">OK, I AM UNDERSTAND</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-server-key" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="largeModalLabel">Obtaining your Firebase Server API Key</h4>
+            </div>
+            <div class="modal-body">
+                <p>Firebase provides Server API Key to identify your firebase app. To obtain your Server API Key, go to firebase console, select the project and go to settings, select Cloud Messaging tab and copy your Server key.</p>
+                <img src="assets/images/fcm-server-key.jpg" class="img-responsive">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">OK, I AM UNDERSTAND</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-api-key" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="largeModalLabel">Where I have to put my API Key?</h4>
+            </div>
+            <div class="modal-body">
+                <ol>
+                    <li>for security needed, Update <b>API_KEY</b> String value.</li>
+                    <li>Open Android Studio Project.</li>
+                    <li>Click <b>CHANGE API KEY</b> to generate new API Key.</li>
+                    <li>go to app > java > yourpackage name > config > <b>AppConfig.java</b>, and update with your own Server Key and Rest API Key. <img src="assets/images/api_key.jpg" class="img-responsive"></li>
+                </ol>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">OK, I AM UNDERSTAND</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-youtube-api-key" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="largeModalLabel">Get YouTube API Key</h4>
+            </div>
+            <div class="modal-body">
+                <ol>
+                    <li>Go to <a href="https://console.developers.google.com/" target="_blank"><b>Google Developers Console</b></a> and log in with your Google account.</li>
+                    <li>Create the new project (name does not matter for the plugin).</li>
+                    <li>Go to your project (by clicking on its name in the list).</li>
+                    <li>In the sidebar on the left, expand APIs & Services → Library. In the list of APIs go to <b>YouTube Data API (v3)</b> and make sure that it’s <b>enabled (Enable API)</b>.</li>
+                    <li>In the same sidebar click Credentials. Then click on Create New Key and choose API key.</li>
+                    <li>Copy API key and paste it in the admin panel youtube api key settings form.</li>
+                    <li>For video tutorial, klik this link <a href="https://youtu.be/eAkyaEHMJUE" target="_blank"><b>HERE</b></a></li>
+                </ol>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">OK, I AM UNDERSTAND</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-onesignal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="largeModalLabel">Where do I get my OneSignal APP ID and Rest API Key?</h4>
+            </div>
+            <div class="modal-body">
+                <ol>
+                    <li>Login to your <a href="https://onesignal.com/" target="_blank"><b>OneSignal</b></a> Account and select your app</li>
+                    <li>Select <b></> SETTINGS > Keys & IDs.</b> <img src="assets/images/onesignal_key.jpg" class="img-responsive"></li>
+                </ol>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">OK, I AM UNDERSTAND</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-admob-app-id" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="largeModalLabel">Update your AdMob App ID</h4>
+            </div>
+            <div class="modal-body">
+                <p>Put your <b>AdMob App ID</b> to <b>res/value/ads.xml</b> in the <b>admob_app_id</b> string tag.</p>
+                <img src="assets/images/admob_app_id.jpg" class="img-responsive">
+                <p><b>Important:</b> This step is required! Failure to add your app id in the string tag results in a crash with the message: The Google Mobile Ads SDK was initialized incorrectly.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">OK, I AM UNDERSTAND</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-applovin-sdk-key" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="largeModalLabel">Update your AppLovin SDK Key</h4>
+            </div>
+            <div class="modal-body">
+                <p>Put your <b>AppLovin SDK Key</b> to <b>res/value/ads.xml</b> in the <b>applovin_sdk_key</b> string tag.</p>
+                <img src="assets/images/admob_app_id.jpg" class="img-responsive">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">OK, I AM UNDERSTAND</button>
+            </div>
+        </div>
+    </div>
+</div>        <!-- Jquery Core Js -->
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/plugins/bootstrap/js/bootstrap.js"></script>
+<script src="assets/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+<script src="assets/js/jquery.slimscroll.js"></script>
+<script src="assets/js/waves.js"></script>
+<script src="assets/js/jquery.validate.js"></script>
+<script src="assets/plugins/dropify/js/dropify.js"></script>
+<script src="assets/js/admin.js"></script>
+<script src="assets/js/form-validation.js"></script>
+<script src="assets/js/bootstrap-tagsinput.min.js"></script>
+<script src="assets/js/ezappclient.js"></script>
+
+<script type="text/javascript">
+        $(document).ready(function(){
+            // Basic
+            $('.dropify').dropify();
+
+            $('.dropify-image').dropify({
+                messages: {
+                    default : '<center>Drag and drop a image here or click</center>',
+                    error   : 'Ooops, something wrong appended.'
+                },
+                error: {
+                    'fileSize': '<center>The file size is too big broo ({{ value }} max).</center>',
+                    'minWidth': '<center>The image width is too small ({{ value }}}px min).</center>',
+                    'maxWidth': '<center>The image width is too big ({{ value }}}px max).</center>',
+                    'minHeight': '<center>The image height is too small ({{ value }}}px min).</center>',
+                    'maxHeight': '<center>The image height is too big ({{ value }}px max).</center>',
+                    'imageFormat': '<center>The image format is not allowed ({{ value }} only).</center>',
+                    'fileExtension': '<center>The file is not allowed ({{ value }} only).</center>'
+                },
+            });
+
+            $('.dropify-notification').dropify({
+                messages: {
+                    default : '<center>Drag and drop a image here or click<br>(Optional)</center>',
+                }
+            });
+
+            // Used events
+            var drEvent = $('#input-file-events').dropify();
+
+            drEvent.on('dropify.beforeClear', function(event, element){
+                return confirm("Do you really want to delete \"" + element.file.name + "\" ?");
+            });
+
+            drEvent.on('dropify.afterClear', function(event, element){
+                alert('File deleted');
+            });
+
+            drEvent.on('dropify.errors', function(event, element){
+                console.log('Has Errors');
+            });
+
+            var drDestroy = $('#input-file-to-destroy').dropify();
+            drDestroy = drDestroy.data('dropify')
+            $('#toggleDropify').on('click', function(e){
+                e.preventDefault();
+                if (drDestroy.isDropified()) {
+                    drDestroy.destroy();
+                } else {
+                    drDestroy.init();
+                }
+            })
+        });
+    </script>
+
+<script type="text/javascript">
+    var EzDashboardBizService = {
+        start: function() {
+            //EzDashboardBizService.fetchGalleries();
+        },
+        handleApiBizResult: function(url, response) {
+        },
+        prev: function() {
+            EzDashboardBizService.data.pageNumber--;
+            EzDashboardBizService.fetchGalleries();
+        },
+        next: function() {
+            EzDashboardBizService.data.pageNumber++;
+            EzDashboardBizService.fetchGalleries();
+        },
+        data: {
+            pageNumber: 1,
+            pageSize: 5,
+            result: null
+        }
+    };
+
+    $(document).ready(function(){
+        EzWebAppClient.onApiBizSuccess(function(url, response){
+            EzDashboardBizService.handleApiBizResult(url, response);
+        });
+        EzWebAppClient.onApiBizFailed(function(url, message){
+            console.log(url +' --- '+ message);
+        });
+        EzWebAppClient.onApiCallError(function(xhr){
+            console.log(xhr);
+        });
+        EzWebAppClient.onReady(function(){
+            EzDashboardBizService.start();
+        });
+        EzWebAppClient.onPrev(function(){
+            EzDashboardBizService.prev();
+        });
+        EzWebAppClient.onNext(function(){
+            EzDashboardBizService.next();
+        });
+        EzWebAppClient.start();
+
+    });
+
+    var DashTemplate = ''+
+        '<tr>'+
+            '<td style="vertical-align: middle;">'+
+                '<img class="img-rounded" style="object-fit:cover;" height="180px" width="240px">'+
+            '</td>'+
+            '<td class="rowTitle" style="vertical-align: middle;"></td>'+
+            '<td class="rowActive" style="vertical-align: middle;"></td>'+
+            '<td class="rowHome" style="vertical-align: middle;"></td>'+
+            '<td class="rowPortfolio" style="vertical-align: middle;"></td>'+
+            '<td class="rowSorting" style="vertical-align: middle;"></td>'+
+        '</tr>';
+
+</script>
+
+</body>
+
+
+</html>
+<!--script type="text/javascript" src="assets/js/moment-with-locales.min.js"></script>
+<script type="text/javascript" src="assets/js/datetimepicker.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#date').bootstrapMaterialDatePicker
+        ({
+            time: false,
+            clearButton: true
+        });
+
+        $('#time').bootstrapMaterialDatePicker
+        ({
+            date: false,
+            shortTime: false,
+            format: 'HH:mm'
+        });
+
+        $('#date-format').bootstrapMaterialDatePicker
+        ({
+            format: 'YYYY-MM-DD HH:mm:ss'
+        });
+        $('#date-fr').bootstrapMaterialDatePicker
+        ({
+            format: 'DD/MM/YYYY HH:mm',
+            lang: 'fr',
+            weekStart: 1,
+            cancelText : 'ANNULER',
+            nowButton : true,
+            switchOnClick : true
+        });
+
+        $('#date-end').bootstrapMaterialDatePicker
+        ({
+            weekStart: 0, format: 'DD/MM/YYYY HH:mm'
+        });
+        $('#date-start').bootstrapMaterialDatePicker
+        ({
+            weekStart: 0, format: 'DD/MM/YYYY HH:mm', shortTime : true
+        }).on('change', function(e, date)
+        {
+            $('#date-end').bootstrapMaterialDatePicker('setMinDate', date);
+        });
+
+        $('#min-date').bootstrapMaterialDatePicker({ format : 'DD/MM/YYYY HH:mm', minDate : new Date() });
+        $.material.init()
+    });
+</script-->
