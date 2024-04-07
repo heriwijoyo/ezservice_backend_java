@@ -55,7 +55,8 @@ public class AppConfigService {
                 AppConstant.CfgKey.ANDROID_UPDATE_APK,
                 AppConstant.CfgKey.ANDROID_FORCE_UPDATE,
                 AppConstant.CfgKey.BIZ_MAX_TPS_NUMBER,
-                AppConstant.CfgKey.REPORT_OPTIONS
+                AppConstant.CfgKey.REPORT_OPTIONS,
+                AppConstant.CfgKey.APP_REQUIRE_LOGIN
         );
     }
 
@@ -130,9 +131,28 @@ public class AppConfigService {
                         case AppConstant.CfgKey.BIZ_MAX_TPS_NUMBER:
                             appConfig.setBizMaxTpsNumber(Integer.parseInt(cfg.getConfigValue()));
                             break;
+
+                        case AppConstant.CfgKey.REPORT_OPTIONS:
+                            appConfig.setReportOptions(cfg.getConfigValue());
+                            break;
+
+                        case AppConstant.CfgKey.APP_REQUIRE_LOGIN:
+                            appConfig.setAppRequireLogin(Boolean.parseBoolean(cfg.getConfigValue()));
+                            break;
                     }
                 });
         return appConfig;
+    }
+
+    public Map<String, String> getAppConfigMap(String orgId) {
+        Map<String, String> configMap = new HashMap<>();
+        getAppConfigAllActive()
+                .stream()
+                .filter(config -> orgId.equals(config.getOrgId()))
+                .forEach(cfg -> {
+                    configMap.put(cfg.getConfigKey(), cfg.getConfigValue());
+                });
+        return configMap;
     }
 
     public String getMessageTemplate(String templateId) {

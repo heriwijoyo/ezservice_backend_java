@@ -61,6 +61,7 @@ public class BizCommonConfigService extends BizBaseService {
             public void onBizProcess() throws EzErrorException {
                 AppSetting appSetting = new AppSetting();
                 appSetting.setAppConfig(appConfigService.getAppConfig(getOrgId()));
+                appSetting.setAppConfigMap(appConfigService.getAppConfigMap(getOrgId()));
                 appSetting.setHomeData(composeHomeData(getOrgId()));
                 bizResult.setSuccess(true);
                 bizResult.setObject(appSetting);

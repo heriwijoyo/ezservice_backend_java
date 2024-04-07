@@ -7,6 +7,9 @@ package id.ezclouds.biz.ezservice.model;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: AppSetting.java, v 0.1 2023‐12‐09 10:38 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -14,6 +17,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class AppSetting {
 
     private AppConfig appConfig;
+    private Map<String, String> appConfigMap = new HashMap<>();
     private HomeData homeData;
 
     public AppConfig getAppConfig() {
@@ -22,6 +26,14 @@ public class AppSetting {
 
     public void setAppConfig(AppConfig appConfig) {
         this.appConfig = appConfig;
+    }
+
+    public Map<String, String> getAppConfigMap() {
+        return appConfigMap;
+    }
+
+    public void setAppConfigMap(Map<String, String> appConfigMap) {
+        this.appConfigMap = appConfigMap;
     }
 
     public HomeData getHomeData() {

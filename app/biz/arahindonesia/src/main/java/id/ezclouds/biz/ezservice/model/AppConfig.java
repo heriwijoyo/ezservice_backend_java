@@ -18,6 +18,7 @@ public class AppConfig {
     private boolean androidForceUpdate;
     private int bizMaxTpsNumber;
     private String reportOptions;
+    private boolean appRequireLogin;
 
     public String getAppName() {
         return appName;
@@ -81,5 +82,13 @@ public class AppConfig {
 
     public void setReportOptions(String reportOptions) {
         this.reportOptions = reportOptions;
+    }
+
+    public boolean isAppRequireLogin() {
+        return appRequireLogin;
+    }
+
+    public void setAppRequireLogin(boolean appRequireLogin) {
+        this.appRequireLogin = appRequireLogin;
     }
 }
