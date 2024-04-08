@@ -13,6 +13,8 @@ import id.ezclouds.biz.ezservice.model.admin.*;
 import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
 import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
+import id.ezclouds.biz.ezservice.service.core.BizAppCacheService;
+import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.biz.ezservice.service.dataservice.BizOrganizationService;
 import id.ezclouds.biz.ezservice.service.dataservice.model.WebImageGallery;
 import id.ezclouds.biz.ezservice.service.inner.service.BizAdminInnerService;
@@ -71,6 +73,9 @@ public class BizAdminService extends BizBaseService {
 
     @Autowired
     private BizAdminInnerService bizAdminInnerService;
+
+    @Autowired
+    private BizAppCacheService bizAppCacheService;
 
     @Value("${ezserviceapp.url.public.root}")
     private String appRootPublicUrl;
@@ -461,6 +466,7 @@ public class BizAdminService extends BizBaseService {
                         request.getSection(),
                         Integer.parseInt(request.getValue())
                 );
+                bizAppCacheService.reloadCacheItem(BizCacheKey.NEWS_HIGHLIGHT);
                 bizResult.setSuccess(true);
                 bizResult.setObject(WebAdminConstant.OPERATION_SUCCESS);
             }
@@ -534,6 +540,7 @@ public class BizAdminService extends BizBaseService {
                         filePath = fileInfo.getNewsGalleryPath(fileName);
                         coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
                         bizAdminInnerService.createNews(session.getOrgId(), fileName, request.getExtendInfo());
+                        bizAppCacheService.reloadCacheItem(BizCacheKey.NEWS_HIGHLIGHT);
                         break;
 
                     case ADMIN_EVENT_GALLERY:

@@ -111,4 +111,21 @@ public class BizAppCacheService {
 
         return cacheNames;
     }
+
+    public void reloadCacheItem(String cacheKey) {
+        BizCacheEnum bizCacheEnum = BizCacheEnum.getByCode(cacheKey);
+        if (bizCacheEnum == BizCacheEnum.UNKNOWN) {
+            return;
+        }
+
+        if (cacheManager.getCache(cacheKey) != null) {
+            cacheManager.getCache(cacheKey).clear();
+        }
+
+        switch (bizCacheEnum) {
+            case NEWS_HIGHLIGHT:
+                newsInnerService.getHighlightedNews();
+                break;
+        }
+    }
 }

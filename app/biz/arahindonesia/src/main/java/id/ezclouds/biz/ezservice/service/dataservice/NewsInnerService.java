@@ -7,6 +7,7 @@ package id.ezclouds.biz.ezservice.service.dataservice;
 import id.ezclouds.biz.ezservice.converter.BizModelConverter;
 import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
 import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
+import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.NewsDO;
 import id.ezclouds.biz.ezservice.service.dataservice.repo.NewsRepository;
 import id.ezclouds.biz.ezservice.service.dataservice.request.NewsCreateRequest;
@@ -56,7 +57,7 @@ public class NewsInnerService {
         newsRepository.saveAndFlush(newsDO);
     }
 
-    @Cacheable("newsHighlighted")
+    @Cacheable(BizCacheKey.NEWS_HIGHLIGHT)
     public List<BizSimpleNews> getHighlightedNews() {
         return newsRepository
                 .findHighlightedNews()

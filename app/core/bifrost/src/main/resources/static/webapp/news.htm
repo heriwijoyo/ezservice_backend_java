@@ -172,7 +172,7 @@
             $('#rowsContainer').html('');
             for(let i=0; i<response.pageResult.data.length; i++) {
                 let rowData = response.pageResult.data[i];
-                let title = '<b>'+ rowData.title +'</b><br>Description:<br>'+ rowData.description +'<br>Source: '+ rowData.source +'<br>Source URL: '+ rowData.sourceUrl;
+                let title = '<a href="newsUpdate.htm?newsId='+ rowData.newsId +'"><b>'+ rowData.title +'</b></a><br>Description:<br>'+ rowData.description +'<br>Source: '+ rowData.source +'<br>Source URL: '+ rowData.sourceUrl;
                 let itemRow = $.parseHTML(DashTemplate);
                 $(itemRow).find('.img-rounded').attr('src', rowData.imageUrl);
                 $(itemRow).find('.rowTitle').html(title);
