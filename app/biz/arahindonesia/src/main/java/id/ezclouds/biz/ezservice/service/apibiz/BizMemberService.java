@@ -165,7 +165,7 @@ public class BizMemberService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthMemberSessionInfo memberSession = authMemberSession();
+                CoreAuthMemberSessionInfo memberSession = authAppMemberSession();
                 PrivateFileResolver privateFileResolver = coreFileService
                         .resolveMemberFileInfo(getOrgId(), memberSession.getMemberId());
 

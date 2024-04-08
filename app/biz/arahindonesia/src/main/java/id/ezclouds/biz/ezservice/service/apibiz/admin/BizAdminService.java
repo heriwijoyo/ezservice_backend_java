@@ -90,7 +90,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthMemberSessionInfo sessionInfo = authMemberSession();
+                CoreAuthMemberSessionInfo sessionInfo = authAppMemberSession();
                 authorizeAdminMember(sessionInfo.getMemberRoles());
 
                 CoreAdminCommonSessionCreateRequest createRequest = new CoreAdminCommonSessionCreateRequest();
@@ -128,7 +128,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthMemberSessionInfo sessionInfo = authMemberSession();
+                CoreAuthMemberSessionInfo sessionInfo = authAppMemberSession();
                 authorizeAdminMember(sessionInfo.getMemberRoles());
 
                 List<BizAdminSession> adminSessions = coreAuthService
@@ -166,7 +166,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthMemberSessionInfo sessionInfo = authMemberSession();
+                CoreAuthMemberSessionInfo sessionInfo = authAppMemberSession();
                 authorizeAdminMember(sessionInfo.getMemberRoles());
 
                 coreAuthService.adminLogoutSession(webSessionId);
@@ -281,8 +281,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession session = coreAuthService.adminAuthWebSessionId(sessionId);
-                authorizeAdminMember(session.getMemberRoles());
+                CoreAuthAdminSession session = authorizedAdminSession(sessionId);
                 List<CoreAdminDashboard> dashboards =  coreAdminService.getAdminDashboardAllActive(session.getOrgId());
 
                 List<BizDashboardData> bizDashboard = dashboards
@@ -377,8 +376,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(request.getSessionId());
-                authorizeAdminMember(adminSession.getMemberRoles());
+                CoreAuthAdminSession adminSession = authorizedAdminSession(request.getSessionId());
 
                 String result = bizAdminInnerService.updateImageGallery(
                         adminSession.getOrgId(),

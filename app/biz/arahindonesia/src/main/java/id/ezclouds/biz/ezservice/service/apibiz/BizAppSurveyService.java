@@ -44,7 +44,7 @@ public class BizAppSurveyService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                authMemberSession();
+                authAppMemberSession();
                 BizSurveyForm bizSurveyForm = appSurveyDataService.getBizSurveyForm(surveyId);
                 AssertUtil.notNull(bizSurveyForm, EzErrorCode.DATA_NOT_FOUND);
 
@@ -78,7 +78,7 @@ public class BizAppSurveyService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthMemberSessionInfo sessionInfo = authMemberSession();
+                CoreAuthMemberSessionInfo sessionInfo = authAppMemberSession();
 
                 CoreResult<Boolean> uniqueResult = coreUniqueService.insertUnique(
                         getOrgId(), BizUniqueScene.BIZ_SURVEY_RESPONSE.getCode(), request.getRequestId());
