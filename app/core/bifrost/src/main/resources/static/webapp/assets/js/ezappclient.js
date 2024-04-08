@@ -1,5 +1,6 @@
 var EzWebAppViewHelper = {
     start: function() {
+        EzWebAppViewHelper.renderViewComponents();
         $('#common-modal-close').click(function(){
             $('#common-modal').removeClass('show');
             $('#common-modal').addClass('fade');
@@ -21,6 +22,25 @@ var EzWebAppViewHelper = {
         }
     },
     onCustomModalClose: function() {},
+    renderViewComponents: function() {
+        let commonModal = ''+
+            '<div class="modal fade" id="common-modal" tabindex="-1" role="dialog">'+
+                '<div class="modal-dialog modal-lg" role="document">'+
+                    '<div class="modal-content">'+
+                        '<div class="modal-header">'+
+                            '<h4 class="modal-title" id="common-modal-title"></h4>'+
+                        '</div>'+
+                        '<div class="modal-body">'+
+                            '<h3 id="common-modal-message"></h3>'+
+                        '</div>'+
+                        '<div class="modal-footer">'+
+                            '<button id="common-modal-close" type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>'+
+            '</div>';
+        $(document.body).append($.parseHTML(commonModal));
+    }
 };
 var EzApiUrl = {
     GET_APP_DATA: 'api/getAppData.json',
