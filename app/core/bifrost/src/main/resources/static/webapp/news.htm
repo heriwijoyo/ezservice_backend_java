@@ -113,8 +113,9 @@
                             <thead>
                             <tr>
                                 <th width="20%">Image</th>
-                                <th width="40%">Information</th>
+                                <th width="50%">Information</th>
                                 <th width="10%" class="text-center">Publish Date</th>
+                                <th width="10%" class="text-center">Highlight</th>
                                 <th width="10%" class="text-center">Status</th>
                             </tr>
                             </thead>
@@ -139,7 +140,7 @@
 <script type="text/javascript">
     var EzAdminUrl = {
         NEWS_GET: 'api/getNews.json',
-        NEWS_STATUS_SWITCH: 'api/newsStatusSwitch.json'
+        NEWS_STATUS_SWITCH: 'api/newsFlagSwitch.json'
     };
     var EzDashboardBizService = {
         start: function() {
@@ -162,6 +163,11 @@
                 EzDashboardBizService.fetchNews();
             }
         },
+        handleApiBizFailed: function(url, message) {
+            if (url === EzAdminUrl.NEWS_STATUS_SWITCH) {
+                alert(message);
+            }
+        },
         reloadPageResultView: function(response) {
             $('#rowsContainer').html('');
             for(let i=0; i<response.pageResult.data.length; i++) {
@@ -171,6 +177,7 @@
                 $(itemRow).find('.img-rounded').attr('src', rowData.imageUrl);
                 $(itemRow).find('.rowTitle').html(title);
                 $(itemRow).find('.rowDate').html(rowData.publishDate);
+                $(itemRow).find('.rowHighlight').html(EzDashboardBizService.renderFlag(rowData.highlight,'highlight',rowData.newsId));
                 $(itemRow).find('.rowActive').html(EzDashboardBizService.renderFlag(rowData.status,'status',rowData.newsId));
                 $('#rowsContainer').append(itemRow);
             }
@@ -185,6 +192,7 @@
             EzWebAppClient.callApiService(EzAdminUrl.NEWS_STATUS_SWITCH, {
                 sessionId: EzWebAppClient.getSessionId(),
                 itemId: itemId,
+                section: section,
                 value: value
             });
         },
@@ -208,7 +216,7 @@
             EzDashboardBizService.handleApiBizResult(url, response);
         });
         EzWebAppClient.onApiBizFailed(function(url, message){
-            console.log(url +' --- '+ message);
+            EzDashboardBizService.handleApiBizFailed(url, message);
         });
         EzWebAppClient.onApiCallError(function(xhr){
             console.log(xhr);
@@ -232,6 +240,7 @@
             '</td>'+
             '<td class="rowTitle" style="vertical-align: middle;"></td>'+
             '<td class="rowDate" style="vertical-align: middle;"></td>'+
+            '<td class="rowHighlight" style="vertical-align: middle;"></td>'+
             '<td class="rowActive" style="vertical-align: middle;"></td>'+
         '</tr>';
 

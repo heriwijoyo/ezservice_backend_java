@@ -161,8 +161,8 @@ public class BizAdminInnerService {
         return newsInnerService.adminGetSimpleNews(orgId, pageRequest);
     }
 
-    public void newsStatusSwitch(String orgId, String newsId, int value) {
-        newsInnerService.adminNewsStatusSwitch(orgId, newsId, value);
+    public void newsFlagSwitch(String orgId, String newsId, String section, int value) {
+        newsInnerService.adminNewsFlagSwitch(orgId, newsId, section, value);
     }
 
     public void createVideoCard(String orgId, String imageUrl, Map<String, String> extInfo) {

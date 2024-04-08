@@ -201,10 +201,11 @@ public class WebApiController {
         return result;
     }
 
-    @PostMapping(value = "/webapp/api/newsStatusSwitch.json")
+    @PostMapping(value = "/webapp/api/newsFlagSwitch.json")
     private WebApiResult<String> newsStatusSwitch(
             @RequestParam(name = "sessionId", required = false) String sessionId,
             @RequestParam(name = "itemId", required = false) String itemId,
+            @RequestParam(name = "section", required = false) String section,
             @RequestParam(name = "value", required = false) String value ) {
         final WebApiResult<String> result = new WebApiResult<>();
         WebApiControllerTemplate.execute(WebEvent.WEB_API_NEWS_STATUS_SWITCH, result, new WebApiControllerTemplate.Handler<String>() {
@@ -213,6 +214,7 @@ public class WebApiController {
                 BizWebUpdateItemRequest request = new BizWebUpdateItemRequest();
                 request.setSessionId(sessionId);
                 request.setItemId(itemId);
+                request.setSection(section);
                 request.setValue(value);
                 return bizAdminService.newsStatusSwitch(request);
             }

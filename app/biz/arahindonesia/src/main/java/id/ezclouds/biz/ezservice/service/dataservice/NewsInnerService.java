@@ -90,6 +90,7 @@ public class NewsInnerService {
                     bizSimpleNews.setSourceUrl(modelDO.getSourceUrl());
                     bizSimpleNews.setPublishDate(modelDO.getPublishDate());
                     bizSimpleNews.setStatus(modelDO.getStatus());
+                    bizSimpleNews.setHighlight(modelDO.getHighlight());
                     return bizSimpleNews;
                 })
                 .collect(Collectors.toList());
@@ -107,10 +108,15 @@ public class NewsInnerService {
     }
 
     @Transactional
-    public void adminNewsStatusSwitch(String orgId, String newsId, int status) {
+    public void adminNewsFlagSwitch(String orgId, String newsId, String section, int value) {
         NewsDO newsDO = newsRepository.findByNewsIdAndOrgId(newsId, orgId);
         AssertUtil.notNull(newsDO, EzErrorCode.DATA_NOT_FOUND);
-        newsDO.setStatus(status);
+        if ("highlight".equals(section)) {
+            newsDO.setHighlight(value);
+        }
+        if ("status".equals(section)) {
+            newsDO.setStatus(value);
+        }
         newsRepository.saveAndFlush(newsDO);
     }
 }

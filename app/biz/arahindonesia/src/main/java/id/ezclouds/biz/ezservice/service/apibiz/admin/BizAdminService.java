@@ -443,6 +443,7 @@ public class BizAdminService extends BizBaseService {
                 AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
                 AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
                 AssertUtil.notBlank(request.getItemId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getSection(), EzErrorCode.ILLEGAL_PARAM);
                 AssertUtil.notBlank(request.getValue(), EzErrorCode.ILLEGAL_PARAM);
                 try {
                     Integer.parseInt(request.getValue());
@@ -454,7 +455,12 @@ public class BizAdminService extends BizBaseService {
             @Override
             public void onBizProcess() throws Exception {
                 CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
-                bizAdminInnerService.newsStatusSwitch(session.getOrgId(), request.getItemId(), Integer.parseInt(request.getValue()));
+                bizAdminInnerService.newsFlagSwitch(
+                        session.getOrgId(),
+                        request.getItemId(),
+                        request.getSection(),
+                        Integer.parseInt(request.getValue())
+                );
                 bizResult.setSuccess(true);
                 bizResult.setObject(WebAdminConstant.OPERATION_SUCCESS);
             }

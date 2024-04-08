@@ -23,6 +23,7 @@ public class BizWebSimpleNews {
     private String sourceUrl;
     private String publishDate;
     private int status;
+    private int highlight;
 
     public String getNewsId() {
         return newsId;
@@ -94,5 +95,13 @@ public class BizWebSimpleNews {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public int getHighlight() {
+        return highlight;
+    }
+
+    public void setHighlight(int highlight) {
+        this.highlight = highlight;
     }
 }
