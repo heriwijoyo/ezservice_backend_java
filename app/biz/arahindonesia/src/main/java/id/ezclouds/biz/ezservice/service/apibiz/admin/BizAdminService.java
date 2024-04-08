@@ -451,6 +451,7 @@ public class BizAdminService extends BizBaseService {
                         break;
 
                     case ADMIN_NEWS_GALLERY:
+                        bizAdminInnerService.validateExtendInfo(request.getExtendInfo(), "TITLE", "DESCRIPTION", "PUBLISH_DATE", "CATEGORY", "CONTENT");
                         filePath = fileInfo.getNewsGalleryPath(fileName);
                         coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
                         bizAdminInnerService.createNews(session.getOrgId(), fileName, request.getExtendInfo());

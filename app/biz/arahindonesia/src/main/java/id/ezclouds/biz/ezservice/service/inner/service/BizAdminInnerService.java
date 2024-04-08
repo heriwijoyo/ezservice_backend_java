@@ -130,19 +130,27 @@ public class BizAdminInnerService {
         return appImageGalleryService.updateImageGallery(orgId, itemId, section, value);
     }
 
+    public void validateExtendInfo(Map<String, String> extendInfo, String... extKeys) throws EzErrorException {
+        AssertUtil.notNull(extendInfo, EzErrorCode.ILLEGAL_PARAM);
+        AssertUtil.isTrue(!extendInfo.isEmpty(), EzErrorCode.ILLEGAL_PARAM);
+        for (String extKey : extKeys) {
+            AssertUtil.notBlank(extendInfo.get(extKey), EzErrorCode.ILLEGAL_PARAM);
+        }
+    }
+
     public void createNews(String orgId, String imageUrl, Map<String, String> extInfo) {
         NewsCreateRequest request = new NewsCreateRequest();
         request.setOrgId(orgId);
         request.setImageUrl(imageUrl);
 
         if (extInfo != null && !extInfo.isEmpty()) {
-            request.setCategory(extInfo.get("CATEGORY"));
             request.setTitle(extInfo.get("TITLE"));
             request.setDescription(extInfo.get("DESCRIPTION"));
+            request.setPublishDate(extInfo.get("PUBLISH_DATE"));
+            request.setCategory(extInfo.get("CATEGORY"));
             request.setContent(extInfo.get("CONTENT"));
             request.setSource(extInfo.get("SOURCE"));
             request.setSourceUrl(extInfo.get("SOURCE_URL"));
-            request.setPublishDate(extInfo.get("PUBLISH_DATE"));
         }
         newsInnerService.createNews(request);
     }

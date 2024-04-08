@@ -130,41 +130,6 @@
     </div>
 </section>
 
-<div class="modal fade" id="modal-form-new" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="largeModalLabel">Upload New Image</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row clearfix">
-                    <div class="form-group form-float col-sm-12">
-                        <div class="form-line">
-                            <div class="font-12">Image Title</div>
-                            <input type="text" class="form-control" id="imageTitle" placeholder="Image Title" required>
-                        </div>
-                    </div>
-                    <div class="col-sm-6" style="margin-bottom: 0px;">
-                        <div class="form-group">
-                            <div class="font-12 ex1">Image ( JPG, JPEG, PNG or GIF )</div>
-                            <form id="newImageForm" enctype="multipart/form-data" method="post">
-                                <input type="file" accept="image/*" name="imageFile" id="imageFile" oninput="imagePreview.src=window.URL.createObjectURL(this.files[0]);imagePreview.style.display='block';" data-max-file-size="3M" data-allowed-file-extensions="jpg jpeg png gif" required/>
-                            </form>
-                            <img id="imagePreview" style="max-width:100%">
-                        </div>
-                    </div>
-                    <div class="col-sm-12">
-                        <img id="newImageSubmitLoader" src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right">
-                        <button id="newImageSubmitButton" class="button button-rounded waves-effect waves-float pull-right" type="submit" name="submit">SUBMIT</button>
-                        <button id="newImageCancelButton" class="button button-rounded button-light waves-effect waves-float pull-right" type="submit" name="submit">CANCEL</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
 <script src="assets/js/jquery.min.js"></script>
 <script src="assets/plugins/bootstrap/js/bootstrap.js"></script>
 <script src="assets/js/jquery.slimscroll.js"></script>
@@ -193,50 +158,6 @@
             if (url === EzApiUrl.UPDATE_APP_GALLERY) {
                 EzDashboardBizService.fetchGalleries();
             }
-        },
-        postNewImage: function() {
-            let sessionId = EzWebAppClient.getSessionId();
-            let title = $('#imageTitle').val();
-            let postData = {
-                sessionId: sessionId,
-                scene: 'ADMIN_APP_GALLERY',
-                extendInfo: {
-                    TITLE: title
-                }
-            };
-
-            let form = $('#newImageForm')[0];
-            let data = new FormData(form);
-            data.append('postData', JSON.stringify(postData));
-
-            $.ajax({
-                type: 'POST',
-                enctype: 'multipart/form-data',
-                url: 'api/adminCommonPost.json',
-                data: data,
-                processData: false,
-                contentType: false,
-                cache: false,
-                timeout: 600000,
-                success: function(response) {
-                    if (response.sessionExpired) {
-                        EzWebAppClient.alertSessionExpired();
-                    }
-                    else if (!response.success) {
-                        alert(response.message);
-                        EzDashboardBizService.resetFormNewImage();
-                    }
-                    else {
-                        alert(response.data);
-                        EzDashboardBizService.hideFormNewImage();
-                        EzDashboardBizService.resetFormNewImage();
-                        EzDashboardBizService.fetchGalleries();
-                    }
-                },
-                error: function(e) {
-                    console.log(e);
-                }
-            });
         },
         reloadPageResultView: function(response) {
             $('#rowsContainer').html('');
@@ -267,22 +188,6 @@
                 section: section,
                 value: value
             });
-        },
-        showFormNewImage: function() {
-            $('#modal-form-new').removeClass('fade');
-            $('#modal-form-new').addClass('show');
-        },
-        hideFormNewImage: function() {
-            $('#modal-form-new').removeClass('show');
-            $('#modal-form-new').addClass('fade');
-        },
-        resetFormNewImage: function() {
-            $('#imageTitle').val('');
-            $('#imageFile').val('');
-            $('#imagePreview').hide();
-            $('#newImageSubmitLoader').hide();
-            $('#newImageSubmitButton').show();
-            $('#newImageCancelButton').show();
         },
         prev: function() {
             EzDashboardBizService.data.pageNumber--;
@@ -319,20 +224,6 @@
             EzDashboardBizService.next();
         });
         EzWebAppClient.start();
-
-        $('#form-add-new-btn').click(function(){
-            EzDashboardBizService.showFormNewImage();
-        });
-        $('#newImageCancelButton').click(function(){
-            EzDashboardBizService.hideFormNewImage();
-        });
-        $('#newImageSubmitButton').click(function(event){
-            event.preventDefault();
-            $('#newImageSubmitButton').hide();
-            $('#newImageCancelButton').hide();
-            $('#newImageSubmitLoader').show();
-            EzDashboardBizService.postNewImage();
-        });
     });
 
     var DashTemplate = ''+
