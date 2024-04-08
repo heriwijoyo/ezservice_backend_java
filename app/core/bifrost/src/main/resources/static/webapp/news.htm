@@ -113,11 +113,9 @@
                             <thead>
                             <tr>
                                 <th width="20%">Image</th>
-                                <th width="40%">Title</th>
-                                <th width="10%" class="text-center">Active</th>
-                                <th width="10%" class="text-center">HOME</th>
-                                <th width="10%" class="text-center">PORTFOLIO</th>
-                                <th width="10%" class="text-center">SORTING</th>
+                                <th width="40%">Information</th>
+                                <th width="10%" class="text-center">Publish Date</th>
+                                <th width="10%" class="text-center">Status</th>
                             </tr>
                             </thead>
                             <tbody id="rowsContainer"></tbody>
@@ -139,53 +137,54 @@
 <script src="assets/js/ezappclient.js"></script>
 
 <script type="text/javascript">
+    var EzAdminUrl = {
+        NEWS_GET: 'api/getNews.json',
+        NEWS_STATUS_SWITCH: 'api/newsStatusSwitch.json'
+    };
     var EzDashboardBizService = {
         start: function() {
-            EzDashboardBizService.fetchGalleries();
+            EzDashboardBizService.fetchNews();
         },
-        fetchGalleries: function() {
-            EzWebAppClient.callApiService(EzApiUrl.GET_APP_GALLERY, {
+        fetchNews: function() {
+            EzWebAppClient.callApiService(EzAdminUrl.NEWS_GET, {
                 sessionId: EzWebAppClient.getSessionId(),
                 pageNumber: EzDashboardBizService.data.pageNumber,
                 pageSize: EzDashboardBizService.data.pageSize
             });
         },
         handleApiBizResult: function(url, response) {
-            if (url === EzApiUrl.GET_APP_GALLERY) {
+            if (url === EzAdminUrl.NEWS_GET) {
                 EzDashboardBizService.data.result = response.pageResult;
                 EzDashboardBizService.reloadPageResultView(response);
             }
-            if (url === EzApiUrl.UPDATE_APP_GALLERY) {
-                EzDashboardBizService.fetchGalleries();
+            if (url === EzAdminUrl.NEWS_STATUS_SWITCH) {
+                alert(response.data);
+                EzDashboardBizService.fetchNews();
             }
         },
         reloadPageResultView: function(response) {
             $('#rowsContainer').html('');
             for(let i=0; i<response.pageResult.data.length; i++) {
                 let rowData = response.pageResult.data[i];
-                let title = '<b>'+ rowData.title +'</b><br>Uploaded: '+ rowData.createdTime;
-                let flags = 'HOME_SLIDE: <b>NO</b>'+ '<br>PORTFOLIO_SLIDE: <b>NO</b>';
+                let title = '<b>'+ rowData.title +'</b><br>Description:<br>'+ rowData.description +'<br>Source: '+ rowData.source +'<br>Source URL: '+ rowData.sourceUrl;
                 let itemRow = $.parseHTML(DashTemplate);
                 $(itemRow).find('.img-rounded').attr('src', rowData.imageUrl);
                 $(itemRow).find('.rowTitle').html(title);
-                $(itemRow).find('.rowActive').html(EzDashboardBizService.renderFlag(rowData.status,'status',rowData.id));
-                $(itemRow).find('.rowHome').html(EzDashboardBizService.renderFlag(rowData.flagHomeSlide,'home',rowData.id));
-                $(itemRow).find('.rowPortfolio').html(EzDashboardBizService.renderFlag(rowData.flagPortfolioSlide,'portfolio',rowData.id));
-                $(itemRow).find('.rowSorting').html('<center><input type="text" class="border" value="'+rowData.sorting+'" onchange="EzDashboardBizService.swithFlag(\''+rowData.id+'\',\'sorting\',this.value)"/></center>');
+                $(itemRow).find('.rowDate').html(rowData.publishDate);
+                $(itemRow).find('.rowActive').html(EzDashboardBizService.renderFlag(rowData.status,'status',rowData.newsId));
                 $('#rowsContainer').append(itemRow);
             }
             $('.pager').html(EzWebAppClient.renderPager(response.pageResult));
         },
         renderFlag: function(flag,section,id) {
-            let flagText = flag == 1 ? 'YES' : 'NO';
+            let flagText = flag == 1 ? 'ACTIVE' : 'NOT ACTIVE';
             let switchFlag = flag == 1 ? '0' : '1';
             return '<center>'+ flagText + '<br><button onClick="EzDashboardBizService.swithFlag(\''+id+'\',\''+section+'\',\''+switchFlag+'\')" class="button button-rounded waves-effect waves-float" type="submit">SWITCH</button></center>';
         },
         swithFlag: function(itemId,section,value) {
-            EzWebAppClient.callApiService(EzApiUrl.UPDATE_APP_GALLERY, {
+            EzWebAppClient.callApiService(EzAdminUrl.NEWS_STATUS_SWITCH, {
                 sessionId: EzWebAppClient.getSessionId(),
                 itemId: itemId,
-                section: section,
                 value: value
             });
         },
@@ -232,10 +231,8 @@
                 '<img class="img-rounded" style="object-fit:cover;" height="180px" width="240px">'+
             '</td>'+
             '<td class="rowTitle" style="vertical-align: middle;"></td>'+
+            '<td class="rowDate" style="vertical-align: middle;"></td>'+
             '<td class="rowActive" style="vertical-align: middle;"></td>'+
-            '<td class="rowHome" style="vertical-align: middle;"></td>'+
-            '<td class="rowPortfolio" style="vertical-align: middle;"></td>'+
-            '<td class="rowSorting" style="vertical-align: middle;"></td>'+
         '</tr>';
 
 </script>

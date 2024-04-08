@@ -13,6 +13,7 @@ import id.ezclouds.biz.ezservice.model.admin.BizOrganizationDetail;
 import id.ezclouds.biz.ezservice.model.member.BizGender;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.model.member.BizMemberInfo;
+import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
 import id.ezclouds.biz.ezservice.service.apibiz.BizConnectService;
 import id.ezclouds.biz.ezservice.service.dataservice.AppConfigService;
 import id.ezclouds.biz.ezservice.service.dataservice.AppImageGalleryService;
@@ -153,6 +154,15 @@ public class BizAdminInnerService {
             request.setSourceUrl(extInfo.get("SOURCE_URL"));
         }
         newsInnerService.createNews(request);
+    }
+
+    public PageResult<BizWebSimpleNews> getSimpleNews(String orgId, int pageNumber, int pageSize, String sortBy, String sort) {
+        PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortBy, sort);
+        return newsInnerService.adminGetSimpleNews(orgId, pageRequest);
+    }
+
+    public void newsStatusSwitch(String orgId, String newsId, int value) {
+        newsInnerService.adminNewsStatusSwitch(orgId, newsId, value);
     }
 
     public void createVideoCard(String orgId, String imageUrl, Map<String, String> extInfo) {

@@ -172,23 +172,27 @@
 <script src="assets/js/ezappclient.js"></script>
 
 <script type="text/javascript">
+    var EzAdminUrl = {
+        GET_APP_GALLERY: 'api/getAppGallery.json',
+        UPDATE_APP_GALLERY: 'api/updateAppGallery.json'
+    };
     var EzDashboardBizService = {
         start: function() {
             EzDashboardBizService.fetchGalleries();
         },
         fetchGalleries: function() {
-            EzWebAppClient.callApiService(EzApiUrl.GET_APP_GALLERY, {
+            EzWebAppClient.callApiService(EzAdminUrl.GET_APP_GALLERY, {
                 sessionId: EzWebAppClient.getSessionId(),
                 pageNumber: EzDashboardBizService.data.pageNumber,
                 pageSize: EzDashboardBizService.data.pageSize
             });
         },
         handleApiBizResult: function(url, response) {
-            if (url === EzApiUrl.GET_APP_GALLERY) {
+            if (url === EzAdminUrl.GET_APP_GALLERY) {
                 EzDashboardBizService.data.result = response.pageResult;
                 EzDashboardBizService.reloadPageResultView(response);
             }
-            if (url === EzApiUrl.UPDATE_APP_GALLERY) {
+            if (url === EzAdminUrl.UPDATE_APP_GALLERY) {
                 EzDashboardBizService.fetchGalleries();
             }
         },

@@ -5,6 +5,8 @@
 package id.ezclouds.biz.ezservice.service.dataservice.repo;
 
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.NewsDO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,4 +26,8 @@ public interface NewsRepository extends JpaRepository<NewsDO, String> {
 
     @Query(value = "SELECT * FROM app_news WHERE org_id = :orgId AND status = 1 ORDER BY publish_date DESC LIMIT :limit", nativeQuery = true)
     List<NewsDO> findActiveNews(@Param("orgId") String orgId, @Param("limit") Integer limit);
+
+    Page<NewsDO> findByOrgId(String orgId, Pageable pageable);
+
+    NewsDO findByNewsIdAndOrgId(String newsId, String orgId);
 }

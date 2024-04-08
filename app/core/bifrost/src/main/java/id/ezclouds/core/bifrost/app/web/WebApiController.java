@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.ezservice.model.admin.*;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
+import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizSuperAdminService;
 import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
@@ -150,6 +151,70 @@ public class WebApiController {
                 request.setSection(section);
                 request.setValue(value);
                 return bizAdminService.updateAppGallery(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                if (object instanceof String) {
+                    return (String) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/getNews.json")
+    private WebApiPageResult<BizWebSimpleNews> getNews(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "pageNumber", required = false) int pageNumber,
+            @RequestParam(name = "pageSize", required = false) int pageSize ) {
+        final WebApiPageResult<BizWebSimpleNews> result = new WebApiPageResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_NEWS_GET, result, new WebApiControllerTemplate.PageHandler<BizWebSimpleNews>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizWebPageRequest request = new BizWebPageRequest();
+                request.setSessionId(sessionId);
+                request.setPageNumber(pageNumber);
+                request.setPageSize(pageSize);
+                return bizAdminService.getNews(request);
+            }
+
+            @Override
+            public PageResult<BizWebSimpleNews> convertResult(Object object) {
+                if (object instanceof PageResult) {
+                    return (PageResult<BizWebSimpleNews>) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/newsStatusSwitch.json")
+    private WebApiResult<String> newsStatusSwitch(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "itemId", required = false) String itemId,
+            @RequestParam(name = "value", required = false) String value ) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_NEWS_STATUS_SWITCH, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizWebUpdateItemRequest request = new BizWebUpdateItemRequest();
+                request.setSessionId(sessionId);
+                request.setItemId(itemId);
+                request.setValue(value);
+                return bizAdminService.newsStatusSwitch(request);
             }
 
             @Override

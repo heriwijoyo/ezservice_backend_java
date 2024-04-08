@@ -11,6 +11,7 @@ import id.ezclouds.biz.ezservice.enums.BizMemberRole;
 import id.ezclouds.biz.ezservice.converter.BizAdminConverter;
 import id.ezclouds.biz.ezservice.model.admin.*;
 import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
+import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
 import id.ezclouds.biz.ezservice.service.dataservice.BizOrganizationService;
 import id.ezclouds.biz.ezservice.service.dataservice.model.WebImageGallery;
@@ -394,6 +395,78 @@ public class BizAdminService extends BizBaseService {
         return bizResult;
     }
 
+    public BizResult getNews(BizWebPageRequest request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notNull(request.getPageNumber(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notNull(request.getPageSize(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.isTrue(request.getPageNumber() > 0, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.isTrue(request.getPageSize() > 0, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.SESSION_INVALID);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                BizPublicUrlResolver urlResolver = new BizPublicUrlResolverImpl(appRootPublicUrl, session.getOrgCode());
+                PageResult<BizWebSimpleNews> newsResult = bizAdminInnerService.getSimpleNews(
+                        session.getOrgId(),
+                        request.getPageNumber(),
+                        request.getPageSize(),
+                        "publishDate",
+                        "desc"
+                );
+                newsResult.getData().forEach(simpleNews -> {
+                    BizAnnotationProcessor.annotatePublicConfig(simpleNews, urlResolver);
+                });
+
+                bizResult.setObject(newsResult);
+                bizResult.setSuccess(true);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
+    public BizResult newsStatusSwitch(BizWebUpdateItemRequest request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getItemId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getValue(), EzErrorCode.ILLEGAL_PARAM);
+                try {
+                    Integer.parseInt(request.getValue());
+                } catch (Exception e) {
+                    throw new EzErrorException(EzErrorCode.ILLEGAL_PARAM);
+                }
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                bizAdminInnerService.newsStatusSwitch(session.getOrgId(), request.getItemId(), Integer.parseInt(request.getValue()));
+                bizResult.setSuccess(true);
+                bizResult.setObject(WebAdminConstant.OPERATION_SUCCESS);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
     public BizResult adminCommonPostWithFileUpload(BizAdminUploadRequest request) {
         final BizResult bizResult = new BizResult();
 
@@ -489,6 +562,15 @@ public class BizAdminService extends BizBaseService {
         });
 
         return bizResult;
+    }
+
+    private CoreAuthAdminSession authorizedAdminSession(String sessionId) throws Exception {
+        CoreAuthAdminSession session = coreAuthService.adminAuthWebSessionId(sessionId);
+        AssertUtil.notNull(session, EzErrorCode.SESSION_INVALID);
+        AssertUtil.notBlank(session.getMemberRoles(), EzErrorCode.MEMBER_UNAUTHORIZED);
+        List<String> roles = Arrays.asList(session.getMemberRoles().split(","));
+        AssertUtil.isTrue(roles.contains(BizMemberRole.ADMIN_ORG.getCode()), EzErrorCode.MEMBER_UNAUTHORIZED);
+        return session;
     }
 
     private void authorizeAdminMember(String memberRoles) throws EzErrorException {

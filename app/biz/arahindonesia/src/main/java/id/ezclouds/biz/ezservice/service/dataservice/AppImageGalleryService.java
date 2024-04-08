@@ -127,6 +127,9 @@ public class AppImageGalleryService {
         AppImageGalleryDO appImageGalleryDO = appImageGalleryRepository.findByIdAndOrgId(itemId, orgId);
         AssertUtil.notNull(appImageGalleryDO, EzErrorCode.DATA_NOT_FOUND);
 
+        if (StringUtil.equals(section, "title")) {
+            appImageGalleryDO.setTitle(value);
+        }
         if (StringUtil.equals(section, "status")) {
             appImageGalleryDO.setStatus(Integer.parseInt(value));
         }
