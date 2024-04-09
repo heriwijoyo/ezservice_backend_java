@@ -375,6 +375,8 @@ public class BizAdminInnerService {
         subOrgSeqConfig.setSeqLength(3);
         subOrgSeqConfig.setSequence(0);
         coreSequenceService.createSequenceConfig(subOrgSeqConfig);
+
+        //TODO: initiate other config, i.e: ez_core_admin_bo_permission, ez_core_admin_bo_menu
     }
 
     private PageRequest buildPageRequest(int page, int size, String sortBy, String sort) {
