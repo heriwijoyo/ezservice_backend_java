@@ -13,6 +13,7 @@ import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
 import id.ezclouds.biz.ezservice.service.core.BizAppCacheService;
 import id.ezclouds.biz.ezservice.service.dataservice.model.BizAppConfig;
 import id.ezclouds.biz.ezservice.service.inner.service.BizAdminInnerService;
+import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.BizWebCreateRequest;
 import id.ezclouds.biz.ezservice.service.request.web.BizWebDetailRequest;
 import id.ezclouds.biz.ezservice.service.request.web.BizWebPageRequest;
@@ -29,9 +30,12 @@ import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.auth.model.CoreAuthAdminSession;
 import id.ezclouds.core.auth.request.CoreAdminCommonSessionCreateRequest;
 import id.ezclouds.core.shared.constant.CoreConstant;
+import id.ezclouds.core.shared.file.PublicFileResolver;
+import id.ezclouds.core.shared.service.CoreFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +49,9 @@ public class BizSuperAdminService extends BizBaseService {
 
     @Autowired
     private BizAdminInnerService bizAdminInnerService;
+
+    @Autowired
+    private CoreFileService coreFileService;
 
     @Autowired
     private BizAppCacheService bizAppCacheService;
@@ -371,6 +378,34 @@ public class BizSuperAdminService extends BizBaseService {
         });
 
         return bizResult;
+    }
+
+    public void adminCommonPostWithFileUpload(BizAdminUploadRequest request) throws Exception {
+        bizAdminInnerService.validateExtendInfo(request.getExtendInfo(), "ORG_ID");
+
+        authorizeSuperUserMember(request.getSessionId());
+        String extOrgId = request.getExtendInfo().get("ORG_ID");
+        PublicFileResolver fileInfo = coreFileService.resolvePublicFileInfo(extOrgId);
+
+        Path filePath;
+        switch (request.getScene()) {
+            case ADMIN_APP_BUILD_PACKAGE:
+                bizAdminInnerService.validateExtendInfo(request.getExtendInfo(), "PLATFORM", "VERSION_CODE", "VERSION_NAME");
+                String platform = request.getExtendInfo().get("PLATFORM");
+                String versionCode = request.getExtendInfo().get("VERSION_CODE");
+                String versionName = request.getExtendInfo().get("VERSION_NAME");
+                String fileName = versionName + ".apk";
+
+                filePath = fileInfo.getAppBuildPackagePath(fileName);
+                coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
+                bizAdminInnerService.createAppBuildPackage(extOrgId, platform, Integer.parseInt(versionCode), versionName);
+                break;
+
+            case ADMIN_APP_ICON:
+                filePath = fileInfo.getAppGalleryPath("icon.png");
+                coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
+                break;
+        }
     }
 
     private void authorizeSuperUserMember(String sessionId) throws Exception {

@@ -8,17 +8,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.ezservice.model.admin.*;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
-import id.ezclouds.biz.ezservice.model.news.BizWebDetailNews;
-import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
-import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizSuperAdminService;
-import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.dataservice.model.BizAppConfig;
-import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.result.PageResult;
-import id.ezclouds.common.util.exception.ExceptionUtil;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;
@@ -30,267 +24,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: WebApiController.java, v 0.1 2024‐02‐11 11:00 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: WebApiAdminController.java, v 0.1 2024‐02‐11 11:00 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @RestController
-public class WebApiController {
+public class WebApiSuperAdminController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CommonLoggerConstant.WEB_API_CONTROLLER);
 
     @Autowired
-    private BizAdminService bizAdminService;
-
-    @Autowired
     private BizSuperAdminService bizSuperAdminService;
-
-    @PostMapping(value = "/webapp/api/getAppData.json")
-    private WebApiResult<BizAdminAppData> getAppData(@RequestParam(name = "sessionId", required = false) String sessionId) {
-        final WebApiResult<BizAdminAppData> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_APP_DATA, result, new WebApiControllerTemplate.Handler<BizAdminAppData>() {
-            @Override
-            public BizResult onProcess() throws Exception {
-                return bizAdminService.getAppData(sessionId);
-            }
-
-            @Override
-            public BizAdminAppData convertResult(Object object) {
-                if (object instanceof BizAdminAppData) {
-                    return (BizAdminAppData) object;
-                }
-                return null;
-            }
-
-            @Override
-            public void onDigestLog(DigestLog digestLog) {
-                DigestLogUtil.logWebDigest(LOGGER, digestLog);
-            }
-        });
-        return result;
-    }
-
-    @PostMapping(value = "/webapp/api/getDashboardData.json")
-    private WebApiResult<List<BizDashboardData>> getDashboardData(@RequestParam(name = "sessionId", required = false) String sessionId) {
-        final WebApiResult<List<BizDashboardData>> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_DASHBOARD, result, new WebApiControllerTemplate.Handler<List<BizDashboardData>>() {
-            @Override
-            public BizResult onProcess() throws Exception {
-                return bizAdminService.getDashboardData(sessionId);
-            }
-
-            @Override
-            public List<BizDashboardData> convertResult(Object object) {
-                if (object instanceof List) {
-                    return (List<BizDashboardData>) object;
-                }
-                return null;
-            }
-
-            @Override
-            public void onDigestLog(DigestLog digestLog) {
-                DigestLogUtil.logWebDigest(LOGGER, digestLog);
-            }
-        });
-        return result;
-    }
-
-    @PostMapping(value = "/webapp/api/getAppGallery.json")
-    private WebApiPageResult<AppImageGallery> getAppGallery(
-            @RequestParam(name = "sessionId", required = false) String sessionId,
-            @RequestParam(name = "pageNumber", required = false) int pageNumber,
-            @RequestParam(name = "pageSize", required = false) int pageSize
-    ) {
-        final WebApiPageResult<AppImageGallery> result = new WebApiPageResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_IMAGE_GALLERY, result, new WebApiControllerTemplate.PageHandler<AppImageGallery>() {
-            @Override
-            public BizResult onProcess() throws Exception {
-                BizWebPageRequest request = new BizWebPageRequest();
-                request.setSessionId(sessionId);
-                request.setPageNumber(pageNumber);
-                request.setPageSize(pageSize);
-                return bizAdminService.getAppGallery(request);
-            }
-
-            @Override
-            public PageResult<AppImageGallery> convertResult(Object object) {
-                if (object instanceof PageResult) {
-                    return (PageResult<AppImageGallery>) object;
-                }
-                return null;
-            }
-
-            @Override
-            public void onDigestLog(DigestLog digestLog) {
-                DigestLogUtil.logWebDigest(LOGGER, digestLog);
-            }
-        });
-        return result;
-    }
-
-    @PostMapping(value = "/webapp/api/updateAppGallery.json")
-    private WebApiResult<String> updateAppGallery(
-            @RequestParam(name = "sessionId", required = false) String sessionId,
-            @RequestParam(name = "itemId", required = false) String itemId,
-            @RequestParam(name = "section", required = false) String section,
-            @RequestParam(name = "value", required = false) String value
-    ) {
-        final WebApiResult<String> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_UPDATE_IMAGE_GALLERY, result, new WebApiControllerTemplate.Handler<String>() {
-            @Override
-            public BizResult onProcess() throws Exception {
-                BizWebUpdateItemRequest request = new BizWebUpdateItemRequest();
-                request.setSessionId(sessionId);
-                request.setItemId(itemId);
-                request.setSection(section);
-                request.setValue(value);
-                return bizAdminService.updateAppGallery(request);
-            }
-
-            @Override
-            public String convertResult(Object object) {
-                if (object instanceof String) {
-                    return (String) object;
-                }
-                return null;
-            }
-
-            @Override
-            public void onDigestLog(DigestLog digestLog) {
-                DigestLogUtil.logWebDigest(LOGGER, digestLog);
-            }
-        });
-        return result;
-    }
-
-    @PostMapping(value = "/webapp/api/getNews.json")
-    private WebApiPageResult<BizWebSimpleNews> getNews(
-            @RequestParam(name = "sessionId", required = false) String sessionId,
-            @RequestParam(name = "pageNumber", required = false) int pageNumber,
-            @RequestParam(name = "pageSize", required = false) int pageSize ) {
-        final WebApiPageResult<BizWebSimpleNews> result = new WebApiPageResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_NEWS_GET, result, new WebApiControllerTemplate.PageHandler<BizWebSimpleNews>() {
-            @Override
-            public BizResult onProcess() throws Exception {
-                BizWebPageRequest request = new BizWebPageRequest();
-                request.setSessionId(sessionId);
-                request.setPageNumber(pageNumber);
-                request.setPageSize(pageSize);
-                return bizAdminService.getNews(request);
-            }
-
-            @Override
-            public PageResult<BizWebSimpleNews> convertResult(Object object) {
-                if (object instanceof PageResult) {
-                    return (PageResult<BizWebSimpleNews>) object;
-                }
-                return null;
-            }
-
-            @Override
-            public void onDigestLog(DigestLog digestLog) {
-                DigestLogUtil.logWebDigest(LOGGER, digestLog);
-            }
-        });
-        return result;
-    }
-
-    @PostMapping(value = "/webapp/api/newsDetail.json")
-    private WebApiResult<BizWebDetailNews> newsDetail(
-            @RequestParam(name = "sessionId", required = false) String sessionId,
-            @RequestParam(name = "newsId", required = false) String newsId ) {
-        final WebApiResult<BizWebDetailNews> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_NEWS_DETAIL, result, new WebApiControllerTemplate.Handler<BizWebDetailNews>() {
-            @Override
-            public BizResult onProcess() throws Exception {
-                BizWebDetailRequest<String> request = new BizWebDetailRequest<>();
-                request.setSessionId(sessionId);
-                request.setObject(newsId);
-                return bizAdminService.getNewsDetail(request);
-            }
-
-            @Override
-            public BizWebDetailNews convertResult(Object object) {
-                if (object instanceof BizWebDetailNews) {
-                    return (BizWebDetailNews) object;
-                }
-                return null;
-            }
-
-            @Override
-            public void onDigestLog(DigestLog digestLog) {
-                DigestLogUtil.logWebDigest(LOGGER, digestLog);
-            }
-        });
-        return result;
-    }
-
-    @PostMapping(value = "/webapp/api/newsFlagSwitch.json")
-    private WebApiResult<String> newsStatusSwitch(
-            @RequestParam(name = "sessionId", required = false) String sessionId,
-            @RequestParam(name = "itemId", required = false) String itemId,
-            @RequestParam(name = "section", required = false) String section,
-            @RequestParam(name = "value", required = false) String value ) {
-        final WebApiResult<String> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_NEWS_STATUS_SWITCH, result, new WebApiControllerTemplate.Handler<String>() {
-            @Override
-            public BizResult onProcess() throws Exception {
-                BizWebUpdateItemRequest request = new BizWebUpdateItemRequest();
-                request.setSessionId(sessionId);
-                request.setItemId(itemId);
-                request.setSection(section);
-                request.setValue(value);
-                return bizAdminService.newsStatusSwitch(request);
-            }
-
-            @Override
-            public String convertResult(Object object) {
-                if (object instanceof String) {
-                    return (String) object;
-                }
-                return null;
-            }
-
-            @Override
-            public void onDigestLog(DigestLog digestLog) {
-                DigestLogUtil.logWebDigest(LOGGER, digestLog);
-            }
-        });
-        return result;
-    }
-
-    @PostMapping(value = "/webapp/api/adminCommonPost.json")
-    private WebApiResult<String> adminUpload(@RequestPart("imageFile") MultipartFile multipartFile, @RequestPart("postData") String postData) {
-        WebApiResult<String> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebEvent.ADMIN_COMMON_POST_WITH_FILE_UPLOAD, result, new WebApiControllerTemplate.Handler<String>() {
-            @Override
-            public BizResult onProcess() throws Exception {
-                BizAdminUploadRequest uploadRequest = composeUploadRequest(multipartFile, postData);
-                return bizAdminService.adminCommonPostWithFileUpload(uploadRequest);
-            }
-
-            @Override
-            public String convertResult(Object object) {
-                if (object instanceof String) {
-                    return (String) object;
-                }
-                return null;
-            }
-
-            @Override
-            public void onDigestLog(DigestLog digestLog) {
-                DigestLogUtil.logWebDigest(LOGGER, digestLog);
-            }
-        });
-        return result;
-    }
 
     @PostMapping(value = "/webapp/api/getOrganization.json")
     private WebApiPageResult<BizOrganization> getOrganization(
@@ -612,20 +361,5 @@ public class WebApiController {
             }
         });
         return result;
-    }
-
-    private BizAdminUploadRequest composeUploadRequest(MultipartFile multipartFile, String postData) {
-        BizAdminUploadRequest request;
-
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            request = objectMapper.readValue(postData, BizAdminUploadRequest.class);
-        } catch (Exception e) {
-            LOGGER.error(ExceptionUtil.getStackTrace(e));
-            request = new BizAdminUploadRequest();
-        }
-        request.setMultipartFile(multipartFile);
-
-        return request;
     }
 }

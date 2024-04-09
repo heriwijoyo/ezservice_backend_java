@@ -9,6 +9,7 @@ import id.ezclouds.biz.ezservice.config.BizPublicUrlResolverImpl;
 import id.ezclouds.biz.ezservice.constant.BizConstant;
 import id.ezclouds.biz.ezservice.enums.BizMemberRole;
 import id.ezclouds.biz.ezservice.converter.BizAdminConverter;
+import id.ezclouds.biz.ezservice.enums.BizUploadScene;
 import id.ezclouds.biz.ezservice.model.admin.*;
 import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
 import id.ezclouds.biz.ezservice.model.news.BizWebDetailNews;
@@ -71,6 +72,9 @@ public class BizAdminService extends BizBaseService {
 
     @Autowired
     private BizOrganizationService bizOrganizationService;
+
+    @Autowired
+    private BizSuperAdminService bizSuperAdminService;
 
     @Autowired
     private BizAdminInnerService bizAdminInnerService;
@@ -520,42 +524,18 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
+                if (isSuperAdminCommonUpload(request.getScene())) {
+                    bizSuperAdminService.adminCommonPostWithFileUpload(request);
+                    return;
+                }
+
                 CoreAuthAdminSession session = coreAuthService.adminAuthWebSessionId(request.getSessionId());
                 PublicFileResolver fileInfo = coreFileService.resolvePublicFileInfo(session.getOrgId());
 
                 String fileName = DateUtil.getTimeNowToString() + "." + request.getFileExtension();
-                String extOrgId;
 
                 Path filePath;
                 switch (request.getScene()) {
-                    case ADMIN_APP_BUILD_PACKAGE:
-                        AssertUtil.notNull(request.getExtendInfo(), EzErrorCode.ILLEGAL_PARAM);
-                        extOrgId = request.getExtendInfo().get("ORG_ID");
-                        String platform = request.getExtendInfo().get("PLATFORM");
-                        String versionCode = request.getExtendInfo().get("VERSION_CODE");
-                        String versionName = request.getExtendInfo().get("VERSION_NAME");
-                        AssertUtil.notBlank(extOrgId, EzErrorCode.ILLEGAL_PARAM);
-                        AssertUtil.notBlank(platform, EzErrorCode.ILLEGAL_PARAM);
-                        AssertUtil.notBlank(versionCode, EzErrorCode.ILLEGAL_PARAM);
-                        AssertUtil.notBlank(versionName, EzErrorCode.ILLEGAL_PARAM);
-
-                        fileName = versionName + ".apk";
-
-                        fileInfo = coreFileService.resolvePublicFileInfo(extOrgId);
-                        filePath = fileInfo.getAppBuildPackagePath(fileName);
-                        coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
-                        bizAdminInnerService.createAppBuildPackage(extOrgId, platform, Integer.parseInt(versionCode), versionName);
-                        break;
-                    case ADMIN_APP_ICON:
-                        AssertUtil.notNull(request.getExtendInfo(), EzErrorCode.ILLEGAL_PARAM);
-                        extOrgId = request.getExtendInfo().get("ORG_ID");
-                        AssertUtil.notBlank(extOrgId, EzErrorCode.ILLEGAL_PARAM);
-
-                        fileInfo = coreFileService.resolvePublicFileInfo(extOrgId);
-                        filePath = fileInfo.getAppGalleryPath("icon.png");
-                        coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
-                        break;
-
                     case ADMIN_APP_GALLERY:
                         filePath = fileInfo.getAppGalleryPath(fileName);
                         coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
@@ -636,5 +616,14 @@ public class BizAdminService extends BizBaseService {
         List<String> roles = Arrays.asList(memberRoles.split(","));
         boolean isAdminOrSuperUser = roles.contains(BizMemberRole.ADMIN_ORG.getCode()) || roles.contains(BizMemberRole.SUPERUSER.getCode());
         AssertUtil.isTrue(isAdminOrSuperUser, EzErrorCode.MEMBER_UNAUTHORIZED);
+    }
+
+    private boolean isSuperAdminCommonUpload(BizUploadScene uploadScene) {
+        switch (uploadScene) {
+            case ADMIN_APP_BUILD_PACKAGE:
+            case ADMIN_APP_ICON:
+                return true;
+        }
+        return false;
     }
 }
