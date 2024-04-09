@@ -563,7 +563,10 @@ public class BizAdminService extends BizBaseService {
                         break;
 
                     case ADMIN_EVENT_GALLERY:
+                        bizAdminInnerService.validateExtendInfo(request.getExtendInfo(), "TITLE", "DESCRIPTION", "CATEGORY", "DATE_START", "TIME_START", "LOCATION");
                         filePath = fileInfo.getEventGalleryPath(fileName);
+                        coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
+                        bizAdminInnerService.createEvent(session.getOrgId(), fileName, request.getExtendInfo());
                         break;
 
                     case ADMIN_VIDEO_CARD_GALLERY:

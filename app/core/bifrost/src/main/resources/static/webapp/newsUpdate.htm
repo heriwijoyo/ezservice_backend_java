@@ -229,7 +229,7 @@
             }
             if (url === EzAdminUrl.ADMIN_COMMON_POST) {
                 alert(response.data);
-                window.location.replace('news.htm');
+                window.location.reload();
             }
         },
         handleApiBizFailed: function(url, message) {
@@ -263,8 +263,15 @@
             $('#newsSourceUrl').val(data.sourceUrl);
             $('.dropify-render').html('<img src="'+ data.imageUrl +'"/>');
             $('.dropify-preview').show();
-
             CKEDITOR.instances.newsContent.setData(data.content);
+
+            $('#newsCategory > option').each(function(){
+                if (this.value == data.category) {
+                    $(this).prop('selected', true);
+                    $('#newsCategory').selectpicker('render');
+
+                }
+            });
         },
         showLoader: function() {
             $('#add-news-submit').hide();

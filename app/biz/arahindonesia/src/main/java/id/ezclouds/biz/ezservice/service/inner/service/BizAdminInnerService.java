@@ -10,16 +10,14 @@ import id.ezclouds.biz.ezservice.model.AppConfig;
 import id.ezclouds.biz.ezservice.model.admin.BizApplicationConfig;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganization;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganizationDetail;
+import id.ezclouds.biz.ezservice.model.event.BizEvent;
 import id.ezclouds.biz.ezservice.model.member.BizGender;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.model.member.BizMemberInfo;
 import id.ezclouds.biz.ezservice.model.news.BizWebDetailNews;
 import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
 import id.ezclouds.biz.ezservice.service.apibiz.BizConnectService;
-import id.ezclouds.biz.ezservice.service.dataservice.AppConfigService;
-import id.ezclouds.biz.ezservice.service.dataservice.AppImageGalleryService;
-import id.ezclouds.biz.ezservice.service.dataservice.NewsInnerService;
-import id.ezclouds.biz.ezservice.service.dataservice.VideoCardService;
+import id.ezclouds.biz.ezservice.service.dataservice.*;
 import id.ezclouds.biz.ezservice.service.dataservice.model.BizAppBuildPackage;
 import id.ezclouds.biz.ezservice.service.dataservice.model.BizAppConfig;
 import id.ezclouds.biz.ezservice.service.dataservice.model.WebImageGallery;
@@ -28,6 +26,7 @@ import id.ezclouds.biz.ezservice.service.dataservice.request.NewsCreateRequest;
 import id.ezclouds.biz.ezservice.service.dataservice.request.VideoCardCreateRequest;
 import id.ezclouds.biz.ezservice.service.result.PageResult;
 import id.ezclouds.common.util.DateUtil;
+import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.RandomUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
@@ -96,6 +95,9 @@ public class BizAdminInnerService {
 
     @Autowired
     private BizConnectService bizConnectService;
+
+    @Autowired
+    private BizEventInnerService bizEventInnerService;
 
     public void createAppBuildPackage(String orgId, String platformId, int versionCode, String versionName) throws EzErrorException {
         BizAppBuildPackage buildPackage = new BizAppBuildPackage();
@@ -169,6 +171,27 @@ public class BizAdminInnerService {
         detailNews.setSource(extInfo.get("SOURCE"));
         detailNews.setSourceUrl(extInfo.get("SOURCE_URL"));
         newsInnerService.updateNews(orgId, detailNews);
+    }
+
+    public void createEvent(String orgId, String fileName, Map<String, String> extInfo) {
+        String currentDate = DateUtil.getCurrentFormattedDate();
+        BizEvent bizEvent = new BizEvent();
+        bizEvent.setId(HashUtil.createHash(orgId, currentDate));
+        bizEvent.setOrgId(orgId);
+        bizEvent.setTitle(extInfo.get("TITLE"));
+        bizEvent.setCategory(extInfo.get("CATEGORY"));
+        bizEvent.setDescription(extInfo.get("DESCRIPTION"));
+        bizEvent.setImageUrl(fileName);
+        bizEvent.setDateStart(extInfo.get("DATE_START"));
+        bizEvent.setDateEnd(extInfo.get("DATE_END"));
+        bizEvent.setTimeStart(extInfo.get("TIME_START"));
+        bizEvent.setTimeEnd(extInfo.get("TIME_END"));
+        bizEvent.setLocation(extInfo.get("LOCATION"));
+        bizEvent.setHighlight(0);
+        bizEvent.setStatus(0);
+        bizEvent.setCreatedTime(currentDate);
+        bizEvent.setModifiedTime(currentDate);
+        bizEventInnerService.createEvent(bizEvent);
     }
 
     public PageResult<BizWebSimpleNews> getSimpleNews(String orgId, int pageNumber, int pageSize, String sortBy, String sort) {

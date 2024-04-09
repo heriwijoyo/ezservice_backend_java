@@ -92,8 +92,8 @@
 
     <ol class="breadcrumb breadcrumb-offset">
         <li><a href="home.htm">Dashboard</a></li>
-        <li><a href="news.htm">Manage News</a></li>
-        <li class="active">Add News</a></li>
+        <li><a href="events.htm">Manage Events</a></li>
+        <li class="active">Add Event</a></li>
     </ol>
 
     <div class="container-fluid" id="fade-in">
@@ -102,7 +102,7 @@
 
                     <div class="card corner-radius">
                         <div class="header">
-                            <h2>ADD NEWS</h2>
+                            <h2>ADD EVENT</h2>
                             <div class="header-dropdown m-r--5">
                                 <img id="submitLoader" src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right">
                                 <button id="add-news-submit" type="submit" name="submit" class="button button-rounded btn-offset bg-blue waves-effect pull-right">SAVE</button>
@@ -110,42 +110,7 @@
                         </div>
                         <div class="body">
                             <div class="row clearfix">
-                                <div class="col-sm-5">
-                                    <div class="form-group">
-                                        <div class="font-12">News Title *</div>
-                                        <div class="form-line">
-                                            <input type="text" class="form-control" id="newsTitle" placeholder="News Title" required>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <div class="font-12">News Description *</div>
-                                        <div class="form-line">
-                                            <textarea class="form-control" id="newsDescription" cols="1" rows="3" required></textarea>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <div class="font-12">News Date *</div>
-                                        <div class="form-line">
-                                            <input type="text" id="newsDate" class="datetimepicker form-control" placeholder="News Date" required>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <div class="font-12">Category *</div>
-                                        <select class="form-control show-tick" id="newsCategory">
-                                            <option value="GENERAL">Berita Umum</option>
-                                            <option value="BUSINESS">Berita Bisnis</option>
-                                            <option value="ECONOMICS">Berita Ekonomi</option>
-                                            <option value="POLITICS">Berita Politik</option>
-                                            <option value="ELECTION">Berita Pemilu</option>
-                                            <option value="SPORT">Berita Olah Raga</option>
-                                            <option value="TECHNOLOGY">Berita Teknologi</option>
-                                            <option value="INTERNATIONAL">Berita Luar Negeri</option>
-                                        </select>
-                                    </div>
-
+                                <div class="col-sm-12">
                                     <div id="video_post">
                                         <div class="font-12 ex1">Image Primary ( jpg / png ) *</div>
                                         <div class="form-group">
@@ -154,29 +119,57 @@
                                             </form>
                                         </div>
                                     </div>
-
                                     <div class="form-group">
-                                        <div class="font-12">Source</div>
+                                        <div class="font-12">Event Title *</div>
                                         <div class="form-line">
-                                            <input type="text" class="form-control" id="newsSource" placeholder="Source" required>
+                                            <input type="text" class="form-control" id="newsTitle" placeholder="Event Title" required>
                                         </div>
                                     </div>
-
                                     <div class="form-group">
-                                        <div class="font-12">Source URL</div>
+                                        <div class="font-12">Category *</div>
+                                        <select class="form-control show-tick" id="newsCategory">
+                                            <option value="BAKSOS">Bakti Sosial</option>
+                                            <option value="BIMTEK">Bimtek</option>
+                                            <option value="TRAINING">Training</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="font-12">Event Description *</div>
                                         <div class="form-line">
-                                            <input type="text" class="form-control" id="newsSourceUrl" placeholder="Source URL" required>
+                                            <textarea class="form-control" id="newsDescription" cols="1" rows="5" required></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="font-12">Date Start *</div>
+                                        <div class="form-line">
+                                            <input type="text" id="dateStart" class="datetimepicker form-control" placeholder="Date Start" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="font-12">Time Start *</div>
+                                        <div class="form-line">
+                                            <input type="text" id="timeStart" class="datetimepicker form-control" placeholder="Time Start" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="font-12">Date End</div>
+                                        <div class="form-line">
+                                            <input type="text" id="dateEnd" class="datetimepicker form-control" placeholder="Date End" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="font-12">Time End</div>
+                                        <div class="form-line">
+                                            <input type="text" id="timeEnd" class="datetimepicker form-control" placeholder="Time End" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="font-12">Location *</div>
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" id="location" placeholder="Location" required>
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="col-sm-7">
-                                    <div class="font-12">Description *</div>
-                                    <div class="form-group" style="margin-top: 6px;">
-                                        <textarea class="form-control" id="newsContent" cols="60" rows="10" required></textarea>
-                                    </div>
-                                </div>
-
                             </div>
                         </div>
                     </div>
@@ -209,7 +202,7 @@
         handleApiBizResult: function(url, response) {
             if (url === EzAdminUrl.ADMIN_COMMON_POST) {
                 alert(response.data);
-                window.location.replace('news.htm');
+                window.location.replace('events.htm');
             }
         },
         handleApiBizFailed: function(url, message) {
@@ -220,15 +213,16 @@
         },
         postAddNewsForm: function() {
             let postData = {
-                scene: 'ADMIN_NEWS_GALLERY',
+                scene: 'ADMIN_EVENT_GALLERY',
                 extendInfo: {
                     TITLE: $('#newsTitle').val(),
                     DESCRIPTION: $('#newsDescription').val(),
                     CATEGORY: $('#newsCategory').val(),
-                    PUBLISH_DATE: $('#newsDate').val(),
-                    SOURCE: $('#newsSource').val(),
-                    SOURCE_URL: $('#newsSourceUrl').val(),
-                    CONTENT: CKEDITOR.instances.newsContent.getData()
+                    DATE_START: $('#dateStart').val(),
+                    DATE_END: $('#dateEnd').val(),
+                    TIME_START: $('#timeStart').val(),
+                    TIME_END: $('#timeEnd').val(),
+                    LOCATION: $('#location').val()
                 }
             };
             EzWebAppClient.postMultipartForm('add-news-form', postData, EzAdminUrl.ADMIN_COMMON_POST, '');
@@ -307,13 +301,22 @@
                 drDestroy.init();
             }
         });
-        $('#newsDate').bootstrapMaterialDatePicker
-        ({
-            format: 'YYYY-MM-DD HH:mm:ss'
+        $('#dateStart').bootstrapMaterialDatePicker({
+            time: false,
+            format: 'YYYY-MM-DD'
         });
-
-        CKEDITOR.replace('newsContent');
-        CKEDITOR.config.height = 338;
+        $('#timeStart').bootstrapMaterialDatePicker({
+            date: false,
+            format: 'HH:mm'
+        });
+        $('#dateEnd').bootstrapMaterialDatePicker({
+            time: false,
+            format: 'YYYY-MM-DD'
+        });
+        $('#timeEnd').bootstrapMaterialDatePicker({
+            date: false,
+            format: 'HH:mm'
+        });
     });
 </script>
 </body>
