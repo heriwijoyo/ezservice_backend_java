@@ -13,6 +13,7 @@ import id.ezclouds.biz.ezservice.model.admin.BizOrganizationDetail;
 import id.ezclouds.biz.ezservice.model.member.BizGender;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.model.member.BizMemberInfo;
+import id.ezclouds.biz.ezservice.model.news.BizWebDetailNews;
 import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
 import id.ezclouds.biz.ezservice.service.apibiz.BizConnectService;
 import id.ezclouds.biz.ezservice.service.dataservice.AppConfigService;
@@ -156,9 +157,27 @@ public class BizAdminInnerService {
         newsInnerService.createNews(request);
     }
 
+    public void updateNews(String orgId, String imageUrl, Map<String, String> extInfo) {
+        BizWebDetailNews detailNews = new BizWebDetailNews();
+        detailNews.setNewsId(extInfo.get("NEWS_ID"));
+        detailNews.setTitle(extInfo.get("TITLE"));
+        detailNews.setDescription(extInfo.get("DESCRIPTION"));
+        detailNews.setPublishDate(extInfo.get("PUBLISH_DATE"));
+        detailNews.setCategory(extInfo.get("CATEGORY"));
+        detailNews.setImageUrl(imageUrl);
+        detailNews.setContent(extInfo.get("CONTENT"));
+        detailNews.setSource(extInfo.get("SOURCE"));
+        detailNews.setSourceUrl(extInfo.get("SOURCE_URL"));
+        newsInnerService.updateNews(orgId, detailNews);
+    }
+
     public PageResult<BizWebSimpleNews> getSimpleNews(String orgId, int pageNumber, int pageSize, String sortBy, String sort) {
         PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortBy, sort);
         return newsInnerService.adminGetSimpleNews(orgId, pageRequest);
+    }
+
+    public BizWebDetailNews getNewsDetail(String orgId, String newsId) {
+        return newsInnerService.adminGetNewsDetail(orgId, newsId);
     }
 
     public void newsFlagSwitch(String orgId, String newsId, String section, int value) {

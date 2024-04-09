@@ -6,6 +6,7 @@ package id.ezclouds.biz.ezservice.service.dataservice;
 
 import id.ezclouds.biz.ezservice.converter.BizModelConverter;
 import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
+import id.ezclouds.biz.ezservice.model.news.BizWebDetailNews;
 import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
 import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.NewsDO;
@@ -14,6 +15,7 @@ import id.ezclouds.biz.ezservice.service.dataservice.request.NewsCreateRequest;
 import id.ezclouds.biz.ezservice.service.result.PageResult;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
+import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
@@ -54,6 +56,23 @@ public class NewsInnerService {
         newsDO.setPublishDate(request.getPublishDate());
         newsDO.setStatus(request.getStatus());
         newsDO.setHighlight(request.getHighlight());
+        newsRepository.saveAndFlush(newsDO);
+    }
+
+    @Transactional
+    public void updateNews(String orgId, BizWebDetailNews detailNews) {
+        NewsDO newsDO = newsRepository.findByNewsIdAndOrgId(detailNews.getNewsId(), orgId);
+        AssertUtil.notNull(newsDO, EzErrorCode.DATA_NOT_FOUND);
+        if (StringUtil.isNotBlank(detailNews.getImageUrl())) {
+            newsDO.setImageUrl(detailNews.getImageUrl());
+        }
+        newsDO.setTitle(detailNews.getTitle());
+        newsDO.setDescription(detailNews.getDescription());
+        newsDO.setPublishDate(detailNews.getPublishDate());
+        newsDO.setCategory(detailNews.getCategory());
+        newsDO.setSource(detailNews.getSource());
+        newsDO.setSourceUrl(detailNews.getSourceUrl());
+        newsDO.setContent(detailNews.getContent());
         newsRepository.saveAndFlush(newsDO);
     }
 
@@ -106,6 +125,22 @@ public class NewsInnerService {
         pageResult.setHasPrevious(findResult.hasPrevious());
         pageResult.setData(resultData);
         return pageResult;
+    }
+
+    public BizWebDetailNews adminGetNewsDetail(String orgId, String newsId) {
+        NewsDO newsDO = newsRepository.findByNewsIdAndOrgId(newsId, orgId);
+        AssertUtil.notNull(newsDO, EzErrorCode.DATA_NOT_FOUND);
+        BizWebDetailNews detailNews = new BizWebDetailNews();
+        detailNews.setNewsId(newsDO.getNewsId());
+        detailNews.setTitle(newsDO.getTitle());
+        detailNews.setDescription(newsDO.getDescription());
+        detailNews.setCategory(newsDO.getCategory());
+        detailNews.setContent(newsDO.getContent());
+        detailNews.setImageUrl(newsDO.getImageUrl());
+        detailNews.setPublishDate(newsDO.getPublishDate());
+        detailNews.setSource(newsDO.getSource());
+        detailNews.setSourceUrl(newsDO.getSourceUrl());
+        return detailNews;
     }
 
     @Transactional

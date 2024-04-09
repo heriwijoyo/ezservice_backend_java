@@ -22,6 +22,9 @@ public class BizMemberUploadRequest extends BizMultipartRequest {
         return scene;
     }
 
+    @Override
+    protected void presetScene(BizUploadScene scene) { }
+
     public void setScene(BizUploadScene scene) {
         this.scene = scene;
     }

@@ -11,6 +11,7 @@ import id.ezclouds.biz.ezservice.enums.BizMemberRole;
 import id.ezclouds.biz.ezservice.converter.BizAdminConverter;
 import id.ezclouds.biz.ezservice.model.admin.*;
 import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
+import id.ezclouds.biz.ezservice.model.news.BizWebDetailNews;
 import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
 import id.ezclouds.biz.ezservice.service.core.BizAppCacheService;
@@ -438,6 +439,34 @@ public class BizAdminService extends BizBaseService {
         return bizResult;
     }
 
+    public BizResult getNewsDetail(BizWebDetailRequest<String> request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getObject(), EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                BizWebDetailNews detailNews = bizAdminInnerService.getNewsDetail(session.getOrgId(), request.getObject());
+                BizPublicUrlResolver urlResolver = new BizPublicUrlResolverImpl(appRootPublicUrl, session.getOrgCode());
+                BizAnnotationProcessor.annotatePublicConfig(detailNews, urlResolver);
+                bizResult.setObject(detailNews);
+                bizResult.setSuccess(true);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
     public BizResult newsStatusSwitch(BizWebUpdateItemRequest request) {
         final BizResult bizResult = new BizResult();
         BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
@@ -539,6 +568,16 @@ public class BizAdminService extends BizBaseService {
                         coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
                         bizAdminInnerService.createNews(session.getOrgId(), fileName, request.getExtendInfo());
                         bizAppCacheService.reloadCacheItem(BizCacheKey.NEWS_HIGHLIGHT);
+                        break;
+
+                    case ADMIN_NEWS_GALLERY_UPDATE:
+                        fileName = null;
+                        if (request.getMultipartFile() != null) {
+                            //TODO: upload new image
+                            System.out.println("NEW IMAGE UPLOADED!!!");
+                        }
+                        bizAdminInnerService.validateExtendInfo(request.getExtendInfo(), "NEWS_ID", "TITLE", "DESCRIPTION", "PUBLISH_DATE", "CATEGORY", "CONTENT");
+                        bizAdminInnerService.updateNews(session.getOrgId(), fileName, request.getExtendInfo());
                         break;
 
                     case ADMIN_EVENT_GALLERY:

@@ -37,12 +37,20 @@ public class BizAdminUploadRequest extends BizMultipartRequest {
     }
 
     @Override
+    protected void presetScene(BizUploadScene scene) {
+        if (scene == BizUploadScene.ADMIN_NEWS_GALLERY_UPDATE) {
+            setMultipartFileOptional();
+        }
+    }
+
+    @Override
     protected List<BizUploadScene> getSupportedScene() {
         List<BizUploadScene> supportedScene = new ArrayList<>();
         supportedScene.add(BizUploadScene.ADMIN_APP_BUILD_PACKAGE);
         supportedScene.add(BizUploadScene.ADMIN_APP_ICON);
         supportedScene.add(BizUploadScene.ADMIN_APP_GALLERY);
         supportedScene.add(BizUploadScene.ADMIN_NEWS_GALLERY);
+        supportedScene.add(BizUploadScene.ADMIN_NEWS_GALLERY_UPDATE);
         supportedScene.add(BizUploadScene.ADMIN_EVENT_GALLERY);
         supportedScene.add(BizUploadScene.ADMIN_VIDEO_CARD_GALLERY);
         supportedScene.add(BizUploadScene.ADMIN_OTHER_GALLERY);

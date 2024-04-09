@@ -93,7 +93,7 @@
     <ol class="breadcrumb breadcrumb-offset">
         <li><a href="home.htm">Dashboard</a></li>
         <li><a href="news.htm">Manage News</a></li>
-        <li class="active">Add News</a></li>
+        <li class="active">Update News</a></li>
     </ol>
 
     <div class="container-fluid" id="fade-in">
@@ -102,15 +102,19 @@
 
                     <div class="card corner-radius">
                         <div class="header">
-                            <h2>ADD NEWS</h2>
+                            <h2>UPDATE NEWS</h2>
                             <div class="header-dropdown m-r--5">
                                 <img id="submitLoader" src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right">
-                                <button id="add-news-submit" type="submit" name="submit" class="button button-rounded btn-offset bg-blue waves-effect pull-right">SAVE</button>
+                                <button id="add-news-submit" type="submit" name="submit" class="button button-rounded btn-offset bg-blue waves-effect pull-right">UPDATE</button>
                             </div>
                         </div>
                         <div class="body">
                             <div class="row clearfix">
                                 <div class="col-sm-5">
+                                    <div class="form-group">
+                                        <div class="font-12">News ID: </div>
+                                        <div id="newsId" class="font-12"></div>
+                                    </div>
                                     <div class="form-group">
                                         <div class="font-12">News Title *</div>
                                         <div class="form-line">
@@ -202,11 +206,27 @@
 
 <script type="text/javascript">
     var EzAdminUrl = {
+        NEWS_DETAIL_GET: 'api/newsDetail.json',
         ADMIN_COMMON_POST: 'api/adminCommonPost.json'
     };
     var EzDashboardBizService = {
-        start: function() {},
+        start: function() {
+            EzDashboardBizService.fetchNewsDetail();
+        },
+        fetchNewsDetail: function() {
+            let newsId = EzWebAppClient.getUrlParameter('newsId');
+            if (EzWebAppClient.isBlank(newsId)) {
+                EzDashboardBizService.alertInvalidNews();
+            } else {
+                 EzWebAppClient.callApiService(EzAdminUrl.NEWS_DETAIL_GET, {
+                    newsId: newsId
+                 });
+            }
+        },
         handleApiBizResult: function(url, response) {
+            if (url === EzAdminUrl.NEWS_DETAIL_GET) {
+                EzDashboardBizService.renderNewsDetail(response.data);
+            }
             if (url === EzAdminUrl.ADMIN_COMMON_POST) {
                 alert(response.data);
                 window.location.replace('news.htm');
@@ -220,8 +240,9 @@
         },
         postAddNewsForm: function() {
             let postData = {
-                scene: 'ADMIN_NEWS_GALLERY',
+                scene: 'ADMIN_NEWS_GALLERY_UPDATE',
                 extendInfo: {
+                    NEWS_ID: $('#newsId').html(),
                     TITLE: $('#newsTitle').val(),
                     DESCRIPTION: $('#newsDescription').val(),
                     CATEGORY: $('#newsCategory').val(),
@@ -233,6 +254,18 @@
             };
             EzWebAppClient.postMultipartForm('add-news-form', postData, EzAdminUrl.ADMIN_COMMON_POST, '');
         },
+        renderNewsDetail: function(data) {
+            $('#newsId').html(data.newsId);
+            $('#newsTitle').val(data.title);
+            $('#newsDescription').val(data.description);
+            $('#newsDate').val(data.publishDate);
+            $('#newsSource').val(data.source);
+            $('#newsSourceUrl').val(data.sourceUrl);
+            $('.dropify-render').html('<img src="'+ data.imageUrl +'"/>');
+            $('.dropify-preview').show();
+
+            CKEDITOR.instances.newsContent.setData(data.content);
+        },
         showLoader: function() {
             $('#add-news-submit').hide();
             $('#submitLoader').show();
@@ -240,6 +273,10 @@
         hideLoader: function() {
             $('#submitLoader').hide();
             $('#add-news-submit').show();
+        },
+        alertInvalidNews: function() {
+            alert('Invalid News ID');
+            window.location.replace('news.htm');
         }
     };
 

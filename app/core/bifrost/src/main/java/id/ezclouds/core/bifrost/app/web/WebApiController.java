@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.ezservice.model.admin.*;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
+import id.ezclouds.biz.ezservice.model.news.BizWebDetailNews;
 import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizSuperAdminService;
@@ -189,6 +190,36 @@ public class WebApiController {
             public PageResult<BizWebSimpleNews> convertResult(Object object) {
                 if (object instanceof PageResult) {
                     return (PageResult<BizWebSimpleNews>) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/newsDetail.json")
+    private WebApiResult<BizWebDetailNews> newsDetail(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "newsId", required = false) String newsId ) {
+        final WebApiResult<BizWebDetailNews> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_NEWS_DETAIL, result, new WebApiControllerTemplate.Handler<BizWebDetailNews>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizWebDetailRequest<String> request = new BizWebDetailRequest<>();
+                request.setSessionId(sessionId);
+                request.setObject(newsId);
+                return bizAdminService.getNewsDetail(request);
+            }
+
+            @Override
+            public BizWebDetailNews convertResult(Object object) {
+                if (object instanceof BizWebDetailNews) {
+                    return (BizWebDetailNews) object;
                 }
                 return null;
             }

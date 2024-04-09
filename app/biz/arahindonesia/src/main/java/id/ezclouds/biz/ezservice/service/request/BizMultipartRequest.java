@@ -19,7 +19,7 @@ import java.util.List;
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizMultipartRequest.java, v 0.1 2024‐02‐08 2:46 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public abstract class BizMultipartRequest extends BizRequest {
+public abstract class BizMultipartRequest extends BizOptionalMultipartRequest {
 
     protected final List<String> imageTypes = Arrays.asList("image/png", "images/png", "image/jpg", "images/jpg", "image/jpeg", "images/jpeg");
 
@@ -39,23 +39,31 @@ public abstract class BizMultipartRequest extends BizRequest {
 
     public abstract BizUploadScene getScene();
 
+    protected abstract void presetScene(BizUploadScene scene);
+
     protected abstract List<BizUploadScene> getSupportedScene();
 
     protected abstract List<String> getSupportedContentType();
 
     public void validateMultipartRequest() throws EzErrorException {
+        presetScene(getScene());
         AssertUtil.isNotTrue(getScene() == BizUploadScene.UNKNOWN, EzErrorCode.UPLOAD_SCENE_EMPTY);
         AssertUtil.isTrue(!getSupportedScene().isEmpty(), EzErrorCode.UPLOAD_SCENE_NOT_ALLOWED);
         AssertUtil.isTrue(getSupportedScene().contains(getScene()), EzErrorCode.UPLOAD_SCENE_NOT_ALLOWED);
 
-        AssertUtil.notNull(multipartFile, EzErrorCode.MULTIPARTFILE_EMPTY);
-        AssertUtil.isTrue(multipartFile.getSize() > 0, EzErrorCode.MULTIPARTFILE_EMPTY);
-        AssertUtil.notNull(getSupportedContentType(), EzErrorCode.MULTIPARTFILE_TYPE_UNDEFINED);
-        AssertUtil.isTrue(getSupportedContentType().size() > 0, EzErrorCode.MULTIPARTFILE_TYPE_UNDEFINED);
-        AssertUtil.isTrue(getSupportedContentType().contains(multipartFile.getContentType()), EzErrorCode.MULTIPARTFILE_TYPE_UNSUPPORTED);
+        if (isMultipartFileRequired()) {
+            AssertUtil.notNull(multipartFile, EzErrorCode.MULTIPARTFILE_EMPTY);
+            AssertUtil.isTrue(multipartFile.getSize() > 0, EzErrorCode.MULTIPARTFILE_EMPTY);
+            AssertUtil.notNull(getSupportedContentType(), EzErrorCode.MULTIPARTFILE_TYPE_UNDEFINED);
+            AssertUtil.isTrue(getSupportedContentType().size() > 0, EzErrorCode.MULTIPARTFILE_TYPE_UNDEFINED);
+            AssertUtil.isTrue(getSupportedContentType().contains(multipartFile.getContentType()), EzErrorCode.MULTIPARTFILE_TYPE_UNSUPPORTED);
+        }
     }
 
     public String getFileExtension() {
-        return StringUtils.getFilenameExtension(multipartFile.getOriginalFilename());
+        if (isMultipartFileRequired()) {
+            return StringUtils.getFilenameExtension(multipartFile.getOriginalFilename());
+        }
+        return "";
     }
 }
