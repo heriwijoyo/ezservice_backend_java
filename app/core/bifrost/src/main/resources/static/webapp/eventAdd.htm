@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>EzService - Admin Dashboard</title>
+    <link rel="icon" href="assets/images/favicon.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link href="assets/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/waves.css" rel="stylesheet" />
+    <link href="assets/css/animate.css" rel="stylesheet" />
+    <link href="assets/css/bootstrap-tagsinput.css" rel="stylesheet">
+    <link href="assets/css/theme.css" rel="stylesheet" />
+    <link href="assets/css/time-picker.css" rel="stylesheet" />
+    <link href="assets/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+    <link href="assets/plugins/dropify/css/dropify.css" rel="stylesheet">
+    <link href="assets/css/styles.min.css" rel="stylesheet">
+    <script src="assets/js/jquery-1.9.1.min.js"></script>
+</head>
+
+<body class="theme-blue poppins">
+
+<nav class="navbar">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
+            <a href="javascript:void(0);" class="bars"></a>
+            <a class="navbar-brand" href="home.htm"><div id="app-info-name" class="uppercase"></div></a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#">
+                        <i class="material-icons">comment</i>
+                    </a>
+                </li>
+                <li><a href="#"><i class="material-icons">notifications</i></a></li>
+                <li class="dropdown">
+                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                        <i class="material-icons">more_vert</i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#"><i class="material-icons">person</i>Profile</a></li>
+                        <li><a href="#"><i class="material-icons">power_settings_new</i>Logout</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<section>
+    <!-- Left Sidebar -->
+    <aside id="leftsidebar" class="sidebar">
+        <div class="user-info">
+            <div class="info-container">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                    <img src="assets/images/ic_launcher.png" width="40px" height="40px" />
+                </div>
+                <div id="user-info-name" class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></div>
+                <div id="user-info-phone" class="email"></div>
+                <div class="btn-group user-helper-dropdown">
+                    <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
+                    <ul class="dropdown-menu pull-right">
+                        <li><a href="#"><i class="material-icons">person</i>Profile</a></li>
+                        <li><a href="#"><i class="material-icons">power_settings_new</i>Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="menu">
+            <ul id="left-menu-container" class="list">
+                <li class="header">MENU</li>
+            </ul>
+        </div>
+        <div class="legal">
+            <div class="copyright">
+                Copyright © 2023 EzService Tech
+            </div>
+            <div class="version">
+                <b>Version: </b> 1.0.0-DEV
+            </div>
+        </div>
+    </aside>
+</section>
+
+<section class="content">
+
+    <ol class="breadcrumb breadcrumb-offset">
+        <li><a href="home.htm">Dashboard</a></li>
+        <li><a href="news.htm">Manage News</a></li>
+        <li class="active">Add News</a></li>
+    </ol>
+
+    <div class="container-fluid" id="fade-in">
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                    <div class="card corner-radius">
+                        <div class="header">
+                            <h2>ADD NEWS</h2>
+                            <div class="header-dropdown m-r--5">
+                                <img id="submitLoader" src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right">
+                                <button id="add-news-submit" type="submit" name="submit" class="button button-rounded btn-offset bg-blue waves-effect pull-right">SAVE</button>
+                            </div>
+                        </div>
+                        <div class="body">
+                            <div class="row clearfix">
+                                <div class="col-sm-5">
+                                    <div class="form-group">
+                                        <div class="font-12">News Title *</div>
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" id="newsTitle" placeholder="News Title" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="font-12">News Description *</div>
+                                        <div class="form-line">
+                                            <textarea class="form-control" id="newsDescription" cols="1" rows="3" required></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="font-12">News Date *</div>
+                                        <div class="form-line">
+                                            <input type="text" id="newsDate" class="datetimepicker form-control" placeholder="News Date" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="font-12">Category *</div>
+                                        <select class="form-control show-tick" id="newsCategory">
+                                            <option value="GENERAL">Berita Umum</option>
+                                            <option value="BUSINESS">Berita Bisnis</option>
+                                            <option value="ECONOMICS">Berita Ekonomi</option>
+                                            <option value="POLITICS">Berita Politik</option>
+                                            <option value="ELECTION">Berita Pemilu</option>
+                                            <option value="SPORT">Berita Olah Raga</option>
+                                            <option value="TECHNOLOGY">Berita Teknologi</option>
+                                            <option value="INTERNATIONAL">Berita Luar Negeri</option>
+                                        </select>
+                                    </div>
+
+                                    <div id="video_post">
+                                        <div class="font-12 ex1">Image Primary ( jpg / png ) *</div>
+                                        <div class="form-group">
+                                            <form id="add-news-form" method="post" enctype="multipart/form-data">
+                                                <input type="file" name="imageFile" class="dropify-image" data-max-file-size="2M" data-allowed-file-extensions="jpg jpeg png gif" required />
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="font-12">Source</div>
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" id="newsSource" placeholder="Source" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="font-12">Source URL</div>
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" id="newsSourceUrl" placeholder="Source URL" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-7">
+                                    <div class="font-12">Description *</div>
+                                    <div class="form-group" style="margin-top: 6px;">
+                                        <textarea class="form-control" id="newsContent" cols="60" rows="10" required></textarea>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/plugins/bootstrap/js/bootstrap.js"></script>
+<script src="assets/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+<script src="assets/js/jquery.slimscroll.js"></script>
+<script src="assets/js/waves.js"></script>
+<script src="assets/js/jquery.validate.js"></script>
+<script src="assets/plugins/dropify/js/dropify.js"></script>
+<script src="assets/js/admin.js"></script>
+<script src="assets/js/form-validation.js"></script>
+<script src="assets/js/bootstrap-tagsinput.min.js"></script>
+<script src="assets/js/moment-with-locales.min.js"></script>
+<script src="assets/js/datetimepicker.js"></script>
+<script src="assets/plugins/ckeditor/ckeditor.js"></script>
+<script src="assets/js/ezappclient.js"></script>
+
+<script type="text/javascript">
+    var EzAdminUrl = {
+        ADMIN_COMMON_POST: 'api/adminCommonPost.json'
+    };
+    var EzDashboardBizService = {
+        start: function() {},
+        handleApiBizResult: function(url, response) {
+            if (url === EzAdminUrl.ADMIN_COMMON_POST) {
+                alert(response.data);
+                window.location.replace('news.htm');
+            }
+        },
+        handleApiBizFailed: function(url, message) {
+            if (url === EzAdminUrl.ADMIN_COMMON_POST) {
+                alert(message);
+                EzDashboardBizService.hideLoader();
+            }
+        },
+        postAddNewsForm: function() {
+            let postData = {
+                scene: 'ADMIN_NEWS_GALLERY',
+                extendInfo: {
+                    TITLE: $('#newsTitle').val(),
+                    DESCRIPTION: $('#newsDescription').val(),
+                    CATEGORY: $('#newsCategory').val(),
+                    PUBLISH_DATE: $('#newsDate').val(),
+                    SOURCE: $('#newsSource').val(),
+                    SOURCE_URL: $('#newsSourceUrl').val(),
+                    CONTENT: CKEDITOR.instances.newsContent.getData()
+                }
+            };
+            EzWebAppClient.postMultipartForm('add-news-form', postData, EzAdminUrl.ADMIN_COMMON_POST, '');
+        },
+        showLoader: function() {
+            $('#add-news-submit').hide();
+            $('#submitLoader').show();
+        },
+        hideLoader: function() {
+            $('#submitLoader').hide();
+            $('#add-news-submit').show();
+        }
+    };
+
+    $(document).ready(function(){
+        EzWebAppClient.onApiBizSuccess(function(url, response){
+            EzDashboardBizService.handleApiBizResult(url, response);
+        });
+        EzWebAppClient.onApiBizFailed(function(url, message){
+            EzDashboardBizService.handleApiBizFailed(url, message);
+        });
+        EzWebAppClient.onApiCallError(function(xhr){
+            console.log(xhr);
+        });
+        EzWebAppClient.onReady(function(){
+            EzDashboardBizService.start();
+        });
+        EzWebAppClient.start();
+
+        $('#add-news-submit').click(function(event) {
+            event.preventDefault();
+            EzDashboardBizService.showLoader();
+            EzDashboardBizService.postAddNewsForm();
+        });
+
+
+        // dropify and timepicker
+        $('.dropify').dropify();
+        $('.dropify-image').dropify({
+            messages: {
+                default : '<center>Drag and drop a image here or click</center>',
+                error   : 'Ooops, something wrong appended.'
+            },
+            error: {
+                'fileSize': '<center>The file size is too big broo ({{ value }} max).</center>',
+                'minWidth': '<center>The image width is too small ({{ value }}}px min).</center>',
+                'maxWidth': '<center>The image width is too big ({{ value }}}px max).</center>',
+                'minHeight': '<center>The image height is too small ({{ value }}}px min).</center>',
+                'maxHeight': '<center>The image height is too big ({{ value }}px max).</center>',
+                'imageFormat': '<center>The image format is not allowed ({{ value }} only).</center>',
+                'fileExtension': '<center>The file is not allowed ({{ value }} only).</center>'
+            },
+        });
+        $('.dropify-notification').dropify({
+            messages: {
+                default : '<center>Drag and drop a image here or click<br>(Optional)</center>',
+            }
+        });
+        var drEvent = $('#input-file-events').dropify();
+        drEvent.on('dropify.beforeClear', function(event, element){
+            return confirm("Do you really want to delete \"" + element.file.name + "\" ?");
+        });
+        drEvent.on('dropify.afterClear', function(event, element){
+            alert('File deleted');
+        });
+        drEvent.on('dropify.errors', function(event, element){
+            console.log('Has Errors');
+        });
+        var drDestroy = $('#input-file-to-destroy').dropify();
+        drDestroy = drDestroy.data('dropify')
+        $('#toggleDropify').on('click', function(e){
+            e.preventDefault();
+            if (drDestroy.isDropified()) {
+                drDestroy.destroy();
+            } else {
+                drDestroy.init();
+            }
+        });
+        $('#newsDate').bootstrapMaterialDatePicker
+        ({
+            format: 'YYYY-MM-DD HH:mm:ss'
+        });
+
+        CKEDITOR.replace('newsContent');
+        CKEDITOR.config.height = 338;
+    });
+</script>
+</body>
+</html>
