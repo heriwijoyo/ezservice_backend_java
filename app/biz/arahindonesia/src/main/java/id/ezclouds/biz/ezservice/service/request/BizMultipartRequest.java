@@ -61,7 +61,7 @@ public abstract class BizMultipartRequest extends BizOptionalMultipartRequest {
     }
 
     public String getFileExtension() {
-        if (isMultipartFileRequired()) {
+        if (multipartFile != null && multipartFile.getSize() > 0) {
             return StringUtils.getFilenameExtension(multipartFile.getOriginalFilename());
         }
         return "";

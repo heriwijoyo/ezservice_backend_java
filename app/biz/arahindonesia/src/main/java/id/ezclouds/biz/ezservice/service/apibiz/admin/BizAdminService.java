@@ -571,13 +571,15 @@ public class BizAdminService extends BizBaseService {
                         break;
 
                     case ADMIN_NEWS_GALLERY_UPDATE:
-                        fileName = null;
-                        if (request.getMultipartFile() != null) {
-                            //TODO: upload new image
-                            System.out.println("NEW IMAGE UPLOADED!!!");
-                        }
                         bizAdminInnerService.validateExtendInfo(request.getExtendInfo(), "NEWS_ID", "TITLE", "DESCRIPTION", "PUBLISH_DATE", "CATEGORY", "CONTENT");
+                        if (request.getMultipartFile() != null && request.getMultipartFile().getSize() > 0) {
+                            filePath = fileInfo.getNewsGalleryPath(fileName);
+                            coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
+                        } else {
+                            fileName = null;
+                        }
                         bizAdminInnerService.updateNews(session.getOrgId(), fileName, request.getExtendInfo());
+                        bizAppCacheService.reloadCacheItem(BizCacheKey.NEWS_HIGHLIGHT);
                         break;
 
                     case ADMIN_EVENT_GALLERY:
