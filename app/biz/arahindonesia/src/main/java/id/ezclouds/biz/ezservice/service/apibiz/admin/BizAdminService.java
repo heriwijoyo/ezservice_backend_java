@@ -439,9 +439,7 @@ public class BizAdminService extends BizBaseService {
         BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
             @Override
             public void onRequestCheck() throws EzErrorException {
-                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(request.getObject(), EzErrorCode.ILLEGAL_PARAM);
+                validateBizDetailRequest(request);
             }
 
             @Override
@@ -536,6 +534,32 @@ public class BizAdminService extends BizBaseService {
         return bizResult;
     }
 
+    public BizResult getEventDetail(BizWebDetailRequest<String> request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                validateBizDetailRequest(request);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                BizEvent bizEvent = bizAdminInnerService.getEventDetail(session.getOrgId(), request.getObject());
+                BizPublicUrlResolver urlResolver = new BizPublicUrlResolverImpl(appRootPublicUrl, session.getOrgCode());
+                BizAnnotationProcessor.annotatePublicConfig(bizEvent, urlResolver);
+                bizResult.setObject(bizEvent);
+                bizResult.setSuccess(true);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
     public BizResult adminCommonPostWithFileUpload(BizAdminUploadRequest request) {
         final BizResult bizResult = new BizResult();
 
@@ -595,6 +619,17 @@ public class BizAdminService extends BizBaseService {
                         bizAdminInnerService.createEvent(session.getOrgId(), fileName, request.getExtendInfo());
                         break;
 
+                    case ADMIN_EVENT_GALLERY_UPDATE:
+                        bizAdminInnerService.validateExtendInfo(request.getExtendInfo(), "EVENT_ID", "TITLE", "DESCRIPTION", "CATEGORY", "DATE_START", "TIME_START", "LOCATION");
+                        if (request.getMultipartFile() != null && request.getMultipartFile().getSize() > 0) {
+                            filePath = fileInfo.getEventGalleryPath(fileName);
+                            coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
+                        } else {
+                            fileName = null;
+                        }
+                        bizAdminInnerService.updateEvent(session.getOrgId(), fileName, request.getExtendInfo());
+                        break;
+
                     case ADMIN_VIDEO_CARD_GALLERY:
                         filePath = fileInfo.getVideoCardGalleryPath(fileName);
                         coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
@@ -632,6 +667,12 @@ public class BizAdminService extends BizBaseService {
         AssertUtil.isTrue(request.getPageNumber() > 0, EzErrorCode.ILLEGAL_PARAM);
         AssertUtil.isTrue(request.getPageSize() > 0, EzErrorCode.ILLEGAL_PARAM);
         AssertUtil.notBlank(request.getSessionId(), EzErrorCode.SESSION_INVALID);
+    }
+
+    private void validateBizDetailRequest(BizWebDetailRequest<String> request) throws EzErrorException {
+        AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+        AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
+        AssertUtil.notBlank(request.getObject(), EzErrorCode.ILLEGAL_PARAM);
     }
 
     private CoreAuthAdminSession authorizedAdminSession(String sessionId) throws Exception {

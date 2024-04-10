@@ -212,6 +212,27 @@ public class BizAdminInnerService {
         return bizEventInnerService.getEvents(orgId, pageRequest);
     }
 
+    public BizEvent getEventDetail(String orgId, String eventId) {
+        return bizEventInnerService.getEventDetail(orgId, eventId);
+    }
+
+    public void updateEvent(String orgId, String fileName, Map<String, String> extInfo) {
+        BizEvent bizEvent = new BizEvent();
+        bizEvent.setId(extInfo.get("EVENT_ID"));
+        bizEvent.setOrgId(orgId);
+        bizEvent.setTitle(extInfo.get("TITLE"));
+        bizEvent.setCategory(extInfo.get("CATEGORY"));
+        bizEvent.setDescription(extInfo.get("DESCRIPTION"));
+        bizEvent.setImageUrl(fileName);
+        bizEvent.setDateStart(extInfo.get("DATE_START"));
+        bizEvent.setDateEnd(extInfo.get("DATE_END"));
+        bizEvent.setTimeStart(extInfo.get("TIME_START"));
+        bizEvent.setTimeEnd(extInfo.get("TIME_END"));
+        bizEvent.setLocation(extInfo.get("LOCATION"));
+        bizEvent.setModifiedTime(DateUtil.getCurrentFormattedDate());
+        bizEventInnerService.updateEvent(bizEvent);
+    }
+
     public void createVideoCard(String orgId, String imageUrl, Map<String, String> extInfo) {
         VideoCardCreateRequest request = new VideoCardCreateRequest();
         request.setOrgId(orgId);

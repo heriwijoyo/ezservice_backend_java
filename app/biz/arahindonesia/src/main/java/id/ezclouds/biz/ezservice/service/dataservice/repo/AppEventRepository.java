@@ -18,4 +18,6 @@ import org.springframework.stereotype.Repository;
 public interface AppEventRepository extends JpaRepository<AppEventDO, String> {
 
     Page<AppEventDO> findByOrgId(String orgId, Pageable pageable);
+
+    AppEventDO findByIdAndOrgId(String id, String orgId);
 }

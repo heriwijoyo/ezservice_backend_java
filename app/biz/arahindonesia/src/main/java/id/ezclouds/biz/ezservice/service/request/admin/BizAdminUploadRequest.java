@@ -38,8 +38,11 @@ public class BizAdminUploadRequest extends BizMultipartRequest {
 
     @Override
     protected void presetScene(BizUploadScene scene) {
-        if (scene == BizUploadScene.ADMIN_NEWS_GALLERY_UPDATE) {
-            setMultipartFileOptional();
+        switch (scene) {
+            case ADMIN_NEWS_GALLERY_UPDATE:
+            case ADMIN_EVENT_GALLERY_UPDATE:
+                setMultipartFileOptional();
+                break;
         }
     }
 
@@ -52,6 +55,7 @@ public class BizAdminUploadRequest extends BizMultipartRequest {
         supportedScene.add(BizUploadScene.ADMIN_NEWS_GALLERY);
         supportedScene.add(BizUploadScene.ADMIN_NEWS_GALLERY_UPDATE);
         supportedScene.add(BizUploadScene.ADMIN_EVENT_GALLERY);
+        supportedScene.add(BizUploadScene.ADMIN_EVENT_GALLERY_UPDATE);
         supportedScene.add(BizUploadScene.ADMIN_VIDEO_CARD_GALLERY);
         supportedScene.add(BizUploadScene.ADMIN_OTHER_GALLERY);
         return supportedScene;
@@ -69,7 +73,8 @@ public class BizAdminUploadRequest extends BizMultipartRequest {
                 return onlyPNG;
             case ADMIN_APP_BUILD_PACKAGE:
                 return onlyAPK;
+            default:
+                return new ArrayList<>();
         }
-        return new ArrayList<>();
     }
 }

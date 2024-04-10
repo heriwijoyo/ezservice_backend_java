@@ -5,10 +5,13 @@
 package id.ezclouds.biz.ezservice.service.dataservice;
 
 import id.ezclouds.biz.ezservice.model.event.BizEvent;
-import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.AppEventDO;
 import id.ezclouds.biz.ezservice.service.dataservice.repo.AppEventRepository;
 import id.ezclouds.biz.ezservice.service.result.PageResult;
+import id.ezclouds.common.util.StringUtil;
+import id.ezclouds.common.util.assertion.AssertUtil;
+import id.ezclouds.common.util.exception.EzErrorCode;
+import id.ezclouds.common.util.exception.EzErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -49,6 +52,27 @@ public class BizEventInnerService {
         appEventRepository.saveAndFlush(eventDO);
     }
 
+    @Transactional
+    public void updateEvent(BizEvent bizEvent) {
+        AppEventDO eventDO = appEventRepository.findByIdAndOrgId(bizEvent.getId(), bizEvent.getOrgId());
+        AssertUtil.notNull(eventDO, EzErrorCode.DATA_NOT_FOUND);
+
+        eventDO.setTitle(bizEvent.getTitle());
+        eventDO.setCategory(bizEvent.getCategory());
+        eventDO.setDescription(bizEvent.getDescription());
+        eventDO.setDateStart(bizEvent.getDateStart());
+        eventDO.setDateEnd(bizEvent.getDateEnd());
+        eventDO.setTimeStart(bizEvent.getTimeStart());
+        eventDO.setTimeEnd(bizEvent.getTimeEnd());
+        eventDO.setLocation(bizEvent.getLocation());
+        eventDO.setModifiedTime(bizEvent.getModifiedTime());
+
+        if (StringUtil.isNotBlank(bizEvent.getImageUrl())) {
+            eventDO.setImageUrl(bizEvent.getImageUrl());
+        }
+        appEventRepository.saveAndFlush(eventDO);
+    }
+
     public PageResult<BizEvent> getEvents(String orgId, PageRequest pageRequest) {
         Page<AppEventDO> findResult = appEventRepository
                 .findByOrgId(orgId, pageRequest);
@@ -56,23 +80,7 @@ public class BizEventInnerService {
         List<BizEvent> resultData = findResult
                 .getContent()
                 .stream()
-                .map(modelDO -> {
-                    BizEvent bizEvent = new BizEvent();
-                    bizEvent.setId(modelDO.getId());
-                    bizEvent.setTitle(modelDO.getTitle());
-                    bizEvent.setDescription(modelDO.getDescription());
-                    bizEvent.setLocation(modelDO.getLocation());
-                    bizEvent.setImageUrl(modelDO.getImageUrl());
-                    bizEvent.setCategory(modelDO.getCategory());
-                    bizEvent.setDateStart(modelDO.getDateStart());
-                    bizEvent.setDateEnd(modelDO.getDateEnd());
-                    bizEvent.setTimeStart(modelDO.getTimeStart());
-                    bizEvent.setTimeEnd(modelDO.getTimeEnd());
-                    bizEvent.setHighlight(modelDO.getHighlight());
-                    bizEvent.setStatus(modelDO.getStatus());
-                    bizEvent.setCreatedTime(modelDO.getCreatedTime());
-                    return bizEvent;
-                })
+                .map(this::convert)
                 .collect(Collectors.toList());
 
         PageResult<BizEvent> pageResult = new PageResult<>();
@@ -85,5 +93,30 @@ public class BizEventInnerService {
         pageResult.setHasPrevious(findResult.hasPrevious());
         pageResult.setData(resultData);
         return pageResult;
+    }
+
+    public BizEvent getEventDetail(String orgId, String eventId) throws EzErrorException {
+        AppEventDO appEventDO = appEventRepository
+                .findByIdAndOrgId(eventId, orgId);
+        AssertUtil.notNull(appEventDO, EzErrorCode.DATA_NOT_FOUND);
+        return convert(appEventDO);
+    }
+
+    private BizEvent convert(AppEventDO modelDO) {
+        BizEvent bizEvent = new BizEvent();
+        bizEvent.setId(modelDO.getId());
+        bizEvent.setTitle(modelDO.getTitle());
+        bizEvent.setDescription(modelDO.getDescription());
+        bizEvent.setLocation(modelDO.getLocation());
+        bizEvent.setImageUrl(modelDO.getImageUrl());
+        bizEvent.setCategory(modelDO.getCategory());
+        bizEvent.setDateStart(modelDO.getDateStart());
+        bizEvent.setDateEnd(modelDO.getDateEnd());
+        bizEvent.setTimeStart(modelDO.getTimeStart());
+        bizEvent.setTimeEnd(modelDO.getTimeEnd());
+        bizEvent.setHighlight(modelDO.getHighlight());
+        bizEvent.setStatus(modelDO.getStatus());
+        bizEvent.setCreatedTime(modelDO.getCreatedTime());
+        return bizEvent;
     }
 }

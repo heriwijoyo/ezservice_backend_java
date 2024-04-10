@@ -291,6 +291,36 @@ public class WebApiAdminController {
         return result;
     }
 
+    @PostMapping(value = "/webapp/api/eventDetail.json")
+    private WebApiResult<BizEvent> eventDetail(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "eventId", required = false) String eventId ) {
+        final WebApiResult<BizEvent> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_EVENT_DETAIL, result, new WebApiControllerTemplate.Handler<BizEvent>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizWebDetailRequest<String> request = new BizWebDetailRequest<>();
+                request.setSessionId(sessionId);
+                request.setObject(eventId);
+                return bizAdminService.getEventDetail(request);
+            }
+
+            @Override
+            public BizEvent convertResult(Object object) {
+                if (object instanceof BizEvent) {
+                    return (BizEvent) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
     @PostMapping(value = "/webapp/api/adminCommonPost.json")
     private WebApiResult<String> adminUpload(@RequestPart("imageFile") MultipartFile multipartFile, @RequestPart("postData") String postData) {
         WebApiResult<String> result = new WebApiResult<>();
