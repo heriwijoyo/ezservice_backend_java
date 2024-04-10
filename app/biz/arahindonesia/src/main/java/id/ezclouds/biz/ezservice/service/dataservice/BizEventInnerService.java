@@ -5,12 +5,18 @@
 package id.ezclouds.biz.ezservice.service.dataservice;
 
 import id.ezclouds.biz.ezservice.model.event.BizEvent;
+import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.AppEventDO;
 import id.ezclouds.biz.ezservice.service.dataservice.repo.AppEventRepository;
+import id.ezclouds.biz.ezservice.service.result.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -41,5 +47,43 @@ public class BizEventInnerService {
         eventDO.setHighlight(bizEvent.getHighlight());
         eventDO.setStatus(bizEvent.getStatus());
         appEventRepository.saveAndFlush(eventDO);
+    }
+
+    public PageResult<BizEvent> getEvents(String orgId, PageRequest pageRequest) {
+        Page<AppEventDO> findResult = appEventRepository
+                .findByOrgId(orgId, pageRequest);
+
+        List<BizEvent> resultData = findResult
+                .getContent()
+                .stream()
+                .map(modelDO -> {
+                    BizEvent bizEvent = new BizEvent();
+                    bizEvent.setId(modelDO.getId());
+                    bizEvent.setTitle(modelDO.getTitle());
+                    bizEvent.setDescription(modelDO.getDescription());
+                    bizEvent.setLocation(modelDO.getLocation());
+                    bizEvent.setImageUrl(modelDO.getImageUrl());
+                    bizEvent.setCategory(modelDO.getCategory());
+                    bizEvent.setDateStart(modelDO.getDateStart());
+                    bizEvent.setDateEnd(modelDO.getDateEnd());
+                    bizEvent.setTimeStart(modelDO.getTimeStart());
+                    bizEvent.setTimeEnd(modelDO.getTimeEnd());
+                    bizEvent.setHighlight(modelDO.getHighlight());
+                    bizEvent.setStatus(modelDO.getStatus());
+                    bizEvent.setCreatedTime(modelDO.getCreatedTime());
+                    return bizEvent;
+                })
+                .collect(Collectors.toList());
+
+        PageResult<BizEvent> pageResult = new PageResult<>();
+        pageResult.setPageNumber(findResult.getPageable().getPageNumber() + 1);
+        pageResult.setPageSize(findResult.getPageable().getPageSize());
+        pageResult.setNumberRecord(findResult.getNumberOfElements());
+        pageResult.setTotalPage(findResult.getTotalPages());
+        pageResult.setTotalRecord((int)findResult.getTotalElements());
+        pageResult.setHasNext(findResult.hasNext());
+        pageResult.setHasPrevious(findResult.hasPrevious());
+        pageResult.setData(resultData);
+        return pageResult;
     }
 }

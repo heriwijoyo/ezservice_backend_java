@@ -12,6 +12,7 @@ import id.ezclouds.biz.ezservice.converter.BizAdminConverter;
 import id.ezclouds.biz.ezservice.enums.BizUploadScene;
 import id.ezclouds.biz.ezservice.model.admin.*;
 import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
+import id.ezclouds.biz.ezservice.model.event.BizEvent;
 import id.ezclouds.biz.ezservice.model.news.BizWebDetailNews;
 import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
@@ -323,12 +324,7 @@ public class BizAdminService extends BizBaseService {
         BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
             @Override
             public void onRequestCheck() throws EzErrorException {
-                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notNull(request.getPageNumber(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notNull(request.getPageSize(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.isTrue(request.getPageNumber() > 0, EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.isTrue(request.getPageSize() > 0, EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.SESSION_INVALID);
+                validateBizPageRequest(request);
             }
 
             @Override
@@ -408,12 +404,7 @@ public class BizAdminService extends BizBaseService {
         BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
             @Override
             public void onRequestCheck() throws EzErrorException {
-                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notNull(request.getPageNumber(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notNull(request.getPageSize(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.isTrue(request.getPageNumber() > 0, EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.isTrue(request.getPageSize() > 0, EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.SESSION_INVALID);
+                validateBizPageRequest(request);
             }
 
             @Override
@@ -500,6 +491,41 @@ public class BizAdminService extends BizBaseService {
                 bizAppCacheService.reloadCacheItem(BizCacheKey.NEWS_HIGHLIGHT);
                 bizResult.setSuccess(true);
                 bizResult.setObject(WebAdminConstant.OPERATION_SUCCESS);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
+    public BizResult getEvents(BizWebPageRequest request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                validateBizPageRequest(request);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                BizPublicUrlResolver urlResolver = new BizPublicUrlResolverImpl(appRootPublicUrl, session.getOrgCode());
+                PageResult<BizEvent> eventsResult = bizAdminInnerService.getEvents(
+                        session.getOrgId(),
+                        request.getPageNumber(),
+                        request.getPageSize(),
+                        "createdTime",
+                        "desc"
+                );
+                eventsResult.getData().forEach(event -> {
+                    BizAnnotationProcessor.annotatePublicConfig(event, urlResolver);
+                });
+
+                bizResult.setObject(eventsResult);
+                bizResult.setSuccess(true);
             }
 
             @Override
@@ -597,6 +623,15 @@ public class BizAdminService extends BizBaseService {
         });
 
         return bizResult;
+    }
+
+    private void validateBizPageRequest(BizWebPageRequest request) throws EzErrorException {
+        AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+        AssertUtil.notNull(request.getPageNumber(), EzErrorCode.ILLEGAL_PARAM);
+        AssertUtil.notNull(request.getPageSize(), EzErrorCode.ILLEGAL_PARAM);
+        AssertUtil.isTrue(request.getPageNumber() > 0, EzErrorCode.ILLEGAL_PARAM);
+        AssertUtil.isTrue(request.getPageSize() > 0, EzErrorCode.ILLEGAL_PARAM);
+        AssertUtil.notBlank(request.getSessionId(), EzErrorCode.SESSION_INVALID);
     }
 
     private CoreAuthAdminSession authorizedAdminSession(String sessionId) throws Exception {

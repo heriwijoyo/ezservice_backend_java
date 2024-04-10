@@ -6,6 +6,7 @@ package id.ezclouds.core.bifrost.app.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.ezservice.model.admin.*;
+import id.ezclouds.biz.ezservice.model.event.BizEvent;
 import id.ezclouds.biz.ezservice.model.news.BizWebDetailNews;
 import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
@@ -246,6 +247,38 @@ public class WebApiAdminController {
             public String convertResult(Object object) {
                 if (object instanceof String) {
                     return (String) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/events.json")
+    private WebApiPageResult<BizEvent> events(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "pageNumber", required = false) int pageNumber,
+            @RequestParam(name = "pageSize", required = false) int pageSize ) {
+        final WebApiPageResult<BizEvent> result = new WebApiPageResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_EVENT_GET, result, new WebApiControllerTemplate.PageHandler<BizEvent>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizWebPageRequest request = new BizWebPageRequest();
+                request.setSessionId(sessionId);
+                request.setPageNumber(pageNumber);
+                request.setPageSize(pageSize);
+                return bizAdminService.getEvents(request);
+            }
+
+            @Override
+            public PageResult<BizEvent> convertResult(Object object) {
+                if (object instanceof PageResult) {
+                    return (PageResult<BizEvent>) object;
                 }
                 return null;
             }

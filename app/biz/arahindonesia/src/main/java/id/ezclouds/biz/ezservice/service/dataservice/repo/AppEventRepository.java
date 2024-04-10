@@ -5,6 +5,8 @@
 package id.ezclouds.biz.ezservice.service.dataservice.repo;
 
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.AppEventDO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,4 +16,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface AppEventRepository extends JpaRepository<AppEventDO, String> {
+
+    Page<AppEventDO> findByOrgId(String orgId, Pageable pageable);
 }

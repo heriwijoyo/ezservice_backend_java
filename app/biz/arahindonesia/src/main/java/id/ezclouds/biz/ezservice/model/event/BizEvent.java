@@ -4,6 +4,9 @@
  */
 package id.ezclouds.biz.ezservice.model.event;
 
+import id.ezclouds.biz.ezservice.constant.AppConstant;
+import id.ezclouds.biz.ezservice.model.annotation.PublicImageUrl;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizEvent.java, v 0.1 2024‐04‐10 2:02 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -20,6 +23,7 @@ public class BizEvent {
     private String timeStart;
     private String timeEnd;
     private String location;
+    @PublicImageUrl(name = AppConstant.Annotation.EVENT_GALLERY_URL)
     private String imageUrl;
     private int highlight;
     private int status;

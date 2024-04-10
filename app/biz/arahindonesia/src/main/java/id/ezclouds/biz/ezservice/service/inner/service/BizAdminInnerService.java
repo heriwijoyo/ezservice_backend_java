@@ -173,6 +173,19 @@ public class BizAdminInnerService {
         newsInnerService.updateNews(orgId, detailNews);
     }
 
+    public PageResult<BizWebSimpleNews> getSimpleNews(String orgId, int pageNumber, int pageSize, String sortBy, String sort) {
+        PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortBy, sort);
+        return newsInnerService.adminGetSimpleNews(orgId, pageRequest);
+    }
+
+    public BizWebDetailNews getNewsDetail(String orgId, String newsId) {
+        return newsInnerService.adminGetNewsDetail(orgId, newsId);
+    }
+
+    public void newsFlagSwitch(String orgId, String newsId, String section, int value) {
+        newsInnerService.adminNewsFlagSwitch(orgId, newsId, section, value);
+    }
+
     public void createEvent(String orgId, String fileName, Map<String, String> extInfo) {
         String currentDate = DateUtil.getCurrentFormattedDate();
         BizEvent bizEvent = new BizEvent();
@@ -194,17 +207,9 @@ public class BizAdminInnerService {
         bizEventInnerService.createEvent(bizEvent);
     }
 
-    public PageResult<BizWebSimpleNews> getSimpleNews(String orgId, int pageNumber, int pageSize, String sortBy, String sort) {
+    public PageResult<BizEvent> getEvents(String orgId, int pageNumber, int pageSize, String sortBy, String sort) {
         PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortBy, sort);
-        return newsInnerService.adminGetSimpleNews(orgId, pageRequest);
-    }
-
-    public BizWebDetailNews getNewsDetail(String orgId, String newsId) {
-        return newsInnerService.adminGetNewsDetail(orgId, newsId);
-    }
-
-    public void newsFlagSwitch(String orgId, String newsId, String section, int value) {
-        newsInnerService.adminNewsFlagSwitch(orgId, newsId, section, value);
+        return bizEventInnerService.getEvents(orgId, pageRequest);
     }
 
     public void createVideoCard(String orgId, String imageUrl, Map<String, String> extInfo) {
