@@ -460,16 +460,12 @@ public class BizAdminService extends BizBaseService {
         return bizResult;
     }
 
-    public BizResult newsStatusSwitch(BizWebUpdateItemRequest request) {
+    public BizResult newsFlagSwitch(BizWebUpdateItemRequest request) {
         final BizResult bizResult = new BizResult();
         BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
             @Override
             public void onRequestCheck() throws EzErrorException {
-                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(request.getItemId(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(request.getSection(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(request.getValue(), EzErrorCode.ILLEGAL_PARAM);
+                validateBizDetailItemRequest(request);
                 try {
                     Integer.parseInt(request.getValue());
                 } catch (Exception e) {
@@ -550,6 +546,40 @@ public class BizAdminService extends BizBaseService {
                 BizAnnotationProcessor.annotatePublicConfig(bizEvent, urlResolver);
                 bizResult.setObject(bizEvent);
                 bizResult.setSuccess(true);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
+    public BizResult eventFlagSwitch(BizWebUpdateItemRequest request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                validateBizDetailItemRequest(request);
+                try {
+                    Integer.parseInt(request.getValue());
+                } catch (Exception e) {
+                    throw new EzErrorException(EzErrorCode.ILLEGAL_PARAM);
+                }
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                bizAdminInnerService.eventFlagSwitch(
+                        session.getOrgId(),
+                        request.getItemId(),
+                        request.getSection(),
+                        Integer.parseInt(request.getValue())
+                );
+                bizResult.setSuccess(true);
+                bizResult.setObject(WebAdminConstant.OPERATION_SUCCESS);
             }
 
             @Override
@@ -673,6 +703,14 @@ public class BizAdminService extends BizBaseService {
         AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
         AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
         AssertUtil.notBlank(request.getObject(), EzErrorCode.ILLEGAL_PARAM);
+    }
+
+    private void validateBizDetailItemRequest(BizWebUpdateItemRequest request) {
+        AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+        AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
+        AssertUtil.notBlank(request.getItemId(), EzErrorCode.ILLEGAL_PARAM);
+        AssertUtil.notBlank(request.getSection(), EzErrorCode.ILLEGAL_PARAM);
+        AssertUtil.notBlank(request.getValue(), EzErrorCode.ILLEGAL_PARAM);
     }
 
     private CoreAuthAdminSession authorizedAdminSession(String sessionId) throws Exception {

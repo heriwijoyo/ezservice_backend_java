@@ -226,13 +226,13 @@ public class WebApiAdminController {
     }
 
     @PostMapping(value = "/webapp/api/newsFlagSwitch.json")
-    private WebApiResult<String> newsStatusSwitch(
+    private WebApiResult<String> newsFlagSwitch(
             @RequestParam(name = "sessionId", required = false) String sessionId,
             @RequestParam(name = "itemId", required = false) String itemId,
             @RequestParam(name = "section", required = false) String section,
             @RequestParam(name = "value", required = false) String value ) {
         final WebApiResult<String> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_NEWS_STATUS_SWITCH, result, new WebApiControllerTemplate.Handler<String>() {
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_NEWS_FLAG_SWITCH, result, new WebApiControllerTemplate.Handler<String>() {
             @Override
             public BizResult onProcess() throws Exception {
                 BizWebUpdateItemRequest request = new BizWebUpdateItemRequest();
@@ -240,7 +240,7 @@ public class WebApiAdminController {
                 request.setItemId(itemId);
                 request.setSection(section);
                 request.setValue(value);
-                return bizAdminService.newsStatusSwitch(request);
+                return bizAdminService.newsFlagSwitch(request);
             }
 
             @Override
@@ -309,6 +309,40 @@ public class WebApiAdminController {
             public BizEvent convertResult(Object object) {
                 if (object instanceof BizEvent) {
                     return (BizEvent) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/eventFlagSwitch.json")
+    private WebApiResult<String> eventFlagSwitch(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "itemId", required = false) String itemId,
+            @RequestParam(name = "section", required = false) String section,
+            @RequestParam(name = "value", required = false) String value ) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_EVENT_FLAG_SWITCH, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizWebUpdateItemRequest request = new BizWebUpdateItemRequest();
+                request.setSessionId(sessionId);
+                request.setItemId(itemId);
+                request.setSection(section);
+                request.setValue(value);
+                return bizAdminService.eventFlagSwitch(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                if (object instanceof String) {
+                    return (String) object;
                 }
                 return null;
             }

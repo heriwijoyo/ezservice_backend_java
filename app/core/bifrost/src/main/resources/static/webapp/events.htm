@@ -163,7 +163,7 @@
             }
         },
         handleApiBizFailed: function(url, message) {
-            if (url === EzAdminUrl.NEWS_STATUS_SWITCH) {
+            if (url === EzAdminUrl.EVENT_STATUS_SWITCH) {
                 alert(message);
             }
         },
@@ -175,8 +175,8 @@
                 let itemRow = $.parseHTML(DashTemplate);
                 $(itemRow).find('.img-rounded').attr('src', rowData.imageUrl);
                 $(itemRow).find('.rowTitle').html(title);
-                $(itemRow).find('.rowHighlight').html(EzDashboardBizService.renderFlag(rowData.highlight,'highlight',rowData.newsId));
-                $(itemRow).find('.rowActive').html(EzDashboardBizService.renderFlag(rowData.status,'status',rowData.newsId));
+                $(itemRow).find('.rowHighlight').html(EzDashboardBizService.renderFlag(rowData.highlight,'highlight',rowData.id));
+                $(itemRow).find('.rowActive').html(EzDashboardBizService.renderFlag(rowData.status,'status',rowData.id));
                 $('#rowsContainer').append(itemRow);
             }
             $('.pager').html(EzWebAppClient.renderPager(response.pageResult));

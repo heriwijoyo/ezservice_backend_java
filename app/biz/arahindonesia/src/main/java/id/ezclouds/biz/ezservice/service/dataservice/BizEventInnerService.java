@@ -73,6 +73,20 @@ public class BizEventInnerService {
         appEventRepository.saveAndFlush(eventDO);
     }
 
+    @Transactional
+    public void adminNewsFlagSwitch(String orgId, String eventId, String section, int value) {
+        AppEventDO appEventDO = appEventRepository
+                .findByIdAndOrgId(eventId, orgId);
+        AssertUtil.notNull(appEventDO, EzErrorCode.DATA_NOT_FOUND);
+        if (section.equals("status")) {
+            appEventDO.setStatus(value);
+        }
+        if (section.equals("highlight")) {
+            appEventDO.setHighlight(value);
+        }
+        appEventRepository.saveAndFlush(appEventDO);
+    }
+
     public PageResult<BizEvent> getEvents(String orgId, PageRequest pageRequest) {
         Page<AppEventDO> findResult = appEventRepository
                 .findByOrgId(orgId, pageRequest);

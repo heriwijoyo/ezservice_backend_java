@@ -233,6 +233,10 @@ public class BizAdminInnerService {
         bizEventInnerService.updateEvent(bizEvent);
     }
 
+    public void eventFlagSwitch(String orgId, String eventId, String section, int value) {
+        bizEventInnerService.adminNewsFlagSwitch(orgId, eventId, section, value);
+    }
+
     public void createVideoCard(String orgId, String imageUrl, Map<String, String> extInfo) {
         VideoCardCreateRequest request = new VideoCardCreateRequest();
         request.setOrgId(orgId);
