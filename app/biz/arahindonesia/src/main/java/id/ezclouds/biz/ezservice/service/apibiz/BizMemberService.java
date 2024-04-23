@@ -8,11 +8,13 @@ import id.ezclouds.biz.ezservice.config.BizPublicUrlResolver;
 import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.constant.BizConstant;
 import id.ezclouds.biz.ezservice.converter.BizMemberConverter;
+import id.ezclouds.biz.ezservice.enums.BizUploadScene;
 import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.model.member.BizMemberInfo;
 import id.ezclouds.biz.ezservice.model.member.BizMemberRegisterResult;
 import id.ezclouds.biz.ezservice.model.profile.MemberProfile;
+import id.ezclouds.biz.ezservice.service.dataservice.AppReportService;
 import id.ezclouds.biz.ezservice.service.inner.service.BizMemberInnerService;
 import id.ezclouds.biz.ezservice.service.dataservice.AppProfileService;
 import id.ezclouds.biz.ezservice.service.request.BizMemberRegisterRequest;
@@ -32,6 +34,7 @@ import id.ezclouds.core.member.model.CoreMemberExtension;
 import id.ezclouds.core.member.service.CoreMemberService;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.file.PrivateFileResolver;
+import id.ezclouds.core.shared.file.PublicFileResolver;
 import id.ezclouds.core.shared.service.CoreFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,6 +66,9 @@ public class BizMemberService extends BizBaseService {
 
     @Autowired
     private BizCommonConfigService bizCommonConfigService;
+
+    @Autowired
+    private AppReportService appReportService;
 
     public BizResult getMemberProfile() {
         final BizResult bizResult = new BizResult();
@@ -169,6 +175,9 @@ public class BizMemberService extends BizBaseService {
                 PrivateFileResolver privateFileResolver = coreFileService
                         .resolveMemberFileInfo(getOrgId(), memberSession.getMemberId());
 
+                PublicFileResolver publicFileResolver = coreFileService
+                        .resolvePublicFileInfo(getOrgId());
+
                 String fileName = DateUtil.getTimeNowToString() + "." + request.getFileExtension();
 
                 Map<String, String> updateField = new HashMap<>();
@@ -199,6 +208,18 @@ public class BizMemberService extends BizBaseService {
                         coreMemberService.updateMemberField(memberSession.getMemberId(), updateField);
                         break;
 
+                    case REPORT_IMAGE:
+                        request.getExtendInfo().put("ORG_ID", getOrgId());
+                        request.getExtendInfo().put("MEMBER_ID", memberSession.getMemberId());
+                        request.getExtendInfo().put("FILE_TYPE", getMemberReportFileType(request.getScene()));
+                        request.getExtendInfo().put("FILE_URL", fileName);
+                        appReportService.validateExtendInfo(request.getExtendInfo(), "ORG_ID", "MEMBER_ID", "CAPTION", "FILE_TYPE", "FILE_URL");
+                        coreFileService.storeFile(
+                                request.getMultipartFile().getInputStream(),
+                                publicFileResolver.getReportImagePath(fileName));
+                        appReportService.storeAppReport(request.getExtendInfo());
+                        break;
+
                     default:
                 }
 
@@ -212,5 +233,18 @@ public class BizMemberService extends BizBaseService {
         });
 
         return bizResult;
+    }
+
+    private String getMemberReportFileType(BizUploadScene scene) {
+        switch (scene) {
+            case REPORT_IMAGE:
+                return "IMAGE";
+            case REPORT_VIDEO:
+                return "VIDEO";
+            case REPORT_VOICE:
+                return "VOICE";
+            default:
+                return BizUploadScene.UNKNOWN.getCode();
+        }
     }
 }
