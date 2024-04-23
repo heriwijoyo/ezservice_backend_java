@@ -29,4 +29,6 @@ public interface PublicFileResolver {
     Path getReportVideoPath(String fileName);
 
     Path getReportVoicePath(String fileName);
+
+    Path getReportRecapPath(String fileName);
 }

@@ -25,6 +25,7 @@ public class PublicFileInitializer {
     public static final String DIR_REPORT_IMAGE        = "IMAGE";
     public static final String DIR_REPORT_VIDEO        = "VIDEO";
     public static final String DIR_REPORT_VOICE        = "VOICE";
+    public static final String DIR_REPORT_RECAP        = "RECAP";
 
     public static final String DIR_MEMBER_ROOT         = "0MEMBER";
 
@@ -54,6 +55,7 @@ public class PublicFileInitializer {
         publicPaths.add(Paths.get(getOrgFiledDir(), DIR_REPORT, DIR_REPORT_IMAGE).toAbsolutePath().normalize());
         publicPaths.add(Paths.get(getOrgFiledDir(), DIR_REPORT, DIR_REPORT_VIDEO).toAbsolutePath().normalize());
         publicPaths.add(Paths.get(getOrgFiledDir(), DIR_REPORT, DIR_REPORT_VOICE).toAbsolutePath().normalize());
+        publicPaths.add(Paths.get(getOrgFiledDir(), DIR_REPORT, DIR_REPORT_RECAP).toAbsolutePath().normalize());
         publicPaths.add(Paths.get(getOrgFiledDir(), DIR_MEMBER_ROOT).toAbsolutePath().normalize());
     }
 

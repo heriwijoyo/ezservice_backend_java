@@ -74,8 +74,10 @@ public class BizAnnotationProcessor {
 
             if (getterMethod != null && setterMethod != null) {
                 currentValue = (String) getterMethod.invoke(object);
-                String newValue = fieldRootUrl + currentValue;
-                setterMethod.invoke(object, newValue);
+                if (!currentValue.contains("http")) {
+                    String newValue = fieldRootUrl + currentValue;
+                    setterMethod.invoke(object, newValue);
+                }
             }
         } catch (Exception e) {}
     }
