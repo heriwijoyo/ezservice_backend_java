@@ -13,6 +13,7 @@ import id.ezclouds.biz.ezservice.model.member.BizMemberInfo;
 import id.ezclouds.biz.ezservice.service.inner.converter.BizMemberRequestConverter;
 import id.ezclouds.biz.ezservice.service.request.BizMemberRegisterRequest;
 import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
+import id.ezclouds.biz.ezservice.service.request.BizRequest;
 import id.ezclouds.biz.ezservice.service.result.BizPageInfo;
 import id.ezclouds.biz.ezservice.util.PageRequestUtil;
 import id.ezclouds.common.util.ShardUtil;
@@ -32,6 +33,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Map;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -156,5 +158,12 @@ public class BizMemberInnerService {
         bizPageInfo.setHasNext(corePageInfo.isHasNext());
         bizPageInfo.setBizData(corePageInfo.getBizData());
         return bizPageInfo;
+    }
+
+    @Transactional
+    public void memberUpdate(Map<String, String> extendInfo) {
+        String memberId = extendInfo.get("MEMBER_ID");
+        CoreMember coreMember = coreMemberService.getOptimisticCoreMember(memberId);
+        coreMemberService.updateMemberField(coreMember.getMemberId(), extendInfo);
     }
 }

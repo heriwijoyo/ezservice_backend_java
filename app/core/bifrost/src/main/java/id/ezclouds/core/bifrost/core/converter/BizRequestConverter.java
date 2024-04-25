@@ -152,7 +152,16 @@ public class BizRequestConverter<T extends BizRequest> {
         return null;
     };
 
-    public static Handler<BizPageRequest> BIZ_PAGE_REQUEST = apiRequest -> {
+    public static BizRequest getBizRequest(ApiRequest apiRequest) {
+        if (apiRequest != null) {
+            BizRequest bizRequest = new BizRequest();
+            bizRequest.getExtendInfo().putAll(apiRequest.getExtendInfo());
+            return bizRequest;
+        }
+        return null;
+    }
+
+    public static BizPageRequest getBizPageRequest(ApiRequest apiRequest) {
         if (apiRequest instanceof ApiPageRequest) {
             ApiPageRequest request = (ApiPageRequest) apiRequest;
             BizPageRequest bizRequest = new BizPageRequest();
@@ -172,7 +181,7 @@ public class BizRequestConverter<T extends BizRequest> {
             return bizRequest;
         }
         return null;
-    };
+    }
 
     interface Handler<T extends BizRequest> {
         T convert(ApiRequest apiRequest);

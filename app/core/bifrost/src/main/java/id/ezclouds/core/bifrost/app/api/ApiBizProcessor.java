@@ -10,7 +10,6 @@ import id.ezclouds.biz.ezservice.service.apibiz.BizAuthService;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
 import id.ezclouds.biz.ezservice.service.dataservice.request.BizSubOrgCreateRequest;
 import id.ezclouds.biz.ezservice.service.request.*;
-import id.ezclouds.biz.ezservice.service.result.BizPageResult;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
@@ -128,12 +127,10 @@ public class ApiBizProcessor implements BizProcessor {
                 return bizSubOrganizationService.create(subOrgCreateConverter.convert(apiRequest));
 
             case API_GET_SUB_ORGANIZATIONS:
-                BizRequestConverter<BizPageRequest> pageRequestConverter = new BizRequestConverter<>(BizRequestConverter.BIZ_PAGE_REQUEST);
-                return bizSubOrganizationService.getSubBizOrganizations(pageRequestConverter.convert(apiRequest));
+                return bizSubOrganizationService.getSubBizOrganizations(BizRequestConverter.getBizPageRequest(apiRequest));
 
             case API_GET_MEMBER:
-                BizRequestConverter<BizPageRequest> pageRequestConverter2 = new BizRequestConverter<>(BizRequestConverter.BIZ_PAGE_REQUEST);
-                return bizMemberService.getMembers(pageRequestConverter2.convert(apiRequest));
+                return bizMemberService.getMembers(BizRequestConverter.getBizPageRequest(apiRequest));
 
 
 
@@ -147,6 +144,9 @@ public class ApiBizProcessor implements BizProcessor {
 
             case API_ADMIN_LOGOUT_WEB_SESSION:
                 return bizAdminService.logoutWebSession(apiRequest.getExtendInfo().get("WEB_SESSION_ID"));
+
+            case API_ADMIN_MEMBER_UPDATE:
+                return bizMemberService.memberUpdate(BizRequestConverter.getBizRequest(apiRequest));
 
         }
 

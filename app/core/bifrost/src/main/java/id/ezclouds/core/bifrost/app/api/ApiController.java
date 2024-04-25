@@ -435,6 +435,21 @@ public class ApiController extends AppController {
         });
     }
 
+    @PostMapping(value = "/api/admin/memberUpdate.json")
+    private ApiResult<String> memberUpdate(@RequestBody ApiRequest request) {
+        return executeInTemplate(ApiEvent.API_ADMIN_MEMBER_UPDATE, request, new RequestHandler<String>() {
+            @Override
+            public String convertResult(Object resultObject) {
+                return (String) resultObject;
+            }
+
+            @Override
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<String> result) {
+                return new EmptyDigestLog(result.isSuccess(), result.getResultCode());
+            }
+        });
+    }
+
     private MemberUploadRequest convertPostData(String postData) {
         ObjectMapper objectMapper = new ObjectMapper();
         MemberUploadRequest memberUploadRequest;

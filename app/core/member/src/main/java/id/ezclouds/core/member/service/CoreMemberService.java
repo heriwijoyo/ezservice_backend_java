@@ -161,6 +161,12 @@ public class CoreMemberService {
                     }
                     break;
 
+                case CoreMemberField.ROLES:
+                    if (coreMemberDO != null && StringUtil.isNotBlank(entry.getValue())) {
+                        coreMemberDO.setRoles(entry.getValue());
+                    }
+                    break;
+
                 case CoreMemberField.ID_CARD:
                     if (extensionDO != null && StringUtil.isNotBlank(entry.getValue())) {
                         extensionDO.setIdCardDocUrl(entry.getValue());

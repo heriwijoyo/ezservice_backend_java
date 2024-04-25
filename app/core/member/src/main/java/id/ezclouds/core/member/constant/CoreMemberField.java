@@ -13,4 +13,5 @@ public class CoreMemberField {
     public static final String NICKNAME = "NICKNAME";
     public static final String ID_CARD = "ID_CARD";
     public static final String FAMILY_CARD = "FAMILY_CARD";
+    public static final String ROLES = "ROLES";
 }
