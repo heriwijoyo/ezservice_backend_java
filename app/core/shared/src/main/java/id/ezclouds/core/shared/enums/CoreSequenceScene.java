@@ -11,7 +11,7 @@ package id.ezclouds.core.shared.enums;
 public enum CoreSequenceScene {
 
     CORE_MEMBER_ID("CORE_MEMBER_ID", "10"),
-    APP_SUB_ORG("APP_SUB_ORG", "11"),
+    BIZ_SUB_ORG("BIZ_SUB_ORG", "11"),
 
     ;
 

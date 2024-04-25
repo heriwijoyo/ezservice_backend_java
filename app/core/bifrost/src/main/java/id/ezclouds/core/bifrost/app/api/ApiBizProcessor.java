@@ -8,6 +8,7 @@ import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.service.apibiz.*;
 import id.ezclouds.biz.ezservice.service.apibiz.BizAuthService;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
+import id.ezclouds.biz.ezservice.service.dataservice.request.BizSubOrgCreateRequest;
 import id.ezclouds.biz.ezservice.service.request.*;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.common.util.exception.EzErrorCode;
@@ -56,6 +57,9 @@ public class ApiBizProcessor implements BizProcessor {
 
     @Autowired
     private BizLocalAreaService bizLocalAreaService;
+
+    @Autowired
+    private BizSubOrganizationService bizSubOrganizationService;
 
     @Override
     public BizResult process(ApiEvent apiEvent, ApiRequest apiRequest, MultipartFile file) throws EzErrorException {
@@ -117,6 +121,10 @@ public class ApiBizProcessor implements BizProcessor {
             case API_GET_LOCAL_AREA:
                 BizRequestConverter<BizLocalAreaRequest> localAreaConverter = new BizRequestConverter<>(BizRequestConverter.LOCAL_AREA);
                 return bizLocalAreaService.getLocalArea(localAreaConverter.convert(apiRequest));
+
+            case API_SUB_ORG_CREATE:
+                BizRequestConverter<BizSubOrgCreateRequest> subOrgCreateConverter = new BizRequestConverter<>(BizRequestConverter.SUB_ORG_CREATE);
+                return bizSubOrganizationService.create(subOrgCreateConverter.convert(apiRequest));
 
 
 

@@ -6,6 +6,7 @@ package id.ezclouds.core.bifrost.core.converter;
 
 import id.ezclouds.biz.ezservice.enums.BizUploadScene;
 import id.ezclouds.biz.ezservice.model.member.BizGender;
+import id.ezclouds.biz.ezservice.service.dataservice.request.BizSubOrgCreateRequest;
 import id.ezclouds.biz.ezservice.service.request.*;
 import id.ezclouds.core.bifrost.app.api.request.*;
 
@@ -135,6 +136,17 @@ public class BizRequestConverter<T extends BizRequest> {
             bizRequest.setAreaLevel(request.getAreaLevel());
             bizRequest.setAreaIds(request.getAreaIds());
             bizRequest.setParentIds(request.getParentIds());
+            return bizRequest;
+        }
+        return null;
+    };
+
+    public static Handler<BizSubOrgCreateRequest> SUB_ORG_CREATE = apiRequest -> {
+        if (apiRequest instanceof SubOrgCreateRequest) {
+            SubOrgCreateRequest request = (SubOrgCreateRequest) apiRequest;
+            BizSubOrgCreateRequest bizRequest = new BizSubOrgCreateRequest();
+            bizRequest.setName(request.getName());
+            bizRequest.getExtendInfo().putAll(request.getExtendInfo());
             return bizRequest;
         }
         return null;

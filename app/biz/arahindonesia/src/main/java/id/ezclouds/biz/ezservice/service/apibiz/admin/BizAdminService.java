@@ -722,12 +722,6 @@ public class BizAdminService extends BizBaseService {
         return session;
     }
 
-    private void authorizeAdminMember(String memberRoles) throws EzErrorException {
-        AssertUtil.notBlank(memberRoles, EzErrorCode.MEMBER_UNAUTHORIZED);
-        List<String> roles = Arrays.asList(memberRoles.split(","));
-        AssertUtil.isTrue(roles.contains(BizMemberRole.ADMIN_ORG.getCode()), EzErrorCode.MEMBER_UNAUTHORIZED);
-    }
-
     private void authorizeSuperUserOrAdminMember(String memberRoles) throws EzErrorException {
         AssertUtil.notBlank(memberRoles, EzErrorCode.MEMBER_UNAUTHORIZED);
         List<String> roles = Arrays.asList(memberRoles.split(","));

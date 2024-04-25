@@ -7,13 +7,17 @@ package id.ezclouds.biz.ezservice.subbiz.arahindonesia.service;
 import id.ezclouds.biz.ezservice.converter.BizModelConverter;
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.BizMemberDO;
 import id.ezclouds.biz.ezservice.service.dataservice.repo.BizMemberRepository;
+import id.ezclouds.biz.ezservice.subbiz.arahindonesia.dataobject.BizSubOrganizationDO;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.repo.AppSubOrganizationRepository;
 import id.ezclouds.common.util.StringUtil;
+import id.ezclouds.core.shared.enums.CoreSequenceScene;
+import id.ezclouds.core.shared.service.CoreSequenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,6 +34,9 @@ public class AppSubOrganizationService {
     @Autowired
     private BizMemberRepository bizMemberRepository;
 
+    @Autowired
+    private CoreSequenceService coreSequenceService;
+
     public BizSubOrganization getSubOrganizationById(String subOrgId) {
         return getAllSubOrganization()
                 .stream()
@@ -45,6 +52,17 @@ public class AppSubOrganizationService {
             return null;
         }
         return getSubOrganizationById(bizMemberDO.getSubOrgId());
+    }
+
+    @Transactional
+    public void create(String name, String orgId, String orgCode) {
+        String subOrgId = coreSequenceService.generateSequence(orgId, orgCode, CoreSequenceScene.BIZ_SUB_ORG.getCode());
+        BizSubOrganizationDO bizSubOrganizationDO = new BizSubOrganizationDO();
+        bizSubOrganizationDO.setName(name);
+        bizSubOrganizationDO.setOrgId(orgId);
+        bizSubOrganizationDO.setSubOrgId(subOrgId);
+        bizSubOrganizationDO.setStatus(1);
+        appSubOrganizationRepository.saveAndFlush(bizSubOrganizationDO);
     }
 
     @Cacheable(value = "appSubOrganization")

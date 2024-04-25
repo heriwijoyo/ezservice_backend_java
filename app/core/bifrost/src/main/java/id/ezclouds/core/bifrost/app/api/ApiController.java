@@ -318,6 +318,24 @@ public class ApiController extends AppController {
         });
     }
 
+    @PostMapping(value = "/api/subOrgCreate.json")
+    private ApiResult<String> subOrgCreate(@RequestBody SubOrgCreateRequest request) {
+        return executeInTemplate(ApiEvent.API_SUB_ORG_CREATE, request, new RequestHandler<String>() {
+            @Override
+            public String convertResult(Object resultObject) {
+                if (resultObject instanceof String) {
+                    return (String) resultObject;
+                }
+                return null;
+            }
+
+            @Override
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<String> result) {
+                return new SimpleDigestLog(result.isSuccess(), result.getResultCode());
+            }
+        });
+    }
+
 
     // ================ ADMIN APIs ==================
 

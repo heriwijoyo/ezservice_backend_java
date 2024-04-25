@@ -415,8 +415,8 @@ public class BizAdminInnerService {
         memberSeqConfig.setSequence(0);
         coreSequenceService.createSequenceConfig(memberSeqConfig);
 
-        String subOrgscene = CoreSequenceScene.APP_SUB_ORG.getCode();
-        String subOrgsceneCode = CoreSequenceScene.APP_SUB_ORG.getSceneCode();
+        String subOrgscene = CoreSequenceScene.BIZ_SUB_ORG.getCode();
+        String subOrgsceneCode = CoreSequenceScene.BIZ_SUB_ORG.getSceneCode();
         CoreSequenceConfig subOrgSeqConfig = new CoreSequenceConfig();
         subOrgSeqConfig.setSeqId(organizationDO.getOrgId() +"_"+ subOrgscene);
         subOrgSeqConfig.setOrgId(organizationDO.getOrgId());
