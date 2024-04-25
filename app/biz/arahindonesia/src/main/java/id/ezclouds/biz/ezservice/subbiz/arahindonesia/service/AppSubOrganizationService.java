@@ -7,9 +7,14 @@ package id.ezclouds.biz.ezservice.subbiz.arahindonesia.service;
 import id.ezclouds.biz.ezservice.converter.BizModelConverter;
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.BizMemberDO;
 import id.ezclouds.biz.ezservice.service.dataservice.repo.BizMemberRepository;
+import id.ezclouds.biz.ezservice.service.inner.service.BizPageQueryStrategy;
+import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
+import id.ezclouds.biz.ezservice.service.result.BizPageInfo;
+import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.dataobject.BizSubOrganizationDO;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.repo.AppSubOrganizationRepository;
+import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.shared.enums.CoreSequenceScene;
 import id.ezclouds.core.shared.service.CoreSequenceService;
@@ -62,6 +67,8 @@ public class AppSubOrganizationService {
         bizSubOrganizationDO.setOrgId(orgId);
         bizSubOrganizationDO.setSubOrgId(subOrgId);
         bizSubOrganizationDO.setStatus(1);
+        bizSubOrganizationDO.setCreatedTime(DateUtil.getCurrentFormattedDate());
+        bizSubOrganizationDO.setModifiedTime(DateUtil.getCurrentFormattedDate());
         appSubOrganizationRepository.saveAndFlush(bizSubOrganizationDO);
     }
 
@@ -72,5 +79,15 @@ public class AppSubOrganizationService {
                 .stream()
                 .map(BizModelConverter::convert)
                 .collect(Collectors.toList());
+    }
+
+    public BizPageInfo pageQuery(BizPageRequest request) {
+        BizPageQueryStrategy<BizSubOrganizationDO, String, BizSubOrganization> queryStrategy = new BizPageQueryStrategy<>();
+        return queryStrategy.pageQuery(appSubOrganizationRepository, request, modelDO -> {
+            BizSubOrganization bizSubOrganization = new BizSubOrganization();
+            bizSubOrganization.setSubOrgId(modelDO.getSubOrgId());
+            bizSubOrganization.setName(modelDO.getName());
+            return bizSubOrganization;
+        });
     }
 }

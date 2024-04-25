@@ -28,4 +28,5 @@ public class BizSubOrganization {
     public void setName(String name) {
         this.name = name;
     }
+
 }

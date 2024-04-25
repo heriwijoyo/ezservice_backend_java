@@ -10,6 +10,7 @@ import id.ezclouds.biz.ezservice.service.apibiz.BizAuthService;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
 import id.ezclouds.biz.ezservice.service.dataservice.request.BizSubOrgCreateRequest;
 import id.ezclouds.biz.ezservice.service.request.*;
+import id.ezclouds.biz.ezservice.service.result.BizPageResult;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
@@ -125,6 +126,10 @@ public class ApiBizProcessor implements BizProcessor {
             case API_SUB_ORG_CREATE:
                 BizRequestConverter<BizSubOrgCreateRequest> subOrgCreateConverter = new BizRequestConverter<>(BizRequestConverter.SUB_ORG_CREATE);
                 return bizSubOrganizationService.create(subOrgCreateConverter.convert(apiRequest));
+
+            case API_GET_SUB_ORGANIZATIONS:
+                BizRequestConverter<BizPageRequest> pageRequestConverter = new BizRequestConverter<>(BizRequestConverter.BIZ_PAGE_REQUEST);
+                return bizSubOrganizationService.getSubBizOrganizations(pageRequestConverter.convert(apiRequest));
 
 
 

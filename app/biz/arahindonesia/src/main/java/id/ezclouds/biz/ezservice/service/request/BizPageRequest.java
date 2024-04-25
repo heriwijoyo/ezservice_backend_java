@@ -10,31 +10,52 @@ package id.ezclouds.biz.ezservice.service.request;
  */
 public class BizPageRequest extends BizRequest {
 
-    private Integer pageNumber = 1;
-    private Integer pageSize;
-    private String searchQuery;
+    public static final int DEFAULT_PAGE_NUMBER = 1;
+    public static final int DEFAULT_PAGE_SIZE = 20;
 
-    public Integer getPageNumber() {
+    private int pageNumber = 1;
+    private int pageSize;
+    private String searchKey;
+    private String sortBy;
+    private String sort;
+
+    public int getPageNumber() {
         return pageNumber;
     }
 
-    public void setPageNumber(Integer pageNumber) {
+    public void setPageNumber(int pageNumber) {
         this.pageNumber = pageNumber;
     }
 
-    public Integer getPageSize() {
+    public int getPageSize() {
         return pageSize;
     }
 
-    public void setPageSize(Integer pageSize) {
+    public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
     }
 
-    public String getSearchQuery() {
-        return searchQuery;
+    public String getSearchKey() {
+        return searchKey;
     }
 
-    public void setSearchQuery(String searchQuery) {
-        this.searchQuery = searchQuery;
+    public void setSearchKey(String searchKey) {
+        this.searchKey = searchKey;
+    }
+
+    public String getSortBy() {
+        return sortBy;
+    }
+
+    public void setSortBy(String sortBy) {
+        this.sortBy = sortBy;
+    }
+
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
     }
 }

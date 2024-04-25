@@ -5,6 +5,8 @@
 package id.ezclouds.biz.ezservice.service.apibiz;
 
 import id.ezclouds.biz.ezservice.service.dataservice.request.BizSubOrgCreateRequest;
+import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
+import id.ezclouds.biz.ezservice.service.result.BizPageInfo;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.service.AppSubOrganizationService;
@@ -42,6 +44,34 @@ public class BizSubOrganizationService extends BizBaseService {
 
                 bizResult.setSuccess(true);
                 bizResult.setObject("SubOrganization Created");
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
+    public BizResult getSubBizOrganizations(BizPageRequest request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(request, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthMemberSessionInfo session = authAppMemberSession();
+                authorizeAdminMember(session.getMemberRoles());
+
+                request.setSortBy("createdTime");
+                request.setSort("DESC");
+                BizPageInfo bizPageInfo = appSubOrganizationService.pageQuery(request);
+                bizResult.setBizPageInfo(bizPageInfo);
+                bizResult.setSuccess(true);
             }
 
             @Override

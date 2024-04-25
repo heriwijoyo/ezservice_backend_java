@@ -14,6 +14,7 @@ import id.ezclouds.biz.ezservice.model.profile.CandidateProfile;
 import id.ezclouds.biz.ezservice.model.profile.MemberProfile;
 import id.ezclouds.biz.ezservice.model.survey.BizSurveyForm;
 import id.ezclouds.biz.ezservice.service.result.BizMemberLoginResult;
+import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.common.util.exception.ExceptionUtil;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
@@ -21,6 +22,7 @@ import id.ezclouds.core.bifrost.app.AppController;
 import id.ezclouds.core.bifrost.app.api.digestlog.*;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.*;
+import id.ezclouds.core.bifrost.app.api.result.ApiPageResult;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
 import id.ezclouds.core.shared.model.CoreArea;
 import id.ezclouds.core.shared.result.ListResult;
@@ -173,6 +175,20 @@ public class ApiController extends AppController {
         });
     }
 
+    @PostMapping(value = "/api/subOrgGet.json")
+    private ApiPageResult<BizSubOrganization> getSubOrganizations(@RequestBody ApiPageRequest request) {
+        return executePageInTemplate(ApiEvent.API_GET_SUB_ORGANIZATIONS, request, new RequestHandler<BizSubOrganization>() {
+            @Override
+            public BizSubOrganization convertResult(Object resultObject) {
+                return null;
+            }
+
+            @Override
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<BizSubOrganization> result) {
+                return new SimpleDigestLog(result.isSuccess(), result.getResultCode());
+            }
+        });
+    }
 
 
     // ================ TRANSACTIONAL APIs ==================

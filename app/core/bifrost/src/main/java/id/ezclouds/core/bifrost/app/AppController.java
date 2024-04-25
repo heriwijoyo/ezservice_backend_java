@@ -16,6 +16,7 @@ import id.ezclouds.core.bifrost.app.api.ApiBizProcessor;
 import id.ezclouds.core.bifrost.app.api.digestlog.CommonWebDigestLog;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
+import id.ezclouds.core.bifrost.app.api.result.ApiPageResult;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
 import id.ezclouds.core.bifrost.app.api.result.ErrorResult;
 import id.ezclouds.core.bifrost.app.web.WebBizProcessor;
@@ -45,11 +46,19 @@ public abstract class AppController {
         return executeInTemplate(apiEvent, apiRequest, null, handler);
     }
 
-
     protected <T> ApiResult<T> executeInTemplate(ApiEvent apiEvent, ApiRequest apiRequest, MultipartFile file, RequestHandler<T> handler) {
+        return executeInTemplate(false, apiEvent, apiRequest, file, handler);
+    }
+
+    protected <T> ApiPageResult<T> executePageInTemplate(ApiEvent apiEvent, ApiRequest apiRequest, RequestHandler<T> handler) {
+        return (ApiPageResult<T>) executeInTemplate(true, apiEvent, apiRequest, null, handler);
+    }
+
+    protected <T> ApiResult<T> executeInTemplate(boolean isPageRequest, ApiEvent apiEvent, ApiRequest apiRequest, MultipartFile file, RequestHandler<T> handler) {
 
         EzAppContextHolder.init(apiEvent);
         ApiResult<T> apiResult = new ApiResult<>();
+        ApiPageResult<T> apiPageResult = new ApiPageResult<>();
 
         try {
             AssertUtil.notNull(apiEvent, EzErrorCode.ILLEGAL_ACTION, "Illegal action request");
@@ -64,27 +73,44 @@ public abstract class AppController {
             BizResult bizResult = bizProcessor.process(apiEvent, apiRequest, file);
 
             apiResult.setSuccess(bizResult.isSuccess());
+            apiPageResult.setSuccess(bizResult.isSuccess());
             if (bizResult.isSuccess()) {
-                apiResult.setData(handler.convertResult(bizResult.getObject()));
+                if (isPageRequest) {
+                    apiPageResult.setBizPageInfo(bizResult.getBizPageInfo());
+                } else {
+                    apiResult.setData(handler.convertResult(bizResult.getObject()));
+                }
             } else {
                 apiResult.setErrorResult(composeErrorResult(bizResult));
+                apiPageResult.setErrorResult(composeErrorResult(bizResult));
             }
 
         } catch (EzErrorException ezException) {
             EzAppContextHolder.getContext().appendErrorStackTrace(ExceptionUtil.getStackTrace(ezException));
             apiResult.setErrorResult(composeErrorResult(ezException));
+            apiPageResult.setErrorResult(composeErrorResult(ezException));
         } catch (Exception exception) {
             EzAppContextHolder.getContext().appendErrorStackTrace(ExceptionUtil.getStackTrace(exception));
             apiResult.setErrorResult(composeErrorResult());
+            apiPageResult.setErrorResult(composeErrorResult());
         } finally {
             DigestLog digestLog = handler.composeDigestLog(apiRequest, apiResult);
+            if (isPageRequest) {
+                digestLog = handler.composeDigestLog(apiRequest, apiPageResult);
+            }
             DigestLogUtil.logDigest(getLogger(), digestLog);
         }
 
         if (apiResult.getErrorResult() != null) {
             apiResult.getErrorResult().setErrorContext(null);
+            apiPageResult.getErrorResult().setErrorContext(null);
         }
         apiResult.setTimestamp(DateUtil.getCurrentFormattedDate());
+        apiPageResult.setTimestamp(DateUtil.getCurrentFormattedDate());
+
+        if (isPageRequest) {
+            return apiPageResult;
+        }
         return apiResult;
     }
 

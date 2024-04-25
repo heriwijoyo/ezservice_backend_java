@@ -22,6 +22,8 @@ public class BizResult implements Serializable {
     private String errorMessage;
     private Object object;
 
+    private BizPageInfo bizPageInfo;
+
     public BizResult() {
         this.success = false;
     }
@@ -64,6 +66,14 @@ public class BizResult implements Serializable {
 
     public void setObject(Object object) {
         this.object = object;
+    }
+
+    public BizPageInfo getBizPageInfo() {
+        return bizPageInfo;
+    }
+
+    public void setBizPageInfo(BizPageInfo bizPageInfo) {
+        this.bizPageInfo = bizPageInfo;
     }
 
     @Override

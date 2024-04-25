@@ -30,6 +30,12 @@ public class BizSubOrganizationDO {
     @Column(name = "status")
     private int status;
 
+    @Column(name = "created_time")
+    private String createdTime;
+
+    @Column(name = "modified_time")
+    private String modifiedTime;
+
     public String getSubOrgId() {
         return subOrgId;
     }
@@ -60,5 +66,21 @@ public class BizSubOrganizationDO {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(String modifiedTime) {
+        this.modifiedTime = modifiedTime;
     }
 }

@@ -152,6 +152,27 @@ public class BizRequestConverter<T extends BizRequest> {
         return null;
     };
 
+    public static Handler<BizPageRequest> BIZ_PAGE_REQUEST = apiRequest -> {
+        if (apiRequest instanceof ApiPageRequest) {
+            ApiPageRequest request = (ApiPageRequest) apiRequest;
+            BizPageRequest bizRequest = new BizPageRequest();
+            if (request.getPageNumber() == null || request.getPageNumber() < 1) {
+                bizRequest.setPageNumber(BizPageRequest.DEFAULT_PAGE_NUMBER);
+            } else {
+                bizRequest.setPageNumber(request.getPageNumber());
+            }
+
+            if (request.getPageSize() == null || request.getPageSize() < 1) {
+                bizRequest.setPageSize(BizPageRequest.DEFAULT_PAGE_SIZE);
+            } else {
+                bizRequest.setPageSize(request.getPageSize());
+            }
+            bizRequest.setSearchKey(request.getSearchKey());
+            return bizRequest;
+        }
+        return null;
+    };
+
     interface Handler<T extends BizRequest> {
         T convert(ApiRequest apiRequest);
     }
