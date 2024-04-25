@@ -23,12 +23,17 @@ import id.ezclouds.core.member.model.MemberStatus;
 import id.ezclouds.core.member.repo.CoreMemberExtensionRepository;
 import id.ezclouds.core.member.repo.CoreMemberRepository;
 import id.ezclouds.core.member.util.CoreMemberConverter;
+import id.ezclouds.core.shared.converter.CoreModelConverter;
 import id.ezclouds.core.shared.enums.CoreSequenceScene;
+import id.ezclouds.core.shared.model.CorePageInfo;
 import id.ezclouds.core.shared.service.CoreSequenceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -169,5 +174,32 @@ public class CoreMemberService {
                     break;
             }
         }
+    }
+
+    public CorePageInfo getMemberByOrg(String orgId, PageRequest pageRequest) {
+        Page<CoreMemberDO> pageResult = coreMemberRepository.findByOrgId(orgId, pageRequest);
+        return composePageInfo(pageResult);
+    }
+
+    public CorePageInfo getMemberByOrgAndSubOrg(String orgId, String subOrgId, PageRequest pageRequest) {
+        Page<CoreMemberDO> pageResult = coreMemberRepository.findByOrgIdAndSubOrgId(orgId, subOrgId, pageRequest);
+        return composePageInfo(pageResult);
+    }
+
+    private CorePageInfo composePageInfo(Page<CoreMemberDO> pageResult) {
+        CorePageInfo bizPageInfo = new CorePageInfo();
+        bizPageInfo.setPageNumber(pageResult.getPageable().getPageNumber() + 1);
+        bizPageInfo.setPageSize(pageResult.getPageable().getPageSize());
+        bizPageInfo.setTotalPage(pageResult.getTotalPages());
+        bizPageInfo.setNumberRecord(pageResult.getNumberOfElements());
+        bizPageInfo.setTotalRecord((int)pageResult.getTotalElements());
+        bizPageInfo.setHasNext(pageResult.hasNext());
+
+        List<Object> bizData = new ArrayList<>();
+        pageResult.getContent().forEach(modelDO -> {
+            bizData.add(CoreMemberConverter.convert(modelDO));
+        });
+        bizPageInfo.setBizData(bizData);
+        return bizPageInfo;
     }
 }

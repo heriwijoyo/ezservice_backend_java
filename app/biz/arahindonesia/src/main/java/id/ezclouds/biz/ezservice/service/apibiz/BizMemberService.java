@@ -19,6 +19,8 @@ import id.ezclouds.biz.ezservice.service.inner.service.BizMemberInnerService;
 import id.ezclouds.biz.ezservice.service.dataservice.AppProfileService;
 import id.ezclouds.biz.ezservice.service.request.BizMemberRegisterRequest;
 import id.ezclouds.biz.ezservice.service.request.BizMemberUploadRequest;
+import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
+import id.ezclouds.biz.ezservice.service.result.BizPageInfo;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.DateUtil;
@@ -232,6 +234,32 @@ public class BizMemberService extends BizBaseService {
             }
         });
 
+        return bizResult;
+    }
+
+    public BizResult getMembers(BizPageRequest request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(request, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthMemberSessionInfo session = authAppMemberSession();
+                authorizeAdminMember(session.getMemberRoles());
+
+                BizPageInfo bizPageInfo = bizMemberInnerService.getMemberPage(getOrgId(), request);
+                bizResult.setSuccess(true);
+                bizResult.setBizPageInfo(bizPageInfo);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
         return bizResult;
     }
 

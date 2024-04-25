@@ -131,6 +131,10 @@ public class ApiBizProcessor implements BizProcessor {
                 BizRequestConverter<BizPageRequest> pageRequestConverter = new BizRequestConverter<>(BizRequestConverter.BIZ_PAGE_REQUEST);
                 return bizSubOrganizationService.getSubBizOrganizations(pageRequestConverter.convert(apiRequest));
 
+            case API_GET_MEMBER:
+                BizRequestConverter<BizPageRequest> pageRequestConverter2 = new BizRequestConverter<>(BizRequestConverter.BIZ_PAGE_REQUEST);
+                return bizMemberService.getMembers(pageRequestConverter2.convert(apiRequest));
+
 
 
 

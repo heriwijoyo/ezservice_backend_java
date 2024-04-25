@@ -190,6 +190,21 @@ public class ApiController extends AppController {
         });
     }
 
+    @PostMapping(value = "/api/memberGet.json")
+    private ApiPageResult<BizSubOrganization> getMembers(@RequestBody ApiPageRequest request) {
+        return executePageInTemplate(ApiEvent.API_GET_MEMBER, request, new RequestHandler<BizSubOrganization>() {
+            @Override
+            public BizSubOrganization convertResult(Object resultObject) {
+                return null;
+            }
+
+            @Override
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<BizSubOrganization> result) {
+                return new SimpleDigestLog(result.isSuccess(), result.getResultCode());
+            }
+        });
+    }
+
 
     // ================ TRANSACTIONAL APIs ==================
 

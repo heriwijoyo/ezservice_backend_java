@@ -168,6 +168,7 @@ public class BizRequestConverter<T extends BizRequest> {
                 bizRequest.setPageSize(request.getPageSize());
             }
             bizRequest.setSearchKey(request.getSearchKey());
+            bizRequest.getExtendInfo().putAll(request.getExtendInfo());
             return bizRequest;
         }
         return null;

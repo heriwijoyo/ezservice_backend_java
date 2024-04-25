@@ -12,7 +12,11 @@ import id.ezclouds.biz.ezservice.model.member.BizMemberClient;
 import id.ezclouds.biz.ezservice.model.member.BizMemberInfo;
 import id.ezclouds.biz.ezservice.service.inner.converter.BizMemberRequestConverter;
 import id.ezclouds.biz.ezservice.service.request.BizMemberRegisterRequest;
+import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
+import id.ezclouds.biz.ezservice.service.result.BizPageInfo;
+import id.ezclouds.biz.ezservice.util.PageRequestUtil;
 import id.ezclouds.common.util.ShardUtil;
+import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.auth.model.CoreAuthMemberClient;
 import id.ezclouds.core.auth.service.CoreAuthService;
 import id.ezclouds.core.member.model.CoreMember;
@@ -20,8 +24,11 @@ import id.ezclouds.core.member.model.CoreMemberExtension;
 import id.ezclouds.core.member.service.CoreMemberService;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.enums.CoreSequenceScene;
+import id.ezclouds.core.shared.model.CorePageInfo;
 import id.ezclouds.core.shared.service.CoreSequenceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -119,5 +126,35 @@ public class BizMemberInnerService {
         bizMemberInfo.setBizMember(bizMember);
         bizMemberInfo.setBizMemberClient(bizMemberClient);
         return bizMemberInfo;
+    }
+
+    public BizPageInfo getMemberPage(String orgId, BizPageRequest request) {
+        request.setSortBy("createdTime");
+        request.setSort("DESC");
+        PageRequest pageRequest = PageRequestUtil.composePageRequest(request);
+        String subOrgId = request.getExtendInfo().get("SUB_ORG_ID");
+
+        CorePageInfo corePageInfo;
+        if (StringUtil.isNotBlank(subOrgId)) {
+            corePageInfo = coreMemberService.getMemberByOrgAndSubOrg(orgId, subOrgId, pageRequest);
+        } else {
+            corePageInfo = coreMemberService.getMemberByOrg(orgId, pageRequest);
+        }
+        return convert(corePageInfo);
+    }
+
+    private BizPageInfo convert(CorePageInfo corePageInfo) {
+        if (corePageInfo == null) {
+            return null;
+        }
+        BizPageInfo bizPageInfo = new BizPageInfo();
+        bizPageInfo.setPageNumber(corePageInfo.getPageNumber());
+        bizPageInfo.setPageSize(corePageInfo.getPageSize());
+        bizPageInfo.setTotalPage(corePageInfo.getTotalPage());
+        bizPageInfo.setNumberRecord(corePageInfo.getNumberRecord());
+        bizPageInfo.setTotalRecord(corePageInfo.getTotalRecord());
+        bizPageInfo.setHasNext(corePageInfo.isHasNext());
+        bizPageInfo.setBizData(corePageInfo.getBizData());
+        return bizPageInfo;
     }
 }

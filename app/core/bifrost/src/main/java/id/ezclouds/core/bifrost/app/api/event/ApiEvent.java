@@ -20,6 +20,7 @@ public enum ApiEvent implements EzAppEvent {
 
     // PageResult APIs
     API_GET_SUB_ORGANIZATIONS("API_GET_SUB_ORGANIZATIONS"),
+    API_GET_MEMBER("API_GET_MEMBER"),
 
     // TRANSACTIONAL APIs
     API_MEMBER_LOGIN("API_MEMBER_LOGIN"),
