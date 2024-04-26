@@ -43,6 +43,12 @@ public class VideoCardDO {
     @Column(name = "target_url")
     private String targetUrl;
 
+    @Column(name = "created_time")
+    private String createdTime;
+
+    @Column(name = "modified_time")
+    private String modifiedTime;
+
     @Column(name = "sorting")
     private int sorting;
 
@@ -119,6 +125,22 @@ public class VideoCardDO {
 
     public void setTargetUrl(String targetUrl) {
         this.targetUrl = targetUrl;
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(String modifiedTime) {
+        this.modifiedTime = modifiedTime;
     }
 
     public int getSorting() {

@@ -6,11 +6,16 @@ package id.ezclouds.biz.ezservice.service.dataservice;
 
 import id.ezclouds.biz.ezservice.converter.BizModelConverter;
 import id.ezclouds.biz.ezservice.model.VideoCard;
+import id.ezclouds.biz.ezservice.model.event.BizEvent;
+import id.ezclouds.biz.ezservice.service.dataservice.dataobject.AppEventDO;
 import id.ezclouds.biz.ezservice.service.dataservice.request.VideoCardCreateRequest;
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.VideoCardDO;
 import id.ezclouds.biz.ezservice.service.dataservice.repo.VideoCardRepository;
+import id.ezclouds.biz.ezservice.service.result.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -50,5 +55,39 @@ public class VideoCardService {
         videoCardDO.setSorting(request.getSorting());
         videoCardDO.setStatus(request.getStatus());
         videoCardRepository.saveAndFlush(videoCardDO);
+    }
+
+    public PageResult<VideoCard> getVideoCards(String orgId, PageRequest pageRequest) {
+        Page<VideoCardDO> findResult = videoCardRepository
+                .findByOrgId(orgId, pageRequest);
+
+        List<VideoCard> resultData = findResult
+                .getContent()
+                .stream()
+                .map(this::convert)
+                .collect(Collectors.toList());
+
+        PageResult<VideoCard> pageResult = new PageResult<>();
+        pageResult.setPageNumber(findResult.getPageable().getPageNumber() + 1);
+        pageResult.setPageSize(findResult.getPageable().getPageSize());
+        pageResult.setNumberRecord(findResult.getNumberOfElements());
+        pageResult.setTotalPage(findResult.getTotalPages());
+        pageResult.setTotalRecord((int)findResult.getTotalElements());
+        pageResult.setHasNext(findResult.hasNext());
+        pageResult.setHasPrevious(findResult.hasPrevious());
+        pageResult.setData(resultData);
+        return pageResult;
+    }
+
+    private VideoCard convert(VideoCardDO videoCardDO) {
+        if (videoCardDO == null) { return null; }
+        VideoCard videoCard = new VideoCard();
+        videoCard.setSection(videoCardDO.getSection());
+        videoCard.setSectionName(videoCardDO.getSectionName());
+        videoCard.setThumbnail(videoCardDO.getThumbnail());
+        videoCard.setTargetType(videoCardDO.getTargetType());
+        videoCard.setTargetUrl(videoCardDO.getTargetUrl());
+        videoCard.setStatus(videoCardDO.getStatus());
+        return videoCard;
     }
 }

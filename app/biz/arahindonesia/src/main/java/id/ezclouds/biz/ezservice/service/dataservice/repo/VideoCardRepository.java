@@ -5,6 +5,8 @@
 package id.ezclouds.biz.ezservice.service.dataservice.repo;
 
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.VideoCardDO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -20,4 +22,6 @@ public interface VideoCardRepository extends JpaRepository<VideoCardDO, Long> {
 
     @Query("SELECT vc FROM VideoCardDO vc WHERE vc.status = 1 ORDER BY vc.sorting")
     List<VideoCardDO> findAllActive();
+
+    Page<VideoCardDO> findByOrgId(String orgId, Pageable pageable);
 }

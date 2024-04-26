@@ -19,6 +19,7 @@ public class BizPublicUrlResolverImpl implements BizPublicUrlResolver {
     private static final String PATH_APP_GALLERY = "/public/app";
     private static final String PATH_NEWS_GALLERY = "/public/news";
     private static final String PATH_EVENT_GALLERY = "/public/event";
+    private static final String PATH_VIDEO_CARD_GALLERY = "/public/video";
     private static final String PATH_OTHER_GALLERY = "/public/other";
 
     private final String rootPublicImageUrl;
@@ -63,6 +64,11 @@ public class BizPublicUrlResolverImpl implements BizPublicUrlResolver {
     @Override
     public String getEventGalleryRootImageUrl() {
         return rootPublicImageUrl + PATH_IMAGE + PATH_EVENT_GALLERY + SLASH + orgCode + SLASH;
+    }
+
+    @Override
+    public String getVideoCardGalleryRootImageUrl() {
+        return rootPublicImageUrl + PATH_IMAGE + PATH_VIDEO_CARD_GALLERY + SLASH + orgCode + SLASH;
     }
 
     @Override

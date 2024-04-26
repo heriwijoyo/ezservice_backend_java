@@ -7,6 +7,7 @@ package id.ezclouds.biz.ezservice.service.inner.service;
 import id.ezclouds.biz.ezservice.converter.BizMemberConverter;
 import id.ezclouds.biz.ezservice.enums.BizMemberRole;
 import id.ezclouds.biz.ezservice.model.AppConfig;
+import id.ezclouds.biz.ezservice.model.VideoCard;
 import id.ezclouds.biz.ezservice.model.admin.BizApplicationConfig;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganization;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganizationDetail;
@@ -235,6 +236,11 @@ public class BizAdminInnerService {
 
     public void eventFlagSwitch(String orgId, String eventId, String section, int value) {
         bizEventInnerService.adminNewsFlagSwitch(orgId, eventId, section, value);
+    }
+
+    public PageResult<VideoCard> getVideoCards(String orgId, int pageNumber, int pageSize, String sortBy, String sort) {
+        PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortBy, sort);
+        return videoCardService.getVideoCards(orgId, pageRequest);
     }
 
     public void createVideoCard(String orgId, String imageUrl, Map<String, String> extInfo) {

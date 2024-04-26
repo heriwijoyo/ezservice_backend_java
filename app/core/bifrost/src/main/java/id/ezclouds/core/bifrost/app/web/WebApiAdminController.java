@@ -5,6 +5,7 @@
 package id.ezclouds.core.bifrost.app.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import id.ezclouds.biz.ezservice.model.VideoCard;
 import id.ezclouds.biz.ezservice.model.admin.*;
 import id.ezclouds.biz.ezservice.model.event.BizEvent;
 import id.ezclouds.biz.ezservice.model.news.BizWebDetailNews;
@@ -343,6 +344,38 @@ public class WebApiAdminController {
             public String convertResult(Object object) {
                 if (object instanceof String) {
                     return (String) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/videoCards.json")
+    private WebApiPageResult<VideoCard> videoCards(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "pageNumber", required = false) int pageNumber,
+            @RequestParam(name = "pageSize", required = false) int pageSize ) {
+        final WebApiPageResult<VideoCard> result = new WebApiPageResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_VIDEO_CARD_GET, result, new WebApiControllerTemplate.PageHandler<VideoCard>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizWebPageRequest request = new BizWebPageRequest();
+                request.setSessionId(sessionId);
+                request.setPageNumber(pageNumber);
+                request.setPageSize(pageSize);
+                return bizAdminService.getVideoCards(request);
+            }
+
+            @Override
+            public PageResult<VideoCard> convertResult(Object object) {
+                if (object instanceof PageResult) {
+                    return (PageResult<VideoCard>) object;
                 }
                 return null;
             }

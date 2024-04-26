@@ -4,6 +4,9 @@
  */
 package id.ezclouds.biz.ezservice.model;
 
+import id.ezclouds.biz.ezservice.constant.AppConstant;
+import id.ezclouds.biz.ezservice.model.annotation.PublicImageUrl;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: VideoCard.java, v 0.1 2023‐12‐10 12:12 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -13,9 +16,11 @@ public class VideoCard {
     private String orgId;
     private String section;
     private String sectionName;
+    @PublicImageUrl(name = AppConstant.Annotation.VIDEO_CARD_GALLERY_URL)
     private String thumbnail;
     private String targetType;
     private String targetUrl;
+    private int status;
 
     public String getOrgId() {
         return orgId;
@@ -63,5 +68,13 @@ public class VideoCard {
 
     public void setTargetUrl(String targetUrl) {
         this.targetUrl = targetUrl;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }
