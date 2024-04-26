@@ -13,6 +13,7 @@ import id.ezclouds.biz.ezservice.model.annotation.PublicImageUrl;
  */
 public class VideoCard {
 
+    private String id;
     private String orgId;
     private String section;
     private String sectionName;
@@ -21,6 +22,14 @@ public class VideoCard {
     private String targetType;
     private String targetUrl;
     private int status;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getOrgId() {
         return orgId;

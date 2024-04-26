@@ -129,6 +129,9 @@ public class BizAppCacheService {
             case APP_IMAGE_GALLERY_ALL:
                 appImageGalleryService.getImageGalleryAllActive();
                 break;
+            case VIDEO_CARD_GALLERY_ALL:
+                videoCardService.getAllVideoCards();
+                break;
         }
     }
 }

@@ -7,11 +7,14 @@ package id.ezclouds.biz.ezservice.service.dataservice;
 import id.ezclouds.biz.ezservice.converter.BizModelConverter;
 import id.ezclouds.biz.ezservice.model.VideoCard;
 import id.ezclouds.biz.ezservice.model.event.BizEvent;
+import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.AppEventDO;
 import id.ezclouds.biz.ezservice.service.dataservice.request.VideoCardCreateRequest;
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.VideoCardDO;
 import id.ezclouds.biz.ezservice.service.dataservice.repo.VideoCardRepository;
 import id.ezclouds.biz.ezservice.service.result.PageResult;
+import id.ezclouds.common.util.DateUtil;
+import id.ezclouds.common.util.HashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -32,7 +35,7 @@ public class VideoCardService {
     @Autowired
     private VideoCardRepository videoCardRepository;
 
-    @Cacheable("videoCard")
+    @Cacheable(value = BizCacheKey.VIDEO_CARD_GALLERY_ALL)
     public List<VideoCard> getAllVideoCards() {
         return videoCardRepository
                 .findAllActive()
@@ -43,7 +46,9 @@ public class VideoCardService {
 
     @Transactional
     public void createVideoCard(VideoCardCreateRequest request) {
+        String currentTime = DateUtil.getCurrentFormattedDate();
         VideoCardDO videoCardDO = new VideoCardDO();
+        videoCardDO.setId(HashUtil.createHash(currentTime));
         videoCardDO.setOrgId(request.getOrgId());
         videoCardDO.setSection(request.getSection());
         videoCardDO.setSectionName(request.getSectionName());
@@ -52,8 +57,10 @@ public class VideoCardService {
         videoCardDO.setThumbnail(request.getThumbnail());
         videoCardDO.setTargetType(request.getTargetType());
         videoCardDO.setTargetUrl(request.getTargetUrl());
+        videoCardDO.setCreatedTime(currentTime);
+        videoCardDO.setModifiedTime(currentTime);
         videoCardDO.setSorting(request.getSorting());
-        videoCardDO.setStatus(request.getStatus());
+        videoCardDO.setStatus(1);
         videoCardRepository.saveAndFlush(videoCardDO);
     }
 
@@ -82,6 +89,8 @@ public class VideoCardService {
     private VideoCard convert(VideoCardDO videoCardDO) {
         if (videoCardDO == null) { return null; }
         VideoCard videoCard = new VideoCard();
+        videoCard.setId(videoCardDO.getId());
+        videoCard.setOrgId(videoCardDO.getOrgId());
         videoCard.setSection(videoCardDO.getSection());
         videoCard.setSectionName(videoCardDO.getSectionName());
         videoCard.setThumbnail(videoCardDO.getThumbnail());

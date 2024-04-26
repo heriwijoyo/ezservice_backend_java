@@ -222,7 +222,7 @@
             let targetUrl = $('#targetUrl').val();
             let postData = {
                 sessionId: sessionId,
-                scene: 'ADMIN_VIDEO_CARD',
+                scene: 'ADMIN_VIDEO_CARD_GALLERY',
                 extendInfo: {
                     SECTION: section,
                     SECTION_LABEL: sectionLabel,
@@ -256,7 +256,7 @@
                         alert(response.data);
                         EzDashboardBizService.hideFormNewImage();
                         EzDashboardBizService.resetFormNewImage();
-                        EzDashboardBizService.fetchGalleries();
+                        EzDashboardBizService.fetchData();
                     }
                 },
                 error: function(e) {

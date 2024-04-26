@@ -695,9 +695,11 @@ public class BizAdminService extends BizBaseService {
                         break;
 
                     case ADMIN_VIDEO_CARD_GALLERY:
+                        bizAdminInnerService.validateExtendInfo(request.getExtendInfo(), "SECTION", "SECTION_LABEL", "TARGET_TYPE", "TARGET_URL");
                         filePath = fileInfo.getVideoCardGalleryPath(fileName);
                         coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
                         bizAdminInnerService.createVideoCard(session.getOrgId(), fileName, request.getExtendInfo());
+                        bizAppCacheService.reloadCacheItem(BizCacheKey.APP_IMAGE_GALLERY_ALL);
                         break;
 
                     case ADMIN_OTHER_GALLERY:

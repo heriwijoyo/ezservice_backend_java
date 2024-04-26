@@ -250,7 +250,7 @@ public class BizAdminInnerService {
 
         if (extInfo != null && !extInfo.isEmpty()) {
             request.setSection(extInfo.get("SECTION"));
-            request.setSectionName(extInfo.get("SECTION_NAME"));
+            request.setSectionName(extInfo.get("SECTION_LABEL"));
             request.setTitle(extInfo.get("TITLE"));
             request.setDescription(extInfo.get("DESCRIPTION"));
             request.setTargetType(extInfo.get("TARGET_TYPE"));

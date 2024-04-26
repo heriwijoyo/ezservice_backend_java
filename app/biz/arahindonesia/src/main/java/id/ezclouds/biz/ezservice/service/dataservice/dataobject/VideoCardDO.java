@@ -15,9 +15,8 @@ import javax.persistence.*;
 public class VideoCardDO {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @Column(name = "vcard_id")
+    private String id;
 
     @Column(name = "org_id")
     private String orgId;
@@ -55,11 +54,11 @@ public class VideoCardDO {
     @Column(name = "status")
     private int status;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -18,7 +18,6 @@ import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -46,6 +45,8 @@ public class BizCommonConfigService extends BizBaseService {
 
     @Autowired
     private BizCandidateProfileService bizCandidateProfileService;
+
+    private BizPublicUrlResolver publicOrgResolver;
 
     public BizResult getAppSetting() {
         final BizResult bizResult = new BizResult();
@@ -79,6 +80,13 @@ public class BizCommonConfigService extends BizBaseService {
 
     public BizPublicUrlResolver resolvePublicUrl(String orgCode) {
         return new BizPublicUrlResolverImpl(appRootPublicUrl, orgCode);
+    }
+
+    private BizPublicUrlResolver getPublicOrgResolver() {
+        if (publicOrgResolver == null) {
+            publicOrgResolver = new BizPublicUrlResolverImpl(appRootPublicUrl, getOrgCode());
+        }
+        return publicOrgResolver;
     }
 
     private HomeData composeHomeData(String orgId) {
@@ -159,6 +167,7 @@ public class BizCommonConfigService extends BizBaseService {
                 .collect(Collectors.toList());
 
         for (VideoCard videoCard : allVideoCards) {
+            BizAnnotationProcessor.annotatePublicConfig(videoCard, getPublicOrgResolver());
             boolean isMapped = false;
             for (VideoSection videoSection : videoSections) {
                 if (videoSection.getSectionName().equals(videoCard.getSectionName())) {

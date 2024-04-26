@@ -12,5 +12,6 @@ public final class BizCacheKey {
 
     public static final String NEWS_HIGHLIGHT   = "NEWS_HIGHLIGHT";
     public static final String APP_IMAGE_GALLERY_ALL = "APP_IMAGE_GALLERY_ALL";
+    public static final String VIDEO_CARD_GALLERY_ALL = "VIDEO_CARD_GALLERY_ALL";
 
 }
