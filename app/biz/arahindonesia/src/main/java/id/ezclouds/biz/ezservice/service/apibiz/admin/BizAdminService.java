@@ -388,6 +388,7 @@ public class BizAdminService extends BizBaseService {
 
                 bizResult.setSuccess(true);
                 bizResult.setObject(result);
+                bizAppCacheService.reloadCacheItem(BizCacheKey.APP_IMAGE_GALLERY_ALL);
             }
 
             @Override
@@ -620,6 +621,7 @@ public class BizAdminService extends BizBaseService {
                         filePath = fileInfo.getAppGalleryPath(fileName);
                         coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
                         bizAdminInnerService.createAppImageGallery(session.getOrgId(), fileName, request.getExtendInfo());
+                        bizAppCacheService.reloadCacheItem(BizCacheKey.APP_IMAGE_GALLERY_ALL);
                         break;
 
                     case ADMIN_NEWS_GALLERY:

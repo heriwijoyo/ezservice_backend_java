@@ -111,10 +111,11 @@
                             <thead>
                             <tr>
                                 <th width="20%">Image</th>
-                                <th width="40%">Title</th>
+                                <th width="30%">Title</th>
                                 <th width="10%" class="text-center">Active</th>
                                 <th width="10%" class="text-center">HOME</th>
                                 <th width="10%" class="text-center">PORTFOLIO</th>
+                                <th width="10%" class="text-center">MID BANNER</th>
                                 <th width="10%" class="text-center">SORTING</th>
                             </tr>
                             </thead>
@@ -252,6 +253,7 @@
                 $(itemRow).find('.rowActive').html(EzDashboardBizService.renderFlag(rowData.status,'status',rowData.id));
                 $(itemRow).find('.rowHome').html(EzDashboardBizService.renderFlag(rowData.flagHomeSlide,'home',rowData.id));
                 $(itemRow).find('.rowPortfolio').html(EzDashboardBizService.renderFlag(rowData.flagPortfolioSlide,'portfolio',rowData.id));
+                $(itemRow).find('.rowMidBanner').html(EzDashboardBizService.renderFlag(rowData.flagMidBanner,'midbanner',rowData.id));
                 $(itemRow).find('.rowSorting').html('<center><input type="text" class="border" value="'+rowData.sorting+'" onchange="EzDashboardBizService.swithFlag(\''+rowData.id+'\',\'sorting\',this.value)"/></center>');
                 $('#rowsContainer').append(itemRow);
             }
@@ -263,7 +265,7 @@
             return '<center>'+ flagText + '<br><button onClick="EzDashboardBizService.swithFlag(\''+id+'\',\''+section+'\',\''+switchFlag+'\')" class="button button-rounded waves-effect waves-float" type="submit">SWITCH</button></center>';
         },
         swithFlag: function(itemId,section,value) {
-            EzWebAppClient.callApiService(EzApiUrl.UPDATE_APP_GALLERY, {
+            EzWebAppClient.callApiService(EzAdminUrl.UPDATE_APP_GALLERY, {
                 sessionId: EzWebAppClient.getSessionId(),
                 itemId: itemId,
                 section: section,
@@ -346,6 +348,7 @@
             '<td class="rowActive" style="vertical-align: middle;"></td>'+
             '<td class="rowHome" style="vertical-align: middle;"></td>'+
             '<td class="rowPortfolio" style="vertical-align: middle;"></td>'+
+            '<td class="rowMidBanner" style="vertical-align: middle;"></td>'+
             '<td class="rowSorting" style="vertical-align: middle;"></td>'+
         '</tr>';
 

@@ -91,7 +91,7 @@ public class BizCommonConfigService extends BizBaseService {
         homeData.setHighlightNews(fetchSimpleNews(orgId));
         homeData.setHomePosters(new ArrayList<>());
         homeData.setVideoSections(composeVideoSections(orgId));
-        homeData.setMidBannerUrl(AppConstant.TMP_MID_BANNER_URL);
+        homeData.setMidBannerUrl(fetchMidBannerUrl(orgId));
 
         //support V1 compatibility
         int appVersionNo = EzAppContextHolder.getContext().getAppVersionNo();
@@ -116,6 +116,24 @@ public class BizCommonConfigService extends BizBaseService {
         });
 
         return galleries;
+    }
+
+    private String fetchMidBannerUrl(String orgId) {
+        AppImageGallery gallery = appImageGalleryService
+                .getImageGalleryAllActive()
+                .stream()
+                .filter(appGallery -> orgId.equals(appGallery.getOrgId()) && appGallery.getFlagMidBanner() == 1)
+                .findFirst()
+                .orElse(null);
+
+        if (gallery != null) {
+            String orgCode = EzAppContextHolder.getContext().getOrgCode();
+            BizPublicUrlResolver resolver = resolvePublicUrl(orgCode);
+            BizAnnotationProcessor.annotatePublicConfig(gallery, resolver);
+
+            return gallery.getImageUrl();
+        }
+        return null;
     }
 
     private List<BizSimpleNews> fetchSimpleNews(String orgId) {

@@ -39,6 +39,9 @@ public class AppImageGalleryDO {
     @Column(name = "flag_portfolio_slide")
     private int flagPortfolioSlide = 0;
 
+    @Column(name = "flag_mid_banner")
+    private int flagMidBanner = 0;
+
     @Column(name = "created_time")
     private String createdTime;
 
@@ -110,6 +113,14 @@ public class AppImageGalleryDO {
 
     public void setFlagPortfolioSlide(int flagPortfolioSlide) {
         this.flagPortfolioSlide = flagPortfolioSlide;
+    }
+
+    public int getFlagMidBanner() {
+        return flagMidBanner;
+    }
+
+    public void setFlagMidBanner(int flagMidBanner) {
+        this.flagMidBanner = flagMidBanner;
     }
 
     public String getCreatedTime() {

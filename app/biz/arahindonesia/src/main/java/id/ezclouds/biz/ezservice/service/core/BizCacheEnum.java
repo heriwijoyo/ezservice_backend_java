@@ -11,6 +11,7 @@ package id.ezclouds.biz.ezservice.service.core;
 public enum BizCacheEnum {
 
     NEWS_HIGHLIGHT(BizCacheKey.NEWS_HIGHLIGHT),
+    APP_IMAGE_GALLERY_ALL(BizCacheKey.APP_IMAGE_GALLERY_ALL),
 
     UNKNOWN("UNKNOWN")
     ;

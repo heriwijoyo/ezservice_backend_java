@@ -28,6 +28,8 @@ public class AppImageGallery {
     private int flagHomeSlide = 0;
     @JsonIgnore
     private int flagPortfolioSlide = 0;
+    @JsonIgnore
+    private int flagMidBanner = 0;
     private String createdTime;
     @JsonIgnore
     private int sorting = 0;
@@ -86,6 +88,14 @@ public class AppImageGallery {
 
     public void setFlagPortfolioSlide(int flagPortfolioSlide) {
         this.flagPortfolioSlide = flagPortfolioSlide;
+    }
+
+    public int getFlagMidBanner() {
+        return flagMidBanner;
+    }
+
+    public void setFlagMidBanner(int flagMidBanner) {
+        this.flagMidBanner = flagMidBanner;
     }
 
     public String getCreatedTime() {

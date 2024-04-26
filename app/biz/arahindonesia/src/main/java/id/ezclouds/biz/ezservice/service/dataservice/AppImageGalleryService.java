@@ -4,6 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.service.dataservice;
 
+import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.AppImageGalleryDO;
 import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.dataservice.model.WebImageGallery;
@@ -68,7 +69,7 @@ public class AppImageGalleryService {
                 .collect(Collectors.toList());
     }
 
-    @Cacheable(value = "appImageGalleryAllOrg")
+    @Cacheable(value = BizCacheKey.APP_IMAGE_GALLERY_ALL)
     public List<AppImageGallery> getImageGalleryAllActive() {
         return appImageGalleryRepository
                 .findAllActive()
@@ -82,6 +83,7 @@ public class AppImageGalleryService {
                     gallery.setTargetUrl(modelDO.getTargetUrl());
                     gallery.setFlagHomeSlide(modelDO.getFlagHomeSlide());
                     gallery.setFlagPortfolioSlide(modelDO.getFlagPortfolioSlide());
+                    gallery.setFlagMidBanner(modelDO.getFlagMidBanner());
                     gallery.setSorting(modelDO.getSorting());
                     return gallery;
                 })
@@ -103,6 +105,7 @@ public class AppImageGalleryService {
                     gallery.setTargetUrl(modelDO.getTargetUrl());
                     gallery.setFlagHomeSlide(modelDO.getFlagHomeSlide());
                     gallery.setFlagPortfolioSlide(modelDO.getFlagPortfolioSlide());
+                    gallery.setFlagMidBanner(modelDO.getFlagMidBanner());
                     gallery.setCreatedTime(modelDO.getCreatedTime());
                     gallery.setSorting(modelDO.getSorting());
                     gallery.setStatus(modelDO.getStatus());
@@ -138,6 +141,9 @@ public class AppImageGalleryService {
         }
         if (StringUtil.equals(section, "portfolio")) {
             appImageGalleryDO.setFlagPortfolioSlide(Integer.parseInt(value));
+        }
+        if (StringUtil.equals(section, "midbanner")) {
+            appImageGalleryDO.setFlagMidBanner(Integer.parseInt(value));
         }
         if (StringUtil.equals(section, "sorting")) {
             appImageGalleryDO.setSorting(Integer.parseInt(value));

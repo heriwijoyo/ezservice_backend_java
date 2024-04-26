@@ -126,6 +126,9 @@ public class BizAppCacheService {
             case NEWS_HIGHLIGHT:
                 newsInnerService.getHighlightedNews();
                 break;
+            case APP_IMAGE_GALLERY_ALL:
+                appImageGalleryService.getImageGalleryAllActive();
+                break;
         }
     }
 }

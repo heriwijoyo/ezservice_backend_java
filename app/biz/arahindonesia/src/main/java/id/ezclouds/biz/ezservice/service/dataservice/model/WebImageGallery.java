@@ -25,6 +25,7 @@ public class WebImageGallery {
 
     private int flagHomeSlide;
     private int flagPortfolioSlide;
+    private int flagMidBanner;
     private String createdTime;
     private int sorting;
     private int status;
@@ -83,6 +84,14 @@ public class WebImageGallery {
 
     public void setFlagPortfolioSlide(int flagPortfolioSlide) {
         this.flagPortfolioSlide = flagPortfolioSlide;
+    }
+
+    public int getFlagMidBanner() {
+        return flagMidBanner;
+    }
+
+    public void setFlagMidBanner(int flagMidBanner) {
+        this.flagMidBanner = flagMidBanner;
     }
 
     public String getCreatedTime() {

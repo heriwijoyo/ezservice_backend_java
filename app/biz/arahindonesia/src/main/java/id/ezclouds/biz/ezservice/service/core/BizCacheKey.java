@@ -11,5 +11,6 @@ package id.ezclouds.biz.ezservice.service.core;
 public final class BizCacheKey {
 
     public static final String NEWS_HIGHLIGHT   = "NEWS_HIGHLIGHT";
+    public static final String APP_IMAGE_GALLERY_ALL = "APP_IMAGE_GALLERY_ALL";
 
 }
