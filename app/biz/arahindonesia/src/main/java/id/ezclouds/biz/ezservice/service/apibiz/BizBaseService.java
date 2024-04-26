@@ -13,6 +13,7 @@ import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
 import id.ezclouds.core.auth.service.CoreAuthService;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +26,9 @@ public class BizBaseService {
 
     @Autowired
     protected CoreAuthService coreAuthService;
+
+    @Value("${ezserviceapp.url.public.root}")
+    protected String appRootPublicUrl;
 
     public String getOrgId() {
         return EzAppContextHolder.getContext().getOrgId();

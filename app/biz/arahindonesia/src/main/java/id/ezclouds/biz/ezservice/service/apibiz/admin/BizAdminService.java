@@ -46,7 +46,6 @@ import id.ezclouds.core.shared.result.ListResult;
 import id.ezclouds.core.shared.service.CoreAdminService;
 import id.ezclouds.core.shared.service.CoreFileService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
@@ -82,9 +81,6 @@ public class BizAdminService extends BizBaseService {
 
     @Autowired
     private BizAppCacheService bizAppCacheService;
-
-    @Value("${ezserviceapp.url.public.root}")
-    private String appRootPublicUrl;
 
     public BizResult createWebSession() {
         final BizResult bizResult = new BizResult();

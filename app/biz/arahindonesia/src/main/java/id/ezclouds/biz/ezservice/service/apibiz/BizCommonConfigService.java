@@ -47,9 +47,6 @@ public class BizCommonConfigService extends BizBaseService {
     @Autowired
     private BizCandidateProfileService bizCandidateProfileService;
 
-    @Value("${ezserviceapp.url.public.root}")
-    private String appRootPublicUrl;
-
     public BizResult getAppSetting() {
         final BizResult bizResult = new BizResult();
 

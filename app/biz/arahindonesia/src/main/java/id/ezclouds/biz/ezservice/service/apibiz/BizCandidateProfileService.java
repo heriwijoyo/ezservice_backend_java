@@ -4,12 +4,16 @@
  */
 package id.ezclouds.biz.ezservice.service.apibiz;
 
+import id.ezclouds.biz.ezservice.config.BizPublicUrlResolver;
+import id.ezclouds.biz.ezservice.config.BizPublicUrlResolverImpl;
+import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
 import id.ezclouds.biz.ezservice.model.profile.CandidateBio;
 import id.ezclouds.biz.ezservice.model.profile.CandidateProfile;
 import id.ezclouds.biz.ezservice.model.profile.CandidateProfileItem;
 import id.ezclouds.biz.ezservice.service.dataservice.AppImageGalleryService;
 import id.ezclouds.biz.ezservice.service.dataservice.CandidateBioService;
 import id.ezclouds.biz.ezservice.service.dataservice.CandidateProfileItemService;
+import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.exception.EzErrorCode;
@@ -96,7 +100,14 @@ public class BizCandidateProfileService extends BizBaseService {
                     }
                 });
 
-        profile.setPortfolios(appImageGalleryService.getAppGalleryPortfolioSlide(orgId));
+        List<AppImageGallery> portfolios = appImageGalleryService.getAppGalleryPortfolioSlide(orgId);
+        String orgCode = EzAppContextHolder.getContext().getOrgCode();
+        BizPublicUrlResolver resolver = new BizPublicUrlResolverImpl(appRootPublicUrl, orgCode);
+        portfolios.forEach(gall -> {
+            BizAnnotationProcessor.annotatePublicConfig(gall, resolver);
+        });
+
+        profile.setPortfolios(portfolios);
 
         List<CandidateBio> candidateBios = candidateBioService
                 .getActiveCandidateBios()
