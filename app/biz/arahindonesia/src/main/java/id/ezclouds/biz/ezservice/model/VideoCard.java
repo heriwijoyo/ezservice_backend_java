@@ -4,6 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.model.annotation.PublicImageUrl;
 
@@ -14,6 +15,7 @@ import id.ezclouds.biz.ezservice.model.annotation.PublicImageUrl;
 public class VideoCard {
 
     private String id;
+    @JsonIgnore
     private String orgId;
     private String section;
     private String sectionName;

@@ -192,7 +192,8 @@
 <script type="text/javascript">
     var EzAdminUrl = {
         GET_VIDEO_CARDS: 'api/videoCards.json',
-        UPDATE_APP_GALLERY: 'api/updateAppGallery.json'
+        UPDATE_VIDEO_CARD: 'api/updateVideoCard.json',
+        FLAG_SWITCH_VIDEO_CARD: 'api/videoCardFlagSwitch.json'
     };
     var EzDashboardBizService = {
         start: function() {
@@ -211,7 +212,7 @@
                 EzDashboardBizService.reloadPageResultView(response);
             }
             if (url === EzAdminUrl.UPDATE_APP_GALLERY) {
-                EzDashboardBizService.fetchGalleries();
+                EzDashboardBizService.fetchData();
             }
         },
         postNewImage: function() {
@@ -284,10 +285,10 @@
         renderFlag: function(flag,section,id) {
             let flagText = flag == 1 ? 'YES' : 'NO';
             let switchFlag = flag == 1 ? '0' : '1';
-            return '<center>'+ flagText + '<br><button onClick="EzDashboardBizService.swithFlag(\''+id+'\',\''+section+'\',\''+switchFlag+'\')" class="button button-rounded waves-effect waves-float" type="submit">SWITCH</button></center>';
+            return '<center>'+ flagText + '<br><button onClick="EzDashboardBizService.switchFlag(\''+id+'\',\''+section+'\',\''+switchFlag+'\')" class="button button-rounded waves-effect waves-float" type="submit">SWITCH</button></center>';
         },
-        swithFlag: function(itemId,section,value) {
-            EzWebAppClient.callApiService(EzAdminUrl.UPDATE_APP_GALLERY, {
+        switchFlag: function(itemId,section,value) {
+            EzWebAppClient.callApiService(EzAdminUrl.FLAG_SWITCH_VIDEO_CARD, {
                 sessionId: EzWebAppClient.getSessionId(),
                 itemId: itemId,
                 section: section,
@@ -312,11 +313,11 @@
         },
         prev: function() {
             EzDashboardBizService.data.pageNumber--;
-            EzDashboardBizService.fetchGalleries();
+            EzDashboardBizService.fetchData();
         },
         next: function() {
             EzDashboardBizService.data.pageNumber++;
-            EzDashboardBizService.fetchGalleries();
+            EzDashboardBizService.fetchData();
         },
         data: {
             pageNumber: 1,

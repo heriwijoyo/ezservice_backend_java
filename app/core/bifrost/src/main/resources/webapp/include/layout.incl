@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html>
+    INCLUDE_HEADER
+    <body class="theme-blue poppins">
+        INCLUDE_NAVIGATION
+
+        INCLUDE_PAGE_CONTENT
+    </body>
+</html>

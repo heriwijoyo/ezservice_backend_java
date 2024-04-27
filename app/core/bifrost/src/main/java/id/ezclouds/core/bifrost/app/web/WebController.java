@@ -196,8 +196,8 @@ public class WebController extends AppController {
             File file = ResourceUtils.getFile("classpath:download.htm");
             String htmlContent = new String(Files.readAllBytes(file.toPath()));
             htmlContent = htmlContent
-                    .replaceAll("APP_NAME", appName)
-                    .replaceAll("APP_VERSION_NAME", buildPackage.getVersionName());
+                    .replace("APP_NAME", appName)
+                    .replace("APP_VERSION_NAME", buildPackage.getVersionName());
             servletResponse.getWriter().write(htmlContent);
             servletResponse.getWriter().flush();
         } catch (IOException e) {
