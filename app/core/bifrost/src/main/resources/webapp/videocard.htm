@@ -120,6 +120,10 @@
                 EzDashboardBizService.resetFormNewImage();
                 EzDashboardBizService.fetchData();
             }
+            if (url === EzApiUrl.COMMON_SWITCH_FLAG) {
+                alert(response.data);
+                EzDashboardBizService.fetchData();
+            }
         },
         updateItem: function() {
             EzWebAppClient.callApiService(EzAdminUrl.UPDATE_VIDEO_CARD, {
@@ -204,21 +208,15 @@
             return '<center>'+ flagText + '<br><button onClick="EzDashboardBizService.switchFlag(\''+id+'\',\''+section+'\',\''+switchFlag+'\')" class="button button-rounded waves-effect waves-float" type="submit">SWITCH</button></center>';
         },
         switchFlag: function(itemId,section,value) {
-            EzWebAppClient.callApiService(EzAdminUrl.FLAG_SWITCH_VIDEO_CARD, {
-                sessionId: EzWebAppClient.getSessionId(),
+            EzWebAppClient.commonSwitchFlag({
+                objectType: 'VIDEO_CARD',
                 itemId: itemId,
                 section: section,
                 value: value
             });
         },
         editItem: function(id) {
-            let data = EzDashboardBizService.data.result.data;
-            var dataItem;
-            for(let i=0; i<data.length; i++) {
-                if (data[i].id === id) {
-                    dataItem = data[i];
-                }
-            }
+            var dataItem = EzDashboardBizService.getDataItem(id);
             EzDashboardBizService.showFormNewImage();
             $('#section').val(dataItem.section);
             $('#sectionLabel').val(dataItem.sectionName);
@@ -254,6 +252,16 @@
         next: function() {
             EzDashboardBizService.data.pageNumber++;
             EzDashboardBizService.fetchData();
+        },
+        getDataItem: function(id) {
+            let data = EzDashboardBizService.data.result.data;
+            var dataItem;
+            for(let i=0; i<data.length; i++) {
+                if (data[i].id === id) {
+                    dataItem = data[i];
+                }
+            }
+            return dataItem;
         },
         data: {
             pageNumber: 1,

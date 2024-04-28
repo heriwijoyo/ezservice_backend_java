@@ -2,27 +2,18 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.biz.ezservice.service.request.web;
+package id.ezclouds.core.shared.model;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: BizWebUpdateItemRequest.java, v 0.1 2024‐03‐25 3:44 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: CommonModelSwitch.java, v 0.1 2024‐04‐28 10:23 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class BizWebUpdateItemRequest {
+public class CommonModelSwitch {
 
-    private String sessionId;
     private String orgId;
     private String itemId;
     private String section;
     private String value;
-
-    public String getSessionId() {
-        return sessionId;
-    }
-
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
-    }
 
     public String getOrgId() {
         return orgId;

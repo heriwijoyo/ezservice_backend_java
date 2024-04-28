@@ -6,6 +6,7 @@ package id.ezclouds.biz.ezservice.service.inner.service;
 
 import id.ezclouds.biz.ezservice.converter.BizMemberConverter;
 import id.ezclouds.biz.ezservice.enums.BizMemberRole;
+import id.ezclouds.biz.ezservice.enums.BizSwitchFlagObject;
 import id.ezclouds.biz.ezservice.model.AppConfig;
 import id.ezclouds.biz.ezservice.model.VideoCard;
 import id.ezclouds.biz.ezservice.model.admin.BizApplicationConfig;
@@ -25,6 +26,7 @@ import id.ezclouds.biz.ezservice.service.dataservice.model.WebImageGallery;
 import id.ezclouds.biz.ezservice.service.dataservice.request.AppImageGalleryRequest;
 import id.ezclouds.biz.ezservice.service.dataservice.request.NewsCreateRequest;
 import id.ezclouds.biz.ezservice.service.dataservice.request.VideoCardCreateRequest;
+import id.ezclouds.biz.ezservice.service.request.web.BizWebUpdateItemRequest;
 import id.ezclouds.biz.ezservice.service.result.PageResult;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
@@ -40,6 +42,7 @@ import id.ezclouds.core.member.model.MemberStatus;
 import id.ezclouds.core.member.service.CoreMemberService;
 import id.ezclouds.core.shared.constant.CoreConstant;
 import id.ezclouds.core.shared.enums.CoreSequenceScene;
+import id.ezclouds.core.shared.model.CommonModelSwitch;
 import id.ezclouds.core.shared.model.CoreSequenceConfig;
 import id.ezclouds.core.shared.repo.dataobject.EzCoreOrganizationDO;
 import id.ezclouds.core.shared.service.CoreConfigService;
@@ -261,6 +264,16 @@ public class BizAdminInnerService {
             request.setTargetUrl(extInfo.get("TARGET_URL"));
         }
         videoCardService.createVideoCard(request);
+    }
+
+    public void commonSwitchFlag(BizSwitchFlagObject switchFlagObject, BizWebUpdateItemRequest request) {
+        switch (switchFlagObject) {
+            case VIDEO_CARD:
+                videoCardService.switchFlag(convert(request));
+                break;
+            default:
+                break;
+        }
     }
 
     public PageResult<BizOrganization> getOrganizationAll(int pageNumber, int pageSize, String sortBy, String sort) {
@@ -494,5 +507,15 @@ public class BizAdminInnerService {
         organizationDO.setModifiedTime(organization.getModifiedTime());
         organizationDO.setStatus(organization.getStatus());
         return organizationDO;
+    }
+
+    private CommonModelSwitch convert(BizWebUpdateItemRequest request) {
+        if (request == null) { return null; }
+        CommonModelSwitch modelSwitch = new CommonModelSwitch();
+        modelSwitch.setOrgId(request.getOrgId());
+        modelSwitch.setSection(request.getSection());
+        modelSwitch.setItemId(request.getItemId());
+        modelSwitch.setValue(request.getValue());
+        return modelSwitch;
     }
 }

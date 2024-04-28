@@ -5,6 +5,7 @@
 package id.ezclouds.core.bifrost.app.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import id.ezclouds.biz.ezservice.enums.BizSwitchFlagObject;
 import id.ezclouds.biz.ezservice.model.VideoCard;
 import id.ezclouds.biz.ezservice.model.admin.*;
 import id.ezclouds.biz.ezservice.model.event.BizEvent;
@@ -408,6 +409,38 @@ public class WebApiAdminController {
                 request.setSessionId(sessionId);
                 request.setObject(videoCard);
                 return bizAdminService.updateVideoCard(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/adminCommonSwitchFlag.json")
+    private WebApiResult<String> adminCommonSwitchFlag(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "objectType", required = false) String objectType,
+            @RequestParam(name = "itemId", required = false) String itemId,
+            @RequestParam(name = "section", required = false) String section,
+            @RequestParam(name = "value", required = false) String value) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_COMMON_SWITCH_FLAG, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizWebUpdateItemRequest request = new BizWebUpdateItemRequest();
+                request.setSessionId(sessionId);
+                request.setItemId(itemId);
+                request.setSection(section);
+                request.setValue(value);
+                return bizAdminService.adminCommonSwitchFlag(BizSwitchFlagObject.getByCode(objectType), request);
             }
 
             @Override

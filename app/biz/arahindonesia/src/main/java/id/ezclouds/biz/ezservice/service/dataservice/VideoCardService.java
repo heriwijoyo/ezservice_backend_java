@@ -17,6 +17,7 @@ import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
+import id.ezclouds.core.shared.model.CommonModelSwitch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -97,6 +98,18 @@ public class VideoCardService {
         videoCardDO.setSection(videoCard.getSection());
         videoCardDO.setSectionName(videoCard.getSectionName());
         videoCardDO.setTargetUrl(videoCard.getTargetUrl());
+        videoCardRepository.saveAndFlush(videoCardDO);
+    }
+
+    @Transactional
+    public void switchFlag(CommonModelSwitch modelSwitch) {
+        VideoCardDO videoCardDO = videoCardRepository
+                .findByIdAndOrgId(modelSwitch.getItemId(), modelSwitch.getOrgId());
+        AssertUtil.notNull(videoCardDO, EzErrorCode.DATA_NOT_FOUND);
+
+        if ("status".equals(modelSwitch.getSection())) {
+            videoCardDO.setStatus(Integer.parseInt(modelSwitch.getValue()));
+        }
         videoCardRepository.saveAndFlush(videoCardDO);
     }
 

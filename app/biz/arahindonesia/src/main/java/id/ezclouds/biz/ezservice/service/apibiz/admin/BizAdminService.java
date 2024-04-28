@@ -9,6 +9,7 @@ import id.ezclouds.biz.ezservice.config.BizPublicUrlResolverImpl;
 import id.ezclouds.biz.ezservice.constant.BizConstant;
 import id.ezclouds.biz.ezservice.enums.BizMemberRole;
 import id.ezclouds.biz.ezservice.converter.BizAdminConverter;
+import id.ezclouds.biz.ezservice.enums.BizSwitchFlagObject;
 import id.ezclouds.biz.ezservice.enums.BizUploadScene;
 import id.ezclouds.biz.ezservice.model.VideoCard;
 import id.ezclouds.biz.ezservice.model.admin.*;
@@ -757,6 +758,34 @@ public class BizAdminService extends BizBaseService {
         return bizResult;
     }
 
+    public BizResult adminCommonSwitchFlag(BizSwitchFlagObject switchFlagObject, BizWebUpdateItemRequest request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(switchFlagObject, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.isNotTrue(switchFlagObject == BizSwitchFlagObject.UNKNOWN, EzErrorCode.ILLEGAL_PARAM);
+                validateBizUpdateItemRequest(request);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                authorizeAdminMember(session.getMemberRoles());
+                request.setOrgId(session.getOrgId());
+                bizAdminInnerService.commonSwitchFlag(switchFlagObject, request);
+                bizResult.setSuccess(true);
+                bizResult.setObject(BizConstant.Message.SUCCESS_COMMON);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
     private void validateBizPageRequest(BizWebPageRequest request) throws EzErrorException {
         AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
         AssertUtil.notNull(request.getPageNumber(), EzErrorCode.ILLEGAL_PARAM);
@@ -784,6 +813,14 @@ public class BizAdminService extends BizBaseService {
         AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
         AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
         AssertUtil.notNull(request.getObject(), EzErrorCode.ILLEGAL_PARAM);
+    }
+
+    private void validateBizUpdateItemRequest(BizWebUpdateItemRequest request) {
+        AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+        AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
+        AssertUtil.notBlank(request.getItemId(), EzErrorCode.ILLEGAL_PARAM);
+        AssertUtil.notBlank(request.getSection(), EzErrorCode.ILLEGAL_PARAM);
+        AssertUtil.notBlank(request.getValue(), EzErrorCode.ILLEGAL_PARAM);
     }
 
     private CoreAuthAdminSession authorizedAdminSession(String sessionId) throws Exception {

@@ -44,7 +44,8 @@ var EzWebAppViewHelper = {
 };
 var EzApiUrl = {
     GET_APP_DATA: 'api/getAppData.json',
-    GET_DASHBOARD_DATA: 'api/getDashboardData.json'
+    GET_DASHBOARD_DATA: 'api/getDashboardData.json',
+    COMMON_SWITCH_FLAG: 'api/adminCommonSwitchFlag.json'
 };
 var EzWebAppBizService = {
     handleAppData: function(response) {
@@ -140,6 +141,9 @@ var EzWebAppClient = {
                 }
             });
         }
+    },
+    commonSwitchFlag: function(data) {
+        EzWebAppClient.callApiService(EzApiUrl.COMMON_SWITCH_FLAG, data);
     },
     handleApiSuccessResult: function(url, data) {
         if (url === EzApiUrl.GET_APP_DATA) {
