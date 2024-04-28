@@ -15,6 +15,8 @@ import id.ezclouds.biz.ezservice.service.dataservice.repo.VideoCardRepository;
 import id.ezclouds.biz.ezservice.service.result.PageResult;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
+import id.ezclouds.common.util.assertion.AssertUtil;
+import id.ezclouds.common.util.exception.EzErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -48,7 +50,7 @@ public class VideoCardService {
     public void createVideoCard(VideoCardCreateRequest request) {
         String currentTime = DateUtil.getCurrentFormattedDate();
         VideoCardDO videoCardDO = new VideoCardDO();
-        videoCardDO.setId(HashUtil.createHash(currentTime));
+        videoCardDO.setId(HashUtil.createHash(request.getOrgId(), currentTime));
         videoCardDO.setOrgId(request.getOrgId());
         videoCardDO.setSection(request.getSection());
         videoCardDO.setSectionName(request.getSectionName());
@@ -84,6 +86,18 @@ public class VideoCardService {
         pageResult.setHasPrevious(findResult.hasPrevious());
         pageResult.setData(resultData);
         return pageResult;
+    }
+
+    @Transactional
+    public void updateVideoCard(VideoCard videoCard) {
+        VideoCardDO videoCardDO = videoCardRepository
+                .findByIdAndOrgId(videoCard.getId(), videoCard.getOrgId());
+        AssertUtil.notNull(videoCardDO, EzErrorCode.DATA_NOT_FOUND);
+
+        videoCardDO.setSection(videoCard.getSection());
+        videoCardDO.setSectionName(videoCard.getSectionName());
+        videoCardDO.setTargetUrl(videoCard.getTargetUrl());
+        videoCardRepository.saveAndFlush(videoCardDO);
     }
 
     private VideoCard convert(VideoCardDO videoCardDO) {

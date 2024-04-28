@@ -623,6 +623,37 @@ public class BizAdminService extends BizBaseService {
         return bizResult;
     }
 
+    public BizResult updateVideoCard(BizWebUpdateRequest<VideoCard> request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                validateBizUpdateRequest(request);
+                AssertUtil.notBlank(request.getObject().getId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getObject().getSection(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getObject().getSectionName(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getObject().getTargetUrl(), EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                authorizeAdminMember(session.getMemberRoles());
+                request.getObject().setOrgId(session.getOrgId());
+                bizAdminInnerService.updateVideoCard(request.getObject());
+
+                bizResult.setSuccess(true);
+                bizResult.setObject(BizConstant.Message.SUCCESS_COMMON);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
     public BizResult adminCommonPostWithFileUpload(BizAdminUploadRequest request) {
         final BizResult bizResult = new BizResult();
 
@@ -747,6 +778,12 @@ public class BizAdminService extends BizBaseService {
         AssertUtil.notBlank(request.getItemId(), EzErrorCode.ILLEGAL_PARAM);
         AssertUtil.notBlank(request.getSection(), EzErrorCode.ILLEGAL_PARAM);
         AssertUtil.notBlank(request.getValue(), EzErrorCode.ILLEGAL_PARAM);
+    }
+
+    private void validateBizUpdateRequest(BizWebUpdateRequest request) {
+        AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+        AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
+        AssertUtil.notNull(request.getObject(), EzErrorCode.ILLEGAL_PARAM);
     }
 
     private CoreAuthAdminSession authorizedAdminSession(String sessionId) throws Exception {

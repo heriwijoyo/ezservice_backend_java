@@ -388,6 +388,41 @@ public class WebApiAdminController {
         return result;
     }
 
+    @PostMapping(value = "/webapp/api/updateVideoCard.json")
+    private WebApiResult<String> updateVideoCard(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "id", required = false) String id,
+            @RequestParam(name = "section", required = false) String section,
+            @RequestParam(name = "sectionLabel", required = false) String sectionLabel,
+            @RequestParam(name = "targetUrl", required = false) String targetUrl) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_VIDEO_CARD_UPDATE, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                VideoCard videoCard = new VideoCard();
+                videoCard.setId(id);
+                videoCard.setSection(section);
+                videoCard.setSectionName(sectionLabel);
+                videoCard.setTargetUrl(targetUrl);
+                BizWebUpdateRequest<VideoCard> request = new BizWebUpdateRequest<>();
+                request.setSessionId(sessionId);
+                request.setObject(videoCard);
+                return bizAdminService.updateVideoCard(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
     @PostMapping(value = "/webapp/api/adminCommonPost.json")
     private WebApiResult<String> adminUpload(@RequestPart("imageFile") MultipartFile multipartFile, @RequestPart("postData") String postData) {
         WebApiResult<String> result = new WebApiResult<>();

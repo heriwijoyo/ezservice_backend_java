@@ -243,6 +243,10 @@ public class BizAdminInnerService {
         return videoCardService.getVideoCards(orgId, pageRequest);
     }
 
+    public void updateVideoCard(VideoCard videoCard) {
+        videoCardService.updateVideoCard(videoCard);
+    }
+
     public void createVideoCard(String orgId, String imageUrl, Map<String, String> extInfo) {
         VideoCardCreateRequest request = new VideoCardCreateRequest();
         request.setOrgId(orgId);

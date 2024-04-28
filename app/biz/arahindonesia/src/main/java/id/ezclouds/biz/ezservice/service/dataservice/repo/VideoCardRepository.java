@@ -24,4 +24,6 @@ public interface VideoCardRepository extends JpaRepository<VideoCardDO, String> 
     List<VideoCardDO> findAllActive();
 
     Page<VideoCardDO> findByOrgId(String orgId, Pageable pageable);
+
+    VideoCardDO findByIdAndOrgId(String id, String orgId);
 }

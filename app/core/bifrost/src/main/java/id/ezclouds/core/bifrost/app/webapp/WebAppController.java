@@ -25,6 +25,11 @@ public class WebAppController {
     private static final String ASSET_INCLUDE_HEADER = "classpath:webapp/include/header.incl";
     private static final String ASSET_INCLUDE_NAVIGATION = "classpath:webapp/include/navigation.incl";
 
+    @GetMapping(value = "/webapp/videocard.htm")
+    private void webAppVideoCard(HttpServletResponse servletResponse) {
+        renderWebApp(WebAppPage.VIDEO_CARD, servletResponse);
+    }
+
     @GetMapping(value = "/webapp/profile.htm")
     private void webAppProfile(HttpServletResponse servletResponse) {
         renderWebApp(WebAppPage.PROFILE, servletResponse);
