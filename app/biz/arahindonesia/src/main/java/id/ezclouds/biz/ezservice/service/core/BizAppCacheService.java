@@ -94,8 +94,8 @@ public class BizAppCacheService {
         appConfigService.getMessageTemplates();
         newsInnerService.getHighlightedNews();
         candidateProfileItemService.getCandidateProfileItems();
-        videoCardService.getAllVideoCards();
         candidateBioService.getActiveCandidateBios();
+        videoCardService.getAllVideoCards();
         appProfileService.getAllAppProfile();
         coreAdminService.getAdminBOPermissionAllActive();
         coreAdminService.getAdminBoMenuAllActive();
@@ -131,6 +131,11 @@ public class BizAppCacheService {
                 break;
             case VIDEO_CARD_GALLERY_ALL:
                 videoCardService.getAllVideoCards();
+                break;
+            case CANDIDATE_PROFILE:
+            case CANDIDATE_BIOGRAPHY:
+                candidateProfileItemService.getCandidateProfileItems();
+                candidateBioService.getActiveCandidateBios();
                 break;
         }
     }

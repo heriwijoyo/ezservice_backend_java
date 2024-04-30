@@ -102,7 +102,7 @@ public class BizCommonConfigService extends BizBaseService {
         int appVersionNo = EzAppContextHolder.getContext().getAppVersionNo();
         if (appVersionNo < AppConstant.APP_V2_START_VERSION_NO) {
             //TODO: compose candidate profile
-            homeData.setCandidateProfile(
+            homeData.setBizCandidateProfile(
                     bizCandidateProfileService.getCandidateProfileOld()
             );
         }

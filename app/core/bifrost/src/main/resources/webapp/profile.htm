@@ -137,24 +137,19 @@
 
 <script type="text/javascript">
     var EzAdminUrl = {
-        EVENT_GET: 'api/events.json',
+        PROFILE_GET: 'api/profileDetail.json',
         EVENT_STATUS_SWITCH: 'api/eventFlagSwitch.json'
     };
     var EzDashboardBizService = {
         start: function() {
-            //EzDashboardBizService.fetchData();
+            EzDashboardBizService.fetchData();
         },
         fetchData: function() {
-            EzWebAppClient.callApiService(EzAdminUrl.EVENT_GET, {
-                sessionId: EzWebAppClient.getSessionId(),
-                pageNumber: EzDashboardBizService.data.pageNumber,
-                pageSize: EzDashboardBizService.data.pageSize
-            });
+            EzWebAppClient.callApiService(EzAdminUrl.PROFILE_GET, {});
         },
         handleApiBizResult: function(url, response) {
-            if (url === EzAdminUrl.EVENT_GET) {
-                EzDashboardBizService.data.result = response.pageResult;
-                EzDashboardBizService.reloadPageResultView(response);
+            if (url === EzAdminUrl.PROFILE_GET) {
+                console.log(response.data);
             }
             if (url === EzAdminUrl.EVENT_STATUS_SWITCH) {
                 alert(response.data);

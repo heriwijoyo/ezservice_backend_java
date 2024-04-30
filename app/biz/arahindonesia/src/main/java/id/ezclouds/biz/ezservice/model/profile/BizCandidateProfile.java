@@ -12,9 +12,9 @@ import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: CandidateProfile.java, v 0.1 2023‐12‐10 3:00 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: BizCandidateProfile.java, v 0.1 2023‐12‐10 3:00 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class CandidateProfile {
+public class BizCandidateProfile {
 
     private String contactNumber;
     private String vision;

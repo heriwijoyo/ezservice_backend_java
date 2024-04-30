@@ -786,6 +786,30 @@ public class BizAdminService extends BizBaseService {
         return bizResult;
     }
 
+    public BizResult getProfileDetail(String sessionId) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notBlank(sessionId, EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthAdminSession session = authorizedAdminSession(sessionId);
+                authorizeAdminMember(session.getMemberRoles());
+                bizResult.setSuccess(true);
+                bizResult.setObject(bizAdminInnerService.getCandidateProfile(session.getOrgId()));
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
     private void validateBizPageRequest(BizWebPageRequest request) throws EzErrorException {
         AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
         AssertUtil.notNull(request.getPageNumber(), EzErrorCode.ILLEGAL_PARAM);

@@ -6,6 +6,7 @@ package id.ezclouds.biz.ezservice.service.dataservice;
 
 import id.ezclouds.biz.ezservice.converter.BizModelConverter;
 import id.ezclouds.biz.ezservice.model.profile.CandidateProfileItem;
+import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.biz.ezservice.service.dataservice.repo.CandidateProfileItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -24,7 +25,7 @@ public class CandidateProfileItemService {
     @Autowired
     private CandidateProfileItemRepository candidateProfileItemRepository;
 
-    @Cacheable("candidateProfileItem")
+    @Cacheable(value = BizCacheKey.CANDIDATE_PROFILE)
     public List<CandidateProfileItem> getCandidateProfileItems() {
         return candidateProfileItemRepository
                 .findAll()

@@ -5,7 +5,7 @@
 package id.ezclouds.biz.ezservice.model;
 
 import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
-import id.ezclouds.biz.ezservice.model.profile.CandidateProfile;
+import id.ezclouds.biz.ezservice.model.profile.BizCandidateProfile;
 import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class HomeData {
     private String pemiluDeadline;
     private List<String> communities = new ArrayList<>();
     private String midBannerUrl;
-    private CandidateProfile candidateProfile;
+    private BizCandidateProfile bizCandidateProfile;
 
     public List<String> getCommunities() {
         return communities;
@@ -82,11 +82,11 @@ public class HomeData {
         this.midBannerUrl = midBannerUrl;
     }
 
-    public CandidateProfile getCandidateProfile() {
-        return candidateProfile;
+    public BizCandidateProfile getBizCandidateProfile() {
+        return bizCandidateProfile;
     }
 
-    public void setCandidateProfile(CandidateProfile candidateProfile) {
-        this.candidateProfile = candidateProfile;
+    public void setBizCandidateProfile(BizCandidateProfile bizCandidateProfile) {
+        this.bizCandidateProfile = bizCandidateProfile;
     }
 }

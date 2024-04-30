@@ -10,7 +10,7 @@ import id.ezclouds.biz.ezservice.model.admin.BizAdminSession;
 import id.ezclouds.biz.ezservice.model.authentication.BizMemberCommonSession;
 import id.ezclouds.biz.ezservice.model.member.BizMemberRegisterResult;
 import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
-import id.ezclouds.biz.ezservice.model.profile.CandidateProfile;
+import id.ezclouds.biz.ezservice.model.profile.BizCandidateProfile;
 import id.ezclouds.biz.ezservice.model.profile.MemberProfile;
 import id.ezclouds.biz.ezservice.model.survey.BizSurveyForm;
 import id.ezclouds.biz.ezservice.service.result.BizMemberLoginResult;
@@ -90,15 +90,15 @@ public class ApiController extends AppController {
     }
 
     @PostMapping(value = "/api/candidate_profile.php")
-    private ApiResult<CandidateProfile> getCandidateProfile(@RequestBody ApiRequest request) {
-        return executeInTemplate(ApiEvent.API_CANDIDATE_PROFILE, request, new RequestHandler<CandidateProfile>() {
+    private ApiResult<BizCandidateProfile> getCandidateProfile(@RequestBody ApiRequest request) {
+        return executeInTemplate(ApiEvent.API_CANDIDATE_PROFILE, request, new RequestHandler<BizCandidateProfile>() {
             @Override
-            public CandidateProfile convertResult(Object resultObject) {
-                return (CandidateProfile) resultObject;
+            public BizCandidateProfile convertResult(Object resultObject) {
+                return (BizCandidateProfile) resultObject;
             }
 
             @Override
-            public DigestLog composeDigestLog(ApiRequest request, ApiResult<CandidateProfile> result) {
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<BizCandidateProfile> result) {
                 EmptyDigestLog digestLog = new EmptyDigestLog(result.isSuccess(), result.getResultCode());
                 digestLog.composeDigest(request, toEmptyResult(result));
                 return digestLog;

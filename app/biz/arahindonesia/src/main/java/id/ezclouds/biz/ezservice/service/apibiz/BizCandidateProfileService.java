@@ -7,8 +7,8 @@ package id.ezclouds.biz.ezservice.service.apibiz;
 import id.ezclouds.biz.ezservice.config.BizPublicUrlResolver;
 import id.ezclouds.biz.ezservice.config.BizPublicUrlResolverImpl;
 import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
+import id.ezclouds.biz.ezservice.model.profile.BizCandidateProfile;
 import id.ezclouds.biz.ezservice.model.profile.CandidateBio;
-import id.ezclouds.biz.ezservice.model.profile.CandidateProfile;
 import id.ezclouds.biz.ezservice.model.profile.CandidateProfileItem;
 import id.ezclouds.biz.ezservice.service.dataservice.AppImageGalleryService;
 import id.ezclouds.biz.ezservice.service.dataservice.CandidateBioService;
@@ -55,7 +55,7 @@ public class BizCandidateProfileService extends BizBaseService {
             @Override
             public void onBizProcess() throws EzErrorException {
                 String orgId = EzAppContextHolder.getContext().getOrgId();
-                CandidateProfile profile = new CandidateProfile();
+                BizCandidateProfile profile = new BizCandidateProfile();
                 setCandidateProfile(profile, orgId);
 
                 bizResult.setSuccess(true);
@@ -71,14 +71,20 @@ public class BizCandidateProfileService extends BizBaseService {
         return bizResult;
     }
 
-    public CandidateProfile getCandidateProfileOld() {
+    public BizCandidateProfile getCandidateProfileOld() {
         String orgId = EzAppContextHolder.getContext().getOrgId();
-        CandidateProfile profile = new CandidateProfile();
+        BizCandidateProfile profile = new BizCandidateProfile();
         setCandidateProfile(profile, orgId);
         return profile;
     }
 
-    private void setCandidateProfile(CandidateProfile profile, String orgId) {
+    public BizCandidateProfile getCandidateProfile(String orgId) {
+        BizCandidateProfile profile = new BizCandidateProfile();
+        setCandidateProfile(profile, orgId);
+        return profile;
+    }
+
+    private void setCandidateProfile(BizCandidateProfile profile, String orgId) {
         List<CandidateProfileItem> profileItems = candidateProfileItemService
                 .getCandidateProfileItems()
                 .stream()

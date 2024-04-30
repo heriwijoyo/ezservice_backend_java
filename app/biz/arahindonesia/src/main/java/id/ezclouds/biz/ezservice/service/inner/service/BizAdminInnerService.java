@@ -18,6 +18,8 @@ import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.model.member.BizMemberInfo;
 import id.ezclouds.biz.ezservice.model.news.BizWebDetailNews;
 import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
+import id.ezclouds.biz.ezservice.model.profile.BizCandidateProfile;
+import id.ezclouds.biz.ezservice.service.apibiz.BizCandidateProfileService;
 import id.ezclouds.biz.ezservice.service.apibiz.BizConnectService;
 import id.ezclouds.biz.ezservice.service.dataservice.*;
 import id.ezclouds.biz.ezservice.service.dataservice.model.BizAppBuildPackage;
@@ -102,6 +104,9 @@ public class BizAdminInnerService {
 
     @Autowired
     private BizEventInnerService bizEventInnerService;
+
+    @Autowired
+    private BizCandidateProfileService bizCandidateProfileService;
 
     public void createAppBuildPackage(String orgId, String platformId, int versionCode, String versionName) throws EzErrorException {
         BizAppBuildPackage buildPackage = new BizAppBuildPackage();
@@ -264,6 +269,11 @@ public class BizAdminInnerService {
             request.setTargetUrl(extInfo.get("TARGET_URL"));
         }
         videoCardService.createVideoCard(request);
+    }
+
+    public BizCandidateProfile getCandidateProfile(String orgId) {
+        BizCandidateProfile profile = new BizCandidateProfile();
+        return bizCandidateProfileService.getCandidateProfile(orgId);
     }
 
     public void commonSwitchFlag(BizSwitchFlagObject switchFlagObject, BizWebUpdateItemRequest request) {

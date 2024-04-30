@@ -11,6 +11,7 @@ import id.ezclouds.biz.ezservice.model.admin.*;
 import id.ezclouds.biz.ezservice.model.event.BizEvent;
 import id.ezclouds.biz.ezservice.model.news.BizWebDetailNews;
 import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
+import id.ezclouds.biz.ezservice.model.profile.BizCandidateProfile;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
 import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
@@ -446,6 +447,29 @@ public class WebApiAdminController {
             @Override
             public String convertResult(Object object) {
                 return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/profileDetail.json")
+    private WebApiResult<BizCandidateProfile> profileDetail(
+            @RequestParam(name = "sessionId", required = false) String sessionId) {
+        final WebApiResult<BizCandidateProfile> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_PROFILE_DETAIL, result, new WebApiControllerTemplate.Handler<BizCandidateProfile>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                return bizAdminService.getProfileDetail(sessionId);
+            }
+
+            @Override
+            public BizCandidateProfile convertResult(Object object) {
+                return (BizCandidateProfile) object;
             }
 
             @Override
