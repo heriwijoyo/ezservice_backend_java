@@ -6,6 +6,7 @@ package id.ezclouds.biz.ezservice.service.dataservice;
 
 import id.ezclouds.biz.ezservice.converter.BizModelConverter;
 import id.ezclouds.biz.ezservice.model.profile.CandidateBio;
+import id.ezclouds.biz.ezservice.model.profile.WebCandidateBio;
 import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.biz.ezservice.service.dataservice.repo.CandidateBioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,14 @@ public class CandidateBioService {
                 .getActiveCandidateBios()
                 .stream()
                 .map(BizModelConverter::convert)
+                .collect(Collectors.toList());
+    }
+
+    public List<WebCandidateBio> getAllCandidateBios(String orgId) {
+        return candidateBioRepository
+                .findByOrgId(orgId)
+                .stream()
+                .map(BizModelConverter::convertWeb)
                 .collect(Collectors.toList());
     }
 }

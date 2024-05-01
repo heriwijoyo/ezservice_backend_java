@@ -98,15 +98,6 @@ public class BizCommonConfigService extends BizBaseService {
         homeData.setVideoSections(composeVideoSections(orgId));
         homeData.setMidBannerUrl(fetchMidBannerUrl(orgId));
 
-        //support V1 compatibility
-        int appVersionNo = EzAppContextHolder.getContext().getAppVersionNo();
-        if (appVersionNo < AppConstant.APP_V2_START_VERSION_NO) {
-            //TODO: compose candidate profile
-            homeData.setBizCandidateProfile(
-                    bizCandidateProfileService.getCandidateProfileOld()
-            );
-        }
-
         return homeData;
     }
 

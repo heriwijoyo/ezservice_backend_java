@@ -20,4 +20,6 @@ public interface CandidateBioRepository extends JpaRepository<CandidateBioDO, St
 
     @Query("SELECT bio FROM CandidateBioDO bio WHERE bio.status = 1 ORDER BY bio.order")
     List<CandidateBioDO> getActiveCandidateBios();
+
+    List<CandidateBioDO> findByOrgId(String orgId);
 }

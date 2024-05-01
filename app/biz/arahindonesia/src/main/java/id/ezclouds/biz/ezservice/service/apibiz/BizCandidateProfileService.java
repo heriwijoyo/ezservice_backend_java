@@ -10,6 +10,7 @@ import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
 import id.ezclouds.biz.ezservice.model.profile.BizCandidateProfile;
 import id.ezclouds.biz.ezservice.model.profile.CandidateBio;
 import id.ezclouds.biz.ezservice.model.profile.CandidateProfileItem;
+import id.ezclouds.biz.ezservice.model.profile.WebCandidateBio;
 import id.ezclouds.biz.ezservice.service.dataservice.AppImageGalleryService;
 import id.ezclouds.biz.ezservice.service.dataservice.CandidateBioService;
 import id.ezclouds.biz.ezservice.service.dataservice.CandidateProfileItemService;
@@ -54,12 +55,8 @@ public class BizCandidateProfileService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws EzErrorException {
-                String orgId = EzAppContextHolder.getContext().getOrgId();
-                BizCandidateProfile profile = new BizCandidateProfile();
-                setCandidateProfile(profile, orgId);
-
                 bizResult.setSuccess(true);
-                bizResult.setObject(profile);
+                bizResult.setObject(getAppCandidateProfile(getOrgId(), getOrgCode()));
             }
 
             @Override
@@ -71,20 +68,29 @@ public class BizCandidateProfileService extends BizBaseService {
         return bizResult;
     }
 
-    public BizCandidateProfile getCandidateProfileOld() {
-        String orgId = EzAppContextHolder.getContext().getOrgId();
-        BizCandidateProfile profile = new BizCandidateProfile();
-        setCandidateProfile(profile, orgId);
+    private BizCandidateProfile<CandidateBio> getAppCandidateProfile(String orgId, String orgCode) {
+        BizCandidateProfile<CandidateBio> profile = new BizCandidateProfile<>();
+        setProfileItems(profile, orgId);
+        setPortfolios(profile, orgId, orgCode);
+
+        List<CandidateBio> candidateBios = candidateBioService
+                .getActiveCandidateBios()
+                .stream()
+                .filter(candidateBio -> orgId.equals(candidateBio.getOrgId()))
+                .collect(Collectors.toList());
+        profile.setCandidateBios(candidateBios);
         return profile;
     }
 
-    public BizCandidateProfile getCandidateProfile(String orgId) {
-        BizCandidateProfile profile = new BizCandidateProfile();
-        setCandidateProfile(profile, orgId);
+    public BizCandidateProfile<WebCandidateBio> getWebCandidateProfile(String orgId, String orgCode) {
+        BizCandidateProfile<WebCandidateBio> profile = new BizCandidateProfile<>();
+        setProfileItems(profile, orgId);
+        setPortfolios(profile, orgId, orgCode);
+        profile.setCandidateBios(candidateBioService.getAllCandidateBios(orgId));
         return profile;
     }
 
-    private void setCandidateProfile(BizCandidateProfile profile, String orgId) {
+    private void setProfileItems(BizCandidateProfile profile, String orgId) {
         List<CandidateProfileItem> profileItems = candidateProfileItemService
                 .getCandidateProfileItems()
                 .stream()
@@ -105,21 +111,14 @@ public class BizCandidateProfileService extends BizBaseService {
                         profile.setMission(candidateProfileItem.getValue());
                     }
                 });
+    }
 
+    private void setPortfolios(BizCandidateProfile profile, String orgId, String orgCode) {
         List<AppImageGallery> portfolios = appImageGalleryService.getAppGalleryPortfolioSlide(orgId);
-        String orgCode = EzAppContextHolder.getContext().getOrgCode();
         BizPublicUrlResolver resolver = new BizPublicUrlResolverImpl(appRootPublicUrl, orgCode);
         portfolios.forEach(gall -> {
             BizAnnotationProcessor.annotatePublicConfig(gall, resolver);
         });
-
         profile.setPortfolios(portfolios);
-
-        List<CandidateBio> candidateBios = candidateBioService
-                .getActiveCandidateBios()
-                .stream()
-                .filter(candidateBio -> orgId.equals(candidateBio.getOrgId()))
-                .collect(Collectors.toList());
-        profile.setCandidateBios(candidateBios);
     }
 }

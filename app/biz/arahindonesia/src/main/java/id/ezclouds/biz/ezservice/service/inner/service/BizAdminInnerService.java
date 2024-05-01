@@ -19,6 +19,7 @@ import id.ezclouds.biz.ezservice.model.member.BizMemberInfo;
 import id.ezclouds.biz.ezservice.model.news.BizWebDetailNews;
 import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
 import id.ezclouds.biz.ezservice.model.profile.BizCandidateProfile;
+import id.ezclouds.biz.ezservice.model.profile.WebCandidateBio;
 import id.ezclouds.biz.ezservice.service.apibiz.BizCandidateProfileService;
 import id.ezclouds.biz.ezservice.service.apibiz.BizConnectService;
 import id.ezclouds.biz.ezservice.service.dataservice.*;
@@ -271,9 +272,8 @@ public class BizAdminInnerService {
         videoCardService.createVideoCard(request);
     }
 
-    public BizCandidateProfile getCandidateProfile(String orgId) {
-        BizCandidateProfile profile = new BizCandidateProfile();
-        return bizCandidateProfileService.getCandidateProfile(orgId);
+    public BizCandidateProfile<WebCandidateBio> getCandidateProfile(String orgId, String orgCode) {
+        return bizCandidateProfileService.getWebCandidateProfile(orgId, orgCode);
     }
 
     public void commonSwitchFlag(BizSwitchFlagObject switchFlagObject, BizWebUpdateItemRequest request) {

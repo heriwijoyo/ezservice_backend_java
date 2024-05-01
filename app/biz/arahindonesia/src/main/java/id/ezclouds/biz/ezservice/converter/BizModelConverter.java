@@ -5,6 +5,7 @@
 package id.ezclouds.biz.ezservice.converter;
 
 import id.ezclouds.biz.ezservice.model.*;
+import id.ezclouds.biz.ezservice.model.profile.WebCandidateBio;
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.CandidateBioDO;
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.CandidateProfileItemDO;
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.NewsDO;
@@ -74,6 +75,19 @@ public class BizModelConverter {
         candidateBio.setOrgId(bioDO.getOrgId());
         candidateBio.setLabel(bioDO.getLabel());
         candidateBio.setValue(bioDO.getValue());
+        return candidateBio;
+    }
+
+    public static WebCandidateBio convertWeb(CandidateBioDO bioDO) {
+        if (bioDO == null) {
+            return null;
+        }
+        WebCandidateBio candidateBio = new WebCandidateBio();
+        candidateBio.setOrgId(bioDO.getOrgId());
+        candidateBio.setLabel(bioDO.getLabel());
+        candidateBio.setValue(bioDO.getValue());
+        candidateBio.setOrder(bioDO.getOrder());
+        candidateBio.setStatus(bioDO.getStatus());
         return candidateBio;
     }
 }

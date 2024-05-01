@@ -14,13 +14,13 @@ import java.util.List;
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizCandidateProfile.java, v 0.1 2023‐12‐10 3:00 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class BizCandidateProfile {
+public class BizCandidateProfile<T extends CandidateBio> {
 
     private String contactNumber;
     private String vision;
     private String mission;
     private List<AppImageGallery> portfolios;
-    private List<CandidateBio> candidateBios;
+    private List<T> candidateBios;
 
     public String getContactNumber() {
         return contactNumber;
@@ -54,11 +54,11 @@ public class BizCandidateProfile {
         this.portfolios = portfolios;
     }
 
-    public List<CandidateBio> getCandidateBios() {
+    public List<T> getCandidateBios() {
         return candidateBios;
     }
 
-    public void setCandidateBios(List<CandidateBio> candidateBios) {
+    public void setCandidateBios(List<T> candidateBios) {
         this.candidateBios = candidateBios;
     }
 

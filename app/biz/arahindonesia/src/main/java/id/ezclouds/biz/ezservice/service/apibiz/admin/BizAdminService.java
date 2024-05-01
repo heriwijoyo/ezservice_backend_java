@@ -799,7 +799,7 @@ public class BizAdminService extends BizBaseService {
                 CoreAuthAdminSession session = authorizedAdminSession(sessionId);
                 authorizeAdminMember(session.getMemberRoles());
                 bizResult.setSuccess(true);
-                bizResult.setObject(bizAdminInnerService.getCandidateProfile(session.getOrgId()));
+                bizResult.setObject(bizAdminInnerService.getCandidateProfile(session.getOrgId(), session.getOrgCode()));
             }
 
             @Override

@@ -15,23 +15,7 @@
                         <div class="row clearfix">
                             <div class="form-group col-sm-12">
                                 <div style="overflow-x:auto;white-space:nowrap;">
-                                    <div style="width:2400px;">
-                                        <div style="display:inline-block;height:180px;margin:5px">
-                                            <img class="img-rounded" src="https://local.arahindonesia.id/image/public/news/201/1712680657151.jpeg" style="height:180px"/>
-                                        </div>
-                                        <div style="display:inline-block;height:180px;margin:5px">
-                                            <img class="img-rounded" src="https://local.arahindonesia.id/image/public/news/201/1712680657151.jpeg" style="height:180px"/>
-                                        </div>
-                                        <div style="display:inline-block;height:180px;margin:5px">
-                                            <img class="img-rounded" src="https://local.arahindonesia.id/image/public/news/201/1712680657151.jpeg" style="height:180px"/>
-                                        </div>
-                                        <div style="display:inline-block;height:180px;margin:5px">
-                                            <img class="img-rounded" src="https://local.arahindonesia.id/image/public/news/201/1712680657151.jpeg" style="height:180px"/>
-                                        </div>
-                                        <div style="display:inline-block;height:180px;margin:5px">
-                                            <img class="img-rounded" src="https://local.arahindonesia.id/image/public/news/201/1712680657151.jpeg" style="height:180px"/>
-                                        </div>
-                                    </div>
+                                    <div id="portfolios" style="width:2400px;"></div>
                                 </div>
                             </div>
                         </div>
@@ -92,40 +76,28 @@
                     </div>
                     <div class="body">
                         <div class="row clearfix">
-
-                            <div class="form-group col-sm-12">
-                                <div class="form-line">
-                                    <div class="font-12">Contact Phone</div>
-                                    <input type="text" class="form-control" id="contactPhone" placeholder="Contact Phone" required="" aria-required="true">
-                                </div>
-                            </div>
-
                             <div class="form-group col-sm-12">
                                 <div class="font-12">Vision</div>
                                 <div class="form-line" style="margin-top: 6px;">
                                     <textarea class="form-control" id="vision" cols="60" rows="5" required></textarea>
                                 </div>
                             </div>
-
                             <div class="form-group col-sm-12">
                                 <div class="font-12">Mission</div>
                                 <div class="form-line" style="margin-top: 6px;">
                                     <textarea class="form-control" id="mission" cols="60" rows="5" required></textarea>
                                 </div>
                             </div>
-
                             <div class="form-group col-sm-12">
                                 <div class="form-line">
                                     <div class="font-12">Whatsapp Contact</div>
-                                    <input type="text" class="form-control" id="whatsappContact" placeholder="Whatsapp Contact">
+                                    <input type="text" class="form-control" id="contactNumber" placeholder="Whatsapp Contact">
                                 </div>
                             </div>
-
                             <div class="col-sm-12">
                                 <img id="submitLoader" src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right">
                                 <button id="submitBtn" class="button button-rounded waves-effect waves-float pull-right" type="submit">SAVE</button>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -149,7 +121,7 @@
         },
         handleApiBizResult: function(url, response) {
             if (url === EzAdminUrl.PROFILE_GET) {
-                console.log(response.data);
+                EzDashboardBizService.reloadPageResultView(response.data);
             }
             if (url === EzAdminUrl.EVENT_STATUS_SWITCH) {
                 alert(response.data);
@@ -171,31 +143,41 @@
                 return;
             }
 
-            let rowHTML = $.parseHTML(DashTemplate);
-            $(rowHTML).find('.inputLabel').val(label);
-            $(rowHTML).find('.inputValue').val(value);
-            $(rowHTML).find('.inputOrder').val(order);
-            $(rowHTML).find('.inputStatus').val(status);
-            $('#rowsContainer .inputBio:last').before(rowHTML);
+            EzDashboardBizService.renderNewRowBio(label, value, order, status);
 
             $('#inputLabel').val('');
             $('#inputValue').val('');
             $('#inputOrder').val('0');
             $('#inputStatus').val('1');
         },
-        reloadPageResultView: function(response) {
-            $('#rowsContainer').html('');
-            for(let i=0; i<response.pageResult.data.length; i++) {
-                let rowData = response.pageResult.data[i];
+        renderNewRowBio: function(label, value, order, status) {
+            let rowHTML = $.parseHTML(DashTemplate);
+            $(rowHTML).find('.inputLabel').val(label);
+            $(rowHTML).find('.inputValue').val(value);
+            $(rowHTML).find('.inputOrder').val(order);
+            $(rowHTML).find('.inputStatus').val(status);
+            $('#rowsContainer .inputBio:last').before(rowHTML);
+        },
+        reloadPageResultView: function(data) {
+            $('#portfolios').html('');
+            for(let i=0; i<data.portfolios.length; i++) {
+                let rowData = data.portfolios[i];
                 let title = '<a href="eventUpdate.htm?id='+ rowData.id +'"><b>'+ rowData.title +'</b></a><br>Category: '+ rowData.category +'<br>Location: '+ rowData.location + '<br>Date Start: '+ rowData.dateStart +'<br>Time Start: '+ rowData.timeStart +'<br>Date End: '+ rowData.dateEnd +'<br>Time End: '+ rowData.timeEnd +'<br><br>Description:<br>'+ rowData.description;
-                let itemRow = $.parseHTML(DashTemplate);
-                $(itemRow).find('.img-rounded').attr('src', rowData.imageUrl);
-                $(itemRow).find('.rowTitle').html(title);
-                $(itemRow).find('.rowHighlight').html(EzDashboardBizService.renderFlag(rowData.highlight,'highlight',rowData.id));
-                $(itemRow).find('.rowActive').html(EzDashboardBizService.renderFlag(rowData.status,'status',rowData.id));
-                $('#rowsContainer').append(itemRow);
+                let portfolioTemplate = ''+
+                    '<div style="display:inline-block;height:180px;margin:5px">'+
+                        '<img class="img-rounded" src="'+  rowData.imageUrl +'" style="height:180px"/>'+
+                    '</div>';
+                $('#portfolios').append($.parseHTML(portfolioTemplate));
             }
-            $('.pager').html(EzWebAppClient.renderPager(response.pageResult));
+
+            for(let x=0; x<data.candidateBios.length; x++) {
+                let bio = data.candidateBios[x];
+                EzDashboardBizService.renderNewRowBio(bio.label, bio.value, bio.order, bio.status);
+            }
+
+            $('#vision').val(data.vision);
+            $('#mission').val(data.mission);
+            $('#contactNumber').val(data.contactNumber);
         },
         renderFlag: function(flag,section,id) {
             let flagText = flag == 1 ? 'ACTIVE' : 'NOT ACTIVE';
