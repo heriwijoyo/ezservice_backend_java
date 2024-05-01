@@ -95,8 +95,8 @@
                                 </div>
                             </div>
                             <div class="col-sm-12">
-                                <img id="submitLoader" src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right">
-                                <button id="submitBtn" class="button button-rounded waves-effect waves-float pull-right" type="submit">SAVE</button>
+                                <img id="submitLoaderProfile" src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right">
+                                <button id="submitBtnProfile" class="button button-rounded waves-effect waves-float pull-right" type="submit">SAVE</button>
                             </div>
                         </div>
                     </div>
@@ -110,7 +110,7 @@
 <script type="text/javascript">
     var EzAdminUrl = {
         PROFILE_GET: 'api/profileDetail.json',
-        EVENT_STATUS_SWITCH: 'api/eventFlagSwitch.json'
+        PROFILE_UPDATE: 'api/profileUpdate.json'
     };
     var EzDashboardBizService = {
         start: function() {
@@ -123,13 +123,13 @@
             if (url === EzAdminUrl.PROFILE_GET) {
                 EzDashboardBizService.reloadPageResultView(response.data);
             }
-            if (url === EzAdminUrl.EVENT_STATUS_SWITCH) {
+            if (url === EzAdminUrl.PROFILE_UPDATE) {
                 alert(response.data);
-                EzDashboardBizService.fetchEvents();
+                EzDashboardBizService.fetchData();
             }
         },
         handleApiBizFailed: function(url, message) {
-            if (url === EzAdminUrl.EVENT_STATUS_SWITCH) {
+            if (url === EzAdminUrl.PROFILE_UPDATE) {
                 alert(message);
             }
         },
@@ -161,11 +161,9 @@
         reloadPageResultView: function(data) {
             $('#portfolios').html('');
             for(let i=0; i<data.portfolios.length; i++) {
-                let rowData = data.portfolios[i];
-                let title = '<a href="eventUpdate.htm?id='+ rowData.id +'"><b>'+ rowData.title +'</b></a><br>Category: '+ rowData.category +'<br>Location: '+ rowData.location + '<br>Date Start: '+ rowData.dateStart +'<br>Time Start: '+ rowData.timeStart +'<br>Date End: '+ rowData.dateEnd +'<br>Time End: '+ rowData.timeEnd +'<br><br>Description:<br>'+ rowData.description;
                 let portfolioTemplate = ''+
                     '<div style="display:inline-block;height:180px;margin:5px">'+
-                        '<img class="img-rounded" src="'+  rowData.imageUrl +'" style="height:180px"/>'+
+                        '<img class="img-rounded" src="'+  data.portfolios[i].imageUrl +'" style="height:180px"/>'+
                     '</div>';
                 $('#portfolios').append($.parseHTML(portfolioTemplate));
             }
@@ -179,31 +177,12 @@
             $('#mission').val(data.mission);
             $('#contactNumber').val(data.contactNumber);
         },
-        renderFlag: function(flag,section,id) {
-            let flagText = flag == 1 ? 'ACTIVE' : 'NOT ACTIVE';
-            let switchFlag = flag == 1 ? '0' : '1';
-            return '<center>'+ flagText + '<br><button onClick="EzDashboardBizService.swithFlag(\''+id+'\',\''+section+'\',\''+switchFlag+'\')" class="button button-rounded waves-effect waves-float" type="submit">SWITCH</button></center>';
-        },
-        swithFlag: function(itemId,section,value) {
-            EzWebAppClient.callApiService(EzAdminUrl.EVENT_STATUS_SWITCH, {
-                sessionId: EzWebAppClient.getSessionId(),
-                itemId: itemId,
-                section: section,
-                value: value
+        submitProfile: function() {
+            EzWebAppClient.callApiService(EzAdminUrl.PROFILE_UPDATE, {
+                vision: $('#vision').val(),
+                mission: $('#mission').val(),
+                contactNumber: $('#contactNumber').val()
             });
-        },
-        prev: function() {
-            EzDashboardBizService.data.pageNumber--;
-            EzDashboardBizService.fetchEvents();
-        },
-        next: function() {
-            EzDashboardBizService.data.pageNumber++;
-            EzDashboardBizService.fetchEvents();
-        },
-        data: {
-            pageNumber: 1,
-            pageSize: 5,
-            result: null
         }
     };
 
@@ -230,6 +209,9 @@
 
         $('#btnAddBio').click(function(){
             EzDashboardBizService.addBioItem();
+        });
+        $('#submitBtnProfile').click(function(){
+            EzDashboardBizService.submitProfile();
         });
     });
 

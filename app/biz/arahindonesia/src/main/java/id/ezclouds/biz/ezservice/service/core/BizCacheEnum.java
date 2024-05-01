@@ -25,6 +25,10 @@ public enum BizCacheEnum {
         this.code = code;
     }
 
+    public String getCode() {
+        return code;
+    }
+
     public static BizCacheEnum getByCode(String cacheKey) {
         for (BizCacheEnum bizCacheEnum : values()) {
             if (bizCacheEnum.code.equals(cacheKey)) {

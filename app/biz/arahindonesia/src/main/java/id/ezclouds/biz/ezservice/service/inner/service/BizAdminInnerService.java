@@ -276,6 +276,10 @@ public class BizAdminInnerService {
         return bizCandidateProfileService.getWebCandidateProfile(orgId, orgCode);
     }
 
+    public void profileUpdate(String orgId, Map<String, String> extInfo) {
+        bizCandidateProfileService.storeProfile(orgId, extInfo);
+    }
+
     public void commonSwitchFlag(BizSwitchFlagObject switchFlagObject, BizWebUpdateItemRequest request) {
         switch (switchFlagObject) {
             case VIDEO_CARD:

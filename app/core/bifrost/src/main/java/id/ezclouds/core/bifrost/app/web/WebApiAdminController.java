@@ -5,6 +5,7 @@
 package id.ezclouds.core.bifrost.app.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import id.ezclouds.biz.ezservice.enums.BizProfileSection;
 import id.ezclouds.biz.ezservice.enums.BizSwitchFlagObject;
 import id.ezclouds.biz.ezservice.model.VideoCard;
 import id.ezclouds.biz.ezservice.model.admin.*;
@@ -470,6 +471,37 @@ public class WebApiAdminController {
             @Override
             public BizCandidateProfile convertResult(Object object) {
                 return (BizCandidateProfile) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/profileUpdate.json")
+    private WebApiResult<String> profileUpdate(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "vision", required = false) String vision,
+            @RequestParam(name = "mission", required = false) String mission,
+            @RequestParam(name = "contactNumber", required = false) String contactNumber) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_PROFILE_UPDATE, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizWebCommonRequest request = new BizWebCommonRequest();
+                request.setSessionId(sessionId);
+                request.getExtendInfo().put(BizProfileSection.VISION.getCode(), vision);
+                request.getExtendInfo().put(BizProfileSection.MISSION.getCode(), mission);
+                request.getExtendInfo().put(BizProfileSection.CONTACT_NUMBER.getCode(), contactNumber);
+                return bizAdminService.profileUpdate(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                return (String) object;
             }
 
             @Override

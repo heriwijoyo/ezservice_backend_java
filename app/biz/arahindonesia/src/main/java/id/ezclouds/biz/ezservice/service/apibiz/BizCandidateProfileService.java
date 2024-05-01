@@ -6,6 +6,7 @@ package id.ezclouds.biz.ezservice.service.apibiz;
 
 import id.ezclouds.biz.ezservice.config.BizPublicUrlResolver;
 import id.ezclouds.biz.ezservice.config.BizPublicUrlResolverImpl;
+import id.ezclouds.biz.ezservice.enums.BizProfileSection;
 import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
 import id.ezclouds.biz.ezservice.model.profile.BizCandidateProfile;
 import id.ezclouds.biz.ezservice.model.profile.CandidateBio;
@@ -19,11 +20,12 @@ import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
-import id.ezclouds.core.shared.context.EzAppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -32,10 +34,6 @@ import java.util.stream.Collectors;
  */
 @Service
 public class BizCandidateProfileService extends BizBaseService {
-
-    private static final String KEY_CONTACT_NUMBER = "contactNumber";
-    private static final String KEY_VISION = "vision";
-    private static final String KEY_MISSION = "mission";
 
     @Autowired
     private CandidateProfileItemService candidateProfileItemService;
@@ -90,6 +88,22 @@ public class BizCandidateProfileService extends BizBaseService {
         return profile;
     }
 
+    public void storeProfile(String orgId, Map<String, String> profileMap) {
+        List<CandidateProfileItem> items = new ArrayList<>();
+
+        for (Map.Entry<String, String> entry : profileMap.entrySet()) {
+            BizProfileSection bizProfileSection = BizProfileSection.getByCode(entry.getKey());
+            if (bizProfileSection != BizProfileSection.UNKNOWN) {
+                CandidateProfileItem item = new CandidateProfileItem();
+                item.setSection(entry.getKey());
+                item.setValue(entry.getValue());
+                items.add(item);
+            }
+        }
+
+        candidateProfileItemService.storeProfileItem(orgId, items);
+    }
+
     private void setProfileItems(BizCandidateProfile profile, String orgId) {
         List<CandidateProfileItem> profileItems = candidateProfileItemService
                 .getCandidateProfileItems()
@@ -99,15 +113,15 @@ public class BizCandidateProfileService extends BizBaseService {
 
         profileItems
                 .forEach(candidateProfileItem -> {
-                    if (KEY_CONTACT_NUMBER.equals(candidateProfileItem.getSection())) {
+                    if (BizProfileSection.CONTACT_NUMBER.getCode().equals(candidateProfileItem.getSection())) {
                         profile.setContactNumber(candidateProfileItem.getValue());
                     }
 
-                    if (KEY_VISION.equals(candidateProfileItem.getSection())) {
+                    if (BizProfileSection.VISION.getCode().equals(candidateProfileItem.getSection())) {
                         profile.setVision(candidateProfileItem.getValue());
                     }
 
-                    if (KEY_MISSION.equals(candidateProfileItem.getSection())) {
+                    if (BizProfileSection.MISSION.getCode().equals(candidateProfileItem.getSection())) {
                         profile.setMission(candidateProfileItem.getValue());
                     }
                 });

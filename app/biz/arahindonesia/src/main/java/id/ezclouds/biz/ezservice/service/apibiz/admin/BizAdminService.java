@@ -19,10 +19,12 @@ import id.ezclouds.biz.ezservice.model.news.BizWebDetailNews;
 import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
 import id.ezclouds.biz.ezservice.service.core.BizAppCacheService;
+import id.ezclouds.biz.ezservice.service.core.BizCacheEnum;
 import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.biz.ezservice.service.dataservice.BizOrganizationService;
 import id.ezclouds.biz.ezservice.service.dataservice.model.WebImageGallery;
 import id.ezclouds.biz.ezservice.service.inner.service.BizAdminInnerService;
+import id.ezclouds.biz.ezservice.service.request.BizRequest;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
@@ -386,7 +388,7 @@ public class BizAdminService extends BizBaseService {
 
                 bizResult.setSuccess(true);
                 bizResult.setObject(result);
-                bizAppCacheService.reloadCacheItem(BizCacheKey.APP_IMAGE_GALLERY_ALL);
+                bizAppCacheService.reloadCacheItem(BizCacheEnum.APP_IMAGE_GALLERY_ALL);
             }
 
             @Override
@@ -481,7 +483,7 @@ public class BizAdminService extends BizBaseService {
                         request.getSection(),
                         Integer.parseInt(request.getValue())
                 );
-                bizAppCacheService.reloadCacheItem(BizCacheKey.NEWS_HIGHLIGHT);
+                bizAppCacheService.reloadCacheItem(BizCacheEnum.NEWS_HIGHLIGHT);
                 bizResult.setSuccess(true);
                 bizResult.setObject(WebAdminConstant.OPERATION_SUCCESS);
             }
@@ -685,7 +687,7 @@ public class BizAdminService extends BizBaseService {
                         filePath = fileInfo.getAppGalleryPath(fileName);
                         coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
                         bizAdminInnerService.createAppImageGallery(session.getOrgId(), fileName, request.getExtendInfo());
-                        bizAppCacheService.reloadCacheItem(BizCacheKey.APP_IMAGE_GALLERY_ALL);
+                        bizAppCacheService.reloadCacheItem(BizCacheEnum.APP_IMAGE_GALLERY_ALL);
                         break;
 
                     case ADMIN_NEWS_GALLERY:
@@ -693,7 +695,7 @@ public class BizAdminService extends BizBaseService {
                         filePath = fileInfo.getNewsGalleryPath(fileName);
                         coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
                         bizAdminInnerService.createNews(session.getOrgId(), fileName, request.getExtendInfo());
-                        bizAppCacheService.reloadCacheItem(BizCacheKey.NEWS_HIGHLIGHT);
+                        bizAppCacheService.reloadCacheItem(BizCacheEnum.NEWS_HIGHLIGHT);
                         break;
 
                     case ADMIN_NEWS_GALLERY_UPDATE:
@@ -705,7 +707,7 @@ public class BizAdminService extends BizBaseService {
                             fileName = null;
                         }
                         bizAdminInnerService.updateNews(session.getOrgId(), fileName, request.getExtendInfo());
-                        bizAppCacheService.reloadCacheItem(BizCacheKey.NEWS_HIGHLIGHT);
+                        bizAppCacheService.reloadCacheItem(BizCacheEnum.NEWS_HIGHLIGHT);
                         break;
 
                     case ADMIN_EVENT_GALLERY:
@@ -731,7 +733,7 @@ public class BizAdminService extends BizBaseService {
                         filePath = fileInfo.getVideoCardGalleryPath(fileName);
                         coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
                         bizAdminInnerService.createVideoCard(session.getOrgId(), fileName, request.getExtendInfo());
-                        bizAppCacheService.reloadCacheItem(BizCacheKey.APP_IMAGE_GALLERY_ALL);
+                        bizAppCacheService.reloadCacheItem(BizCacheEnum.APP_IMAGE_GALLERY_ALL);
                         break;
 
                     case ADMIN_OTHER_GALLERY:
@@ -800,6 +802,34 @@ public class BizAdminService extends BizBaseService {
                 authorizeAdminMember(session.getMemberRoles());
                 bizResult.setSuccess(true);
                 bizResult.setObject(bizAdminInnerService.getCandidateProfile(session.getOrgId(), session.getOrgCode()));
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
+    public BizResult profileUpdate(BizWebCommonRequest request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                bizAdminInnerService.validateExtendInfo(request.getExtendInfo(), "VISION", "MISSION", "CONTACT_NUMBER");
+                bizAdminInnerService.profileUpdate(session.getOrgId(), request.getExtendInfo());
+                bizResult.setSuccess(true);
+                bizResult.setObject(BizConstant.Message.SUCCESS_COMMON);
+                bizAppCacheService.reloadCacheItem(BizCacheEnum.CANDIDATE_PROFILE);
+                bizAppCacheService.reloadCacheItem(BizCacheEnum.CANDIDATE_BIOGRAPHY);
             }
 
             @Override

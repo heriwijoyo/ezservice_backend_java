@@ -7,11 +7,15 @@ package id.ezclouds.biz.ezservice.service.dataservice;
 import id.ezclouds.biz.ezservice.converter.BizModelConverter;
 import id.ezclouds.biz.ezservice.model.profile.CandidateProfileItem;
 import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
+import id.ezclouds.biz.ezservice.service.dataservice.dataobject.CandidateProfileItemDO;
 import id.ezclouds.biz.ezservice.service.dataservice.repo.CandidateProfileItemRepository;
+import id.ezclouds.common.util.DateUtil;
+import id.ezclouds.common.util.HashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,5 +36,22 @@ public class CandidateProfileItemService {
                 .stream()
                 .map(BizModelConverter::convert)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void storeProfileItem(String orgId, List<CandidateProfileItem> items) {
+        for (CandidateProfileItem item : items) {
+            CandidateProfileItemDO itemDO = candidateProfileItemRepository
+                    .findByOrgIdAndSection(orgId, item.getSection());
+            if (itemDO == null) {
+                itemDO = new CandidateProfileItemDO();
+                itemDO.setId(HashUtil.createHash(orgId, DateUtil.getCurrentFormattedDate()));
+                itemDO.setOrgId(orgId);
+                itemDO.setSection(item.getSection());
+            }
+            itemDO.setValue(item.getValue());
+
+            candidateProfileItemRepository.saveAndFlush(itemDO);
+        }
     }
 }

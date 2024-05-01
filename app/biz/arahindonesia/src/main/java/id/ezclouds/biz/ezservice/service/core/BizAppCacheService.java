@@ -112,14 +112,13 @@ public class BizAppCacheService {
         return cacheNames;
     }
 
-    public void reloadCacheItem(String cacheKey) {
-        BizCacheEnum bizCacheEnum = BizCacheEnum.getByCode(cacheKey);
+    public void reloadCacheItem(BizCacheEnum bizCacheEnum) {
         if (bizCacheEnum == BizCacheEnum.UNKNOWN) {
             return;
         }
 
-        if (cacheManager.getCache(cacheKey) != null) {
-            cacheManager.getCache(cacheKey).clear();
+        if (cacheManager.getCache(bizCacheEnum.getCode()) != null) {
+            cacheManager.getCache(bizCacheEnum.getCode()).clear();
         }
 
         switch (bizCacheEnum) {

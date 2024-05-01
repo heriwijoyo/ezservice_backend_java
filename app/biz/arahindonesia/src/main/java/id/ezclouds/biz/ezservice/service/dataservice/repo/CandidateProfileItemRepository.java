@@ -14,4 +14,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface CandidateProfileItemRepository extends JpaRepository<CandidateProfileItemDO, String> {
+
+    CandidateProfileItemDO findByOrgIdAndSection(String orgId, String section);
 }
