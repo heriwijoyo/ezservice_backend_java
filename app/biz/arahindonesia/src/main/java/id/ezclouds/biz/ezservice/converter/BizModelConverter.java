@@ -86,7 +86,7 @@ public class BizModelConverter {
         candidateBio.setOrgId(bioDO.getOrgId());
         candidateBio.setLabel(bioDO.getLabel());
         candidateBio.setValue(bioDO.getValue());
-        candidateBio.setOrder(bioDO.getOrder());
+        candidateBio.setSort(bioDO.getSort());
         candidateBio.setStatus(bioDO.getStatus());
         return candidateBio;
     }

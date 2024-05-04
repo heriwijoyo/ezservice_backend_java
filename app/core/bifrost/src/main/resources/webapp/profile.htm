@@ -47,8 +47,8 @@
                                     </thead>
                                     <tbody id="rowsContainer">
                                         <tr class="inputBio">
-                                            <td><input type="text" id="inputLabel" placeholder="Label.." style="width:100%"></td>
-                                            <td><input type="text" id="inputValue" placeholder="Value.." style="width:100%"></td>
+                                            <td><input type="text" id="inputLabel" style="width:100%"></td>
+                                            <td><input type="text" id="inputValue" style="width:100%"></td>
                                             <td><center><input type="text" id="inputOrder" value="0" style="width:40px"></center></td>
                                             <td><center><input type="text" id="inputStatus" value="1" style="width:40px"></center></td>
                                             <td><button id="btnAddBio" class="button button-rounded waves-effect waves-float pull-right" type="submit">ADD</button></td>
@@ -57,8 +57,7 @@
                                 </table>
                             </div>
                             <div class="col-sm-12">
-                                <img src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right">
-                                <button class="button button-rounded waves-effect waves-float pull-right" type="submit">SAVE</button>
+                                <button id="submitBtnBio" class="button button-rounded waves-effect waves-float pull-right" type="submit">SAVE</button>
                             </div>
                         </div>
                     </div>
@@ -95,7 +94,6 @@
                                 </div>
                             </div>
                             <div class="col-sm-12">
-                                <img id="submitLoaderProfile" src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right">
                                 <button id="submitBtnProfile" class="button button-rounded waves-effect waves-float pull-right" type="submit">SAVE</button>
                             </div>
                         </div>
@@ -110,7 +108,8 @@
 <script type="text/javascript">
     var EzAdminUrl = {
         PROFILE_GET: 'api/profileDetail.json',
-        PROFILE_UPDATE: 'api/profileUpdate.json'
+        PROFILE_UPDATE: 'api/profileUpdate.json',
+        PROFILE_UPDATE_BIO: 'api/profileBioUpdate.json'
     };
     var EzDashboardBizService = {
         start: function() {
@@ -124,6 +123,10 @@
                 EzDashboardBizService.reloadPageResultView(response.data);
             }
             if (url === EzAdminUrl.PROFILE_UPDATE) {
+                alert(response.data);
+                EzDashboardBizService.fetchData();
+            }
+            if (url === EzAdminUrl.PROFILE_UPDATE_BIO) {
                 alert(response.data);
                 EzDashboardBizService.fetchData();
             }
@@ -158,6 +161,9 @@
             $(rowHTML).find('.inputStatus').val(status);
             $('#rowsContainer .inputBio:last').before(rowHTML);
         },
+        deleteRowBio: function(_this) {
+            $(_this).parent().parent().remove();
+        },
         reloadPageResultView: function(data) {
             $('#portfolios').html('');
             for(let i=0; i<data.portfolios.length; i++) {
@@ -168,14 +174,36 @@
                 $('#portfolios').append($.parseHTML(portfolioTemplate));
             }
 
+            $('#rowsContainer tr.inputBio:not(:last-child)').remove();
             for(let x=0; x<data.candidateBios.length; x++) {
                 let bio = data.candidateBios[x];
-                EzDashboardBizService.renderNewRowBio(bio.label, bio.value, bio.order, bio.status);
+                EzDashboardBizService.renderNewRowBio(bio.label, bio.value, bio.sort, bio.status);
             }
 
             $('#vision').val(data.vision);
             $('#mission').val(data.mission);
             $('#contactNumber').val(data.contactNumber);
+        },
+        submitBio: function() {
+            let bioData = [];
+            let trData = $('#rowsContainer > tr');
+            for(let a=0; a<trData.length; a++) {
+                if (a < (trData.length - 1)) {
+                    let label = $(trData[a]).find('.inputLabel').val();
+                    let value = $(trData[a]).find('.inputValue').val();
+                    let order = $(trData[a]).find('.inputOrder').val();
+                    let status = $(trData[a]).find('.inputStatus').val();
+                    bioData.push({
+                        label: label,
+                        value: value,
+                        sort: order,
+                        status: status
+                    });
+                }
+            }
+            EzWebAppClient.callApiService(EzAdminUrl.PROFILE_UPDATE_BIO, {
+                data: JSON.stringify(bioData)
+            });
         },
         submitProfile: function() {
             EzWebAppClient.callApiService(EzAdminUrl.PROFILE_UPDATE, {
@@ -210,6 +238,9 @@
         $('#btnAddBio').click(function(){
             EzDashboardBizService.addBioItem();
         });
+        $('#submitBtnBio').click(function(){
+            EzDashboardBizService.submitBio();
+        });
         $('#submitBtnProfile').click(function(){
             EzDashboardBizService.submitProfile();
         });
@@ -221,6 +252,6 @@
             '<td><input type="text" class="inputValue" style="width:100%"></td>'+
             '<td><center><input type="text" class="inputOrder" style="width:40px"></center></td>'+
             '<td><center><input type="text" class="inputStatus" style="width:40px"></center></td>'+
-            '<td></td>'+
+            '<td><a onClick="EzDashboardBizService.deleteRowBio(this)" href="javascript:void(0)"><i class="material-icons">delete</i></a></td>'+
         '</tr>';
 </script>

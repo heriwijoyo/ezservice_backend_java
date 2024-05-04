@@ -4,6 +4,9 @@
  */
 package id.ezclouds.biz.ezservice.service.dataservice.dataobject;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -30,8 +33,8 @@ public class CandidateBioDO {
     @Column(name = "value")
     private String value;
 
-    @Column(name = "order")
-    private Integer order;
+    @Column(name = "sort")
+    private Integer sort;
 
     @Column(name = "status")
     private Integer status;
@@ -68,12 +71,12 @@ public class CandidateBioDO {
         this.value = value;
     }
 
-    public Integer getOrder() {
-        return order;
+    public Integer getSort() {
+        return sort;
     }
 
-    public void setOrder(Integer order) {
-        this.order = order;
+    public void setSort(Integer sort) {
+        this.sort = sort;
     }
 
     public Integer getStatus() {
@@ -82,5 +85,10 @@ public class CandidateBioDO {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

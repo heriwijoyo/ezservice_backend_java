@@ -10,15 +10,15 @@ package id.ezclouds.biz.ezservice.model.profile;
  */
 public class WebCandidateBio extends CandidateBio {
 
-    private int order;
+    private int sort;
     private int status;
 
-    public int getOrder() {
-        return order;
+    public int getSort() {
+        return sort;
     }
 
-    public void setOrder(int order) {
-        this.order = order;
+    public void setSort(int sort) {
+        this.sort = sort;
     }
 
     public int getStatus() {

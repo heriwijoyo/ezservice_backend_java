@@ -18,8 +18,9 @@ import java.util.List;
 @Repository
 public interface CandidateBioRepository extends JpaRepository<CandidateBioDO, String> {
 
-    @Query("SELECT bio FROM CandidateBioDO bio WHERE bio.status = 1 ORDER BY bio.order")
+    @Query("SELECT bio FROM CandidateBioDO bio WHERE bio.status = 1 ORDER BY bio.sort")
     List<CandidateBioDO> getActiveCandidateBios();
 
+    @Query("SELECT bio FROM CandidateBioDO bio WHERE bio.orgId = :orgId ORDER BY bio.sort ASC")
     List<CandidateBioDO> findByOrgId(String orgId);
 }

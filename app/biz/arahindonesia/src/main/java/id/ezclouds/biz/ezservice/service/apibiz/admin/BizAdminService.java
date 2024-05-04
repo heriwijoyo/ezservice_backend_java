@@ -17,6 +17,7 @@ import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
 import id.ezclouds.biz.ezservice.model.event.BizEvent;
 import id.ezclouds.biz.ezservice.model.news.BizWebDetailNews;
 import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
+import id.ezclouds.biz.ezservice.model.profile.WebCandidateBio;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
 import id.ezclouds.biz.ezservice.service.core.BizAppCacheService;
 import id.ezclouds.biz.ezservice.service.core.BizCacheEnum;
@@ -802,6 +803,35 @@ public class BizAdminService extends BizBaseService {
                 authorizeAdminMember(session.getMemberRoles());
                 bizResult.setSuccess(true);
                 bizResult.setObject(bizAdminInnerService.getCandidateProfile(session.getOrgId(), session.getOrgCode()));
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
+    public BizResult profileBioUpdate(BizWebCreateRequest<List<WebCandidateBio>> request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notNull(request.getData(), EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                authorizeAdminMember(session.getMemberRoles());
+                bizAdminInnerService.profileBioUpdate(session.getOrgId(), request.getData());
+                bizResult.setSuccess(true);
+                bizResult.setObject(BizConstant.Message.SUCCESS_COMMON);
+                bizAppCacheService.reloadCacheItem(BizCacheEnum.CANDIDATE_PROFILE);
+                bizAppCacheService.reloadCacheItem(BizCacheEnum.CANDIDATE_BIOGRAPHY);
             }
 
             @Override

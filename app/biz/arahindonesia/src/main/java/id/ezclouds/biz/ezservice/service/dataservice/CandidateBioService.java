@@ -8,11 +8,15 @@ import id.ezclouds.biz.ezservice.converter.BizModelConverter;
 import id.ezclouds.biz.ezservice.model.profile.CandidateBio;
 import id.ezclouds.biz.ezservice.model.profile.WebCandidateBio;
 import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
+import id.ezclouds.biz.ezservice.service.dataservice.dataobject.CandidateBioDO;
 import id.ezclouds.biz.ezservice.service.dataservice.repo.CandidateBioRepository;
+import id.ezclouds.common.util.DateUtil;
+import id.ezclouds.common.util.HashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,5 +45,29 @@ public class CandidateBioService {
                 .stream()
                 .map(BizModelConverter::convertWeb)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void restoreProfileBio(String orgId, List<WebCandidateBio> bioData) {
+        List<CandidateBioDO> existBio = candidateBioRepository.findByOrgId(orgId);
+        for (CandidateBioDO bioDO: existBio) {
+            candidateBioRepository.delete(bioDO);
+            candidateBioRepository.flush();
+        }
+
+        String currentTime = DateUtil.getCurrentFormattedDate();
+        int i = 0;
+        for (WebCandidateBio webCandidateBio : bioData) {
+            CandidateBioDO newBioDO = new CandidateBioDO();
+            newBioDO.setId(HashUtil.createHash(currentTime, String.valueOf(i)));
+            newBioDO.setOrgId(orgId);
+            newBioDO.setLabel(webCandidateBio.getLabel());
+            newBioDO.setValue(webCandidateBio.getValue());
+            newBioDO.setSort(webCandidateBio.getSort());
+            newBioDO.setStatus(webCandidateBio.getStatus());
+            i++;
+
+            candidateBioRepository.saveAndFlush(newBioDO);
+        }
     }
 }

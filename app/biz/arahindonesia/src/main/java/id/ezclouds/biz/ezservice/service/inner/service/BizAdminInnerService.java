@@ -280,6 +280,10 @@ public class BizAdminInnerService {
         bizCandidateProfileService.storeProfile(orgId, extInfo);
     }
 
+    public void profileBioUpdate(String orgId, List<WebCandidateBio> bioData) {
+        bizCandidateProfileService.profileBioUpdate(orgId, bioData);
+    }
+
     public void commonSwitchFlag(BizSwitchFlagObject switchFlagObject, BizWebUpdateItemRequest request) {
         switch (switchFlagObject) {
             case VIDEO_CARD:

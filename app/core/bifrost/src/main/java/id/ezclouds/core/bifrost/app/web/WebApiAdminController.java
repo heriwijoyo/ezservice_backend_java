@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.bifrost.app.web;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.ezservice.enums.BizProfileSection;
 import id.ezclouds.biz.ezservice.enums.BizSwitchFlagObject;
@@ -13,6 +14,7 @@ import id.ezclouds.biz.ezservice.model.event.BizEvent;
 import id.ezclouds.biz.ezservice.model.news.BizWebDetailNews;
 import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
 import id.ezclouds.biz.ezservice.model.profile.BizCandidateProfile;
+import id.ezclouds.biz.ezservice.model.profile.WebCandidateBio;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
 import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
@@ -471,6 +473,34 @@ public class WebApiAdminController {
             @Override
             public BizCandidateProfile convertResult(Object object) {
                 return (BizCandidateProfile) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/profileBioUpdate.json")
+    private WebApiResult<String> profileBioUpdate(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "data", required = false) String data) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_PROFILE_UPDATE_BIO, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                List<WebCandidateBio> objectList = new ObjectMapper().readValue(data, new TypeReference<List<WebCandidateBio>>(){});
+                BizWebCreateRequest<List<WebCandidateBio>> request = new BizWebCreateRequest<>();
+                request.setSessionId(sessionId);
+                request.setData(objectList);
+                return bizAdminService.profileBioUpdate(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                return (String) object;
             }
 
             @Override

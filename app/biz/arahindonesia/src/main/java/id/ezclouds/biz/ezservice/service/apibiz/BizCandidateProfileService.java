@@ -104,6 +104,10 @@ public class BizCandidateProfileService extends BizBaseService {
         candidateProfileItemService.storeProfileItem(orgId, items);
     }
 
+    public void profileBioUpdate(String orgId, List<WebCandidateBio> bioData) {
+        candidateBioService.restoreProfileBio(orgId, bioData);
+    }
+
     private void setProfileItems(BizCandidateProfile profile, String orgId) {
         List<CandidateProfileItem> profileItems = candidateProfileItemService
                 .getCandidateProfileItems()
