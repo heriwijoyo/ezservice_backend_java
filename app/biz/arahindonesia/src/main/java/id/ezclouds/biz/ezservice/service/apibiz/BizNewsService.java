@@ -4,11 +4,16 @@
  */
 package id.ezclouds.biz.ezservice.service.apibiz;
 
+import id.ezclouds.biz.ezservice.config.BizPublicUrlResolver;
+import id.ezclouds.biz.ezservice.config.BizPublicUrlResolverImpl;
+import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
+import id.ezclouds.biz.ezservice.model.news.BizNewsDetail;
 import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
 import id.ezclouds.biz.ezservice.service.dataservice.NewsInnerService;
 import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
+import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.shared.result.ListResult;
@@ -73,6 +78,33 @@ public class BizNewsService extends BizBaseService {
             }
         });
 
+        return bizResult;
+    }
+
+    public BizResult getNewsDetail(String newsId) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notBlank(newsId, EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                BizNewsDetail detail = newsInnerService.getNewsDetail(newsId);
+
+                BizPublicUrlResolver publicUrlResolver = new BizPublicUrlResolverImpl(appRootPublicUrl, getOrgCode(), getOrgId());
+                BizAnnotationProcessor.annotatePublicConfig(detail, publicUrlResolver);
+
+                bizResult.setObject(detail);
+                bizResult.setSuccess(true);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
         return bizResult;
     }
 }

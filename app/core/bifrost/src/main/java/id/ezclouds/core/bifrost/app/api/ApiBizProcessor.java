@@ -15,6 +15,7 @@ import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
+import id.ezclouds.core.bifrost.app.api.request.NewsDetailRequest;
 import id.ezclouds.core.bifrost.app.api.request.SurveyFormRequest;
 import id.ezclouds.core.bifrost.core.converter.BizRequestConverter;
 import id.ezclouds.core.bifrost.core.processor.BizProcessor;
@@ -76,6 +77,9 @@ public class ApiBizProcessor implements BizProcessor {
 
             case API_NEWS:
                 return bizNewsService.getActiveNews();
+
+            case API_NEWS_DETAIL:
+                return bizNewsService.getNewsDetail(((NewsDetailRequest)apiRequest).getNewsId());
 
             case API_MEMBER_PROFILE:
                 return bizMemberService.getMemberProfile();

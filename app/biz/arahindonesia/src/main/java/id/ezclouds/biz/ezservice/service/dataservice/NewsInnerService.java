@@ -5,6 +5,7 @@
 package id.ezclouds.biz.ezservice.service.dataservice;
 
 import id.ezclouds.biz.ezservice.converter.BizModelConverter;
+import id.ezclouds.biz.ezservice.model.news.BizNewsDetail;
 import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
 import id.ezclouds.biz.ezservice.model.news.BizWebDetailNews;
 import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
@@ -92,6 +93,21 @@ public class NewsInnerService {
                 .stream()
                 .map(BizModelConverter::convert)
                 .collect(Collectors.toList());
+    }
+
+    public BizNewsDetail getNewsDetail(String newsId) {
+        NewsDO newsDO = newsRepository
+                .findById(newsId)
+                .orElse(null);
+        AssertUtil.notNull(newsDO, EzErrorCode.DATA_NOT_FOUND);
+        BizNewsDetail detail = new BizNewsDetail();
+        detail.setTitle(newsDO.getTitle());
+        detail.setImageUrl(newsDO.getImageUrl());
+        detail.setContent(newsDO.getContent());
+        detail.setPublishDate(newsDO.getPublishDate());
+        detail.setSource(newsDO.getSource());
+        detail.setSourceUrl(newsDO.getSourceUrl());
+        return detail;
     }
 
     public PageResult<BizWebSimpleNews> adminGetSimpleNews(String orgId, PageRequest pageRequest) {
