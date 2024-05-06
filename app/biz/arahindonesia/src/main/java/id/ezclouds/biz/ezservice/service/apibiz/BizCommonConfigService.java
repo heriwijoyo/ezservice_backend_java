@@ -134,7 +134,7 @@ public class BizCommonConfigService extends BizBaseService {
 
     private List<BizSimpleNews> fetchSimpleNews(String orgId) {
         List<BizSimpleNews> news = newsInnerService
-                .getHighlightedNews()
+                .getHighlightedNews(orgId)
                 .stream()
                 .filter(simpleNews -> orgId.equals(simpleNews.getOrgId()))
                 .limit(AppConstant.HIGHLIGHTED_NEWS_LIMIT)

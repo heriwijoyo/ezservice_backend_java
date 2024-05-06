@@ -244,7 +244,7 @@ public class BizMemberService extends BizBaseService {
         BizServiceTemplate.execute(request, bizResult, new BizServiceTemplate.Handler() {
             @Override
             public void onRequestCheck() throws EzErrorException {
-
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
             }
 
             @Override

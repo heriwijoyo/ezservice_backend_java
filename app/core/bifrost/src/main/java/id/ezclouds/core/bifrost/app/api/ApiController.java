@@ -124,19 +124,17 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = "/api/news.php")
-    private ApiResult<ListResult<BizSimpleNews>> getNews(@RequestBody ApiRequest request) {
-        return executeInTemplate(ApiEvent.API_NEWS, request, new RequestHandler<ListResult<BizSimpleNews>>() {
+    @PostMapping(value = "/api/news.json")
+    private ApiPageResult<BizSimpleNews> getNews(@RequestBody ApiPageRequest request) {
+        return executePageInTemplate(ApiEvent.API_NEWS, request, new RequestHandler<BizSimpleNews>() {
             @Override
-            public ListResult<BizSimpleNews> convertResult(Object resultObject) {
-                return (ListResult<BizSimpleNews>) resultObject;
+            public BizSimpleNews convertResult(Object resultObject) {
+                return null;
             }
 
             @Override
-            public DigestLog composeDigestLog(ApiRequest request, ApiResult<ListResult<BizSimpleNews>> result) {
-                EmptyDigestLog digestLog = new EmptyDigestLog(result.isSuccess(), result.getResultCode());
-                digestLog.composeDigest(request, toEmptyResult(result));
-                return digestLog;
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<BizSimpleNews> result) {
+                return new SimpleDigestLog(result.isSuccess(), result.getResultCode());
             }
         });
     }

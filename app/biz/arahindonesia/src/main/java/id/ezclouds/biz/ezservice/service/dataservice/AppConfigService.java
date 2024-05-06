@@ -6,6 +6,7 @@ package id.ezclouds.biz.ezservice.service.dataservice;
 
 import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.model.AppConfig;
+import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.AppBuildPackageDO;
 import id.ezclouds.biz.ezservice.service.dataservice.model.AppMessageTemplate;
 import id.ezclouds.biz.ezservice.service.dataservice.model.BizAppBuildPackage;
@@ -203,12 +204,12 @@ public class AppConfigService {
         appConfigRepository.saveAndFlush(configDO);
     }
 
-    @Cacheable("appConfigAllActive")
+    @Cacheable(value = BizCacheKey.APP_CONFIG_ALL)
     public List<AppConfigDO> getAppConfigAllActive() {
         return appConfigRepository.findAllActive();
     }
 
-    @Cacheable("appMessageTemplate")
+    @Cacheable(value = BizCacheKey.APP_MESSAGE_TEMPLATE)
     public List<AppMessageTemplate> getMessageTemplates() {
         return appCommonMessageTemplateRepository
                 .findAll()

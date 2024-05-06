@@ -29,5 +29,7 @@ public interface NewsRepository extends JpaRepository<NewsDO, String> {
 
     Page<NewsDO> findByOrgId(String orgId, Pageable pageable);
 
+    Page<NewsDO> findByOrgIdAndStatus(String orgId, int status, Pageable pageable);
+
     NewsDO findByNewsIdAndOrgId(String newsId, String orgId);
 }

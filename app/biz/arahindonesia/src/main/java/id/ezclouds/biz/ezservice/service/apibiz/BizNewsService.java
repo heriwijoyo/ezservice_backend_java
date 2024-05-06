@@ -11,6 +11,7 @@ import id.ezclouds.biz.ezservice.model.news.BizNewsDetail;
 import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
 import id.ezclouds.biz.ezservice.service.dataservice.NewsInnerService;
 import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
+import id.ezclouds.biz.ezservice.service.result.BizPageInfo;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.assertion.AssertUtil;
@@ -27,9 +28,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class BizNewsService extends BizBaseService {
 
-    private static final int PAGE_NUMBER_DEFAULT = 1;
-    private static final int PAGE_SIZE_DEFAULT = 10;
-
     @Autowired
     private NewsInnerService newsInnerService;
 
@@ -38,38 +36,23 @@ public class BizNewsService extends BizBaseService {
         BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
             @Override
             public void onRequestCheck() throws EzErrorException {
-
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
             }
 
             @Override
             public void onBizProcess() throws Exception {
+                BizPageInfo bizPageInfo = newsInnerService.getNewsPage(getOrgId(), request);
 
-            }
-
-            @Override
-            public String getErrorMessage(EzErrorCode ezErrorCode) {
-                return getBizErrorMessage(ezErrorCode);
-            }
-        });
-        return bizResult;
-    }
-
-    public BizResult getActiveNews() {
-        final BizResult bizResult = new BizResult();
-
-        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
-            @Override
-            public void onRequestCheck() throws EzErrorException {}
-
-            @Override
-            public void onBizProcess() throws EzErrorException {
-                ListResult<BizSimpleNews> result = new ListResult<>();
-                result.setPageNumber(1);
-                result.setHasMore(false);
-                result.setItems(newsInnerService.getActiveListNews());
+                BizPublicUrlResolver publicUrlResolver = new BizPublicUrlResolverImpl(appRootPublicUrl, getOrgCode(), getOrgId());
+                bizPageInfo.getBizData().stream().forEach(object -> {
+                    if (object instanceof BizSimpleNews) {
+                        BizSimpleNews bizSimpleNews = (BizSimpleNews) object;
+                        BizAnnotationProcessor.annotatePublicConfig(bizSimpleNews, publicUrlResolver);
+                    }
+                });
 
                 bizResult.setSuccess(true);
-                bizResult.setObject(result);
+                bizResult.setBizPageInfo(bizPageInfo);
             }
 
             @Override
@@ -77,7 +60,6 @@ public class BizNewsService extends BizBaseService {
                 return getBizErrorMessage(ezErrorCode);
             }
         });
-
         return bizResult;
     }
 

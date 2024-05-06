@@ -92,7 +92,7 @@ public class BizAppCacheService {
         coreConfigService.getCoreOrgConfigs();
         appConfigService.getAppConfigAllActive();
         appConfigService.getMessageTemplates();
-        newsInnerService.getHighlightedNews();
+        newsInnerService.getHighlightNewsAllOrg();
         candidateProfileItemService.getCandidateProfileItems();
         candidateBioService.getActiveCandidateBios();
         videoCardService.getAllVideoCards();
@@ -122,8 +122,14 @@ public class BizAppCacheService {
         }
 
         switch (bizCacheEnum) {
+            case APP_CONFIG_ALL:
+                appConfigService.getAppConfigAllActive();
+                break;
+            case APP_MESSAGE_TEMPLATE:
+                appConfigService.getMessageTemplates();
+                break;
             case NEWS_HIGHLIGHT:
-                newsInnerService.getHighlightedNews();
+                newsInnerService.getHighlightNewsAllOrg();
                 break;
             case APP_IMAGE_GALLERY_ALL:
                 appImageGalleryService.getImageGalleryAllActive();

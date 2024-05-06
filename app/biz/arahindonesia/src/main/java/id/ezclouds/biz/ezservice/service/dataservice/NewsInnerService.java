@@ -13,13 +13,18 @@ import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.biz.ezservice.service.dataservice.dataobject.NewsDO;
 import id.ezclouds.biz.ezservice.service.dataservice.repo.NewsRepository;
 import id.ezclouds.biz.ezservice.service.dataservice.request.NewsCreateRequest;
+import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
+import id.ezclouds.biz.ezservice.service.result.BizPageInfo;
 import id.ezclouds.biz.ezservice.service.result.PageResult;
+import id.ezclouds.biz.ezservice.util.PageRequestUtil;
+import id.ezclouds.biz.ezservice.util.PageResultUtil;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
+import id.ezclouds.core.shared.model.CoreOrganization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -27,6 +32,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,7 +43,12 @@ import java.util.stream.Collectors;
 @Service
 public class NewsInnerService {
 
+    private static final int NEWS_HIGHLIGHT_LIMIT = 3;
     private static final int NEWS_LIMIT = 10;
+    private static final int STATUS_ACTIVE = 1;
+
+    @Autowired
+    private BizOrganizationService bizOrganizationService;
 
     @Autowired
     private NewsRepository newsRepository;
@@ -77,13 +88,46 @@ public class NewsInnerService {
         newsRepository.saveAndFlush(newsDO);
     }
 
+    public List<BizSimpleNews> getHighlightedNews(String orgId) {
+        return getHighlightNewsAllOrg()
+                .stream()
+                .filter(news -> orgId.equals(news.getOrgId()))
+                .collect(Collectors.toList());
+    }
+
     @Cacheable(BizCacheKey.NEWS_HIGHLIGHT)
-    public List<BizSimpleNews> getHighlightedNews() {
-        return newsRepository
-                .findHighlightedNews()
+    public List<BizSimpleNews> getHighlightNewsAllOrg() {
+        List<CoreOrganization> organizations = bizOrganizationService
+                .getActiveOrganizations();
+
+        List<NewsDO> highlightedNews = new ArrayList<>();
+        for (CoreOrganization organization : organizations) {
+            List<NewsDO> orgHighlightNews = newsRepository
+                    .findActiveNews(organization.getOrgId(), NEWS_HIGHLIGHT_LIMIT);
+            highlightedNews.addAll(orgHighlightNews);
+        }
+
+        return highlightedNews
                 .stream()
                 .map(BizModelConverter::convert)
                 .collect(Collectors.toList());
+    }
+
+    public BizPageInfo getNewsPage(String orgId, BizPageRequest request) {
+        request.setSortBy("publishDate");
+        request.setSort("DESC");
+        PageRequest pageRequest = PageRequestUtil.composePageRequest(request);
+
+        Page<NewsDO> pageResult = newsRepository
+                .findByOrgIdAndStatus(orgId, STATUS_ACTIVE, pageRequest);
+        List<Object> bizData = new ArrayList<>();
+        pageResult.getContent().forEach(modelDO -> {
+            bizData.add(BizModelConverter.convert(modelDO));
+        });
+
+        BizPageInfo bizPageInfo = PageResultUtil.composePageInfo(pageResult);
+        bizPageInfo.setBizData(bizData);
+        return bizPageInfo;
     }
 
     public List<BizSimpleNews> getActiveListNews() {

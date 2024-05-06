@@ -76,7 +76,7 @@ public class ApiBizProcessor implements BizProcessor {
                 return bizCandidateProfileService.getCandidateProfile();
 
             case API_NEWS:
-                return bizNewsService.getActiveNews();
+                return bizNewsService.getNews(BizRequestConverter.getBizPageRequest(apiRequest));
 
             case API_NEWS_DETAIL:
                 return bizNewsService.getNewsDetail(((NewsDetailRequest)apiRequest).getNewsId());

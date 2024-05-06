@@ -10,9 +10,11 @@ package id.ezclouds.biz.ezservice.service.core;
  */
 public final class BizCacheKey {
 
-    public static final String NEWS_HIGHLIGHT   = "NEWS_HIGHLIGHT";
-    public static final String APP_IMAGE_GALLERY_ALL = "APP_IMAGE_GALLERY_ALL";
-    public static final String VIDEO_CARD_GALLERY_ALL = "VIDEO_CARD_GALLERY_ALL";
-    public static final String CANDIDATE_PROFILE = "CANDIDATE_PROFILE";
-    public static final String CANDIDATE_BIOGRAPHY = "CANDIDATE_BIOGRAPHY";
+    public static final String APP_CONFIG_ALL           = "APP_CONFIG_ALL";
+    public static final String APP_MESSAGE_TEMPLATE     = "APP_MESSAGE_TEMPLATE";
+    public static final String NEWS_HIGHLIGHT           = "NEWS_HIGHLIGHT";
+    public static final String APP_IMAGE_GALLERY_ALL    = "APP_IMAGE_GALLERY_ALL";
+    public static final String VIDEO_CARD_GALLERY_ALL   = "VIDEO_CARD_GALLERY_ALL";
+    public static final String CANDIDATE_PROFILE        = "CANDIDATE_PROFILE";
+    public static final String CANDIDATE_BIOGRAPHY      = "CANDIDATE_BIOGRAPHY";
 }
