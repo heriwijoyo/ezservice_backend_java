@@ -17,7 +17,6 @@ import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
-import id.ezclouds.core.shared.result.ListResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
