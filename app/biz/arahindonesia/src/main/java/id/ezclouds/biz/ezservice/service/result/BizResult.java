@@ -22,7 +22,7 @@ public class BizResult implements Serializable {
     private String errorMessage;
     private Object object;
 
-    private BizPageInfo bizPageInfo;
+    private BizPageInfo<?> bizPageInfo;
 
     public BizResult() {
         this.success = false;
@@ -68,11 +68,11 @@ public class BizResult implements Serializable {
         this.object = object;
     }
 
-    public BizPageInfo getBizPageInfo() {
+    public BizPageInfo<?> getBizPageInfo() {
         return bizPageInfo;
     }
 
-    public void setBizPageInfo(BizPageInfo bizPageInfo) {
+    public void setBizPageInfo(BizPageInfo<?> bizPageInfo) {
         this.bizPageInfo = bizPageInfo;
     }
 
