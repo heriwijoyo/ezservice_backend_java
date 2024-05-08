@@ -56,11 +56,7 @@ public class PreBizProcessor {
             EzAppContextHolder.getContext().setAppVersionNo(reqClient.getAppVersionNo());
 
             if (apiRequest.getAppSession() != null) {
-                if (reqClient.getAppVersionNo() >= AppConstant.APP_V2_START_VERSION_NO) {
-                    EzAppContextHolder.getContext().setMemberSessionId(apiRequest.getAppSession().getMemberSessionId());
-                } else {
-                    EzAppContextHolder.getContext().setMemberSessionId(apiRequest.getAppSession().getMemberSessionCode());
-                }
+                EzAppContextHolder.getContext().setMemberSessionId(apiRequest.getAppSession().getMemberSessionId());
             }
         }
     }

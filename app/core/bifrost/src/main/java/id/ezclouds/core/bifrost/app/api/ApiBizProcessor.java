@@ -45,6 +45,9 @@ public class ApiBizProcessor implements BizProcessor {
     private BizNewsService bizNewsService;
 
     @Autowired
+    private BizAppMessageService bizAppMessageService;
+
+    @Autowired
     private BizMemberProfileService bizMemberProfileService;
 
     @Autowired
@@ -80,6 +83,9 @@ public class ApiBizProcessor implements BizProcessor {
 
             case API_NEWS_DETAIL:
                 return bizNewsService.getNewsDetail(((NewsDetailRequest)apiRequest).getNewsId());
+
+            case API_MESSAGE_MEMBER:
+                return bizAppMessageService.getAppMessageMember(BizRequestConverter.getBizPageRequest(apiRequest));
 
             case API_MEMBER_PROFILE:
                 return bizMemberService.getMemberProfile();

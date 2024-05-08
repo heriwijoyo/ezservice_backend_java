@@ -7,6 +7,7 @@ package id.ezclouds.core.bifrost.app.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.ezservice.model.AppSetting;
 import id.ezclouds.biz.ezservice.model.admin.BizAdminSession;
+import id.ezclouds.biz.ezservice.model.app.AppMessage;
 import id.ezclouds.biz.ezservice.model.authentication.BizMemberCommonSession;
 import id.ezclouds.biz.ezservice.model.member.BizMemberRegisterResult;
 import id.ezclouds.biz.ezservice.model.news.BizNewsDetail;
@@ -152,6 +153,21 @@ public class ApiController extends AppController {
                 EmptyDigestLog digestLog = new EmptyDigestLog(result.isSuccess(), result.getResultCode());
                 digestLog.composeDigest(request, toEmptyResult(result));
                 return digestLog;
+            }
+        });
+    }
+
+    @PostMapping(value = "/api/messageMember.json")
+    private ApiPageResult<AppMessage> messageMember(@RequestBody ApiPageRequest request) {
+        return executePageInTemplate(ApiEvent.API_MESSAGE_MEMBER, request, new RequestHandler<AppMessage>() {
+            @Override
+            public AppMessage convertResult(Object resultObject) {
+                return null;
+            }
+
+            @Override
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<AppMessage> result) {
+                return new SimpleDigestLog(result.isSuccess(), result.getResultCode());
             }
         });
     }
