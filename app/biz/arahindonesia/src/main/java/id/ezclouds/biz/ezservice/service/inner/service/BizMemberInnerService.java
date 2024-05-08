@@ -130,13 +130,13 @@ public class BizMemberInnerService {
         return bizMemberInfo;
     }
 
-    public BizPageInfo getMemberPage(String orgId, BizPageRequest request) {
+    public BizPageInfo<CoreMember> getMemberPage(String orgId, BizPageRequest request) {
         request.setSortBy("createdTime");
         request.setSort("DESC");
         PageRequest pageRequest = PageRequestUtil.composePageRequest(request);
         String subOrgId = request.getExtendInfo().get("SUB_ORG_ID");
 
-        CorePageInfo corePageInfo;
+        CorePageInfo<CoreMember> corePageInfo;
         if (StringUtil.isNotBlank(subOrgId)) {
             corePageInfo = coreMemberService.getMemberByOrgAndSubOrg(orgId, subOrgId, pageRequest);
         } else {
@@ -145,11 +145,11 @@ public class BizMemberInnerService {
         return convert(corePageInfo);
     }
 
-    private BizPageInfo convert(CorePageInfo corePageInfo) {
+    private BizPageInfo<CoreMember> convert(CorePageInfo<CoreMember> corePageInfo) {
         if (corePageInfo == null) {
             return null;
         }
-        BizPageInfo bizPageInfo = new BizPageInfo();
+        BizPageInfo<CoreMember> bizPageInfo = new BizPageInfo<>();
         bizPageInfo.setPageNumber(corePageInfo.getPageNumber());
         bizPageInfo.setPageSize(corePageInfo.getPageSize());
         bizPageInfo.setTotalPage(corePageInfo.getTotalPage());

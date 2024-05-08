@@ -113,19 +113,19 @@ public class NewsInnerService {
                 .collect(Collectors.toList());
     }
 
-    public BizPageInfo getNewsPage(String orgId, BizPageRequest request) {
+    public BizPageInfo<BizSimpleNews> getNewsPage(String orgId, BizPageRequest request) {
         request.setSortBy("publishDate");
         request.setSort("DESC");
         PageRequest pageRequest = PageRequestUtil.composePageRequest(request);
 
         Page<NewsDO> pageResult = newsRepository
                 .findByOrgIdAndStatus(orgId, STATUS_ACTIVE, pageRequest);
-        List<Object> bizData = new ArrayList<>();
+        List<BizSimpleNews> bizData = new ArrayList<>();
         pageResult.getContent().forEach(modelDO -> {
             bizData.add(BizModelConverter.convert(modelDO));
         });
 
-        BizPageInfo bizPageInfo = PageResultUtil.composePageInfo(pageResult);
+        BizPageInfo<BizSimpleNews> bizPageInfo = PageResultUtil.composePageInfo(pageResult);
         bizPageInfo.setBizData(bizData);
         return bizPageInfo;
     }

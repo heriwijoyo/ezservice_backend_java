@@ -252,7 +252,7 @@ public class BizMemberService extends BizBaseService {
                 CoreAuthMemberSessionInfo session = authAppMemberSession();
                 authorizeAdminMember(session.getMemberRoles());
 
-                BizPageInfo bizPageInfo = bizMemberInnerService.getMemberPage(getOrgId(), request);
+                BizPageInfo<CoreMember> bizPageInfo = bizMemberInnerService.getMemberPage(getOrgId(), request);
                 bizResult.setSuccess(true);
                 bizResult.setBizPageInfo(bizPageInfo);
             }

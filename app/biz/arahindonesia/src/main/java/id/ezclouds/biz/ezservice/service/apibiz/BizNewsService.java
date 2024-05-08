@@ -40,14 +40,11 @@ public class BizNewsService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                BizPageInfo bizPageInfo = newsInnerService.getNewsPage(getOrgId(), request);
+                BizPageInfo<BizSimpleNews> bizPageInfo = newsInnerService.getNewsPage(getOrgId(), request);
 
                 BizPublicUrlResolver publicUrlResolver = new BizPublicUrlResolverImpl(appRootPublicUrl, getOrgCode(), getOrgId());
-                bizPageInfo.getBizData().stream().forEach(object -> {
-                    if (object instanceof BizSimpleNews) {
-                        BizSimpleNews bizSimpleNews = (BizSimpleNews) object;
-                        BizAnnotationProcessor.annotatePublicConfig(bizSimpleNews, publicUrlResolver);
-                    }
+                bizPageInfo.getBizData().forEach(simpleNews -> {
+                    BizAnnotationProcessor.annotatePublicConfig(simpleNews, publicUrlResolver);
                 });
 
                 bizResult.setSuccess(true);

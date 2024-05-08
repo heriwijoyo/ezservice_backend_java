@@ -182,18 +182,18 @@ public class CoreMemberService {
         }
     }
 
-    public CorePageInfo getMemberByOrg(String orgId, PageRequest pageRequest) {
+    public CorePageInfo<CoreMember> getMemberByOrg(String orgId, PageRequest pageRequest) {
         Page<CoreMemberDO> pageResult = coreMemberRepository.findByOrgId(orgId, pageRequest);
         return composePageInfo(pageResult);
     }
 
-    public CorePageInfo getMemberByOrgAndSubOrg(String orgId, String subOrgId, PageRequest pageRequest) {
+    public CorePageInfo<CoreMember> getMemberByOrgAndSubOrg(String orgId, String subOrgId, PageRequest pageRequest) {
         Page<CoreMemberDO> pageResult = coreMemberRepository.findByOrgIdAndSubOrgId(orgId, subOrgId, pageRequest);
         return composePageInfo(pageResult);
     }
 
-    private CorePageInfo composePageInfo(Page<CoreMemberDO> pageResult) {
-        CorePageInfo bizPageInfo = new CorePageInfo();
+    private CorePageInfo<CoreMember> composePageInfo(Page<CoreMemberDO> pageResult) {
+        CorePageInfo<CoreMember> bizPageInfo = new CorePageInfo<>();
         bizPageInfo.setPageNumber(pageResult.getPageable().getPageNumber() + 1);
         bizPageInfo.setPageSize(pageResult.getPageable().getPageSize());
         bizPageInfo.setTotalPage(pageResult.getTotalPages());
@@ -201,7 +201,7 @@ public class CoreMemberService {
         bizPageInfo.setTotalRecord((int)pageResult.getTotalElements());
         bizPageInfo.setHasNext(pageResult.hasNext());
 
-        List<Object> bizData = new ArrayList<>();
+        List<CoreMember> bizData = new ArrayList<>();
         pageResult.getContent().forEach(modelDO -> {
             bizData.add(CoreMemberConverter.convert(modelDO));
         });

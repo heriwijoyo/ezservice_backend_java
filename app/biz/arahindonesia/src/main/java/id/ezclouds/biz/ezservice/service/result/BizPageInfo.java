@@ -10,9 +10,9 @@ import java.util.List;
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizPageInfo.java, v 0.1 2024‐04‐26 1:20 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class BizPageInfo {
+public class BizPageInfo<T> {
 
-    private List<Object> bizData;
+    private List<T> bizData;
     private int pageNumber;
     private int pageSize;
     private int totalPage;
@@ -20,11 +20,11 @@ public class BizPageInfo {
     private int totalRecord;
     private boolean hasNext;
 
-    public List<Object> getBizData() {
+    public List<T> getBizData() {
         return bizData;
     }
 
-    public void setBizData(List<Object> bizData) {
+    public void setBizData(List<T> bizData) {
         this.bizData = bizData;
     }
 
