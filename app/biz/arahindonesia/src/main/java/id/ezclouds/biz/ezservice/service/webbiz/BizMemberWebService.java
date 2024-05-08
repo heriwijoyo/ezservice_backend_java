@@ -6,7 +6,7 @@ package id.ezclouds.biz.ezservice.service.webbiz;
 
 import id.ezclouds.biz.ezservice.enums.ImageRestriction;
 import id.ezclouds.biz.ezservice.enums.WebLoadImageScene;
-import id.ezclouds.biz.ezservice.service.dataservice.BizOrganizationService;
+import id.ezclouds.biz.ezservice.service.app.BizOrganizationService;
 import id.ezclouds.biz.ezservice.service.request.BizImageLoadRequest;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;

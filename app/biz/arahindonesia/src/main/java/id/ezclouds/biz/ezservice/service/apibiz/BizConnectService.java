@@ -6,7 +6,7 @@ package id.ezclouds.biz.ezservice.service.apibiz;
 
 import id.ezclouds.biz.ezservice.constant.BizConstant;
 import id.ezclouds.biz.ezservice.converter.BizMessageTemplateConverter;
-import id.ezclouds.biz.ezservice.service.dataservice.AppConfigService;
+import id.ezclouds.biz.ezservice.service.app.AppConfigService;
 import id.ezclouds.core.integration.request.WhatsappSendRequest;
 import id.ezclouds.core.integration.service.EzConnectService;
 import org.springframework.beans.factory.annotation.Autowired;

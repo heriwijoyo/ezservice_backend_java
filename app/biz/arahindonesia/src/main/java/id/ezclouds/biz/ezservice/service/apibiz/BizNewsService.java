@@ -9,7 +9,7 @@ import id.ezclouds.biz.ezservice.config.BizPublicUrlResolverImpl;
 import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
 import id.ezclouds.biz.ezservice.model.news.BizNewsDetail;
 import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
-import id.ezclouds.biz.ezservice.service.dataservice.NewsInnerService;
+import id.ezclouds.biz.ezservice.service.app.NewsInnerService;
 import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
 import id.ezclouds.biz.ezservice.service.result.BizPageInfo;
 import id.ezclouds.biz.ezservice.service.result.BizResult;

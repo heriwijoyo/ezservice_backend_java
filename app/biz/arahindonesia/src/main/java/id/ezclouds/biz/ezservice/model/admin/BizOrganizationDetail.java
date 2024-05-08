@@ -5,8 +5,8 @@
 package id.ezclouds.biz.ezservice.model.admin;
 
 import id.ezclouds.biz.ezservice.model.member.BizMember;
-import id.ezclouds.biz.ezservice.service.dataservice.model.BizAppBuildPackage;
-import id.ezclouds.biz.ezservice.service.dataservice.model.BizAppConfig;
+import id.ezclouds.biz.ezservice.service.app.model.BizAppBuildPackage;
+import id.ezclouds.biz.ezservice.service.app.model.BizAppConfig;
 
 import java.util.List;
 import java.util.Map;

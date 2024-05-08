@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.ezservice.model.admin.*;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizSuperAdminService;
-import id.ezclouds.biz.ezservice.service.dataservice.model.BizAppConfig;
+import id.ezclouds.biz.ezservice.service.app.model.BizAppConfig;
 import id.ezclouds.biz.ezservice.service.request.web.*;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.result.PageResult;

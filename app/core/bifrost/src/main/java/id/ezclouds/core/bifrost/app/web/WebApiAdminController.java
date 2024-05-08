@@ -16,7 +16,7 @@ import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
 import id.ezclouds.biz.ezservice.model.profile.BizCandidateProfile;
 import id.ezclouds.biz.ezservice.model.profile.WebCandidateBio;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
-import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
+import id.ezclouds.biz.ezservice.service.app.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
 import id.ezclouds.biz.ezservice.service.result.BizResult;

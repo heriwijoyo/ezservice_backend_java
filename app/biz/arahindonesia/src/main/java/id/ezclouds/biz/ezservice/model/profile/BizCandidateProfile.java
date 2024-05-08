@@ -4,7 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.model.profile;
 
-import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
+import id.ezclouds.biz.ezservice.service.app.model.AppImageGallery;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

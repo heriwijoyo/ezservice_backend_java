@@ -1,0 +1,57 @@
+/**
+ * Ezclouds.id
+ * Copyright (c) 2020‐2024 All Rights Reserved.
+ */
+package id.ezclouds.biz.ezservice.service.app;
+
+import id.ezclouds.biz.ezservice.model.BizStatus;
+import id.ezclouds.biz.ezservice.service.app.dataobject.AppMemberFlagDO;
+import id.ezclouds.biz.ezservice.service.app.model.AppMemberFlag;
+import id.ezclouds.biz.ezservice.service.app.repo.AppMemberFlagRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+/**
+ * @author Heri Wijoyo (heri.wijoyo@gmail.com)
+ * @version $Id: AppMemberFlagService.java, v 0.1 2024‐02‐04 6:56 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ */
+@Service
+public class AppMemberFlagService {
+
+    @Autowired
+    private AppMemberFlagRepository appMemberFlagRepository;
+
+    public Map<String, String> getAppMemberFlag(String orgId, String memberId) {
+        Map<String, String> memberFlagMap = new HashMap<>();
+        List<AppMemberFlag> appMemberFlags = appMemberFlagRepository
+                .getActiveMemberFlags(orgId, memberId)
+                .stream()
+                .map(flagDO -> new AppMemberFlag(flagDO.getFlagCode(), flagDO.getFlagValue()))
+                .collect(Collectors.toList());
+
+        appMemberFlags
+                .forEach(memberFlag -> {
+                    memberFlagMap.put(memberFlag.getFlagCode(), memberFlag.getFlagValue());
+                });
+
+        return memberFlagMap;
+    }
+
+    @Transactional
+    public void invalidateAppMemberFlag(String orgId, String memberId, String flagCode) {
+        AppMemberFlagDO memberFlagDO = appMemberFlagRepository
+                .findByMemberFlagCode(orgId, memberId, flagCode)
+                .orElse(null);
+
+        if (memberFlagDO != null) {
+            memberFlagDO.setStatus(BizStatus.NOT_ACTIVE.getCode());
+            appMemberFlagRepository.saveAndFlush(memberFlagDO);
+        }
+    }
+}

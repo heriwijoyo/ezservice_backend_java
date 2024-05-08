@@ -11,7 +11,7 @@ import id.ezclouds.biz.ezservice.model.admin.BizOrganizationDetail;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
 import id.ezclouds.biz.ezservice.service.core.BizAppCacheService;
-import id.ezclouds.biz.ezservice.service.dataservice.model.BizAppConfig;
+import id.ezclouds.biz.ezservice.service.app.model.BizAppConfig;
 import id.ezclouds.biz.ezservice.service.inner.service.BizAdminInnerService;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.BizWebCreateRequest;

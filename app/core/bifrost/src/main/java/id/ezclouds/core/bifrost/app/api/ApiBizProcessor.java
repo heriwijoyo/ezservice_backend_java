@@ -8,7 +8,7 @@ import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.service.apibiz.*;
 import id.ezclouds.biz.ezservice.service.apibiz.BizAuthService;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
-import id.ezclouds.biz.ezservice.service.dataservice.request.BizSubOrgCreateRequest;
+import id.ezclouds.biz.ezservice.service.app.request.BizSubOrgCreateRequest;
 import id.ezclouds.biz.ezservice.service.request.*;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.common.util.exception.EzErrorCode;

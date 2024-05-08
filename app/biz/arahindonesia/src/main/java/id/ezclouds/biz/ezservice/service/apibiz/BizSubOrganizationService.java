@@ -4,7 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.service.apibiz;
 
-import id.ezclouds.biz.ezservice.service.dataservice.request.BizSubOrgCreateRequest;
+import id.ezclouds.biz.ezservice.service.app.request.BizSubOrgCreateRequest;
 import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
 import id.ezclouds.biz.ezservice.service.result.BizPageInfo;
 import id.ezclouds.biz.ezservice.service.result.BizResult;

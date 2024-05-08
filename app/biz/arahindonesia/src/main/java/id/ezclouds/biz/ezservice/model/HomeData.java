@@ -6,7 +6,7 @@ package id.ezclouds.biz.ezservice.model;
 
 import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
 import id.ezclouds.biz.ezservice.model.profile.BizCandidateProfile;
-import id.ezclouds.biz.ezservice.service.dataservice.model.AppImageGallery;
+import id.ezclouds.biz.ezservice.service.app.model.AppImageGallery;
 
 import java.util.ArrayList;
 import java.util.List;

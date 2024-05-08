@@ -4,7 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.service.core;
 
-import id.ezclouds.biz.ezservice.service.dataservice.*;
+import id.ezclouds.biz.ezservice.service.app.*;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.service.AppSubOrganizationService;
 import id.ezclouds.core.auth.service.CoreAuthService;
 import id.ezclouds.core.shared.service.CoreAdminService;

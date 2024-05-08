@@ -6,10 +6,10 @@ package id.ezclouds.biz.ezservice.converter;
 
 import id.ezclouds.biz.ezservice.model.*;
 import id.ezclouds.biz.ezservice.model.profile.WebCandidateBio;
-import id.ezclouds.biz.ezservice.service.dataservice.dataobject.CandidateBioDO;
-import id.ezclouds.biz.ezservice.service.dataservice.dataobject.CandidateProfileItemDO;
-import id.ezclouds.biz.ezservice.service.dataservice.dataobject.NewsDO;
-import id.ezclouds.biz.ezservice.service.dataservice.dataobject.VideoCardDO;
+import id.ezclouds.biz.ezservice.service.app.dataobject.CandidateBioDO;
+import id.ezclouds.biz.ezservice.service.app.dataobject.CandidateProfileItemDO;
+import id.ezclouds.biz.ezservice.service.app.dataobject.NewsDO;
+import id.ezclouds.biz.ezservice.service.app.dataobject.VideoCardDO;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
 import id.ezclouds.biz.ezservice.model.profile.CandidateBio;

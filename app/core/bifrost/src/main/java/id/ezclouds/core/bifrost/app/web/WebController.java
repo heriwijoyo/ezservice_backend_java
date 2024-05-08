@@ -6,9 +6,9 @@ package id.ezclouds.core.bifrost.app.web;
 
 import id.ezclouds.biz.ezservice.enums.WebLoadImageScene;
 import id.ezclouds.biz.ezservice.model.AppConfig;
-import id.ezclouds.biz.ezservice.service.dataservice.AppConfigService;
-import id.ezclouds.biz.ezservice.service.dataservice.BizOrganizationService;
-import id.ezclouds.biz.ezservice.service.dataservice.model.BizAppBuildPackage;
+import id.ezclouds.biz.ezservice.service.app.AppConfigService;
+import id.ezclouds.biz.ezservice.service.app.BizOrganizationService;
+import id.ezclouds.biz.ezservice.service.app.model.BizAppBuildPackage;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.core.bifrost.app.AppController;

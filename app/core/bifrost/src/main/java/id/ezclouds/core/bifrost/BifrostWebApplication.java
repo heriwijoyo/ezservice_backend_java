@@ -32,8 +32,8 @@ import java.util.TimeZone;
         "id.ezclouds.core.shared",
         "id.ezclouds.core.member",
         "id.ezclouds.core.auth",
-        "id.ezclouds.core.integration.dataservice.repo",
-        "id.ezclouds.biz.ezservice.service.dataservice.repo",
+        "id.ezclouds.core.integration.app.repo",
+        "id.ezclouds.biz.ezservice.service.app.repo",
         "id.ezclouds.biz.ezservice.subbiz.arahindonesia.repo"
 })
 @EntityScan(basePackages = {
@@ -41,8 +41,8 @@ import java.util.TimeZone;
         "id.ezclouds.core.shared",
         "id.ezclouds.core.member",
         "id.ezclouds.core.auth",
-        "id.ezclouds.core.integration.dataservice.dataobject",
-        "id.ezclouds.biz.ezservice.service.dataservice.dataobject",
+        "id.ezclouds.core.integration.app.dataobject",
+        "id.ezclouds.biz.ezservice.service.app.dataobject",
         "id.ezclouds.biz.ezservice.subbiz.arahindonesia.dataobject"
 })
 @EnableCaching

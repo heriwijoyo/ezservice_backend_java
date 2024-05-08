@@ -6,8 +6,8 @@ package id.ezclouds.biz.ezservice.service.apibiz;
 
 import id.ezclouds.biz.ezservice.enums.BizUniqueScene;
 import id.ezclouds.biz.ezservice.model.survey.BizSurveyForm;
-import id.ezclouds.biz.ezservice.service.dataservice.AppSurveyDataService;
-import id.ezclouds.biz.ezservice.service.dataservice.request.AppSurveyResponseRequest;
+import id.ezclouds.biz.ezservice.service.app.AppSurveyDataService;
+import id.ezclouds.biz.ezservice.service.app.request.AppSurveyResponseRequest;
 import id.ezclouds.biz.ezservice.service.request.BizSurveySubmitRequest;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;

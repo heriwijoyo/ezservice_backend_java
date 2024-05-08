@@ -30,7 +30,7 @@ public class BizMemberConverter {
         memberBase.setEmail(coreMember.getEmail());
         memberBase.setAddress(coreMember.getAddress());
 
-        //support backward compatibility for old version dataservice dataobject
+        //support backward compatibility for old version app dataobject
         memberBase.setRole(coreMember.getRoles());
 
         if ("MALE".equals(coreMember.getGender())) {

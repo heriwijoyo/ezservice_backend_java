@@ -4,7 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.service.core;
 
-import id.ezclouds.biz.ezservice.service.dataservice.BizOrganizationService;
+import id.ezclouds.biz.ezservice.service.app.BizOrganizationService;
 import id.ezclouds.core.shared.service.CoreFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
