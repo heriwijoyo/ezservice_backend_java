@@ -11,7 +11,7 @@ import id.ezclouds.biz.ezservice.model.survey.ResponderForm;
 import id.ezclouds.biz.ezservice.service.app.comparator.AnswerOptionComparator;
 import id.ezclouds.biz.ezservice.service.app.comparator.QuestionComparator;
 import id.ezclouds.biz.ezservice.service.app.comparator.ResponderComparator;
-import id.ezclouds.biz.ezservice.service.app.converter.DataObjectConverter;
+import id.ezclouds.biz.ezservice.service.app.converter.AppModelConverter;
 import id.ezclouds.biz.ezservice.service.app.dataobject.*;
 import id.ezclouds.biz.ezservice.service.app.repo.*;
 import id.ezclouds.biz.ezservice.service.app.request.AppSurveyResponseRequest;
@@ -116,7 +116,7 @@ public class AppSurveyDataService {
                 .stream()
                 .filter(responder -> surveyId.equals(responder.getSurveyId()))
                 .sorted(new ResponderComparator())
-                .map(DataObjectConverter::convert)
+                .map(AppModelConverter::convert)
                 .collect(Collectors.toList());
     }
 
@@ -125,7 +125,7 @@ public class AppSurveyDataService {
                 .stream()
                 .filter(question -> question.getSurveyId().equals(surveyId))
                 .sorted(new QuestionComparator())
-                .map(DataObjectConverter::convert)
+                .map(AppModelConverter::convert)
                 .collect(Collectors.toList());
 
         int lblCount = 1;

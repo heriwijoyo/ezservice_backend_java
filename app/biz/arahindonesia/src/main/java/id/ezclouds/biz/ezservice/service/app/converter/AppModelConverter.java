@@ -4,8 +4,10 @@
  */
 package id.ezclouds.biz.ezservice.service.app.converter;
 
+import id.ezclouds.biz.ezservice.model.app.AppMessage;
 import id.ezclouds.biz.ezservice.model.survey.QuestionForm;
 import id.ezclouds.biz.ezservice.model.survey.ResponderForm;
+import id.ezclouds.biz.ezservice.service.app.dataobject.AppMessageMemberDO;
 import id.ezclouds.biz.ezservice.service.app.dataobject.BizSurveyQuestionDO;
 import id.ezclouds.biz.ezservice.service.app.dataobject.BizSurveyResponderDO;
 import id.ezclouds.common.util.StringUtil;
@@ -14,9 +16,9 @@ import java.util.Arrays;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: DataObjectConverter.java, v 0.1 2024‐02‐17 6:14 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: AppModelConverter.java, v 0.1 2024‐02‐17 6:14 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class DataObjectConverter {
+public class AppModelConverter {
 
     public static ResponderForm convert(BizSurveyResponderDO responderDO) {
         if (responderDO == null) { return null; }
@@ -43,6 +45,20 @@ public class DataObjectConverter {
         questionForm.setOtherRequiredCondition(questionDO.getOtherRequiredCondition());
         questionForm.setOtherHint(questionDO.getOtherHint());
         return questionForm;
+    }
+
+    public static AppMessage convert(AppMessageMemberDO messageMemberDO) {
+        if (messageMemberDO == null) { return null; }
+        AppMessage appMessage = new AppMessage();
+        appMessage.setId(messageMemberDO.getId());
+        appMessage.setType(messageMemberDO.getType());
+        appMessage.setTitle(messageMemberDO.getTitle());
+        appMessage.setDescription(messageMemberDO.getDescription());
+        appMessage.setContent(messageMemberDO.getContent());
+        appMessage.setImageUrl(messageMemberDO.getImageUrl());
+        appMessage.setCreatedTime(messageMemberDO.getCreatedTime());
+        appMessage.setHasRead(toBool(messageMemberDO.getHasRead()));
+        return appMessage;
     }
 
     private static boolean toBool(int state) {
