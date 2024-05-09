@@ -4,6 +4,8 @@
  */
 package id.ezclouds.biz.ezservice.service.apibiz;
 
+import id.ezclouds.biz.ezservice.config.BizPublicUrlResolver;
+import id.ezclouds.biz.ezservice.config.BizPublicUrlResolverImpl;
 import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.enums.BizMemberRole;
 import id.ezclouds.common.util.assertion.AssertUtil;
@@ -40,6 +42,10 @@ public class BizBaseService {
 
     public String getAppId() {
         return EzAppContextHolder.getContext().getAppId();
+    }
+
+    public BizPublicUrlResolver getPublicOrgUrlResolver(String orgCode) {
+        return new BizPublicUrlResolverImpl(appRootPublicUrl, orgCode);
     }
 
     protected CoreAuthMemberSessionInfo authAppMemberSession() throws Exception {

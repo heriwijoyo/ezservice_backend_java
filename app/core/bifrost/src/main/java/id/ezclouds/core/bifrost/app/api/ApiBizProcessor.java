@@ -54,6 +54,9 @@ public class ApiBizProcessor implements BizProcessor {
     private BizMemberService bizMemberService;
 
     @Autowired
+    private BizAppEventService bizAppEventService;
+
+    @Autowired
     private BizAuthService bizAuthService;
 
     @Autowired
@@ -89,6 +92,9 @@ public class ApiBizProcessor implements BizProcessor {
 
             case API_MESSAGE_MEMBER_DETAIL:
                 return bizAppMessageService.detailAppMessageMember(BizRequestConverter.getBizDetailRequest(apiRequest));
+
+            case API_APP_EVENT:
+                return bizAppEventService.getAppEventHome();
 
             case API_MEMBER_PROFILE:
                 return bizMemberService.getMemberProfile();

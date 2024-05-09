@@ -9,9 +9,9 @@ import id.ezclouds.biz.ezservice.model.annotation.PublicImageUrl;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: BizEvent.java, v 0.1 2024‐04‐10 2:02 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: AppEvent.java, v 0.1 2024‐04‐10 2:02 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class BizEvent {
+public class AppEvent {
 
     private String id;
     private String orgId;

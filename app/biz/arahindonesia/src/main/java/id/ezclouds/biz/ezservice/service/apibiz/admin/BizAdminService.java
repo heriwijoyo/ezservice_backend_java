@@ -14,7 +14,7 @@ import id.ezclouds.biz.ezservice.enums.BizUploadScene;
 import id.ezclouds.biz.ezservice.model.VideoCard;
 import id.ezclouds.biz.ezservice.model.admin.*;
 import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
-import id.ezclouds.biz.ezservice.model.event.BizEvent;
+import id.ezclouds.biz.ezservice.model.event.AppEvent;
 import id.ezclouds.biz.ezservice.model.news.BizWebDetailNews;
 import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
 import id.ezclouds.biz.ezservice.model.profile.WebCandidateBio;
@@ -507,7 +507,7 @@ public class BizAdminService extends BizBaseService {
             public void onBizProcess() throws Exception {
                 CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
                 BizPublicUrlResolver urlResolver = new BizPublicUrlResolverImpl(appRootPublicUrl, session.getOrgCode());
-                PageResult<BizEvent> eventsResult = bizAdminInnerService.getEvents(
+                PageResult<AppEvent> eventsResult = bizAdminInnerService.getEvents(
                         session.getOrgId(),
                         request.getPageNumber(),
                         request.getPageSize(),
@@ -541,10 +541,10 @@ public class BizAdminService extends BizBaseService {
             @Override
             public void onBizProcess() throws Exception {
                 CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
-                BizEvent bizEvent = bizAdminInnerService.getEventDetail(session.getOrgId(), request.getObject());
+                AppEvent appEvent = bizAdminInnerService.getEventDetail(session.getOrgId(), request.getObject());
                 BizPublicUrlResolver urlResolver = new BizPublicUrlResolverImpl(appRootPublicUrl, session.getOrgCode());
-                BizAnnotationProcessor.annotatePublicConfig(bizEvent, urlResolver);
-                bizResult.setObject(bizEvent);
+                BizAnnotationProcessor.annotatePublicConfig(appEvent, urlResolver);
+                bizResult.setObject(appEvent);
                 bizResult.setSuccess(true);
             }
 

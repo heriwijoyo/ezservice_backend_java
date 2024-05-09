@@ -10,6 +10,7 @@ import id.ezclouds.biz.ezservice.model.admin.BizAdminSession;
 import id.ezclouds.biz.ezservice.model.app.AppMessage;
 import id.ezclouds.biz.ezservice.model.app.SimpleAppMessage;
 import id.ezclouds.biz.ezservice.model.authentication.BizMemberCommonSession;
+import id.ezclouds.biz.ezservice.model.event.AppEventHome;
 import id.ezclouds.biz.ezservice.model.member.BizMemberRegisterResult;
 import id.ezclouds.biz.ezservice.model.news.BizNewsDetail;
 import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
@@ -183,6 +184,23 @@ public class ApiController extends AppController {
 
             @Override
             public DigestLog composeDigestLog(ApiRequest request, ApiResult<AppMessage> result) {
+                EmptyDigestLog digestLog = new EmptyDigestLog(result.isSuccess(), result.getResultCode());
+                digestLog.composeDigest(request, toEmptyResult(result));
+                return digestLog;
+            }
+        });
+    }
+
+    @PostMapping(value = "/api/appEvents.json")
+    private ApiResult<AppEventHome> appEvents(@RequestBody ApiRequest request) {
+        return executeInTemplate(ApiEvent.API_APP_EVENT, request, new RequestHandler<AppEventHome>() {
+            @Override
+            public AppEventHome convertResult(Object resultObject) {
+                return (AppEventHome) resultObject;
+            }
+
+            @Override
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<AppEventHome> result) {
                 EmptyDigestLog digestLog = new EmptyDigestLog(result.isSuccess(), result.getResultCode());
                 digestLog.composeDigest(request, toEmptyResult(result));
                 return digestLog;

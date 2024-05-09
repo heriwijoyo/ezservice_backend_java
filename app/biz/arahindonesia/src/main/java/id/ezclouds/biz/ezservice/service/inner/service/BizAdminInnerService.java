@@ -12,7 +12,7 @@ import id.ezclouds.biz.ezservice.model.VideoCard;
 import id.ezclouds.biz.ezservice.model.admin.BizApplicationConfig;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganization;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganizationDetail;
-import id.ezclouds.biz.ezservice.model.event.BizEvent;
+import id.ezclouds.biz.ezservice.model.event.AppEvent;
 import id.ezclouds.biz.ezservice.model.member.BizGender;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.model.member.BizMemberInfo;
@@ -104,7 +104,7 @@ public class BizAdminInnerService {
     private BizConnectService bizConnectService;
 
     @Autowired
-    private BizEventInnerService bizEventInnerService;
+    private AppEventService appEventService;
 
     @Autowired
     private BizCandidateProfileService bizCandidateProfileService;
@@ -198,53 +198,53 @@ public class BizAdminInnerService {
 
     public void createEvent(String orgId, String fileName, Map<String, String> extInfo) {
         String currentDate = DateUtil.getCurrentFormattedDate();
-        BizEvent bizEvent = new BizEvent();
-        bizEvent.setId(HashUtil.createHash(orgId, currentDate));
-        bizEvent.setOrgId(orgId);
-        bizEvent.setTitle(extInfo.get("TITLE"));
-        bizEvent.setCategory(extInfo.get("CATEGORY"));
-        bizEvent.setDescription(extInfo.get("DESCRIPTION"));
-        bizEvent.setImageUrl(fileName);
-        bizEvent.setDateStart(extInfo.get("DATE_START"));
-        bizEvent.setDateEnd(extInfo.get("DATE_END"));
-        bizEvent.setTimeStart(extInfo.get("TIME_START"));
-        bizEvent.setTimeEnd(extInfo.get("TIME_END"));
-        bizEvent.setLocation(extInfo.get("LOCATION"));
-        bizEvent.setHighlight(0);
-        bizEvent.setStatus(0);
-        bizEvent.setCreatedTime(currentDate);
-        bizEvent.setModifiedTime(currentDate);
-        bizEventInnerService.createEvent(bizEvent);
+        AppEvent appEvent = new AppEvent();
+        appEvent.setId(HashUtil.createHash(orgId, currentDate));
+        appEvent.setOrgId(orgId);
+        appEvent.setTitle(extInfo.get("TITLE"));
+        appEvent.setCategory(extInfo.get("CATEGORY"));
+        appEvent.setDescription(extInfo.get("DESCRIPTION"));
+        appEvent.setImageUrl(fileName);
+        appEvent.setDateStart(extInfo.get("DATE_START"));
+        appEvent.setDateEnd(extInfo.get("DATE_END"));
+        appEvent.setTimeStart(extInfo.get("TIME_START"));
+        appEvent.setTimeEnd(extInfo.get("TIME_END"));
+        appEvent.setLocation(extInfo.get("LOCATION"));
+        appEvent.setHighlight(0);
+        appEvent.setStatus(0);
+        appEvent.setCreatedTime(currentDate);
+        appEvent.setModifiedTime(currentDate);
+        appEventService.createEvent(appEvent);
     }
 
-    public PageResult<BizEvent> getEvents(String orgId, int pageNumber, int pageSize, String sortBy, String sort) {
+    public PageResult<AppEvent> getEvents(String orgId, int pageNumber, int pageSize, String sortBy, String sort) {
         PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortBy, sort);
-        return bizEventInnerService.getEvents(orgId, pageRequest);
+        return appEventService.getEvents(orgId, pageRequest);
     }
 
-    public BizEvent getEventDetail(String orgId, String eventId) {
-        return bizEventInnerService.getEventDetail(orgId, eventId);
+    public AppEvent getEventDetail(String orgId, String eventId) {
+        return appEventService.getEventDetail(orgId, eventId);
     }
 
     public void updateEvent(String orgId, String fileName, Map<String, String> extInfo) {
-        BizEvent bizEvent = new BizEvent();
-        bizEvent.setId(extInfo.get("EVENT_ID"));
-        bizEvent.setOrgId(orgId);
-        bizEvent.setTitle(extInfo.get("TITLE"));
-        bizEvent.setCategory(extInfo.get("CATEGORY"));
-        bizEvent.setDescription(extInfo.get("DESCRIPTION"));
-        bizEvent.setImageUrl(fileName);
-        bizEvent.setDateStart(extInfo.get("DATE_START"));
-        bizEvent.setDateEnd(extInfo.get("DATE_END"));
-        bizEvent.setTimeStart(extInfo.get("TIME_START"));
-        bizEvent.setTimeEnd(extInfo.get("TIME_END"));
-        bizEvent.setLocation(extInfo.get("LOCATION"));
-        bizEvent.setModifiedTime(DateUtil.getCurrentFormattedDate());
-        bizEventInnerService.updateEvent(bizEvent);
+        AppEvent appEvent = new AppEvent();
+        appEvent.setId(extInfo.get("EVENT_ID"));
+        appEvent.setOrgId(orgId);
+        appEvent.setTitle(extInfo.get("TITLE"));
+        appEvent.setCategory(extInfo.get("CATEGORY"));
+        appEvent.setDescription(extInfo.get("DESCRIPTION"));
+        appEvent.setImageUrl(fileName);
+        appEvent.setDateStart(extInfo.get("DATE_START"));
+        appEvent.setDateEnd(extInfo.get("DATE_END"));
+        appEvent.setTimeStart(extInfo.get("TIME_START"));
+        appEvent.setTimeEnd(extInfo.get("TIME_END"));
+        appEvent.setLocation(extInfo.get("LOCATION"));
+        appEvent.setModifiedTime(DateUtil.getCurrentFormattedDate());
+        appEventService.updateEvent(appEvent);
     }
 
     public void eventFlagSwitch(String orgId, String eventId, String section, int value) {
-        bizEventInnerService.adminNewsFlagSwitch(orgId, eventId, section, value);
+        appEventService.adminNewsFlagSwitch(orgId, eventId, section, value);
     }
 
     public PageResult<VideoCard> getVideoCards(String orgId, int pageNumber, int pageSize, String sortBy, String sort) {

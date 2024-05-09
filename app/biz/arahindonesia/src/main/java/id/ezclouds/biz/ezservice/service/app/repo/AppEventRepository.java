@@ -19,5 +19,7 @@ public interface AppEventRepository extends JpaRepository<AppEventDO, String> {
 
     Page<AppEventDO> findByOrgId(String orgId, Pageable pageable);
 
+    Page<AppEventDO> findByOrgIdAndStatus(String orgId, int status, Pageable pageable);
+
     AppEventDO findByIdAndOrgId(String id, String orgId);
 }

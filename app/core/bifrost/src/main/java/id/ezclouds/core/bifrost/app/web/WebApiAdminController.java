@@ -10,7 +10,7 @@ import id.ezclouds.biz.ezservice.enums.BizProfileSection;
 import id.ezclouds.biz.ezservice.enums.BizSwitchFlagObject;
 import id.ezclouds.biz.ezservice.model.VideoCard;
 import id.ezclouds.biz.ezservice.model.admin.*;
-import id.ezclouds.biz.ezservice.model.event.BizEvent;
+import id.ezclouds.biz.ezservice.model.event.AppEvent;
 import id.ezclouds.biz.ezservice.model.news.BizWebDetailNews;
 import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
 import id.ezclouds.biz.ezservice.model.profile.BizCandidateProfile;
@@ -266,12 +266,12 @@ public class WebApiAdminController {
     }
 
     @PostMapping(value = "/webapp/api/events.json")
-    private WebApiPageResult<BizEvent> events(
+    private WebApiPageResult<AppEvent> events(
             @RequestParam(name = "sessionId", required = false) String sessionId,
             @RequestParam(name = "pageNumber", required = false) int pageNumber,
             @RequestParam(name = "pageSize", required = false) int pageSize ) {
-        final WebApiPageResult<BizEvent> result = new WebApiPageResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_EVENT_GET, result, new WebApiControllerTemplate.PageHandler<BizEvent>() {
+        final WebApiPageResult<AppEvent> result = new WebApiPageResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_EVENT_GET, result, new WebApiControllerTemplate.PageHandler<AppEvent>() {
             @Override
             public BizResult onProcess() throws Exception {
                 BizWebPageRequest request = new BizWebPageRequest();
@@ -282,9 +282,9 @@ public class WebApiAdminController {
             }
 
             @Override
-            public PageResult<BizEvent> convertResult(Object object) {
+            public PageResult<AppEvent> convertResult(Object object) {
                 if (object instanceof PageResult) {
-                    return (PageResult<BizEvent>) object;
+                    return (PageResult<AppEvent>) object;
                 }
                 return null;
             }
@@ -298,11 +298,11 @@ public class WebApiAdminController {
     }
 
     @PostMapping(value = "/webapp/api/eventDetail.json")
-    private WebApiResult<BizEvent> eventDetail(
+    private WebApiResult<AppEvent> eventDetail(
             @RequestParam(name = "sessionId", required = false) String sessionId,
             @RequestParam(name = "eventId", required = false) String eventId ) {
-        final WebApiResult<BizEvent> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_EVENT_DETAIL, result, new WebApiControllerTemplate.Handler<BizEvent>() {
+        final WebApiResult<AppEvent> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_EVENT_DETAIL, result, new WebApiControllerTemplate.Handler<AppEvent>() {
             @Override
             public BizResult onProcess() throws Exception {
                 BizWebDetailRequest<String> request = new BizWebDetailRequest<>();
@@ -312,9 +312,9 @@ public class WebApiAdminController {
             }
 
             @Override
-            public BizEvent convertResult(Object object) {
-                if (object instanceof BizEvent) {
-                    return (BizEvent) object;
+            public AppEvent convertResult(Object object) {
+                if (object instanceof AppEvent) {
+                    return (AppEvent) object;
                 }
                 return null;
             }
