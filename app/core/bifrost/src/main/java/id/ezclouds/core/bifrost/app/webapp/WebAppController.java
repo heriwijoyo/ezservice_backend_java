@@ -35,6 +35,11 @@ public class WebAppController {
         renderWebApp(WebAppPage.PROFILE, servletResponse);
     }
 
+    @GetMapping(value = "/assets/go.htm")
+    private void assetGo(HttpServletResponse servletResponse) {
+        writePageNotFound(servletResponse);
+    }
+
     private void renderWebApp(WebAppPage webAppPage, HttpServletResponse servletResponse) {
         try {
             String layoutContent = readHtmlContent(ASSET_INCLUDE_LAYOUT);
