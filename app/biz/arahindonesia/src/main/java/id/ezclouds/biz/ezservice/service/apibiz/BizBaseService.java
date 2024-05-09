@@ -42,10 +42,6 @@ public class BizBaseService {
         return EzAppContextHolder.getContext().getAppId();
     }
 
-    public String getMemberSessionId() {
-        return EzAppContextHolder.getContext().getMemberSessionId();
-    }
-
     protected CoreAuthMemberSessionInfo authAppMemberSession() throws Exception {
         String sessionId = EzAppContextHolder.getContext().getMemberSessionId();
         AssertUtil.notBlank(sessionId, EzErrorCode.SESSION_INVALID);

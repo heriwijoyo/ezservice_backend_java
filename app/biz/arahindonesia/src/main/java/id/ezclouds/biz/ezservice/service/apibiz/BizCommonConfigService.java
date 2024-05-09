@@ -7,8 +7,10 @@ package id.ezclouds.biz.ezservice.service.apibiz;
 import id.ezclouds.biz.ezservice.config.BizPublicUrlResolver;
 import id.ezclouds.biz.ezservice.config.BizPublicUrlResolverImpl;
 import id.ezclouds.biz.ezservice.constant.AppConstant;
+import id.ezclouds.biz.ezservice.converter.BizMemberConverter;
 import id.ezclouds.biz.ezservice.model.*;
 import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
+import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
 import id.ezclouds.biz.ezservice.service.app.*;
 import id.ezclouds.biz.ezservice.service.app.model.AppImageGallery;
@@ -16,6 +18,9 @@ import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
+import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
+import id.ezclouds.core.member.model.CoreMember;
+import id.ezclouds.core.member.service.CoreMemberService;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,7 +49,7 @@ public class BizCommonConfigService extends BizBaseService {
     private VideoCardService videoCardService;
 
     @Autowired
-    private BizCandidateProfileService bizCandidateProfileService;
+    private CoreMemberService coreMemberService;
 
     private BizPublicUrlResolver publicOrgResolver;
 
@@ -56,11 +61,22 @@ public class BizCommonConfigService extends BizBaseService {
             public void onRequestCheck() throws EzErrorException {}
 
             @Override
-            public void onBizProcess() throws EzErrorException {
+            public void onBizProcess() throws Exception {
                 AppSetting appSetting = new AppSetting();
                 appSetting.setAppConfig(appConfigService.getAppConfig(getOrgId()));
                 appSetting.setAppConfigMap(appConfigService.getAppConfigMap(getOrgId()));
                 appSetting.setHomeData(composeHomeData(getOrgId()));
+
+                try {
+                    CoreAuthMemberSessionInfo session = authAppMemberSession();
+                    CoreMember coreMember = coreMemberService
+                            .getOptimisticCoreMember(session.getMemberId());
+                    BizMember bizMember = BizMemberConverter.convert(coreMember, null);
+                    BizAnnotationProcessor.annotatePublicConfig(bizMember, resolvePublicUrl(getOrgCode(), session.getMemberId()));
+
+                    appSetting.getHomeData().setMemberAvatarUrl(bizMember.getAvatarUrl());
+                } catch (Exception e) {}
+
                 bizResult.setSuccess(true);
                 bizResult.setObject(appSetting);
             }
@@ -91,7 +107,7 @@ public class BizCommonConfigService extends BizBaseService {
 
     private HomeData composeHomeData(String orgId) {
         HomeData homeData = new HomeData();
-        homeData.setPemiluDeadline("2024-02-14 00:00:00");
+        //homeData.setPemiluDeadline("2024-10-14 00:00:00");
         homeData.setHighlightBanners(fetchHomeSlideGallery(orgId));
         homeData.setHighlightNews(fetchSimpleNews(orgId));
         homeData.setHomePosters(new ArrayList<>());

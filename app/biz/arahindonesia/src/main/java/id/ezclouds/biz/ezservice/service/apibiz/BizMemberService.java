@@ -26,7 +26,6 @@ import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.biz.ezservice.util.BizExtendInfoUtil;
 import id.ezclouds.common.util.DateUtil;
-import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
@@ -36,7 +35,6 @@ import id.ezclouds.core.member.constant.CoreMemberField;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
 import id.ezclouds.core.member.service.CoreMemberService;
-import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.file.PrivateFileResolver;
 import id.ezclouds.core.shared.file.PublicFileResolver;
 import id.ezclouds.core.shared.service.CoreFileService;
@@ -76,23 +74,13 @@ public class BizMemberService extends BizBaseService {
 
     public BizResult getMemberProfile() {
         final BizResult bizResult = new BizResult();
-
-        if (StringUtil.isBlank(EzAppContextHolder.getContext().getMemberSessionId())) {
-            bizResult.setErrorCode(EzErrorCode.SESSION_INVALID);
-            return bizResult;
-        }
-
-        String sessionId = EzAppContextHolder.getContext().getMemberSessionId();
-        String orgId = EzAppContextHolder.getContext().getOrgId();
-        int appVersionNo = EzAppContextHolder.getContext().getAppVersionNo();
-
         BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
             @Override
             public void onRequestCheck() throws EzErrorException {}
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthMemberSessionInfo sessionInfo = coreAuthService.authMemberSession(sessionId);
+                CoreAuthMemberSessionInfo sessionInfo = authAppMemberSession();
 
                 CoreMember coreMember = coreMemberService.getOptimisticCoreMember(sessionInfo.getMemberId());
                 CoreMemberExtension coreMemberExtension = coreMemberService.getOptimisticCoreMemberExtension(sessionInfo.getMemberId());
@@ -102,13 +90,8 @@ public class BizMemberService extends BizBaseService {
                 BizAnnotationProcessor.annotatePublicConfig(bizMember, publicConfig);
 
                 MemberProfile memberProfile = new MemberProfile();
-                memberProfile.setAppProfiles(appProfileService.getAppProfile(orgId));
+                memberProfile.setAppProfiles(appProfileService.getAppProfile(getOrgId()));
                 memberProfile.setBizMember(bizMember);
-
-                //support older client version
-                if (appVersionNo < AppConstant.APP_V2_START_VERSION_NO) {
-                    memberProfile.setMemberBase(BizMemberConverter.convert(coreMember));
-                }
 
                 bizResult.setSuccess(true);
                 bizResult.setObject(memberProfile);
