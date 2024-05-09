@@ -16,17 +16,8 @@ import java.util.Map;
  */
 public class AppSetting {
 
-    private AppConfig appConfig;
     private Map<String, String> appConfigMap = new HashMap<>();
     private HomeData homeData;
-
-    public AppConfig getAppConfig() {
-        return appConfig;
-    }
-
-    public void setAppConfig(AppConfig appConfig) {
-        this.appConfig = appConfig;
-    }
 
     public Map<String, String> getAppConfigMap() {
         return appConfigMap;
