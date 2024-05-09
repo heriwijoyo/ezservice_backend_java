@@ -183,6 +183,16 @@ public class BizRequestConverter<T extends BizRequest> {
         return null;
     }
 
+    public static BizDetailRequest getBizDetailRequest(ApiRequest apiRequest) {
+        if (apiRequest instanceof ApiDetailRequest) {
+            BizDetailRequest bizDetailRequest = new BizDetailRequest();
+            bizDetailRequest.setDetailId(((ApiDetailRequest) apiRequest).getDetailId());
+            bizDetailRequest.setRequestId(apiRequest.getExtendInfo().get("REQUEST_ID"));
+            return bizDetailRequest;
+        }
+        return null;
+    }
+
     interface Handler<T extends BizRequest> {
         T convert(ApiRequest apiRequest);
     }

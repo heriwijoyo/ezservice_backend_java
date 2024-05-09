@@ -87,6 +87,9 @@ public class ApiBizProcessor implements BizProcessor {
             case API_MESSAGE_MEMBER:
                 return bizAppMessageService.getAppMessageMember(BizRequestConverter.getBizPageRequest(apiRequest));
 
+            case API_MESSAGE_MEMBER_DETAIL:
+                return bizAppMessageService.detailAppMessageMember(BizRequestConverter.getBizDetailRequest(apiRequest));
+
             case API_MEMBER_PROFILE:
                 return bizMemberService.getMemberProfile();
 

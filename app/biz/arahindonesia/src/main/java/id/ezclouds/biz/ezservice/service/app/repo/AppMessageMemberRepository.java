@@ -18,4 +18,6 @@ import org.springframework.stereotype.Repository;
 public interface AppMessageMemberRepository extends JpaRepository<AppMessageMemberDO, String> {
 
     Page<AppMessageMemberDO> findByOrgIdAndMemberId(String orgId, String memberId, Pageable pageable);
+
+    AppMessageMemberDO findByIdAndOrgId(String id, String orgId);
 }

@@ -5,6 +5,7 @@
 package id.ezclouds.biz.ezservice.service.app.converter;
 
 import id.ezclouds.biz.ezservice.model.app.AppMessage;
+import id.ezclouds.biz.ezservice.model.app.SimpleAppMessage;
 import id.ezclouds.biz.ezservice.model.survey.QuestionForm;
 import id.ezclouds.biz.ezservice.model.survey.ResponderForm;
 import id.ezclouds.biz.ezservice.service.app.dataobject.AppMessageMemberDO;
@@ -45,6 +46,17 @@ public class AppModelConverter {
         questionForm.setOtherRequiredCondition(questionDO.getOtherRequiredCondition());
         questionForm.setOtherHint(questionDO.getOtherHint());
         return questionForm;
+    }
+
+    public static SimpleAppMessage convertSimple(AppMessageMemberDO messageMemberDO) {
+        if (messageMemberDO == null) { return null; }
+        SimpleAppMessage appMessage = new SimpleAppMessage();
+        appMessage.setId(messageMemberDO.getId());
+        appMessage.setType(messageMemberDO.getType());
+        appMessage.setTitle(messageMemberDO.getTitle());
+        appMessage.setDescription(messageMemberDO.getDescription());
+        appMessage.setHasRead(toBool(messageMemberDO.getHasRead()));
+        return appMessage;
     }
 
     public static AppMessage convert(AppMessageMemberDO messageMemberDO) {

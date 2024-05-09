@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.ezservice.model.AppSetting;
 import id.ezclouds.biz.ezservice.model.admin.BizAdminSession;
 import id.ezclouds.biz.ezservice.model.app.AppMessage;
+import id.ezclouds.biz.ezservice.model.app.SimpleAppMessage;
 import id.ezclouds.biz.ezservice.model.authentication.BizMemberCommonSession;
 import id.ezclouds.biz.ezservice.model.member.BizMemberRegisterResult;
 import id.ezclouds.biz.ezservice.model.news.BizNewsDetail;
@@ -158,16 +159,33 @@ public class ApiController extends AppController {
     }
 
     @PostMapping(value = "/api/messageMember.json")
-    private ApiPageResult<AppMessage> messageMember(@RequestBody ApiPageRequest request) {
-        return executePageInTemplate(ApiEvent.API_MESSAGE_MEMBER, request, new RequestHandler<AppMessage>() {
+    private ApiPageResult<SimpleAppMessage> messageMember(@RequestBody ApiPageRequest request) {
+        return executePageInTemplate(ApiEvent.API_MESSAGE_MEMBER, request, new RequestHandler<SimpleAppMessage>() {
             @Override
-            public AppMessage convertResult(Object resultObject) {
+            public SimpleAppMessage convertResult(Object resultObject) {
                 return null;
             }
 
             @Override
-            public DigestLog composeDigestLog(ApiRequest request, ApiResult<AppMessage> result) {
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<SimpleAppMessage> result) {
                 return new SimpleDigestLog(result.isSuccess(), result.getResultCode());
+            }
+        });
+    }
+
+    @PostMapping(value = "/api/messageMemberDetail.json")
+    private ApiResult<AppMessage> messageMemberDetail(@RequestBody ApiDetailRequest request) {
+        return executeInTemplate(ApiEvent.API_MESSAGE_MEMBER_DETAIL, request, new RequestHandler<AppMessage>() {
+            @Override
+            public AppMessage convertResult(Object resultObject) {
+                return (AppMessage) resultObject;
+            }
+
+            @Override
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<AppMessage> result) {
+                EmptyDigestLog digestLog = new EmptyDigestLog(result.isSuccess(), result.getResultCode());
+                digestLog.composeDigest(request, toEmptyResult(result));
+                return digestLog;
             }
         });
     }

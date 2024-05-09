@@ -5,8 +5,11 @@
 package id.ezclouds.biz.ezservice.service.apibiz;
 
 import id.ezclouds.biz.ezservice.model.app.AppMessage;
+import id.ezclouds.biz.ezservice.model.app.SimpleAppMessage;
 import id.ezclouds.biz.ezservice.service.app.AppMessageService;
+import id.ezclouds.biz.ezservice.service.request.BizDetailRequest;
 import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
+import id.ezclouds.biz.ezservice.service.request.BizRequest;
 import id.ezclouds.biz.ezservice.service.result.BizPageInfo;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
@@ -38,11 +41,36 @@ public class BizAppMessageService extends BizBaseService {
             @Override
             public void onBizProcess() throws Exception {
                 CoreAuthMemberSessionInfo session = authAppMemberSession();
-                BizPageInfo<AppMessage> appMessages = appMessageService
+                BizPageInfo<SimpleAppMessage> appMessages = appMessageService
                         .getAppMessage(getOrgId(), session.getMemberId(), request);
 
                 bizResult.setSuccess(true);
                 bizResult.setBizPageInfo(appMessages);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
+    public BizResult detailAppMessageMember(BizDetailRequest request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(request, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                authAppMemberSession();
+                AppMessage appMessage = appMessageService
+                        .getAppMessage(getOrgId(), request.getDetailId());
+                bizResult.setSuccess(true);
+                bizResult.setObject(appMessage);
             }
 
             @Override
