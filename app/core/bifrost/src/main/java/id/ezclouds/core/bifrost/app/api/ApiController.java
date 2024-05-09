@@ -404,10 +404,7 @@ public class ApiController extends AppController {
         return executeInTemplate(ApiEvent.API_SURVEY_SUBMIT, request, new RequestHandler<String>() {
             @Override
             public String convertResult(Object resultObject) {
-                if (resultObject instanceof String) {
-                    return (String) resultObject;
-                }
-                return null;
+                return (String) resultObject;
             }
 
             @Override

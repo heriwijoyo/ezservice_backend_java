@@ -69,7 +69,7 @@ public class BizAppSurveyService extends BizBaseService {
             public void onRequestCheck() throws EzErrorException {
                 AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
                 AssertUtil.notBlank(request.getRequestId(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.isTrue(request.getRequestId().length() <= 32, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.isTrue(request.getRequestId().length() <= 52, EzErrorCode.ILLEGAL_PARAM);
                 AssertUtil.notBlank(request.getSurveyId(), EzErrorCode.ILLEGAL_PARAM);
                 AssertUtil.notBlank(request.getQuestionVersion(), EzErrorCode.ILLEGAL_PARAM);
                 AssertUtil.notBlank(request.getResponderDataEncoded(), EzErrorCode.ILLEGAL_PARAM);
@@ -85,6 +85,7 @@ public class BizAppSurveyService extends BizBaseService {
 
                 if (uniqueResult.isSuccess()) {
                     AppSurveyResponseRequest surveyRequest = new AppSurveyResponseRequest();
+                    surveyRequest.setRequestId(request.getRequestId());
                     surveyRequest.setOrgId(getOrgId());
                     surveyRequest.setSurveyId(request.getSurveyId());
                     surveyRequest.setSubmitterMemberId(sessionInfo.getMemberId());
@@ -93,8 +94,9 @@ public class BizAppSurveyService extends BizBaseService {
                     surveyRequest.setResponseDataEncoded(request.getResponseDataEncoded());
 
                     try {
-                        appSurveyDataService.submitSurvey(surveyRequest);
+                        String submitId = appSurveyDataService.submitSurvey(surveyRequest);
                         bizResult.setSuccess(true);
+                        bizResult.setObject(submitId);
                     } catch (Exception e) {
                         coreUniqueService.revertUnique(
                                 getOrgId(), BizUniqueScene.BIZ_SURVEY_RESPONSE.getCode(), request.getRequestId());
@@ -104,9 +106,14 @@ public class BizAppSurveyService extends BizBaseService {
                 } else {
                     if (uniqueResult.getErrorCode() == EzErrorCode.IDEMPOTENT_ERROR) {
                         bizResult.setSuccess(true);
+                        bizResult.setObject(appSurveyDataService.getSubmitIdByRequestId(request.getRequestId()));
                     } else {
                         throw new EzErrorException(EzErrorCode.SYSTEM_ERROR);
                     }
+                }
+
+                if (bizResult.isSuccess()) {
+                    appSurveyDataService.processResponseAsync((String)bizResult.getObject());
                 }
             }
 

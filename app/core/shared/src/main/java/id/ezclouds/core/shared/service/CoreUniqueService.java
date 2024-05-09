@@ -38,7 +38,7 @@ public class CoreUniqueService {
         coreUniqueDO.setCreatedTime(DateUtil.getCurrentFormattedDate());
 
         try {
-            coreUniqueRepository.save(coreUniqueDO);
+            coreUniqueRepository.saveAndFlush(coreUniqueDO);
             coreResult.setSuccess(true);
         } catch (DataIntegrityViolationException integrityException) {
             coreResult.setErrorCode(EzErrorCode.IDEMPOTENT_ERROR);
@@ -58,5 +58,6 @@ public class CoreUniqueService {
         coreUniqueDO.setScene(scene);
         coreUniqueDO.setUniqueValue(uniqueValue);
         coreUniqueRepository.delete(coreUniqueDO);
+        coreUniqueRepository.flush();
     }
 }

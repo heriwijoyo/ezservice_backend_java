@@ -4,6 +4,13 @@
  */
 package id.ezclouds.core.bifrost.app.api.request;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import id.ezclouds.core.bifrost.app.api.model.survey.QuestionnaireData;
+
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: SurveySubmitRequest.java, v 0.1 2024‐02‐18 1:41 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -11,7 +18,9 @@ package id.ezclouds.core.bifrost.app.api.request;
 public class SurveySubmitRequest extends ApiRequest {
 
     private String surveyId;
-    private String questionVersion;
+    private String questionnaireVersion;
+    private Map<String, Object> responderData;
+    private List<QuestionnaireData> responseData;
     private String responderDataEncoded;
     private String responseDataEncoded;
 
@@ -23,24 +32,44 @@ public class SurveySubmitRequest extends ApiRequest {
         this.surveyId = surveyId;
     }
 
-    public String getQuestionVersion() {
-        return questionVersion;
+    public String getQuestionnaireVersion() {
+        return questionnaireVersion;
     }
 
-    public void setQuestionVersion(String questionVersion) {
-        this.questionVersion = questionVersion;
+    public void setQuestionnaireVersion(String questionnaireVersion) {
+        this.questionnaireVersion = questionnaireVersion;
+    }
+
+    public Map<String, Object> getResponderData() {
+        return responderData;
+    }
+
+    public void setResponderData(Map<String, Object> responderData) {
+        this.responderData = responderData;
+    }
+
+    public List<QuestionnaireData> getResponseData() {
+        return responseData;
+    }
+
+    public void setResponseData(List<QuestionnaireData> responseData) {
+        this.responseData = responseData;
     }
 
     public String getResponderDataEncoded() {
-        return responderDataEncoded;
-    }
-
-    public void setResponderDataEncoded(String responderDataEncoded) {
-        this.responderDataEncoded = responderDataEncoded;
+        try {
+            return new ObjectMapper().writeValueAsString(getResponderData());
+        } catch (JsonProcessingException e) {
+            return null;
+        }
     }
 
     public String getResponseDataEncoded() {
-        return responseDataEncoded;
+        try {
+            return new ObjectMapper().writeValueAsString(getResponseData());
+        } catch (JsonProcessingException e) {
+            return null;
+        }
     }
 
     public void setResponseDataEncoded(String responseDataEncoded) {

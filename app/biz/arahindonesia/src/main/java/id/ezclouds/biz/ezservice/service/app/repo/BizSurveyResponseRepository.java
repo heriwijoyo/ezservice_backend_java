@@ -13,5 +13,7 @@ import org.springframework.stereotype.Repository;
  * @version $Id: BizSurveyResponseRepository.java, v 0.1 2024‐02‐18 1:30 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Repository
-public interface BizSurveyResponseRepository extends JpaRepository<BizSurveyResponseDO, Long> {
+public interface BizSurveyResponseRepository extends JpaRepository<BizSurveyResponseDO, String> {
+
+    BizSurveyResponseDO findByRequestId(String requestId);
 }

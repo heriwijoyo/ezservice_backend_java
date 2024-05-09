@@ -110,7 +110,7 @@ public class BizRequestConverter<T extends BizRequest> {
             BizSurveySubmitRequest bizRequest = new BizSurveySubmitRequest();
             bizRequest.setRequestId(request.getExtendInfo().get("REQUEST_ID"));
             bizRequest.setSurveyId(request.getSurveyId());
-            bizRequest.setQuestionVersion(request.getQuestionVersion());
+            bizRequest.setQuestionVersion(request.getQuestionnaireVersion());
             bizRequest.setResponderDataEncoded(request.getResponderDataEncoded());
             bizRequest.setResponseDataEncoded(request.getResponseDataEncoded());
             return bizRequest;

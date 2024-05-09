@@ -16,9 +16,14 @@ import id.ezclouds.biz.ezservice.service.app.dataobject.*;
 import id.ezclouds.biz.ezservice.service.app.repo.*;
 import id.ezclouds.biz.ezservice.service.app.request.AppSurveyResponseRequest;
 import id.ezclouds.common.util.DateUtil;
+import id.ezclouds.common.util.HashUtil;
+import id.ezclouds.common.util.StringUtil;
+import id.ezclouds.common.util.assertion.AssertUtil;
+import id.ezclouds.common.util.exception.EzErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -50,8 +55,10 @@ public class AppSurveyDataService {
     private BizSurveyResponseRepository bizSurveyResponseRepository;
 
     @Transactional
-    public void submitSurvey(AppSurveyResponseRequest request) {
+    public String submitSurvey(AppSurveyResponseRequest request) {
         BizSurveyResponseDO responseDO = new BizSurveyResponseDO();
+        responseDO.setId(HashUtil.createHash(request.getRequestId()));
+        responseDO.setRequestId(request.getRequestId());
         responseDO.setOrgId(request.getOrgId());
         responseDO.setSurveyId(request.getSurveyId());
         responseDO.setQuestionVersion(request.getQuestionVersion());
@@ -59,8 +66,29 @@ public class AppSurveyDataService {
         responseDO.setResponderData(request.getResponderDataEncoded());
         responseDO.setResponseData(request.getResponseDataEncoded());
         responseDO.setCreatedTime(DateUtil.getCurrentFormattedDate());
-
         bizSurveyResponseRepository.saveAndFlush(responseDO);
+
+        return responseDO.getId();
+    }
+
+    public String getSubmitIdByRequestId(String requestId) {
+        BizSurveyResponseDO responseDO = bizSurveyResponseRepository
+                .findByRequestId(requestId);
+        AssertUtil.notNull(responseDO, EzErrorCode.DATA_NOT_FOUND);
+        return responseDO.getId();
+    }
+
+    @Async
+    public void processResponseAsync(String responseId) {
+        if (StringUtil.isBlank(responseId)) {
+            return;
+        }
+
+        try {
+            Thread.sleep(10000);
+            System.out.println("ASYNC AFTER SLEEP 10s");
+        } catch (Exception e) {
+        }
     }
 
     public BizSurveyForm getBizSurveyForm(String surveyId) {

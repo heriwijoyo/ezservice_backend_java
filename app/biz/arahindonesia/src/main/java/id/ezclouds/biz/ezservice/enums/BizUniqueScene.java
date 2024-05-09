@@ -10,7 +10,7 @@ package id.ezclouds.biz.ezservice.enums;
  */
 public enum BizUniqueScene {
 
-    BIZ_SURVEY_RESPONSE("BIZ_SURVEY_RESPONSE"),
+    BIZ_SURVEY_RESPONSE("SURVEY0-"),
 
     ;
 

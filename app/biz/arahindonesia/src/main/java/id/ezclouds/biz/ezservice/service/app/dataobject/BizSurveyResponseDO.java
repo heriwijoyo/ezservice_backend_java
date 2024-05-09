@@ -15,9 +15,11 @@ import javax.persistence.*;
 public class BizSurveyResponseDO {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private String id;
+
+    @Column(name = "request_id")
+    private String requestId;
 
     @Column(name = "org_id")
     private String orgId;
@@ -40,12 +42,26 @@ public class BizSurveyResponseDO {
     @Column(name = "created_time")
     private String createdTime;
 
-    public Long getId() {
+    @Column(name = "process_id")
+    private String processId;
+
+    @Column(name = "process_time")
+    private String processTime;
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
+    }
+
+    public String getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
     }
 
     public String getOrgId() {
@@ -102,5 +118,21 @@ public class BizSurveyResponseDO {
 
     public void setCreatedTime(String createdTime) {
         this.createdTime = createdTime;
+    }
+
+    public String getProcessId() {
+        return processId;
+    }
+
+    public void setProcessId(String processId) {
+        this.processId = processId;
+    }
+
+    public String getProcessTime() {
+        return processTime;
+    }
+
+    public void setProcessTime(String processTime) {
+        this.processTime = processTime;
     }
 }

@@ -10,12 +10,21 @@ package id.ezclouds.biz.ezservice.service.app.request;
  */
 public class AppSurveyResponseRequest {
 
+    private String requestId;
     private String orgId;
     private String surveyId;
     private String submitterMemberId;
     private String questionVersion;
     private String responderDataEncoded;
     private String responseDataEncoded;
+
+    public String getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
+    }
 
     public String getOrgId() {
         return orgId;
