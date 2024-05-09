@@ -379,7 +379,7 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = "/api/member_upload.php", consumes = {MediaType.ALL_VALUE})
+    @PostMapping(value = "/api/memberUpload.json", consumes = {MediaType.ALL_VALUE})
     private ApiResult<String> memberUpload(@RequestPart("mediaFile") MultipartFile mediaFile, @RequestPart("postData") String postData) throws Exception {
 
         MemberUploadRequest request = convertPostData(postData);

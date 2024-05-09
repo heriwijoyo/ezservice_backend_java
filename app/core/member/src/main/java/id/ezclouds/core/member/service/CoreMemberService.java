@@ -167,6 +167,12 @@ public class CoreMemberService {
                     }
                     break;
 
+                case CoreMemberField.NICKNAME:
+                    if (coreMemberDO != null && StringUtil.isNotBlank(entry.getValue())) {
+                        coreMemberDO.setNickname(entry.getValue());
+                    }
+                    break;
+
                 case CoreMemberField.ID_CARD:
                     if (extensionDO != null && StringUtil.isNotBlank(entry.getValue())) {
                         extensionDO.setIdCardDocUrl(entry.getValue());
