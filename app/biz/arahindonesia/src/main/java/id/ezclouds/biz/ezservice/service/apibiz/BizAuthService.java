@@ -4,10 +4,12 @@
  */
 package id.ezclouds.biz.ezservice.service.apibiz;
 
+import id.ezclouds.biz.ezservice.config.BizPublicUrlResolver;
 import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.constant.BizConstant;
 import id.ezclouds.biz.ezservice.converter.BizMemberConverter;
 import id.ezclouds.biz.ezservice.converter.BizMessageTemplateConverter;
+import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
 import id.ezclouds.biz.ezservice.model.authentication.BizMemberCommonSession;
 import id.ezclouds.biz.ezservice.service.app.AppConfigService;
 import id.ezclouds.biz.ezservice.service.app.AppMemberFlagService;
@@ -132,6 +134,8 @@ public class BizAuthService extends BizBaseService {
                 coreAuthService.updateMemberSessionRoles(sessionInfo.getSessionId(), coreMember.getRoles());
 
                 BizMember bizMember = BizMemberConverter.convert(coreMember, coreMemberExtension);
+                BizPublicUrlResolver publicUrlResolver = getPublicOrgUrlResolver(getOrgCode(), coreMember.getMemberId());
+                BizAnnotationProcessor.annotatePublicConfig(bizMember, publicUrlResolver);
                 loginResult.setBizMember(bizMember);
 
                 if (Boolean.parseBoolean(orgExtendConfig.get(BizConstant.ExtKey.HAS_SUB_ORG))) {

@@ -48,6 +48,10 @@ public class BizBaseService {
         return new BizPublicUrlResolverImpl(appRootPublicUrl, orgCode);
     }
 
+    public BizPublicUrlResolver getPublicOrgUrlResolver(String orgCode, String memberId) {
+        return new BizPublicUrlResolverImpl(appRootPublicUrl, orgCode, memberId);
+    }
+
     protected CoreAuthMemberSessionInfo authAppMemberSession() throws Exception {
         String sessionId = EzAppContextHolder.getContext().getMemberSessionId();
         AssertUtil.notBlank(sessionId, EzErrorCode.SESSION_INVALID);
