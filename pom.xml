@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<packaging>pom</packaging>
 	<modules>
-		<module>app/biz/arahindonesia</module>
+		<module>app/biz/ezservice</module>
 		<module>app/core/bifrost</module>
 		<module>app/core/member</module>
 		<module>app/core/shared</module>
