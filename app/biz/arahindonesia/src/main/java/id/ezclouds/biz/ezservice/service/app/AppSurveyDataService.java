@@ -13,7 +13,10 @@ import id.ezclouds.biz.ezservice.service.app.comparator.QuestionComparator;
 import id.ezclouds.biz.ezservice.service.app.comparator.ResponderComparator;
 import id.ezclouds.biz.ezservice.service.app.converter.AppModelConverter;
 import id.ezclouds.biz.ezservice.service.app.dataobject.*;
+import id.ezclouds.biz.ezservice.service.app.model.AppAsyncScene;
+import id.ezclouds.biz.ezservice.service.app.processor.request.AppSurveyResponseProcessRequest;
 import id.ezclouds.biz.ezservice.service.app.repo.*;
+import id.ezclouds.biz.ezservice.service.app.request.AppAsyncRequest;
 import id.ezclouds.biz.ezservice.service.app.request.AppSurveyResponseRequest;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
@@ -54,6 +57,12 @@ public class AppSurveyDataService {
     @Autowired
     private BizSurveyResponseRepository bizSurveyResponseRepository;
 
+    @Autowired
+    private AppSurveyProcessorConfigRepository appSurveyProcessorConfigRepository;
+
+    @Autowired
+    private AppAsyncService appAsyncService;
+
     @Transactional
     public String submitSurvey(AppSurveyResponseRequest request) {
         BizSurveyResponseDO responseDO = new BizSurveyResponseDO();
@@ -84,11 +93,30 @@ public class AppSurveyDataService {
             return;
         }
 
-        try {
-            Thread.sleep(10000);
-            System.out.println("ASYNC AFTER SLEEP 10s");
-        } catch (Exception e) {
+        BizSurveyResponseDO responseDO = bizSurveyResponseRepository
+                .findById(responseId)
+                .orElse(null);
+        if (responseDO == null) {
+            return;
         }
+
+        AppSurveyProcessorConfigDO processorConfigDO = appSurveyProcessorConfigRepository
+                .findByOrgIdAndSurveyIdAndQuestionVersion(
+                        responseDO.getOrgId(),
+                        responseDO.getSurveyId(),
+                        responseDO.getQuestionVersion()
+                );
+        if (processorConfigDO == null || processorConfigDO.getStatus() < 1) {
+            return;
+        }
+
+        AppAsyncScene appAsyncScene = AppAsyncScene.getByCode(processorConfigDO.getParserCode());
+        AppSurveyResponseProcessRequest processRequest = new AppSurveyResponseProcessRequest();
+        AppAsyncRequest request = new AppAsyncRequest();
+        request.setAppAsyncScene(appAsyncScene);
+        request.setData(processRequest);
+
+        appAsyncService.process(request);
     }
 
     public BizSurveyForm getBizSurveyForm(String surveyId) {
