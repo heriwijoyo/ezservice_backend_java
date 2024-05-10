@@ -116,7 +116,12 @@ public class AppSurveyDataService {
         }
 
         AppSurveyResponseProcessRequest processRequest = new AppSurveyResponseProcessRequest();
+        processRequest.setResponseId(responseDO.getId());
+        processRequest.setOrgId(responseDO.getOrgId());
+        processRequest.setSubmitterId(responseDO.getSubmitterMemberId());
+        processRequest.setQuestionVersion(responseDO.getQuestionVersion());
         processRequest.setParserCode(processorConfigDO.getParserCode());
+        processRequest.setParserMap(processorConfigDO.getParserMapping());
 
         try {
             Map<String, Object> responderData = new ObjectMapper()

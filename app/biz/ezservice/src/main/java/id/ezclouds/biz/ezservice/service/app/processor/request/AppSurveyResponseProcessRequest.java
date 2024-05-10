@@ -17,9 +17,46 @@ import java.util.Map;
  */
 public class AppSurveyResponseProcessRequest {
 
+    private String responseId;
+    private String orgId;
+    private String submitterId;
+    private String questionVersion;
     private String parserCode;
+    private String parserMap;
     private Map<String, Object> responderData;
     private List<QuestionnaireData> responseData;
+
+    public String getResponseId() {
+        return responseId;
+    }
+
+    public void setResponseId(String responseId) {
+        this.responseId = responseId;
+    }
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
+
+    public String getSubmitterId() {
+        return submitterId;
+    }
+
+    public void setSubmitterId(String submitterId) {
+        this.submitterId = submitterId;
+    }
+
+    public String getQuestionVersion() {
+        return questionVersion;
+    }
+
+    public void setQuestionVersion(String questionVersion) {
+        this.questionVersion = questionVersion;
+    }
 
     public String getParserCode() {
         return parserCode;
@@ -27,6 +64,14 @@ public class AppSurveyResponseProcessRequest {
 
     public void setParserCode(String parserCode) {
         this.parserCode = parserCode;
+    }
+
+    public String getParserMap() {
+        return parserMap;
+    }
+
+    public void setParserMap(String parserMap) {
+        this.parserMap = parserMap;
     }
 
     public Map<String, Object> getResponderData() {
