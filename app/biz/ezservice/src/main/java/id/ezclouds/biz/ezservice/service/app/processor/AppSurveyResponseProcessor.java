@@ -5,6 +5,7 @@
 package id.ezclouds.biz.ezservice.service.app.processor;
 
 import id.ezclouds.biz.ezservice.service.app.processor.request.AppSurveyResponseProcessRequest;
+import id.ezclouds.biz.ezservice.service.app.processor.result.ProcessResult;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,7 +15,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class AppSurveyResponseProcessor {
 
-    public void process(AppSurveyResponseProcessRequest request) {
+    public ProcessResult process(AppSurveyResponseProcessRequest request) {
+        final ProcessResult result = new ProcessResult();
 
+        System.out.println("--- Start Process SURVEY_RESPONSE ---");
+        if (request == null) {
+
+        }
+
+        return result;
     }
 }

@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.core.bifrost.app.api.model.survey;
+package id.ezclouds.biz.ezservice.model.survey;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public class QuestionnaireData {
 
     private String questionId;
     private String title;
-    private List<SelectionOption> selectedOptions;
+    private List<AnswerOption> selectedOptions;
     private String other;
 
     public String getQuestionId() {
@@ -33,11 +33,11 @@ public class QuestionnaireData {
         this.title = title;
     }
 
-    public List<SelectionOption> getSelectedOptions() {
+    public List<AnswerOption> getSelectedOptions() {
         return selectedOptions;
     }
 
-    public void setSelectedOptions(List<SelectionOption> selectedOptions) {
+    public void setSelectedOptions(List<AnswerOption> selectedOptions) {
         this.selectedOptions = selectedOptions;
     }
 

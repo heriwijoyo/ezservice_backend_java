@@ -68,6 +68,9 @@ public class ApiBizProcessor implements BizProcessor {
     @Autowired
     private BizSubOrganizationService bizSubOrganizationService;
 
+    @Autowired
+    private BizAsyncService bizAsyncService;
+
     @Override
     public BizResult process(ApiEvent apiEvent, ApiRequest apiRequest, MultipartFile file) throws EzErrorException {
 
@@ -150,6 +153,10 @@ public class ApiBizProcessor implements BizProcessor {
 
             case API_GET_MEMBER:
                 return bizMemberService.getMembers(BizRequestConverter.getBizPageRequest(apiRequest));
+
+            case API_ASYNC_PROCESS_TRIGGER:
+                return bizAsyncService.triggerAsync(BizRequestConverter.getBizAsyncTriggerRequest(apiRequest));
+
 
 
 

@@ -6,7 +6,7 @@ package id.ezclouds.core.bifrost.app.api.request;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import id.ezclouds.core.bifrost.app.api.model.survey.QuestionnaireData;
+import id.ezclouds.biz.ezservice.model.survey.QuestionnaireData;
 
 import java.util.List;
 import java.util.Map;
@@ -21,8 +21,6 @@ public class SurveySubmitRequest extends ApiRequest {
     private String questionnaireVersion;
     private Map<String, Object> responderData;
     private List<QuestionnaireData> responseData;
-    private String responderDataEncoded;
-    private String responseDataEncoded;
 
     public String getSurveyId() {
         return surveyId;
@@ -70,9 +68,5 @@ public class SurveySubmitRequest extends ApiRequest {
         } catch (JsonProcessingException e) {
             return null;
         }
-    }
-
-    public void setResponseDataEncoded(String responseDataEncoded) {
-        this.responseDataEncoded = responseDataEncoded;
     }
 }

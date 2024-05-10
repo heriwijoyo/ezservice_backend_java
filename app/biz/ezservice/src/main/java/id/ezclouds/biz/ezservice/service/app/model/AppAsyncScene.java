@@ -10,22 +10,12 @@ package id.ezclouds.biz.ezservice.service.app.model;
  */
 public enum AppAsyncScene {
 
-    RJL_COMMON_SURVEY("RJL_COMMON_SURVEY"),
-    UNKNOWN("UNKNOWN")
+    RJL_COMMON_SURVEY_PROCESS("RJL_COMMON_SURVEY_PROCESS"),
     ;
 
     private final String code;
 
     AppAsyncScene(String code) {
         this.code = code;
-    }
-
-    public static AppAsyncScene getByCode(String code) {
-        for (AppAsyncScene scene : values()) {
-            if (scene.code.equals(code)) {
-                return scene;
-            }
-        }
-        return UNKNOWN;
     }
 }

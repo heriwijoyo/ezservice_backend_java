@@ -4,10 +4,9 @@
  */
 package id.ezclouds.biz.ezservice.service.app;
 
-import id.ezclouds.biz.ezservice.model.survey.AnswerOption;
-import id.ezclouds.biz.ezservice.model.survey.BizSurveyForm;
-import id.ezclouds.biz.ezservice.model.survey.QuestionForm;
-import id.ezclouds.biz.ezservice.model.survey.ResponderForm;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import id.ezclouds.biz.ezservice.model.survey.*;
 import id.ezclouds.biz.ezservice.service.app.comparator.AnswerOptionComparator;
 import id.ezclouds.biz.ezservice.service.app.comparator.QuestionComparator;
 import id.ezclouds.biz.ezservice.service.app.comparator.ResponderComparator;
@@ -15,6 +14,7 @@ import id.ezclouds.biz.ezservice.service.app.converter.AppModelConverter;
 import id.ezclouds.biz.ezservice.service.app.dataobject.*;
 import id.ezclouds.biz.ezservice.service.app.model.AppAsyncScene;
 import id.ezclouds.biz.ezservice.service.app.processor.request.AppSurveyResponseProcessRequest;
+import id.ezclouds.biz.ezservice.service.app.processor.result.ProcessResult;
 import id.ezclouds.biz.ezservice.service.app.repo.*;
 import id.ezclouds.biz.ezservice.service.app.request.AppAsyncRequest;
 import id.ezclouds.biz.ezservice.service.app.request.AppSurveyResponseRequest;
@@ -97,6 +97,11 @@ public class AppSurveyDataService {
                 .findById(responseId)
                 .orElse(null);
         if (responseDO == null) {
+            System.out.println("BizSurveyResponseDO is NULL");
+            return;
+        }
+        if (StringUtil.isNotBlank(responseDO.getProcessId()) && StringUtil.isNotBlank(responseDO.getProcessTime())) {
+            System.out.println("BizSurveyResponseDO.processId or processTime is BLANK");
             return;
         }
 
@@ -110,13 +115,40 @@ public class AppSurveyDataService {
             return;
         }
 
-        AppAsyncScene appAsyncScene = AppAsyncScene.getByCode(processorConfigDO.getParserCode());
         AppSurveyResponseProcessRequest processRequest = new AppSurveyResponseProcessRequest();
+        processRequest.setParserCode(processorConfigDO.getParserCode());
+
+        try {
+            Map<String, Object> responderData = new ObjectMapper()
+                    .readValue(responseDO.getResponderData(), new TypeReference<Map<String, Object>>(){});
+            processRequest.setResponderData(responderData);
+        } catch (Exception e) {
+            System.out.println("Failed to parse RESPONDER DATA");
+        }
+
+        try {
+            List<QuestionnaireData> responseData = new ObjectMapper()
+                    .readValue(responseDO.getResponseData(), new TypeReference<List<QuestionnaireData>>(){});
+            processRequest.setResponseData(responseData);
+        } catch (Exception e) {
+            System.out.println("Failed to parse RESPONSE DATA");
+        }
+
         AppAsyncRequest request = new AppAsyncRequest();
-        request.setAppAsyncScene(appAsyncScene);
+        request.setAppAsyncScene(AppAsyncScene.RJL_COMMON_SURVEY_PROCESS);
         request.setData(processRequest);
 
-        appAsyncService.process(request);
+        ProcessResult result = appAsyncService.process(request);
+        if (result.isSuccess()) {
+            responseDO.setProcessId(result.getProcessId());
+            responseDO.setProcessTime(result.getProcessTime());
+            updateResponseData(responseDO);
+        }
+    }
+
+    @Transactional
+    public void updateResponseData(BizSurveyResponseDO responseDO) {
+        bizSurveyResponseRepository.saveAndFlush(responseDO);
     }
 
     public BizSurveyForm getBizSurveyForm(String surveyId) {

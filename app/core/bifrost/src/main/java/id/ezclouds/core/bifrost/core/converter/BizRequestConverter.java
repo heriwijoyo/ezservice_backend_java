@@ -193,6 +193,17 @@ public class BizRequestConverter<T extends BizRequest> {
         return null;
     }
 
+    public static BizAsyncTriggerRequest getBizAsyncTriggerRequest(ApiRequest apiRequest) {
+        if (apiRequest instanceof AsyncTriggerRequest) {
+            AsyncTriggerRequest request = (AsyncTriggerRequest) apiRequest;
+            BizAsyncTriggerRequest bizRequest = new BizAsyncTriggerRequest();
+            bizRequest.setScene(request.getScene());
+            bizRequest.setTargetId(request.getTargetId());
+            return bizRequest;
+        }
+        return null;
+    }
+
     interface Handler<T extends BizRequest> {
         T convert(ApiRequest apiRequest);
     }
