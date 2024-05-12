@@ -20,10 +20,12 @@ public class AppSurveyBaseData {
     @Id
     @Column(name = "id")
     private String id;
-    @Column(name = "response_id")
-    private String responseId;
     @Column(name = "org_id")
     private String orgId;
+    @Column(name = "survey_id")
+    private String surveyId;
+    @Column(name = "response_id")
+    private String responseId;
     @Column(name = "submitter_id")
     private String submitterId;
     @Column(name = "question_version")
@@ -100,6 +102,14 @@ public class AppSurveyBaseData {
 
     public void setOrgId(String orgId) {
         this.orgId = orgId;
+    }
+
+    public String getSurveyId() {
+        return surveyId;
+    }
+
+    public void setSurveyId(String surveyId) {
+        this.surveyId = surveyId;
     }
 
     public String getSubmitterId() {

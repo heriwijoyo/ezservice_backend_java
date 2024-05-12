@@ -8,10 +8,13 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.ezservice.service.app.processor.parser.ParserType;
 import id.ezclouds.biz.ezservice.service.app.processor.parser.SurveyDataParser;
+import id.ezclouds.biz.ezservice.service.app.processor.repo.AppSurveyBaseData;
 import id.ezclouds.biz.ezservice.service.app.processor.repo.AppSurveyDataRJL001;
 import id.ezclouds.biz.ezservice.service.app.processor.repo.AppSurveyDataRJL001Repository;
+import id.ezclouds.biz.ezservice.service.app.processor.request.AppSurveyResponseProcessBaseRequest;
 import id.ezclouds.biz.ezservice.service.app.processor.request.AppSurveyResponseProcessRequest;
 import id.ezclouds.biz.ezservice.service.app.processor.result.ProcessResult;
+import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,9 +34,7 @@ public class AppSurveyResponseProcessor {
     public ProcessResult process(AppSurveyResponseProcessRequest request) {
         final ProcessResult result = new ProcessResult();
 
-        System.out.println("--- Start Process SURVEY_RESPONSE ---");
         if (request == null || ParserType.getByCode(request.getParserCode()) == ParserType.UNKNOWN || StringUtil.isBlank(request.getParserMap())) {
-            System.out.println("AppSurveyResponseProcessRequest is invalid");
             return result;
         }
 
@@ -51,9 +52,13 @@ public class AppSurveyResponseProcessor {
 
         switch (ParserType.getByCode(request.getParserCode())) {
             case RJL_SURVEY_001:
-                SurveyDataParser<AppSurveyDataRJL001> surveyDataParser = new SurveyDataParser<>(ParserType.RJL_SURVEY_001, new AppSurveyDataRJL001());
-                setCommonInfo(surveyDataParser, request, parserMapping);
-                AppSurveyDataRJL001 modelDO = surveyDataParser.parseToModel();
+                SurveyDataParser<AppSurveyDataRJL001> surveyDataParser = new SurveyDataParser<>(new AppSurveyDataRJL001(), ParserType.RJL_SURVEY_001);
+                surveyDataParser.setCommonInfo(baseData -> setBaseCommonInfo(baseData, request));
+                AppSurveyDataRJL001 modelDO = surveyDataParser.parseToModel(
+                        parserMapping,
+                        request.getResponderData(),
+                        request.getResponseData()
+                );
                 appSurveyDataRJL001Repository.saveAndFlush(modelDO);
                 break;
         }
@@ -61,13 +66,12 @@ public class AppSurveyResponseProcessor {
         return result;
     }
 
-    private void setCommonInfo(SurveyDataParser<?> surveyDataParser, AppSurveyResponseProcessRequest request, Map<String, String> parserMapping) {
-        surveyDataParser.setResponseId(request.getResponseId());
-        surveyDataParser.setOrgId(request.getOrgId());
-        surveyDataParser.setSubmitterId(request.getSubmitterId());
-        surveyDataParser.setQuestionVersion(request.getQuestionVersion());
-        surveyDataParser.setResponderData(request.getResponderData());
-        surveyDataParser.setMappingConfig(parserMapping);
-        surveyDataParser.setResponseData(request.getResponseData());
+    private void setBaseCommonInfo(AppSurveyBaseData appSurveyBaseData, AppSurveyResponseProcessBaseRequest request) {
+        appSurveyBaseData.setId(HashUtil.createHash(request.getOrgId(), request.getResponseId()));
+        appSurveyBaseData.setOrgId(request.getOrgId());
+        appSurveyBaseData.setSurveyId(request.getSurveyId());
+        appSurveyBaseData.setResponseId(request.getResponseId());
+        appSurveyBaseData.setSubmitterId(request.getSubmitterId());
+        appSurveyBaseData.setQuestionVersion(request.getQuestionVersion());
     }
 }

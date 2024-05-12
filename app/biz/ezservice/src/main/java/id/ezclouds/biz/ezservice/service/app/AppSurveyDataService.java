@@ -116,8 +116,9 @@ public class AppSurveyDataService {
         }
 
         AppSurveyResponseProcessRequest processRequest = new AppSurveyResponseProcessRequest();
-        processRequest.setResponseId(responseDO.getId());
         processRequest.setOrgId(responseDO.getOrgId());
+        processRequest.setSurveyId(responseDO.getSurveyId());
+        processRequest.setResponseId(responseDO.getId());
         processRequest.setSubmitterId(responseDO.getSubmitterMemberId());
         processRequest.setQuestionVersion(responseDO.getQuestionVersion());
         processRequest.setParserCode(processorConfigDO.getParserCode());
