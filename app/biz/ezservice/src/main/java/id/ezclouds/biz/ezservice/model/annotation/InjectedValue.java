@@ -17,5 +17,4 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface InjectedValue {
     Class<?> type() default String.class;
-    String field() default "";
 }

@@ -9,6 +9,8 @@ import id.ezclouds.common.util.StringUtil;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,27 +19,18 @@ import java.util.Map;
  */
 public class ParserModelInjector {
 
-    public static void injectValue(Object object, Map<String, Object> valueMap, Map<String, String> configMap) {
-        if (object == null || valueMap == null || valueMap.isEmpty() || configMap == null || configMap.isEmpty()) {
+    public static void injectValue(Object object, Map<String, Object> valueMap) {
+        if (object == null || valueMap == null || valueMap.isEmpty()) {
             return;
         }
 
-        Field[] fields = object.getClass().getDeclaredFields();
-        for (Field field : fields) {
+        List<Field> injectedFields = getAllInjectedFields(new ArrayList<>(), object.getClass());
+
+        for (Field field : injectedFields) {
             if (field.isAnnotationPresent(InjectedValue.class)) {
                 InjectedValue injectedValue = field.getAnnotation(InjectedValue.class);
-                String fieldKey = injectedValue.field();
 
-                if (StringUtil.isBlank(fieldKey)) {
-                    continue;
-                }
-
-                String configMapKey = configMap.get(fieldKey);
-                if (StringUtil.isBlank(configMapKey)) {
-                    continue;
-                }
-
-                Object objectValue = valueMap.get(configMapKey);
+                Object objectValue = valueMap.get(field.getName());
                 if (objectValue instanceof String) {
                     Object castedValue = objectValue;
                     if (injectedValue.type() == Integer.class) {
@@ -47,6 +40,19 @@ public class ParserModelInjector {
                 }
             }
         }
+    }
+
+    private static List<Field> getAllInjectedFields(List<Field> fields, Class<?> type) {
+        for (Field field : type.getDeclaredFields()) {
+            if (field.isAnnotationPresent(InjectedValue.class)) {
+                fields.add(field);
+            }
+        }
+
+        if (type.getSuperclass() != null) {
+            getAllInjectedFields(fields, type.getSuperclass());
+        }
+        return fields;
     }
 
     private static void updateFieldValue(Object object, Field field, Object value) {

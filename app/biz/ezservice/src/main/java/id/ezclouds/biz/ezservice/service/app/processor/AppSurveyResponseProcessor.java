@@ -32,7 +32,6 @@ public class AppSurveyResponseProcessor {
         final ProcessResult result = new ProcessResult();
 
         System.out.println("--- Start Process SURVEY_RESPONSE ---");
-        System.out.println(request);
         if (request == null || ParserType.getByCode(request.getParserCode()) == ParserType.UNKNOWN || StringUtil.isBlank(request.getParserMap())) {
             System.out.println("AppSurveyResponseProcessRequest is invalid");
             return result;
@@ -68,7 +67,7 @@ public class AppSurveyResponseProcessor {
         surveyDataParser.setSubmitterId(request.getSubmitterId());
         surveyDataParser.setQuestionVersion(request.getQuestionVersion());
         surveyDataParser.setResponderData(request.getResponderData());
-        surveyDataParser.setParserMapping(parserMapping);
+        surveyDataParser.setMappingConfig(parserMapping);
         surveyDataParser.setResponseData(request.getResponseData());
     }
 }
