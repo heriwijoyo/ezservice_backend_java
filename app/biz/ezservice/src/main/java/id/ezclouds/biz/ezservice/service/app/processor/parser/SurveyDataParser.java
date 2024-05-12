@@ -113,7 +113,6 @@ public class SurveyDataParser<T extends AppSurveyBaseData> {
             }
             return oriValue;
         }
-
         return String.valueOf(oriValue);
     }
 

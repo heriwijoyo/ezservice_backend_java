@@ -4,6 +4,9 @@
  */
 package id.ezclouds.biz.ezservice.service.app.dataobject;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 
 /**
@@ -47,6 +50,9 @@ public class BizSurveyResponseDO {
 
     @Column(name = "process_time")
     private String processTime;
+
+    @Column(name = "process_message")
+    private String processMessage;
 
     public String getId() {
         return id;
@@ -134,5 +140,18 @@ public class BizSurveyResponseDO {
 
     public void setProcessTime(String processTime) {
         this.processTime = processTime;
+    }
+
+    public String getProcessMessage() {
+        return processMessage;
+    }
+
+    public void setProcessMessage(String processMessage) {
+        this.processMessage = processMessage;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

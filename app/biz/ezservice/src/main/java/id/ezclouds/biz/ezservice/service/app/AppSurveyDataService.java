@@ -101,7 +101,7 @@ public class AppSurveyDataService {
             return;
         }
         if (StringUtil.isNotBlank(responseDO.getProcessId()) && StringUtil.isNotBlank(responseDO.getProcessTime())) {
-            System.out.println("BizSurveyResponseDO.processId or processTime is BLANK");
+            System.out.println("BizSurveyResponseDO.processId or processTime is NOT BLANK");
             return;
         }
 
@@ -145,9 +145,12 @@ public class AppSurveyDataService {
         request.setData(processRequest);
 
         ProcessResult result = appAsyncService.process(request);
-        if (result.isSuccess()) {
-            responseDO.setProcessId(result.getProcessId());
-            responseDO.setProcessTime(result.getProcessTime());
+        if (result != null) {
+            responseDO.setProcessMessage(result.getMessage());
+            if (result.isSuccess()) {
+                responseDO.setProcessId(result.getProcessId());
+                responseDO.setProcessTime(result.getProcessTime());
+            }
             updateResponseData(responseDO);
         }
     }

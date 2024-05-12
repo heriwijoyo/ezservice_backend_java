@@ -14,11 +14,13 @@ import id.ezclouds.biz.ezservice.service.app.processor.repo.AppSurveyDataRJL001R
 import id.ezclouds.biz.ezservice.service.app.processor.request.AppSurveyResponseProcessBaseRequest;
 import id.ezclouds.biz.ezservice.service.app.processor.request.AppSurveyResponseProcessRequest;
 import id.ezclouds.biz.ezservice.service.app.processor.result.ProcessResult;
+import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Map;
 
 /**
@@ -35,6 +37,7 @@ public class AppSurveyResponseProcessor {
         final ProcessResult result = new ProcessResult();
 
         if (request == null || ParserType.getByCode(request.getParserCode()) == ParserType.UNKNOWN || StringUtil.isBlank(request.getParserMap())) {
+            result.setMessage("Invalid process request");
             return result;
         }
 
@@ -42,32 +45,45 @@ public class AppSurveyResponseProcessor {
         try {
             parserMapping = new ObjectMapper()
                     .readValue(request.getParserMap(), new TypeReference<Map<String, String>>(){});
-        } catch (Exception e) {
-            System.out.println("error parsing configMap");
-        }
+        } catch (Exception e) {}
 
         if (parserMapping == null || parserMapping.isEmpty()) {
+            result.setMessage("Invalid parserMapping config");
             return result;
         }
 
-        switch (ParserType.getByCode(request.getParserCode())) {
-            case RJL_SURVEY_001:
-                SurveyDataParser<AppSurveyDataRJL001> surveyDataParser = new SurveyDataParser<>(new AppSurveyDataRJL001(), ParserType.RJL_SURVEY_001);
-                surveyDataParser.setCommonInfo(baseData -> setBaseCommonInfo(baseData, request));
-                AppSurveyDataRJL001 modelDO = surveyDataParser.parseToModel(
-                        parserMapping,
-                        request.getResponderData(),
-                        request.getResponseData()
-                );
-                appSurveyDataRJL001Repository.saveAndFlush(modelDO);
-                break;
+        try {
+            switch (ParserType.getByCode(request.getParserCode())) {
+                case RJL_SURVEY_001:
+                    SurveyDataParser<AppSurveyDataRJL001> surveyDataParser = new SurveyDataParser<>(new AppSurveyDataRJL001(), ParserType.RJL_SURVEY_001);
+                    surveyDataParser.setCommonInfo(baseData -> setBaseCommonInfo(baseData, request));
+                    AppSurveyDataRJL001 modelDO = surveyDataParser.parseToModel(
+                            parserMapping,
+                            request.getResponderData(),
+                            request.getResponseData()
+                    );
+                    saveSurveyDataRJL001(modelDO);
+
+                    result.setProcessId(modelDO.getId());
+                    result.setProcessTime(DateUtil.getCurrentFormattedDate());
+                    result.setSuccess(true);
+                    result.setMessage("SUCCESS");
+                    break;
+            }
+        } catch (Exception e) {
+            result.setMessage("Parsing process failed : " + e.getMessage());
         }
 
         return result;
     }
 
+    @Transactional
+    public void saveSurveyDataRJL001(AppSurveyDataRJL001 surveyDataRJL001) {
+        appSurveyDataRJL001Repository.saveAndFlush(surveyDataRJL001);
+    }
+
     private void setBaseCommonInfo(AppSurveyBaseData appSurveyBaseData, AppSurveyResponseProcessBaseRequest request) {
-        appSurveyBaseData.setId(HashUtil.createHash(request.getOrgId(), request.getResponseId()));
+        appSurveyBaseData.setId(HashUtil.createHash(request.getOrgId(), request.getResponseId(), DateUtil.getCurrentFormattedDate()));
         appSurveyBaseData.setOrgId(request.getOrgId());
         appSurveyBaseData.setSurveyId(request.getSurveyId());
         appSurveyBaseData.setResponseId(request.getResponseId());
