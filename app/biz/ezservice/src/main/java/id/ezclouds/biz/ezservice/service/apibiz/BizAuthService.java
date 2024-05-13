@@ -128,7 +128,7 @@ public class BizAuthService extends BizBaseService {
                 loginResult.setMemberFlags(appMemberFlagService.getAppMemberFlag(orgId, sessionInfo.getMemberId()));
 
                 CoreMember coreMember = coreMemberService.getOptimisticCoreMember(sessionInfo.getMemberId());
-                CoreMemberExtension coreMemberExtension = coreMemberService.getOptimisticCoreMemberExtension(sessionInfo.getMemberId());
+                CoreMemberExtension coreMemberExtension = coreMemberService.getPessimisticCoreMemberExtension(sessionInfo.getMemberId());
 
                 //assign session with roles
                 coreAuthService.updateMemberSessionRoles(sessionInfo.getSessionId(), coreMember.getRoles());

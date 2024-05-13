@@ -83,7 +83,7 @@ public class BizMemberService extends BizBaseService {
                 CoreAuthMemberSessionInfo sessionInfo = authAppMemberSession();
 
                 CoreMember coreMember = coreMemberService.getOptimisticCoreMember(sessionInfo.getMemberId());
-                CoreMemberExtension coreMemberExtension = coreMemberService.getOptimisticCoreMemberExtension(sessionInfo.getMemberId());
+                CoreMemberExtension coreMemberExtension = coreMemberService.getPessimisticCoreMemberExtension(sessionInfo.getMemberId());
                 BizMember bizMember = BizMemberConverter.convert(coreMember, coreMemberExtension);
 
                 BizPublicUrlResolver publicConfig = bizCommonConfigService.resolvePublicUrl(getOrgCode(), bizMember.getMemberId());

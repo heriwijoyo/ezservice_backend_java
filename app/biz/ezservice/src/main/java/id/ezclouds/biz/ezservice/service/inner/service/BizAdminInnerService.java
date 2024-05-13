@@ -48,6 +48,7 @@ import id.ezclouds.core.shared.enums.CoreSequenceScene;
 import id.ezclouds.core.shared.model.CommonModelSwitch;
 import id.ezclouds.core.shared.model.CoreSequenceConfig;
 import id.ezclouds.core.shared.repo.dataobject.EzCoreOrganizationDO;
+import id.ezclouds.core.shared.service.CoreAdminService;
 import id.ezclouds.core.shared.service.CoreConfigService;
 import id.ezclouds.core.shared.service.CoreOrganizationService;
 import id.ezclouds.core.shared.service.CoreSequenceService;
@@ -108,6 +109,9 @@ public class BizAdminInnerService {
 
     @Autowired
     private BizCandidateProfileService bizCandidateProfileService;
+
+    @Autowired
+    private CoreAdminService coreAdminService;
 
     public void createAppBuildPackage(String orgId, String platformId, int versionCode, String versionName) throws EzErrorException {
         BizAppBuildPackage buildPackage = new BizAppBuildPackage();
@@ -470,7 +474,7 @@ public class BizAdminInnerService {
         subOrgSeqConfig.setSequence(0);
         coreSequenceService.createSequenceConfig(subOrgSeqConfig);
 
-        //TODO: initiate other config, i.e: ez_core_admin_bo_permission, ez_core_admin_bo_menu
+        coreAdminService.initiateBOMenuAndPermission(organizationDO.getOrgId());
     }
 
     private PageRequest buildPageRequest(int page, int size, String sortBy, String sort) {
