@@ -338,6 +338,40 @@ public class WebApiSuperAdminController {
         return result;
     }
 
+    @PostMapping(value = "/webapp/api/whatsappSend.json")
+    private WebApiResult<String> whatsappSend(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "orgId", required = false) String orgId,
+            @RequestParam(name = "phone", required = false) String phone,
+            @RequestParam(name = "message", required = false) String message ) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_WHATSAPP_SEND, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizWebCommonRequest request = new BizWebCommonRequest();
+                request.setSessionId(sessionId);
+                request.getExtendInfo().put("ORG_ID", orgId);
+                request.getExtendInfo().put("PHONE", phone);
+                request.getExtendInfo().put("MESSAGE", message);
+                return bizSuperAdminService.adminWhatsappSendMessage(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                if (object instanceof String) {
+                    return (String) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
     @PostMapping(value = "/webapp/api/refreshAllCaches.json")
     private WebApiResult<List<String>> refreshAllCaches(@RequestParam(name = "sessionId", required = false) String sessionId) {
         final WebApiResult<List<String>> result = new WebApiResult<>();

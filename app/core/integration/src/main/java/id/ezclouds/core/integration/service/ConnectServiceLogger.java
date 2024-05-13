@@ -31,10 +31,10 @@ public class ConnectServiceLogger {
 
     public static void logResult(EzConnectResult result) {
         String traceId = StringUtil.EMPTY;
-        if (EzAppContextHolder.getContext() != null && EzAppContextHolder.getContext().getTraceId() != null) {
-            traceId = EzAppContextHolder.getContext().getTraceId();
+        if (result.getTraceId() != null) {
+            traceId = result.getTraceId();
         }
-        String resultLog = result != null ? result.toString() : "ConnectResult=NULL";
+        String resultLog = result.toString();
         LOGGER.info(traceId + " --- " + resultLog);
     }
 }

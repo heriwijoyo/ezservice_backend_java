@@ -5,6 +5,8 @@
 package id.ezclouds.core.integration.result;
 
 import id.ezclouds.common.util.exception.EzErrorCode;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -12,12 +14,21 @@ import id.ezclouds.common.util.exception.EzErrorCode;
  */
 public class EzConnectResult {
 
+    private String traceId;
     private boolean success;
     private EzErrorCode errorCode;
     private Object data;
 
     public EzConnectResult() {
         this.success = false;
+    }
+
+    public String getTraceId() {
+        return traceId;
+    }
+
+    public void setTraceId(String traceId) {
+        this.traceId = traceId;
     }
 
     public boolean isSuccess() {
@@ -42,5 +53,10 @@ public class EzConnectResult {
 
     public void setData(Object data) {
         this.data = data;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

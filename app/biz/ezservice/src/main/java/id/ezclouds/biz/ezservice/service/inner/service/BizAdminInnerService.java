@@ -21,7 +21,6 @@ import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
 import id.ezclouds.biz.ezservice.model.profile.BizCandidateProfile;
 import id.ezclouds.biz.ezservice.model.profile.WebCandidateBio;
 import id.ezclouds.biz.ezservice.service.apibiz.BizCandidateProfileService;
-import id.ezclouds.biz.ezservice.service.apibiz.BizConnectService;
 import id.ezclouds.biz.ezservice.service.app.*;
 import id.ezclouds.biz.ezservice.service.app.model.BizAppBuildPackage;
 import id.ezclouds.biz.ezservice.service.app.model.BizAppConfig;
@@ -102,7 +101,7 @@ public class BizAdminInnerService {
     private BizMemberInnerService bizMemberInnerService;
 
     @Autowired
-    private BizConnectService bizConnectService;
+    private BizConnectInnerService bizConnectInnerService;
 
     @Autowired
     private AppEventService appEventService;
@@ -425,7 +424,8 @@ public class BizAdminInnerService {
         coreAuthService.updateMemberClientPassword(bizMemberInfo.getBizMemberClient().getClientId(), newPassword);
 
         AppConfig appConfig = appConfigService.getAppConfig(orgId);
-        bizConnectService.memberSendPassword(
+        bizConnectInnerService.memberSendPassword(
+                orgId,
                 bizMemberInfo.getBizMember().getPhone(),
                 newPassword,
                 appConfig.getAppName(),

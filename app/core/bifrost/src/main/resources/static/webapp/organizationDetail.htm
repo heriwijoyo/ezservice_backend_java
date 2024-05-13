@@ -304,6 +304,33 @@
             <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
                 <div class="card corner-radius">
                     <div class="header">
+                        <h2>TRY SEND WHATSAPP</h2>
+                    </div>
+                    <div class="body">
+                        <div class="row clearfix">
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Phone Number</div>
+                                    <input type="text" class="form-control" id="waSendPhone" placeholder="Phone Number">
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Message</div>
+                                    <input type="text" class="form-control" id="waSendMessage" placeholder="Message">
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <button id="waSendBtnSubmit" class="button button-rounded waves-effect waves-float pull-right" type="submit">SEND</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                <div class="card corner-radius">
+                    <div class="header">
                         <h2>ORGANIZATION USER ADMIN</h2>
                     </div>
                     <div class="body">
@@ -481,6 +508,7 @@
         APP_CLIENT_CONFIG_UPDATE: 'api/appClientConfigUpdate.json',
         APP_CONFIG_UPDATE: 'api/appConfigUpdate.json',
         CORE_ORG_CONFIG_UPDATE: 'api/coreOrgConfigUpdate.json',
+        WHATSAPP_SEND_MESSAGE: 'api/whatsappSend.json',
         ORG_ADMIN_ADD: 'api/coreOrgAdminAdd.json',
         ADMIN_COMMON_POST: 'api/adminCommonPost.json'
     };
@@ -559,6 +587,13 @@
                 });
             }
         },
+        waSendMessage: function() {
+            EzWebAppClient.callApiService(EzAdminUrl.WHATSAPP_SEND_MESSAGE, {
+                orgId: EzWebAppClient.getUrlParameter('id'),
+                phone: $('#waSendPhone').val(),
+                message: $('#waSendMessage').val()
+            });
+        },
         addOrgAdmin: function() {
             let orgId = EzWebAppClient.getUrlParameter('id');
             if (EzWebAppClient.isNotBlank(orgId)) {
@@ -625,6 +660,11 @@
                 alert(response.data);
                 EzDashboardBizService.fetchOrganization();
             }
+            if (url === EzAdminUrl.WHATSAPP_SEND_MESSAGE) {
+                alert(response.data);
+                $('#waSendPhone').val('');
+                $('#waSendMessage').val('');
+            }
             if (url === EzAdminUrl.ORG_ADMIN_ADD) {
                 alert(response.data);
                 window.location.reload();
@@ -656,16 +696,16 @@
                     $('#clientGenerateBtn').show();
                 }
             }
-            if (url === EzAdminUrl.APP_CONFIG_UPDATE) {
+            if (url === EzAdminUrl.APP_CONFIG_UPDATE ||
+                url === EzAdminUrl.ORG_ADMIN_ADD ||
+                url === EzAdminUrl.ADMIN_COMMON_POST ||
+                url === EzAdminUrl.WHATSAPP_SEND_MESSAGE) {
                 alert(message);
             }
             if (url === EzAdminUrl.CORE_ORG_CONFIG_UPDATE) {
                 alert(message);
                 $('.coreOrgConfigImgLoader').hide();
                 $('.coreOrgConfigBtnSubmit').show();
-            }
-            if (url === EzAdminUrl.ORG_ADMIN_ADD || url === EzAdminUrl.ADMIN_COMMON_POST) {
-                alert(message);
             }
             if (url === (EzAdminUrl.ADMIN_COMMON_POST + 'NEW_BUILD')) {
                 alert(message);
@@ -892,6 +932,9 @@
         });
         $('#newBuildSubmitButton').click(function(){
             EzDashboardBizService.postNewBuildPackage();
+        });
+        $('#waSendBtnSubmit').click(function(){
+            EzDashboardBizService.waSendMessage();
         });
     });
 

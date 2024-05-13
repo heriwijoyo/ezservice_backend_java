@@ -9,4 +9,14 @@ package id.ezclouds.core.integration.request;
  * @version $Id: ConnectRequest.java, v 0.1 2024‐02‐05 1:47 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 public class ConnectRequest {
+
+    private String orgId;
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
 }

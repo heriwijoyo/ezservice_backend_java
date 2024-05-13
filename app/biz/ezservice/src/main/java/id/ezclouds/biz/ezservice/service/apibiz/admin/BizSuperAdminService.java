@@ -4,23 +4,24 @@
  */
 package id.ezclouds.biz.ezservice.service.apibiz.admin;
 
+import id.ezclouds.biz.ezservice.enums.BizConnectType;
 import id.ezclouds.biz.ezservice.enums.BizMemberRole;
 import id.ezclouds.biz.ezservice.model.admin.BizApplicationConfig;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganization;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganizationDetail;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
+import id.ezclouds.biz.ezservice.service.inner.service.BizConnectInnerService;
 import id.ezclouds.biz.ezservice.service.core.BizAppCacheService;
 import id.ezclouds.biz.ezservice.service.app.model.BizAppConfig;
 import id.ezclouds.biz.ezservice.service.inner.service.BizAdminInnerService;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
-import id.ezclouds.biz.ezservice.service.request.web.BizWebCreateRequest;
-import id.ezclouds.biz.ezservice.service.request.web.BizWebDetailRequest;
-import id.ezclouds.biz.ezservice.service.request.web.BizWebPageRequest;
-import id.ezclouds.biz.ezservice.service.request.web.BizWebUpdateRequest;
+import id.ezclouds.biz.ezservice.service.request.admin.BizAdminWhatsappSendRequest;
+import id.ezclouds.biz.ezservice.service.request.web.*;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.result.PageResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
+import id.ezclouds.biz.ezservice.util.BizExtendInfoUtil;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
@@ -55,6 +56,9 @@ public class BizSuperAdminService extends BizBaseService {
 
     @Autowired
     private BizAppCacheService bizAppCacheService;
+
+    @Autowired
+    private BizConnectInnerService bizConnectInnerService;
 
     public BizResult createSuperAdminSession() {
         final BizResult bizResult = new BizResult();
@@ -344,6 +348,36 @@ public class BizSuperAdminService extends BizBaseService {
                 bizAdminInnerService.adminOrgCreateMember(request.getOrgId(), request.getData());
                 bizResult.setSuccess(true);
                 bizResult.setObject("OPERATION SUCCESS");
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
+    public BizResult adminWhatsappSendMessage(BizWebCommonRequest request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(request, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                BizExtendInfoUtil.validateExtendInfo(request.getExtendInfo(), "ORG_ID", "PHONE", "MESSAGE");
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                authorizeSuperUserMember(request.getSessionId());
+                bizConnectInnerService.sendMessage(
+                        BizConnectType.WHATSAPP,
+                        request.getExtendInfo().get("ORG_ID"),
+                        request.getExtendInfo().get("PHONE"),
+                        request.getExtendInfo().get("MESSAGE")
+                );
+                bizResult.setSuccess(true);
+                bizResult.setObject("Whatsapp send SUCCESS!");
             }
 
             @Override

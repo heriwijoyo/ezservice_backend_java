@@ -8,6 +8,7 @@ import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.integration.request.ConnectRequest;
 import id.ezclouds.core.integration.result.EzConnectResult;
+import id.ezclouds.core.shared.context.EzAppContextHolder;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -16,6 +17,7 @@ import id.ezclouds.core.integration.result.EzConnectResult;
 public final class ConnectServiceTemplate {
 
     public static void execute(ConnectRequest request, EzConnectResult result, Handler handler) {
+        result.setTraceId(EzAppContextHolder.getContext().getTraceId());
         try {
             handler.onRequestCheck();
             handler.onProcess();

@@ -11,7 +11,6 @@ import id.ezclouds.core.integration.request.WhatsappSendRequest;
 import id.ezclouds.core.integration.result.EzConnectResult;
 import id.ezclouds.core.integration.service.client.service.WatzapClientService;
 import id.ezclouds.core.integration.service.client.request.WatzapSendRequest;
-import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.service.CoreConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,13 +35,14 @@ public class EzConnectService {
             @Override
             public void onRequestCheck() throws EzErrorException {
                 AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM, "WhatsappSendRequest is null");
+                AssertUtil.notBlank(request.getOrgId(), EzErrorCode.ILLEGAL_PARAM, "WhatsappSendRequest.orgId is blank");
                 AssertUtil.notBlank(request.getPhoneNumber(), EzErrorCode.ILLEGAL_PARAM, "WhatsappSendRequest.phoneNumber is blank");
                 AssertUtil.notBlank(request.getMessage(), EzErrorCode.ILLEGAL_PARAM, "WhatsappSendRequest.message is blank");
             }
 
             @Override
             public void onProcess() throws Exception {
-                String orgId = EzAppContextHolder.getContext().getOrgId();
+                String orgId = request.getOrgId();
                 if (coreConfigService.isWatzapSendEnable(orgId)) {
                     WatzapSendRequest sendRequest = new WatzapSendRequest();
                     sendRequest.setApi_key(coreConfigService.getWatzapApiKey(orgId));
