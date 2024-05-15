@@ -83,9 +83,22 @@ public class BizSuperAdminService extends BizBaseService {
                 createRequest.setMemberId(CoreConstant.SU_ORG_ID);
                 createRequest.setMemberRoles("SUPERUSER");
 
-                coreAuthService.adminCreateSession(createRequest);
+                String scrambledCode = "";
+                CoreAuthAdminSession session = coreAuthService.adminCreateSession(createRequest);
+                String sessionCode = session.getSessionCode();
+                for (int i = 0; i < sessionCode.length(); i++) {
+                    String codePart = sessionCode.substring(i, i+1);
+                    int codePartNumber = Integer.parseInt(codePart);
+                    int newCodePart;
+                    if (codePartNumber == 9) {
+                        newCodePart = 0;
+                    } else {
+                        newCodePart = codePartNumber + 1;
+                    }
+                    scrambledCode += String.valueOf(newCodePart);
+                }
 
-                bizResult.setObject("SUCCESS");
+                bizResult.setObject("SUCCESS :: "+ scrambledCode);
                 bizResult.setSuccess(true);
             }
 
