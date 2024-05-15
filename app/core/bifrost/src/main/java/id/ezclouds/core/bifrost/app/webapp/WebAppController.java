@@ -4,6 +4,9 @@
  */
 package id.ezclouds.core.bifrost.app.webapp;
 
+import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
+import id.ezclouds.common.util.StringUtil;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ResourceUtils;
@@ -27,20 +30,25 @@ public class WebAppController {
 
     @GetMapping(value = "/webapp/videocard.htm")
     private void webAppVideoCard(HttpServletResponse servletResponse) {
-        renderWebApp(WebAppPage.VIDEO_CARD, servletResponse);
+        renderCachedWebApp(getVideoCardContent(), servletResponse);
     }
 
     @GetMapping(value = "/webapp/profile.htm")
     private void webAppProfile(HttpServletResponse servletResponse) {
-        renderWebApp(WebAppPage.PROFILE, servletResponse);
+        renderCachedWebApp(getProfileContent(), servletResponse);
     }
 
-    @GetMapping(value = "/assets/go.htm")
-    private void assetGo(HttpServletResponse servletResponse) {
-        writePageNotFound(servletResponse);
+    @Cacheable(value = BizCacheKey.WEBAPP_VIDEO_CARD)
+    public String getVideoCardContent() {
+        return getWebAppContent(WebAppPage.VIDEO_CARD);
     }
 
-    private void renderWebApp(WebAppPage webAppPage, HttpServletResponse servletResponse) {
+    @Cacheable(value = BizCacheKey.WEBAPP_PROFILE)
+    public String getProfileContent() {
+        return getWebAppContent(WebAppPage.PROFILE);
+    }
+
+    private String getWebAppContent(WebAppPage webAppPage) {
         try {
             String layoutContent = readHtmlContent(ASSET_INCLUDE_LAYOUT);
             String headerContent = readHtmlContent(ASSET_INCLUDE_HEADER);
@@ -51,20 +59,31 @@ public class WebAppController {
                     .replace("INCLUDE_HEADER", headerContent)
                     .replace("INCLUDE_NAVIGATION", navigationContent)
                     .replace("INCLUDE_PAGE_CONTENT", pageContent);
+            return htmlContent;
+        } catch (IOException e) {
+            return StringUtil.EMPTY;
+        }
+    }
 
+    private void renderCachedWebApp(String htmlContent, HttpServletResponse servletResponse) {
+        if (StringUtil.EMPTY.equals(htmlContent)) {
+            servletResponse.setStatus(HttpStatus.NOT_FOUND.value());
+            servletResponse.setContentType("text/html;charset=UTF-8");
+            htmlContent = "Not Found";
+        } else {
+            servletResponse.setStatus(HttpStatus.OK.value());
+        }
+
+        try {
             servletResponse.getWriter().write(htmlContent);
             servletResponse.getWriter().flush();
         } catch (IOException e) {
-            writePageNotFound(servletResponse);
+            servletResponse.setStatus(HttpStatus.NOT_FOUND.value());
         }
     }
 
     private String readHtmlContent(String assetFile) throws IOException {
         File file = ResourceUtils.getFile(assetFile);
         return new String(Files.readAllBytes(file.toPath()));
-    }
-
-    private void writePageNotFound(HttpServletResponse response) {
-        response.setStatus(HttpStatus.NOT_FOUND.value());
     }
 }

@@ -15,6 +15,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -23,6 +24,15 @@ import java.util.List;
  */
 @Service
 public class BizAppCacheService {
+
+    private static List<String> notReloadableCaches;
+
+    static {
+        notReloadableCaches = Arrays.asList(
+                BizCacheKey.WEBAPP_PROFILE,
+                BizCacheKey.WEBAPP_VIDEO_CARD
+        );
+    }
 
     @Autowired
     private CacheManager cacheManager;
@@ -78,6 +88,9 @@ public class BizAppCacheService {
 
         cacheManager.getCacheNames()
                 .forEach((cacheName) -> {
+                    if (notReloadableCaches.contains(cacheName)) {
+                        return;
+                    }
                     cacheNames.add(cacheName);
                     if (cacheManager.getCache(cacheName) != null) {
                         cacheManager.getCache(cacheName).clear();

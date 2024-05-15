@@ -17,4 +17,8 @@ public final class BizCacheKey {
     public static final String VIDEO_CARD_GALLERY_ALL   = "VIDEO_CARD_GALLERY_ALL";
     public static final String CANDIDATE_PROFILE        = "CANDIDATE_PROFILE";
     public static final String CANDIDATE_BIOGRAPHY      = "CANDIDATE_BIOGRAPHY";
+
+
+    public static final String WEBAPP_PROFILE           = "WEBAPP_PROFILE";
+    public static final String WEBAPP_VIDEO_CARD        = "WEBAPP_VIDEO_CARD";
 }
