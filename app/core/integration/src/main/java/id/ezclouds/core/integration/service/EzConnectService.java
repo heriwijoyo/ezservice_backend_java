@@ -7,6 +7,7 @@ package id.ezclouds.core.integration.service;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
+import id.ezclouds.core.integration.dataservice.ConnectDbLoggerService;
 import id.ezclouds.core.integration.request.WhatsappSendRequest;
 import id.ezclouds.core.integration.result.EzConnectResult;
 import id.ezclouds.core.integration.service.client.service.WatzapClientService;
@@ -27,6 +28,9 @@ public class EzConnectService {
 
     @Autowired
     private WatzapClientService watzapClientService;
+
+    @Autowired
+    private ConnectDbLoggerService connectDbLoggerService;
 
     public EzConnectResult sendWhatsappMessage(WhatsappSendRequest request) {
         final EzConnectResult result = new EzConnectResult();
@@ -50,11 +54,15 @@ public class EzConnectService {
                     sendRequest.setApiUri(coreConfigService.getWatzapApiUri());
                     sendRequest.setPhone_no(request.getPhoneNumber());
                     sendRequest.setMessage(request.getMessage());
+
+                    String logId = connectDbLoggerService.logWatzapMessage(request, sendRequest);
+
                     watzapClientService
                             .sendWatzap(sendRequest)
                             .subscribe(response -> {
                                 result.setData(response);
                                 ConnectServiceLogger.logResult(result);
+                                connectDbLoggerService.updateWatzapLog(logId, result.getTraceId(), response);
                             });
                 }
                 result.setSuccess(true);

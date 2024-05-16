@@ -70,4 +70,11 @@ public class StringUtil {
         }
         return stringBuilder.toString();
     }
+
+    public static String defaultIfBlank(String str, String defValue) {
+        if (isBlank(str)) {
+            return defValue;
+        }
+        return str;
+    }
 }

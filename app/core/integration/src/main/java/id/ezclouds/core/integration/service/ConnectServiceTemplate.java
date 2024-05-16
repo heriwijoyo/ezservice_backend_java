@@ -25,9 +25,11 @@ public final class ConnectServiceTemplate {
         } catch (EzErrorException ezException) {
             result.setErrorCode(ezException.getEzErrorCode());
             ConnectServiceLogger.logException(traceId, ezException);
+            ezException.printStackTrace();
         } catch (Exception exception) {
             result.setErrorCode(EzErrorCode.SYSTEM_ERROR);
             ConnectServiceLogger.logException(traceId, exception);
+            exception.printStackTrace();
         } finally {
             ConnectServiceLogger.logRequest(request);
         }
