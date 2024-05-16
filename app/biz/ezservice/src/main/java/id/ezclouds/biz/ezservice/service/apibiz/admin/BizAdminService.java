@@ -671,7 +671,9 @@ public class BizAdminService extends BizBaseService {
             @Override
             public void onBizProcess() throws Exception {
                 if (isSuperAdminCommonUpload(request.getScene())) {
-                    bizSuperAdminService.adminCommonPostWithFileUpload(request);
+                    boolean uploadResult = bizSuperAdminService.adminCommonPostWithFileUpload(request);
+                    bizResult.setSuccess(uploadResult);
+                    bizResult.setObject(BizConstant.Message.SUCCESS_COMMON);
                     return;
                 }
 

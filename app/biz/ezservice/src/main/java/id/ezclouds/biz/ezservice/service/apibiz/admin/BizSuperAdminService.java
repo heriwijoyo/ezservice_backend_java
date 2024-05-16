@@ -352,7 +352,6 @@ public class BizSuperAdminService extends BizBaseService {
                 AssertUtil.notBlank(request.getOrgId(), EzErrorCode.ILLEGAL_PARAM);
                 AssertUtil.notBlank(request.getData().getName(), EzErrorCode.ILLEGAL_PARAM);
                 AssertUtil.notBlank(request.getData().getPhone(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(request.getData().getEmail(), EzErrorCode.ILLEGAL_PARAM);
             }
 
             @Override
@@ -427,7 +426,7 @@ public class BizSuperAdminService extends BizBaseService {
         return bizResult;
     }
 
-    public void adminCommonPostWithFileUpload(BizAdminUploadRequest request) throws Exception {
+    public boolean adminCommonPostWithFileUpload(BizAdminUploadRequest request) throws Exception {
         bizAdminInnerService.validateExtendInfo(request.getExtendInfo(), "ORG_ID");
 
         authorizeSuperUserMember(request.getSessionId());
@@ -453,6 +452,7 @@ public class BizSuperAdminService extends BizBaseService {
                 coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
                 break;
         }
+        return true;
     }
 
     private void authorizeSuperUserMember(String sessionId) throws Exception {

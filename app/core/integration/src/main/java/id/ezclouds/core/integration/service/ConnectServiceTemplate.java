@@ -17,14 +17,17 @@ import id.ezclouds.core.shared.context.EzAppContextHolder;
 public final class ConnectServiceTemplate {
 
     public static void execute(ConnectRequest request, EzConnectResult result, Handler handler) {
-        result.setTraceId(EzAppContextHolder.getContext().getTraceId());
+        String traceId = EzAppContextHolder.getContext().getTraceId();
+        result.setTraceId(traceId);
         try {
             handler.onRequestCheck();
             handler.onProcess();
         } catch (EzErrorException ezException) {
             result.setErrorCode(ezException.getEzErrorCode());
+            ConnectServiceLogger.logException(traceId, ezException);
         } catch (Exception exception) {
             result.setErrorCode(EzErrorCode.SYSTEM_ERROR);
+            ConnectServiceLogger.logException(traceId, exception);
         } finally {
             ConnectServiceLogger.logRequest(request);
         }

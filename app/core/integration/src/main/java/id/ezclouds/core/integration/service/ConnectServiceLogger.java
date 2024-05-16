@@ -5,6 +5,7 @@
 package id.ezclouds.core.integration.service;
 
 import id.ezclouds.common.util.StringUtil;
+import id.ezclouds.common.util.exception.ExceptionUtil;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.core.integration.request.ConnectRequest;
 import id.ezclouds.core.integration.result.EzConnectResult;
@@ -36,5 +37,13 @@ public class ConnectServiceLogger {
         }
         String resultLog = result.toString();
         LOGGER.info(traceId + " --- " + resultLog);
+    }
+
+    public static void logException(String traceId, Exception e) {
+        ExceptionUtil.getErrorContext(e);
+        if (traceId == null) {
+            traceId = StringUtil.EMPTY;
+        }
+        LOGGER.info(traceId + " --- Exception: " + ExceptionUtil.getErrorContext(e));
     }
 }

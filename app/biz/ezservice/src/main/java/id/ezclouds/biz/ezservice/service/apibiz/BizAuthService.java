@@ -358,6 +358,7 @@ public class BizAuthService extends BizBaseService {
         String whatsappMessage = BizMessageTemplateConverter.getMessage(messageTemplate, values);
         if (whatsappMessage != null) {
             WhatsappSendRequest request = new WhatsappSendRequest();
+            request.setOrgId(commonSession.getOrgId());
             request.setPhoneNumber(commonSession.getVerifyTarget());
             request.setMessage(whatsappMessage);
             ezConnectService.sendWhatsappMessage(request);

@@ -10,12 +10,21 @@ package id.ezclouds.core.auth.result;
  */
 public class CoreCommonSession {
 
+    private String orgId;
     private String sessionId;
     private String scene;
     private String verifyStrategy;
     private String verifyTarget;
     private String verifyCode;
     private String expiryTime;
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
 
     public String getSessionId() {
         return sessionId;

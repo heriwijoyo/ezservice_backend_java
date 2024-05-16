@@ -250,6 +250,7 @@ public class CoreAuthService {
         }
 
         CoreCommonSession sessionInfo = new CoreCommonSession();
+        sessionInfo.setOrgId(sessionDO.getOrgId());
         sessionInfo.setSessionId(sessionDO.getSessionId());
         sessionInfo.setScene(request.getScene());
         sessionInfo.setVerifyStrategy(request.getVerifyStrategy());
