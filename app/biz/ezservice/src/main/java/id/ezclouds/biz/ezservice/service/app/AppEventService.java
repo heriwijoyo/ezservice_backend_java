@@ -9,7 +9,7 @@ import id.ezclouds.biz.ezservice.model.event.AppEventHome;
 import id.ezclouds.biz.ezservice.service.app.dataobject.AppEventDO;
 import id.ezclouds.biz.ezservice.service.app.repo.AppEventRepository;
 import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
-import id.ezclouds.biz.ezservice.service.result.PageResult;
+import id.ezclouds.core.shared.result.PageResult;
 import id.ezclouds.biz.ezservice.util.PageRequestUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;

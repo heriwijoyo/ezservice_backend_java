@@ -27,7 +27,7 @@ import id.ezclouds.biz.ezservice.service.inner.service.BizAdminInnerService;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
-import id.ezclouds.biz.ezservice.service.result.PageResult;
+import id.ezclouds.core.shared.result.PageResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.StringUtil;
@@ -655,6 +655,38 @@ public class BizAdminService extends BizBaseService {
         });
         return bizResult;
     }
+
+    /*
+    public BizResult getWhatsappLog(BizWebPageRequest request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                validateBizPageRequest(request);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                PageResult<BizWhatsappLog> vCardResult = bizAdminInnerService.getVideoCards(
+                        session.getOrgId(),
+                        request.getPageNumber(),
+                        request.getPageSize(),
+                        "createdTime",
+                        "desc"
+                );
+
+                bizResult.setObject(vCardResult);
+                bizResult.setSuccess(true);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }*/
 
     public BizResult adminCommonPostWithFileUpload(BizAdminUploadRequest request) {
         final BizResult bizResult = new BizResult();

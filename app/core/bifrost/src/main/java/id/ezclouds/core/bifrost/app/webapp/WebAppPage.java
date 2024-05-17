@@ -11,6 +11,7 @@ public enum WebAppPage {
 
     VIDEO_CARD("classpath:webapp/videocard.htm"),
     PROFILE("classpath:webapp/profile.htm"),
+    WHATSAPP("classpath:webapp/whatsapp.htm"),
 
     ;
 

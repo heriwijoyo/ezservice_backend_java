@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.ezservice.enums.BizProfileSection;
 import id.ezclouds.biz.ezservice.enums.BizSwitchFlagObject;
+import id.ezclouds.biz.ezservice.model.BizWhatsappLog;
 import id.ezclouds.biz.ezservice.model.VideoCard;
 import id.ezclouds.biz.ezservice.model.admin.*;
 import id.ezclouds.biz.ezservice.model.event.AppEvent;
@@ -20,7 +21,7 @@ import id.ezclouds.biz.ezservice.service.app.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
-import id.ezclouds.biz.ezservice.service.result.PageResult;
+import id.ezclouds.core.shared.result.PageResult;
 import id.ezclouds.common.util.exception.ExceptionUtil;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
@@ -532,6 +533,38 @@ public class WebApiAdminController {
             @Override
             public String convertResult(Object object) {
                 return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/getWhatsappLog.json")
+    private WebApiPageResult<BizWhatsappLog> whatsappLogs(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "pageNumber", required = false) int pageNumber,
+            @RequestParam(name = "pageSize", required = false) int pageSize ) {
+        final WebApiPageResult<BizWhatsappLog> result = new WebApiPageResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_WHATSAPP_LOG, result, new WebApiControllerTemplate.PageHandler<BizWhatsappLog>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizWebPageRequest request = new BizWebPageRequest();
+                request.setSessionId(sessionId);
+                request.setPageNumber(pageNumber);
+                request.setPageSize(pageSize);
+                return bizAdminService.getVideoCards(request);
+            }
+
+            @Override
+            public PageResult<BizWhatsappLog> convertResult(Object object) {
+                if (object instanceof PageResult) {
+                    return (PageResult<BizWhatsappLog>) object;
+                }
+                return null;
             }
 
             @Override

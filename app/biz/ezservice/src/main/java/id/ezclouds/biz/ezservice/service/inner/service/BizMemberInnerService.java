@@ -13,8 +13,7 @@ import id.ezclouds.biz.ezservice.model.member.BizMemberInfo;
 import id.ezclouds.biz.ezservice.service.inner.converter.BizMemberRequestConverter;
 import id.ezclouds.biz.ezservice.service.request.BizMemberRegisterRequest;
 import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
-import id.ezclouds.biz.ezservice.service.request.BizRequest;
-import id.ezclouds.biz.ezservice.service.result.BizPageInfo;
+import id.ezclouds.core.shared.result.BizPageInfo;
 import id.ezclouds.biz.ezservice.util.PageRequestUtil;
 import id.ezclouds.common.util.ShardUtil;
 import id.ezclouds.common.util.StringUtil;
@@ -29,7 +28,6 @@ import id.ezclouds.core.shared.model.CorePageInfo;
 import id.ezclouds.core.shared.service.CoreSequenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

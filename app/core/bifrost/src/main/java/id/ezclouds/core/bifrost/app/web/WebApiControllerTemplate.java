@@ -5,7 +5,7 @@
 package id.ezclouds.core.bifrost.app.web;
 
 import id.ezclouds.biz.ezservice.service.result.BizResult;
-import id.ezclouds.biz.ezservice.service.result.PageResult;
+import id.ezclouds.core.shared.result.PageResult;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.common.util.logger.DigestLog;

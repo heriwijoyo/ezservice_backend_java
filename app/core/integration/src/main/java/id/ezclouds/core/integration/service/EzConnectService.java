@@ -8,10 +8,13 @@ import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.integration.dataservice.ConnectDbLoggerService;
+import id.ezclouds.core.integration.dataservice.model.WhatsappLog;
+import id.ezclouds.core.integration.request.WhatsappLogRequest;
 import id.ezclouds.core.integration.request.WhatsappSendRequest;
 import id.ezclouds.core.integration.result.EzConnectResult;
 import id.ezclouds.core.integration.service.client.service.WatzapClientService;
 import id.ezclouds.core.integration.service.client.request.WatzapSendRequest;
+import id.ezclouds.core.shared.result.BizPageInfo;
 import id.ezclouds.core.shared.service.CoreConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,6 +72,26 @@ public class EzConnectService {
             }
         });
 
+        return result;
+    }
+
+    public EzConnectResult getWhatsappLog(WhatsappLogRequest request) {
+        final EzConnectResult result = new EzConnectResult();
+        ConnectServiceTemplate.execute(request, result, new ConnectServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notNull(request.getPageRequest(), EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onProcess() throws Exception {
+                BizPageInfo<WhatsappLog> pageInfo = connectDbLoggerService
+                        .getWhatsappLogs(request);
+                result.setSuccess(true);
+                result.setData(pageInfo);
+            }
+        });
         return result;
     }
 }

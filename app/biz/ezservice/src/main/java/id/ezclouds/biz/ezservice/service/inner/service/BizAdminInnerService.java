@@ -8,6 +8,7 @@ import id.ezclouds.biz.ezservice.converter.BizMemberConverter;
 import id.ezclouds.biz.ezservice.enums.BizMemberRole;
 import id.ezclouds.biz.ezservice.enums.BizSwitchFlagObject;
 import id.ezclouds.biz.ezservice.model.AppConfig;
+import id.ezclouds.biz.ezservice.model.BizWhatsappLog;
 import id.ezclouds.biz.ezservice.model.VideoCard;
 import id.ezclouds.biz.ezservice.model.admin.BizApplicationConfig;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganization;
@@ -29,7 +30,7 @@ import id.ezclouds.biz.ezservice.service.app.request.AppImageGalleryRequest;
 import id.ezclouds.biz.ezservice.service.app.request.NewsCreateRequest;
 import id.ezclouds.biz.ezservice.service.app.request.VideoCardCreateRequest;
 import id.ezclouds.biz.ezservice.service.request.web.BizWebUpdateItemRequest;
-import id.ezclouds.biz.ezservice.service.result.PageResult;
+import id.ezclouds.core.shared.result.PageResult;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.RandomUtil;
@@ -39,6 +40,7 @@ import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.auth.model.CoreAuthAppClient;
 import id.ezclouds.core.auth.service.CoreAuthService;
+import id.ezclouds.core.integration.service.EzConnectService;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.MemberStatus;
 import id.ezclouds.core.member.service.CoreMemberService;
@@ -111,6 +113,9 @@ public class BizAdminInnerService {
 
     @Autowired
     private CoreAdminService coreAdminService;
+
+    @Autowired
+    private EzConnectService ezConnectService;
 
     public void createAppBuildPackage(String orgId, String platformId, int versionCode, String versionName) throws EzErrorException {
         BizAppBuildPackage buildPackage = new BizAppBuildPackage();
@@ -253,6 +258,11 @@ public class BizAdminInnerService {
     public PageResult<VideoCard> getVideoCards(String orgId, int pageNumber, int pageSize, String sortBy, String sort) {
         PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortBy, sort);
         return videoCardService.getVideoCards(orgId, pageRequest);
+    }
+
+    public PageResult<BizWhatsappLog> getWhatsappLog(String orgId, int pageNumber, int pageSize, String sortBy, String sort) {
+        PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortBy, sort);
+        return null;
     }
 
     public void updateVideoCard(VideoCard videoCard) {

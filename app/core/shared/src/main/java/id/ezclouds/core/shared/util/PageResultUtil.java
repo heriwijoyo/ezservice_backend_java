@@ -2,9 +2,9 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.biz.ezservice.util;
+package id.ezclouds.core.shared.util;
 
-import id.ezclouds.biz.ezservice.service.result.BizPageInfo;
+import id.ezclouds.core.shared.result.BizPageInfo;
 import org.springframework.data.domain.Page;
 
 /**

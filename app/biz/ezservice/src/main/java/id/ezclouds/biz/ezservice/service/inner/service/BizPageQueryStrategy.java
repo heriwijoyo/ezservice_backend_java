@@ -5,7 +5,7 @@
 package id.ezclouds.biz.ezservice.service.inner.service;
 
 import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
-import id.ezclouds.biz.ezservice.service.result.BizPageInfo;
+import id.ezclouds.core.shared.result.BizPageInfo;
 import id.ezclouds.common.util.StringUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

@@ -38,6 +38,11 @@ public class WebAppController {
         renderCachedWebApp(getProfileContent(), servletResponse);
     }
 
+    @GetMapping(value = "/webapp/whatsapp.htm")
+    private void webWhatsapp(HttpServletResponse servletResponse) {
+        renderCachedWebApp(getWhatsappContent(), servletResponse);
+    }
+
     @Cacheable(value = BizCacheKey.WEBAPP_VIDEO_CARD)
     public String getVideoCardContent() {
         return getWebAppContent(WebAppPage.VIDEO_CARD);
@@ -46,6 +51,11 @@ public class WebAppController {
     @Cacheable(value = BizCacheKey.WEBAPP_PROFILE)
     public String getProfileContent() {
         return getWebAppContent(WebAppPage.PROFILE);
+    }
+
+    @Cacheable(value = BizCacheKey.WEBAPP_WHATSAPP)
+    public String getWhatsappContent() {
+        return getWebAppContent(WebAppPage.WHATSAPP);
     }
 
     private String getWebAppContent(WebAppPage webAppPage) {

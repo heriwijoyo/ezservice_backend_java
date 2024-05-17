@@ -21,7 +21,7 @@ import id.ezclouds.biz.ezservice.service.request.BizMemberRegisterRequest;
 import id.ezclouds.biz.ezservice.service.request.BizMemberUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
 import id.ezclouds.biz.ezservice.service.request.BizRequest;
-import id.ezclouds.biz.ezservice.service.result.BizPageInfo;
+import id.ezclouds.core.shared.result.BizPageInfo;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.biz.ezservice.util.BizExtendInfoUtil;
