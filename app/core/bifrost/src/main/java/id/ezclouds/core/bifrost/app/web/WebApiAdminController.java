@@ -547,7 +547,8 @@ public class WebApiAdminController {
     private WebApiPageResult<BizWhatsappLog> whatsappLogs(
             @RequestParam(name = "sessionId", required = false) String sessionId,
             @RequestParam(name = "pageNumber", required = false) int pageNumber,
-            @RequestParam(name = "pageSize", required = false) int pageSize ) {
+            @RequestParam(name = "pageSize", required = false) int pageSize,
+            @RequestParam(name = "keyword", required = false) String keyword ) {
         final WebApiPageResult<BizWhatsappLog> result = new WebApiPageResult<>();
         WebApiControllerTemplate.execute(WebEvent.WEB_API_WHATSAPP_LOG, result, new WebApiControllerTemplate.PageHandler<BizWhatsappLog>() {
             @Override
@@ -556,7 +557,8 @@ public class WebApiAdminController {
                 request.setSessionId(sessionId);
                 request.setPageNumber(pageNumber);
                 request.setPageSize(pageSize);
-                return bizAdminService.getVideoCards(request);
+                request.setKeyword(keyword);
+                return bizAdminService.getWhatsappLog(request);
             }
 
             @Override

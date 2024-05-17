@@ -15,6 +15,7 @@ import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
 import id.ezclouds.biz.ezservice.model.profile.CandidateBio;
 import id.ezclouds.biz.ezservice.model.profile.CandidateProfileItem;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.dataobject.BizSubOrganizationDO;
+import id.ezclouds.core.integration.dataservice.model.WhatsappLog;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -89,5 +90,18 @@ public class BizModelConverter {
         candidateBio.setSort(bioDO.getSort());
         candidateBio.setStatus(bioDO.getStatus());
         return candidateBio;
+    }
+
+    public static BizWhatsappLog convert(WhatsappLog whatsappLog) {
+        if (whatsappLog == null) { return null; }
+        BizWhatsappLog bizWhatsappLog = new BizWhatsappLog();
+        bizWhatsappLog.setOrgId(whatsappLog.getOrgId());
+        bizWhatsappLog.setPhone(whatsappLog.getPhone());
+        bizWhatsappLog.setMessage(whatsappLog.getMessage());
+        bizWhatsappLog.setCreatedTime(whatsappLog.getCreatedTime());
+        bizWhatsappLog.setStatus(whatsappLog.getStatus());
+        bizWhatsappLog.setResponseTime(whatsappLog.getResponseTime());
+        bizWhatsappLog.setResponseDetail(whatsappLog.getResponse());
+        return bizWhatsappLog;
     }
 }

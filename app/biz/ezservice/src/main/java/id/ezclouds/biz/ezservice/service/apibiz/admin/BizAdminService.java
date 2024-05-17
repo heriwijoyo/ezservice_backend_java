@@ -11,6 +11,7 @@ import id.ezclouds.biz.ezservice.enums.BizMemberRole;
 import id.ezclouds.biz.ezservice.converter.BizAdminConverter;
 import id.ezclouds.biz.ezservice.enums.BizSwitchFlagObject;
 import id.ezclouds.biz.ezservice.enums.BizUploadScene;
+import id.ezclouds.biz.ezservice.model.BizWhatsappLog;
 import id.ezclouds.biz.ezservice.model.VideoCard;
 import id.ezclouds.biz.ezservice.model.admin.*;
 import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
@@ -656,7 +657,6 @@ public class BizAdminService extends BizBaseService {
         return bizResult;
     }
 
-    /*
     public BizResult getWhatsappLog(BizWebPageRequest request) {
         final BizResult bizResult = new BizResult();
         BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
@@ -668,15 +668,16 @@ public class BizAdminService extends BizBaseService {
             @Override
             public void onBizProcess() throws Exception {
                 CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
-                PageResult<BizWhatsappLog> vCardResult = bizAdminInnerService.getVideoCards(
+                PageResult<BizWhatsappLog> pageResult = bizAdminInnerService.getWhatsappLog(
                         session.getOrgId(),
+                        request.getKeyword(),
                         request.getPageNumber(),
                         request.getPageSize(),
                         "createdTime",
                         "desc"
                 );
 
-                bizResult.setObject(vCardResult);
+                bizResult.setObject(pageResult);
                 bizResult.setSuccess(true);
             }
 
@@ -686,7 +687,7 @@ public class BizAdminService extends BizBaseService {
             }
         });
         return bizResult;
-    }*/
+    }
 
     public BizResult adminCommonPostWithFileUpload(BizAdminUploadRequest request) {
         final BizResult bizResult = new BizResult();

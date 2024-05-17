@@ -15,7 +15,6 @@ import id.ezclouds.core.integration.request.WhatsappSendRequest;
 import id.ezclouds.core.integration.service.client.request.WatzapSendRequest;
 import id.ezclouds.core.integration.service.client.response.WatzapResponse;
 import id.ezclouds.core.shared.result.BizPageInfo;
-import id.ezclouds.core.shared.result.PageResult;
 import id.ezclouds.core.shared.util.PageResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -101,7 +100,7 @@ public class ConnectDbLoggerService {
                 .map(modelDO -> {
                     WhatsappLog whatsappLog = new WhatsappLog();
                     whatsappLog.setOrgId(modelDO.getOrgId());
-                    whatsappLog.setTarget(modelDO.getTarget());
+                    whatsappLog.setPhone(modelDO.getTarget());
                     whatsappLog.setMessage(modelDO.getMessage());
                     whatsappLog.setCreatedTime(modelDO.getCreatedTime());
                     whatsappLog.setStatus(modelDO.getStatus());

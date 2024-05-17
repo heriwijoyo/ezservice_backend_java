@@ -4,7 +4,9 @@
  */
 package id.ezclouds.core.shared.util;
 
+import id.ezclouds.core.shared.converter.PageResultConverter;
 import id.ezclouds.core.shared.result.BizPageInfo;
+import id.ezclouds.core.shared.result.PageResult;
 import org.springframework.data.domain.Page;
 
 /**
@@ -22,5 +24,31 @@ public class PageResultUtil {
         bizPageInfo.setTotalRecord((int)pageResult.getTotalElements());
         bizPageInfo.setHasNext(pageResult.hasNext());
         return bizPageInfo;
+    }
+
+    public static <T> PageResult<T> composeFromPageInfo(BizPageInfo<T> pageInfo) {
+        PageResult<T> pageResult = new PageResult<>();
+        pageResult.setPageNumber(pageInfo.getPageNumber());
+        pageResult.setPageSize(pageInfo.getPageSize());
+        pageResult.setNumberRecord(pageInfo.getNumberRecord());
+        pageResult.setTotalRecord(pageInfo.getTotalRecord());
+        pageResult.setTotalPage(pageInfo.getTotalPage());
+        pageResult.setHasNext(pageInfo.isHasNext());
+        pageResult.setHasPrevious(pageInfo.getPageNumber() > 1);
+        pageResult.setData(pageInfo.getBizData());
+        return pageResult;
+    }
+
+    public static <I, O> PageResult<O> convert(PageResult<I> inputResult, PageResultConverter<I, O> converter) {
+        PageResult<O> pageResult = new PageResult<>();
+        pageResult.setPageNumber(inputResult.getPageNumber());
+        pageResult.setPageSize(inputResult.getPageSize());
+        pageResult.setNumberRecord(inputResult.getNumberRecord());
+        pageResult.setTotalRecord(inputResult.getTotalRecord());
+        pageResult.setTotalPage(inputResult.getTotalPage());
+        pageResult.setHasNext(inputResult.isHasNext());
+        pageResult.setHasPrevious(inputResult.isHasPrevious());
+        pageResult.setData(converter.convert(inputResult.getData()));
+        return pageResult;
     }
 }

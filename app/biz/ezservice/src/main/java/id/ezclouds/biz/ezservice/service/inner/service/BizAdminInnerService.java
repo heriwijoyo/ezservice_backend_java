@@ -5,6 +5,7 @@
 package id.ezclouds.biz.ezservice.service.inner.service;
 
 import id.ezclouds.biz.ezservice.converter.BizMemberConverter;
+import id.ezclouds.biz.ezservice.converter.BizModelConverter;
 import id.ezclouds.biz.ezservice.enums.BizMemberRole;
 import id.ezclouds.biz.ezservice.enums.BizSwitchFlagObject;
 import id.ezclouds.biz.ezservice.model.AppConfig;
@@ -30,6 +31,10 @@ import id.ezclouds.biz.ezservice.service.app.request.AppImageGalleryRequest;
 import id.ezclouds.biz.ezservice.service.app.request.NewsCreateRequest;
 import id.ezclouds.biz.ezservice.service.app.request.VideoCardCreateRequest;
 import id.ezclouds.biz.ezservice.service.request.web.BizWebUpdateItemRequest;
+import id.ezclouds.core.integration.dataservice.model.WhatsappLog;
+import id.ezclouds.core.integration.request.WhatsappLogRequest;
+import id.ezclouds.core.integration.result.EzConnectResult;
+import id.ezclouds.core.shared.result.BizPageInfo;
 import id.ezclouds.core.shared.result.PageResult;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
@@ -53,6 +58,7 @@ import id.ezclouds.core.shared.service.CoreAdminService;
 import id.ezclouds.core.shared.service.CoreConfigService;
 import id.ezclouds.core.shared.service.CoreOrganizationService;
 import id.ezclouds.core.shared.service.CoreSequenceService;
+import id.ezclouds.core.shared.util.PageResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -61,6 +67,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -260,9 +267,24 @@ public class BizAdminInnerService {
         return videoCardService.getVideoCards(orgId, pageRequest);
     }
 
-    public PageResult<BizWhatsappLog> getWhatsappLog(String orgId, int pageNumber, int pageSize, String sortBy, String sort) {
+    public PageResult<BizWhatsappLog> getWhatsappLog(String orgId, String phone, int pageNumber, int pageSize, String sortBy, String sort) {
         PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortBy, sort);
-        return null;
+        WhatsappLogRequest request = new WhatsappLogRequest();
+        request.setOrgId(orgId);
+        request.setPhone(phone);
+        request.setPageRequest(pageRequest);
+        EzConnectResult connectResult = ezConnectService.getWhatsappLog(request);
+
+        AssertUtil.notNull(connectResult, EzErrorCode.SYSTEM_ERROR);
+        AssertUtil.isTrue(connectResult.isSuccess(), EzErrorCode.SYSTEM_ERROR);
+        AssertUtil.isTrue((connectResult.getData() instanceof BizPageInfo), EzErrorCode.SYSTEM_ERROR);
+
+        BizPageInfo<WhatsappLog> pageInfo = (BizPageInfo<WhatsappLog>) connectResult.getData();
+        PageResult<WhatsappLog> pageResult = PageResultUtil.composeFromPageInfo(pageInfo);
+        return PageResultUtil.convert(pageResult, input -> input
+                .stream()
+                .map(BizModelConverter::convert)
+                .collect(Collectors.toList()));
     }
 
     public void updateVideoCard(VideoCard videoCard) {

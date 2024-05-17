@@ -11,7 +11,7 @@ package id.ezclouds.core.integration.dataservice.model;
 public class WhatsappLog {
 
     private String orgId;
-    private String target;
+    private String phone;
     private String message;
     private String createdTime;
     private String status;
@@ -26,12 +26,12 @@ public class WhatsappLog {
         this.orgId = orgId;
     }
 
-    public String getTarget() {
-        return target;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setTarget(String target) {
-        this.target = target;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getMessage() {

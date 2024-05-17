@@ -16,13 +16,11 @@
                         <table class="table table-hover table-striped">
                             <thead>
                             <tr>
-                                <th width="20%">Image</th>
-                                <th width="10%">Section</th>
-                                <th width="10%">Section Label</th>
-                                <th width="10%">Target Type</th>
-                                <th width="10%">Target URL</th>
-                                <th width="10%">EDIT</th>
-                                <th width="10%">ACTIVE</th>
+                                <th width="12%">Time</th>
+                                <th width="12%">Phone</th>
+                                <th width="54%">Message</th>
+                                <th width="10%">Status</th>
+                                <th width="12%">Response</th>
                             </tr>
                             </thead>
                             <tbody id="rowsContainer"></tbody>
@@ -35,63 +33,9 @@
     </div>
 </section>
 
-<div class="modal fade" id="modal-form-new" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="largeModalLabel">Create New Video Card</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row clearfix">
-                    <div class="form-group form-float col-sm-12">
-                        <div class="form-line">
-                            <div class="font-12">Section</div>
-                            <input type="text" class="form-control" id="section" placeholder="Section" required>
-                            <input type="hidden" id="formMode" value="CREATE">
-                            <input type="hidden" id="updateId" value="">
-                        </div>
-                    </div>
-                    <div class="form-group form-float col-sm-12">
-                        <div class="form-line">
-                            <div class="font-12">Section Label</div>
-                            <input type="text" class="form-control" id="sectionLabel" placeholder="Section Label" required>
-                        </div>
-                    </div>
-                    <div class="form-group form-float col-sm-12">
-                        <div class="form-line">
-                            <div class="font-12">Target Type</div>
-                            <input type="text" class="form-control" id="targetType" value="YOUTUBE" disabled>
-                        </div>
-                    </div>
-                    <div class="form-group form-float col-sm-12">
-                        <div class="form-line">
-                            <div class="font-12">Target URL</div>
-                            <input type="text" class="form-control" id="targetUrl" placeholder="Target URL" required>
-                        </div>
-                    </div>
-                    <div class="col-sm-6" style="margin-bottom: 0px;">
-                        <div class="form-group">
-                            <div class="font-12 ex1">Image ( JPG, JPEG, PNG or GIF )</div>
-                            <form id="newImageForm" enctype="multipart/form-data" method="post">
-                                <input type="file" accept="image/*" name="imageFile" id="imageFile" oninput="imagePreview.src=window.URL.createObjectURL(this.files[0]);imagePreview.style.display='block';" data-max-file-size="3M" data-allowed-file-extensions="jpg jpeg png gif" required/>
-                            </form>
-                            <img id="imagePreview" style="max-width:100%">
-                        </div>
-                    </div>
-                    <div class="col-sm-12">
-                        <img id="newImageSubmitLoader" src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right">
-                        <button id="newImageSubmitButton" class="button button-rounded waves-effect waves-float pull-right" type="submit" name="submit">SUBMIT</button>
-                        <button id="newImageCancelButton" class="button button-rounded button-light waves-effect waves-float pull-right" type="submit" name="submit">CANCEL</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script type="text/javascript">
     var EzAdminUrl = {
-        GET_WHATSAPP_LOG: 'api/getWhatsappLog.json',
+        GET_WHATSAPP_LOG: 'api/getWhatsappLog.json'
     };
     var EzDashboardBizService = {
         start: function() {
@@ -101,7 +45,8 @@
             EzWebAppClient.callApiService(EzAdminUrl.GET_WHATSAPP_LOG, {
                 sessionId: EzWebAppClient.getSessionId(),
                 pageNumber: EzDashboardBizService.data.pageNumber,
-                pageSize: EzDashboardBizService.data.pageSize
+                pageSize: EzDashboardBizService.data.pageSize,
+                keyword: $('#phone').val()
             });
         },
         handleApiBizResult: function(url, response) {
@@ -110,79 +55,16 @@
                 EzDashboardBizService.reloadPageResultView(response);
             }
         },
-        updateItem: function() {
-            EzWebAppClient.callApiService(EzAdminUrl.UPDATE_VIDEO_CARD, {
-                sessionId: EzWebAppClient.getSessionId(),
-                id: $('#updateId').val(),
-                section: $('#section').val(),
-                sectionLabel: $('#sectionLabel').val(),
-                targetUrl: $('#targetUrl').val()
-            });
-        },
-        postNewImage: function() {
-            let sessionId = EzWebAppClient.getSessionId();
-            let section = $('#section').val();
-            let sectionLabel = $('#sectionLabel').val();
-            let targetType = $('#targetType').val();
-            let targetUrl = $('#targetUrl').val();
-            let postData = {
-                sessionId: sessionId,
-                scene: 'ADMIN_VIDEO_CARD_GALLERY',
-                extendInfo: {
-                    SECTION: section,
-                    SECTION_LABEL: sectionLabel,
-                    TARGET_TYPE: targetType,
-                    TARGET_URL: targetUrl
-                }
-            };
-
-            let form = $('#newImageForm')[0];
-            let data = new FormData(form);
-            data.append('postData', JSON.stringify(postData));
-
-            $.ajax({
-                type: 'POST',
-                enctype: 'multipart/form-data',
-                url: 'api/adminCommonPost.json',
-                data: data,
-                processData: false,
-                contentType: false,
-                cache: false,
-                timeout: 600000,
-                success: function(response) {
-                    if (response.sessionExpired) {
-                        EzWebAppClient.alertSessionExpired();
-                    }
-                    else if (!response.success) {
-                        alert(response.message);
-                        EzDashboardBizService.resetFormNewImage();
-                    }
-                    else {
-                        alert(response.data);
-                        EzDashboardBizService.hideFormNewImage();
-                        EzDashboardBizService.resetFormNewImage();
-                        EzDashboardBizService.fetchData();
-                    }
-                },
-                error: function(e) {
-                    console.log(e);
-                }
-            });
-        },
         reloadPageResultView: function(response) {
             $('#rowsContainer').html('');
             for(let i=0; i<response.pageResult.data.length; i++) {
                 let rowData = response.pageResult.data[i];
-                let title = '<b>'+ rowData.title +'</b><br>Uploaded: '+ rowData.createdTime;
-                let flags = 'HOME_SLIDE: <b>NO</b>'+ '<br>PORTFOLIO_SLIDE: <b>NO</b>';
                 let itemRow = $.parseHTML(DashTemplate);
-                $(itemRow).find('.img-rounded').attr('src', rowData.thumbnail);
-                $(itemRow).find('.rowSection').html(rowData.section);
-                $(itemRow).find('.rowSectionLabel').html(rowData.sectionName);
-                $(itemRow).find('.rowTargetType').html(rowData.targetType);
-                $(itemRow).find('.rowTargetUrl').html(rowData.targetUrl);
-                $(itemRow).find('.rowActive').html(EzDashboardBizService.renderFlag(rowData.status,'status',rowData.id));
-                $(itemRow).find('.rowEdit').html('<button onClick="EzDashboardBizService.editItem(\''+rowData.id+'\')" class="button button-rounded waves-effect waves-float">EDIT</button>');
+                $(itemRow).find('.rowPhone').html(rowData.phone);
+                $(itemRow).find('.rowMessage').html(rowData.message);
+                $(itemRow).find('.rowTime').html(rowData.createdTime);
+                $(itemRow).find('.rowStatus').html(rowData.status);
+                $(itemRow).find('.rowResponse').html(rowData.responseTime);
                 $('#rowsContainer').append(itemRow);
             }
             $('.pager').html(EzWebAppClient.renderPager(response.pageResult));
@@ -199,36 +81,6 @@
                 section: section,
                 value: value
             });
-        },
-        editItem: function(id) {
-            var dataItem = EzDashboardBizService.getDataItem(id);
-            EzDashboardBizService.showFormNewImage();
-            $('#section').val(dataItem.section);
-            $('#sectionLabel').val(dataItem.sectionName);
-            $('#targetUrl').val(dataItem.targetUrl);
-            $('#imageFile').prop('disabled', true);
-            $('#formMode').val('UPDATE');
-            $('#updateId').val(dataItem.id);
-        },
-        showFormNewImage: function() {
-            $('#modal-form-new').removeClass('fade');
-            $('#modal-form-new').addClass('show');
-        },
-        hideFormNewImage: function() {
-            $('#modal-form-new').removeClass('show');
-            $('#modal-form-new').addClass('fade');
-        },
-        resetFormNewImage: function() {
-            $('#formMode').val('CREATE');
-            $('#section').val('');
-            $('#sectionLabel').val('');
-            $('#targetUrl').val('');
-            $('#imageFile').val('');
-            $('#imageFile').prop('disabled', false);
-            $('#imagePreview').hide();
-            $('#newImageSubmitLoader').hide();
-            $('#newImageSubmitButton').show();
-            $('#newImageCancelButton').show();
         },
         prev: function() {
             EzDashboardBizService.data.pageNumber--;
@@ -301,14 +153,10 @@
 
     var DashTemplate = ''+
         '<tr>'+
-            '<td style="vertical-align: middle;">'+
-                '<img class="img-rounded" style="object-fit:cover;" height="180px" width="240px">'+
-            '</td>'+
-            '<td class="rowSection" style="vertical-align: middle;"></td>'+
-            '<td class="rowSectionLabel" style="vertical-align: middle;"></td>'+
-            '<td class="rowTargetType" style="vertical-align: middle;"></td>'+
-            '<td class="rowTargetUrl" style="vertical-align: middle;"></td>'+
-            '<td class="rowEdit" style="vertical-align: middle;"></td>'+
-            '<td class="rowActive" style="vertical-align: middle;"></td>'+
+            '<td class="rowTime" style="vertical-align: middle;"></td>'+
+            '<td class="rowPhone" style="vertical-align: middle;"></td>'+
+            '<td class="rowMessage" style="vertical-align: middle;"></td>'+
+            '<td class="rowStatus" style="vertical-align: middle;"></td>'+
+            '<td class="rowResponse" style="vertical-align: middle;"></td>'+
         '</tr>';
 </script>
