@@ -20,4 +20,5 @@ public interface EzCoreConnectLogsWatzapRepository extends JpaRepository<WatzapL
     Page<WatzapLogDO> findByOrgId(String orgId, Pageable pageable);
     Page<WatzapLogDO> findByOrgIdAndTarget(String orgId, String target, Pageable pageable);
     Page<WatzapLogDO> findByTarget(String target, Pageable pageable);
+    WatzapLogDO findByIdAndOrgId(String id, String orgId);
 }

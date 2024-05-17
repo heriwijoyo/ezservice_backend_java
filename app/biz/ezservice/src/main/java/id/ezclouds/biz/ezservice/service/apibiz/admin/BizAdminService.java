@@ -6,6 +6,7 @@ package id.ezclouds.biz.ezservice.service.apibiz.admin;
 
 import id.ezclouds.biz.ezservice.config.BizPublicUrlResolver;
 import id.ezclouds.biz.ezservice.config.BizPublicUrlResolverImpl;
+import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.constant.BizConstant;
 import id.ezclouds.biz.ezservice.enums.BizMemberRole;
 import id.ezclouds.biz.ezservice.converter.BizAdminConverter;
@@ -28,6 +29,7 @@ import id.ezclouds.biz.ezservice.service.inner.service.BizAdminInnerService;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
+import id.ezclouds.core.integration.result.EzConnectResult;
 import id.ezclouds.core.shared.result.PageResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.DateUtil;
@@ -679,6 +681,39 @@ public class BizAdminService extends BizBaseService {
 
                 bizResult.setObject(pageResult);
                 bizResult.setSuccess(true);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
+    public BizResult resendWhatsapp(BizWebCreateRequest<String> request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getData(), EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                if (StringUtil.isBlank(request.getOrgId())) {
+                    request.setOrgId(session.getOrgId());
+                }
+                EzConnectResult result = bizAdminInnerService.resendWhatsapp(request.getOrgId(), request.getData());
+                bizResult.setSuccess(result.isSuccess());
+                if (result.isSuccess()) {
+                    bizResult.setObject(BizConstant.Message.SUCCESS_COMMON);
+                } else {
+                    bizResult.setObject(result.getErrorCode().getDescription());
+                }
             }
 
             @Override

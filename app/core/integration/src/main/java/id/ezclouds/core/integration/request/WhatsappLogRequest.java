@@ -8,7 +8,8 @@ import org.springframework.data.domain.PageRequest;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: WhatsappLogRequest.java, v 0.1 2024‐05‐16 10:22 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
+ * @version $Id: WhatsappLogRequest.java, v 0.1 2024‐05‐16 10:22 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ */
 public class WhatsappLogRequest extends ConnectRequest {
 
     private String phone;

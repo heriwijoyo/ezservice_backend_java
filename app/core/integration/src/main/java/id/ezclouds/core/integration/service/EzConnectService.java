@@ -10,6 +10,7 @@ import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.integration.dataservice.ConnectDbLoggerService;
 import id.ezclouds.core.integration.dataservice.model.WhatsappLog;
 import id.ezclouds.core.integration.request.WhatsappLogRequest;
+import id.ezclouds.core.integration.request.WhatsappResendRequest;
 import id.ezclouds.core.integration.request.WhatsappSendRequest;
 import id.ezclouds.core.integration.result.EzConnectResult;
 import id.ezclouds.core.integration.service.client.service.WatzapClientService;
@@ -90,6 +91,39 @@ public class EzConnectService {
                         .getWhatsappLogs(request);
                 result.setSuccess(true);
                 result.setData(pageInfo);
+            }
+        });
+        return result;
+    }
+
+    public EzConnectResult resendWhatsapp(WhatsappResendRequest request) {
+        final EzConnectResult result = new EzConnectResult();
+        ConnectServiceTemplate.execute(null, result, new ConnectServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getOrgId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getMessageId(), EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onProcess() throws Exception {
+                WhatsappLog whatsappLog = connectDbLoggerService
+                        .getWhatsappLog(request.getOrgId(), request.getMessageId());
+                AssertUtil.notNull(whatsappLog, EzErrorCode.DATA_NOT_FOUND);
+
+                WhatsappSendRequest sendRequest = new WhatsappSendRequest();
+                sendRequest.setOrgId(whatsappLog.getOrgId());
+                sendRequest.setPhoneNumber(whatsappLog.getPhone());
+                sendRequest.setMessage(whatsappLog.getMessage());
+
+                EzConnectResult ezConnectResult = sendWhatsappMessage(sendRequest);
+                if (ezConnectResult.isSuccess()) {
+                    connectDbLoggerService.updateWhatsappResend(request.getOrgId(), request.getMessageId());
+                }
+
+                result.setSuccess(ezConnectResult.isSuccess());
+                result.setData(ezConnectResult.getData());
             }
         });
         return result;

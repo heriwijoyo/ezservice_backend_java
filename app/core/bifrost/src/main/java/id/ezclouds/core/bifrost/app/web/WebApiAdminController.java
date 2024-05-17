@@ -577,6 +577,33 @@ public class WebApiAdminController {
         return result;
     }
 
+    @PostMapping(value = "/webapp/api/resendWhatsapp.json")
+    private WebApiResult<String> resendWhatsapp(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "mid", required = false) String messageId ) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_RESEND_WHATSAPP, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizWebCreateRequest<String> request = new BizWebCreateRequest<>();
+                request.setSessionId(sessionId);
+                request.setData(messageId);
+                return bizAdminService.resendWhatsapp(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
     @PostMapping(value = "/webapp/api/adminCommonPost.json")
     private WebApiResult<String> adminUpload(@RequestPart("imageFile") MultipartFile multipartFile, @RequestPart("postData") String postData) {
         WebApiResult<String> result = new WebApiResult<>();

@@ -13,13 +13,27 @@
                     </div>
 
                     <div style="margin-top: -10px;" class="body table-responsive">
+                        <table class='table'>
+                            <tr>
+                                <td>
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" id="keyword" placeholder="Search Phone Number..." required>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td width="1%"><button id="reset" type="button" class="button button-rounded waves-effect waves-float">RESET</button></td>
+                                <td width="1%"><button id="search" type="submit" class="btn bg-blue btn-circle waves-effect waves-circle waves-float"><i class="material-icons">search</i></button></td>
+                            </tr>
+                        </table>
                         <table class="table table-hover table-striped">
                             <thead>
                             <tr>
                                 <th width="12%">Time</th>
                                 <th width="12%">Phone</th>
-                                <th width="54%">Message</th>
+                                <th width="50%">Message</th>
                                 <th width="10%">Status</th>
+                                <th width="4%"></th>
                                 <th width="12%">Response</th>
                             </tr>
                             </thead>
@@ -35,7 +49,8 @@
 
 <script type="text/javascript">
     var EzAdminUrl = {
-        GET_WHATSAPP_LOG: 'api/getWhatsappLog.json'
+        GET_WHATSAPP_LOG: 'api/getWhatsappLog.json',
+        WHATSAPP_RESEND: 'api/resendWhatsapp.json'
     };
     var EzDashboardBizService = {
         start: function() {
@@ -46,13 +61,25 @@
                 sessionId: EzWebAppClient.getSessionId(),
                 pageNumber: EzDashboardBizService.data.pageNumber,
                 pageSize: EzDashboardBizService.data.pageSize,
-                keyword: $('#phone').val()
+                keyword: $('#keyword').val()
             });
+        },
+        resendMessage: function(mid) {
+            if (window.confirm('Resend Message?')) {
+                EzWebAppClient.callApiService(EzAdminUrl.WHATSAPP_RESEND, {
+                    sessionId: EzWebAppClient.getSessionId(),
+                    mid: mid
+                });
+            }
         },
         handleApiBizResult: function(url, response) {
             if (url === EzAdminUrl.GET_WHATSAPP_LOG) {
                 EzDashboardBizService.data.result = response.pageResult;
                 EzDashboardBizService.reloadPageResultView(response);
+            }
+            if (url === EzAdminUrl.WHATSAPP_RESEND) {
+                alert(response.data);
+                EzDashboardBizService.fetchData();
             }
         },
         reloadPageResultView: function(response) {
@@ -60,27 +87,19 @@
             for(let i=0; i<response.pageResult.data.length; i++) {
                 let rowData = response.pageResult.data[i];
                 let itemRow = $.parseHTML(DashTemplate);
+                let resendText = '<a href="javascript:void(0)" onclick="EzDashboardBizService.resendMessage(\''+ rowData.id +'\')"><i class="material-icons">send</i></a>';
+                if (rowData.status == 'SUCCESS' || rowData.status == 'RESEND') {
+                    resendText = '';
+                }
                 $(itemRow).find('.rowPhone').html(rowData.phone);
                 $(itemRow).find('.rowMessage').html(rowData.message);
                 $(itemRow).find('.rowTime').html(rowData.createdTime);
                 $(itemRow).find('.rowStatus').html(rowData.status);
+                $(itemRow).find('.rowSend').html(resendText);
                 $(itemRow).find('.rowResponse').html(rowData.responseTime);
                 $('#rowsContainer').append(itemRow);
             }
             $('.pager').html(EzWebAppClient.renderPager(response.pageResult));
-        },
-        renderFlag: function(flag,section,id) {
-            let flagText = flag == 1 ? 'YES' : 'NO';
-            let switchFlag = flag == 1 ? '0' : '1';
-            return '<center>'+ flagText + '<br><button onClick="EzDashboardBizService.switchFlag(\''+id+'\',\''+section+'\',\''+switchFlag+'\')" class="button button-rounded waves-effect waves-float" type="submit">SWITCH</button></center>';
-        },
-        switchFlag: function(itemId,section,value) {
-            EzWebAppClient.commonSwitchFlag({
-                objectType: 'VIDEO_CARD',
-                itemId: itemId,
-                section: section,
-                value: value
-            });
         },
         prev: function() {
             EzDashboardBizService.data.pageNumber--;
@@ -128,26 +147,12 @@
         });
         EzWebAppClient.start();
 
-        $('#form-add-new-btn').click(function(){
-            EzDashboardBizService.showFormNewImage();
+        $('#search').click(function(){
+            EzDashboardBizService.fetchData();
         });
-        $('#newImageCancelButton').click(function(){
-            EzDashboardBizService.hideFormNewImage();
-            EzDashboardBizService.resetFormNewImage();
-        });
-        $('#newImageSubmitButton').click(function(event){
-            event.preventDefault();
-            $('#newImageSubmitButton').hide();
-            $('#newImageCancelButton').hide();
-            $('#newImageSubmitLoader').show();
-
-            let formMode = $('#formMode').val();
-            if (formMode === 'CREATE') {
-                EzDashboardBizService.postNewImage();
-            }
-            if (formMode === 'UPDATE') {
-                EzDashboardBizService.updateItem();
-            }
+        $('#reset').click(function(){
+            $('#keyword').val('');
+            EzDashboardBizService.fetchData();
         });
     });
 
@@ -157,6 +162,7 @@
             '<td class="rowPhone" style="vertical-align: middle;"></td>'+
             '<td class="rowMessage" style="vertical-align: middle;"></td>'+
             '<td class="rowStatus" style="vertical-align: middle;"></td>'+
+            '<td class="rowSend" style="vertical-align: middle;"></td>'+
             '<td class="rowResponse" style="vertical-align: middle;"></td>'+
         '</tr>';
 </script>

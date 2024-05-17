@@ -95,6 +95,7 @@ public class BizModelConverter {
     public static BizWhatsappLog convert(WhatsappLog whatsappLog) {
         if (whatsappLog == null) { return null; }
         BizWhatsappLog bizWhatsappLog = new BizWhatsappLog();
+        bizWhatsappLog.setId(whatsappLog.getId());
         bizWhatsappLog.setOrgId(whatsappLog.getOrgId());
         bizWhatsappLog.setPhone(whatsappLog.getPhone());
         bizWhatsappLog.setMessage(whatsappLog.getMessage());

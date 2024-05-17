@@ -10,6 +10,7 @@ package id.ezclouds.biz.ezservice.model;
  */
 public class BizWhatsappLog {
 
+    private String id;
     private String orgId;
     private String phone;
     private String message;
@@ -17,6 +18,14 @@ public class BizWhatsappLog {
     private String responseTime;
     private String status;
     private String responseDetail;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getOrgId() {
         return orgId;

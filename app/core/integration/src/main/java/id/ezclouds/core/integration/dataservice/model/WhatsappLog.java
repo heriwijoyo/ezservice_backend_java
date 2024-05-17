@@ -10,6 +10,7 @@ package id.ezclouds.core.integration.dataservice.model;
  */
 public class WhatsappLog {
 
+    private String id;
     private String orgId;
     private String phone;
     private String message;
@@ -17,6 +18,14 @@ public class WhatsappLog {
     private String status;
     private String responseTime;
     private String response;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getOrgId() {
         return orgId;

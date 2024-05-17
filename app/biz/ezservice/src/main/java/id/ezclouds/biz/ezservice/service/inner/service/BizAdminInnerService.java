@@ -33,6 +33,8 @@ import id.ezclouds.biz.ezservice.service.app.request.VideoCardCreateRequest;
 import id.ezclouds.biz.ezservice.service.request.web.BizWebUpdateItemRequest;
 import id.ezclouds.core.integration.dataservice.model.WhatsappLog;
 import id.ezclouds.core.integration.request.WhatsappLogRequest;
+import id.ezclouds.core.integration.request.WhatsappResendRequest;
+import id.ezclouds.core.integration.request.WhatsappSendRequest;
 import id.ezclouds.core.integration.result.EzConnectResult;
 import id.ezclouds.core.shared.result.BizPageInfo;
 import id.ezclouds.core.shared.result.PageResult;
@@ -285,6 +287,13 @@ public class BizAdminInnerService {
                 .stream()
                 .map(BizModelConverter::convert)
                 .collect(Collectors.toList()));
+    }
+
+    public EzConnectResult resendWhatsapp(String orgId, String messageId) {
+        WhatsappResendRequest resendRequest = new WhatsappResendRequest();
+        resendRequest.setOrgId(orgId);
+        resendRequest.setMessageId(messageId);
+        return ezConnectService.resendWhatsapp(resendRequest);
     }
 
     public void updateVideoCard(VideoCard videoCard) {

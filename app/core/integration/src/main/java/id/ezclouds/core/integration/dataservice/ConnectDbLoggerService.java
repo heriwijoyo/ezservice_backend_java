@@ -75,6 +75,30 @@ public class ConnectDbLoggerService {
         }
     }
 
+    public WhatsappLog getWhatsappLog(String orgId, String messageId) {
+        WatzapLogDO watzapLogDO = ezCoreConnectLogsWatzapRepository
+                .findByIdAndOrgId(messageId, orgId);
+        if (watzapLogDO == null) {
+            return null;
+        }
+        WhatsappLog whatsappLog = new WhatsappLog();
+        whatsappLog.setOrgId(watzapLogDO.getOrgId());
+        whatsappLog.setPhone(watzapLogDO.getTarget());
+        whatsappLog.setMessage(watzapLogDO.getMessage());
+        return whatsappLog;
+    }
+
+    @Transactional
+    public void updateWhatsappResend(String orgId, String messageId) {
+        WatzapLogDO watzapLogDO = ezCoreConnectLogsWatzapRepository
+                .findByIdAndOrgId(messageId, orgId);
+        if (watzapLogDO != null) {
+            watzapLogDO.setStatus("RESEND");
+            ezCoreConnectLogsWatzapRepository
+                    .saveAndFlush(watzapLogDO);
+        }
+    }
+
     public BizPageInfo<WhatsappLog> getWhatsappLogs(WhatsappLogRequest request) {
         Page<WatzapLogDO> findResult;
         if (StringUtil.isNotBlank(request.getOrgId()) && StringUtil.isNotBlank(request.getPhone())) {
@@ -99,6 +123,7 @@ public class ConnectDbLoggerService {
                 .stream()
                 .map(modelDO -> {
                     WhatsappLog whatsappLog = new WhatsappLog();
+                    whatsappLog.setId(modelDO.getId());
                     whatsappLog.setOrgId(modelDO.getOrgId());
                     whatsappLog.setPhone(modelDO.getTarget());
                     whatsappLog.setMessage(modelDO.getMessage());
