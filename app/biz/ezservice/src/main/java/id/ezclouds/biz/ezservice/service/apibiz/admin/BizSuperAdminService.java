@@ -197,7 +197,8 @@ public class BizSuperAdminService extends BizBaseService {
             public void onBizProcess() throws Exception {
                 authorizeSuperUserMember(request.getSessionId());
 
-                bizAdminInnerService.createOrganization(request.getData());
+                String orgId = bizAdminInnerService.createOrganization(request.getData());
+                coreFileService.initPublicFileDirectory(orgId);
                 bizResult.setSuccess(true);
                 bizResult.setObject("SUCCESS");
             }

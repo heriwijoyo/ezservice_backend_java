@@ -34,7 +34,6 @@ import id.ezclouds.biz.ezservice.service.request.web.BizWebUpdateItemRequest;
 import id.ezclouds.core.integration.dataservice.model.WhatsappLog;
 import id.ezclouds.core.integration.request.WhatsappLogRequest;
 import id.ezclouds.core.integration.request.WhatsappResendRequest;
-import id.ezclouds.core.integration.request.WhatsappSendRequest;
 import id.ezclouds.core.integration.result.EzConnectResult;
 import id.ezclouds.core.shared.result.BizPageInfo;
 import id.ezclouds.core.shared.result.PageResult;
@@ -69,7 +68,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -379,7 +377,7 @@ public class BizAdminInnerService {
     }
 
     @Transactional
-    public void createOrganization(BizOrganization org) {
+    public String createOrganization(BizOrganization org) {
         EzCoreOrganizationDO modelDO = new EzCoreOrganizationDO();
         modelDO.setOrgId(org.getOrgId());
         modelDO.setCode(org.getCode());
@@ -394,6 +392,7 @@ public class BizAdminInnerService {
         coreOrganizationService.saveOrganization(modelDO);
 
         initiateOrgConfig(modelDO);
+        return modelDO.getOrgId();
     }
 
     private BizApplicationConfig getAppConfig(String orgId) {

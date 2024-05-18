@@ -7,15 +7,16 @@ package id.ezclouds.core.bifrost.app.webapp;
 import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.common.util.StringUtil;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.ResourceUtils;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -24,9 +25,9 @@ import java.nio.file.Files;
 @Controller
 public class WebAppController {
 
-    private static final String ASSET_INCLUDE_LAYOUT = "classpath:webapp/include/layout.incl";
-    private static final String ASSET_INCLUDE_HEADER = "classpath:webapp/include/header.incl";
-    private static final String ASSET_INCLUDE_NAVIGATION = "classpath:webapp/include/navigation.incl";
+    private static final String ASSET_INCLUDE_LAYOUT = "webapp/include/layout.incl";
+    private static final String ASSET_INCLUDE_HEADER = "webapp/include/header.incl";
+    private static final String ASSET_INCLUDE_NAVIGATION = "webapp/include/navigation.incl";
 
     @GetMapping(value = "/webapp/videocard.htm")
     private void webAppVideoCard(HttpServletResponse servletResponse) {
@@ -93,7 +94,7 @@ public class WebAppController {
     }
 
     private String readHtmlContent(String assetFile) throws IOException {
-        File file = ResourceUtils.getFile(assetFile);
-        return new String(Files.readAllBytes(file.toPath()));
+        Resource resource = new ClassPathResource(assetFile);
+        return StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
     }
 }

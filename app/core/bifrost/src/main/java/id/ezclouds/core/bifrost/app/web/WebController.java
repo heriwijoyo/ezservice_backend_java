@@ -28,15 +28,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.ResourceUtils;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -66,7 +67,7 @@ public class WebController extends AppController {
     @Value("${ezserviceapp.download.apk_path}")
     private String downloadApkPath;
 
-    @GetMapping(value = "/app/{orgCode}/download/apk/{versionName}")
+    @GetMapping(value = "/app/{orgCode}/download/apk/{versionName}.apk")
     public void downloadApk(@PathVariable("orgCode") String orgCode, @PathVariable("versionName") String versionName, HttpServletResponse response) throws IOException {
         CoreOrganization organization = bizOrganizationService.getOrganizationByCode(orgCode);
         if (organization == null) {
@@ -176,7 +177,7 @@ public class WebController extends AppController {
     }
 
     @GetMapping(value = "/app/{orgCode}/download.htm")
-    private void appDownloadPage(@PathVariable("orgCode") String orgCode, HttpServletResponse servletResponse) {
+    private void appDownloadPage(@PathVariable(name = "orgCode", required = false) String orgCode, HttpServletResponse servletResponse) {
         EzAppContextHolder.init(WebEvent.WEB_PAGE_ORG_DOWNLOAD);
         ErrorResult errorResult = null;
 
@@ -192,10 +193,12 @@ public class WebController extends AppController {
             AssertUtil.notNull(appConfig, EzErrorCode.DATA_NOT_FOUND, "appConfig not found");
             AssertUtil.notBlank(appConfig.getAppName(), EzErrorCode.DATA_NOT_FOUND, "appConfig.name is blank");
 
-            File file = ResourceUtils.getFile("classpath:download.htm");
-            String htmlContent = new String(Files.readAllBytes(file.toPath()));
+            Resource downloadResource = new ClassPathResource("download.htm");
+
+            String htmlContent = StreamUtils.copyToString(downloadResource.getInputStream(), StandardCharsets.UTF_8);
             htmlContent = htmlContent
                     .replace("APP_NAME", appConfig.getAppName())
+                    .replace("ORG_CODE", orgCode)
                     .replace("APP_VERSION_NAME", buildPackage.getVersionName());
             servletResponse.getWriter().write(htmlContent);
             servletResponse.getWriter().flush();
