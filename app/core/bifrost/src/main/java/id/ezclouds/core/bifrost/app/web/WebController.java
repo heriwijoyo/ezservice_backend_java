@@ -9,6 +9,7 @@ import id.ezclouds.biz.ezservice.model.AppConfig;
 import id.ezclouds.biz.ezservice.service.app.AppConfigService;
 import id.ezclouds.biz.ezservice.service.app.BizOrganizationService;
 import id.ezclouds.biz.ezservice.service.app.model.BizAppBuildPackage;
+import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.ExceptionUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
@@ -38,7 +39,6 @@ import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -67,35 +67,62 @@ public class WebController extends AppController {
     @Value("${ezserviceapp.download.apk_path}")
     private String downloadApkPath;
 
-    @GetMapping(value = "/app/{orgCode}/download/apk/{versionName}.apk")
-    public void downloadApk(@PathVariable("orgCode") String orgCode, @PathVariable("versionName") String versionName, HttpServletResponse response) throws IOException {
-        CoreOrganization organization = bizOrganizationService.getOrganizationByCode(orgCode);
-        if (organization == null) {
-            writePageNotFound(response);
-            return;
+    @GetMapping(value = "/app/{orgCode}/download/apk/{appName}-{versionName}.apk")
+    public void downloadApk(
+            @PathVariable("orgCode") String orgCode,
+            @PathVariable("appName") String appName,
+            @PathVariable("versionName") String versionName,
+            HttpServletResponse response) {
+
+        EzAppContextHolder.init(WebEvent.WEB_DOWNLOAD_APK);
+        ErrorResult errorResult = null;
+
+        try {
+            CoreOrganization organization = bizOrganizationService.getOrganizationByCode(orgCode);
+            AssertUtil.notNull(organization, EzErrorCode.DATA_NOT_FOUND, "org not found");
+
+            AppConfig appConfig = appConfigService.getAppConfig(organization.getOrgId());
+            AssertUtil.notNull(appConfig, EzErrorCode.DATA_NOT_FOUND, "appConfig not found");
+            AssertUtil.isTrue(StringUtil.equalsNotNull(appName, appConfig.getAppName()), EzErrorCode.DATA_NOT_FOUND, "invalid appName");
+
+            BizAppBuildPackage buildPackage = appConfigService
+                    .getBuildPackageByVersionName(organization.getOrgId(), "ANDROID", versionName);
+            AssertUtil.notNull(buildPackage, EzErrorCode.DATA_NOT_FOUND, "buildPackage not found");
+
+            PublicFileResolver publicFileResolver = coreFileService.resolvePublicFileInfo(organization.getOrgId());
+            Path apkFile = publicFileResolver.getAppBuildPackagePath(versionName + ".apk");
+
+            response.setContentType("application/vnd.android.package-archive");
+            response.setContentLengthLong(Files.size(apkFile));
+            response.setHeader(
+                    HttpHeaders.CONTENT_DISPOSITION,
+                    ContentDisposition.attachment()
+                            .filename(apkFile.getFileName().toString(), StandardCharsets.UTF_8)
+                            .build()
+                            .toString()
+            );
+
+            Files.copy(apkFile, response.getOutputStream());
+        }
+        catch (Exception exception) {
+            EzAppContextHolder
+                    .getContext()
+                    .appendErrorStackTrace(ExceptionUtil.getStackTrace(exception));
+            errorResult = ErrorResultUtil.composeErrorResult(exception);
+        }
+        finally {
+            boolean success = errorResult == null;
+            String resultCode = errorResult == null ? "RESULT_SUCCESS" : errorResult.getErrorCode();
+            CommonWebDigestLog webDigestLog = new CommonWebDigestLog(success, resultCode);
+            webDigestLog.setDigestMessage("request(orgCode="+ orgCode +")");
+            webDigestLog.setErrorMessage(errorResult);
+            DigestLogUtil.logWebDigest(getLogger(), webDigestLog);
+
+            if (!success) {
+                writePageNotFound(response);
+            }
         }
 
-        BizAppBuildPackage buildPackage = appConfigService
-                .getBuildPackageByVersionName(organization.getOrgId(), "ANDROID", versionName);
-        if (buildPackage == null) {
-            writePageNotFound(response);
-            return;
-        }
-
-        PublicFileResolver publicFileResolver = coreFileService.resolvePublicFileInfo(organization.getOrgId());
-        Path apkFile = publicFileResolver.getAppBuildPackagePath(versionName + ".apk");
-
-        response.setContentType("application/vnd.android.package-archive");
-        response.setContentLengthLong(Files.size(apkFile));
-        response.setHeader(
-                HttpHeaders.CONTENT_DISPOSITION,
-                ContentDisposition.attachment()
-                .filename(apkFile.getFileName().toString(), StandardCharsets.UTF_8)
-                .build()
-                .toString()
-        );
-
-        Files.copy(apkFile, response.getOutputStream());
     }
 
     @GetMapping(value = "/image/private/{scene}/{orgCode}/{memberId}/{fileName}")
@@ -177,7 +204,7 @@ public class WebController extends AppController {
     }
 
     @GetMapping(value = "/app/{orgCode}/download.htm")
-    private void appDownloadPage(@PathVariable(name = "orgCode", required = false) String orgCode, HttpServletResponse servletResponse) {
+    private void appDownloadPage(@PathVariable(name = "orgCode", required = false) String orgCode, HttpServletResponse response) {
         EzAppContextHolder.init(WebEvent.WEB_PAGE_ORG_DOWNLOAD);
         ErrorResult errorResult = null;
 
@@ -200,8 +227,8 @@ public class WebController extends AppController {
                     .replace("APP_NAME", appConfig.getAppName())
                     .replace("ORG_CODE", orgCode)
                     .replace("APP_VERSION_NAME", buildPackage.getVersionName());
-            servletResponse.getWriter().write(htmlContent);
-            servletResponse.getWriter().flush();
+            response.getWriter().write(htmlContent);
+            response.getWriter().flush();
         }
         catch (Exception exception) {
             EzAppContextHolder
@@ -218,7 +245,7 @@ public class WebController extends AppController {
             DigestLogUtil.logWebDigest(getLogger(), webDigestLog);
 
             if (!success) {
-                writePageNotFound(servletResponse);
+                writePageNotFound(response);
             }
         }
     }
