@@ -11,7 +11,7 @@ package id.ezclouds.biz.ezservice.constant;
 public class AppConstant {
 
     public static final class CfgKey {
-        public static final String APP_NAME = "APP_NAME";
+        public static final String APP_NAME                 = "APP_NAME";
         public static final String ANDROID_VERSION_CODE     = "ANDROID_VERSION_CODE";
         public static final String ANDROID_VERSION_NAME     = "ANDROID_VERSION_NAME";
         public static final String ANDROID_UPDATE_URL       = "ANDROID_UPDATE_URL";
@@ -21,6 +21,7 @@ public class AppConstant {
         public static final String REPORT_OPTIONS           = "REPORT_OPTIONS";
         public static final String APP_REQUIRE_LOGIN        = "APP_REQUIRE_LOGIN";
         public static final String APP_DEFAULT_SURVEY_ID    = "APP_DEFAULT_SURVEY_ID";
+        public static final String APP_ELECTION_DEADLINE    = "APP_ELECTION_DEADLINE";
     }
 
     public static final String APP_VERSION_NAME_TAG = "APP_VERSION_NAME_TAG";

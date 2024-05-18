@@ -20,7 +20,7 @@ public class HomeData {
     private List<BizSimpleNews> highlightNews;
     private List<AppImageGallery> homePosters;
     private List<VideoSection> videoSections;
-    private String pemiluDeadline;
+    private String electionDeadline;
     private List<String> communities = new ArrayList<>();
     private String midBannerUrl;
     private String memberAvatarUrl;
@@ -65,12 +65,12 @@ public class HomeData {
         this.videoSections = videoSections;
     }
 
-    public String getPemiluDeadline() {
-        return pemiluDeadline;
+    public String getElectionDeadline() {
+        return electionDeadline;
     }
 
-    public void setPemiluDeadline(String pemiluDeadline) {
-        this.pemiluDeadline = pemiluDeadline;
+    public void setElectionDeadline(String electionDeadline) {
+        this.electionDeadline = electionDeadline;
     }
 
     public String getMidBannerUrl() {

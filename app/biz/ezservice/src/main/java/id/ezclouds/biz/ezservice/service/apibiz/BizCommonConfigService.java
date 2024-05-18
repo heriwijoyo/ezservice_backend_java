@@ -106,7 +106,6 @@ public class BizCommonConfigService extends BizBaseService {
 
     private HomeData composeHomeData(String orgId) {
         HomeData homeData = new HomeData();
-        //homeData.setPemiluDeadline("2024-10-14 00:00:00");
         homeData.setHighlightBanners(fetchHomeSlideGallery(orgId));
         homeData.setHighlightNews(fetchSimpleNews(orgId));
         homeData.setHomePosters(new ArrayList<>());

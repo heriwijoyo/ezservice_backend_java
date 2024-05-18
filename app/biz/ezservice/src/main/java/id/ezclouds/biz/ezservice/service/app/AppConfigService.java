@@ -58,7 +58,8 @@ public class AppConfigService {
                 AppConstant.CfgKey.BIZ_MAX_TPS_NUMBER,
                 AppConstant.CfgKey.REPORT_OPTIONS,
                 AppConstant.CfgKey.APP_REQUIRE_LOGIN,
-                AppConstant.CfgKey.APP_DEFAULT_SURVEY_ID
+                AppConstant.CfgKey.APP_DEFAULT_SURVEY_ID,
+                AppConstant.CfgKey.APP_ELECTION_DEADLINE
         );
     }
 
