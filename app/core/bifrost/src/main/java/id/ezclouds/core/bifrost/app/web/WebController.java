@@ -91,13 +91,14 @@ public class WebController extends AppController {
 
             PublicFileResolver publicFileResolver = coreFileService.resolvePublicFileInfo(organization.getOrgId());
             Path apkFile = publicFileResolver.getAppBuildPackagePath(versionName + ".apk");
+            String apkFileName = appName +"-"+ versionName + ".apk";
 
             response.setContentType("application/vnd.android.package-archive");
             response.setContentLengthLong(Files.size(apkFile));
             response.setHeader(
                     HttpHeaders.CONTENT_DISPOSITION,
                     ContentDisposition.attachment()
-                            .filename(apkFile.getFileName().toString(), StandardCharsets.UTF_8)
+                            .filename(apkFileName, StandardCharsets.UTF_8)
                             .build()
                             .toString()
             );
