@@ -6,11 +6,9 @@ package id.ezclouds.core.bifrost.app;
 
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.common.util.DateUtil;
-import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.ExceptionUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
-import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.core.bifrost.app.api.ApiBizProcessor;
 import id.ezclouds.core.bifrost.app.api.digestlog.CommonWebDigestLog;
@@ -25,6 +23,7 @@ import id.ezclouds.core.bifrost.core.SpringContextConfig;
 import id.ezclouds.core.bifrost.core.processor.BizProcessor;
 import id.ezclouds.core.bifrost.core.processor.PreBizProcessor;
 import id.ezclouds.core.bifrost.core.processor.WebProcessor;
+import id.ezclouds.core.bifrost.core.util.ErrorResultUtil;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.util.DigestLogUtil;
 import org.slf4j.Logger;
@@ -81,18 +80,14 @@ public abstract class AppController {
                     apiResult.setData(handler.convertResult(bizResult.getObject()));
                 }
             } else {
-                apiResult.setErrorResult(composeErrorResult(bizResult));
-                apiPageResult.setErrorResult(composeErrorResult(bizResult));
+                apiResult.setErrorResult(ErrorResultUtil.composeErrorResult(bizResult));
+                apiPageResult.setErrorResult(ErrorResultUtil.composeErrorResult(bizResult));
             }
 
-        } catch (EzErrorException ezException) {
-            EzAppContextHolder.getContext().appendErrorStackTrace(ExceptionUtil.getStackTrace(ezException));
-            apiResult.setErrorResult(composeErrorResult(ezException));
-            apiPageResult.setErrorResult(composeErrorResult(ezException));
         } catch (Exception exception) {
             EzAppContextHolder.getContext().appendErrorStackTrace(ExceptionUtil.getStackTrace(exception));
-            apiResult.setErrorResult(composeErrorResult());
-            apiPageResult.setErrorResult(composeErrorResult());
+            apiResult.setErrorResult(ErrorResultUtil.composeErrorResult(exception));
+            apiPageResult.setErrorResult(ErrorResultUtil.composeErrorResult(exception));
         } finally {
             DigestLog digestLog = handler.composeDigestLog(apiRequest, apiResult);
             if (isPageRequest) {
@@ -123,13 +118,9 @@ public abstract class AppController {
             WebProcessor webProcessor = SpringContextConfig.getBean(WebBizProcessor.class);
             Object result = webProcessor.process(webEvent, request, servletResponse);
             returnObject = handler.convertResult(result);
-        } catch (EzErrorException ezException) {
-            EzAppContextHolder.getContext().appendErrorStackTrace(ExceptionUtil.getStackTrace(ezException));
-            errorResult = composeErrorResult(ezException);
-            handler.onException(ezException);
         } catch (Exception exception) {
             EzAppContextHolder.getContext().appendErrorStackTrace(ExceptionUtil.getStackTrace(exception));
-            errorResult = composeErrorResult();
+            errorResult = ErrorResultUtil.composeErrorResult(exception);
             handler.onException(exception);
         } finally {
             boolean success = errorResult == null;
@@ -141,35 +132,6 @@ public abstract class AppController {
         }
 
         return returnObject;
-    }
-
-    private ErrorResult composeErrorResult(BizResult bizResult) {
-        ErrorResult errorResult = new ErrorResult();
-        errorResult.setErrorCode(bizResult.getErrorCode().getCode());
-        errorResult.setErrorContext(
-                StringUtil.concateStrings(
-                        bizResult.getErrorCode().getCode(),
-                        "@",
-                        bizResult.getErrorLocation())
-        );
-        errorResult.setErrorMessage(bizResult.getErrorMessage());
-        return errorResult;
-    }
-
-    private ErrorResult composeErrorResult(EzErrorException ezException) {
-        ErrorResult errorResult = new ErrorResult();
-        errorResult.setErrorCode(ezException.getEzErrorCode().getCode());
-        errorResult.setErrorContext(ezException.getEzErrorCode().getDescription());
-        errorResult.setErrorMessage(ezException.getErrorMessage() != null ? ezException.getErrorMessage() : ezException.getEzErrorCode().getDescription() );
-        return errorResult;
-    }
-
-    private ErrorResult composeErrorResult() {
-        EzErrorException ezErrorException = new EzErrorException(
-                EzErrorCode.SYSTEM_ERROR,
-                EzErrorCode.SYSTEM_ERROR.getDescription()
-        );
-        return composeErrorResult(ezErrorException);
     }
 
     public interface RequestHandler<T> {

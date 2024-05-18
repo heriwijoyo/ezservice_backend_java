@@ -9,14 +9,21 @@ import id.ezclouds.biz.ezservice.model.AppConfig;
 import id.ezclouds.biz.ezservice.service.app.AppConfigService;
 import id.ezclouds.biz.ezservice.service.app.BizOrganizationService;
 import id.ezclouds.biz.ezservice.service.app.model.BizAppBuildPackage;
-import id.ezclouds.common.util.StringUtil;
+import id.ezclouds.common.util.assertion.AssertUtil;
+import id.ezclouds.common.util.exception.ExceptionUtil;
+import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.core.bifrost.app.AppController;
+import id.ezclouds.core.bifrost.app.api.digestlog.CommonWebDigestLog;
+import id.ezclouds.core.bifrost.app.api.result.ErrorResult;
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;
 import id.ezclouds.core.bifrost.app.web.request.WebLoadImageRequest;
+import id.ezclouds.core.bifrost.core.util.ErrorResultUtil;
+import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.file.PublicFileResolver;
 import id.ezclouds.core.shared.model.CoreOrganization;
 import id.ezclouds.core.shared.service.CoreFileService;
+import id.ezclouds.core.shared.util.DigestLogUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -170,38 +177,46 @@ public class WebController extends AppController {
 
     @GetMapping(value = "/app/{orgCode}/download.htm")
     private void appDownloadPage(@PathVariable("orgCode") String orgCode, HttpServletResponse servletResponse) {
-
-        CoreOrganization organization = bizOrganizationService.getOrganizationByCode(orgCode);
-        if (organization == null) {
-            writePageNotFound(servletResponse);
-            return;
-        }
-
-        BizAppBuildPackage buildPackage = appConfigService
-                .getLatestBuildPackage(organization.getOrgId(), "ANDROID");
-        if (buildPackage == null) {
-            writePageNotFound(servletResponse);
-            return;
-        }
-
-        AppConfig appConfig = appConfigService.getAppConfig(organization.getOrgId());
-        String appName = appConfig.getAppName();
-
-        if (StringUtil.isBlank(appName)) {
-            writePageNotFound(servletResponse);
-            return;
-        }
+        EzAppContextHolder.init(WebEvent.WEB_PAGE_ORG_DOWNLOAD);
+        ErrorResult errorResult = null;
 
         try {
+            CoreOrganization organization = bizOrganizationService.getOrganizationByCode(orgCode);
+            AssertUtil.notNull(organization, EzErrorCode.DATA_NOT_FOUND, "organization not found");
+
+            BizAppBuildPackage buildPackage = appConfigService
+                    .getLatestBuildPackage(organization.getOrgId(), "ANDROID");
+            AssertUtil.notNull(buildPackage, EzErrorCode.DATA_NOT_FOUND, "buildPackage not found");
+
+            AppConfig appConfig = appConfigService.getAppConfig(organization.getOrgId());
+            AssertUtil.notNull(appConfig, EzErrorCode.DATA_NOT_FOUND, "appConfig not found");
+            AssertUtil.notBlank(appConfig.getAppName(), EzErrorCode.DATA_NOT_FOUND, "appConfig.name is blank");
+
             File file = ResourceUtils.getFile("classpath:download.htm");
             String htmlContent = new String(Files.readAllBytes(file.toPath()));
             htmlContent = htmlContent
-                    .replace("APP_NAME", appName)
+                    .replace("APP_NAME", appConfig.getAppName())
                     .replace("APP_VERSION_NAME", buildPackage.getVersionName());
             servletResponse.getWriter().write(htmlContent);
             servletResponse.getWriter().flush();
-        } catch (IOException e) {
-            writePageNotFound(servletResponse);
+        }
+        catch (Exception exception) {
+            EzAppContextHolder
+                    .getContext()
+                    .appendErrorStackTrace(ExceptionUtil.getStackTrace(exception));
+            errorResult = ErrorResultUtil.composeErrorResult(exception);
+        }
+        finally {
+            boolean success = errorResult == null;
+            String resultCode = errorResult == null ? "RESULT_SUCCESS" : errorResult.getErrorCode();
+            CommonWebDigestLog webDigestLog = new CommonWebDigestLog(success, resultCode);
+            webDigestLog.setDigestMessage("request(orgCode="+ orgCode +")");
+            webDigestLog.setErrorMessage(errorResult);
+            DigestLogUtil.logWebDigest(getLogger(), webDigestLog);
+
+            if (!success) {
+                writePageNotFound(servletResponse);
+            }
         }
     }
 
