@@ -331,6 +331,33 @@
             <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
                 <div class="card corner-radius">
                     <div class="header">
+                        <h2>NATIVE CODE CONVERTER</h2>
+                    </div>
+                    <div class="body">
+                        <div class="row clearfix">
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Plain Code</div>
+                                    <input type="text" class="form-control" id="plainCode" placeholder="Plain Code">
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Native Code</div>
+                                    <input type="text" class="form-control" id="nativeCode" placeholder="Message" disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <button id="nativeCodeBtn" class="button button-rounded waves-effect waves-float pull-right" type="submit">CONVERT</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                <div class="card corner-radius">
+                    <div class="header">
                         <h2>ORGANIZATION USER ADMIN</h2>
                     </div>
                     <div class="body">
@@ -935,6 +962,11 @@
         });
         $('#waSendBtnSubmit').click(function(){
             EzDashboardBizService.waSendMessage();
+        });
+        $('#nativeCodeBtn').click(function(){
+            let plainCode = $('#plainCode').val();
+            let nativeCode = EzDashboardBizService.generateNativeCode(plainCode);
+            $('#nativeCode').val(nativeCode);
         });
     });
 
