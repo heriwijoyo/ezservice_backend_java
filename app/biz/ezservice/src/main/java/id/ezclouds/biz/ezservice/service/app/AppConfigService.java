@@ -59,7 +59,8 @@ public class AppConfigService {
                 AppConstant.CfgKey.REPORT_OPTIONS,
                 AppConstant.CfgKey.APP_REQUIRE_LOGIN,
                 AppConstant.CfgKey.APP_DEFAULT_SURVEY_ID,
-                AppConstant.CfgKey.APP_ELECTION_DEADLINE
+                AppConstant.CfgKey.APP_ELECTION_DEADLINE,
+                AppConstant.CfgKey.APP_AREA_CONFIG
         );
     }
 

@@ -22,6 +22,7 @@ public class AppConstant {
         public static final String APP_REQUIRE_LOGIN        = "APP_REQUIRE_LOGIN";
         public static final String APP_DEFAULT_SURVEY_ID    = "APP_DEFAULT_SURVEY_ID";
         public static final String APP_ELECTION_DEADLINE    = "APP_ELECTION_DEADLINE";
+        public static final String APP_AREA_CONFIG         = "APP_AREA_CONFIG";
     }
 
     public static final String APP_VERSION_NAME_TAG = "APP_VERSION_NAME_TAG";

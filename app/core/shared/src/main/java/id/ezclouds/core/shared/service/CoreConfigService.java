@@ -47,9 +47,7 @@ public class CoreConfigService {
                 CoreConstant.ConfigKey.ADMIN_COMMON_SESSION_EXPIRY_MINS,
                 CoreConstant.ConfigKey.WATZAP_SEND_ENABLE,
                 CoreConstant.ConfigKey.WATZAP_API_KEY,
-                CoreConstant.ConfigKey.WATZAP_NUMBER_KEY,
-                CoreConstant.ConfigKey.CORE_AREA_LEVEL_ROOT,
-                CoreConstant.ConfigKey.CORE_AREA_ROOT_IDS
+                CoreConstant.ConfigKey.WATZAP_NUMBER_KEY
         );
     }
 
