@@ -92,6 +92,25 @@ public class CoreAdminService {
     }
 
     @Transactional
+    public void deleteAllBOMenuAndPermission(String ordId) {
+        List<EzCoreAdminBOMenuDO> menus = ezCoreAdminBOMenuRepository
+                .findByOrgId(ordId);
+        for (EzCoreAdminBOMenuDO menu : menus) {
+            ezCoreAdminBOMenuRepository
+                    .delete(menu);
+        }
+        ezCoreAdminBOMenuRepository.flush();
+
+        List<EzCoreAdminBOPermissionDO> permissions = ezCoreAdminBOPermissionRepository
+                .findByOrgId(ordId);
+        for (EzCoreAdminBOPermissionDO permission : permissions) {
+            ezCoreAdminBOPermissionRepository
+                    .delete(permission);
+        }
+        ezCoreAdminBOPermissionRepository.flush();
+    }
+
+    @Transactional
     public void initiateBOMenuAndPermission(String orgId) {
         String initRole = "ADMIN_ORG";
         List<String> initMenus = Arrays.asList(
@@ -100,7 +119,8 @@ public class CoreAdminService {
                 "APP_EVENTS,Manage Events,events.htm,calendar_month",
                 "APP_VIDEO_CARD,Manage Video Card,videocard.htm,smart_display",
                 "APP_PROFILE,Candidate Profile,profile.htm,assignment_ind",
-                "WHATSAPP_LOG,Whatsapp Logs,whatsapp.htm,sms"
+                "WHATSAPP_LOG,Whatsapp Logs,whatsapp.htm,sms",
+                "APP_DOCUMENTS,Documents,documents.htm,picture_as_pdf"
         );
         for (int i = 0; i < initMenus.size(); i++) {
             String[] menuSection = initMenus.get(i).split(",");
@@ -122,7 +142,8 @@ public class CoreAdminService {
                 "APP_EVENTS",
                 "APP_VIDEO_CARD",
                 "APP_PROFILE",
-                "WHATSAPP_LOG"
+                "WHATSAPP_LOG",
+                "APP_DOCUMENTS"
         );
         for (String permission : initPermission) {
             EzCoreAdminBOPermissionDO permissionDO = new EzCoreAdminBOPermissionDO();

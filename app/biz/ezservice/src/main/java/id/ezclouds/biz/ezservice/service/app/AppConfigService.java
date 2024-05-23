@@ -162,7 +162,10 @@ public class AppConfigService {
         Map<String, String> orgExtendConfig = EzAppContextHolder.getContext().getOrgExtendConfig();
         String orgHasSubOrg = StringUtil
                 .defaultIfBlank(orgExtendConfig.get(BizConstant.ExtKey.HAS_SUB_ORG), Boolean.FALSE.toString());
+        String allowPublicRegister = StringUtil
+                .defaultIfBlank(orgExtendConfig.get(BizConstant.ExtKey.ALLOW_PUBLIC_REGISTER), Boolean.FALSE.toString());
         configMap.put(BizConstant.ExtKey.HAS_SUB_ORG, orgHasSubOrg);
+        configMap.put(BizConstant.ExtKey.ALLOW_PUBLIC_REGISTER, allowPublicRegister);
         return configMap;
     }
 

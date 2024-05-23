@@ -12,6 +12,7 @@ public enum WebAppPage {
     VIDEO_CARD("webapp/videocard.htm"),
     PROFILE("webapp/profile.htm"),
     WHATSAPP("webapp/whatsapp.htm"),
+    DOCUMENTS("webapp/documents.htm"),
 
     ;
 

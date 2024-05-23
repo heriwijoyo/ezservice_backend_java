@@ -383,10 +383,29 @@ public class WebApiSuperAdminController {
 
             @Override
             public List<String> convertResult(Object object) {
-                if (object instanceof List) {
-                    return (List<String>) object;
-                }
-                return null;
+                return (List<String>) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/refreshAllDirectories.json")
+    private WebApiResult<String> refreshAllDirectories(@RequestParam(name = "sessionId", required = false) String sessionId) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_REFRESH_ALL_DIRECTORIES, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                return bizSuperAdminService.refreshAllDirectories(sessionId);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                return (String) object;
             }
 
             @Override

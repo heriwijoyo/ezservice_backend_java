@@ -101,6 +101,22 @@
             <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
                 <div class="card corner-radius">
                     <div class="header">
+                        <h2>COMMON ACTION</h2>
+                    </div>
+                    <div class="body">
+                        <div class="row clearfix">
+                            <div class="col-sm-12">
+                                <button id="generateAdminMenu" class="button button-rounded waves-effect waves-float">GENERATE MENU</button>
+                                <button id="generateOrgDir" class="button button-rounded waves-effect waves-float">GENERATE DIRECTORY</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                <div class="card corner-radius">
+                    <div class="header">
                         <h2>UPDATE ORGANIZATION</h2>
                     </div>
                     <div class="body">
@@ -537,6 +553,8 @@
         CORE_ORG_CONFIG_UPDATE: 'api/coreOrgConfigUpdate.json',
         WHATSAPP_SEND_MESSAGE: 'api/whatsappSend.json',
         ORG_ADMIN_ADD: 'api/coreOrgAdminAdd.json',
+        ORG_GENERATE_MENU: 'api/adminGenerateMenu.json',
+        ORG_GENERATE_DIRECTORY: 'api/adminGenerateDirectories.json',
         ADMIN_COMMON_POST: 'api/adminCommonPost.json'
     };
     var EzDashboardBizService = {

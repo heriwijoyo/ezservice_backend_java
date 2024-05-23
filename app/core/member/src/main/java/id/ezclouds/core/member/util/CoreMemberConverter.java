@@ -32,6 +32,10 @@ public class CoreMemberConverter {
         member.setGender(memberDO.getGender());
         member.setDateOfBirth(memberDO.getDateOfBirth());
         member.setPhone(memberDO.getPhone());
+        member.setEducation(memberDO.getEducation());
+        member.setOccupation(memberDO.getOccupation());
+        member.setReligion(memberDO.getReligion());
+        member.setEthnic(memberDO.getEthnic());
         member.setEmail(memberDO.getEmail());
         member.setAvatarUrl(memberDO.getAvatarUrl());
         member.setAddress(memberDO.getAddress());
@@ -57,6 +61,10 @@ public class CoreMemberConverter {
         memberDO.setGender(coreMember.getGender());
         memberDO.setDateOfBirth(coreMember.getDateOfBirth());
         memberDO.setPhone(coreMember.getPhone());
+        memberDO.setEducation(coreMember.getEducation());
+        memberDO.setOccupation(coreMember.getOccupation());
+        memberDO.setReligion(coreMember.getReligion());
+        memberDO.setEthnic(coreMember.getEthnic());
         memberDO.setEmail(coreMember.getEmail());
         memberDO.setAvatarUrl(coreMember.getAvatarUrl());
         memberDO.setAddress(coreMember.getAddress());

@@ -100,9 +100,20 @@
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <br>
-                        <div id="dashboard-name" class="color-name uppercase"></div>
-                        <div class="color-name"><i id="dashboard-icon" class="material-icons">cached</i></div>
-                        <div id="dashboard-label" class="color-class-name">Refresh All Caches</div>
+                        <div class="color-name uppercase"></div>
+                        <div class="color-name"><i class="material-icons">cached</i></div>
+                        <div class="color-class-name">Refresh All Caches</div>
+                        <br>
+                    </div>
+                </div>
+            </a>
+            <a id="refresh-all-dir-btn" href="#">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase"></div>
+                        <div class="color-name"><i class="material-icons">folder_open</i></div>
+                        <div class="color-class-name">Refresh All Directory</div>
                         <br>
                     </div>
                 </div>
@@ -127,7 +138,8 @@
 
 <script type="text/javascript">
     var EzConfigApiUrl = {
-        GET_REFRESH_ALL_CACHES: 'api/refreshAllCaches.json'
+        GET_REFRESH_ALL_CACHES: 'api/refreshAllCaches.json',
+        GET_REFRESH_ALL_DIRECTORIES: 'api/refreshAllDirectories.json'
     };
 
     var EzSystemConfigService = {
@@ -135,9 +147,15 @@
             $('#refresh-all-caches-btn').click(function(){
                 EzSystemConfigService.refreshAllCaches();
             });
+            $('#refresh-all-dir-btn').click(function(){
+                EzSystemConfigService.refreshAllDirectories();
+            });
         },
         refreshAllCaches: function() {
             EzWebAppClient.callApiService(EzConfigApiUrl.GET_REFRESH_ALL_CACHES, {});
+        },
+        refreshAllDirectories: function() {
+            EzWebAppClient.callApiService(EzConfigApiUrl.GET_REFRESH_ALL_DIRECTORIES, {});
         },
         handleApiBizResult: function(url, response) {
             if (url === EzConfigApiUrl.GET_REFRESH_ALL_CACHES) {
@@ -151,6 +169,9 @@
                     message,
                     function(){}
                 );
+            }
+            if (url === EzConfigApiUrl.GET_REFRESH_ALL_DIRECTORIES) {
+                alert(response.data);
             }
         }
     };

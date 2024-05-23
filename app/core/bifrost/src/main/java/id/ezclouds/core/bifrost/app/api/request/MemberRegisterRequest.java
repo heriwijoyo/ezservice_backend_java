@@ -20,6 +20,10 @@ public class MemberRegisterRequest extends ApiRequest {
     private String gender;
     private String dateOfBirth;
     private String phone;
+    private String education;
+    private String occupation;
+    private String religion;
+    private String ethnic;
     private String email;
     private String avatarUrl;
     private String address;
@@ -100,6 +104,38 @@ public class MemberRegisterRequest extends ApiRequest {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getEducation() {
+        return education;
+    }
+
+    public void setEducation(String education) {
+        this.education = education;
+    }
+
+    public String getOccupation() {
+        return occupation;
+    }
+
+    public void setOccupation(String occupation) {
+        this.occupation = occupation;
+    }
+
+    public String getReligion() {
+        return religion;
+    }
+
+    public void setReligion(String religion) {
+        this.religion = religion;
+    }
+
+    public String getEthnic() {
+        return ethnic;
+    }
+
+    public void setEthnic(String ethnic) {
+        this.ethnic = ethnic;
     }
 
     public String getEmail() {

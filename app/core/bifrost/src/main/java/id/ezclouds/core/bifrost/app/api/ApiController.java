@@ -276,7 +276,7 @@ public class ApiController extends AppController {
 
     // ================ TRANSACTIONAL APIs ==================
 
-    @PostMapping(value = "/api/member_register.json")
+    @PostMapping(value = "/api/memberRegister.json")
     private ApiResult<BizMemberRegisterResult> memberRegister(@RequestBody MemberRegisterRequest request) {
         return executeInTemplate(ApiEvent.API_MEMBER_REGISTER, request, new RequestHandler<BizMemberRegisterResult>() {
             @Override

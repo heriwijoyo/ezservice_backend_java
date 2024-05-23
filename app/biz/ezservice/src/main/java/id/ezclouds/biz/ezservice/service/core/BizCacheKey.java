@@ -22,4 +22,5 @@ public final class BizCacheKey {
     public static final String WEBAPP_PROFILE           = "WEBAPP_PROFILE";
     public static final String WEBAPP_VIDEO_CARD        = "WEBAPP_VIDEO_CARD";
     public static final String WEBAPP_WHATSAPP          = "WEBAPP_WHATSAPP";
+    public static final String WEBAPP_DOCUMENTS         = "WEBAPP_DOCUMENTS";
 }

@@ -48,6 +48,10 @@ public class BizRequestConverter<T extends BizRequest> {
             bizRequest.setNickname(request.getNickname());
             bizRequest.setDateOfBirth(request.getDateOfBirth());
             bizRequest.setPhone(request.getPhone());
+            bizRequest.setEducation(request.getEducation());
+            bizRequest.setOccupation(request.getOccupation());
+            bizRequest.setReligion(request.getReligion());
+            bizRequest.setEthnic(request.getEthnic());
             bizRequest.setEmail(request.getEmail());
             bizRequest.setAvatarUrl(request.getAvatarUrl());
             bizRequest.setAddress(request.getAddress());
@@ -63,6 +67,7 @@ public class BizRequestConverter<T extends BizRequest> {
             bizRequest.setRukunWarga(request.getRukunWarga());
             bizRequest.setRukunTetangga(request.getRukunTetangga());
             bizRequest.setTpsNumber(request.getTpsNumber());
+            bizRequest.getExtendInfo().putAll(request.getExtendInfo());
             return bizRequest;
         }
         return null;

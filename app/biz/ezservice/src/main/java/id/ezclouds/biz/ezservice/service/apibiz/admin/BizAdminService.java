@@ -805,8 +805,8 @@ public class BizAdminService extends BizBaseService {
                         bizAppCacheService.reloadCacheItem(BizCacheEnum.APP_IMAGE_GALLERY_ALL);
                         break;
 
-                    case ADMIN_OTHER_GALLERY:
-                        filePath = fileInfo.getOtherGalleryPath(fileName);
+                    case ADMIN_DOCS_GALLERY:
+                        filePath = fileInfo.getDocsGalleryPath(fileName);
                         break;
 
                     default:

@@ -20,4 +20,6 @@ public interface EzCoreAdminBOMenuRepository extends JpaRepository<EzCoreAdminBO
 
     @Query("SELECT menu FROM EzCoreAdminBOMenuDO menu WHERE menu.status = 1")
     List<EzCoreAdminBOMenuDO> findAllActive();
+
+    List<EzCoreAdminBOMenuDO> findByOrgId(String orgId);
 }

@@ -22,7 +22,7 @@ public interface PublicFileResolver {
 
     Path getVideoCardGalleryPath(String fileName);
 
-    Path getOtherGalleryPath(String fileName);
+    Path getDocsGalleryPath(String fileName);
 
     Path getReportImagePath(String fileName);
 

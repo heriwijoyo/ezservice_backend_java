@@ -8,10 +8,12 @@ import id.ezclouds.biz.ezservice.config.BizPublicUrlResolver;
 import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.constant.BizConstant;
 import id.ezclouds.biz.ezservice.converter.BizMemberConverter;
+import id.ezclouds.biz.ezservice.enums.BizMemberRole;
 import id.ezclouds.biz.ezservice.enums.BizUploadScene;
 import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.model.member.BizMemberInfo;
+import id.ezclouds.biz.ezservice.model.member.BizMemberRegisterMode;
 import id.ezclouds.biz.ezservice.model.member.BizMemberRegisterResult;
 import id.ezclouds.biz.ezservice.model.profile.MemberProfile;
 import id.ezclouds.biz.ezservice.service.app.AppReportService;
@@ -30,7 +32,6 @@ import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
-import id.ezclouds.core.auth.service.CoreAuthService;
 import id.ezclouds.core.member.constant.CoreMemberField;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
@@ -41,8 +42,7 @@ import id.ezclouds.core.shared.service.CoreFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -53,9 +53,6 @@ public class BizMemberService extends BizBaseService {
 
     @Autowired
     private BizMemberInnerService bizMemberInnerService;
-
-    @Autowired
-    private CoreAuthService coreAuthService;
 
     @Autowired
     private AppProfileService appProfileService;
@@ -125,6 +122,27 @@ public class BizMemberService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
+                CoreAuthMemberSessionInfo sessionInfo = authAppMemberSession();
+                AssertUtil.notBlank(sessionInfo.getMemberRoles(), EzErrorCode.UNAUTHORIZED);
+                List<String> memberRoles = Arrays.asList(sessionInfo.getMemberRoles().split(","));
+                AssertUtil.isTrue(memberRoles.size() > 0, EzErrorCode.UNAUTHORIZED);
+
+                String registerMode = request.getExtendInfo().get("REG_MODE");
+                BizMemberRegisterMode bizRegisterMode = BizMemberRegisterMode.getByCode(registerMode);
+
+                if (bizRegisterMode == BizMemberRegisterMode.BY_RECRUITER) {
+                    AssertUtil.isTrue(memberRoles.contains(BizMemberRole.OP_RECRUITER.getCode()), EzErrorCode.UNAUTHORIZED);
+                }
+                if (bizRegisterMode == BizMemberRegisterMode.BY_SUB_ORG_ADMIN) {
+                    AssertUtil.isTrue(memberRoles.contains(BizMemberRole.ADMIN_SUB_ORG.getCode()), EzErrorCode.UNAUTHORIZED);
+                }
+                if (bizRegisterMode == BizMemberRegisterMode.BY_ORG_ADMIN) {
+                    AssertUtil.isTrue(memberRoles.contains(BizMemberRole.ADMIN_ORG.getCode()), EzErrorCode.UNAUTHORIZED);
+                }
+
+                request.setReferrerId(sessionInfo.getMemberId());
+
+
                 BizMemberInfo bizMemberInfo = bizMemberInnerService.processRegisterMember(request);
                 BizMemberRegisterResult result = new BizMemberRegisterResult();
                 result.setMemberId(bizMemberInfo.getBizMember().getMemberId());

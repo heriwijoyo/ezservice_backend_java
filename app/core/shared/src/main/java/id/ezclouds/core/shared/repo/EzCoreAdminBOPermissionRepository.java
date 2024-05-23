@@ -20,4 +20,6 @@ public interface EzCoreAdminBOPermissionRepository extends JpaRepository<EzCoreA
 
     @Query("SELECT pbo FROM EzCoreAdminBOPermissionDO pbo WHERE pbo.status = 1")
     List<EzCoreAdminBOPermissionDO> findAllActive();
+
+    List<EzCoreAdminBOPermissionDO> findByOrgId(String orgId);
 }

@@ -4,6 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.service.apibiz.admin;
 
+import id.ezclouds.biz.ezservice.constant.BizConstant;
 import id.ezclouds.biz.ezservice.enums.BizConnectType;
 import id.ezclouds.biz.ezservice.enums.BizMemberRole;
 import id.ezclouds.biz.ezservice.model.admin.BizApplicationConfig;
@@ -415,6 +416,32 @@ public class BizSuperAdminService extends BizBaseService {
 
                 bizResult.setSuccess(true);
                 bizResult.setObject(bizAppCacheService.refreshAllCaches());
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+
+        return bizResult;
+    }
+
+    public BizResult refreshAllDirectories(String sessionId) {
+        BizResult bizResult = new BizResult();
+
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notBlank(sessionId, EzErrorCode.SESSION_INVALID);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                authorizeSuperUserMember(sessionId);
+                bizAdminInnerService.refreshAllDirectories();
+                bizResult.setSuccess(true);
+                bizResult.setObject(BizConstant.Message.SUCCESS_COMMON);
             }
 
             @Override

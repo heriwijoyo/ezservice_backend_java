@@ -5,6 +5,7 @@
 package id.ezclouds.biz.ezservice.service.core;
 
 import id.ezclouds.biz.ezservice.service.app.BizOrganizationService;
+import id.ezclouds.core.shared.constant.CoreConstant;
 import id.ezclouds.core.shared.service.CoreFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -32,7 +33,7 @@ public class BizAppStartupService {
         bizOrganizationService
                 .getActiveOrganizations()
                 .forEach(org -> {
-                    if (!"SU00".equals(org.getOrgId())) {
+                    if (!CoreConstant.SU_ORG_ID.equals(org.getOrgId())) {
                         coreFileService.initPublicFileDirectory(org.getOrgId());
                     }
                 });

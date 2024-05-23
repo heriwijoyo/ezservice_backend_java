@@ -57,7 +57,7 @@ public class BizAdminUploadRequest extends BizMultipartRequest {
         supportedScene.add(BizUploadScene.ADMIN_EVENT_GALLERY);
         supportedScene.add(BizUploadScene.ADMIN_EVENT_GALLERY_UPDATE);
         supportedScene.add(BizUploadScene.ADMIN_VIDEO_CARD_GALLERY);
-        supportedScene.add(BizUploadScene.ADMIN_OTHER_GALLERY);
+        supportedScene.add(BizUploadScene.ADMIN_DOCS_GALLERY);
         return supportedScene;
     }
 

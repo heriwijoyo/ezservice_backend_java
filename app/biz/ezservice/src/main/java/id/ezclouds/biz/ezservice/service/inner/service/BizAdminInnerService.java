@@ -55,10 +55,7 @@ import id.ezclouds.core.shared.enums.CoreSequenceScene;
 import id.ezclouds.core.shared.model.CommonModelSwitch;
 import id.ezclouds.core.shared.model.CoreSequenceConfig;
 import id.ezclouds.core.shared.repo.dataobject.EzCoreOrganizationDO;
-import id.ezclouds.core.shared.service.CoreAdminService;
-import id.ezclouds.core.shared.service.CoreConfigService;
-import id.ezclouds.core.shared.service.CoreOrganizationService;
-import id.ezclouds.core.shared.service.CoreSequenceService;
+import id.ezclouds.core.shared.service.*;
 import id.ezclouds.core.shared.util.PageResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -123,6 +120,9 @@ public class BizAdminInnerService {
 
     @Autowired
     private EzConnectService ezConnectService;
+
+    @Autowired
+    private CoreFileService coreFileService;
 
     public void createAppBuildPackage(String orgId, String platformId, int versionCode, String versionName) throws EzErrorException {
         BizAppBuildPackage buildPackage = new BizAppBuildPackage();
@@ -471,6 +471,16 @@ public class BizAdminInnerService {
                 appConfig.getAppName(),
                 appConfig.getAndroidUpdateUrl()
         );
+    }
+
+    public void refreshAllDirectories() {
+        coreOrganizationService
+                .getActiveOrganizations()
+                .forEach(org -> {
+                    if (!CoreConstant.SU_ORG_ID.equals(org.getOrgId())) {
+                        coreFileService.initPublicFileDirectory(org.getOrgId());
+                    }
+                });
     }
 
     private List<BizMember> getOrgAdminMembers(String orgId) {

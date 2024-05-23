@@ -28,6 +28,10 @@ public class BizMemberRequestConverter {
         coreMember.setGender(request.getBizGender().getCode());
         coreMember.setDateOfBirth(request.getDateOfBirth());
         coreMember.setPhone(request.getPhone());
+        coreMember.setEducation(request.getEducation());
+        coreMember.setOccupation(request.getOccupation());
+        coreMember.setReligion(request.getReligion());
+        coreMember.setEthnic(request.getEthnic());
         coreMember.setEmail(request.getEmail());
         coreMember.setAvatarUrl(request.getAvatarUrl());
         coreMember.setAddress(request.getAddress());
