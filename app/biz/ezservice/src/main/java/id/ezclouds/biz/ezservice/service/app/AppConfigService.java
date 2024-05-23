@@ -5,6 +5,7 @@
 package id.ezclouds.biz.ezservice.service.app;
 
 import id.ezclouds.biz.ezservice.constant.AppConstant;
+import id.ezclouds.biz.ezservice.constant.BizConstant;
 import id.ezclouds.biz.ezservice.model.AppConfig;
 import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.biz.ezservice.service.app.dataobject.AppBuildPackageDO;
@@ -18,6 +19,7 @@ import id.ezclouds.biz.ezservice.service.app.repo.AppConfigRepository;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
+import id.ezclouds.core.shared.context.EzAppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -156,6 +158,11 @@ public class AppConfigService {
                 .forEach(cfg -> {
                     configMap.put(cfg.getConfigKey(), cfg.getConfigValue());
                 });
+
+        Map<String, String> orgExtendConfig = EzAppContextHolder.getContext().getOrgExtendConfig();
+        String orgHasSubOrg = StringUtil
+                .defaultIfBlank(orgExtendConfig.get(BizConstant.ExtKey.HAS_SUB_ORG), Boolean.FALSE.toString());
+        configMap.put(BizConstant.ExtKey.HAS_SUB_ORG, orgHasSubOrg);
         return configMap;
     }
 
