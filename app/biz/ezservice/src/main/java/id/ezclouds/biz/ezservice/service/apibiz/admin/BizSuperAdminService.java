@@ -453,6 +453,32 @@ public class BizSuperAdminService extends BizBaseService {
         return bizResult;
     }
 
+    public BizResult refreshAllMenus(String sessionId) {
+        BizResult bizResult = new BizResult();
+
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notBlank(sessionId, EzErrorCode.SESSION_INVALID);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                authorizeSuperUserMember(sessionId);
+                bizAdminInnerService.refreshAllMenus();
+                bizResult.setSuccess(true);
+                bizResult.setObject(BizConstant.Message.SUCCESS_COMMON);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+
+        return bizResult;
+    }
+
     public boolean adminCommonPostWithFileUpload(BizAdminUploadRequest request) throws Exception {
         bizAdminInnerService.validateExtendInfo(request.getExtendInfo(), "ORG_ID");
 

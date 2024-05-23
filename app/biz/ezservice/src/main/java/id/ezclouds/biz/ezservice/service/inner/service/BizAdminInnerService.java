@@ -483,6 +483,17 @@ public class BizAdminInnerService {
                 });
     }
 
+    public void refreshAllMenus() {
+        coreOrganizationService
+                .getActiveOrganizations()
+                .forEach(org -> {
+                    if (!CoreConstant.SU_ORG_ID.equals(org.getOrgId())) {
+                        coreAdminService.deleteAllBOMenuAndPermission(org.getOrgId());
+                        coreAdminService.initiateBOMenuAndPermission(org.getOrgId());
+                    }
+                });
+    }
+
     private List<BizMember> getOrgAdminMembers(String orgId) {
         return coreMemberService
                 .getMemberByOrgIdAndRoles(orgId, BizMemberRole.ADMIN_ORG.getCode())

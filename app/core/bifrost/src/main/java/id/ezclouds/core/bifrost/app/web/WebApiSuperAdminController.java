@@ -415,4 +415,26 @@ public class WebApiSuperAdminController {
         });
         return result;
     }
+
+    @PostMapping(value = "/webapp/api/refreshAllMenus.json")
+    private WebApiResult<String> refreshAllMenus(@RequestParam(name = "sessionId", required = false) String sessionId) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_REFRESH_ALL_MENUS, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                return bizSuperAdminService.refreshAllMenus(sessionId);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
 }
