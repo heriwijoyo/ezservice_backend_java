@@ -119,8 +119,8 @@ public class CoreAdminService {
                 "APP_EVENTS,Manage Events,events.htm,calendar_month",
                 "APP_VIDEO_CARD,Manage Video Card,videocard.htm,smart_display",
                 "APP_PROFILE,Candidate Profile,profile.htm,assignment_ind",
-                "WHATSAPP_LOG,Whatsapp Logs,whatsapp.htm,sms",
-                "APP_DOCUMENTS,Documents,documents.htm,picture_as_pdf"
+                "APP_DOCUMENTS,Documents,documents.htm,picture_as_pdf",
+                "WHATSAPP_LOG,Whatsapp Logs,whatsapp.htm,sms"
         );
         for (int i = 0; i < initMenus.size(); i++) {
             String[] menuSection = initMenus.get(i).split(",");
@@ -142,8 +142,8 @@ public class CoreAdminService {
                 "APP_EVENTS",
                 "APP_VIDEO_CARD",
                 "APP_PROFILE",
-                "WHATSAPP_LOG",
-                "APP_DOCUMENTS"
+                "APP_DOCUMENTS",
+                "WHATSAPP_LOG"
         );
         for (String permission : initPermission) {
             EzCoreAdminBOPermissionDO permissionDO = new EzCoreAdminBOPermissionDO();
