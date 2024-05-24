@@ -73,6 +73,8 @@ public class BizAdminUploadRequest extends BizMultipartRequest {
                 return onlyPNG;
             case ADMIN_APP_BUILD_PACKAGE:
                 return onlyAPK;
+            case ADMIN_DOCS_GALLERY:
+                return imageAndPdfTypes;
             default:
                 return new ArrayList<>();
         }

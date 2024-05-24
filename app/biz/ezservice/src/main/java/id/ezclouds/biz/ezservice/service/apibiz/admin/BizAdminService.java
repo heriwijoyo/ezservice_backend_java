@@ -806,7 +806,10 @@ public class BizAdminService extends BizBaseService {
                         break;
 
                     case ADMIN_DOCS_GALLERY:
+                        bizAdminInnerService.validateExtendInfo(request.getExtendInfo(), "TITLE");
                         filePath = fileInfo.getDocsGalleryPath(fileName);
+                        coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
+                        bizAdminInnerService.createDocumentGallery(session.getOrgId(), request.getFileType(), request.getExtendInfo().get("TITLE"), fileName);
                         break;
 
                     default:

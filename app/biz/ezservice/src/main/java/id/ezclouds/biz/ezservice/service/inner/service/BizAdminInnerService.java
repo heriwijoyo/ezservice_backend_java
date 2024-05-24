@@ -124,6 +124,9 @@ public class BizAdminInnerService {
     @Autowired
     private CoreFileService coreFileService;
 
+    @Autowired
+    private AppDocumentService appDocumentService;
+
     public void createAppBuildPackage(String orgId, String platformId, int versionCode, String versionName) throws EzErrorException {
         BizAppBuildPackage buildPackage = new BizAppBuildPackage();
         buildPackage.setOrgId(orgId);
@@ -312,6 +315,10 @@ public class BizAdminInnerService {
             request.setTargetUrl(extInfo.get("TARGET_URL"));
         }
         videoCardService.createVideoCard(request);
+    }
+
+    public void createDocumentGallery(String orgId, String type, String title, String fileName) {
+        appDocumentService.createDocumentGallery(orgId, type, title, fileName);
     }
 
     public BizCandidateProfile<WebCandidateBio> getCandidateProfile(String orgId, String orgCode) {

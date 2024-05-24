@@ -23,6 +23,8 @@ public abstract class BizMultipartRequest extends BizOptionalMultipartRequest {
 
     protected final List<String> imageTypes = Arrays.asList("image/png", "images/png", "image/jpg", "images/jpg", "image/jpeg", "images/jpeg");
 
+    protected final List<String> imageAndPdfTypes = Arrays.asList("image/png", "images/png", "image/jpg", "images/jpg", "image/jpeg", "images/jpeg", "application/pdf");
+
     protected final List<String> onlyPNG = Collections.singletonList("image/png");
 
     protected final List<String> onlyAPK = Collections.singletonList("application/vnd.android.package-archive");
@@ -63,6 +65,17 @@ public abstract class BizMultipartRequest extends BizOptionalMultipartRequest {
     public String getFileExtension() {
         if (multipartFile != null && multipartFile.getSize() > 0) {
             return StringUtils.getFilenameExtension(multipartFile.getOriginalFilename());
+        }
+        return "";
+    }
+
+    public String getFileType() {
+        if (multipartFile == null) {
+            return "";
+        }
+        String contentType = multipartFile.getContentType();
+        if ("application/pdf".equals(contentType)) {
+            return "PDF";
         }
         return "";
     }
