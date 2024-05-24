@@ -4,14 +4,23 @@
  */
 package id.ezclouds.biz.ezservice.service.app;
 
+import id.ezclouds.biz.ezservice.model.VideoCard;
 import id.ezclouds.biz.ezservice.service.app.dataobject.AppDocumentDO;
+import id.ezclouds.biz.ezservice.service.app.dataobject.VideoCardDO;
+import id.ezclouds.biz.ezservice.service.app.model.AppDocument;
 import id.ezclouds.biz.ezservice.service.app.repo.AppDocumentRepository;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
+import id.ezclouds.core.shared.converter.PageResultConverter;
+import id.ezclouds.core.shared.result.PageResult;
+import id.ezclouds.core.shared.util.PageResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.stream.Collectors;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -36,5 +45,27 @@ public class AppDocumentService {
         appDocumentDO.setModifiedTime(currentTime);
         appDocumentDO.setStatus(1);
         appDocumentRepository.saveAndFlush(appDocumentDO);
+    }
+
+    public PageResult<AppDocument> getAppDocuments(String orgId, PageRequest pageRequest) {
+        Page<AppDocumentDO> findResult = appDocumentRepository
+                .findByOrgId(orgId, pageRequest);
+
+        return PageResultUtil.convertFindResult(findResult, input -> input
+                .stream()
+                .map(AppDocumentService::convert)
+                .collect(Collectors.toList()));
+    }
+
+    public static AppDocument convert(AppDocumentDO documentDO) {
+        if (documentDO == null) { return null; }
+        AppDocument appDocument = new AppDocument();
+        appDocument.setId(documentDO.getId());
+        appDocument.setType(documentDO.getType());
+        appDocument.setTitle(documentDO.getTitle());
+        appDocument.setDocUrl(documentDO.getUrl());
+        appDocument.setCreatedTime(documentDO.getCreatedTime());
+        appDocument.setStatus(documentDO.getStatus());
+        return appDocument;
     }
 }

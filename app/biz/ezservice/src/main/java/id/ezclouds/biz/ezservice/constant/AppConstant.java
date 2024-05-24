@@ -77,6 +77,6 @@ public class AppConstant {
         public static final String NEWS_GALLERY_URL = "NEWS_GALLERY_URL";
         public static final String EVENT_GALLERY_URL = "EVENT_GALLERY_URL";
         public static final String VIDEO_CARD_GALLERY_URL = "VIDEO_CARD_GALLERY_URL";
-        public static final String OTHER_GALLERY_URL = "OTHER_GALLERY_URL";
+        public static final String DOCUMENT_GALLERY_URL = "DOCUMENT_GALLERY_URL";
     }
 }

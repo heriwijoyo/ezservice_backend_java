@@ -51,4 +51,18 @@ public class PageResultUtil {
         pageResult.setData(converter.convert(inputResult.getData()));
         return pageResult;
     }
+
+    public static <I, O> PageResult<O> convertFindResult(Page<I> findResult, PageResultConverter<I, O> converter) {
+        PageResult<O> pageResult = new PageResult<>();
+        pageResult.setPageNumber(findResult.getPageable().getPageNumber() + 1);
+        pageResult.setPageSize(findResult.getPageable().getPageSize());
+        pageResult.setNumberRecord(findResult.getNumberOfElements());
+        pageResult.setTotalPage(findResult.getTotalPages());
+        pageResult.setTotalRecord((int)findResult.getTotalElements());
+        pageResult.setHasNext(findResult.hasNext());
+        pageResult.setHasPrevious(findResult.hasPrevious());
+        pageResult.setData(converter.convert(findResult.getContent()));
+        return pageResult;
+
+    }
 }

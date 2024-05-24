@@ -17,6 +17,7 @@ import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
 import id.ezclouds.biz.ezservice.model.profile.BizCandidateProfile;
 import id.ezclouds.biz.ezservice.model.profile.WebCandidateBio;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
+import id.ezclouds.biz.ezservice.service.app.model.AppDocument;
 import id.ezclouds.biz.ezservice.service.app.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
@@ -594,6 +595,40 @@ public class WebApiAdminController {
             @Override
             public String convertResult(Object object) {
                 return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/getAppDocuments.json")
+    private WebApiPageResult<AppDocument> getAppDocuments(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "pageNumber", required = false) int pageNumber,
+            @RequestParam(name = "pageSize", required = false) int pageSize,
+            @RequestParam(name = "keyword", required = false) String keyword ) {
+        final WebApiPageResult<AppDocument> result = new WebApiPageResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_APP_DOCUMENTS, result, new WebApiControllerTemplate.PageHandler<AppDocument>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizWebPageRequest request = new BizWebPageRequest();
+                request.setSessionId(sessionId);
+                request.setPageNumber(pageNumber);
+                request.setPageSize(pageSize);
+                request.setKeyword(keyword);
+                return bizAdminService.getAppDocuments(request);
+            }
+
+            @Override
+            public PageResult<AppDocument> convertResult(Object object) {
+                if (object instanceof PageResult) {
+                    return (PageResult<AppDocument>) object;
+                }
+                return null;
             }
 
             @Override

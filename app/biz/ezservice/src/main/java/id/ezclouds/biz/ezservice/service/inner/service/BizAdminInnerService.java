@@ -24,6 +24,7 @@ import id.ezclouds.biz.ezservice.model.profile.BizCandidateProfile;
 import id.ezclouds.biz.ezservice.model.profile.WebCandidateBio;
 import id.ezclouds.biz.ezservice.service.apibiz.BizCandidateProfileService;
 import id.ezclouds.biz.ezservice.service.app.*;
+import id.ezclouds.biz.ezservice.service.app.model.AppDocument;
 import id.ezclouds.biz.ezservice.service.app.model.BizAppBuildPackage;
 import id.ezclouds.biz.ezservice.service.app.model.BizAppConfig;
 import id.ezclouds.biz.ezservice.service.app.model.WebImageGallery;
@@ -268,6 +269,11 @@ public class BizAdminInnerService {
     public PageResult<VideoCard> getVideoCards(String orgId, int pageNumber, int pageSize, String sortBy, String sort) {
         PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortBy, sort);
         return videoCardService.getVideoCards(orgId, pageRequest);
+    }
+
+    public PageResult<AppDocument> getAppDocuments(String orgId, int pageNumber, int pageSize, String sortBy, String sort) {
+        PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortBy, sort);
+        return appDocumentService.getAppDocuments(orgId, pageRequest);
     }
 
     public PageResult<BizWhatsappLog> getWhatsappLog(String orgId, String phone, int pageNumber, int pageSize, String sortBy, String sort) {

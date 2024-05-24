@@ -5,6 +5,8 @@
 package id.ezclouds.biz.ezservice.service.app.repo;
 
 import id.ezclouds.biz.ezservice.service.app.dataobject.AppDocumentDO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,4 +16,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface AppDocumentRepository extends JpaRepository<AppDocumentDO, String> {
+
+    Page<AppDocumentDO> findByOrgId(String orgId, Pageable pageable);
+
+    Page<AppDocumentDO> findByOrgIdAndStatus(String orgId, int status, Pageable pageable);
 }

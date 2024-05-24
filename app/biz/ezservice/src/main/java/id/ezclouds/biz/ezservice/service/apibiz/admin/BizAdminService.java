@@ -21,6 +21,7 @@ import id.ezclouds.biz.ezservice.model.news.BizWebDetailNews;
 import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
 import id.ezclouds.biz.ezservice.model.profile.WebCandidateBio;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
+import id.ezclouds.biz.ezservice.service.app.model.AppDocument;
 import id.ezclouds.biz.ezservice.service.core.BizAppCacheService;
 import id.ezclouds.biz.ezservice.service.core.BizCacheEnum;
 import id.ezclouds.biz.ezservice.service.app.BizOrganizationService;
@@ -723,6 +724,42 @@ public class BizAdminService extends BizBaseService {
         });
         return bizResult;
     }
+
+    public BizResult getAppDocuments(BizWebPageRequest request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                validateBizPageRequest(request);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                BizPublicUrlResolver urlResolver = new BizPublicUrlResolverImpl(appRootPublicUrl, session.getOrgCode());
+                PageResult<AppDocument> appDocsResult = bizAdminInnerService.getAppDocuments(
+                        session.getOrgId(),
+                        request.getPageNumber(),
+                        request.getPageSize(),
+                        "createdTime",
+                        "desc"
+                );
+                appDocsResult.getData().forEach(document -> {
+                    BizAnnotationProcessor.annotatePublicConfig(document, urlResolver);
+                });
+
+                bizResult.setObject(appDocsResult);
+                bizResult.setSuccess(true);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
 
     public BizResult adminCommonPostWithFileUpload(BizAdminUploadRequest request) {
         final BizResult bizResult = new BizResult();

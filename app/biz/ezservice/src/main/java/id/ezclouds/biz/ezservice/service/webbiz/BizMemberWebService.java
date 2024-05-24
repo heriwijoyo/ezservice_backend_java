@@ -100,6 +100,9 @@ public class BizMemberWebService {
                         case PUBLIC_VIDEO_CARD_GALLERY:
                             imagePath = fileInfo.getVideoCardGalleryPath(request.getFileName());
                             break;
+                        case PUBLIC_DOCUMENT_GALLERY:
+                            imagePath = fileInfo.getDocsGalleryPath(request.getFileName());
+                            break;
 
                         default:
                             throw new EzErrorException(EzErrorCode.MEDIA_NOT_FOUND);

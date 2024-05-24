@@ -20,6 +20,7 @@ public enum WebLoadImageScene {
     PUBLIC_NEWS_GALLERY("news", ImageRestriction.PUBLIC),
     PUBLIC_EVENT_GALLERY("event", ImageRestriction.PUBLIC),
     PUBLIC_VIDEO_CARD_GALLERY("video", ImageRestriction.PUBLIC),
+    PUBLIC_DOCUMENT_GALLERY("document", ImageRestriction.PUBLIC),
 
     PUBLIC_REPORT_IMAGE("PUBLIC_REPORT_IMAGE", ImageRestriction.PRIVATE),
     PUBLIC_REPORT_VIDEO("PUBLIC_REPORT_VIDEO", ImageRestriction.PRIVATE),

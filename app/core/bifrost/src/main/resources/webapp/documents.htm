@@ -71,21 +71,27 @@
 
 <script type="text/javascript">
     var EzAdminUrl = {
-        NEWS_GET: 'api/getNews.json',
+        APP_DOCS_GET: 'api/getAppDocuments.json',
         ADMIN_COMMON_POST: 'api/adminCommonPost.json'
     };
     var EzDashboardBizService = {
         start: function() {
-            //EzDashboardBizService.fetchNews();
+            EzDashboardBizService.fetchData();
         },
-        fetchNews: function() {
-            EzWebAppClient.callApiService(EzAdminUrl.NEWS_GET, {
+        fetchData: function() {
+            EzWebAppClient.callApiService(EzAdminUrl.APP_DOCS_GET, {
                 sessionId: EzWebAppClient.getSessionId(),
                 pageNumber: EzDashboardBizService.data.pageNumber,
                 pageSize: EzDashboardBizService.data.pageSize
             });
         },
         handleApiBizResult: function(url, response) {
+            if (url === EzAdminUrl.APP_DOCS_GET) {
+                EzDashboardBizService.reloadPageResultView(response);
+            }
+            if (url === EzAdminUrl.ADMIN_COMMON_POST) {
+                alert(response.data);
+            }
         },
         handleApiBizFailed: function(url, message) {
             if (url === EzAdminUrl.ADMIN_COMMON_POST) {
@@ -96,13 +102,11 @@
             $('#rowsContainer').html('');
             for(let i=0; i<response.pageResult.data.length; i++) {
                 let rowData = response.pageResult.data[i];
-                let title = '<a href="newsUpdate.htm?newsId='+ rowData.newsId +'"><b>'+ rowData.title +'</b></a><br>Description:<br>'+ rowData.description +'<br>Source: '+ rowData.source +'<br>Source URL: '+ rowData.sourceUrl;
+                let fileInfo = '<b>Title: '+ rowData.title +'</b><br>Created Time: '+ rowData.createdTime +'<br>'+ rowData.docUrl;
                 let itemRow = $.parseHTML(DashTemplate);
-                $(itemRow).find('.img-rounded').attr('src', rowData.imageUrl);
-                $(itemRow).find('.rowTitle').html(title);
-                $(itemRow).find('.rowDate').html(rowData.publishDate);
-                $(itemRow).find('.rowHighlight').html(EzDashboardBizService.renderFlag(rowData.highlight,'highlight',rowData.newsId));
-                $(itemRow).find('.rowActive').html(EzDashboardBizService.renderFlag(rowData.status,'status',rowData.newsId));
+                $(itemRow).find('.rowType').html(rowData.type);
+                $(itemRow).find('.rowInfo').html(fileInfo);
+                $(itemRow).find('.rowStatus').html(rowData.status);
                 $('#rowsContainer').append(itemRow);
             }
             $('.pager').html(EzWebAppClient.renderPager(response.pageResult));
@@ -173,13 +177,9 @@
 
     var DashTemplate = ''+
         '<tr>'+
-            '<td style="vertical-align: middle;">'+
-                '<img class="img-rounded" style="object-fit:cover;" height="180px" width="240px">'+
-            '</td>'+
-            '<td class="rowTitle" style="vertical-align: middle;"></td>'+
-            '<td class="rowDate" style="vertical-align: middle;"></td>'+
-            '<td class="rowHighlight" style="vertical-align: middle;"></td>'+
-            '<td class="rowActive" style="vertical-align: middle;"></td>'+
+            '<td class="rowType" style="vertical-align: middle;"></td>'+
+            '<td class="rowInfo" style="vertical-align: middle;"></td>'+
+            '<td class="rowStatus" style="vertical-align: middle;"></td>'+
         '</tr>';
 
 </script>

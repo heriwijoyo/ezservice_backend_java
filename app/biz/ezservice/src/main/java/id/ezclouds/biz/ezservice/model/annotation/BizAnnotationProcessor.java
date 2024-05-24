@@ -48,8 +48,8 @@ public class BizAnnotationProcessor {
                     case AppConstant.Annotation.VIDEO_CARD_GALLERY_URL:
                         updateFieldValue(object, field, publicConfig.getVideoCardGalleryRootImageUrl());
                         break;
-                    case AppConstant.Annotation.OTHER_GALLERY_URL:
-                        updateFieldValue(object, field, publicConfig.getOtherGalleryRootImageUrl());
+                    case AppConstant.Annotation.DOCUMENT_GALLERY_URL:
+                        updateFieldValue(object, field, publicConfig.getDocumentGalleryRootImageUrl());
                         break;
                 }
             }

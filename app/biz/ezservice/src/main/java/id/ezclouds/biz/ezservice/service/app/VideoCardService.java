@@ -6,6 +6,7 @@ package id.ezclouds.biz.ezservice.service.app;
 
 import id.ezclouds.biz.ezservice.converter.BizModelConverter;
 import id.ezclouds.biz.ezservice.model.VideoCard;
+import id.ezclouds.biz.ezservice.service.app.model.AppDocument;
 import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.biz.ezservice.service.app.request.VideoCardCreateRequest;
 import id.ezclouds.biz.ezservice.service.app.dataobject.VideoCardDO;
