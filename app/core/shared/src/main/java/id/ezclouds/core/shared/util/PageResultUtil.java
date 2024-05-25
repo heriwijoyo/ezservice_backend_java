@@ -26,6 +26,18 @@ public class PageResultUtil {
         return bizPageInfo;
     }
 
+    public static <I, O> BizPageInfo<O> composePageInfo(Page<I> pageResult, PageResultConverter<I, O> converter) {
+        BizPageInfo<O> bizPageInfo = new BizPageInfo<>();
+        bizPageInfo.setPageNumber(pageResult.getPageable().getPageNumber() + 1);
+        bizPageInfo.setPageSize(pageResult.getPageable().getPageSize());
+        bizPageInfo.setTotalPage(pageResult.getTotalPages());
+        bizPageInfo.setNumberRecord(pageResult.getNumberOfElements());
+        bizPageInfo.setTotalRecord((int)pageResult.getTotalElements());
+        bizPageInfo.setHasNext(pageResult.hasNext());
+        bizPageInfo.setBizData(converter.convert(pageResult.getContent()));
+        return bizPageInfo;
+    }
+
     public static <T> PageResult<T> composeFromPageInfo(BizPageInfo<T> pageInfo) {
         PageResult<T> pageResult = new PageResult<>();
         pageResult.setPageNumber(pageInfo.getPageNumber());

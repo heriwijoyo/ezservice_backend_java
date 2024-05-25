@@ -8,6 +8,7 @@ import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.service.apibiz.*;
 import id.ezclouds.biz.ezservice.service.apibiz.BizAuthService;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
+import id.ezclouds.biz.ezservice.service.app.AppDocumentService;
 import id.ezclouds.biz.ezservice.service.app.request.BizSubOrgCreateRequest;
 import id.ezclouds.biz.ezservice.service.request.*;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
@@ -70,6 +71,9 @@ public class ApiBizProcessor implements BizProcessor {
 
     @Autowired
     private BizAsyncService bizAsyncService;
+
+    @Autowired
+    private BizAppDocumentService bizAppDocumentService;
 
     @Override
     public BizResult process(ApiEvent apiEvent, ApiRequest apiRequest, MultipartFile file) throws EzErrorException {
@@ -153,6 +157,9 @@ public class ApiBizProcessor implements BizProcessor {
 
             case API_GET_MEMBER:
                 return bizMemberService.getMembers(BizRequestConverter.getBizPageRequest(apiRequest));
+
+            case API_GET_APP_DOCUMENTS:
+                return bizAppDocumentService.getAppDocuments(BizRequestConverter.getBizPageRequest(apiRequest));
 
             case API_ASYNC_PROCESS_TRIGGER:
                 return bizAsyncService.triggerAsync(BizRequestConverter.getBizAsyncTriggerRequest(apiRequest));

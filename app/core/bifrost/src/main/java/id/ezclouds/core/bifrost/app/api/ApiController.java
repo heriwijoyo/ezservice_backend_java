@@ -17,6 +17,7 @@ import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
 import id.ezclouds.biz.ezservice.model.profile.BizCandidateProfile;
 import id.ezclouds.biz.ezservice.model.profile.MemberProfile;
 import id.ezclouds.biz.ezservice.model.survey.BizSurveyForm;
+import id.ezclouds.biz.ezservice.service.app.model.AppDocument;
 import id.ezclouds.biz.ezservice.service.result.BizMemberLoginResult;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.common.util.exception.ExceptionUtil;
@@ -28,6 +29,7 @@ import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.*;
 import id.ezclouds.core.bifrost.app.api.result.ApiPageResult;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
+import id.ezclouds.core.bifrost.app.api.result.BizApiPageResult;
 import id.ezclouds.core.shared.model.CoreArea;
 import id.ezclouds.core.shared.result.ListResult;
 import org.slf4j.Logger;
@@ -36,8 +38,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,11 +51,6 @@ public class ApiController extends AppController {
     @Override
     protected Logger getLogger() {
         return LoggerFactory.getLogger(CommonLoggerConstant.API_CONTROLLER);
-    }
-
-    @GetMapping(value = "/")
-    private void index(HttpServletResponse response) throws IOException {
-        response.sendRedirect("index.html");
     }
 
     @PostMapping(value = "/api/setting.php")
@@ -268,6 +263,21 @@ public class ApiController extends AppController {
 
             @Override
             public DigestLog composeDigestLog(ApiRequest request, ApiResult<BizSubOrganization> result) {
+                return new SimpleDigestLog(result.isSuccess(), result.getResultCode());
+            }
+        });
+    }
+
+    @PostMapping(value = "/api/appDocuments.json")
+    private BizApiPageResult<AppDocument> getAppDocuments(@RequestBody ApiPageRequest request) {
+        return ApiControllerTemplate.execute(ApiEvent.API_GET_APP_DOCUMENTS, request, new ApiControllerTemplate.Handler<AppDocument>() {
+            @Override
+            public AppDocument convertItem(Object object) {
+                return (AppDocument) object;
+            }
+
+            @Override
+            public DigestLog composeDigestLog(ApiPageRequest request, BizApiPageResult<AppDocument> result) {
                 return new SimpleDigestLog(result.isSuccess(), result.getResultCode());
             }
         });

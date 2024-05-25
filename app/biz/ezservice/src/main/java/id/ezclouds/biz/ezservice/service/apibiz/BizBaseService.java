@@ -8,6 +8,7 @@ import id.ezclouds.biz.ezservice.config.BizPublicUrlResolver;
 import id.ezclouds.biz.ezservice.config.BizPublicUrlResolverImpl;
 import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.enums.BizMemberRole;
+import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
@@ -106,5 +107,14 @@ public class BizBaseService {
         AssertUtil.notBlank(memberRoles, EzErrorCode.MEMBER_UNAUTHORIZED);
         List<String> roles = Arrays.asList(memberRoles.split(","));
         AssertUtil.isTrue(roles.contains(BizMemberRole.ADMIN_ORG.getCode()), EzErrorCode.MEMBER_UNAUTHORIZED);
+    }
+
+    protected void adjustBizPageRequest(BizPageRequest request) {
+        if (request.getPageNumber() < 1) {
+            request.setPageNumber(1);
+        }
+        if (request.getPageSize() < 1) {
+            request.setPageSize(20);
+        }
     }
 }
