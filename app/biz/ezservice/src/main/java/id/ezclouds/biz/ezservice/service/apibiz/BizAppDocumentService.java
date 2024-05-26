@@ -4,11 +4,13 @@
  */
 package id.ezclouds.biz.ezservice.service.apibiz;
 
+import id.ezclouds.biz.ezservice.config.BizPublicUrlResolver;
+import id.ezclouds.biz.ezservice.config.BizPublicUrlResolverImpl;
+import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
 import id.ezclouds.biz.ezservice.service.app.AppDocumentService;
 import id.ezclouds.biz.ezservice.service.app.model.AppDocument;
 import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
 import id.ezclouds.biz.ezservice.service.result.BizPageResult;
-import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
@@ -38,8 +40,11 @@ public class BizAppDocumentService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                authAppMemberSession();
                 BizPageInfo<AppDocument> bizPageInfo = appDocumentService.getAppDocuments(getOrgId(), request);
+                BizPublicUrlResolver urlResolver = new BizPublicUrlResolverImpl(appRootPublicUrl, getOrgCode());
+                bizPageInfo.getBizData().forEach(document -> {
+                    BizAnnotationProcessor.annotatePublicConfig(document, urlResolver);
+                });
 
                 bizResult.setSuccess(true);
                 bizResult.setBizPageInfo(bizPageInfo);
