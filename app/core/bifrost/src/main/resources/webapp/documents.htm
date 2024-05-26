@@ -91,6 +91,8 @@
             }
             if (url === EzAdminUrl.ADMIN_COMMON_POST) {
                 alert(response.data);
+                EzDashboardBizService.hideFormNewImage();
+                EzDashboardBizService.fetchData();
             }
         },
         handleApiBizFailed: function(url, message) {
