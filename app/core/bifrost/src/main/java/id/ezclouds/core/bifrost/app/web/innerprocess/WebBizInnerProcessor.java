@@ -13,6 +13,7 @@ import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.bifrost.app.web.request.WebLoadImageRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.nio.file.Files;
@@ -42,6 +43,14 @@ public class WebBizInnerProcessor {
         BizResult bizResult = bizMemberWebService.bizLoadCommonImage(bizImageLoadRequest);
         if (bizResult.isSuccess()) {
             Path imagePath = (Path) bizResult.getObject();
+
+            String fileExt = StringUtils.getFilenameExtension(imagePath.toString());
+            if (fileExt != null && fileExt.equalsIgnoreCase("pdf")) {
+                String filename = loadImageRequest.getFileName();
+                response.setContentType("application/pdf");
+                response.setHeader("content-disposition", "inline; filename=\""+ filename +"\"");
+            }
+            response.setContentLengthLong(Files.size(imagePath));
             Files.copy(imagePath, response.getOutputStream());
         } else {
             throw new EzErrorException(bizResult.getErrorCode(), bizResult.getErrorCode().getDescription());
