@@ -230,6 +230,7 @@ public class BizSuperAdminService extends BizBaseService {
                 authorizeSuperUserMember(request.getSessionId());
 
                 BizOrganization organization = bizAdminInnerService.getOrganizationById(request.getObject().getOrgId());
+                organization.setExtendConfig(request.getObject().getExtendConfig());
                 organization.setAddress(request.getObject().getAddress());
                 organization.setContactName(request.getObject().getContactName());
                 organization.setContactPhone(request.getObject().getContactPhone());

@@ -133,6 +133,13 @@
 
                             <div class="form-group col-sm-12">
                                 <div class="form-line">
+                                    <div class="font-12">Extend Config</div>
+                                    <input type="text" class="form-control" id="extendConfig" placeholder="Extend Config">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
                                     <div class="font-12">Organization Address</div>
                                     <input type="text" class="form-control" id="address" placeholder="Address" required="" aria-required="true">
                                 </div>
@@ -556,6 +563,7 @@
         updateOrganization: function() {
             EzWebAppClient.callApiService(EzAdminUrl.ORGANIZATION_UPDATE, {
                 orgId: EzWebAppClient.getUrlParameter('id'),
+                extendConfig: $('#extendConfig').val(),
                 address: $('#address').val(),
                 contactName: $('#contactName').val(),
                 contactPhone: $('#contactPhone').val(),
@@ -747,6 +755,7 @@
             $('#orgId').val(data.orgId);
             $('#nativeOrgId').html(EzDashboardBizService.generateNativeCode(data.orgId));
             $('#orgCode').val(data.code);
+            $('#extendConfig').val(data.extendConfig);
             $('#createdTime').val(data.createdTime);
             $('#modifiedTime').val(data.modifiedTime);
             $('#address').val(data.address);

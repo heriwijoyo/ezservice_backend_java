@@ -154,6 +154,7 @@ public class WebApiSuperAdminController {
     private WebApiResult<String> organizationUpdate(
             @RequestParam(name = "sessionId", required = false) String sessionId,
             @RequestParam(name = "orgId", required = false) String orgId,
+            @RequestParam(name = "extendConfig", required = false) String extendConfig,
             @RequestParam(name = "address", required = false) String address,
             @RequestParam(name = "contactName", required = false) String contactName,
             @RequestParam(name = "contactPhone", required = false) String contactPhone,
@@ -165,6 +166,7 @@ public class WebApiSuperAdminController {
             public BizResult onProcess() throws Exception {
                 BizOrganization organization = new BizOrganization();
                 organization.setOrgId(orgId);
+                organization.setExtendConfig(extendConfig);
                 organization.setAddress(address);
                 organization.setContactName(contactName);
                 organization.setContactPhone(contactPhone);

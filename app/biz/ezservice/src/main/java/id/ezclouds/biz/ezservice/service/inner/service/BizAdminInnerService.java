@@ -595,6 +595,7 @@ public class BizAdminInnerService {
         organizationDO.setOrgId(organization.getOrgId());
         organizationDO.setName(organization.getName());
         organizationDO.setCode(organization.getCode());
+        organizationDO.setExtendConfig(organization.getExtendConfig());
         organizationDO.setAddress(organization.getAddress());
         organizationDO.setContactName(organization.getContactName());
         organizationDO.setContactPhone(organization.getContactPhone());
