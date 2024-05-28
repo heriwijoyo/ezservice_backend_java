@@ -60,6 +60,7 @@ public class BizSubOrganizationService extends BizBaseService {
             @Override
             public void onRequestCheck() throws EzErrorException {
                 AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                adjustBizPageRequest(request);
             }
 
             @Override

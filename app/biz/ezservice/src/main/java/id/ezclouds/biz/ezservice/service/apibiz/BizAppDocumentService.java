@@ -10,7 +10,7 @@ import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
 import id.ezclouds.biz.ezservice.service.app.AppDocumentService;
 import id.ezclouds.biz.ezservice.service.app.model.AppDocument;
 import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
-import id.ezclouds.biz.ezservice.service.result.BizPageResult;
+import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
@@ -29,8 +29,8 @@ public class BizAppDocumentService extends BizBaseService {
     @Autowired
     private AppDocumentService appDocumentService;
 
-    public BizPageResult getAppDocuments(BizPageRequest request) {
-        final BizPageResult bizResult = new BizPageResult();
+    public BizResult getAppDocuments(BizPageRequest request) {
+        final BizResult bizResult = new BizResult();
         BizServiceTemplate.execute(request, bizResult, new BizServiceTemplate.Handler() {
             @Override
             public void onRequestCheck() throws EzErrorException {

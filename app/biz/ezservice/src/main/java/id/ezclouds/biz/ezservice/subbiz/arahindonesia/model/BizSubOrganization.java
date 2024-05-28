@@ -12,6 +12,8 @@ public class BizSubOrganization {
 
     private String subOrgId;
     private String name;
+    private String createdTime;
+    private int status;
 
     public String getSubOrgId() {
         return subOrgId;
@@ -29,4 +31,19 @@ public class BizSubOrganization {
         this.name = name;
     }
 
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 }

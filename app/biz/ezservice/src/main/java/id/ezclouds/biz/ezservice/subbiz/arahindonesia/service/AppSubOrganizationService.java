@@ -86,6 +86,8 @@ public class AppSubOrganizationService {
             BizSubOrganization bizSubOrganization = new BizSubOrganization();
             bizSubOrganization.setSubOrgId(modelDO.getSubOrgId());
             bizSubOrganization.setName(modelDO.getName());
+            bizSubOrganization.setCreatedTime(modelDO.getCreatedTime());
+            bizSubOrganization.setStatus(modelDO.getStatus());
             return bizSubOrganization;
         });
     }

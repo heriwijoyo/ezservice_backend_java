@@ -5,7 +5,8 @@
 package id.ezclouds.core.bifrost.app.api;
 
 import id.ezclouds.biz.ezservice.service.apibiz.BizAppDocumentService;
-import id.ezclouds.biz.ezservice.service.result.BizPageResult;
+import id.ezclouds.biz.ezservice.service.apibiz.BizSubOrganizationService;
+import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiPageRequest;
 import id.ezclouds.core.bifrost.core.converter.BizRequestConverter;
@@ -22,10 +23,16 @@ public class ApiBizPageProcessor {
     @Autowired
     private BizAppDocumentService bizAppDocumentService;
 
-    public BizPageResult process(ApiEvent event, ApiPageRequest request) {
+    @Autowired
+    private BizSubOrganizationService bizSubOrganizationService;
+
+    public BizResult process(ApiEvent event, ApiPageRequest request) {
         switch (event) {
             case API_GET_APP_DOCUMENTS:
                 return bizAppDocumentService.getAppDocuments(BizRequestConverter.getBizPageRequest(request));
+
+            case API_GET_SUB_ORGANIZATIONS:
+                return bizSubOrganizationService.getSubBizOrganizations(BizRequestConverter.getBizPageRequest(request));
         }
         return null;
     }

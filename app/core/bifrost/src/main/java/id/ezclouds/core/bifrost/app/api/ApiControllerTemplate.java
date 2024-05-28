@@ -4,7 +4,7 @@
  */
 package id.ezclouds.core.bifrost.app.api;
 
-import id.ezclouds.biz.ezservice.service.result.BizPageResult;
+import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.ExceptionUtil;
@@ -44,12 +44,12 @@ public class ApiControllerTemplate {
             preBizProcessor.process(event, request);
 
             ApiBizPageProcessor bizProcessor = SpringContextConfig.getBean(ApiBizPageProcessor.class);
-            BizPageResult bizPageResult = bizProcessor.process(event, request);
-            if (bizPageResult.isSuccess()) {
-                composeSuccessResult(bizApiPageResult, bizPageResult, handler);
+            BizResult bizResult = bizProcessor.process(event, request);
+            if (bizResult.isSuccess()) {
+                composeSuccessResult(bizApiPageResult, bizResult, handler);
             }
             else {
-                bizApiPageResult.setErrorResult(ErrorResultUtil.composeErrorResult(bizPageResult));
+                bizApiPageResult.setErrorResult(ErrorResultUtil.composeErrorResult(bizResult));
             }
 
         } catch (Exception exception) {
@@ -64,18 +64,18 @@ public class ApiControllerTemplate {
         return bizApiPageResult;
     }
 
-    private static <T> void composeSuccessResult(BizApiPageResult<T> apiPageResult, BizPageResult bizPageResult, Handler<T> handler) {
-        AssertUtil.notNull(bizPageResult.getBizPageInfo(), EzErrorCode.SYSTEM_ERROR);
+    private static <T> void composeSuccessResult(BizApiPageResult<T> apiPageResult, BizResult bizResult, Handler<T> handler) {
+        AssertUtil.notNull(bizResult.getBizPageInfo(), EzErrorCode.SYSTEM_ERROR);
 
         apiPageResult.setSuccess(true);
-        apiPageResult.setPageNumber(bizPageResult.getBizPageInfo().getPageNumber());
-        apiPageResult.setPageSize(bizPageResult.getBizPageInfo().getPageSize());
-        apiPageResult.setNumberRecord(bizPageResult.getBizPageInfo().getNumberRecord());
-        apiPageResult.setTotalRecord(bizPageResult.getBizPageInfo().getTotalRecord());
-        apiPageResult.setTotalPage(bizPageResult.getBizPageInfo().getTotalPage());
-        apiPageResult.setHasNext(bizPageResult.getBizPageInfo().isHasNext());
+        apiPageResult.setPageNumber(bizResult.getBizPageInfo().getPageNumber());
+        apiPageResult.setPageSize(bizResult.getBizPageInfo().getPageSize());
+        apiPageResult.setNumberRecord(bizResult.getBizPageInfo().getNumberRecord());
+        apiPageResult.setTotalRecord(bizResult.getBizPageInfo().getTotalRecord());
+        apiPageResult.setTotalPage(bizResult.getBizPageInfo().getTotalPage());
+        apiPageResult.setHasNext(bizResult.getBizPageInfo().isHasNext());
         apiPageResult.setBizData(
-                bizPageResult
+                bizResult
                         .getBizPageInfo()
                         .getBizData()
                         .stream()
