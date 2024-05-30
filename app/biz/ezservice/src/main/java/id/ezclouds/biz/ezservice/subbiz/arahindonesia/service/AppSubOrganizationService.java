@@ -59,12 +59,13 @@ public class AppSubOrganizationService {
     }
 
     @Transactional
-    public void create(String name, String orgId, String orgCode) {
+    public void create(String name, String address, String orgId, String orgCode) {
         String subOrgId = coreSequenceService.generateSequence(orgId, orgCode, CoreSequenceScene.BIZ_SUB_ORG.getCode());
         BizSubOrganizationDO bizSubOrganizationDO = new BizSubOrganizationDO();
         bizSubOrganizationDO.setName(name);
         bizSubOrganizationDO.setOrgId(orgId);
         bizSubOrganizationDO.setSubOrgId(subOrgId);
+        bizSubOrganizationDO.setAddress(address);
         bizSubOrganizationDO.setStatus(1);
         bizSubOrganizationDO.setCreatedTime(DateUtil.getCurrentFormattedDate());
         bizSubOrganizationDO.setModifiedTime(DateUtil.getCurrentFormattedDate());
@@ -86,6 +87,7 @@ public class AppSubOrganizationService {
             BizSubOrganization bizSubOrganization = new BizSubOrganization();
             bizSubOrganization.setSubOrgId(modelDO.getSubOrgId());
             bizSubOrganization.setName(modelDO.getName());
+            bizSubOrganization.setAddress(modelDO.getAddress());
             bizSubOrganization.setCreatedTime(modelDO.getCreatedTime());
             bizSubOrganization.setStatus(modelDO.getStatus());
             return bizSubOrganization;

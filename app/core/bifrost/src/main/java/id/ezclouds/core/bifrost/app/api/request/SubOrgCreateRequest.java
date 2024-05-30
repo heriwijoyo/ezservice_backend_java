@@ -11,6 +11,7 @@ package id.ezclouds.core.bifrost.app.api.request;
 public class SubOrgCreateRequest extends ApiRequest {
 
     private String name;
+    private String address;
 
     public String getName() {
         return name;
@@ -18,5 +19,13 @@ public class SubOrgCreateRequest extends ApiRequest {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

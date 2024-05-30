@@ -151,6 +151,7 @@ public class BizRequestConverter<T extends BizRequest> {
             SubOrgCreateRequest request = (SubOrgCreateRequest) apiRequest;
             BizSubOrgCreateRequest bizRequest = new BizSubOrgCreateRequest();
             bizRequest.setName(request.getName());
+            bizRequest.setAddress(request.getAddress());
             bizRequest.getExtendInfo().putAll(request.getExtendInfo());
             return bizRequest;
         }

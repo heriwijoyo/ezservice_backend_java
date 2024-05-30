@@ -40,7 +40,7 @@ public class BizSubOrganizationService extends BizBaseService {
             public void onBizProcess() throws Exception {
                 CoreAuthMemberSessionInfo session = authAppMemberSession();
                 authorizeAdminMember(session.getMemberRoles());
-                appSubOrganizationService.create(request.getName(), getOrgId(), getOrgCode());
+                appSubOrganizationService.create(request.getName(), request.getAddress(), getOrgId(), getOrgCode());
 
                 bizResult.setSuccess(true);
                 bizResult.setObject("SubOrganization Created");

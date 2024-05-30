@@ -238,21 +238,6 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = "/api/subOrgGet.json")
-    private ApiPageResult<BizSubOrganization> getSubOrganizations(@RequestBody ApiPageRequest request) {
-        return executePageInTemplate(ApiEvent.API_GET_SUB_ORGANIZATIONS, request, new RequestHandler<BizSubOrganization>() {
-            @Override
-            public BizSubOrganization convertResult(Object resultObject) {
-                return null;
-            }
-
-            @Override
-            public DigestLog composeDigestLog(ApiRequest request, ApiResult<BizSubOrganization> result) {
-                return new SimpleDigestLog(result.isSuccess(), result.getResultCode());
-            }
-        });
-    }
-
     @PostMapping(value = "/api/getSubOrg.json")
     private BizApiPageResult<BizSubOrganization> getSubOrg(@RequestBody ApiPageRequest request) {
         return ApiControllerTemplate.execute(ApiEvent.API_GET_SUB_ORGANIZATIONS, request, new ApiControllerTemplate.Handler<BizSubOrganization>() {

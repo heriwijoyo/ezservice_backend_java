@@ -27,6 +27,7 @@ public class BizModelConverter {
         BizSubOrganization subOrganization = new BizSubOrganization();
         subOrganization.setSubOrgId(subOrganizationDO.getSubOrgId());
         subOrganization.setName(subOrganizationDO.getName());
+        subOrganization.setAddress(subOrganizationDO.getAddress());
         return subOrganization;
     }
 
