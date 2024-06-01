@@ -43,6 +43,7 @@ public class CoreMemberConverter {
         member.setEmailVerified(BoolState.getBool(memberDO.getEmailVerified()));
         member.setAddressVerified(BoolState.getBool(memberDO.getIsAddressVerified()));
         member.setMemberStatus(MemberStatus.getByCode(memberDO.getStatus()));
+        member.setCreatedTime(memberDO.getCreatedTime());
         return member;
     }
 

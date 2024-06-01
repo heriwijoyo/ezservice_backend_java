@@ -6,13 +6,17 @@ package id.ezclouds.biz.ezservice.service.inner.service;
 
 import id.ezclouds.biz.ezservice.converter.BizMemberClientConverter;
 import id.ezclouds.biz.ezservice.converter.BizMemberConverter;
+import id.ezclouds.biz.ezservice.model.AppConfig;
 import id.ezclouds.biz.ezservice.model.BizStatus;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.model.member.BizMemberClient;
 import id.ezclouds.biz.ezservice.model.member.BizMemberInfo;
+import id.ezclouds.biz.ezservice.model.member.BizMemberRegisterMode;
+import id.ezclouds.biz.ezservice.service.app.AppConfigService;
 import id.ezclouds.biz.ezservice.service.inner.converter.BizMemberRequestConverter;
 import id.ezclouds.biz.ezservice.service.request.BizMemberRegisterRequest;
 import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
+import id.ezclouds.common.util.RandomUtil;
 import id.ezclouds.core.shared.result.BizPageInfo;
 import id.ezclouds.biz.ezservice.util.PageRequestUtil;
 import id.ezclouds.common.util.ShardUtil;
@@ -50,6 +54,12 @@ public class BizMemberInnerService {
 
     @Autowired
     private CoreAuthService coreAuthService;
+
+    @Autowired
+    private AppConfigService appConfigService;
+
+    @Autowired
+    private BizConnectInnerService bizConnectInnerService;
 
     @Transactional
     public BizMemberInfo processRegisterMember(BizMemberRegisterRequest request) throws Exception {
@@ -93,7 +103,32 @@ public class BizMemberInnerService {
         bizMemberInfo.setBizMember(bizMember);
         bizMemberInfo.setBizMemberClient(bizMemberClient);
 
+        String registerMode = request.getExtendInfo().get("REG_MODE");
+        sendPasswordIfNecessary(registerMode, orgId, bizMemberInfo.getBizMemberClient().getClientId(), bizMember.getPhone());
+
         return bizMemberInfo;
+    }
+
+    private void sendPasswordIfNecessary(String registerMode, String orgId, String clientId, String phone) {
+        boolean isRegByAdmin = BizMemberRegisterMode.BY_ORG_ADMIN.getCode().equals(registerMode) || BizMemberRegisterMode.BY_SUB_ORG_ADMIN.getCode().equals(registerMode);
+
+        if (!isRegByAdmin) {
+            return;
+        }
+
+        try {
+            String newPassword = RandomUtil.generateNumberCode(6);
+            coreAuthService.updateMemberClientPassword(clientId, newPassword);
+
+            AppConfig appConfig = appConfigService.getAppConfig(orgId);
+            bizConnectInnerService.memberSendPassword(
+                    orgId,
+                    phone,
+                    newPassword,
+                    appConfig.getAppName(),
+                    appConfig.getAndroidUpdateUrl()
+            );
+        } catch (Exception e) {}
     }
 
     @Transactional

@@ -30,6 +30,7 @@ import id.ezclouds.core.bifrost.app.api.request.*;
 import id.ezclouds.core.bifrost.app.api.result.ApiPageResult;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
 import id.ezclouds.core.bifrost.app.api.result.BizApiPageResult;
+import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.shared.model.CoreArea;
 import id.ezclouds.core.shared.result.ListResult;
 import org.slf4j.Logger;
@@ -253,16 +254,16 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = "/api/memberGet.json")
-    private ApiPageResult<BizSubOrganization> getMembers(@RequestBody ApiPageRequest request) {
-        return executePageInTemplate(ApiEvent.API_GET_MEMBER, request, new RequestHandler<BizSubOrganization>() {
+    @PostMapping(value = "/api/getMembers.json")
+    private BizApiPageResult<CoreMember> getMembers(@RequestBody ApiPageRequest request) {
+        return ApiControllerTemplate.execute(ApiEvent.API_GET_MEMBER, request, new ApiControllerTemplate.Handler<CoreMember>() {
             @Override
-            public BizSubOrganization convertResult(Object resultObject) {
-                return null;
+            public CoreMember convertItem(Object object) {
+                return (CoreMember)object;
             }
 
             @Override
-            public DigestLog composeDigestLog(ApiRequest request, ApiResult<BizSubOrganization> result) {
+            public DigestLog composeDigestLog(ApiPageRequest request, BizApiPageResult<CoreMember> result) {
                 return new SimpleDigestLog(result.isSuccess(), result.getResultCode());
             }
         });
