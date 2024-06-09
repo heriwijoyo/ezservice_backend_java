@@ -4,6 +4,8 @@
  */
 package id.ezclouds.biz.ezservice.service.app;
 
+import id.ezclouds.biz.ezservice.config.BizPublicUrlResolver;
+import id.ezclouds.biz.ezservice.config.BizPublicUrlResolverImpl;
 import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.constant.BizConstant;
 import id.ezclouds.biz.ezservice.model.AppConfig;
@@ -21,6 +23,7 @@ import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -47,6 +50,9 @@ public class AppConfigService {
     @Autowired
     private AppCommonMessageTemplateRepository appCommonMessageTemplateRepository;
 
+    @Value("${ezserviceapp.url.public.root}")
+    protected String appRootUrl;
+
     private static final List<String> APP_CONFIG_KEYS;
 
     static {
@@ -54,8 +60,6 @@ public class AppConfigService {
                 AppConstant.CfgKey.APP_NAME,
                 AppConstant.CfgKey.ANDROID_VERSION_NAME,
                 AppConstant.CfgKey.ANDROID_VERSION_CODE,
-                AppConstant.CfgKey.ANDROID_UPDATE_URL,
-                AppConstant.CfgKey.ANDROID_UPDATE_APK,
                 AppConstant.CfgKey.ANDROID_FORCE_UPDATE,
                 AppConstant.CfgKey.BIZ_MAX_TPS_NUMBER,
                 AppConstant.CfgKey.REPORT_OPTIONS,
@@ -150,7 +154,7 @@ public class AppConfigService {
         return appConfig;
     }
 
-    public Map<String, String> getAppConfigMap(String orgId) {
+    public Map<String, String> getAppConfigMap(String orgId, String orgCode) {
         Map<String, String> configMap = new HashMap<>();
         getAppConfigAllActive()
                 .stream()
@@ -158,6 +162,16 @@ public class AppConfigService {
                 .forEach(cfg -> {
                     configMap.put(cfg.getConfigKey(), cfg.getConfigValue());
                 });
+
+        //override update URL
+        BizAppBuildPackage buildPackage = getLatestBuildPackage(orgId, "ANDROID");
+        if (buildPackage != null) {
+            String appName = configMap.get(AppConstant.CfgKey.APP_NAME);
+            BizPublicUrlResolver urlResolver = new BizPublicUrlResolverImpl(appRootUrl, orgCode);
+            String downloadRoot = urlResolver.getAppDownloadRootUrl();
+            String apkDownloadUrl = downloadRoot + "/apk/"+ appName + "-" + buildPackage.getVersionName() + ".apk";
+            configMap.put(AppConstant.CfgKey.ANDROID_UPDATE_APK, apkDownloadUrl);
+        }
 
         Map<String, String> orgExtendConfig = EzAppContextHolder.getContext().getOrgExtendConfig();
         String orgHasSubOrg = StringUtil

@@ -63,7 +63,7 @@ public class BizCommonConfigService extends BizBaseService {
             @Override
             public void onBizProcess() throws Exception {
                 AppSetting appSetting = new AppSetting();
-                appSetting.setAppConfigMap(appConfigService.getAppConfigMap(getOrgId()));
+                appSetting.setAppConfigMap(appConfigService.getAppConfigMap(getOrgId(), getOrgCode()));
                 appSetting.setHomeData(composeHomeData(getOrgId()));
 
                 try {

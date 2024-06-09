@@ -22,57 +22,64 @@ public class BizPublicUrlResolverImpl implements BizPublicUrlResolver {
     private static final String PATH_VIDEO_CARD_GALLERY = "/public/video";
     private static final String PATH_DOCUMENT_GALLERY = "/public/document";
 
-    private final String rootPublicImageUrl;
+    private static final String PATH_APP = "/app";
+
+    private final String rootUrl;
     private final String orgCode;
     private final String memberId;
 
-    public BizPublicUrlResolverImpl(String rootPublicImageUrl, String orgCode, String memberId) {
-        this.rootPublicImageUrl = rootPublicImageUrl;
+    public BizPublicUrlResolverImpl(String rootUrl, String orgCode, String memberId) {
+        this.rootUrl = rootUrl;
         this.orgCode = orgCode;
         this.memberId = memberId;
     }
 
-    public BizPublicUrlResolverImpl(String rootPublicImageUrl, String orgCode) {
-        this(rootPublicImageUrl, orgCode, null);
+    public BizPublicUrlResolverImpl(String rootUrl, String orgCode) {
+        this(rootUrl, orgCode, null);
     }
 
     @Override
     public String getAvatarRootImageUrl() {
-        return rootPublicImageUrl + PATH_IMAGE + PATH_AVATAR + SLASH + orgCode + SLASH + memberId + SLASH;
+        return rootUrl + PATH_IMAGE + PATH_AVATAR + SLASH + orgCode + SLASH + memberId + SLASH;
     }
 
     @Override
     public String getIdCardRootImageUrl() {
-        return rootPublicImageUrl + PATH_IMAGE + PATH_IDCARD + SLASH + orgCode + SLASH + memberId + SLASH;
+        return rootUrl + PATH_IMAGE + PATH_IDCARD + SLASH + orgCode + SLASH + memberId + SLASH;
     }
 
     @Override
     public String getFamCardRootImageUrl() {
-        return rootPublicImageUrl + PATH_IMAGE + PATH_FAMCARD + SLASH + orgCode + SLASH + memberId + SLASH;
+        return rootUrl + PATH_IMAGE + PATH_FAMCARD + SLASH + orgCode + SLASH + memberId + SLASH;
     }
 
     @Override
     public String getAppGalleryRootImageUrl() {
-        return rootPublicImageUrl + PATH_IMAGE + PATH_APP_GALLERY + SLASH + orgCode + SLASH;
+        return rootUrl + PATH_IMAGE + PATH_APP_GALLERY + SLASH + orgCode + SLASH;
     }
 
     @Override
     public String getNewsGalleryRootImageUrl() {
-        return rootPublicImageUrl + PATH_IMAGE + PATH_NEWS_GALLERY + SLASH + orgCode + SLASH;
+        return rootUrl + PATH_IMAGE + PATH_NEWS_GALLERY + SLASH + orgCode + SLASH;
     }
 
     @Override
     public String getEventGalleryRootImageUrl() {
-        return rootPublicImageUrl + PATH_IMAGE + PATH_EVENT_GALLERY + SLASH + orgCode + SLASH;
+        return rootUrl + PATH_IMAGE + PATH_EVENT_GALLERY + SLASH + orgCode + SLASH;
     }
 
     @Override
     public String getVideoCardGalleryRootImageUrl() {
-        return rootPublicImageUrl + PATH_IMAGE + PATH_VIDEO_CARD_GALLERY + SLASH + orgCode + SLASH;
+        return rootUrl + PATH_IMAGE + PATH_VIDEO_CARD_GALLERY + SLASH + orgCode + SLASH;
     }
 
     @Override
     public String getDocumentGalleryRootImageUrl() {
-        return rootPublicImageUrl + PATH_IMAGE + PATH_DOCUMENT_GALLERY + SLASH + orgCode + SLASH;
+        return rootUrl + PATH_IMAGE + PATH_DOCUMENT_GALLERY + SLASH + orgCode + SLASH;
+    }
+
+    @Override
+    public String getAppDownloadRootUrl() {
+        return rootUrl + PATH_APP + SLASH + orgCode + SLASH + "download";
     }
 }

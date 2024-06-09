@@ -19,4 +19,6 @@ public interface BizPublicUrlResolver {
     String getEventGalleryRootImageUrl();
     String getVideoCardGalleryRootImageUrl();
     String getDocumentGalleryRootImageUrl();
+
+    String getAppDownloadRootUrl();
 }
