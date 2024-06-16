@@ -10,6 +10,8 @@ package id.ezclouds.biz.ezservice.service.core;
  */
 public enum BizCacheEnum {
 
+    ORGANIZATION_ALL(BizCacheKey.ORGANIZATION_ALL),
+    APP_BUILD_PACKAGE_ALL(BizCacheKey.APP_BUILD_PACKAGE_ALL),
     APP_CONFIG_ALL(BizCacheKey.APP_CONFIG_ALL),
     APP_MESSAGE_TEMPLATE(BizCacheKey.APP_MESSAGE_TEMPLATE),
     NEWS_HIGHLIGHT(BizCacheKey.NEWS_HIGHLIGHT),

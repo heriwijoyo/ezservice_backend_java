@@ -9,6 +9,7 @@ import id.ezclouds.biz.ezservice.config.BizPublicUrlResolverImpl;
 import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.constant.BizConstant;
 import id.ezclouds.biz.ezservice.model.AppConfig;
+import id.ezclouds.biz.ezservice.service.app.model.AppBuildType;
 import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.biz.ezservice.service.app.dataobject.AppBuildPackageDO;
 import id.ezclouds.biz.ezservice.service.app.model.AppMessageTemplate;
@@ -25,9 +26,6 @@ import id.ezclouds.core.shared.context.EzAppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -45,6 +43,9 @@ public class AppConfigService {
     private AppBuildPackageRepository appBuildPackageRepository;
 
     @Autowired
+    private AppBuildPackageService appBuildPackageService;
+
+    @Autowired
     private AppConfigRepository appConfigRepository;
 
     @Autowired
@@ -58,8 +59,6 @@ public class AppConfigService {
     static {
         APP_CONFIG_KEYS = Arrays.asList(
                 AppConstant.CfgKey.APP_NAME,
-                AppConstant.CfgKey.ANDROID_VERSION_NAME,
-                AppConstant.CfgKey.ANDROID_VERSION_CODE,
                 AppConstant.CfgKey.ANDROID_FORCE_UPDATE,
                 AppConstant.CfgKey.BIZ_MAX_TPS_NUMBER,
                 AppConstant.CfgKey.REPORT_OPTIONS,
@@ -77,33 +76,6 @@ public class AppConfigService {
         buildPackageDO.setId(HashUtil.createHash(buildPackage.getOrgId(), currentTime));
         buildPackageDO.setCreatedTime(currentTime);
         appBuildPackageRepository.saveAndFlush(buildPackageDO);
-    }
-
-    public List<BizAppBuildPackage> getAppBuildPackages(String orgId) {
-        return appBuildPackageRepository
-                .findByOrgId(orgId)
-                .stream()
-                .map(this::convert)
-                .collect(Collectors.toList());
-    }
-
-    public BizAppBuildPackage getBuildPackageByVersionName(String orgId, String platform, String versionName) {
-        AppBuildPackageDO packageDO = appBuildPackageRepository
-                .findByOrgIdAndPlatformAndVersionName(orgId, platform, versionName);
-        if (packageDO == null) {
-            return null;
-        }
-        return convert(packageDO);
-    }
-
-    public BizAppBuildPackage getLatestBuildPackage(String orgId, String platform) {
-        PageRequest pageRequest = PageRequest.of(0, 1, Sort.by(Sort.Direction.DESC, "createdTime"));
-        Page<AppBuildPackageDO> result = appBuildPackageRepository
-                .findByOrgIdAndPlatform(orgId, platform, pageRequest);
-        if (result != null && result.hasContent()) {
-            return convert(result.getContent().get(0));
-        }
-        return null;
     }
 
     public AppConfig getAppConfig(String orgId) {
@@ -164,13 +136,15 @@ public class AppConfigService {
                 });
 
         //override update URL
-        BizAppBuildPackage buildPackage = getLatestBuildPackage(orgId, "ANDROID");
+        BizAppBuildPackage buildPackage = appBuildPackageService.getLatestBuildPackage(orgId, AppBuildType.ANDROID.getCode());
         if (buildPackage != null) {
             String appName = configMap.get(AppConstant.CfgKey.APP_NAME);
             BizPublicUrlResolver urlResolver = new BizPublicUrlResolverImpl(appRootUrl, orgCode);
             String downloadRoot = urlResolver.getAppDownloadRootUrl();
             String apkDownloadUrl = downloadRoot + "/apk/"+ appName + "-" + buildPackage.getVersionName() + ".apk";
             configMap.put(AppConstant.CfgKey.ANDROID_UPDATE_APK, apkDownloadUrl);
+            configMap.put(AppConstant.CfgKey.ANDROID_VERSION_CODE, String.valueOf(buildPackage.getVersionCode()));
+            configMap.put(AppConstant.CfgKey.ANDROID_VERSION_NAME, buildPackage.getVersionName());
         }
 
         Map<String, String> orgExtendConfig = EzAppContextHolder.getContext().getOrgExtendConfig();
@@ -255,17 +229,5 @@ public class AppConfigService {
         buildPackageDO.setCreatedTime(buildPackage.getCreatedTime());
         buildPackageDO.setStatus(buildPackage.getStatus());
         return buildPackageDO;
-    }
-
-    private BizAppBuildPackage convert(AppBuildPackageDO buildPackageDO) {
-        BizAppBuildPackage buildPackage = new BizAppBuildPackage();
-        buildPackage.setId(buildPackageDO.getId());
-        buildPackage.setOrgId(buildPackageDO.getOrgId());
-        buildPackage.setPlatform(buildPackageDO.getPlatform());
-        buildPackage.setVersionCode(buildPackageDO.getVersionCode());
-        buildPackage.setVersionName(buildPackageDO.getVersionName());
-        buildPackage.setCreatedTime(buildPackageDO.getCreatedTime());
-        buildPackage.setStatus(buildPackageDO.getStatus());
-        return buildPackage;
     }
 }

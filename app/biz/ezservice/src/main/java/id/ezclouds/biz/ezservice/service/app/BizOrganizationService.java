@@ -4,6 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.service.app;
 
+import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.shared.model.CoreOrganization;
 import id.ezclouds.core.shared.service.CoreOrganizationService;
@@ -23,7 +24,7 @@ public class BizOrganizationService {
     @Autowired
     private CoreOrganizationService coreOrganizationService;
 
-    @Cacheable("organizations")
+    @Cacheable(BizCacheKey.ORGANIZATION_ALL)
     public List<CoreOrganization> getActiveOrganizations() {
         return coreOrganizationService.getActiveOrganizations();
     }

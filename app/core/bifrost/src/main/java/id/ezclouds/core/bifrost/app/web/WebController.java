@@ -6,8 +6,10 @@ package id.ezclouds.core.bifrost.app.web;
 
 import id.ezclouds.biz.ezservice.enums.WebLoadImageScene;
 import id.ezclouds.biz.ezservice.model.AppConfig;
+import id.ezclouds.biz.ezservice.service.app.AppBuildPackageService;
 import id.ezclouds.biz.ezservice.service.app.AppConfigService;
 import id.ezclouds.biz.ezservice.service.app.BizOrganizationService;
+import id.ezclouds.biz.ezservice.service.app.model.AppBuildType;
 import id.ezclouds.biz.ezservice.service.app.model.BizAppBuildPackage;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
@@ -65,6 +67,9 @@ public class WebController extends AppController {
     @Autowired
     private AppConfigService appConfigService;
 
+    @Autowired
+    private AppBuildPackageService appBuildPackageService;
+
     @Value("${ezserviceapp.download.apk_path}")
     private String downloadApkPath;
 
@@ -91,7 +96,7 @@ public class WebController extends AppController {
             AssertUtil.notNull(appConfig, EzErrorCode.DATA_NOT_FOUND, "appConfig not found");
             AssertUtil.isTrue(StringUtil.equalsNotNull(appName, appConfig.getAppName()), EzErrorCode.DATA_NOT_FOUND, "invalid appName");
 
-            BizAppBuildPackage buildPackage = appConfigService
+            BizAppBuildPackage buildPackage = appBuildPackageService
                     .getBuildPackageByVersionName(organization.getOrgId(), "ANDROID", versionName);
             AssertUtil.notNull(buildPackage, EzErrorCode.DATA_NOT_FOUND, "buildPackage not found");
 
@@ -219,8 +224,8 @@ public class WebController extends AppController {
             CoreOrganization organization = bizOrganizationService.getOrganizationByCode(orgCode);
             AssertUtil.notNull(organization, EzErrorCode.DATA_NOT_FOUND, "organization not found");
 
-            BizAppBuildPackage buildPackage = appConfigService
-                    .getLatestBuildPackage(organization.getOrgId(), "ANDROID");
+            BizAppBuildPackage buildPackage = appBuildPackageService
+                    .getLatestBuildPackage(organization.getOrgId(), AppBuildType.ANDROID.getCode());
             AssertUtil.notNull(buildPackage, EzErrorCode.DATA_NOT_FOUND, "buildPackage not found");
 
             AppConfig appConfig = appConfigService.getAppConfig(organization.getOrgId());

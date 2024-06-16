@@ -10,6 +10,9 @@ package id.ezclouds.biz.ezservice.service.core;
  */
 public final class BizCacheKey {
 
+    public static final String ORGANIZATION_ALL         = "ORGANIZATION_ALL";
+    public static final String APP_BUILD_PACKAGE_ALL    = "APP_BUILD_PACKAGE_ALL";
+
     public static final String APP_CONFIG_ALL           = "APP_CONFIG_ALL";
     public static final String APP_MESSAGE_TEMPLATE     = "APP_MESSAGE_TEMPLATE";
     public static final String NEWS_HIGHLIGHT           = "NEWS_HIGHLIGHT";

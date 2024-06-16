@@ -96,6 +96,9 @@ public class BizAdminInnerService {
     private CoreAuthService coreAuthService;
 
     @Autowired
+    private AppBuildPackageService appBuildPackageService;
+
+    @Autowired
     private AppConfigService appConfigService;
 
     @Autowired
@@ -516,7 +519,7 @@ public class BizAdminInnerService {
     }
 
     private List<BizAppBuildPackage> getAppBuildPackages(String orgId) {
-        return appConfigService.getAppBuildPackages(orgId);
+        return appBuildPackageService.getAppBuildPackages(orgId);
     }
 
     private void initiateOrgConfig(EzCoreOrganizationDO organizationDO) {

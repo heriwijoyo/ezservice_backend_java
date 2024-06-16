@@ -44,6 +44,9 @@ public class BizAppCacheService {
     private AppSubOrganizationService appSubOrganizationService;
 
     @Autowired
+    private AppBuildPackageService appBuildPackageService;
+
+    @Autowired
     private CoreAuthService coreAuthService;
 
     @Autowired
@@ -97,10 +100,11 @@ public class BizAppCacheService {
                     }
                 });
 
-        appImageGalleryService.getImageGalleryAllActive();
         bizOrganizationService.getActiveOrganizations();
-        coreAuthService.getActiveAppClients();
         appSubOrganizationService.getAllSubOrganization();
+        appBuildPackageService.getAllAppBuildPackage();
+        appImageGalleryService.getImageGalleryAllActive();
+        coreAuthService.getActiveAppClients();
         coreConfigService.getCoreConfigs();
         coreConfigService.getCoreOrgConfigs();
         appConfigService.getAppConfigAllActive();
@@ -135,6 +139,12 @@ public class BizAppCacheService {
         }
 
         switch (bizCacheEnum) {
+            case ORGANIZATION_ALL:
+                bizOrganizationService.getActiveOrganizations();
+                break;
+            case APP_BUILD_PACKAGE_ALL:
+                appBuildPackageService.getAllAppBuildPackage();
+                break;
             case APP_CONFIG_ALL:
                 appConfigService.getAppConfigAllActive();
                 break;
