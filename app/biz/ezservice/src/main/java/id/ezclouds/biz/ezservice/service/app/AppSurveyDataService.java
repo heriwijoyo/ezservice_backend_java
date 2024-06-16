@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 @Service
 public class AppSurveyDataService {
 
-    private static final int N_TOP_SURVEY = 2;
+    private static final int N_TOP_SURVEY = 20;
 
     @Autowired
     private BizSurveyRepository bizSurveyRepository;
