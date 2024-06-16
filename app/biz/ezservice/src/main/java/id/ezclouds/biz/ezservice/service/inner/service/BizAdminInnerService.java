@@ -139,7 +139,7 @@ public class BizAdminInnerService {
         buildPackage.setVersionName(versionName);
         buildPackage.setStatus(1);
         try {
-            appConfigService.createAppBuildPackage(buildPackage);
+            appBuildPackageService.createAppBuildPackage(buildPackage);
         } catch (DataIntegrityViolationException integrityException) {
             throw new EzErrorException(EzErrorCode.IDEMPOTENT_ERROR);
         } catch (Exception e) {

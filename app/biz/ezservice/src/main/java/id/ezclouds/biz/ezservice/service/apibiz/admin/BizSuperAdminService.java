@@ -12,6 +12,7 @@ import id.ezclouds.biz.ezservice.model.admin.BizOrganization;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganizationDetail;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
+import id.ezclouds.biz.ezservice.service.core.BizCacheEnum;
 import id.ezclouds.biz.ezservice.service.inner.service.BizConnectInnerService;
 import id.ezclouds.biz.ezservice.service.core.BizAppCacheService;
 import id.ezclouds.biz.ezservice.service.app.model.BizAppConfig;
@@ -499,6 +500,7 @@ public class BizSuperAdminService extends BizBaseService {
                 filePath = fileInfo.getAppBuildPackagePath(fileName);
                 coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
                 bizAdminInnerService.createAppBuildPackage(extOrgId, platform, Integer.parseInt(versionCode), versionName);
+                bizAppCacheService.reloadCacheItem(BizCacheEnum.APP_BUILD_PACKAGE_ALL);
                 break;
 
             case ADMIN_APP_ICON:

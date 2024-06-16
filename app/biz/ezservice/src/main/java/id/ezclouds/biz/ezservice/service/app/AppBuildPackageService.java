@@ -9,6 +9,8 @@ import id.ezclouds.biz.ezservice.service.app.model.AppBuildType;
 import id.ezclouds.biz.ezservice.service.app.model.BizAppBuildPackage;
 import id.ezclouds.biz.ezservice.service.app.repo.AppBuildPackageRepository;
 import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
+import id.ezclouds.common.util.DateUtil;
+import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.core.shared.model.CoreOrganization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -86,6 +89,15 @@ public class AppBuildPackageService {
         return convert(packageDO);
     }
 
+    @Transactional
+    public void createAppBuildPackage(BizAppBuildPackage buildPackage) throws Exception {
+        AppBuildPackageDO buildPackageDO = convert(buildPackage);
+        String currentTime = DateUtil.getCurrentFormattedDate();
+        buildPackageDO.setId(HashUtil.createHash(buildPackage.getOrgId(), currentTime));
+        buildPackageDO.setCreatedTime(currentTime);
+        appBuildPackageRepository.saveAndFlush(buildPackageDO);
+    }
+
     private BizAppBuildPackage convert(AppBuildPackageDO buildPackageDO) {
         if (buildPackageDO == null) { return null; }
         BizAppBuildPackage buildPackage = new BizAppBuildPackage();
@@ -97,5 +109,17 @@ public class AppBuildPackageService {
         buildPackage.setCreatedTime(buildPackageDO.getCreatedTime());
         buildPackage.setStatus(buildPackageDO.getStatus());
         return buildPackage;
+    }
+
+    private AppBuildPackageDO convert(BizAppBuildPackage buildPackage) {
+        AppBuildPackageDO buildPackageDO = new AppBuildPackageDO();
+        buildPackageDO.setId(buildPackage.getId());
+        buildPackageDO.setOrgId(buildPackage.getOrgId());
+        buildPackageDO.setPlatform(buildPackage.getPlatform());
+        buildPackageDO.setVersionCode(buildPackage.getVersionCode());
+        buildPackageDO.setVersionName(buildPackage.getVersionName());
+        buildPackageDO.setCreatedTime(buildPackage.getCreatedTime());
+        buildPackageDO.setStatus(buildPackage.getStatus());
+        return buildPackageDO;
     }
 }
