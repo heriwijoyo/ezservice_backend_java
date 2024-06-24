@@ -7,6 +7,7 @@ package id.ezclouds.biz.ezservice.subbiz.arahindonesia.service;
 import id.ezclouds.biz.ezservice.converter.BizModelConverter;
 import id.ezclouds.biz.ezservice.service.app.dataobject.BizMemberDO;
 import id.ezclouds.biz.ezservice.service.app.repo.BizMemberRepository;
+import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.biz.ezservice.service.inner.service.BizPageQueryStrategy;
 import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
 import id.ezclouds.core.shared.result.BizPageInfo;
@@ -72,12 +73,19 @@ public class AppSubOrganizationService {
         appSubOrganizationRepository.saveAndFlush(bizSubOrganizationDO);
     }
 
-    @Cacheable(value = "appSubOrganization")
+    @Cacheable(BizCacheKey.SUB_ORGANIZATION_ALL)
     public List<BizSubOrganization> getAllSubOrganization() {
         return appSubOrganizationRepository
                 .findAll()
                 .stream()
                 .map(BizModelConverter::convert)
+                .collect(Collectors.toList());
+    }
+
+    public List<BizSubOrganization> getSubOrganizationByOrgId(String orgId) {
+        return getAllSubOrganization()
+                .stream()
+                .filter(subOrg -> orgId.equals(subOrg.getOrgId()))
                 .collect(Collectors.toList());
     }
 

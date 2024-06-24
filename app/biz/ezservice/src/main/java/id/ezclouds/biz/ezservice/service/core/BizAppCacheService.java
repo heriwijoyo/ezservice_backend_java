@@ -142,6 +142,9 @@ public class BizAppCacheService {
             case ORGANIZATION_ALL:
                 bizOrganizationService.getActiveOrganizations();
                 break;
+            case SUB_ORGANIZATION_ALL:
+                appSubOrganizationService.getAllSubOrganization();
+                break;
             case APP_BUILD_PACKAGE_ALL:
                 appBuildPackageService.getAllAppBuildPackage();
                 break;

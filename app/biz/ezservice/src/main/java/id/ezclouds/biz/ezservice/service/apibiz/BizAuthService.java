@@ -13,6 +13,7 @@ import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
 import id.ezclouds.biz.ezservice.model.authentication.BizMemberCommonSession;
 import id.ezclouds.biz.ezservice.service.app.AppConfigService;
 import id.ezclouds.biz.ezservice.service.app.AppMemberFlagService;
+import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.service.AppSubOrganizationService;
 import id.ezclouds.biz.ezservice.service.request.BizVerifyCommonSessionRequest;
 import id.ezclouds.biz.ezservice.service.request.BizMemberResetPasswordRequest;
@@ -139,7 +140,8 @@ public class BizAuthService extends BizBaseService {
                 loginResult.setBizMember(bizMember);
 
                 if (Boolean.parseBoolean(orgExtendConfig.get(BizConstant.ExtKey.HAS_SUB_ORG))) {
-                    bizMember.setSubOrganization(appSubOrganizationService.getSubOrganization(coreMember.getOrgId(), coreMember.getMemberId()));
+                    BizSubOrganization bizSubOrganization = appSubOrganizationService.getSubOrganizationById(bizMember.getSubOrganization().getSubOrgId());
+                    bizMember.getSubOrganization().setName(bizSubOrganization.getName());
                 }
 
                 bizResult.setObject(loginResult);

@@ -5,7 +5,10 @@
 package id.ezclouds.biz.ezservice.service.apibiz;
 
 import id.ezclouds.biz.ezservice.service.app.request.BizSubOrgCreateRequest;
+import id.ezclouds.biz.ezservice.service.core.BizAppCacheService;
+import id.ezclouds.biz.ezservice.service.core.BizCacheEnum;
 import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
+import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.core.shared.result.BizPageInfo;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
@@ -17,6 +20,8 @@ import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizSubOrganizationService.java, v 0.1 2024‐04‐25 9:48 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -26,6 +31,9 @@ public class BizSubOrganizationService extends BizBaseService {
 
     @Autowired
     private AppSubOrganizationService appSubOrganizationService;
+
+    @Autowired
+    private BizAppCacheService bizAppCacheService;
 
     public BizResult create(BizSubOrgCreateRequest request) {
         final BizResult bizResult = new BizResult();
@@ -41,9 +49,32 @@ public class BizSubOrganizationService extends BizBaseService {
                 CoreAuthMemberSessionInfo session = authAppMemberSession();
                 authorizeAdminMember(session.getMemberRoles());
                 appSubOrganizationService.create(request.getName(), request.getAddress(), getOrgId(), getOrgCode());
+                bizAppCacheService.reloadCacheItem(BizCacheEnum.SUB_ORGANIZATION_ALL);
 
                 bizResult.setSuccess(true);
                 bizResult.setObject("SubOrganization Created");
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
+    public BizResult getOrgSubOrganizations() {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {}
+
+            @Override
+            public void onBizProcess() throws Exception {
+                authAppMemberSession();
+                List<BizSubOrganization> subOrganizations = appSubOrganizationService.getSubOrganizationByOrgId(getOrgId());
+                bizResult.setObject(subOrganizations);
+                bizResult.setSuccess(true);
             }
 
             @Override

@@ -32,13 +32,13 @@ public class ApiBizPageProcessor {
 
     public BizResult process(ApiEvent event, ApiPageRequest request) {
         switch (event) {
-            case API_GET_APP_DOCUMENTS:
+            case API_PAGE_APP_DOCUMENTS:
                 return bizAppDocumentService.getAppDocuments(BizRequestConverter.getBizPageRequest(request));
 
-            case API_GET_SUB_ORGANIZATIONS:
+            case API_PAGE_SUB_ORGANIZATIONS:
                 return bizSubOrganizationService.getSubBizOrganizations(BizRequestConverter.getBizPageRequest(request));
 
-            case API_GET_MEMBER:
+            case API_PAGE_MEMBER:
                 return bizMemberService.getMembers(BizRequestConverter.getBizPageRequest(request));
 
         }

@@ -8,6 +8,8 @@ import id.ezclouds.biz.ezservice.model.BizStatus;
 import id.ezclouds.biz.ezservice.model.member.BizGender;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.model.member.MemberBase;
+import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
+import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
 
@@ -67,6 +69,13 @@ public class BizMemberConverter {
         BizStatus bizStatus = BizStatus.getByCode(member.getMemberStatus().getCode());
         bizMember.setStatus(bizStatus);
         bizMember.setAvatarUrl(member.getAvatarUrl());
+
+        if (StringUtil.isNotBlank(member.getSubOrgId())) {
+            BizSubOrganization subOrganization = new BizSubOrganization();
+            subOrganization.setOrgId(member.getOrgId());
+            subOrganization.setSubOrgId(member.getSubOrgId());
+            bizMember.setSubOrganization(subOrganization);
+        }
 
         //memberExt
         if (extension == null) {

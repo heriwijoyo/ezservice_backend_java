@@ -239,9 +239,27 @@ public class ApiController extends AppController {
         });
     }
 
+    @PostMapping(value = "/api/subOrganizations.json")
+    private ApiResult<List<BizSubOrganization>> subOrganizations(@RequestBody ApiRequest request) {
+        return executeInTemplate(ApiEvent.API_GET_SUB_ORGANIZATIONS, request, new RequestHandler<List<BizSubOrganization>>() {
+            @Override
+            public List<BizSubOrganization> convertResult(Object resultObject) {
+                if (resultObject instanceof  ArrayList) {
+                    return (List<BizSubOrganization>) resultObject;
+                }
+                return null;
+            }
+
+            @Override
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<List<BizSubOrganization>> result) {
+                return new EmptyDigestLog(result.isSuccess(), result.getResultCode());
+            }
+        });
+    }
+
     @PostMapping(value = "/api/getSubOrg.json")
     private BizApiPageResult<BizSubOrganization> getSubOrg(@RequestBody ApiPageRequest request) {
-        return ApiControllerTemplate.execute(ApiEvent.API_GET_SUB_ORGANIZATIONS, request, new ApiControllerTemplate.Handler<BizSubOrganization>() {
+        return ApiControllerTemplate.execute(ApiEvent.API_PAGE_SUB_ORGANIZATIONS, request, new ApiControllerTemplate.Handler<BizSubOrganization>() {
             @Override
             public BizSubOrganization convertItem(Object object) {
                 return (BizSubOrganization) object;
@@ -256,7 +274,7 @@ public class ApiController extends AppController {
 
     @PostMapping(value = "/api/getMembers.json")
     private BizApiPageResult<CoreMember> getMembers(@RequestBody ApiPageRequest request) {
-        return ApiControllerTemplate.execute(ApiEvent.API_GET_MEMBER, request, new ApiControllerTemplate.Handler<CoreMember>() {
+        return ApiControllerTemplate.execute(ApiEvent.API_PAGE_MEMBER, request, new ApiControllerTemplate.Handler<CoreMember>() {
             @Override
             public CoreMember convertItem(Object object) {
                 return (CoreMember)object;
@@ -271,7 +289,7 @@ public class ApiController extends AppController {
 
     @PostMapping(value = "/api/appDocuments.json")
     private BizApiPageResult<AppDocument> getAppDocuments(@RequestBody ApiPageRequest request) {
-        return ApiControllerTemplate.execute(ApiEvent.API_GET_APP_DOCUMENTS, request, new ApiControllerTemplate.Handler<AppDocument>() {
+        return ApiControllerTemplate.execute(ApiEvent.API_PAGE_APP_DOCUMENTS, request, new ApiControllerTemplate.Handler<AppDocument>() {
             @Override
             public AppDocument convertItem(Object object) {
                 return (AppDocument) object;

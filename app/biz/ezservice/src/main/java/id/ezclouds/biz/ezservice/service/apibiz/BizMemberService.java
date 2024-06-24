@@ -251,7 +251,7 @@ public class BizMemberService extends BizBaseService {
             @Override
             public void onBizProcess() throws Exception {
                 CoreAuthMemberSessionInfo session = authAppMemberSession();
-                authorizeAdminMember(session.getMemberRoles());
+                authorizeAdminOrSubOrgAdmin(session.getMemberRoles());
 
                 BizPageInfo<CoreMember> bizPageInfo = bizMemberInnerService.getMemberPage(getOrgId(), request);
                 bizResult.setSuccess(true);

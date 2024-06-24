@@ -109,6 +109,14 @@ public class BizBaseService {
         AssertUtil.isTrue(roles.contains(BizMemberRole.ADMIN_ORG.getCode()), EzErrorCode.MEMBER_UNAUTHORIZED);
     }
 
+    protected void authorizeAdminOrSubOrgAdmin(String memberRoles) throws EzErrorException {
+        AssertUtil.notBlank(memberRoles, EzErrorCode.MEMBER_UNAUTHORIZED);
+        List<String> roles = Arrays.asList(memberRoles.split(","));
+        boolean isAdminOrSubOrgAdmin = roles.contains(BizMemberRole.ADMIN_ORG.getCode())
+                || roles.contains(BizMemberRole.ADMIN_SUB_ORG.getCode());
+        AssertUtil.isTrue(isAdminOrSubOrgAdmin, EzErrorCode.MEMBER_UNAUTHORIZED);
+    }
+
     protected void adjustBizPageRequest(BizPageRequest request) {
         if (request.getPageNumber() < 1) {
             request.setPageNumber(1);

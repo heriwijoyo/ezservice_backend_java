@@ -25,6 +25,7 @@ public class BizModelConverter {
     public static BizSubOrganization convert(BizSubOrganizationDO subOrganizationDO) {
         if (subOrganizationDO == null) { return null; }
         BizSubOrganization subOrganization = new BizSubOrganization();
+        subOrganization.setOrgId(subOrganizationDO.getOrgId());
         subOrganization.setSubOrgId(subOrganizationDO.getSubOrgId());
         subOrganization.setName(subOrganizationDO.getName());
         subOrganization.setAddress(subOrganizationDO.getAddress());

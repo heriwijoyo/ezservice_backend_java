@@ -153,12 +153,15 @@ public class ApiBizProcessor implements BizProcessor {
                 return bizSubOrganizationService.create(subOrgCreateConverter.convert(apiRequest));
 
             case API_GET_SUB_ORGANIZATIONS:
+                return bizSubOrganizationService.getOrgSubOrganizations();
+
+            case API_PAGE_SUB_ORGANIZATIONS:
                 return bizSubOrganizationService.getSubBizOrganizations(BizRequestConverter.getBizPageRequest(apiRequest));
 
-            case API_GET_MEMBER:
+            case API_PAGE_MEMBER:
                 return bizMemberService.getMembers(BizRequestConverter.getBizPageRequest(apiRequest));
 
-            case API_GET_APP_DOCUMENTS:
+            case API_PAGE_APP_DOCUMENTS:
                 return bizAppDocumentService.getAppDocuments(BizRequestConverter.getBizPageRequest(apiRequest));
 
             case API_ASYNC_PROCESS_TRIGGER:
