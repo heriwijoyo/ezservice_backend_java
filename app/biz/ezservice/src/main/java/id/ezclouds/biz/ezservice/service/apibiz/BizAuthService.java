@@ -140,8 +140,11 @@ public class BizAuthService extends BizBaseService {
                 loginResult.setBizMember(bizMember);
 
                 if (Boolean.parseBoolean(orgExtendConfig.get(BizConstant.ExtKey.HAS_SUB_ORG))) {
-                    BizSubOrganization bizSubOrganization = appSubOrganizationService.getSubOrganizationById(bizMember.getSubOrganization().getSubOrgId());
-                    bizMember.getSubOrganization().setName(bizSubOrganization.getName());
+                    if (bizMember.getSubOrganization() != null) {
+                        BizSubOrganization bizSubOrganization = appSubOrganizationService
+                                .getSubOrganizationById(bizMember.getSubOrganization().getSubOrgId());
+                        bizMember.getSubOrganization().setName(bizSubOrganization.getName());
+                    }
                 }
 
                 bizResult.setObject(loginResult);
