@@ -19,6 +19,7 @@ public class PublicFileResolverImpl implements PublicFileResolver {
     private static final String DIR_EVENT_GALLERY       = PublicFileInitializer.DIR_EVENT_GALLERY;
     private static final String DIR_VIDEO_CARD_GALLERY  = PublicFileInitializer.DIR_VIDEO_CARD_GALLERY;
     private static final String DIR_DOCS_GALLERY        = PublicFileInitializer.DIR_DOCS_GALLERY;
+    private static final String DIR_OTHER               = PublicFileInitializer.DIR_OTHER;
     private static final String DIR_REPORT              = PublicFileInitializer.DIR_REPORT;
     private static final String DIR_REPORT_IMAGE        = PublicFileInitializer.DIR_REPORT_IMAGE;
     private static final String DIR_REPORT_VIDEO        = PublicFileInitializer.DIR_REPORT_VIDEO;
@@ -85,5 +86,10 @@ public class PublicFileResolverImpl implements PublicFileResolver {
     @Override
     public Path getReportRecapPath(String fileName) {
         return Paths.get(getOrgFiledDir(), DIR_REPORT, DIR_REPORT_RECAP, fileName).toAbsolutePath().normalize();
+    }
+
+    @Override
+    public Path getOtherPath(String fileName) {
+        return Paths.get(getOrgFiledDir(), DIR_OTHER, fileName).toAbsolutePath().normalize();
     }
 }

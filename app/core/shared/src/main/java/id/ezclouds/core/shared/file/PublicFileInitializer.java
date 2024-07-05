@@ -21,6 +21,7 @@ public class PublicFileInitializer {
     public static final String DIR_EVENT_GALLERY       = "GALLERY_EVENT";
     public static final String DIR_VIDEO_CARD_GALLERY  = "GALLERY_VIDEO_CARD";
     public static final String DIR_DOCS_GALLERY        = "GALLERY_DOCS";
+    public static final String DIR_OTHER               = "OTHER";
     public static final String DIR_REPORT              = "REPORT";
     public static final String DIR_REPORT_IMAGE        = "IMAGE";
     public static final String DIR_REPORT_VIDEO        = "VIDEO";
@@ -51,6 +52,7 @@ public class PublicFileInitializer {
         publicPaths.add(Paths.get(getOrgFiledDir(), DIR_EVENT_GALLERY).toAbsolutePath().normalize());
         publicPaths.add(Paths.get(getOrgFiledDir(), DIR_VIDEO_CARD_GALLERY).toAbsolutePath().normalize());
         publicPaths.add(Paths.get(getOrgFiledDir(), DIR_DOCS_GALLERY).toAbsolutePath().normalize());
+        publicPaths.add(Paths.get(getOrgFiledDir(), DIR_OTHER).toAbsolutePath().normalize());
         publicPaths.add(Paths.get(getOrgFiledDir(), DIR_REPORT).toAbsolutePath().normalize());
         publicPaths.add(Paths.get(getOrgFiledDir(), DIR_REPORT, DIR_REPORT_IMAGE).toAbsolutePath().normalize());
         publicPaths.add(Paths.get(getOrgFiledDir(), DIR_REPORT, DIR_REPORT_VIDEO).toAbsolutePath().normalize());
