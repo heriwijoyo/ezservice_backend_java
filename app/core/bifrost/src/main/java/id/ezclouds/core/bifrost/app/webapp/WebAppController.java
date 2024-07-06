@@ -6,6 +6,14 @@ package id.ezclouds.core.bifrost.app.webapp;
 
 import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.common.util.StringUtil;
+import id.ezclouds.common.util.logger.CommonLoggerConstant;
+import id.ezclouds.common.util.logger.DigestLog;
+import id.ezclouds.core.bifrost.app.api.digestlog.EmptyDigestLog;
+import id.ezclouds.core.bifrost.app.web.event.WebEvent;
+import id.ezclouds.core.shared.context.EzAppContextHolder;
+import id.ezclouds.core.shared.util.DigestLogUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -24,6 +32,8 @@ import java.nio.charset.StandardCharsets;
  */
 @Controller
 public class WebAppController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommonLoggerConstant.ADMIN_WEB_CONTROLLER);
 
     private static final String ASSET_INCLUDE_LAYOUT = "webapp/include/layout.incl";
     private static final String ASSET_INCLUDE_HEADER = "webapp/include/header.incl";
@@ -50,8 +60,17 @@ public class WebAppController {
     }
 
     @GetMapping(value = "/webapp/config.htm")
+    private void webConfig(HttpServletResponse servletResponse) {
+        EzAppContextHolder.init(WebEvent.WEB_PAGE_ADMIN_CONFIG);
+        boolean success = renderCachedWebApp(getWebAppContent(WebAppPage.CONFIG), servletResponse);
+        DigestLogUtil.logWebDigest(LOGGER, getDigestLog(success));
+    }
+
+    @GetMapping(value = "/webapp/specialProcess.htm")
     private void webSpecialProcess(HttpServletResponse servletResponse) {
-        renderCachedWebApp(getWebAppContent(WebAppPage.CONFIG), servletResponse);
+        EzAppContextHolder.init(WebEvent.WEB_PAGE_ADMIN_SPECIAL_PROCESS);
+        boolean success = renderCachedWebApp(getWebAppContent(WebAppPage.SPECIAL_PROCESS), servletResponse);
+        DigestLogUtil.logWebDigest(LOGGER, getDigestLog(success));
     }
 
     @Cacheable(value = BizCacheKey.WEBAPP_VIDEO_CARD)
@@ -91,13 +110,15 @@ public class WebAppController {
         }
     }
 
-    private void renderCachedWebApp(String htmlContent, HttpServletResponse servletResponse) {
+    private boolean renderCachedWebApp(String htmlContent, HttpServletResponse servletResponse) {
+        boolean success = false;
         if (StringUtil.EMPTY.equals(htmlContent)) {
             servletResponse.setStatus(HttpStatus.NOT_FOUND.value());
             servletResponse.setContentType("text/html;charset=UTF-8");
             htmlContent = "Not Found";
         } else {
             servletResponse.setStatus(HttpStatus.OK.value());
+            success = true;
         }
 
         try {
@@ -105,11 +126,17 @@ public class WebAppController {
             servletResponse.getWriter().flush();
         } catch (IOException e) {
             servletResponse.setStatus(HttpStatus.NOT_FOUND.value());
+            success = false;
         }
+        return success;
     }
 
     private String readHtmlContent(String assetFile) throws IOException {
         Resource resource = new ClassPathResource(assetFile);
         return StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
+    }
+
+    private DigestLog getDigestLog(boolean success) {
+        return new EmptyDigestLog(success, "");
     }
 }

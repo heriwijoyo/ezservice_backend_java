@@ -1,0 +1,129 @@
+<section class="content">
+    <ol class="breadcrumb breadcrumb-offset">
+        <li class="active">System Config</li>
+    </ol>
+
+    <div class="container-fluid" id="fade-in">
+        <div id="dashboard-container" class="row">
+            <a id="refresh-all-caches-btn" href="#">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase"></div>
+                        <div class="color-name"><i class="material-icons">cached</i></div>
+                        <div class="color-class-name">Refresh All Caches</div>
+                        <br>
+                    </div>
+                </div>
+            </a>
+            <a id="refresh-all-dir-btn" href="#">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase"></div>
+                        <div class="color-name"><i class="material-icons">folder_open</i></div>
+                        <div class="color-class-name">Refresh All Directory</div>
+                        <br>
+                    </div>
+                </div>
+            </a>
+            <a id="refresh-all-menu-btn" href="#">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase"></div>
+                        <div class="color-name"><i class="material-icons">menu_book</i></div>
+                        <div class="color-class-name">Refresh All BO Menu</div>
+                        <br>
+                    </div>
+                </div>
+            </a>
+            <a id="trigger-async-process" href="specialProcess.htm">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase"></div>
+                        <div class="color-name"><i class="material-icons">rocket_launch</i></div>
+                        <div class="color-class-name">Special Process</div>
+                        <br>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    var EzConfigApiUrl = {
+        GET_REFRESH_ALL_CACHES: 'api/refreshAllCaches.json',
+        GET_REFRESH_ALL_DIRECTORIES: 'api/refreshAllDirectories.json',
+        GET_REFRESH_ALL_MENUS: 'api/refreshAllMenus.json'
+    };
+
+    var EzSystemConfigService = {
+        start: function() {
+            $('#refresh-all-caches-btn').click(function(){
+                EzSystemConfigService.refreshAllCaches();
+            });
+            $('#refresh-all-dir-btn').click(function(){
+                EzSystemConfigService.refreshAllDirectories();
+            });
+            $('#refresh-all-menu-btn').click(function(){
+                EzSystemConfigService.refreshAllMenus();
+            });
+        },
+        refreshAllCaches: function() {
+            EzWebAppClient.callApiService(EzConfigApiUrl.GET_REFRESH_ALL_CACHES, {});
+        },
+        refreshAllDirectories: function() {
+            EzWebAppClient.callApiService(EzConfigApiUrl.GET_REFRESH_ALL_DIRECTORIES, {});
+        },
+        refreshAllMenus: function() {
+            EzWebAppClient.callApiService(EzConfigApiUrl.GET_REFRESH_ALL_MENUS, {});
+        },
+        handleApiBizResult: function(url, response) {
+            if (url === EzConfigApiUrl.GET_REFRESH_ALL_CACHES) {
+                var message = 'Refreshed caches:<br><ul>';
+                for (var i=0; i<response.data.length; i++) {
+                    message += '<li>' + response.data[i] + '</li>';
+                }
+                message += '</ul>';
+                EzWebAppViewHelper.showModalAlert(
+                    'Operation Success',
+                    message,
+                    function(){}
+                );
+            }
+            if (url === EzConfigApiUrl.GET_REFRESH_ALL_DIRECTORIES) {
+                alert(response.data);
+            }
+            if (url === EzConfigApiUrl.GET_REFRESH_ALL_MENUS) {
+                alert(response.data);
+            }
+        }
+    };
+
+    $(document).ready(function(){
+        EzWebAppClient.onApiBizSuccess(function(url, response){
+            EzSystemConfigService.handleApiBizResult(url, response);
+        });
+        EzWebAppClient.onApiBizFailed(function(url, message){
+            EzWebAppViewHelper.showModalAlert(
+                'API Biz Failed',
+                message,
+                function(){}
+            );
+        });
+        EzWebAppClient.onApiCallError(function(xhr){
+            EzWebAppViewHelper.showModalAlert(
+                'Application Error',
+                xhr.responseText,
+                function(){}
+            );
+        });
+        EzWebAppClient.onReady(function(){
+            EzSystemConfigService.start();
+        });
+        EzWebAppClient.start();
+    });
+</script>

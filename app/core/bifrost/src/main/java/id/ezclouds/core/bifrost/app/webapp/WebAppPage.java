@@ -15,6 +15,7 @@ public enum WebAppPage {
     DOCUMENTS("webapp/documents.htm"),
 
     CONFIG("webapp/config.htm"),
+    SPECIAL_PROCESS("webapp/specialProcess.htm"),
 
     ;
 
