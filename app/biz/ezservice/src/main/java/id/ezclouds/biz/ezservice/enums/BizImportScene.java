@@ -10,7 +10,7 @@ package id.ezclouds.biz.ezservice.enums;
  */
 public enum BizImportScene {
 
-    DATA_2024_JULY_EARLY("DATA_2024_JULY_EARLY"),
+    MEMBER_REGISTER_2024_JULY_EARLY("MEMBER_REGISTER_2024_JULY_EARLY"),
 
     UNKNOWN("UNKNOWN")
     ;

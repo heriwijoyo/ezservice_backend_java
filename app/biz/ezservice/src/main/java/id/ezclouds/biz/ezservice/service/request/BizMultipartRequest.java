@@ -29,6 +29,8 @@ public abstract class BizMultipartRequest extends BizOptionalMultipartRequest {
 
     protected final List<String> onlyAPK = Collections.singletonList("application/vnd.android.package-archive");
 
+    protected final List<String> onlyCSV = Collections.singletonList("text/csv");
+
     private MultipartFile multipartFile;
 
     public MultipartFile getMultipartFile() {
@@ -74,6 +76,7 @@ public abstract class BizMultipartRequest extends BizOptionalMultipartRequest {
             return "";
         }
         String contentType = multipartFile.getContentType();
+        System.out.println(contentType);
         if ("application/pdf".equals(contentType)) {
             return "PDF";
         }

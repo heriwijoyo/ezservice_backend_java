@@ -6,6 +6,7 @@ package id.ezclouds.biz.ezservice.service.apibiz.admin;
 
 import id.ezclouds.biz.ezservice.constant.BizConstant;
 import id.ezclouds.biz.ezservice.enums.BizConnectType;
+import id.ezclouds.biz.ezservice.enums.BizImportScene;
 import id.ezclouds.biz.ezservice.enums.BizMemberRole;
 import id.ezclouds.biz.ezservice.model.admin.BizApplicationConfig;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganization;
@@ -17,6 +18,7 @@ import id.ezclouds.biz.ezservice.service.inner.service.BizConnectInnerService;
 import id.ezclouds.biz.ezservice.service.core.BizAppCacheService;
 import id.ezclouds.biz.ezservice.service.app.model.BizAppConfig;
 import id.ezclouds.biz.ezservice.service.inner.service.BizAdminInnerService;
+import id.ezclouds.biz.ezservice.service.request.BizDataImportRequest;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
@@ -481,11 +483,51 @@ public class BizSuperAdminService extends BizBaseService {
         return bizResult;
     }
 
+    public BizResult commonImport(BizDataImportRequest request) {
+        final BizResult bizResult = new BizResult();
+
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notNull(request.getImportScene(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.isNotTrue(request.getImportScene() == BizImportScene.UNKNOWN, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notNull(request.getScene(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getOrgId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getFileId(), EzErrorCode.ILLEGAL_PARAM);
+                request.validateMultipartRequest();
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                authorizeSuperUserMember(request.getSessionId());
+                String fileName = HashUtil.createHash(request.getOrgId(), DateUtil.getCurrentFormattedDate()) + ".csv";
+                PublicFileResolver fileInfo = coreFileService.resolvePublicFileInfo(request.getOrgId());
+                Path filePath = fileInfo.getOtherPath(fileName);
+
+                coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
+                request.setFilePath(filePath);
+                request.setFileName(fileName);
+
+
+                bizResult.setSuccess(true);
+                bizResult.setObject("IMPORT SUCCESS");
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+
+        return bizResult;
+    }
+
     public boolean adminCommonPostWithFileUpload(BizAdminUploadRequest request) throws Exception {
         bizAdminInnerService.validateExtendInfo(request.getExtendInfo(), "ORG_ID");
 
         authorizeSuperUserMember(request.getSessionId());
-        String extOrgId = request.getExtendInfo().get("ORG_ID");
+        String extOrgId = request.getExtOrgId();
         PublicFileResolver fileInfo = coreFileService.resolvePublicFileInfo(extOrgId);
 
         Path filePath;

@@ -58,6 +58,7 @@ public class BizAdminUploadRequest extends BizMultipartRequest {
         supportedScene.add(BizUploadScene.ADMIN_EVENT_GALLERY_UPDATE);
         supportedScene.add(BizUploadScene.ADMIN_VIDEO_CARD_GALLERY);
         supportedScene.add(BizUploadScene.ADMIN_DOCS_GALLERY);
+        supportedScene.add(BizUploadScene.ADMIN_OTHER);
         return supportedScene;
     }
 
@@ -75,8 +76,14 @@ public class BizAdminUploadRequest extends BizMultipartRequest {
                 return onlyAPK;
             case ADMIN_DOCS_GALLERY:
                 return imageAndPdfTypes;
+            case ADMIN_OTHER:
+                return onlyCSV;
             default:
                 return new ArrayList<>();
         }
+    }
+
+    public String getExtOrgId() {
+        return getExtendInfo().get("ORG_ID");
     }
 }

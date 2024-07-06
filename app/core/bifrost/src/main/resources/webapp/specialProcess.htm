@@ -41,14 +41,20 @@
                 <div class="row clearfix">
                     <div class="form-group form-float col-sm-12">
                         <div class="form-line">
-                            <div class="font-12">File ID</div>
-                            <input type="text" class="form-control" id="fileId" placeholder="File ID" required>
+                            <div class="font-12">Import Scene</div>
+                            <input type="text" class="form-control" id="importScene" placeholder="Import Scene" required>
                         </div>
                     </div>
                     <div class="form-group form-float col-sm-12">
                         <div class="form-line">
-                            <div class="font-12">Processor Key</div>
-                            <input type="text" class="form-control" id="processorKey" placeholder="Processor Key" required>
+                            <div class="font-12">Organization ID</div>
+                            <input type="text" class="form-control" id="orgId" placeholder="Organization ID" required>
+                        </div>
+                    </div>
+                    <div class="form-group form-float col-sm-12">
+                        <div class="form-line">
+                            <div class="font-12">File ID</div>
+                            <input type="text" class="form-control" id="fileId" placeholder="File ID" required>
                         </div>
                     </div>
                     <div class="col-sm-6" style="margin-bottom: 0px;">
@@ -72,7 +78,7 @@
 
 <script type="text/javascript">
     var EzProcessApiUrl = {
-        COMMON_IMPORT_URL : 'commonImport.json'
+        COMMON_IMPORT_URL : 'api/commonImport.json'
     };
 
     var EzProcessService = {
@@ -100,8 +106,9 @@
             $('#importSubmitButton').hide();
             $('#importLoader').show();
             let postData = {
+                orgId : $('#orgId').val(),
                 fileId : $('#fileId').val(),
-                processorKey : $('#processorKey').val()
+                scene : $('#importScene').val()
             };
             EzWebAppClient.postMultipartForm('importForm', postData, EzProcessApiUrl.COMMON_IMPORT_URL, 'IMPORT_FILE');
         },
