@@ -1,50 +1,28 @@
 <section class="content">
     <ol class="breadcrumb breadcrumb-offset">
-        <li class="active">System Config</li>
+        <li class="active">Special Process</li>
     </ol>
 
     <div class="container-fluid" id="fade-in">
         <div id="dashboard-container" class="row">
-            <a id="refresh-all-caches-btn" href="#">
+            <a id="sync-member-report-btn" href="#">
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <br>
                         <div class="color-name uppercase"></div>
-                        <div class="color-name"><i class="material-icons">cached</i></div>
-                        <div class="color-class-name">Refresh All Caches</div>
+                        <div class="color-name"><i class="material-icons">analytics</i></div>
+                        <div class="color-class-name">Sync Member Report</div>
                         <br>
                     </div>
                 </div>
             </a>
-            <a id="refresh-all-dir-btn" href="#">
+            <a id="import-data-btn" href="#">
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <br>
                         <div class="color-name uppercase"></div>
-                        <div class="color-name"><i class="material-icons">folder_open</i></div>
-                        <div class="color-class-name">Refresh All Directory</div>
-                        <br>
-                    </div>
-                </div>
-            </a>
-            <a id="refresh-all-menu-btn" href="#">
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <br>
-                        <div class="color-name uppercase"></div>
-                        <div class="color-name"><i class="material-icons">menu_book</i></div>
-                        <div class="color-class-name">Refresh All BO Menu</div>
-                        <br>
-                    </div>
-                </div>
-            </a>
-            <a id="trigger-async-process" href="specialProcess.htm">
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <br>
-                        <div class="color-name uppercase"></div>
-                        <div class="color-name"><i class="material-icons">rocket_launch</i></div>
-                        <div class="color-class-name">Special Process</div>
+                        <div class="color-name"><i class="material-icons">storage</i></div>
+                        <div class="color-class-name">Import Data</div>
                         <br>
                     </div>
                 </div>
@@ -53,59 +31,87 @@
     </div>
 </section>
 
+<div class="modal fade" id="modal-import-form" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Import Special Data</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row clearfix">
+                    <div class="form-group form-float col-sm-12">
+                        <div class="form-line">
+                            <div class="font-12">File ID</div>
+                            <input type="text" class="form-control" id="fileId" placeholder="File ID" required>
+                        </div>
+                    </div>
+                    <div class="form-group form-float col-sm-12">
+                        <div class="form-line">
+                            <div class="font-12">Processor Key</div>
+                            <input type="text" class="form-control" id="processorKey" placeholder="Processor Key" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-6" style="margin-bottom: 0px;">
+                        <div class="form-group">
+                            <div class="font-12 ex1">CSV File</div>
+                            <form id="importForm" enctype="multipart/form-data" method="post">
+                                <input type="file" name="importFile" data-allowed-file-extensions="csv" required/>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <img id="importLoader" src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right">
+                        <button id="importSubmitButton" class="button button-rounded waves-effect waves-float pull-right" type="submit" name="submit">SUBMIT</button>
+                        <button id="importCancelButton" class="button button-rounded button-light waves-effect waves-float pull-right" type="submit" name="submit">CANCEL</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
-    var EzConfigApiUrl = {
-        GET_REFRESH_ALL_CACHES: 'api/refreshAllCaches.json',
-        GET_REFRESH_ALL_DIRECTORIES: 'api/refreshAllDirectories.json',
-        GET_REFRESH_ALL_MENUS: 'api/refreshAllMenus.json'
+    var EzProcessApiUrl = {
+        COMMON_IMPORT_URL : 'commonImport.json'
     };
 
-    var EzSystemConfigService = {
+    var EzProcessService = {
         start: function() {
-            $('#refresh-all-caches-btn').click(function(){
-                EzSystemConfigService.refreshAllCaches();
+            $('#import-data-btn').click(function(){
+                EzProcessService.showImportForm();
             });
-            $('#refresh-all-dir-btn').click(function(){
-                EzSystemConfigService.refreshAllDirectories();
+            $('#importCancelButton').click(function(){
+                EzProcessService.hideImportForm();
             });
-            $('#refresh-all-menu-btn').click(function(){
-                EzSystemConfigService.refreshAllMenus();
+            $('#importSubmitButton').click(function(){
+                EzProcessService.submitImportForm();
             });
         },
-        refreshAllCaches: function() {
-            EzWebAppClient.callApiService(EzConfigApiUrl.GET_REFRESH_ALL_CACHES, {});
+        showImportForm: function() {
+            $('#modal-import-form').removeClass('fade');
+            $('#modal-import-form').addClass('show');
         },
-        refreshAllDirectories: function() {
-            EzWebAppClient.callApiService(EzConfigApiUrl.GET_REFRESH_ALL_DIRECTORIES, {});
+        hideImportForm: function() {
+            $('#modal-import-form').removeClass('show');
+            $('#modal-import-form').addClass('fade');
         },
-        refreshAllMenus: function() {
-            EzWebAppClient.callApiService(EzConfigApiUrl.GET_REFRESH_ALL_MENUS, {});
+        submitImportForm: function() {
+            $('#importCancelButton').hide();
+            $('#importSubmitButton').hide();
+            $('#importLoader').show();
+            let postData = {
+                fileId : $('#fileId').val(),
+                processorKey : $('#processorKey').val()
+            };
+            EzWebAppClient.postMultipartForm('importForm', postData, EzProcessApiUrl.COMMON_IMPORT_URL, 'IMPORT_FILE');
         },
         handleApiBizResult: function(url, response) {
-            if (url === EzConfigApiUrl.GET_REFRESH_ALL_CACHES) {
-                var message = 'Refreshed caches:<br><ul>';
-                for (var i=0; i<response.data.length; i++) {
-                    message += '<li>' + response.data[i] + '</li>';
-                }
-                message += '</ul>';
-                EzWebAppViewHelper.showModalAlert(
-                    'Operation Success',
-                    message,
-                    function(){}
-                );
-            }
-            if (url === EzConfigApiUrl.GET_REFRESH_ALL_DIRECTORIES) {
-                alert(response.data);
-            }
-            if (url === EzConfigApiUrl.GET_REFRESH_ALL_MENUS) {
-                alert(response.data);
-            }
         }
     };
 
     $(document).ready(function(){
         EzWebAppClient.onApiBizSuccess(function(url, response){
-            EzSystemConfigService.handleApiBizResult(url, response);
+            EzProcessService.handleApiBizResult(url, response);
         });
         EzWebAppClient.onApiBizFailed(function(url, message){
             EzWebAppViewHelper.showModalAlert(
@@ -122,7 +128,7 @@
             );
         });
         EzWebAppClient.onReady(function(){
-            EzSystemConfigService.start();
+            EzProcessService.start();
         });
         EzWebAppClient.start();
     });
