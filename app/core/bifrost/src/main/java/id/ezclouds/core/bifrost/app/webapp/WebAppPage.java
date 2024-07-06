@@ -14,6 +14,8 @@ public enum WebAppPage {
     WHATSAPP("webapp/whatsapp.htm"),
     DOCUMENTS("webapp/documents.htm"),
 
+    CONFIG("webapp/config.htm"),
+
     ;
 
     private final String assetFile;

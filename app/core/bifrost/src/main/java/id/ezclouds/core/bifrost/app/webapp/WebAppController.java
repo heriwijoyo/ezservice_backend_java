@@ -49,6 +49,11 @@ public class WebAppController {
         renderCachedWebApp(getDocumentsContent(), servletResponse);
     }
 
+    @GetMapping(value = "/webapp/config.htm")
+    private void webSpecialProcess(HttpServletResponse servletResponse) {
+        renderCachedWebApp(getWebAppContent(WebAppPage.CONFIG), servletResponse);
+    }
+
     @Cacheable(value = BizCacheKey.WEBAPP_VIDEO_CARD)
     public String getVideoCardContent() {
         return getWebAppContent(WebAppPage.VIDEO_CARD);
