@@ -14,6 +14,7 @@ import id.ezclouds.biz.ezservice.model.admin.BizOrganizationDetail;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
 import id.ezclouds.biz.ezservice.service.core.BizCacheEnum;
+import id.ezclouds.biz.ezservice.service.core.BizDataImportService;
 import id.ezclouds.biz.ezservice.service.inner.service.BizConnectInnerService;
 import id.ezclouds.biz.ezservice.service.core.BizAppCacheService;
 import id.ezclouds.biz.ezservice.service.app.model.BizAppConfig;
@@ -62,6 +63,9 @@ public class BizSuperAdminService extends BizBaseService {
 
     @Autowired
     private BizConnectInnerService bizConnectInnerService;
+
+    @Autowired
+    private BizDataImportService bizDataImportService;
 
     public BizResult createSuperAdminSession() {
         final BizResult bizResult = new BizResult();
@@ -509,6 +513,7 @@ public class BizSuperAdminService extends BizBaseService {
                 request.setFilePath(filePath);
                 request.setFileName(fileName);
 
+                bizDataImportService.process(request);
 
                 bizResult.setSuccess(true);
                 bizResult.setObject("IMPORT SUCCESS");

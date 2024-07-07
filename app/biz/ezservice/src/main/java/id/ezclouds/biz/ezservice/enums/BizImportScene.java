@@ -21,6 +21,10 @@ public enum BizImportScene {
         this.code = code;
     }
 
+    public String getCode() {
+        return code;
+    }
+
     public static BizImportScene getByCode(String code) {
         for (BizImportScene scene : values()) {
             if (scene.code.equals(code)) {
