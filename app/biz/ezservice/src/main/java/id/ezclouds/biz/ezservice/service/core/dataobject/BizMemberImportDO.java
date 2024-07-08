@@ -20,19 +20,14 @@ public class BizMemberImportDO {
     @Id
     @Column(name = "biz_member_id")
     private String bizMemberId;
-
     @Column(name = "org_id")
     private String orgId;
-
     @Column(name = "sub_org_id")
     private String subOrgId;
-
     @Column(name = "source_id")
     private String sourceId;
-
     @Column(name = "created_time")
     private String createdTime;
-
     @Column(name = "name")
     private String name;
     @Column(name = "gender")
@@ -41,6 +36,8 @@ public class BizMemberImportDO {
     private String dateOfBirth;
     @Column(name = "phone")
     private String phone;
+    @Column(name = "education")
+    private String education;
     @Column(name = "occupation")
     private String occupation;
     @Column(name = "religion")
@@ -51,8 +48,8 @@ public class BizMemberImportDO {
     private String idCardNumber;
     @Column(name = "address")
     private String address;
-
-
+    @Column(name = "tps_number")
+    private String tpsNumber;
 
     public String getBizMemberId() {
         return bizMemberId;
@@ -126,6 +123,14 @@ public class BizMemberImportDO {
         this.phone = phone;
     }
 
+    public String getEducation() {
+        return education;
+    }
+
+    public void setEducation(String education) {
+        this.education = education;
+    }
+
     public String getOccupation() {
         return occupation;
     }
@@ -164,5 +169,13 @@ public class BizMemberImportDO {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getTpsNumber() {
+        return tpsNumber;
+    }
+
+    public void setTpsNumber(String tpsNumber) {
+        this.tpsNumber = tpsNumber;
     }
 }

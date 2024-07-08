@@ -46,6 +46,7 @@ public class ImportMemberParser implements CSVLineParser<BizMemberImportDO> {
         memberImportDO.setEthnic(getValue(line, 8));
         memberImportDO.setIdCardNumber(getValue(line, 9));
         memberImportDO.setAddress(getValue(line, 12));
+        memberImportDO.setTpsNumber(getValue(line, 13));
 
         return memberImportDO;
     }
