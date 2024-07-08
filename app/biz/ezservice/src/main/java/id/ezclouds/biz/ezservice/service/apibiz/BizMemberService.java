@@ -127,8 +127,7 @@ public class BizMemberService extends BizBaseService {
                 List<String> memberRoles = Arrays.asList(sessionInfo.getMemberRoles().split(","));
                 AssertUtil.isTrue(memberRoles.size() > 0, EzErrorCode.UNAUTHORIZED);
 
-                String registerMode = request.getExtendInfo().get("REG_MODE");
-                BizMemberRegisterMode bizRegisterMode = BizMemberRegisterMode.getByCode(registerMode);
+                BizMemberRegisterMode bizRegisterMode = request.getRegisterMode();
 
                 if (bizRegisterMode == BizMemberRegisterMode.BY_RECRUITER) {
                     AssertUtil.isTrue(memberRoles.contains(BizMemberRole.OP_RECRUITER.getCode()), EzErrorCode.UNAUTHORIZED);
@@ -141,7 +140,6 @@ public class BizMemberService extends BizBaseService {
                 }
 
                 request.setReferrerId(sessionInfo.getMemberId());
-
 
                 BizMemberInfo bizMemberInfo = bizMemberInnerService.processRegisterMember(request);
                 BizMemberRegisterResult result = new BizMemberRegisterResult();

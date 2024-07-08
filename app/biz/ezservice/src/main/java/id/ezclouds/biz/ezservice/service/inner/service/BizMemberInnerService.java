@@ -82,40 +82,38 @@ public class BizMemberInnerService {
         memberExtension.setShard(shard);
         coreMemberService.store(memberExtension);
 
-        CoreAuthMemberClient memberClient = new CoreAuthMemberClient();
-        memberClient.setOrgId(orgId);
-        memberClient.setShard(shard);
-        memberClient.setAppId(appId);
-        memberClient.setMemberId(memberId);
-        memberClient.setLoginType(DEFAULT_LOGIN_TYPE);
-        memberClient.setLoginId(request.getPhone());
-        memberClient.setStatus(BizStatus.ACTIVE.getCode());
-        coreAuthService.createMemberClient(memberClient);
+        BizMemberInfo bizMemberInfo = new BizMemberInfo();
 
         CoreMember storedMember = coreMemberService.getOptimisticCoreMember(memberId);
         CoreMemberExtension storedMemberExtension = coreMemberService.getPessimisticCoreMemberExtension(memberId);
-        CoreAuthMemberClient storedMemberClient = coreAuthService.getOptimisticMemberClient(DEFAULT_LOGIN_TYPE, memberId);
-
         BizMember bizMember = BizMemberConverter.convert(storedMember, storedMemberExtension);
-        BizMemberClient bizMemberClient = BizMemberClientConverter.convert(storedMemberClient);
 
-        BizMemberInfo bizMemberInfo = new BizMemberInfo();
         bizMemberInfo.setBizMember(bizMember);
-        bizMemberInfo.setBizMemberClient(bizMemberClient);
 
-        String registerMode = request.getExtendInfo().get("REG_MODE");
-        sendPasswordIfNecessary(registerMode, orgId, bizMemberInfo.getBizMemberClient().getClientId(), bizMember.getPhone());
+        BizMemberRegisterMode registerMode = request.getRegisterMode();
+        if (registerMode == BizMemberRegisterMode.BY_ORG_ADMIN) {
+            CoreAuthMemberClient memberClient = new CoreAuthMemberClient();
+            memberClient.setOrgId(orgId);
+            memberClient.setShard(shard);
+            memberClient.setAppId(appId);
+            memberClient.setMemberId(memberId);
+            memberClient.setLoginType(DEFAULT_LOGIN_TYPE);
+            memberClient.setLoginId(request.getPhone());
+            memberClient.setStatus(BizStatus.ACTIVE.getCode());
+            coreAuthService.createMemberClient(memberClient);
+
+            CoreAuthMemberClient storedMemberClient = coreAuthService.getOptimisticMemberClient(DEFAULT_LOGIN_TYPE, memberId);
+            BizMemberClient bizMemberClient = BizMemberClientConverter.convert(storedMemberClient);
+
+            bizMemberInfo.setBizMemberClient(bizMemberClient);
+
+            sendPasswordIfNecessary(orgId, bizMemberInfo.getBizMemberClient().getClientId(), bizMember.getPhone());
+        }
 
         return bizMemberInfo;
     }
 
-    private void sendPasswordIfNecessary(String registerMode, String orgId, String clientId, String phone) {
-        boolean isRegByAdmin = BizMemberRegisterMode.BY_ORG_ADMIN.getCode().equals(registerMode) || BizMemberRegisterMode.BY_SUB_ORG_ADMIN.getCode().equals(registerMode);
-
-        if (!isRegByAdmin) {
-            return;
-        }
-
+    private void sendPasswordIfNecessary(String orgId, String clientId, String phone) {
         try {
             String newPassword = RandomUtil.generateNumberCode(6);
             coreAuthService.updateMemberClientPassword(clientId, newPassword);

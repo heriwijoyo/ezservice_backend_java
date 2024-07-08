@@ -5,6 +5,7 @@
 package id.ezclouds.biz.ezservice.service.request;
 
 import id.ezclouds.biz.ezservice.model.member.BizGender;
+import id.ezclouds.biz.ezservice.model.member.BizMemberRegisterMode;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -263,5 +264,10 @@ public class BizMemberRegisterRequest extends BizRequest {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public BizMemberRegisterMode getRegisterMode() {
+        String registerMode = getExtendInfo().get("REG_MODE");
+        return BizMemberRegisterMode.getByCode(registerMode);
     }
 }
