@@ -4,10 +4,13 @@
  */
 package id.ezclouds.biz.ezservice.service.core;
 
+import id.ezclouds.biz.ezservice.enums.BizAsyncScene;
 import id.ezclouds.biz.ezservice.enums.BizImportScene;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
+import id.ezclouds.biz.ezservice.service.async.BizAsyncProcessService;
 import id.ezclouds.biz.ezservice.service.core.dataobject.BizCommonImportDO;
 import id.ezclouds.biz.ezservice.service.core.repo.BizCommonImportRepository;
+import id.ezclouds.biz.ezservice.service.request.BizAsyncProcessRequest;
 import id.ezclouds.biz.ezservice.service.request.BizDataImportRequest;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
@@ -28,6 +31,9 @@ public class BizDataImportService extends BizBaseService {
 
     @Autowired
     private BizCommonImportRepository bizCommonImportRepository;
+
+    @Autowired
+    private BizAsyncProcessService bizAsyncProcessService;
 
     public BizResult process(BizDataImportRequest request) {
         final BizResult bizResult = new BizResult();
@@ -58,6 +64,20 @@ public class BizDataImportService extends BizBaseService {
                 bizCommonImportDO.setCreatedTime(currentTime);
 
                 bizCommonImportRepository.saveAndFlush(bizCommonImportDO);
+
+                BizAsyncProcessRequest asyncProcessRequest = new BizAsyncProcessRequest();
+
+                switch (request.getImportScene()) {
+                    case MEMBER_REGISTER_2024_JULY_EARLY:
+                        asyncProcessRequest.setBizAsyncScene(BizAsyncScene.MEMBER_DATA_IMPORT_24JULY);
+                        asyncProcessRequest.setOrgId(request.getOrgId());
+                        asyncProcessRequest.getPayload().put("SUB_ORG_ID", request.getSubOrgId());
+                        asyncProcessRequest.getPayload().put("FILE_ID", request.getFileId());
+                        asyncProcessRequest.getPayload().put("FILE_PATH", request.getFilePath());
+                        break;
+                }
+
+                bizAsyncProcessService.process(asyncProcessRequest);
 
                 bizResult.setSuccess(true);
             }

@@ -6,6 +6,9 @@ package id.ezclouds.biz.ezservice.service.request;
 
 import id.ezclouds.biz.ezservice.enums.BizAsyncScene;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizAsyncProcessRequest.java, v 0.1 2024‐07‐06 12:39 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -14,7 +17,7 @@ public class BizAsyncProcessRequest {
 
     private String orgId;
     private BizAsyncScene bizAsyncScene;
-    private String payload;
+    private Map<String, Object> payload = new HashMap<>();
     private String processTime;
 
     public String getOrgId() {
@@ -33,12 +36,8 @@ public class BizAsyncProcessRequest {
         this.bizAsyncScene = bizAsyncScene;
     }
 
-    public String getPayload() {
+    public Map<String, Object> getPayload() {
         return payload;
-    }
-
-    public void setPayload(String payload) {
-        this.payload = payload;
     }
 
     public String getProcessTime() {

@@ -461,6 +461,7 @@ public class WebApiSuperAdminController {
                     request.setScene(BizUploadScene.ADMIN_OTHER);
                     request.setImportScene(BizImportScene.getByCode(postDataNode.get("scene").asText()));
                     request.setOrgId(postDataNode.get("orgId").asText());
+                    request.setSubOrgId(postDataNode.get("subOrgId").asText());
                     request.setFileId(postDataNode.get("fileId").asText());
                     request.setMultipartFile(multipartFile);
                 } catch (Exception e) {}

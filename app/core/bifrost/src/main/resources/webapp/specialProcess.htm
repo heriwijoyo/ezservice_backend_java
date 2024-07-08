@@ -53,6 +53,12 @@
                     </div>
                     <div class="form-group form-float col-sm-12">
                         <div class="form-line">
+                            <div class="font-12">Sub Organization ID</div>
+                            <input type="text" class="form-control" id="subOrgId" placeholder="Sub Organization ID" required>
+                        </div>
+                    </div>
+                    <div class="form-group form-float col-sm-12">
+                        <div class="form-line">
                             <div class="font-12">File ID</div>
                             <input type="text" class="form-control" id="fileId" placeholder="File ID" required>
                         </div>
@@ -61,7 +67,7 @@
                         <div class="form-group">
                             <div class="font-12 ex1">CSV File</div>
                             <form id="importForm" enctype="multipart/form-data" method="post">
-                                <input type="file" name="importFile" data-allowed-file-extensions="csv" required/>
+                                <input type="file" id="importFile" name="importFile" data-allowed-file-extensions="csv" required/>
                             </form>
                         </div>
                     </div>
@@ -101,18 +107,33 @@
             $('#modal-import-form').removeClass('show');
             $('#modal-import-form').addClass('fade');
         },
+        resetImportForm: function() {
+            $('#importScene').val('');
+            $('#orgId').val('');
+            $('#subOrgId').val('');
+            $('#fileId').val('');
+            $('#importFile').val('');
+            $('#importCancelButton').show();
+            $('#importSubmitButton').show();
+            $('#importLoader').hide();
+        },
         submitImportForm: function() {
             $('#importCancelButton').hide();
             $('#importSubmitButton').hide();
             $('#importLoader').show();
             let postData = {
                 orgId : $('#orgId').val(),
+                subOrgId : $('#subOrgId').val(),
                 fileId : $('#fileId').val(),
                 scene : $('#importScene').val()
             };
             EzWebAppClient.postMultipartForm('importForm', postData, EzProcessApiUrl.COMMON_IMPORT_URL, 'IMPORT_FILE');
         },
         handleApiBizResult: function(url, response) {
+            if (url === EzProcessApiUrl.COMMON_IMPORT_URL + 'IMPORT_FILE') {
+                alert(response.data);
+                EzProcessService.resetImportForm();
+            }
         }
     };
 

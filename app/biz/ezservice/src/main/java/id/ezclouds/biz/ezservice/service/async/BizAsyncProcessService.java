@@ -7,8 +7,10 @@ package id.ezclouds.biz.ezservice.service.async;
 import id.ezclouds.biz.ezservice.enums.BizAsyncScene;
 import id.ezclouds.biz.ezservice.service.async.processor.BizAsyncProcessor;
 import id.ezclouds.biz.ezservice.service.async.processor.BizCommonReportProcessor;
+import id.ezclouds.biz.ezservice.service.async.processor.BizImportMemberProcessor;
 import id.ezclouds.biz.ezservice.service.request.BizAsyncProcessRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,9 +24,12 @@ import java.util.List;
 public class BizAsyncProcessService {
 
     @Autowired
+    private BizImportMemberProcessor bizImportMemberProcessor;
+
+    @Autowired
     private BizCommonReportProcessor bizCommonReportProcessor;
 
-
+    @Async
     public void process(BizAsyncProcessRequest request) {
         for (BizAsyncProcessor bizAsyncProcessor : getProcessors(request.getBizAsyncScene())) {
             bizAsyncProcessor.process(request);
@@ -39,6 +44,7 @@ public class BizAsyncProcessService {
                 processors.add(bizCommonReportProcessor);
                 break;
             case MEMBER_DATA_IMPORT_24JULY:
+                processors.add(bizImportMemberProcessor);
                 processors.add(bizCommonReportProcessor);
                 break;
         }
