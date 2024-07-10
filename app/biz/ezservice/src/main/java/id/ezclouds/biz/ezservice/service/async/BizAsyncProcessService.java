@@ -40,10 +40,10 @@ public class BizAsyncProcessService {
         List<BizAsyncProcessor> processors = new ArrayList<>();
 
         switch (bizAsyncScene) {
-            case MEMBER_REGISTER:
+            case SYNC_MEMBER_DATA_REGISTER:
                 processors.add(bizCommonReportProcessor);
                 break;
-            case MEMBER_DATA_IMPORT_24JULY:
+            case SYNC_MEMBER_DATA_IMPORT:
                 processors.add(bizImportMemberProcessor);
                 processors.add(bizCommonReportProcessor);
                 break;

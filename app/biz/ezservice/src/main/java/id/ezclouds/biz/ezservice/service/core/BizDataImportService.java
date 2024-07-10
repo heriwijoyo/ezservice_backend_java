@@ -68,8 +68,8 @@ public class BizDataImportService extends BizBaseService {
                 BizAsyncProcessRequest asyncProcessRequest = new BizAsyncProcessRequest();
 
                 switch (request.getImportScene()) {
-                    case MEMBER_REGISTER_2024_JULY_EARLY:
-                        asyncProcessRequest.setBizAsyncScene(BizAsyncScene.MEMBER_DATA_IMPORT_24JULY);
+                    case MEMBER_REGISTER_CSV_2024_JULY:
+                        asyncProcessRequest.setBizAsyncScene(BizAsyncScene.SYNC_MEMBER_DATA_IMPORT);
                         asyncProcessRequest.setOrgId(request.getOrgId());
                         asyncProcessRequest.getPayload().put("SUB_ORG_ID", request.getSubOrgId());
                         asyncProcessRequest.getPayload().put("FILE_ID", request.getFileId());
