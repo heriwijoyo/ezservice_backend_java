@@ -8,7 +8,7 @@ import id.ezclouds.biz.ezservice.enums.BizAsyncScene;
 import id.ezclouds.biz.ezservice.service.async.processor.BizAsyncProcessor;
 import id.ezclouds.biz.ezservice.service.async.processor.BizCommonReportProcessor;
 import id.ezclouds.biz.ezservice.service.async.processor.BizImportMemberProcessor;
-import id.ezclouds.biz.ezservice.service.async.processor.BizSyncMemberProcessor;
+import id.ezclouds.biz.ezservice.service.async.processor.BizSyncBatchMemberProcessor;
 import id.ezclouds.biz.ezservice.service.request.BizAsyncProcessRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -25,7 +25,7 @@ import java.util.List;
 public class BizAsyncProcessService {
 
     @Autowired
-    private BizSyncMemberProcessor bizSyncMemberProcessor;
+    private BizSyncBatchMemberProcessor bizSyncBatchMemberProcessor;
 
     @Autowired
     private BizImportMemberProcessor bizImportMemberProcessor;
@@ -45,7 +45,7 @@ public class BizAsyncProcessService {
 
         switch (bizAsyncScene) {
             case SYNC_BULK_MEMBER_DATA_REGISTER:
-                processors.add(bizSyncMemberProcessor);
+                processors.add(bizSyncBatchMemberProcessor);
                 processors.add(bizCommonReportProcessor);
                 break;
             case SYNC_BULK_MEMBER_DATA_IMPORT:
