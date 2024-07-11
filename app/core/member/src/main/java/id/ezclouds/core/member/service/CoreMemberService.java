@@ -75,7 +75,6 @@ public class CoreMemberService {
         memberClient.setLoginId(coreMember.getPhone());
         memberClient.setStatus(CoreAuthConstant.Status.ACTIVE);
         coreAuthService.createMemberClient(memberClient);
-
     }
 
     public void store(CoreMember coreMember) {
@@ -148,6 +147,14 @@ public class CoreMemberService {
         return coreMemberRepository.findByOrgIdAndRolesContains(orgId, roles)
                 .stream()
                 .map(CoreMemberConverter::convert)
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getAllMemberIds(String orgId) {
+        return coreMemberRepository
+                .findByOrgId(orgId)
+                .stream()
+                .map(CoreMemberDO::getMemberId)
                 .collect(Collectors.toList());
     }
 

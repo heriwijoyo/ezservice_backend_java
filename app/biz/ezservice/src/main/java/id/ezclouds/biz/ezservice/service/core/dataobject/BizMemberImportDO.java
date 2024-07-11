@@ -46,10 +46,18 @@ public class BizMemberImportDO {
     private String ethnic;
     @Column(name = "id_card_number")
     private String idCardNumber;
-    @Column(name = "address")
-    private String address;
+    @Column(name = "district_name")
+    private String districtName;
+    @Column(name = "village_name")
+    private String villageName;
+    @Column(name = "rukun_warga")
+    private String rukunWarga;
+    @Column(name = "rukun_tetangga")
+    private String rukunTetangga;
     @Column(name = "tps_number")
     private String tpsNumber;
+    @Column(name = "address")
+    private String address;
 
     public String getBizMemberId() {
         return bizMemberId;
@@ -161,6 +169,38 @@ public class BizMemberImportDO {
 
     public void setIdCardNumber(String idCardNumber) {
         this.idCardNumber = idCardNumber;
+    }
+
+    public String getDistrictName() {
+        return districtName;
+    }
+
+    public void setDistrictName(String districtName) {
+        this.districtName = districtName;
+    }
+
+    public String getVillageName() {
+        return villageName;
+    }
+
+    public void setVillageName(String villageName) {
+        this.villageName = villageName;
+    }
+
+    public String getRukunWarga() {
+        return rukunWarga;
+    }
+
+    public void setRukunWarga(String rukunWarga) {
+        this.rukunWarga = rukunWarga;
+    }
+
+    public String getRukunTetangga() {
+        return rukunTetangga;
+    }
+
+    public void setRukunTetangga(String rukunTetangga) {
+        this.rukunTetangga = rukunTetangga;
     }
 
     public String getAddress() {

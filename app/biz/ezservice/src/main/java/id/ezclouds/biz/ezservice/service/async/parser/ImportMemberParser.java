@@ -45,7 +45,7 @@ public class ImportMemberParser implements CSVLineParser<BizMemberImportDO> {
         memberImportDO.setReligion(getValue(line, 7));
         memberImportDO.setEthnic(getValue(line, 8));
         memberImportDO.setIdCardNumber(getValue(line, 9));
-        memberImportDO.setAddress(getValue(line, 12));
+        memberImportDO.setDistrictName(getValue(line, 12));
         memberImportDO.setTpsNumber(getValue(line, 13));
 
         return memberImportDO;
@@ -64,7 +64,7 @@ public class ImportMemberParser implements CSVLineParser<BizMemberImportDO> {
     }
 
     private String reformatDate(String dateStr) {
-        Date date = DateUtil.parseFormattedDate("dd-MM-yyyy");
+        Date date = DateUtil.parseFormattedDate(dateStr, "dd-MM-yyyy");
         return DateUtil.getFormattedDate(date);
     }
 }

@@ -10,6 +10,7 @@ package id.ezclouds.biz.ezservice.enums;
  */
 public enum BizImportScene {
 
+    SYNC_BULK_MEMBER_DATA_REGISTER("SYNC_BULK_MEMBER_DATA_REGISTER"),
     MEMBER_REGISTER_CSV_2024_JULY("MEMBER_REGISTER_CSV_2024_JULY"),
 
     UNKNOWN("UNKNOWN")

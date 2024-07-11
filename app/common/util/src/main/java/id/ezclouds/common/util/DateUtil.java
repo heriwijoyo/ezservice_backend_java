@@ -23,7 +23,11 @@ public class DateUtil {
     }
 
     public static Date parseFormattedDate(String formattedDate) {
-        SimpleDateFormat dateFormatter = new SimpleDateFormat(FORMAT_DATETIME_DEFAULT);
+        return parseFormattedDate(formattedDate, FORMAT_DATETIME_DEFAULT);
+    }
+
+    public static Date parseFormattedDate(String formattedDate, String format) {
+        SimpleDateFormat dateFormatter = new SimpleDateFormat(format);
         Date date;
         try {
             date = dateFormatter.parse(formattedDate);

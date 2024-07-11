@@ -59,6 +59,10 @@ public class BizMemberConverter {
         bizMember.setName(member.getName());
         bizMember.setNickname(member.getNickname());
         bizMember.setPhone(member.getPhone());
+        bizMember.setEducation(member.getEducation());
+        bizMember.setOccupation(member.getOccupation());
+        bizMember.setReligion(member.getReligion());
+        bizMember.setEthnic(member.getEthnic());
         bizMember.setDateOfBirth(member.getDateOfBirth());
         bizMember.setGender(BizGender.getByCode(member.getGender()));
         bizMember.setEmail(member.getEmail());

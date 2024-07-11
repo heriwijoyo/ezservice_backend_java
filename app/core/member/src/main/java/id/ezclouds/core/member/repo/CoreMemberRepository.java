@@ -19,6 +19,8 @@ import java.util.List;
 @Repository
 public interface CoreMemberRepository  extends JpaRepository<CoreMemberDO, String> {
 
+    List<CoreMemberDO> findByOrgId(String orgId);
+
     List<CoreMemberDO> findByOrgIdAndRolesContains(String orgId, String roles);
 
     Page<CoreMemberDO> findByOrgId(String orgId, Pageable pageable);

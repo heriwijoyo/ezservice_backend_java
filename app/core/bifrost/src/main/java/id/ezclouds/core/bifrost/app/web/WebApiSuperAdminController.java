@@ -458,7 +458,6 @@ public class WebApiSuperAdminController {
                     ObjectMapper objectMapper = new ObjectMapper();
                     JsonNode postDataNode = objectMapper.readTree(postData);
                     request.setSessionId(postDataNode.get("sessionId").asText());
-                    request.setScene(BizUploadScene.ADMIN_OTHER);
                     request.setImportScene(BizImportScene.getByCode(postDataNode.get("scene").asText()));
                     request.setOrgId(postDataNode.get("orgId").asText());
                     request.setSubOrgId(postDataNode.get("subOrgId").asText());

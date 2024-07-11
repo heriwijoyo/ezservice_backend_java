@@ -40,7 +40,7 @@ public class BizImportMemberProcessor implements BizAsyncProcessor {
     public void process(BizAsyncProcessRequest request) {
         if (request == null
                 || request.getBizAsyncScene() == null
-                || request.getBizAsyncScene() != BizAsyncScene.SYNC_MEMBER_DATA_IMPORT) {
+                || request.getBizAsyncScene() != BizAsyncScene.SYNC_BULK_MEMBER_DATA_IMPORT) {
             return;
         }
 

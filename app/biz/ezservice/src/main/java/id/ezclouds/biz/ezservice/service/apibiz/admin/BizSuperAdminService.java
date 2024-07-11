@@ -8,6 +8,7 @@ import id.ezclouds.biz.ezservice.constant.BizConstant;
 import id.ezclouds.biz.ezservice.enums.BizConnectType;
 import id.ezclouds.biz.ezservice.enums.BizImportScene;
 import id.ezclouds.biz.ezservice.enums.BizMemberRole;
+import id.ezclouds.biz.ezservice.enums.BizUploadScene;
 import id.ezclouds.biz.ezservice.model.admin.BizApplicationConfig;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganization;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganizationDetail;
@@ -487,7 +488,7 @@ public class BizSuperAdminService extends BizBaseService {
         return bizResult;
     }
 
-    public BizResult commonImport(BizDataImportRequest request) {
+    public BizResult commonImport(final BizDataImportRequest request) {
         final BizResult bizResult = new BizResult();
 
         BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
@@ -496,27 +497,37 @@ public class BizSuperAdminService extends BizBaseService {
                 AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
                 AssertUtil.notNull(request.getImportScene(), EzErrorCode.ILLEGAL_PARAM);
                 AssertUtil.isNotTrue(request.getImportScene() == BizImportScene.UNKNOWN, EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notNull(request.getScene(), EzErrorCode.ILLEGAL_PARAM);
                 AssertUtil.notBlank(request.getOrgId(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(request.getFileId(), EzErrorCode.ILLEGAL_PARAM);
-                request.validateMultipartRequest();
             }
 
             @Override
             public void onBizProcess() throws Exception {
                 authorizeSuperUserMember(request.getSessionId());
-                String fileName = HashUtil.createHash(request.getOrgId(), DateUtil.getCurrentFormattedDate()) + ".csv";
-                PublicFileResolver fileInfo = coreFileService.resolvePublicFileInfo(request.getOrgId());
-                Path filePath = fileInfo.getOtherPath(fileName);
 
-                coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
-                request.setFilePath(filePath);
-                request.setFileName(fileName);
+                switch (request.getImportScene()) {
+                    case MEMBER_REGISTER_CSV_2024_JULY:
+                        AssertUtil.notBlank(request.getSubOrgId(), EzErrorCode.ILLEGAL_PARAM);
+                        AssertUtil.notBlank(request.getFileId(), EzErrorCode.ILLEGAL_PARAM);
+                        request.setScene(BizUploadScene.ADMIN_OTHER);
+                        request.validateMultipartRequest();
+
+                        String fileName = HashUtil.createHash(request.getOrgId(), DateUtil.getCurrentFormattedDate()) + ".csv";
+                        PublicFileResolver fileInfo = coreFileService.resolvePublicFileInfo(request.getOrgId());
+                        Path filePath = fileInfo.getOtherPath(fileName);
+
+                        coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
+                        request.setFilePath(filePath);
+                        request.setFileName(fileName);
+                        break;
+
+                    case SYNC_BULK_MEMBER_DATA_REGISTER:
+                        break;
+                }
 
                 bizDataImportService.process(request);
 
                 bizResult.setSuccess(true);
-                bizResult.setObject("IMPORT SUCCESS");
+                bizResult.setObject("PROCESS IMPORT SUCCESS");
             }
 
             @Override

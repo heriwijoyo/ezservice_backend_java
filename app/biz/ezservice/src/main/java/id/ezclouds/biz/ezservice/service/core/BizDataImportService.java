@@ -42,13 +42,22 @@ public class BizDataImportService extends BizBaseService {
             public void onRequestCheck() throws EzErrorException {
                 AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
                 AssertUtil.notNull(request.getImportScene(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.isTrue(request.getImportScene() != BizImportScene.UNKNOWN, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.isNotTrue(request.getImportScene() == BizImportScene.UNKNOWN, EzErrorCode.ILLEGAL_PARAM);
                 AssertUtil.notBlank(request.getOrgId(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(request.getFileId(), EzErrorCode.ILLEGAL_PARAM);
             }
 
             @Override
             public void onBizProcess() throws Exception {
+                switch (request.getImportScene()) {
+                    case MEMBER_REGISTER_CSV_2024_JULY:
+                        AssertUtil.notBlank(request.getSubOrgId(), EzErrorCode.ILLEGAL_PARAM);
+                        AssertUtil.notBlank(request.getFileId(), EzErrorCode.ILLEGAL_PARAM);
+                        break;
+                    case SYNC_BULK_MEMBER_DATA_REGISTER:
+                        request.setFileId(request.getImportScene().getCode());
+                        break;
+                }
+
                 String currentTime = DateUtil.getCurrentFormattedDate();
                 BizCommonImportDO bizCommonImportDO = new BizCommonImportDO();
                 bizCommonImportDO.setId(
@@ -66,20 +75,47 @@ public class BizDataImportService extends BizBaseService {
                 bizCommonImportRepository.saveAndFlush(bizCommonImportDO);
 
                 BizAsyncProcessRequest asyncProcessRequest = new BizAsyncProcessRequest();
+                asyncProcessRequest.setOrgId(request.getOrgId());
 
                 switch (request.getImportScene()) {
                     case MEMBER_REGISTER_CSV_2024_JULY:
-                        asyncProcessRequest.setBizAsyncScene(BizAsyncScene.SYNC_MEMBER_DATA_IMPORT);
-                        asyncProcessRequest.setOrgId(request.getOrgId());
+                        asyncProcessRequest.setBizAsyncScene(BizAsyncScene.SYNC_BULK_MEMBER_DATA_IMPORT);
                         asyncProcessRequest.getPayload().put("SUB_ORG_ID", request.getSubOrgId());
                         asyncProcessRequest.getPayload().put("FILE_ID", request.getFileId());
                         asyncProcessRequest.getPayload().put("FILE_PATH", request.getFilePath());
+                        break;
+                    case SYNC_BULK_MEMBER_DATA_REGISTER:
+                        asyncProcessRequest.setBizAsyncScene(BizAsyncScene.SYNC_BULK_MEMBER_DATA_REGISTER);
+                        asyncProcessRequest.getPayload().put("FILE_ID", request.getImportScene().getCode());
                         break;
                 }
 
                 bizAsyncProcessService.process(asyncProcessRequest);
 
                 bizResult.setSuccess(true);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
+    public BizResult syncMemberRegister(BizDataImportRequest request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.isNotTrue(request.getImportScene() == BizImportScene.UNKNOWN, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getOrgId(), EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+
             }
 
             @Override
