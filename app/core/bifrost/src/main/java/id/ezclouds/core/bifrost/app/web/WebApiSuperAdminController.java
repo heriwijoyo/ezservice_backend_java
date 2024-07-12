@@ -480,4 +480,26 @@ public class WebApiSuperAdminController {
         });
         return result;
     }
+
+    @PostMapping(value = "/webapp/api/reloadReport.json")
+    private WebApiResult<String> reloadReport(@RequestParam(name = "sessionId", required = false) String sessionId) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_RELOAD_REPORT, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                return bizSuperAdminService.reloadReport(sessionId);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
 }

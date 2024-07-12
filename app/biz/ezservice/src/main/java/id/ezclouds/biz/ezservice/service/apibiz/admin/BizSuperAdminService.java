@@ -14,12 +14,14 @@ import id.ezclouds.biz.ezservice.model.admin.BizOrganization;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganizationDetail;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
+import id.ezclouds.biz.ezservice.service.async.processor.BizCommonReportProcessor;
 import id.ezclouds.biz.ezservice.service.core.BizCacheEnum;
 import id.ezclouds.biz.ezservice.service.core.BizDataImportService;
 import id.ezclouds.biz.ezservice.service.inner.service.BizConnectInnerService;
 import id.ezclouds.biz.ezservice.service.core.BizAppCacheService;
 import id.ezclouds.biz.ezservice.service.app.model.BizAppConfig;
 import id.ezclouds.biz.ezservice.service.inner.service.BizAdminInnerService;
+import id.ezclouds.biz.ezservice.service.request.BizAsyncProcessRequest;
 import id.ezclouds.biz.ezservice.service.request.BizDataImportRequest;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
@@ -67,6 +69,9 @@ public class BizSuperAdminService extends BizBaseService {
 
     @Autowired
     private BizDataImportService bizDataImportService;
+
+    @Autowired
+    private BizCommonReportProcessor bizCommonReportProcessor;
 
     public BizResult createSuperAdminSession() {
         final BizResult bizResult = new BizResult();
@@ -475,6 +480,34 @@ public class BizSuperAdminService extends BizBaseService {
             public void onBizProcess() throws Exception {
                 authorizeSuperUserMember(sessionId);
                 bizAdminInnerService.refreshAllMenus();
+                bizResult.setSuccess(true);
+                bizResult.setObject(BizConstant.Message.SUCCESS_COMMON);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+
+        return bizResult;
+    }
+
+    public BizResult reloadReport(String sessionId) {
+        BizResult bizResult = new BizResult();
+
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notBlank(sessionId, EzErrorCode.SESSION_INVALID);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                authorizeSuperUserMember(sessionId);
+                BizAsyncProcessRequest processRequest = new BizAsyncProcessRequest();
+                processRequest.setOrgId("RJL0");
+                bizCommonReportProcessor.process(processRequest);
                 bizResult.setSuccess(true);
                 bizResult.setObject(BizConstant.Message.SUCCESS_COMMON);
             }

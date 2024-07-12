@@ -84,11 +84,15 @@
 
 <script type="text/javascript">
     var EzProcessApiUrl = {
+        RELOAD_REPORT_URL : 'api/reloadReport.json',
         COMMON_IMPORT_URL : 'api/commonImport.json'
     };
 
     var EzProcessService = {
         start: function() {
+            $('#sync-member-report-btn').click(function(){
+                EzProcessService.reloadReport();
+            });
             $('#import-data-btn').click(function(){
                 EzProcessService.showImportForm();
             });
@@ -98,6 +102,9 @@
             $('#importSubmitButton').click(function(){
                 EzProcessService.submitImportForm();
             });
+        },
+        reloadReport: function() {
+            EzWebAppClient.callApiService(EzProcessApiUrl.RELOAD_REPORT_URL, {});
         },
         showImportForm: function() {
             $('#modal-import-form').removeClass('fade');
@@ -133,6 +140,9 @@
             if (url === EzProcessApiUrl.COMMON_IMPORT_URL + 'IMPORT_FILE') {
                 alert(response.data);
                 EzProcessService.resetImportForm();
+            }
+            if (url === EzProcessApiUrl.RELOAD_REPORT_URL) {
+                alert(response.data);
             }
         }
     };
