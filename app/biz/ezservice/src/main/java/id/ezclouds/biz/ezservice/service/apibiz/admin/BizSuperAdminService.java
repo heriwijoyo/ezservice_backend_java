@@ -26,6 +26,7 @@ import id.ezclouds.biz.ezservice.service.request.BizDataImportRequest;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
+import id.ezclouds.core.auth.model.CoreAuthAdminScene;
 import id.ezclouds.core.shared.result.PageResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.biz.ezservice.util.BizExtendInfoUtil;
@@ -90,7 +91,7 @@ public class BizSuperAdminService extends BizBaseService {
                 CoreAdminCommonSessionCreateRequest createRequest = new CoreAdminCommonSessionCreateRequest();
                 createRequest.setOrgId(CoreConstant.SU_ORG_ID);
                 createRequest.setOrgCode(CoreConstant.SU_ORG_CODE);
-                createRequest.setScene("WEB_LOGIN_SESSION");
+                createRequest.setScene(CoreAuthAdminScene.WEB_LOGIN_SESSION.getCode());
                 createRequest.setAppId(CoreConstant.SU_ORG_ID);
                 createRequest.setClientId(CoreConstant.SU_ORG_ID);
                 createRequest.setMemberId(CoreConstant.SU_ORG_ID);
@@ -112,6 +113,37 @@ public class BizSuperAdminService extends BizBaseService {
                 }
 
                 bizResult.setObject("SUCCESS :: "+ scrambledCode);
+                bizResult.setSuccess(true);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
+    public BizResult createSuperAdminPublicSession() {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {}
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAdminCommonSessionCreateRequest createRequest = new CoreAdminCommonSessionCreateRequest();
+                createRequest.setOrgId(CoreConstant.SU_ORG_ID);
+                createRequest.setOrgCode(CoreConstant.SU_ORG_CODE);
+                createRequest.setScene(CoreAuthAdminScene.WEB_PUBLIC_SESSION.getCode());
+                createRequest.setAppId(CoreConstant.SU_ORG_ID);
+                createRequest.setClientId(CoreConstant.SU_ORG_ID);
+                createRequest.setMemberId(CoreConstant.SU_ORG_ID);
+                createRequest.setMemberRoles("PUBLIC_ACCESS");
+
+                CoreAuthAdminSession session = coreAuthService.adminCreateSession(createRequest);
+
+                bizResult.setObject("SUCCESS :: "+ session.getSessionId());
                 bizResult.setSuccess(true);
             }
 

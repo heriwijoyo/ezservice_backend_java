@@ -12,7 +12,8 @@ import id.ezclouds.core.shared.context.EzAppEvent;
  */
 public enum SuperAdminEvent implements EzAppEvent {
 
-    SU_CREATE_WEB_SESSION("SU_CREATE_WEB_SESSION")
+    SU_CREATE_WEB_SESSION("SU_CREATE_WEB_SESSION"),
+    SU_CREATE_PUBLIC_SESSION("SU_CREATE_PUBLIC_SESSION"),
 
     ;
 

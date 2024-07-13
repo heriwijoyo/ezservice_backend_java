@@ -21,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -71,6 +72,13 @@ public class WebAppController {
         EzAppContextHolder.init(WebEvent.WEB_PAGE_ADMIN_SPECIAL_PROCESS);
         boolean success = renderCachedWebApp(getWebAppContent(WebAppPage.SPECIAL_PROCESS), servletResponse);
         DigestLogUtil.logWebDigest(LOGGER, getDigestLog(success));
+    }
+
+    @GetMapping(value = "/webapp/report/{orgCode}/{sessionId}")
+    private void webReport(@PathVariable("orgCode") String orgCode, @PathVariable("sessionId") String sessionId) {
+        EzAppContextHolder.init(WebEvent.WEB_PAGE_ADMIN_PUBLIC_REPORT);
+        String content = getReportPublicContent(WebAppPage.REPORT_PUBLIC.getAssetFile());
+        DigestLogUtil.logWebDigest(LOGGER, getDigestLog(true));
     }
 
     @Cacheable(value = BizCacheKey.WEBAPP_VIDEO_CARD)
@@ -134,6 +142,14 @@ public class WebAppController {
     private String readHtmlContent(String assetFile) throws IOException {
         Resource resource = new ClassPathResource(assetFile);
         return StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
+    }
+
+    private String getReportPublicContent(String assetFile) {
+        try {
+            return readHtmlContent(assetFile);
+        } catch (IOException e) {
+            return StringUtil.EMPTY;
+        }
     }
 
     private DigestLog getDigestLog(boolean success) {

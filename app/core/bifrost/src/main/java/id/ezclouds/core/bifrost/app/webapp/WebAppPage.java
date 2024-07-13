@@ -16,6 +16,7 @@ public enum WebAppPage {
 
     CONFIG("webapp/config.htm"),
     SPECIAL_PROCESS("webapp/specialProcess.htm"),
+    REPORT_PUBLIC("webapp/report.htm"),
 
     ;
 

@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>MSA Report Center</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat|Open+Sans|Roboto|Material+Icons" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400&display=swap">
+    <link rel="stylesheet" href="css/a11y-light.css">
+    <link rel="stylesheet" href="css/jsuites.min.css" type="text/css" />
+    <link rel="stylesheet" href="css/style.min.css" type="text/css" />
+    <link rel="stylesheet" href="css/menu.min.css" type="text/css" />
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
+    <link rel="stylesheet" href="css/jspreadsheet.min.css" type="text/css" />
+
+    <script src="js/index.min.js" type="text/javascript"/></script>
+    <script src="js/highlight.min.js" type="text/javascript"></script>
+    <script src="js/highlightjs-line-numbers.min.js" type="text/javascript"></script>
+    <script src="js/lemonade.min.js" type="text/javascript"></script>
+    <script src="js/jsuites.min.js" type="text/javascript"></script>
+    <script src="js/menu.min.js" type="text/javascript"></script>
+    <script src="js/themes.js" type="text/javascript"></script>
+    <script src="js/app.js" type="text/javascript"></script>
+</head>
+<body>
+<style type="text/css">
+.jexcel>tbody>tr>td.readonly {
+    color: rgba(0,0,0,.8)
+}
+</style>
+
+<section class='top'>
+    <div class='row container middle' style="min-height:60px">
+        <nav id='top' class='big-screen-only'>
+            <ul>
+                <li><a href="#">Data Aplikasi</a></li>
+                <li><a href="#">Data Google Sheet</a></li>
+            </ul>
+        </nav>
+    </div>
+</section>
+
+<section>
+    <div class='row container'>
+        <div class='column f3'>
+            <div id='content'>
+                <div class="section">
+                    <div class="section-content">
+
+                        <h2 id="title">Data Aplikasi</h2>
+
+                        <!--p>Report description<p-->
+
+                        <div id='dataTable'></div>
+
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                table = jspreadsheet(document.getElementById('dataTable'), {
+                                    data:[],
+                                    columns: [],
+                                    toolbar: [
+                                        {
+                                            type: 'i',
+                                            content: 'save',
+                                            onclick: function () {
+                                                table.download();
+                                            }
+                                        },
+                                        {
+                                            type: 'select',
+                                            k: 'font-family',
+                                            v: ['Arial','Verdana']
+                                        },
+                                        {
+                                            type: 'select',
+                                            k: 'font-size',
+                                            v: ['9px','10px','11px','12px','13px','14px','15px','16px','17px','18px','19px','20px']
+                                        },
+                                        {
+                                            type: 'i',
+                                            content: 'format_align_left',
+                                            k: 'text-align',
+                                            v: 'left'
+                                        },
+                                        {
+                                            type:'i',
+                                            content:'format_align_center',
+                                            k:'text-align',
+                                            v:'center'
+                                        },
+                                        {
+                                            type: 'i',
+                                            content: 'format_align_right', 
+                                            k: 'text-align',
+                                            v: 'right'
+                                        },
+                                        {
+                                            type: 'i',
+                                            content: 'format_bold',
+                                            k: 'font-weight',
+                                            v: 'bold'
+                                        },
+                                        {
+                                            type: 'color',
+                                            content: 'format_color_text',
+                                            k: 'color'
+                                        },
+                                        {
+                                            type: 'color',
+                                            content: 'format_color_fill',
+                                            k: 'background-color'
+                                        },
+                                    ],
+                                    csvHeaders:true,
+                                    search:true,
+                                    columnSorting:true,
+                                    pagination: 100,
+                                    includeHeadersOnDownload:true,
+                                    csvFileName:'Report_MSA_Center'
+                                });
+                            });
+
+                            setTimeout(function(){
+                                table.setData([['Mazda', 2001, 2000],['Pegeout', 2010, 5000],['Honda Fit', 2009, 3000],['Honda CRV', 2010, 6000]]);
+                            }, 3000);
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--footer id="footer">
+<div class="container p20">
+    <div class="row">
+        <div class="column f3 p20">
+            <div class='footer-list'>
+                <h4>Dynamic Report</h4>
+                <p>Prepared by ArahIndonesia</p>
+                <a href='mailto:marketing@arahindonesia.id'>marketing@arahindonesia.id</a>
+            </div>
+        </div>
+    </div>
+</div>
+</footer-->
+
+</body>
+
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', app);
+</script>
+</html>
