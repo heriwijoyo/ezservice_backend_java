@@ -53,6 +53,8 @@ public class BizRequestConverter<T extends BizRequest> {
             bizRequest.setReligion(request.getReligion());
             bizRequest.setEthnic(request.getEthnic());
             bizRequest.setEmail(request.getEmail());
+            bizRequest.setIdCardNumber(request.getIdCardNumber());
+            bizRequest.setFamilyCardNumber(request.getFamilyCardNumber());
             bizRequest.setAvatarUrl(request.getAvatarUrl());
             bizRequest.setAddress(request.getAddress());
             bizRequest.setBizGender(BizGender.getByCode(request.getGender()));
