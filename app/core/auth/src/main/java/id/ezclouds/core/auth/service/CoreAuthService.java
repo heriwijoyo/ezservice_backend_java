@@ -13,6 +13,7 @@ import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.core.auth.constant.CoreAuthConstant;
 import id.ezclouds.core.auth.converter.CoreAuthModelConverter;
 import id.ezclouds.core.auth.dataobject.*;
+import id.ezclouds.core.auth.model.CoreAuthAdminScene;
 import id.ezclouds.core.auth.model.CoreAuthAdminSession;
 import id.ezclouds.core.auth.model.CoreAuthAppClient;
 import id.ezclouds.core.auth.model.CoreAuthMemberClient;
@@ -382,8 +383,13 @@ public class CoreAuthService {
 
         while (retryCount < 1 || (createError && (retryCount < maxRetry))) {
             try {
+                int sessionExpiryMins;
+                if (CoreAuthAdminScene.WEB_PUBLIC_SESSION.getCode().equals(request.getScene())) {
+                    sessionExpiryMins = CoreAuthConstant.PUBLIC_SESSION_EXPIRY_MINS;
+                } else {
+                    sessionExpiryMins = innerAuthService.getAdminCommonSessionExpMins(request.getOrgId());
+                }
                 Date currentDate = new Date();
-                int sessionExpiryMins = innerAuthService.getAdminCommonSessionExpMins(request.getOrgId());
                 Date expiryDate = DateUtil.getDateAfterMins(currentDate, sessionExpiryMins);
 
                 int sessionCodeNumber = new Random().nextInt(900000) + 100000;

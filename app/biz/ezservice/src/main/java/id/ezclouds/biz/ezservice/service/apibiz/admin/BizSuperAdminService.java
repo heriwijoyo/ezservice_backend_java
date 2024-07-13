@@ -134,7 +134,7 @@ public class BizSuperAdminService extends BizBaseService {
             public void onBizProcess() throws Exception {
                 CoreAdminCommonSessionCreateRequest createRequest = new CoreAdminCommonSessionCreateRequest();
                 createRequest.setOrgId(CoreConstant.SU_ORG_ID);
-                createRequest.setOrgCode(CoreConstant.SU_ORG_CODE);
+                createRequest.setOrgCode(CoreConstant.RJL_ORG_CODE);
                 createRequest.setScene(CoreAuthAdminScene.WEB_PUBLIC_SESSION.getCode());
                 createRequest.setAppId(CoreConstant.SU_ORG_ID);
                 createRequest.setClientId(CoreConstant.SU_ORG_ID);

@@ -14,6 +14,8 @@ public class CoreConstant {
     public static final String SU_ORG_CODE = "101";
     public static final int SU_WEB_SESSION_EXPIRY_MINS = 30;
 
+    public static final String RJL_ORG_CODE = "201";
+
     public static final class ConfigKey {
         public static final String MEMBER_CLIENT_ALLOW_MULTIPLE_SESSION = "MEMBER_CLIENT_ALLOW_MULTIPLE_SESSION";
         public static final String MEMBER_CLIENT_SESSION_EXPIRY_DAYS = "MEMBER_CLIENT_SESSION_EXPIRY_DAYS";

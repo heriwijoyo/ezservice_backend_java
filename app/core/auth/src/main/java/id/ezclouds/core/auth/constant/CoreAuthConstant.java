@@ -15,6 +15,7 @@ public class CoreAuthConstant {
     public static final int MEMBER_CLIENT_STATUS_ACTIVE = 1;
     public static final int MEMBER_CLIENT_STATUS_NOT_ACTIVE = 0;
     public static final int MEMBER_CLIENT_STATUS_FROZEN = -1;
+    public static final int PUBLIC_SESSION_EXPIRY_MINS = 7200;
 
     public static final class Status {
         public static final int ACTIVE = 1;

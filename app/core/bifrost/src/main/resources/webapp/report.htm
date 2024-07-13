@@ -1,25 +1,24 @@
-
 <!DOCTYPE html>
 <html>
 <head>
 <title>MSA Report Center</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat|Open+Sans|Roboto|Material+Icons" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400&display=swap">
-    <link rel="stylesheet" href="css/a11y-light.css">
-    <link rel="stylesheet" href="css/jsuites.min.css" type="text/css" />
-    <link rel="stylesheet" href="css/style.min.css" type="text/css" />
-    <link rel="stylesheet" href="css/menu.min.css" type="text/css" />
-    <link rel="stylesheet" href="css/style.css" type="text/css" />
-    <link rel="stylesheet" href="css/jspreadsheet.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../assets/css/report/a11y-light.css">
+    <link rel="stylesheet" href="../../assets/css/report/jsuites.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../assets/css/report/style.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../assets/css/report/menu.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../assets/css/report/style.css" type="text/css" />
+    <link rel="stylesheet" href="../../assets/css/report/jspreadsheet.min.css" type="text/css" />
 
-    <script src="js/index.min.js" type="text/javascript"/></script>
-    <script src="js/highlight.min.js" type="text/javascript"></script>
-    <script src="js/highlightjs-line-numbers.min.js" type="text/javascript"></script>
-    <script src="js/lemonade.min.js" type="text/javascript"></script>
-    <script src="js/jsuites.min.js" type="text/javascript"></script>
-    <script src="js/menu.min.js" type="text/javascript"></script>
-    <script src="js/themes.js" type="text/javascript"></script>
-    <script src="js/app.js" type="text/javascript"></script>
+    <script src="../../assets/js/report/index.min.js" type="text/javascript"/></script>
+    <script src="../../assets/js/report/highlight.min.js" type="text/javascript"></script>
+    <script src="../../assets/js/report/highlightjs-line-numbers.min.js" type="text/javascript"></script>
+    <script src="../../assets/js/report/lemonade.min.js" type="text/javascript"></script>
+    <script src="../../assets/js/report/jsuites.min.js" type="text/javascript"></script>
+    <script src="../../assets/js/report/menu.min.js" type="text/javascript"></script>
+    <script src="../../assets/js/report/themes.js" type="text/javascript"></script>
+    <script src="../../assets/js/report/app.js" type="text/javascript"></script>
 </head>
 <body>
 <style type="text/css">
@@ -56,7 +55,23 @@
                             document.addEventListener('DOMContentLoaded', function() {
                                 table = jspreadsheet(document.getElementById('dataTable'), {
                                     data:[],
-                                    columns: [],
+                                    columns: [
+                                        { readOnly:true, align:'left', title:'Komunitas', width:200 },
+                                        { readOnly:true, align:'left', title:'Nama', width:200 },
+                                        { readOnly:true, align:'left', title:'No KTP', width:100 },
+                                        { readOnly:true, title:'Jenis Kelamin', width:100 },
+                                        { readOnly:true, title:'Tgl Lahir', width:100 },
+                                        { readOnly:true, title:'No HP', width:100 },
+                                        { readOnly:true, title:'Pendidikan', width:100 },
+                                        { readOnly:true, title:'Pekerjaan', width:100 },
+                                        { readOnly:true, title:'Agama', width:100 },
+                                        { readOnly:true, title:'Etnis', width:100 },
+                                        { readOnly:true, title:'Kecamatan', width:100 },
+                                        { readOnly:true, title:'Kelurahan', width:100 },
+                                        { readOnly:true, title:'RW', width:100 },
+                                        { readOnly:true, title:'RT', width:100 },
+                                        { readOnly:true, title:'No TPS', width:100 },
+                                    ],
                                     toolbar: [
                                         {
                                             type: 'i',

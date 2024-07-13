@@ -10,6 +10,7 @@ import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.auth.constant.CoreAuthConstant;
 import id.ezclouds.core.auth.dataobject.EzAuthAdminCommonSessionDO;
+import id.ezclouds.core.auth.model.CoreAuthAdminScene;
 import id.ezclouds.core.auth.repo.EzAuthAdminCommonSessionRepository;
 import id.ezclouds.core.shared.constant.CoreConstant;
 import id.ezclouds.core.shared.service.CoreConfigService;
@@ -97,7 +98,12 @@ public class InnerAuthService {
             throw new EzErrorException(EzErrorCode.SESSION_INVALID);
         }
 
-        int expiryExtensionMins = getAdminCommonSessionExpMins(sessionDO.getOrgId());
+        int expiryExtensionMins;
+        if (CoreAuthAdminScene.WEB_PUBLIC_SESSION.getCode().equals(sessionDO.getScene())) {
+            expiryExtensionMins = CoreAuthConstant.PUBLIC_SESSION_EXPIRY_MINS;
+        } else {
+            expiryExtensionMins = getAdminCommonSessionExpMins(sessionDO.getOrgId());
+        }
         Date newExpiryDate = DateUtil.getDateAfterMins(currentDate, expiryExtensionMins);
         sessionDO.setExpiryTime(DateUtil.getFormattedDate(newExpiryDate));
         ezAuthAdminCommonSessionRepository.saveAndFlush(sessionDO);

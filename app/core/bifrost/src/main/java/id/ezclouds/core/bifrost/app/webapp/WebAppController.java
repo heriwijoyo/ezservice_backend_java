@@ -6,14 +6,20 @@ package id.ezclouds.core.bifrost.app.webapp;
 
 import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.common.util.StringUtil;
+import id.ezclouds.common.util.assertion.AssertUtil;
+import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
+import id.ezclouds.core.auth.model.CoreAuthAdminSession;
+import id.ezclouds.core.auth.service.CoreAuthService;
 import id.ezclouds.core.bifrost.app.api.digestlog.EmptyDigestLog;
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;
+import id.ezclouds.core.bifrost.core.SpringContextConfig;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.util.DigestLogUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -74,11 +80,29 @@ public class WebAppController {
         DigestLogUtil.logWebDigest(LOGGER, getDigestLog(success));
     }
 
-    @GetMapping(value = "/webapp/report/{orgCode}/{sessionId}")
-    private void webReport(@PathVariable("orgCode") String orgCode, @PathVariable("sessionId") String sessionId) {
+    @GetMapping(value = "/webapp/data/{orgCode}/{sessionId}")
+    private void webReport(
+            @PathVariable("orgCode") String orgCode,
+            @PathVariable("sessionId") String sessionId,
+            HttpServletResponse servletResponse) {
         EzAppContextHolder.init(WebEvent.WEB_PAGE_ADMIN_PUBLIC_REPORT);
-        String content = getReportPublicContent(WebAppPage.REPORT_PUBLIC.getAssetFile());
-        DigestLogUtil.logWebDigest(LOGGER, getDigestLog(true));
+        boolean renderSuccess;
+        try {
+            AssertUtil.notBlank(orgCode, EzErrorCode.ILLEGAL_PARAM);
+            AssertUtil.notBlank(sessionId, EzErrorCode.ILLEGAL_PARAM);
+
+            CoreAuthAdminSession session = SpringContextConfig
+                    .getBean(CoreAuthService.class)
+                    .adminAuthWebSessionId(sessionId);
+            AssertUtil.isTrue(orgCode.equals(session.getOrgCode()), EzErrorCode.SESSION_INVALID);
+
+            String htmlContent = getReportPublicContent(WebAppPage.REPORT_PUBLIC.getAssetFile());
+            renderSuccess = renderCachedWebApp(htmlContent, servletResponse);
+        } catch (Exception e) {
+            e.printStackTrace();
+            renderSuccess = renderCachedWebApp(null, servletResponse);
+        }
+        DigestLogUtil.logWebDigest(LOGGER, getDigestLog(renderSuccess));
     }
 
     @Cacheable(value = BizCacheKey.WEBAPP_VIDEO_CARD)
@@ -101,6 +125,15 @@ public class WebAppController {
         return getWebAppContent(WebAppPage.DOCUMENTS);
     }
 
+    @Cacheable(value = BizCacheKey.WEBAPP_REPORT_PUBLIC)
+    public String getReportPublicContent(String assetFile) {
+        try {
+            return readHtmlContent(assetFile);
+        } catch (IOException e) {
+            return StringUtil.EMPTY;
+        }
+    }
+
     private String getWebAppContent(WebAppPage webAppPage) {
         try {
             String layoutContent = readHtmlContent(ASSET_INCLUDE_LAYOUT);
@@ -120,10 +153,10 @@ public class WebAppController {
 
     private boolean renderCachedWebApp(String htmlContent, HttpServletResponse servletResponse) {
         boolean success = false;
-        if (StringUtil.EMPTY.equals(htmlContent)) {
+        if (StringUtil.isBlank(htmlContent)) {
             servletResponse.setStatus(HttpStatus.NOT_FOUND.value());
             servletResponse.setContentType("text/html;charset=UTF-8");
-            htmlContent = "Not Found";
+            htmlContent = "Nothing Here";
         } else {
             servletResponse.setStatus(HttpStatus.OK.value());
             success = true;
@@ -142,14 +175,6 @@ public class WebAppController {
     private String readHtmlContent(String assetFile) throws IOException {
         Resource resource = new ClassPathResource(assetFile);
         return StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
-    }
-
-    private String getReportPublicContent(String assetFile) {
-        try {
-            return readHtmlContent(assetFile);
-        } catch (IOException e) {
-            return StringUtil.EMPTY;
-        }
     }
 
     private DigestLog getDigestLog(boolean success) {
