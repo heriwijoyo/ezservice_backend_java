@@ -11,7 +11,7 @@ public enum BizGender {
 
     MALE("MALE", "Laki - Laki"),
     FEMALE("FEMALE", "Perempuan"),
-
+    UNKNOWN("UNKNOWN", "-"),
     ;
 
     private final String code;
@@ -36,6 +36,6 @@ public enum BizGender {
                 return bizGender;
             }
         }
-        return null;
+        return UNKNOWN;
     }
 }

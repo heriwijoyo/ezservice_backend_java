@@ -54,23 +54,23 @@
                         <script>
                             document.addEventListener('DOMContentLoaded', function() {
                                 table = jspreadsheet(document.getElementById('dataTable'), {
-                                    data:[],
+                                    url: 'app/INCLUDE_SESSION_ID.json',
                                     columns: [
-                                        { readOnly:true, align:'left', title:'Komunitas', width:200 },
-                                        { readOnly:true, align:'left', title:'Nama', width:200 },
-                                        { readOnly:true, align:'left', title:'No KTP', width:100 },
-                                        { readOnly:true, title:'Jenis Kelamin', width:100 },
-                                        { readOnly:true, title:'Tgl Lahir', width:100 },
-                                        { readOnly:true, title:'No HP', width:100 },
-                                        { readOnly:true, title:'Pendidikan', width:100 },
-                                        { readOnly:true, title:'Pekerjaan', width:100 },
-                                        { readOnly:true, title:'Agama', width:100 },
-                                        { readOnly:true, title:'Etnis', width:100 },
-                                        { readOnly:true, title:'Kecamatan', width:100 },
-                                        { readOnly:true, title:'Kelurahan', width:100 },
-                                        { readOnly:true, title:'RW', width:100 },
-                                        { readOnly:true, title:'RT', width:100 },
-                                        { readOnly:true, title:'No TPS', width:100 },
+                                        { readOnly:true, align:'left', title:'Komunitas', width:180 },
+                                        { readOnly:true, align:'left', title:'Nama', width:180 },
+                                        { readOnly:true, align:'left', title:'No KTP', width:160 },
+                                        { readOnly:true, align:'left', title:'Jenis Kelamin', width:100 },
+                                        { readOnly:true, align:'left', title:'Tgl Lahir', width:100 },
+                                        { readOnly:true, align:'left', title:'No HP', width:100 },
+                                        { readOnly:true, align:'left', title:'Pendidikan', width:100 },
+                                        { readOnly:true, align:'left', title:'Pekerjaan', width:100 },
+                                        { readOnly:true, align:'left', title:'Agama', width:100 },
+                                        { readOnly:true, align:'left', title:'Etnis', width:100 },
+                                        { readOnly:true, align:'left', title:'Kecamatan', width:100 },
+                                        { readOnly:true, align:'left', title:'Kelurahan', width:100 },
+                                        { readOnly:true, align:'left', title:'RW', width:100 },
+                                        { readOnly:true, align:'left', title:'RT', width:100 },
+                                        { readOnly:true, align:'left', title:'No TPS', width:100 },
                                     ],
                                     toolbar: [
                                         {
@@ -133,10 +133,6 @@
                                     csvFileName:'Report_MSA_Center'
                                 });
                             });
-
-                            setTimeout(function(){
-                                table.setData([['Mazda', 2001, 2000],['Pegeout', 2010, 5000],['Honda Fit', 2009, 3000],['Honda CRV', 2010, 6000]]);
-                            }, 3000);
                         </script>
                     </div>
                 </div>

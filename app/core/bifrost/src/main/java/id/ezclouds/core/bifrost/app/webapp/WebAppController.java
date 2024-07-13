@@ -4,6 +4,8 @@
  */
 package id.ezclouds.core.bifrost.app.webapp;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import id.ezclouds.biz.ezservice.service.apibiz.BizMemberService;
 import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
@@ -15,11 +17,11 @@ import id.ezclouds.core.auth.service.CoreAuthService;
 import id.ezclouds.core.bifrost.app.api.digestlog.EmptyDigestLog;
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;
 import id.ezclouds.core.bifrost.core.SpringContextConfig;
+import id.ezclouds.core.member.service.CoreMemberService;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.util.DigestLogUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -32,6 +34,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -96,13 +101,44 @@ public class WebAppController {
                     .adminAuthWebSessionId(sessionId);
             AssertUtil.isTrue(orgCode.equals(session.getOrgCode()), EzErrorCode.SESSION_INVALID);
 
-            String htmlContent = getReportPublicContent(WebAppPage.REPORT_PUBLIC.getAssetFile());
+            String htmlLayout = getReportPublicContent(WebAppPage.REPORT_PUBLIC.getAssetFile());
+            String htmlContent = htmlLayout.replace("INCLUDE_SESSION_ID", sessionId);
             renderSuccess = renderCachedWebApp(htmlContent, servletResponse);
         } catch (Exception e) {
             e.printStackTrace();
             renderSuccess = renderCachedWebApp(null, servletResponse);
         }
         DigestLogUtil.logWebDigest(LOGGER, getDigestLog(renderSuccess));
+    }
+
+    @GetMapping(value = "/webapp/data/{orgCode}/app/{sessionId}.json")
+    private void webDataJson(
+            @PathVariable("orgCode") String orgCode,
+            @PathVariable("sessionId") String sessionId,
+            HttpServletResponse servletResponse) {
+        EzAppContextHolder.init(WebEvent.WEB_PAGE_ADMIN_PUBLIC_DATA_APP);
+
+        boolean success;
+
+        try {
+            AssertUtil.notBlank(orgCode, EzErrorCode.ILLEGAL_PARAM);
+            AssertUtil.notBlank(sessionId, EzErrorCode.ILLEGAL_PARAM);
+
+            CoreAuthAdminSession session = SpringContextConfig
+                    .getBean(CoreAuthService.class)
+                    .adminAuthWebSessionId(sessionId);
+            AssertUtil.isTrue(orgCode.equals(session.getOrgCode()), EzErrorCode.SESSION_INVALID);
+
+            List<List<String>> jsonData = SpringContextConfig
+                    .getBean(BizMemberService.class)
+                    .getAllMemberData(session.getOrgId());
+
+            success = renderJsonData(new ObjectMapper().writeValueAsString(jsonData), servletResponse);
+        } catch (Exception e) {
+            e.printStackTrace();
+            success = false;
+        }
+        DigestLogUtil.logWebDigest(LOGGER, getDigestLog(success));
     }
 
     @Cacheable(value = BizCacheKey.WEBAPP_VIDEO_CARD)
@@ -165,6 +201,21 @@ public class WebAppController {
         try {
             servletResponse.getWriter().write(htmlContent);
             servletResponse.getWriter().flush();
+        } catch (IOException e) {
+            servletResponse.setStatus(HttpStatus.NOT_FOUND.value());
+            success = false;
+        }
+        return success;
+    }
+
+    private boolean renderJsonData(String jsonData, HttpServletResponse servletResponse) {
+        boolean success;
+        try {
+            servletResponse.setContentType("application/json");
+            servletResponse.setStatus(HttpStatus.OK.value());
+            servletResponse.getWriter().write(jsonData);
+            servletResponse.getWriter().flush();
+            success = true;
         } catch (IOException e) {
             servletResponse.setStatus(HttpStatus.NOT_FOUND.value());
             success = false;

@@ -158,6 +158,22 @@ public class CoreMemberService {
                 .collect(Collectors.toList());
     }
 
+    public List<CoreMember> getAllMembers(String orgId) {
+        return coreMemberRepository
+                .findByOrgId(orgId)
+                .stream()
+                .map(CoreMemberConverter::convert)
+                .collect(Collectors.toList());
+    }
+
+    public List<CoreMemberExtension> getAllMemberExtensions(String orgId) {
+        return coreMemberExtensionRepository
+                .findByOrgId(orgId)
+                .stream()
+                .map(CoreMemberConverter::convert)
+                .collect(Collectors.toList());
+    }
+
     private void updateMemberDO(CoreMemberDO coreMemberDO, CoreMemberExtensionDO extensionDO, Map<String, String> fieldMap) {
 
         for (Map.Entry<String, String> entry : fieldMap.entrySet()) {

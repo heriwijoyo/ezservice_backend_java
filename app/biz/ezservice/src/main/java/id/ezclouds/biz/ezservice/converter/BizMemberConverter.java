@@ -74,12 +74,12 @@ public class BizMemberConverter {
         bizMember.setStatus(bizStatus);
         bizMember.setAvatarUrl(member.getAvatarUrl());
 
+        BizSubOrganization subOrganization = new BizSubOrganization();
         if (StringUtil.isNotBlank(member.getSubOrgId())) {
-            BizSubOrganization subOrganization = new BizSubOrganization();
             subOrganization.setOrgId(member.getOrgId());
             subOrganization.setSubOrgId(member.getSubOrgId());
-            bizMember.setSubOrganization(subOrganization);
         }
+        bizMember.setSubOrganization(subOrganization);
 
         //memberExt
         if (extension == null) {

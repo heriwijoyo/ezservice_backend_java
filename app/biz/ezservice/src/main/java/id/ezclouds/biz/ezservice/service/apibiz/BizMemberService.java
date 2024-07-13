@@ -23,6 +23,9 @@ import id.ezclouds.biz.ezservice.service.request.BizMemberRegisterRequest;
 import id.ezclouds.biz.ezservice.service.request.BizMemberUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
 import id.ezclouds.biz.ezservice.service.request.BizRequest;
+import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
+import id.ezclouds.biz.ezservice.subbiz.arahindonesia.service.AppSubOrganizationService;
+import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.shared.result.BizPageInfo;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
@@ -68,6 +71,9 @@ public class BizMemberService extends BizBaseService {
 
     @Autowired
     private AppReportService appReportService;
+
+    @Autowired
+    private AppSubOrganizationService appSubOrganizationService;
 
     public BizResult getMemberProfile() {
         final BizResult bizResult = new BizResult();
@@ -288,6 +294,39 @@ public class BizMemberService extends BizBaseService {
         return bizResult;
     }
 
+    public List<List<String>> getAllMemberData(String orgId) {
+        List<List<String>> memberData = new ArrayList<>();
+
+        List<BizSubOrganization> subOrganizations = appSubOrganizationService.getSubOrganizationByOrgId(orgId);
+        List<CoreMember> coreMembers = coreMemberService.getAllMembers(orgId);
+        List<CoreMemberExtension> coreMemberExtensions = coreMemberService.getAllMemberExtensions(orgId);
+
+        for (CoreMember coreMember : coreMembers) {
+            CoreMemberExtension coreExtension = fetchExtension(coreMemberExtensions, coreMember.getMemberId());
+            BizMember bizMember = BizMemberConverter.convert(coreMember, coreExtension);
+            List<String> rowData = new ArrayList<>();
+            rowData.add(fetchSubOrgName(subOrganizations, bizMember.getSubOrganization().getSubOrgId()));
+            rowData.add(bizMember.getName());
+            rowData.add(bizMember.getIdCardNumber());
+            rowData.add(bizMember.getGender().getLabel());
+            rowData.add(bizMember.getDateOfBirth());
+            rowData.add(bizMember.getPhone());
+            rowData.add(bizMember.getEducation());
+            rowData.add(bizMember.getOccupation());
+            rowData.add(bizMember.getReligion());
+            rowData.add(bizMember.getEthnic());
+            rowData.add(bizMember.getDistrictName());
+            rowData.add(bizMember.getVillageName());
+            rowData.add(bizMember.getRukunWarga());
+            rowData.add(bizMember.getRukunTetangga());
+            rowData.add(bizMember.getTpsNumber());
+
+            memberData.add(rowData);
+        }
+
+        return memberData;
+    }
+
     private String getMemberReportFileType(BizUploadScene scene) {
         switch (scene) {
             case REPORT_IMAGE:
@@ -299,5 +338,26 @@ public class BizMemberService extends BizBaseService {
             default:
                 return BizUploadScene.UNKNOWN.getCode();
         }
+    }
+
+    private CoreMemberExtension fetchExtension(List<CoreMemberExtension> extensions, String memberId) {
+        for (CoreMemberExtension extension : extensions) {
+            if (extension.getMemberId().equals(memberId)) {
+                return extension;
+            }
+        }
+        return null;
+    }
+
+    private String fetchSubOrgName(List<BizSubOrganization> subOrganizations, String subOrgId) {
+        if (StringUtil.isBlank(subOrgId)) {
+            return "";
+        }
+        for (BizSubOrganization subOrganization : subOrganizations) {
+            if (subOrganization.getSubOrgId().equals(subOrgId)) {
+                return subOrganization.getName();
+            }
+        }
+        return "";
     }
 }
