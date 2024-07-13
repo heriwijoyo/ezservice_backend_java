@@ -17,7 +17,6 @@ import id.ezclouds.core.auth.service.CoreAuthService;
 import id.ezclouds.core.bifrost.app.api.digestlog.EmptyDigestLog;
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;
 import id.ezclouds.core.bifrost.core.SpringContextConfig;
-import id.ezclouds.core.member.service.CoreMemberService;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.util.DigestLogUtil;
 import org.slf4j.Logger;
@@ -34,8 +33,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -86,7 +83,7 @@ public class WebAppController {
     }
 
     @GetMapping(value = "/webapp/data/{orgCode}/{sessionId}")
-    private void webReport(
+    private void webDataPage(
             @PathVariable("orgCode") String orgCode,
             @PathVariable("sessionId") String sessionId,
             HttpServletResponse servletResponse) {
@@ -102,7 +99,39 @@ public class WebAppController {
             AssertUtil.isTrue(orgCode.equals(session.getOrgCode()), EzErrorCode.SESSION_INVALID);
 
             String htmlLayout = getReportPublicContent(WebAppPage.REPORT_PUBLIC.getAssetFile());
-            String htmlContent = htmlLayout.replace("INCLUDE_SESSION_ID", sessionId);
+            String htmlContent = htmlLayout
+                    .replace("PAGE_TITLE", "Data Aplikasi")
+                    .replace("ORG_CODE", orgCode)
+                    .replace("INCLUDE_SESSION_ID", sessionId);
+            renderSuccess = renderCachedWebApp(htmlContent, servletResponse);
+        } catch (Exception e) {
+            e.printStackTrace();
+            renderSuccess = renderCachedWebApp(null, servletResponse);
+        }
+        DigestLogUtil.logWebDigest(LOGGER, getDigestLog(renderSuccess));
+    }
+
+    @GetMapping(value = "/webapp/import/{orgCode}/{sessionId}")
+    private void webDataImportPage(
+            @PathVariable("orgCode") String orgCode,
+            @PathVariable("sessionId") String sessionId,
+            HttpServletResponse servletResponse) {
+        EzAppContextHolder.init(WebEvent.WEB_PAGE_ADMIN_PUBLIC_REPORT);
+        boolean renderSuccess;
+        try {
+            AssertUtil.notBlank(orgCode, EzErrorCode.ILLEGAL_PARAM);
+            AssertUtil.notBlank(sessionId, EzErrorCode.ILLEGAL_PARAM);
+
+            CoreAuthAdminSession session = SpringContextConfig
+                    .getBean(CoreAuthService.class)
+                    .adminAuthWebSessionId(sessionId);
+            AssertUtil.isTrue(orgCode.equals(session.getOrgCode()), EzErrorCode.SESSION_INVALID);
+
+            String htmlLayout = getReportPublicContent(WebAppPage.REPORT_PUBLIC.getAssetFile());
+            String htmlContent = htmlLayout
+                    .replace("PAGE_TITLE", "Data Google Sheet")
+                    .replace("ORG_CODE", orgCode)
+                    .replace("INCLUDE_SESSION_ID", sessionId);
             renderSuccess = renderCachedWebApp(htmlContent, servletResponse);
         } catch (Exception e) {
             e.printStackTrace();
@@ -132,6 +161,36 @@ public class WebAppController {
             List<List<String>> jsonData = SpringContextConfig
                     .getBean(BizMemberService.class)
                     .getAllMemberData(session.getOrgId());
+
+            success = renderJsonData(new ObjectMapper().writeValueAsString(jsonData), servletResponse);
+        } catch (Exception e) {
+            e.printStackTrace();
+            success = false;
+        }
+        DigestLogUtil.logWebDigest(LOGGER, getDigestLog(success));
+    }
+
+    @GetMapping(value = "/webapp/import/{orgCode}/app/{sessionId}.json")
+    private void webImportJson(
+            @PathVariable("orgCode") String orgCode,
+            @PathVariable("sessionId") String sessionId,
+            HttpServletResponse servletResponse) {
+        EzAppContextHolder.init(WebEvent.WEB_PAGE_ADMIN_PUBLIC_DATA_APP);
+
+        boolean success;
+
+        try {
+            AssertUtil.notBlank(orgCode, EzErrorCode.ILLEGAL_PARAM);
+            AssertUtil.notBlank(sessionId, EzErrorCode.ILLEGAL_PARAM);
+
+            CoreAuthAdminSession session = SpringContextConfig
+                    .getBean(CoreAuthService.class)
+                    .adminAuthWebSessionId(sessionId);
+            AssertUtil.isTrue(orgCode.equals(session.getOrgCode()), EzErrorCode.SESSION_INVALID);
+
+            List<List<String>> jsonData = SpringContextConfig
+                    .getBean(BizMemberService.class)
+                    .getAllImportData(session.getOrgId());
 
             success = renderJsonData(new ObjectMapper().writeValueAsString(jsonData), servletResponse);
         } catch (Exception e) {

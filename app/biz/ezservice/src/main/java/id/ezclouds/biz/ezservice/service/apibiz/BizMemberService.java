@@ -11,12 +11,11 @@ import id.ezclouds.biz.ezservice.converter.BizMemberConverter;
 import id.ezclouds.biz.ezservice.enums.BizMemberRole;
 import id.ezclouds.biz.ezservice.enums.BizUploadScene;
 import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
-import id.ezclouds.biz.ezservice.model.member.BizMember;
-import id.ezclouds.biz.ezservice.model.member.BizMemberInfo;
-import id.ezclouds.biz.ezservice.model.member.BizMemberRegisterMode;
-import id.ezclouds.biz.ezservice.model.member.BizMemberRegisterResult;
+import id.ezclouds.biz.ezservice.model.member.*;
 import id.ezclouds.biz.ezservice.model.profile.MemberProfile;
 import id.ezclouds.biz.ezservice.service.app.AppReportService;
+import id.ezclouds.biz.ezservice.service.core.dataobject.BizMemberImportDO;
+import id.ezclouds.biz.ezservice.service.core.repo.BizMemberImportRepository;
 import id.ezclouds.biz.ezservice.service.inner.service.BizMemberInnerService;
 import id.ezclouds.biz.ezservice.service.app.AppProfileService;
 import id.ezclouds.biz.ezservice.service.request.BizMemberRegisterRequest;
@@ -74,6 +73,9 @@ public class BizMemberService extends BizBaseService {
 
     @Autowired
     private AppSubOrganizationService appSubOrganizationService;
+
+    @Autowired
+    private BizMemberImportRepository bizMemberImportRepository;
 
     public BizResult getMemberProfile() {
         final BizResult bizResult = new BizResult();
@@ -320,6 +322,37 @@ public class BizMemberService extends BizBaseService {
             rowData.add(bizMember.getRukunWarga());
             rowData.add(bizMember.getRukunTetangga());
             rowData.add(bizMember.getTpsNumber());
+
+            memberData.add(rowData);
+        }
+
+        return memberData;
+    }
+
+    public List<List<String>> getAllImportData(String orgId) {
+        List<List<String>> memberData = new ArrayList<>();
+
+        List<BizSubOrganization> subOrganizations = appSubOrganizationService.getSubOrganizationByOrgId(orgId);
+        List<BizMemberImportDO> memberImports = bizMemberImportRepository
+                .findByOrgIdAndSourceIdNot(orgId, "SYNC_BULK_MEMBER_DATA_REGISTER");
+
+        for (BizMemberImportDO memberImport : memberImports) {
+            List<String> rowData = new ArrayList<>();
+            rowData.add(fetchSubOrgName(subOrganizations, memberImport.getSubOrgId()));
+            rowData.add(memberImport.getName());
+            rowData.add(memberImport.getIdCardNumber());
+            rowData.add(BizGender.getByCode(memberImport.getGender()).getLabel());
+            rowData.add(memberImport.getDateOfBirth());
+            rowData.add(memberImport.getPhone());
+            rowData.add(memberImport.getEducation());
+            rowData.add(memberImport.getOccupation());
+            rowData.add(memberImport.getReligion());
+            rowData.add(memberImport.getEthnic());
+            rowData.add(memberImport.getDistrictName());
+            rowData.add(memberImport.getVillageName());
+            rowData.add(memberImport.getRukunWarga());
+            rowData.add(memberImport.getRukunTetangga());
+            rowData.add(memberImport.getTpsNumber());
 
             memberData.add(rowData);
         }

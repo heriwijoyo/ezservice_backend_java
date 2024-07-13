@@ -22,6 +22,8 @@ public interface BizMemberImportRepository extends JpaRepository<BizMemberImport
 
     List<BizMemberImportDO> findByOrgIdAndSourceId(String orgId, String sourceId);
 
+    List<BizMemberImportDO> findByOrgIdAndSourceIdNot(String orgId, String sourceIdNot);
+
     @Query("SELECT new id.ezclouds.biz.ezservice.service.core.dataobject.BizReportCustomDO(bmi.subOrgId, COUNT(bmi.subOrgId)) "
             + "FROM BizMemberImportDO AS bmi WHERE bmi.orgId = :orgId GROUP BY bmi.subOrgId")
     List<BizReportCustomDO> getReportGroupBySubOrg(@Param("orgId") String orgId);
