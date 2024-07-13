@@ -98,7 +98,7 @@ public class WebAppController {
                     .adminAuthWebSessionId(sessionId);
             AssertUtil.isTrue(orgCode.equals(session.getOrgCode()), EzErrorCode.SESSION_INVALID);
 
-            String htmlLayout = getReportPublicContent(WebAppPage.REPORT_PUBLIC.getAssetFile());
+            String htmlLayout = getReportPublicContent(WebAppPage.DATA_PUBLIC_LIMITED.getAssetFile());
             String htmlContent = htmlLayout
                     .replace("PAGE_TITLE", "Data Aplikasi")
                     .replace("ORG_CODE", orgCode)
@@ -127,7 +127,7 @@ public class WebAppController {
                     .adminAuthWebSessionId(sessionId);
             AssertUtil.isTrue(orgCode.equals(session.getOrgCode()), EzErrorCode.SESSION_INVALID);
 
-            String htmlLayout = getReportPublicContent(WebAppPage.REPORT_PUBLIC.getAssetFile());
+            String htmlLayout = getReportPublicContent(WebAppPage.DATA_PUBLIC_LIMITED.getAssetFile());
             String htmlContent = htmlLayout
                     .replace("PAGE_TITLE", "Data Google Sheet")
                     .replace("ORG_CODE", orgCode)

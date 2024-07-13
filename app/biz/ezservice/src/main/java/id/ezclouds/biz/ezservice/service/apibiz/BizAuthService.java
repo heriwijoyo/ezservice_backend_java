@@ -24,6 +24,7 @@ import id.ezclouds.biz.ezservice.service.app.BizOrganizationService;
 import id.ezclouds.biz.ezservice.service.request.BizMemberLoginRequest;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
+import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
@@ -140,7 +141,7 @@ public class BizAuthService extends BizBaseService {
                 loginResult.setBizMember(bizMember);
 
                 if (Boolean.parseBoolean(orgExtendConfig.get(BizConstant.ExtKey.HAS_SUB_ORG))) {
-                    if (bizMember.getSubOrganization() != null) {
+                    if (bizMember.getSubOrganization() != null && StringUtil.isNotBlank(bizMember.getSubOrganization().getSubOrgId())) {
                         BizSubOrganization bizSubOrganization = appSubOrganizationService
                                 .getSubOrganizationById(bizMember.getSubOrganization().getSubOrgId());
                         bizMember.getSubOrganization().setName(bizSubOrganization.getName());
