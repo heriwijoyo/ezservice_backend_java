@@ -8,7 +8,9 @@ import id.ezclouds.biz.ezservice.converter.BizMemberConverter;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.service.async.event.BizProcessEvent;
 import id.ezclouds.biz.ezservice.service.async.parser.BizMemberUnionConverter;
+import id.ezclouds.biz.ezservice.service.core.dataobject.BizMemberImportDO;
 import id.ezclouds.biz.ezservice.service.core.dataobject.BizMemberUnionDO;
+import id.ezclouds.biz.ezservice.service.core.repo.BizMemberImportRepository;
 import id.ezclouds.biz.ezservice.service.core.repo.BizMemberUnionDuplicateRepository;
 import id.ezclouds.biz.ezservice.service.core.repo.BizMemberUnionRepository;
 import id.ezclouds.biz.ezservice.service.template.BizProcessTemplate;
@@ -37,6 +39,9 @@ public class BizSyncMemberUnionProcessor {
 
     @Autowired
     private CoreMemberService coreMemberService;
+
+    @Autowired
+    private BizMemberImportRepository bizMemberImportRepository;
 
     @Autowired
     private BizMemberUnionRepository bizMemberUnionRepository;
@@ -92,7 +97,25 @@ public class BizSyncMemberUnionProcessor {
                 logData.add("MEMBER_APP_SYNC_FAIL="+ syncFailCount);
 
                 // 4. query from member import and try to sync
-
+                int importSyncSuccessCount = 0;
+                int importSyncFailCount = 0;
+                List<BizMemberImportDO> memberImports = bizMemberImportRepository.findByOrgId(orgId);
+                for (BizMemberImportDO memberImportDO : memberImports) {
+                    BizMemberUnionDO unionDO = BizMemberUnionConverter.convertMemberImport(memberImportDO);
+                    unionDO.setOrgId(orgId);
+                    unionDO.setSubOrgName(getSubOrgName(subOrgs, unionDO.getSubOrgId()));
+                    try {
+                        bizMemberUnionRepository.saveAndFlush(unionDO);
+                        importSyncSuccessCount++;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        tryStoreDuplicate(unionDO);
+                        importSyncFailCount++;
+                    }
+                }
+                logData.add("MEMBER_IMPORT_SYNC_TOTAL="+ memberImports.size());
+                logData.add("MEMBER_IMPORT_SYNC_SUCCESS="+ importSyncSuccessCount);
+                logData.add("MEMBER_IMPORT_SYNC_FAIL="+ importSyncFailCount);
 
                 return true;
             }
@@ -102,10 +125,6 @@ public class BizSyncMemberUnionProcessor {
                 return logData;
             }
         });
-    }
-
-    public long deleteCurrentUnionRecord(String orgId) {
-        return bizMemberUnionRepository.deleteByOrgId(orgId);
     }
 
     private String getSubOrgName(List<BizSubOrganizationDO> subOrgs, String subOrgId) {

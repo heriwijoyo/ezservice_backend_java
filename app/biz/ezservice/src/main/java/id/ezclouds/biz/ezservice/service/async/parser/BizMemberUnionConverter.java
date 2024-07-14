@@ -5,6 +5,7 @@
 package id.ezclouds.biz.ezservice.service.async.parser;
 
 import id.ezclouds.biz.ezservice.model.member.BizMember;
+import id.ezclouds.biz.ezservice.service.core.dataobject.BizMemberImportDO;
 import id.ezclouds.biz.ezservice.service.core.dataobject.BizMemberUnionDO;
 import id.ezclouds.common.util.HashUtil;
 
@@ -26,6 +27,32 @@ public class BizMemberUnionConverter {
         unionDO.setRole(getRole(bizMember.getReferrerId()));
         unionDO.setName(bizMember.getName());
         unionDO.setGender(bizMember.getGender().getCode());
+        unionDO.setDateOfBirth(bizMember.getDateOfBirth());
+        unionDO.setPhone(bizMember.getPhone());
+        unionDO.setEducation(bizMember.getEducation());
+        unionDO.setOccupation(bizMember.getOccupation());
+        unionDO.setReligion(bizMember.getReligion());
+        unionDO.setEthnic(bizMember.getEthnic());
+        unionDO.setIdCardNumber(bizMember.getIdCardNumber());
+        unionDO.setDistrictName(bizMember.getDistrictName());
+        unionDO.setVillageName(bizMember.getVillageName());
+        unionDO.setRukunWarga(bizMember.getRukunWarga());
+        unionDO.setRukunTetangga(bizMember.getRukunTetangga());
+        unionDO.setTpsNumber(bizMember.getTpsNumber());
+        unionDO.setCreatedTime(bizMember.getCreatedTime());
+
+        return unionDO;
+    }
+
+    public static BizMemberUnionDO convertMemberImport(BizMemberImportDO bizMember) {
+        if (bizMember == null) { return null; }
+        BizMemberUnionDO unionDO = new BizMemberUnionDO();
+        unionDO.setBizUnionId(HashUtil.createHash("IMPORT", bizMember.getBizMemberId()));
+        unionDO.setSource("IMPORT");
+        unionDO.setSourceId(bizMember.getBizMemberId());
+        unionDO.setSubOrgId(bizMember.getSubOrgId());
+        unionDO.setName(bizMember.getName());
+        unionDO.setGender(bizMember.getGender());
         unionDO.setDateOfBirth(bizMember.getDateOfBirth());
         unionDO.setPhone(bizMember.getPhone());
         unionDO.setEducation(bizMember.getEducation());
