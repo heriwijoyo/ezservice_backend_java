@@ -142,9 +142,12 @@ public class BizAuthService extends BizBaseService {
 
                 if (Boolean.parseBoolean(orgExtendConfig.get(BizConstant.ExtKey.HAS_SUB_ORG))) {
                     if (bizMember.getSubOrganization() != null && StringUtil.isNotBlank(bizMember.getSubOrganization().getSubOrgId())) {
-                        BizSubOrganization bizSubOrganization = appSubOrganizationService
-                                .getSubOrganizationById(bizMember.getSubOrganization().getSubOrgId());
-                        bizMember.getSubOrganization().setName(bizSubOrganization.getName());
+                        //TODO: fix why service bean not found
+                        if (appSubOrganizationService != null) {
+                            BizSubOrganization bizSubOrganization =  appSubOrganizationService
+                                    .getSubOrganizationById(bizMember.getSubOrganization().getSubOrgId());
+                            bizMember.getSubOrganization().setName(bizSubOrganization.getName());
+                        }
                     }
                 }
 
