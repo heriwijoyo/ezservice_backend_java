@@ -59,7 +59,6 @@ public class BizSyncBatchMemberProcessor implements BizAsyncProcessor {
         SyncMemberConverter syncMemberConverter = new SyncMemberConverter(request.getOrgId(), fileId);
 
         List<String> memberIds = coreMemberService.getAllMemberIds(request.getOrgId());
-        System.out.println(memberIds);
         if (memberIds != null && memberIds.size() > 0) {
             for (String memberId : memberIds) {
                 BizMemberImportDO memberImportDO = null;
