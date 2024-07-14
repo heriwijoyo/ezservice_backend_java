@@ -68,4 +68,26 @@ public class LocalController {
             response.getWriter().flush();
         }
     }
+
+
+    @GetMapping(value = "/api/local/scheduler/{timeFrame}")
+    private void localSchedulerHandler(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String localAddr = request.getLocalAddr();
+
+        if (!"127.0.0.1".equals(localAddr)) {
+            response.setStatus(HttpStatus.NOT_FOUND.value());
+        }
+        else {
+            EzAppContextHolder.init(SuperAdminEvent.SU_CREATE_PUBLIC_SESSION);
+            BizResult bizResult = bizSuperAdminService.createSuperAdminPublicSession();
+
+            response.setStatus(HttpStatus.OK.value());
+            if (bizResult.isSuccess()) {
+                response.getWriter().write((String)bizResult.getObject());
+            } else {
+                response.getWriter().write(bizResult.getErrorMessage());
+            }
+            response.getWriter().flush();
+        }
+    }
 }
