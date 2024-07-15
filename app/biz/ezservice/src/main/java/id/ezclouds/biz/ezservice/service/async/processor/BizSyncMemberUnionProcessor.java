@@ -159,6 +159,7 @@ public class BizSyncMemberUnionProcessor {
                     }
                 }
 
+                bizReportBySubOrgRepository.deleteByOrgId(orgId);
                 generateSubOrgReport(currentTime, orgId, "APP");
                 generateSubOrgReport(currentTime, orgId, "IMPORT");
 
