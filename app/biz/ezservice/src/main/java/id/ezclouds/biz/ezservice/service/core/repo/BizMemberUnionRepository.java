@@ -45,7 +45,17 @@ public interface BizMemberUnionRepository extends JpaRepository<BizMemberUnionDO
             + "FROM BizMemberUnionDO AS bmu WHERE bmu.orgId = ?1 AND bmu.source = ?2 AND bmu.districtName = ?3 AND bmu.villageName = ?4 GROUP BY bmu.tpsNumber")
     List<BizCustomQueryGroupDO> villageLevelFetchTpsGroup(String orgId, String source, String districtName, String villageName);
 
+    @Query("SELECT new id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO(bmu.subOrgName, COUNT(bmu.subOrgName)) "
+            + "FROM BizMemberUnionDO AS bmu WHERE bmu.orgId = ?1 AND bmu.source = ?2 GROUP BY bmu.subOrgName")
+    List<BizCustomQueryGroupDO> fetchGroupSubOrg(String orgId, String source);
 
+    @Query("SELECT new id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO(bmu.role, COUNT(*)) "
+            + "FROM BizMemberUnionDO AS bmu WHERE bmu.orgId = ?1 AND bmu.source = ?2 AND bmu.subOrgName = ?3 GROUP BY bmu.role")
+    List<BizCustomQueryGroupDO> fetchRoleBySubOrgGroup(String orgId, String source, String subOrgName);
+
+    @Query("SELECT new id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO(bmu.gender, COUNT(bmu.gender)) "
+            + "FROM BizMemberUnionDO AS bmu WHERE bmu.orgId = ?1 AND bmu.source = ?2 AND bmu.subOrgName = ?3 GROUP BY bmu.gender")
+    List<BizCustomQueryGroupDO> fetchGenderBySubOrgGroup(String orgId, String source, String subOrgName);
 
 
 

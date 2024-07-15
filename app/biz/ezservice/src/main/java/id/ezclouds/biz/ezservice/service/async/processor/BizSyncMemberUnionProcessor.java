@@ -9,14 +9,8 @@ import id.ezclouds.biz.ezservice.converter.BizMemberConverter;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.service.async.event.BizProcessEvent;
 import id.ezclouds.biz.ezservice.service.async.parser.BizMemberUnionConverter;
-import id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO;
-import id.ezclouds.biz.ezservice.service.core.dataobject.BizMemberImportDO;
-import id.ezclouds.biz.ezservice.service.core.dataobject.BizMemberUnionDO;
-import id.ezclouds.biz.ezservice.service.core.dataobject.BizReportByAreaDO;
-import id.ezclouds.biz.ezservice.service.core.repo.BizMemberImportRepository;
-import id.ezclouds.biz.ezservice.service.core.repo.BizMemberUnionDuplicateRepository;
-import id.ezclouds.biz.ezservice.service.core.repo.BizMemberUnionRepository;
-import id.ezclouds.biz.ezservice.service.core.repo.BizReportByAreaRepository;
+import id.ezclouds.biz.ezservice.service.core.dataobject.*;
+import id.ezclouds.biz.ezservice.service.core.repo.*;
 import id.ezclouds.biz.ezservice.service.template.BizProcessTemplate;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.dataobject.BizSubOrganizationDO;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.repo.AppSubOrganizationRepository;
@@ -70,6 +64,9 @@ public class BizSyncMemberUnionProcessor {
 
     @Autowired
     private BizReportByAreaRepository bizReportByAreaRepository;
+
+    @Autowired
+    private BizReportBySubOrgRepository bizReportBySubOrgRepository;
 
     public void process(String orgId) {
 
@@ -128,6 +125,7 @@ public class BizSyncMemberUnionProcessor {
                     BizMemberUnionDO unionDO = BizMemberUnionConverter.convertMemberImport(memberImportDO);
                     unionDO.setOrgId(orgId);
                     unionDO.setSubOrgName(getSubOrgName(subOrgs, unionDO.getSubOrgId()));
+                    unionDO.setRole("L");
                     try {
                         bizMemberUnionRepository.saveAndFlush(unionDO);
                         importSyncSuccessCount++;
@@ -164,6 +162,9 @@ public class BizSyncMemberUnionProcessor {
                     }
                 }
 
+                generateSubOrgReport(currentTime, orgId, "APP");
+                generateSubOrgReport(currentTime, orgId, "IMPORT");
+
                 return true;
             }
 
@@ -172,6 +173,47 @@ public class BizSyncMemberUnionProcessor {
                 return logData;
             }
         });
+    }
+
+    private void generateSubOrgReport(String currentTime, String orgId, String source) {
+        List<BizCustomQueryGroupDO> subOrgGroups = bizMemberUnionRepository
+                .fetchGroupSubOrg(orgId, source);
+        for (BizCustomQueryGroupDO subOrgGroup : subOrgGroups) {
+            BizReportBySubOrgDO report = new BizReportBySubOrgDO();
+            report.setId(HashUtil.createHash(currentTime, orgId, source, subOrgGroup.getGroupName()));
+            report.setOrgId(orgId);
+            report.setSource(source);
+            report.setSubOrgName(subOrgGroup.getGroupName());
+            report.setVoterTotal(subOrgGroup.getCount1Value());
+
+            List<BizCustomQueryGroupDO> groupRoles = bizMemberUnionRepository
+                    .fetchRoleBySubOrgGroup(orgId, source, subOrgGroup.getGroupName());
+            for (BizCustomQueryGroupDO groupRole : groupRoles) {
+                if ("S".equals(groupRole.getGroupName())) {
+                    report.setVoterStrong(groupRole.getCount1Value());
+                } else if ("L".equals(groupRole.getGroupName())) {
+                    report.setVoterLazy(groupRole.getCount1Value());
+                } else {
+                    report.setVoterOther(groupRole.getCount1Value());
+                }
+            }
+
+            List<BizCustomQueryGroupDO> groupGenders = bizMemberUnionRepository
+                    .fetchGenderBySubOrgGroup(orgId, source, subOrgGroup.getGroupName());
+            long otherGender = 0;
+            for (BizCustomQueryGroupDO groupGender : groupGenders) {
+                if ("MALE".equals(groupGender.getGroupName())) {
+                    report.setGenderMale(groupGender.getCount1Value());
+                } else if ("FEMALE".equals(groupGender.getGroupName())) {
+                    report.setGenderFemale(groupGender.getCount1Value());
+                } else {
+                    otherGender += groupGender.getCount1Value();
+                }
+            }
+            report.setGenderOther(otherGender);
+            bizReportBySubOrgRepository.saveAndFlush(report);
+        }
+
     }
 
     private void generateAreaReport(String currentTime, String orgId, String source, String districtName, String villageName) {
@@ -250,7 +292,7 @@ public class BizSyncMemberUnionProcessor {
                 return subOrganizationDO.getName();
             }
         }
-        return null;
+        return "UNDEFINED";
     }
 
     private void tryStoreDuplicate(BizMemberUnionDO memberUnionDO) {
