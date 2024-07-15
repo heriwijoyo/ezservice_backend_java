@@ -29,6 +29,7 @@ import id.ezclouds.core.member.service.CoreMemberService;
 import id.ezclouds.core.shared.repo.CoreAppDistrictRepository;
 import id.ezclouds.core.shared.repo.CoreAppVillageRepository;
 import id.ezclouds.core.shared.repo.dataobject.EzCoreAppDistrictDO;
+import id.ezclouds.core.shared.repo.dataobject.EzCoreAppVillageDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -147,13 +148,15 @@ public class BizSyncMemberUnionProcessor {
 
                 List<EzCoreAppDistrictDO> districts = coreAppDistrictRepository.findByRegencyId("1802");
                 for (EzCoreAppDistrictDO districtDO : districts) {
-                    //List<EzCoreAppVillageDO> villages = coreAppVillageRepository.findByDistrictId(districtDO.getId());
-                    //districtVillageMap.put(districtDO.getId(), villages);
-
 
                     if ("KOTA AGUNG".equals(districtDO.getName())) {
                         generateAreaReport(currentTime, orgId, "APP", districtDO.getName(), "ALL");
                         generateAreaReport(currentTime, orgId, "IMPORT", districtDO.getName(), "ALL");
+
+                        List<EzCoreAppVillageDO> villages = coreAppVillageRepository.findByDistrictId(districtDO.getId());
+                        if (villages.size() > 0) {
+
+                        }
                     }
                 }
 
@@ -220,15 +223,17 @@ public class BizSyncMemberUnionProcessor {
         }
         reportByArea.setVoterTotal(totalVoter);
 
+        long otherGender = 0;
         for (BizCustomQueryGroupDO groupGender : groupGenders) {
             if ("MALE".equals(groupGender.getGroupName())) {
                 reportByArea.setGenderMale(groupGender.getCount1Value());
             } else if ("FEMALE".equals(groupGender.getGroupName())) {
                 reportByArea.setGenderFemale(groupGender.getCount1Value());
             } else {
-                reportByArea.setGenderOther(groupGender.getCount1Value());
+                otherGender += groupGender.getCount1Value();
             }
         }
+        reportByArea.setGenderOther(otherGender);
 
         bizReportByAreaRepository.saveAndFlush(reportByArea);
     }

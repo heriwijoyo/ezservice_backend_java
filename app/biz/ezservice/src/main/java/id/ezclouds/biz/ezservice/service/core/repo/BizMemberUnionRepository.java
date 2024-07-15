@@ -25,7 +25,7 @@ public interface BizMemberUnionRepository extends JpaRepository<BizMemberUnionDO
             + "FROM BizMemberUnionDO AS bmu WHERE bmu.orgId = ?1 GROUP BY bmu.source")
     List<BizCustomQueryGroupDO> fetchTotalBySource(String orgId);
 
-    @Query("SELECT new id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO(bmu.role, COUNT(bmu.role)) "
+    @Query("SELECT new id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO(bmu.role, COUNT(*)) "
             + "FROM BizMemberUnionDO AS bmu WHERE bmu.orgId = ?1 AND bmu.source = ?2 AND bmu.districtName = ?3 GROUP BY bmu.role")
     List<BizCustomQueryGroupDO> districtNameFetchRoleGroup(String orgId, String source, String districtName);
 
