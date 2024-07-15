@@ -4,6 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.service.async.processor;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.ezservice.converter.BizMemberConverter;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.service.async.event.BizProcessEvent;
@@ -21,13 +22,13 @@ import id.ezclouds.biz.ezservice.subbiz.arahindonesia.dataobject.BizSubOrganizat
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.repo.AppSubOrganizationRepository;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
+import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
 import id.ezclouds.core.member.service.CoreMemberService;
 import id.ezclouds.core.shared.repo.CoreAppDistrictRepository;
 import id.ezclouds.core.shared.repo.CoreAppVillageRepository;
 import id.ezclouds.core.shared.repo.dataobject.EzCoreAppDistrictDO;
-import id.ezclouds.core.shared.repo.dataobject.EzCoreAppVillageDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -183,9 +184,26 @@ public class BizSyncMemberUnionProcessor {
                     .districtNameFetchGenderGroup(orgId, source, districtName);
         } else {
             groupRoles = bizMemberUnionRepository
-                    .villageNameFetchRoleGroup(orgId, source, districtName, villageName);
+                    .villageLevelFetchRoleGroup(orgId, source, districtName, villageName);
             groupGenders = bizMemberUnionRepository
-                    .villageNameFetchGenderGroup(orgId, source, districtName, villageName);
+                    .villageLevelFetchGenderGroup(orgId, source, districtName, villageName);
+
+            List<BizCustomQueryGroupDO> groupTps = bizMemberUnionRepository
+                    .villageLevelFetchTpsGroup(orgId, source, districtName, villageName);
+            if (groupTps.size() > 0) {
+                Map<String, Long> tpsData = new HashMap<>();
+                for (BizCustomQueryGroupDO tpsGroup : groupTps) {
+                    String tpsName = "U";
+                    if (StringUtil.isNotBlank(tpsGroup.getGroupName())) {
+                        tpsName = tpsGroup.getGroupName().length() < 2 ? "0"+ tpsGroup.getGroupName() : tpsGroup.getGroupName();
+                    }
+                    tpsData.put(tpsName, tpsGroup.getCount1Value());
+                }
+
+                try {
+                    reportByArea.setTpsData(new ObjectMapper().writeValueAsString(tpsData));
+                } catch (Exception ignored) {}
+            }
         }
 
         long totalVoter = 0;
