@@ -6,7 +6,6 @@ package id.ezclouds.biz.ezservice.service.inner.service;
 
 import id.ezclouds.biz.ezservice.converter.BizMemberClientConverter;
 import id.ezclouds.biz.ezservice.converter.BizMemberConverter;
-import id.ezclouds.biz.ezservice.enums.BizAsyncScene;
 import id.ezclouds.biz.ezservice.model.AppConfig;
 import id.ezclouds.biz.ezservice.model.BizStatus;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
@@ -14,9 +13,7 @@ import id.ezclouds.biz.ezservice.model.member.BizMemberClient;
 import id.ezclouds.biz.ezservice.model.member.BizMemberInfo;
 import id.ezclouds.biz.ezservice.model.member.BizMemberRegisterMode;
 import id.ezclouds.biz.ezservice.service.app.AppConfigService;
-import id.ezclouds.biz.ezservice.service.async.processor.BizSyncSingleMemberProcessor;
 import id.ezclouds.biz.ezservice.service.inner.converter.BizMemberRequestConverter;
-import id.ezclouds.biz.ezservice.service.request.BizAsyncProcessRequest;
 import id.ezclouds.biz.ezservice.service.request.BizMemberRegisterRequest;
 import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
 import id.ezclouds.common.util.RandomUtil;
@@ -64,9 +61,6 @@ public class BizMemberInnerService {
     @Autowired
     private BizConnectInnerService bizConnectInnerService;
 
-    @Autowired
-    private BizSyncSingleMemberProcessor bizSyncSingleMemberProcessor;
-
     @Transactional
     public BizMemberInfo processRegisterMember(BizMemberRegisterRequest request) throws Exception {
         String orgId = EzAppContextHolder.getContext().getOrgId();
@@ -93,12 +87,6 @@ public class BizMemberInnerService {
         CoreMember storedMember = coreMemberService.getOptimisticCoreMember(memberId);
         CoreMemberExtension storedMemberExtension = coreMemberService.getPessimisticCoreMemberExtension(memberId);
         BizMember bizMember = BizMemberConverter.convert(storedMember, storedMemberExtension);
-
-        BizAsyncProcessRequest asyncProcessRequest = new BizAsyncProcessRequest();
-        asyncProcessRequest.setOrgId(orgId);
-        asyncProcessRequest.setBizAsyncScene(BizAsyncScene.SYNC_SINGLE_MEMBER_DATA_REGISTER);
-        asyncProcessRequest.getPayload().put("BIZ_MEMBER", bizMember);
-        bizSyncSingleMemberProcessor.process(asyncProcessRequest);
 
         bizMemberInfo.setBizMember(bizMember);
 
