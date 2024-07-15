@@ -104,10 +104,12 @@ public class BizSyncMemberUnionProcessor {
                             BizMember bizMember = BizMemberConverter.convert(coreMember, memberExtension);
 
                             unionDO = BizMemberUnionConverter.convert(bizMember);
-                            unionDO.setOrgId(orgId);
-                            unionDO.setSubOrgName(getSubOrgName(subOrgs, unionDO.getSubOrgId()));
-                            bizMemberUnionRepository.saveAndFlush(unionDO);
-                            syncSuccessCount++;
+                            if (unionDO != null) {
+                                unionDO.setOrgId(orgId);
+                                unionDO.setSubOrgName(getSubOrgName(subOrgs, unionDO.getSubOrgId()));
+                                bizMemberUnionRepository.saveAndFlush(unionDO);
+                                syncSuccessCount++;
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                             tryStoreDuplicate(unionDO);
@@ -202,7 +204,9 @@ public class BizSyncMemberUnionProcessor {
                     if (StringUtil.isNotBlank(tpsGroup.getGroupName())) {
                         tpsName = tpsGroup.getGroupName().length() < 2 ? "0"+ tpsGroup.getGroupName() : tpsGroup.getGroupName();
                     }
-                    tpsData.put(tpsName, tpsGroup.getCount1Value());
+                    if (tpsGroup.getCount1Value() > 0) {
+                        tpsData.put(tpsName, tpsGroup.getCount1Value());
+                    }
                 }
 
                 try {

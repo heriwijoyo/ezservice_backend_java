@@ -9,6 +9,8 @@ import id.ezclouds.biz.ezservice.service.core.dataobject.BizMemberImportDO;
 import id.ezclouds.biz.ezservice.service.core.dataobject.BizMemberUnionDO;
 import id.ezclouds.common.util.HashUtil;
 
+import java.util.Arrays;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizMemberUnionConverter.java, v 0.1 2024‐07‐15 3:40 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -19,6 +21,9 @@ public class BizMemberUnionConverter {
 
     public static BizMemberUnionDO convert(BizMember bizMember) {
         if (bizMember == null) { return null; }
+        if (Arrays.asList(orgAdminIds).contains(bizMember.getMemberId())) {
+            return null;
+        }
         BizMemberUnionDO unionDO = new BizMemberUnionDO();
         unionDO.setBizUnionId(HashUtil.createHash("APP", bizMember.getMemberId()));
         unionDO.setSource("APP");
