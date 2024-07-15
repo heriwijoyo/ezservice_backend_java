@@ -155,7 +155,10 @@ public class BizSyncMemberUnionProcessor {
 
                         List<EzCoreAppVillageDO> villages = coreAppVillageRepository.findByDistrictId(districtDO.getId());
                         if (villages.size() > 0) {
-
+                            for (EzCoreAppVillageDO village : villages) {
+                                generateAreaReport(currentTime, orgId, "APP", districtDO.getName(), village.getName());
+                                generateAreaReport(currentTime, orgId, "IMPORT", districtDO.getName(), village.getName());
+                            }
                         }
                     }
                 }
