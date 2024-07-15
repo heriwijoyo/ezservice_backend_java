@@ -148,16 +148,13 @@ public class BizSyncMemberUnionProcessor {
 
                 List<EzCoreAppDistrictDO> districts = coreAppDistrictRepository.findByRegencyId("1802");
                 for (EzCoreAppDistrictDO districtDO : districts) {
+                    generateAreaReport(currentTime, orgId, "APP", districtDO.getName(), "ALL");
+                    generateAreaReport(currentTime, orgId, "IMPORT", districtDO.getName(), "ALL");
 
-                    if ("KOTA AGUNG".equals(districtDO.getName())) {
-                        generateAreaReport(currentTime, orgId, "APP", districtDO.getName(), "ALL");
-                        generateAreaReport(currentTime, orgId, "IMPORT", districtDO.getName(), "ALL");
-
-                        List<EzCoreAppVillageDO> villages = coreAppVillageRepository.findByDistrictId(districtDO.getId());
-                        if (villages.size() > 0) {
-                            for (EzCoreAppVillageDO village : villages) {
-                                generateAreaReport(currentTime, orgId, "APP", districtDO.getName(), village.getName());
-                            }
+                    List<EzCoreAppVillageDO> villages = coreAppVillageRepository.findByDistrictId(districtDO.getId());
+                    if (villages.size() > 0) {
+                        for (EzCoreAppVillageDO village : villages) {
+                            generateAreaReport(currentTime, orgId, "APP", districtDO.getName(), village.getName());
                         }
                     }
                 }
@@ -213,7 +210,6 @@ public class BizSyncMemberUnionProcessor {
             report.setGenderOther(otherGender);
             bizReportBySubOrgRepository.saveAndFlush(report);
         }
-
     }
 
     private void generateAreaReport(String currentTime, String orgId, String source, String districtName, String villageName) {
