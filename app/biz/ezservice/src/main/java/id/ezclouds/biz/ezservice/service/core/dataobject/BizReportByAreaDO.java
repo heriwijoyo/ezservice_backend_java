@@ -28,8 +28,6 @@ public class BizReportByAreaDO {
     private String districtName;
     @Column(name = "village_name")
     private String villageName;
-    @Column(name = "tps_no")
-    private String tpsNo;
     @Column(name = "voter_total")
     private long voterTotal;
     @Column(name = "voter_strong")
@@ -39,11 +37,13 @@ public class BizReportByAreaDO {
     @Column(name = "voter_other")
     private long voterOther;
     @Column(name = "gender_male")
-    private String genderMale;
+    private long genderMale;
     @Column(name = "gender_female")
-    private String genderFemale;
+    private long genderFemale;
     @Column(name = "gender_other")
-    private String genderOther;
+    private long genderOther;
+    @Column(name = "tps_data")
+    private String tpsData;
 
     public String getId() {
         return id;
@@ -85,14 +85,6 @@ public class BizReportByAreaDO {
         this.villageName = villageName;
     }
 
-    public String getTpsNo() {
-        return tpsNo;
-    }
-
-    public void setTpsNo(String tpsNo) {
-        this.tpsNo = tpsNo;
-    }
-
     public long getVoterTotal() {
         return voterTotal;
     }
@@ -125,27 +117,35 @@ public class BizReportByAreaDO {
         this.voterOther = voterOther;
     }
 
-    public String getGenderMale() {
+    public long getGenderMale() {
         return genderMale;
     }
 
-    public void setGenderMale(String genderMale) {
+    public void setGenderMale(long genderMale) {
         this.genderMale = genderMale;
     }
 
-    public String getGenderFemale() {
+    public long getGenderFemale() {
         return genderFemale;
     }
 
-    public void setGenderFemale(String genderFemale) {
+    public void setGenderFemale(long genderFemale) {
         this.genderFemale = genderFemale;
     }
 
-    public String getGenderOther() {
+    public long getGenderOther() {
         return genderOther;
     }
 
-    public void setGenderOther(String genderOther) {
+    public void setGenderOther(long genderOther) {
         this.genderOther = genderOther;
+    }
+
+    public String getTpsData() {
+        return tpsData;
+    }
+
+    public void setTpsData(String tpsData) {
+        this.tpsData = tpsData;
     }
 }

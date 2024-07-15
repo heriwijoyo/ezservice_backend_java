@@ -29,6 +29,18 @@ public interface BizMemberUnionRepository extends JpaRepository<BizMemberUnionDO
             + "FROM BizMemberUnionDO AS bmu WHERE bmu.orgId = ?1 AND bmu.source = ?2 AND bmu.districtName = ?3 GROUP BY bmu.role")
     List<BizCustomQueryGroupDO> districtNameFetchRoleGroup(String orgId, String source, String districtName);
 
+    @Query("SELECT new id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO(bmu.role, COUNT(bmu.role)) "
+            + "FROM BizMemberUnionDO AS bmu WHERE bmu.orgId = ?1 AND bmu.source = ?2 AND bmu.districtName = ?3 AND bmu.villageName = ?4 GROUP BY bmu.role")
+    List<BizCustomQueryGroupDO> villageNameFetchRoleGroup(String orgId, String source, String districtName, String villageName);
+
+    @Query("SELECT new id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO(bmu.gender, COUNT(bmu.gender)) "
+            + "FROM BizMemberUnionDO AS bmu WHERE bmu.orgId = ?1 AND bmu.source = ?2 AND bmu.districtName = ?3 GROUP BY bmu.gender")
+    List<BizCustomQueryGroupDO> districtNameFetchGenderGroup(String orgId, String source, String districtName);
+
+    @Query("SELECT new id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO(bmu.gender, COUNT(bmu.gender)) "
+            + "FROM BizMemberUnionDO AS bmu WHERE bmu.orgId = ?1 AND bmu.source = ?2 AND bmu.districtName = ?3 AND bmu.villageName = ?4 GROUP BY bmu.gender")
+    List<BizCustomQueryGroupDO> villageNameFetchGenderGroup(String orgId, String source, String districtName, String villageName);
+
 
 
 

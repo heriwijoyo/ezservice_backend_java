@@ -19,6 +19,7 @@ import id.ezclouds.biz.ezservice.service.core.repo.BizReportByAreaRepository;
 import id.ezclouds.biz.ezservice.service.template.BizProcessTemplate;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.dataobject.BizSubOrganizationDO;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.repo.AppSubOrganizationRepository;
+import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
@@ -137,8 +138,12 @@ public class BizSyncMemberUnionProcessor {
                 logData.add("MEMBER_IMPORT_SYNC_FAIL=" + importSyncFailCount);
 
                 // 5. start generate the report
-                // 5.1 fetch all district
-                //Map<String, List<EzCoreAppVillageDO>> districtVillageMap = new HashMap<>();
+                // 5.1 delete existing report by area
+                long deletedReportArea = bizReportByAreaRepository.deleteByOrgId(orgId);
+                logData.add("DEL_REPORT_AREA="+ deletedReportArea);
+
+                String currentTime = DateUtil.getCurrentFormattedDate();
+
                 List<EzCoreAppDistrictDO> districts = coreAppDistrictRepository.findByRegencyId("1802");
                 for (EzCoreAppDistrictDO districtDO : districts) {
                     //List<EzCoreAppVillageDO> villages = coreAppVillageRepository.findByDistrictId(districtDO.getId());
@@ -146,37 +151,8 @@ public class BizSyncMemberUnionProcessor {
 
 
                     if ("KOTA AGUNG".equals(districtDO.getName())) {
-                        BizReportByAreaDO reportByArea = new BizReportByAreaDO();
-                        reportByArea.setId(HashUtil.createHash(districtDO.getName()));
-                        reportByArea.setSource("APP");
-                        reportByArea.setOrgId(orgId);
-                        reportByArea.setDistrictName(districtDO.getName());
-                        reportByArea.setVillageName("ALL");
-                        reportByArea.setTpsNo("ALL");
-
-                        List<BizCustomQueryGroupDO> groupRoles = bizMemberUnionRepository
-                                .districtNameFetchRoleGroup(orgId, "APP", districtDO.getName());
-
-                        long strongVoter = 0;
-                        long lazyVoter = 0;
-                        long otherVoter = 0;
-                        long totalVoter = 0;
-                        for (BizCustomQueryGroupDO groupRole : groupRoles) {
-                            if ("S".equals(groupRole.getGroupName())) {
-                                strongVoter = groupRole.getCount1Value();
-                            } else if ("L".equals(groupRole.getGroupName())) {
-                                lazyVoter = groupRole.getCount1Value();
-                            } else {
-                                otherVoter = groupRole.getCount1Value();
-                            }
-                        }
-                        totalVoter = strongVoter + lazyVoter + otherVoter;
-                        reportByArea.setVoterStrong(strongVoter);
-                        reportByArea.setVoterLazy(lazyVoter);
-                        reportByArea.setVoterOther(otherVoter);
-                        reportByArea.setVoterTotal(totalVoter);
-
-                        bizReportByAreaRepository.saveAndFlush(reportByArea);
+                        generateAreaReport(currentTime, orgId, "APP", districtDO.getName(), "ALL");
+                        generateAreaReport(currentTime, orgId, "IMPORT", districtDO.getName(), "ALL");
                     }
                 }
 
@@ -188,6 +164,55 @@ public class BizSyncMemberUnionProcessor {
                 return logData;
             }
         });
+    }
+
+    private void generateAreaReport(String currentTime, String orgId, String source, String districtName, String villageName) {
+        BizReportByAreaDO reportByArea = new BizReportByAreaDO();
+        reportByArea.setId(HashUtil.createHash(currentTime, orgId, source, districtName, villageName));
+        reportByArea.setSource(source);
+        reportByArea.setOrgId(orgId);
+        reportByArea.setDistrictName(districtName);
+        reportByArea.setVillageName(villageName);
+
+        List<BizCustomQueryGroupDO> groupRoles;
+        List<BizCustomQueryGroupDO> groupGenders;
+        if ("ALL".equals(villageName)) {
+            groupRoles = bizMemberUnionRepository
+                    .districtNameFetchRoleGroup(orgId, source, districtName);
+            groupGenders = bizMemberUnionRepository
+                    .districtNameFetchGenderGroup(orgId, source, districtName);
+        } else {
+            groupRoles = bizMemberUnionRepository
+                    .villageNameFetchRoleGroup(orgId, source, districtName, villageName);
+            groupGenders = bizMemberUnionRepository
+                    .villageNameFetchGenderGroup(orgId, source, districtName, villageName);
+        }
+
+        long totalVoter = 0;
+        for (BizCustomQueryGroupDO groupRole : groupRoles) {
+            totalVoter += groupRole.getCount1Value();
+            if ("S".equals(groupRole.getGroupName())) {
+                reportByArea.setVoterStrong(groupRole.getCount1Value());
+            } else if ("L".equals(groupRole.getGroupName())) {
+                reportByArea.setVoterLazy(groupRole.getCount1Value());
+                totalVoter += groupRole.getCount1Value();
+            } else {
+                reportByArea.setVoterOther(groupRole.getCount1Value());
+            }
+        }
+        reportByArea.setVoterTotal(totalVoter);
+
+        for (BizCustomQueryGroupDO groupGender : groupGenders) {
+            if ("MALE".equals(groupGender.getGroupName())) {
+                reportByArea.setGenderMale(groupGender.getCount1Value());
+            } else if ("FEMALE".equals(groupGender.getGroupName())) {
+                reportByArea.setGenderFemale(groupGender.getCount1Value());
+            } else {
+                reportByArea.setGenderOther(groupGender.getCount1Value());
+            }
+        }
+
+        bizReportByAreaRepository.saveAndFlush(reportByArea);
     }
 
     private String getSubOrgName(List<BizSubOrganizationDO> subOrgs, String subOrgId) {
