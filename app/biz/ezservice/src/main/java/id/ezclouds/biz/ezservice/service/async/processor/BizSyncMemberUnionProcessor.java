@@ -165,7 +165,7 @@ public class BizSyncMemberUnionProcessor {
                             if ("S".equals(groupRole.getGroupName())) {
                                 strongVoter = groupRole.getCount1Value();
                             } else if ("L".equals(groupRole.getGroupName())) {
-                                strongVoter = groupRole.getCount1Value();
+                                lazyVoter = groupRole.getCount1Value();
                             } else {
                                 otherVoter = groupRole.getCount1Value();
                             }
