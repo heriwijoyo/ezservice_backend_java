@@ -7,6 +7,7 @@ package id.ezclouds.biz.ezservice.service.async.parser;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.service.core.dataobject.BizMemberImportDO;
 import id.ezclouds.biz.ezservice.service.core.dataobject.BizMemberUnionDO;
+import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 
 import java.util.Arrays;
@@ -44,6 +45,7 @@ public class BizMemberUnionConverter {
         unionDO.setRukunWarga(bizMember.getRukunWarga());
         unionDO.setRukunTetangga(bizMember.getRukunTetangga());
         unionDO.setTpsNumber(bizMember.getTpsNumber());
+        unionDO.setCreatedDate(DateUtil.getFormattedDateFromDateTime(bizMember.getCreatedTime()));
         unionDO.setCreatedTime(bizMember.getCreatedTime());
 
         return unionDO;
@@ -70,6 +72,7 @@ public class BizMemberUnionConverter {
         unionDO.setRukunWarga(bizMember.getRukunWarga());
         unionDO.setRukunTetangga(bizMember.getRukunTetangga());
         unionDO.setTpsNumber(bizMember.getTpsNumber());
+        unionDO.setCreatedDate(DateUtil.getFormattedDateFromDateTime(bizMember.getCreatedTime()));
         unionDO.setCreatedTime(bizMember.getCreatedTime());
 
         return unionDO;

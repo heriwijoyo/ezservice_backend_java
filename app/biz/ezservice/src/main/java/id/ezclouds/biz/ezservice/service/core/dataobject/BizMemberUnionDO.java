@@ -62,6 +62,8 @@ public class BizMemberUnionDO {
     private String tpsNumber;
     @Column(name = "address")
     private String address;
+    @Column(name = "created_date")
+    private String createdDate;
     @Column(name = "created_time")
     private String createdTime;
 
@@ -239,6 +241,14 @@ public class BizMemberUnionDO {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(String createdDate) {
+        this.createdDate = createdDate;
     }
 
     public String getCreatedTime() {
