@@ -6,6 +6,7 @@ package id.ezclouds.biz.ezservice.service.async.processor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.ezservice.converter.BizMemberConverter;
+import id.ezclouds.biz.ezservice.enums.BizReportByTime;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.service.async.event.BizProcessEvent;
 import id.ezclouds.biz.ezservice.service.async.parser.BizMemberUnionConverter;
@@ -28,10 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -67,6 +65,9 @@ public class BizSyncMemberUnionProcessor {
 
     @Autowired
     private BizReportBySubOrgRepository bizReportBySubOrgRepository;
+
+    @Autowired
+    private BizReportTimeSeriesRepository bizReportTimeSeriesRepository;
 
     public void process(String orgId) {
 
@@ -163,6 +164,15 @@ public class BizSyncMemberUnionProcessor {
                 generateSubOrgReport(currentTime, orgId, "APP");
                 generateSubOrgReport(currentTime, orgId, "IMPORT");
 
+                bizReportTimeSeriesRepository.deleteByOrgId(orgId);
+                for (BizReportByTime bizReportByTime : BizReportByTime.values()) {
+                    switch (bizReportByTime) {
+                        case RJL_DAILY_SUB_ORG_PERFORMANCE:
+                            generateDailySubOrgPerformance(orgId, "APP", subOrgs, bizReportByTime.getId());
+                            break;
+                    }
+                }
+
                 return true;
             }
 
@@ -171,6 +181,44 @@ public class BizSyncMemberUnionProcessor {
                 return logData;
             }
         });
+    }
+
+    private void generateDailySubOrgPerformance(String orgId, String source, List<BizSubOrganizationDO> subOrgs, String reportId) {
+        Date startDate = DateUtil.parseFormattedDate("2024-06-24 22:00:00", DateUtil.FORMAT_DATETIME_DEFAULT);
+        Date endDate = new Date();
+        List<String> timePeriods = new ArrayList<>();
+
+        while (startDate.before(endDate)) {
+            timePeriods.add(DateUtil.getFormattedDate(startDate, DateUtil.FORMAT_DATE));
+            startDate = DateUtil.getDateAfterDays(startDate, 1);
+        }
+
+        for (String timePeriod : timePeriods) {
+            System.out.println(timePeriod);
+            List<BizCustomQueryGroupDO> groupDates = bizMemberUnionRepository
+                    .fetchDateSeriesBySubOrgGroup(orgId, source, timePeriod);
+            for (BizSubOrganizationDO subOrganization : subOrgs) {
+                String groupValue = subOrganization.getSubOrgId();
+                BizReportTimeSeriesDO bizReport = new BizReportTimeSeriesDO();
+                bizReport.setId(HashUtil.createHash(orgId, reportId, groupValue, timePeriod));
+                bizReport.setOrgId(orgId);
+                bizReport.setReportId(reportId);
+                bizReport.setGroupValue(groupValue);
+                bizReport.setTimeFrame(timePeriod);
+                bizReport.setTimeValue(getTimeSeriesValue(groupDates, groupValue));
+                bizReportTimeSeriesRepository.saveAndFlush(bizReport);
+            }
+        }
+    }
+
+    private long getTimeSeriesValue(List<BizCustomQueryGroupDO> groupResult, String groupValue) {
+        long value = 0;
+        for (BizCustomQueryGroupDO groupDO : groupResult) {
+            if (StringUtil.equalsNotNull(groupDO.getGroupName(), groupValue)) {
+                return groupDO.getCount1Value();
+            }
+        }
+        return value;
     }
 
     private void generateSubOrgReport(String currentTime, String orgId, String source) {
