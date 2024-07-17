@@ -4,7 +4,16 @@
  */
 package id.ezclouds.biz.ezservice.service.scheduler;
 
+import id.ezclouds.biz.ezservice.enums.BizSchedulerScene;
+import id.ezclouds.biz.ezservice.service.async.BizThreadSharedResource;
+import id.ezclouds.biz.ezservice.service.async.event.BizProcessEvent;
+import id.ezclouds.biz.ezservice.service.async.processor.BizSyncMemberUnionProcessor;
+import id.ezclouds.biz.ezservice.service.processor.BizSchedulerMinuteProcessor;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
+import id.ezclouds.biz.ezservice.service.template.BizSchedulerTemplate;
+import id.ezclouds.common.util.assertion.AssertUtil;
+import id.ezclouds.common.util.exception.EzErrorCode;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,9 +23,38 @@ import org.springframework.stereotype.Service;
 @Service
 public class BizSchedulerService {
 
-    public BizResult execute(String timeFrame) {
-        final BizResult bizResult = new BizResult();
+    @Autowired
+    private BizThreadSharedResource bizThreadSharedResource;
 
-        return bizResult;
+    @Autowired
+    private BizSchedulerMinuteProcessor bizSchedulerMinuteProcessor;
+
+    @Autowired
+    private BizSyncMemberUnionProcessor bizSyncMemberUnionProcessor;
+
+    public BizResult execute(String scene) {
+        return BizSchedulerTemplate.execute(scene, new BizSchedulerTemplate.Handler() {
+            @Override
+            public void preProcess(BizSchedulerScene schedulerScene) {
+                AssertUtil.isNotTrue(schedulerScene == BizSchedulerScene.UNKNOWN, EzErrorCode.ILLEGAL_ACTION);
+
+                boolean isOnProcess = bizThreadSharedResource.isOnProcess();
+                String onProcessEvent = bizThreadSharedResource.getProcessEvent();
+                boolean isProcessOverlap = isOnProcess && BizProcessEvent.SYNC_MEMBER_UNION.getEventCode().equals(onProcessEvent);
+                AssertUtil.isNotTrue(isProcessOverlap, EzErrorCode.SCHEDULER_OVERLAP);
+            }
+
+            @Override
+            public void process(BizSchedulerScene schedulerScene) {
+                switch (schedulerScene) {
+                    case MINUTE:
+                        bizSchedulerMinuteProcessor.process();
+                        break;
+                    case CUSTOM_DAILY_REPORT:
+                        bizSyncMemberUnionProcessor.process("RJL0");
+                        break;
+                }
+            }
+        });
     }
 }

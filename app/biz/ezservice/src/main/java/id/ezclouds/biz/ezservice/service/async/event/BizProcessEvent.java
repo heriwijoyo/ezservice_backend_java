@@ -13,6 +13,7 @@ import id.ezclouds.core.shared.context.EzAppEvent;
 public enum BizProcessEvent implements EzAppEvent {
 
     SYNC_MEMBER_UNION("SYNC_MEMBER_UNION"),
+    SCHEDULER_MINUTE("SCHEDULER_MINUTE"),
 
     ;
     private final String code;

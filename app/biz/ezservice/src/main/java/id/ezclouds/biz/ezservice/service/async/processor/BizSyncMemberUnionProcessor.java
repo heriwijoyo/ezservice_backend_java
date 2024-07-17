@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.ezservice.converter.BizMemberConverter;
 import id.ezclouds.biz.ezservice.enums.BizReportByTime;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
+import id.ezclouds.biz.ezservice.service.async.BizThreadSharedResource;
 import id.ezclouds.biz.ezservice.service.async.event.BizProcessEvent;
 import id.ezclouds.biz.ezservice.service.async.parser.BizMemberUnionConverter;
 import id.ezclouds.biz.ezservice.service.core.dataobject.*;
@@ -26,6 +27,7 @@ import id.ezclouds.core.shared.repo.CoreAppVillageRepository;
 import id.ezclouds.core.shared.repo.dataobject.EzCoreAppDistrictDO;
 import id.ezclouds.core.shared.repo.dataobject.EzCoreAppVillageDO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -36,6 +38,7 @@ import java.util.*;
  * @version $Id: BizSyncMemberUnionProcessor.java, v 0.1 2024‐07‐15 1:06 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
+@Async
 @Transactional
 public class BizSyncMemberUnionProcessor {
 
@@ -69,6 +72,9 @@ public class BizSyncMemberUnionProcessor {
     @Autowired
     private BizReportTimeSeriesRepository bizReportTimeSeriesRepository;
 
+    @Autowired
+    private BizThreadSharedResource bizThreadSharedResource;
+
     public void process(String orgId) {
 
         final List<String> logData = new ArrayList<>();
@@ -76,7 +82,8 @@ public class BizSyncMemberUnionProcessor {
 
         BizProcessTemplate.execute(BizProcessEvent.SYNC_MEMBER_UNION, new BizProcessTemplate.Handler() {
             @Override
-            public boolean onProcess() {
+            public boolean onProcess(BizProcessEvent processEvent) {
+                bizThreadSharedResource.startProcess(processEvent.getEventCode());
                 // prepare necessary data
                 List<BizSubOrganizationDO> subOrgs = appSubOrganizationRepository.findByOrgId(orgId);
 
@@ -108,8 +115,7 @@ public class BizSyncMemberUnionProcessor {
                                 bizMemberUnionRepository.saveAndFlush(unionDO);
                                 syncSuccessCount++;
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        } catch (Exception ignored) {
                             tryStoreDuplicate(unionDO);
                             syncFailCount++;
                         }
@@ -130,8 +136,7 @@ public class BizSyncMemberUnionProcessor {
                     try {
                         bizMemberUnionRepository.saveAndFlush(unionDO);
                         importSyncSuccessCount++;
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } catch (Exception ignored) {
                         tryStoreDuplicate(unionDO);
                         importSyncFailCount++;
                     }
@@ -177,6 +182,11 @@ public class BizSyncMemberUnionProcessor {
             }
 
             @Override
+            public void onFinish() {
+                bizThreadSharedResource.stopProcess();
+            }
+
+            @Override
             public List<String> getLogData() {
                 return logData;
             }
@@ -194,7 +204,6 @@ public class BizSyncMemberUnionProcessor {
         }
 
         for (String timePeriod : timePeriods) {
-            System.out.println(timePeriod);
             List<BizCustomQueryGroupDO> groupDates = bizMemberUnionRepository
                     .fetchDateSeriesBySubOrgGroup(orgId, source, timePeriod);
             for (BizSubOrganizationDO subOrganization : subOrgs) {
@@ -346,8 +355,6 @@ public class BizSyncMemberUnionProcessor {
         }
         try {
             bizMemberUnionDuplicateRepository.saveAndFlush(memberUnionDO);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception ignored) {}
     }
 }

@@ -75,23 +75,24 @@ public class LocalController {
     }
 
 
-    @GetMapping(value = "/api/local/scheduler/{timeFrame}")
-    private void localSchedulerHandler(@PathVariable("timeFrame") String timeFrame, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @GetMapping(value = "/api/local/scheduler/{scene}")
+    private void localSchedulerHandler(@PathVariable("scene") String scene, HttpServletRequest request, HttpServletResponse response) throws IOException {
         String localAddr = request.getLocalAddr();
 
         if (!"127.0.0.1".equals(localAddr)) {
             response.setStatus(HttpStatus.NOT_FOUND.value());
         }
         else {
-            BizResult bizResult = bizSchedulerService.execute(timeFrame);
-            String responseBody;
+            BizResult bizResult = bizSchedulerService.execute(scene);
             response.setStatus(HttpStatus.OK.value());
+
+            String responseBody;
             if (bizResult.isSuccess()) {
-                responseBody = "Y - "+ bizResult.getErrorCode();
-                response.getWriter().write((String)bizResult.getObject());
+                responseBody = "Y - SUCCESS";
             } else {
-                response.getWriter().write(bizResult.getErrorMessage());
+                responseBody = "N - "+ bizResult.getErrorCode();
             }
+            response.getWriter().write(responseBody);
             response.getWriter().flush();
         }
     }

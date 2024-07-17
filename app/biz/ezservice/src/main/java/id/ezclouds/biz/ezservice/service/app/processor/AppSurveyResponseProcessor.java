@@ -37,7 +37,7 @@ public class AppSurveyResponseProcessor {
         final ProcessResult result = new ProcessResult();
 
         if (request == null || ParserType.getByCode(request.getParserCode()) == ParserType.UNKNOWN || StringUtil.isBlank(request.getParserMap())) {
-            result.setMessage("Invalid process request");
+            result.setMessage("Invalid processor request");
             return result;
         }
 
@@ -71,7 +71,7 @@ public class AppSurveyResponseProcessor {
                     break;
             }
         } catch (Exception e) {
-            result.setMessage("Parsing process failed : " + e.getMessage());
+            result.setMessage("Parsing processor failed : " + e.getMessage());
         }
 
         return result;
