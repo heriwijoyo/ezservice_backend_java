@@ -12,6 +12,8 @@
 		<module>app/core/integration</module>
 		<module>app/common/util</module>
 		<module>app/test/core</module>
+        <module>app/core/process</module>
+        <module>app/core/dal</module>
     </modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>

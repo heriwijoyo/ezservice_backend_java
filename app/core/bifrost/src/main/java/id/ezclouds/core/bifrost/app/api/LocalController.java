@@ -6,12 +6,14 @@ package id.ezclouds.core.bifrost.app.api;
 
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizSuperAdminService;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
+import id.ezclouds.biz.ezservice.service.scheduler.BizSchedulerService;
 import id.ezclouds.core.bifrost.app.api.event.SuperAdminEvent;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +28,9 @@ public class LocalController {
 
     @Autowired
     private BizSuperAdminService bizSuperAdminService;
+
+    @Autowired
+    private BizSchedulerService bizSchedulerService;
 
     @GetMapping(value = "/api/local/auth.json")
     private void localSuperUserAuth(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -65,6 +70,29 @@ public class LocalController {
             } else {
                 response.getWriter().write(bizResult.getErrorMessage());
             }
+            response.getWriter().flush();
+        }
+    }
+
+
+    @GetMapping(value = "/api/local/scheduler/{scene}")
+    private void localSchedulerHandler(@PathVariable("scene") String scene, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String localAddr = request.getLocalAddr();
+
+        if (!"127.0.0.1".equals(localAddr)) {
+            response.setStatus(HttpStatus.NOT_FOUND.value());
+        }
+        else {
+            BizResult bizResult = bizSchedulerService.execute(scene);
+            response.setStatus(HttpStatus.OK.value());
+
+            String responseBody;
+            if (bizResult.isSuccess()) {
+                responseBody = "Y - SUCCESS";
+            } else {
+                responseBody = "N - "+ bizResult.getErrorCode();
+            }
+            response.getWriter().write(responseBody);
             response.getWriter().flush();
         }
     }

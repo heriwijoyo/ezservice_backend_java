@@ -27,14 +27,14 @@ public class BizProcessTemplate {
 
         String resultCode = "N";
         try {
-            boolean result = handler.onProcess();
+            boolean result = handler.onProcess(event);
+            handler.onFinish();
             resultCode = result ? "Y" : "N";
         } catch (Exception e) {
             resultCode = "E";
             EzAppContextHolder
                     .getContext()
                     .appendErrorStackTrace(ExceptionUtil.getErrorContext(e));
-            e.printStackTrace();
         } finally {
             String traceId = EzAppContextHolder.getContext().getTraceId();
             String timeCost = EzAppContextHolder.getContext().getTimeCost();
@@ -61,7 +61,8 @@ public class BizProcessTemplate {
     }
 
     public interface Handler {
-        boolean onProcess();
+        boolean onProcess(BizProcessEvent processEvent);
+        void onFinish();
         List<String> getLogData();
     }
 }
