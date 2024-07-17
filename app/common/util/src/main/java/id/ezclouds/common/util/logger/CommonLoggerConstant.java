@@ -18,5 +18,7 @@ public class CommonLoggerConstant {
     public static final String INTEGRATION_SERVICE  = "INTEGRATION_SERVICE";
     public static final String ADMIN_WEB_CONTROLLER = "ADMIN_WEB_CONTROLLER";
     public static final String WEB_API_CONTROLLER   = "WEB_API_CONTROLLER";
+    public static final String ASYNC_PROCESS        = "ASYNC_PROCESS";
+    public static final String SCHEDULER            = "SCHEDULER";
 
 }

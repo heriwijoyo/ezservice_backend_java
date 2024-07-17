@@ -5,12 +5,6 @@
     <springProperty scope="context" name="APP_LOG_ROOT" source="logging.app.root_path" />
     <springProperty scope="context" name="APP_LOG_TYPE" source="logging.app.log_type" />
 
-    <appender name="Appender_Console"
-              class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>%black(%d{ISO8601}) --- [%blue(%thread)]%m%n</pattern>
-        </layout>
-    </appender>
     <appender name="Appender_File"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${APP_LOG_ROOT}/${APP_NAME}/default.log</file>
@@ -23,15 +17,6 @@
         </encoder>
     </appender>
 
-    <appender name="ErrorAppender_Console"
-              class="ch.qos.logback.core.ConsoleAppender">
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>error</level>
-        </filter>
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>%black(%d{ISO8601}) --- [%blue(%thread)]%m%n</pattern>
-        </layout>
-    </appender>
     <appender name="ErrorAppender_File"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${APP_LOG_ROOT}/${APP_NAME}/default-error.log</file>
@@ -47,15 +32,6 @@
         </encoder>
     </appender>
 
-    <appender name="AppErrorAppender_Console"
-              class="ch.qos.logback.core.ConsoleAppender">
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>error</level>
-        </filter>
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>%black(%d{ISO8601}) --- [%blue(%thread)]%m%n</pattern>
-        </layout>
-    </appender>
     <appender name="AppErrorAppender_File"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${APP_LOG_ROOT}/${APP_NAME}/common-error.log</file>
@@ -71,14 +47,6 @@
         </encoder>
     </appender>
 
-    <appender name="API_CONTROLLER_Console"
-              class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>
-                %black(%d{ISO8601}) --- [%blue(%thread)]%m%n
-            </pattern>
-        </layout>
-    </appender>
     <appender name="API_CONTROLLER_File"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${APP_LOG_ROOT}/${APP_NAME}/controller-api.log</file>
@@ -95,14 +63,6 @@
         </encoder>
     </appender>
 
-    <appender name="WEB_CONTROLLER_Console"
-              class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>
-                %black(%d{ISO8601}) --- [%blue(%thread)]%m%n
-            </pattern>
-        </layout>
-    </appender>
     <appender name="WEB_CONTROLLER_File"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${APP_LOG_ROOT}/${APP_NAME}/controller-web.log</file>
@@ -119,14 +79,6 @@
         </encoder>
     </appender>
 
-    <appender name="ADMIN_WEB_CONTROLLER_Console"
-              class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>
-                %black(%d{ISO8601}) --- [%blue(%thread)]%m%n
-            </pattern>
-        </layout>
-    </appender>
     <appender name="ADMIN_WEB_CONTROLLER_File"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${APP_LOG_ROOT}/${APP_NAME}/controller-web-admin.log</file>
@@ -143,14 +95,6 @@
         </encoder>
     </appender>
 
-    <appender name="WEB_API_CONTROLLER_Console"
-              class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>
-                %black(%d{ISO8601}) --- [%blue(%thread)]%m%n
-            </pattern>
-        </layout>
-    </appender>
     <appender name="WEB_API_CONTROLLER_File"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${APP_LOG_ROOT}/${APP_NAME}/controller-web-api.log</file>
@@ -167,14 +111,6 @@
         </encoder>
     </appender>
 
-    <appender name="APP_BIZ_SERVICE_Console"
-              class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>
-                %black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable
-            </pattern>
-        </layout>
-    </appender>
     <appender name="APP_BIZ_SERVICE_File"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${APP_LOG_ROOT}/${APP_NAME}/biz-service.log</file>
@@ -191,19 +127,43 @@
         </encoder>
     </appender>
 
-    <appender name="INTEGRATION_SERVICE_Console"
-              class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>
-                %black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable
-            </pattern>
-        </layout>
-    </appender>
     <appender name="INTEGRATION_SERVICE_File"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${APP_LOG_ROOT}/${APP_NAME}/integration-service.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/integration-service.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d --- [%thread]%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC_PROCESS_File"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/${APP_NAME}/async-process.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/async-process.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d --- [%thread]%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="SCHEDULER_File"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/${APP_NAME}/scheduler.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/scheduler.log.%d{yyyy-MM-dd}</fileNamePattern>
         </rollingPolicy>
         <append>true</append>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
@@ -248,6 +208,18 @@
     <logger name="INTEGRATION_SERVICE" additivity="false">
         <level value="INFO" />
         <appender-ref ref="INTEGRATION_SERVICE_${APP_LOG_TYPE}" />
+        <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
+    </logger>
+
+    <logger name="ASYNC_PROCESS" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="ASYNC_PROCESS_${APP_LOG_TYPE}" />
+        <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
+    </logger>
+
+    <logger name="SCHEDULER" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="SCHEDULER_${APP_LOG_TYPE}" />
         <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
     </logger>
 
