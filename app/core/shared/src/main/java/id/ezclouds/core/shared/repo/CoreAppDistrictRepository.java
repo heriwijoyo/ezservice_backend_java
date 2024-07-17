@@ -18,5 +18,6 @@ import java.util.List;
 public interface CoreAppDistrictRepository extends JpaRepository<EzCoreAppDistrictDO, String> {
 
     List<EzCoreAppDistrictDO> findByIdIn(List<String> ids);
+    List<EzCoreAppDistrictDO> findByRegencyId(String regencyId);
     List<EzCoreAppDistrictDO> findByRegencyIdIn(List<String> regencyIds);
 }

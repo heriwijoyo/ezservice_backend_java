@@ -15,13 +15,13 @@ import id.ezclouds.biz.ezservice.model.admin.BizOrganizationDetail;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
 import id.ezclouds.biz.ezservice.service.async.processor.BizCommonReportProcessor;
+import id.ezclouds.biz.ezservice.service.async.processor.BizSyncMemberUnionProcessor;
 import id.ezclouds.biz.ezservice.service.core.BizCacheEnum;
 import id.ezclouds.biz.ezservice.service.core.BizDataImportService;
 import id.ezclouds.biz.ezservice.service.inner.service.BizConnectInnerService;
 import id.ezclouds.biz.ezservice.service.core.BizAppCacheService;
 import id.ezclouds.biz.ezservice.service.app.model.BizAppConfig;
 import id.ezclouds.biz.ezservice.service.inner.service.BizAdminInnerService;
-import id.ezclouds.biz.ezservice.service.request.BizAsyncProcessRequest;
 import id.ezclouds.biz.ezservice.service.request.BizDataImportRequest;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
@@ -73,6 +73,9 @@ public class BizSuperAdminService extends BizBaseService {
 
     @Autowired
     private BizCommonReportProcessor bizCommonReportProcessor;
+
+    @Autowired
+    private BizSyncMemberUnionProcessor bizSyncMemberUnionProcessor;
 
     public BizResult createSuperAdminSession() {
         final BizResult bizResult = new BizResult();
@@ -537,9 +540,7 @@ public class BizSuperAdminService extends BizBaseService {
             @Override
             public void onBizProcess() throws Exception {
                 authorizeSuperUserMember(sessionId);
-                BizAsyncProcessRequest processRequest = new BizAsyncProcessRequest();
-                processRequest.setOrgId("RJL0");
-                bizCommonReportProcessor.process(processRequest);
+                bizSyncMemberUnionProcessor.process("RJL0");
                 bizResult.setSuccess(true);
                 bizResult.setObject(BizConstant.Message.SUCCESS_COMMON);
             }

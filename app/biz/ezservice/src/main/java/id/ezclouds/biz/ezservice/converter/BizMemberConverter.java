@@ -73,6 +73,7 @@ public class BizMemberConverter {
         BizStatus bizStatus = BizStatus.getByCode(member.getMemberStatus().getCode());
         bizMember.setStatus(bizStatus);
         bizMember.setAvatarUrl(member.getAvatarUrl());
+        bizMember.setCreatedTime(member.getCreatedTime());
 
         BizSubOrganization subOrganization = new BizSubOrganization();
         if (StringUtil.isNotBlank(member.getSubOrgId())) {

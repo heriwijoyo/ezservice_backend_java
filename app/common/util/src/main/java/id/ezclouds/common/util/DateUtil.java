@@ -16,6 +16,7 @@ import java.util.Date;
 public class DateUtil {
 
     public static final String FORMAT_DATETIME_DEFAULT = "yyyy-MM-dd HH:mm:ss";
+    public static final String FORMAT_DATE = "yyyy-MM-dd";
 
     public static String getFormattedDate(Date date, String dateFormat) {
         SimpleDateFormat dateFormatter = new SimpleDateFormat(dateFormat);
@@ -51,6 +52,11 @@ public class DateUtil {
 
     public static String getCurrentFormattedDate() {
         return getFormattedDate(new Date());
+    }
+
+    public static String getFormattedDateFromDateTime(String dateTime) {
+        Date date = parseFormattedDate(dateTime, FORMAT_DATETIME_DEFAULT);
+        return getFormattedDate(date, FORMAT_DATE);
     }
 
     public static Date getDateAfterDays(Date originalDate, int daysAfter) {

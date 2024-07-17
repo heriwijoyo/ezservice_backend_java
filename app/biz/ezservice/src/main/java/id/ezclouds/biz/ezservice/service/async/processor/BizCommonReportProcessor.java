@@ -38,10 +38,10 @@ public class BizCommonReportProcessor implements BizAsyncProcessor {
 
     @Override
     public void process(BizAsyncProcessRequest request) {
-        reloadReportByGroupType("SUB_ORG_ID", request.getOrgId());
-        reloadReportByGroupType("DISTRICT", request.getOrgId());
+        //
     }
 
+    /*
     private void reloadReportByGroupType(String groupType, String orgId) {
         List<BizReportCustomDO> currentReports = bizReportCustomRepository
                 .findByOrgIdAndGroupType(orgId, groupType);
@@ -120,4 +120,6 @@ public class BizCommonReportProcessor implements BizAsyncProcessor {
             e.printStackTrace();
         }
     }
+
+     */
 }

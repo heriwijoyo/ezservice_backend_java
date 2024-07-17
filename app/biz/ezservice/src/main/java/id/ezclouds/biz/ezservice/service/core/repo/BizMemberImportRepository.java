@@ -20,6 +20,8 @@ import java.util.List;
 @Repository
 public interface BizMemberImportRepository extends JpaRepository<BizMemberImportDO, String> {
 
+    List<BizMemberImportDO> findByOrgId(String orgId);
+
     List<BizMemberImportDO> findByOrgIdAndSourceId(String orgId, String sourceId);
 
     List<BizMemberImportDO> findByOrgIdAndSourceIdNot(String orgId, String sourceIdNot);
