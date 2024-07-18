@@ -4,6 +4,8 @@
  */
 package id.ezclouds.common.util;
 
+import org.springframework.cache.annotation.Cacheable;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -71,5 +73,23 @@ public class DateUtil {
         calendar.setTime(originalDate);
         calendar.add(Calendar.MINUTE, minsAfter);
         return calendar.getTime();
+    }
+
+    public static String getFormattedDayStart(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        return getFormattedDate(calendar.getTime(), FORMAT_DATETIME_DEFAULT);
+    }
+
+    public static String getFormattedDayEnd(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        return getFormattedDate(calendar.getTime(), FORMAT_DATETIME_DEFAULT);
     }
 }

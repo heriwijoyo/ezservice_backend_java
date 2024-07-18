@@ -11,6 +11,7 @@ package id.ezclouds.biz.ezservice.enums;
 public enum BizSchedulerScene {
 
     MINUTE("MINUTE"),
+    RJL_SEND_SUB_ORG_REPORT_DAILY("RJL_SEND_SUB_ORG_REPORT_DAILY"),
     CUSTOM_DAILY_REPORT("CUSTOM_DAILY_REPORT"),
     UNKNOWN("UNKNOWN"),
 

@@ -15,6 +15,7 @@ import id.ezclouds.core.auth.constant.CoreAuthConstant;
 import id.ezclouds.core.auth.model.CoreAuthMemberClient;
 import id.ezclouds.core.auth.service.CoreAuthService;
 import id.ezclouds.core.member.constant.CoreMemberField;
+import id.ezclouds.core.member.dataobject.CoreGroupCountDO;
 import id.ezclouds.core.member.dataobject.CoreMemberDO;
 import id.ezclouds.core.member.dataobject.CoreMemberExtensionDO;
 import id.ezclouds.core.member.model.CoreMember;
@@ -34,6 +35,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -236,5 +238,21 @@ public class CoreMemberService {
         });
         bizPageInfo.setBizData(bizData);
         return bizPageInfo;
+    }
+
+    public Map<String, Long> getGroupCountBySubOrg(String orgId, String startTime, String endTime) {
+        Map<String, Long> result = new HashMap<>();
+
+        List<CoreGroupCountDO> coreGroupCount = coreMemberRepository
+                .fetchGroupCountBySubOrg(orgId, startTime, endTime);
+        for (CoreGroupCountDO groupCountDO : coreGroupCount) {
+            if (StringUtil.isNotBlank(groupCountDO.getGroupValue())) {
+                String groupValue = groupCountDO.getGroupValue();
+                Long groupCount = groupCountDO.getGroupCount();
+                result.put(groupValue, groupCount);
+            }
+        }
+
+        return result;
     }
 }

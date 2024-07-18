@@ -14,6 +14,7 @@ public enum BizProcessEvent implements EzAppEvent {
 
     SYNC_MEMBER_UNION("SYNC_MEMBER_UNION"),
     SCHEDULER_MINUTE("SCHEDULER_MINUTE"),
+    SUB_ORG_DAILY_MONITOR("SUB_ORG_DAILY_MONITOR"),
 
     ;
     private final String code;
