@@ -22,13 +22,15 @@ public class DigestLogUtil {
         String infoLog = "[" +
                 ezAppContext.getTraceId() +
                 "][" +
-                ezAppContext.getEzAppEvent().getEventCode() +
+                ezAppContext.getOrgId() +
                 "," +
-                ezAppContext.getTimeCost() +
+                ezAppContext.getEzAppEvent().getEventCode() +
                 "," +
                 digestLog.getSuccessFlag() +
                 "," +
                 digestLog.getResultCode() +
+                "," +
+                ezAppContext.getTimeCost() +
                 "][appVersionNo=" +
                 ezAppContext.getAppVersionNo() +
                 "][" +

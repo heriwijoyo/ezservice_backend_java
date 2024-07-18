@@ -318,7 +318,9 @@ public class ApiController extends AppController {
 
             @Override
             public DigestLog composeDigestLog(ApiRequest request, ApiResult<BizMemberRegisterResult> result) {
-                return new EmptyDigestLog(result.isSuccess(), result.getResultCode());
+                MemberRegisterDigestLog digestLog = new MemberRegisterDigestLog(result.isSuccess(), result.getResultCode());
+                digestLog.composeDigest(request, result);
+                return digestLog;
             }
         });
     }
