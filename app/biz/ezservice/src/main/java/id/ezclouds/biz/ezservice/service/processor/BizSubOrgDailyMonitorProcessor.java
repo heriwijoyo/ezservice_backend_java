@@ -44,14 +44,14 @@ public class BizSubOrgDailyMonitorProcessor {
         final List<String> logData = new ArrayList<>();
         logData.add("ORG_ID="+ orgId);
 
-        List<String> reportPhoneReceiver = Arrays.asList("6281281150355");
+        List<String> reportPhoneReceiver = Arrays.asList("6281281150355", "6285310197009", "6281328602519", "627839376820");
 
         BizProcessTemplate.execute(BizProcessEvent.SUB_ORG_DAILY_MONITOR, new BizProcessTemplate.Handler() {
             @Override
             public boolean onProcess(BizProcessEvent processEvent) {
                 bizThreadSharedResource.startProcess(processEvent.getEventCode());
 
-                String reportMessage = fetchLastNDaysReport(orgId, 3);
+                String reportMessage = fetchLastNDaysReport(orgId, 5);
 
                 for (String reportReceiver : reportPhoneReceiver) {
                     bizConnectInnerService
