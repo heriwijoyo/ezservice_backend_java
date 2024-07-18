@@ -18,10 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -47,39 +44,20 @@ public class BizSubOrgDailyMonitorProcessor {
         final List<String> logData = new ArrayList<>();
         logData.add("ORG_ID="+ orgId);
 
+        List<String> reportPhoneReceiver = Arrays.asList("6281281150355");
+
         BizProcessTemplate.execute(BizProcessEvent.SUB_ORG_DAILY_MONITOR, new BizProcessTemplate.Handler() {
             @Override
             public boolean onProcess(BizProcessEvent processEvent) {
                 bizThreadSharedResource.startProcess(processEvent.getEventCode());
 
-                List<BizSubOrganizationDO> subOrgs = appSubOrganizationRepository
-                        .findByOrgId(orgId);
+                String reportMessage = fetchLastNDaysReport(orgId, 3);
 
-                Date yesterday = DateUtil.getDateAfterDays(new Date(), -1);
-                String startTime = DateUtil.getFormattedDayStart(yesterday);
-                String endTime = DateUtil.getFormattedDayEnd(yesterday);
-                logData.add("START="+ startTime);
-                logData.add("END="+ endTime);
-
-                Map<String, Long> result = coreMemberService
-                        .getGroupCountBySubOrg(orgId, startTime, endTime);
-
-                String resultMsg = StringUtil.EMPTY;
-                if (result.size() > 0) {
-                    for (Map.Entry<String, Long> entry : result.entrySet()) {
-                        String subOrgName = getSubOrgName(subOrgs, entry.getKey());
-                        resultMsg += "- "+ subOrgName +" = "+ entry.getValue() + "\n";
-                    }
-                } else {
-                    resultMsg = "TIDAK ADA DATA";
+                for (String reportReceiver : reportPhoneReceiver) {
+                    bizConnectInnerService
+                            .sendMessage(BizConnectType.WHATSAPP, orgId, reportReceiver, reportMessage);
                 }
 
-                String reportDate = DateUtil.getFormattedDate(yesterday, DateUtil.FORMAT_DATE);
-                String reportMessage = "Report Komunitas "+ reportDate + ":\n\n" + resultMsg;
-
-                bizConnectInnerService.sendMessage(BizConnectType.WHATSAPP, orgId, "6281281150355", reportMessage);
-
-                logData.add("RESULT="+ result.size());
                 return true;
             }
 
@@ -93,6 +71,33 @@ public class BizSubOrgDailyMonitorProcessor {
                 return logData;
             }
         });
+    }
+
+    private String fetchLastNDaysReport(String orgId, int nDays) {
+        List<BizSubOrganizationDO> subOrgs = appSubOrganizationRepository
+                .findByOrgId(orgId);
+        Date today = new Date();
+
+        String resultMsg = StringUtil.EMPTY;
+        for (int i = 1; i <= nDays; i++) {
+            Date reportDate = DateUtil.getDateAfterDays(today, -i);
+            String startTime = DateUtil.getFormattedDayStart(reportDate);
+            String endTime = DateUtil.getFormattedDayEnd(reportDate);
+
+            resultMsg += "Report Komunitas *"+ DateUtil.getFormattedDate(reportDate, DateUtil.FORMAT_DATE) + "*\n";
+
+            Map<String, Long> result = coreMemberService
+                    .getGroupCountBySubOrg(orgId, startTime, endTime);
+            if (result.size() > 0) {
+                for (Map.Entry<String, Long> entry : result.entrySet()) {
+                    String subOrgName = getSubOrgName(subOrgs, entry.getKey());
+                    resultMsg += "- "+ subOrgName +" = "+ entry.getValue() + "\n";
+                }
+            } else {
+                resultMsg = "- TIDAK ADA DATA";
+            }
+        }
+        return resultMsg;
     }
 
     private String getSubOrgName(List<BizSubOrganizationDO> subOrgs, String subOrgId) {
