@@ -44,7 +44,7 @@ public class BizSubOrgDailyMonitorProcessor {
         final List<String> logData = new ArrayList<>();
         logData.add("ORG_ID="+ orgId);
 
-        List<String> reportPhoneReceiver = Arrays.asList("6281281150355", "6285310197009", "6281328602519", "627839376820");
+        List<String> reportPhoneReceiver = Arrays.asList("6281281150355", "6285310197009", "6281328602519", "6287839376820");
 
         BizProcessTemplate.execute(BizProcessEvent.SUB_ORG_DAILY_MONITOR, new BizProcessTemplate.Handler() {
             @Override
