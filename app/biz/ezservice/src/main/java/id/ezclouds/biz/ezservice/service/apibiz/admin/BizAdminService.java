@@ -30,6 +30,8 @@ import id.ezclouds.biz.ezservice.service.inner.service.BizAdminInnerService;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
+import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
+import id.ezclouds.biz.ezservice.subbiz.arahindonesia.service.AppSubOrganizationService;
 import id.ezclouds.core.integration.result.EzConnectResult;
 import id.ezclouds.core.shared.result.PageResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
@@ -56,9 +58,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -79,6 +79,9 @@ public class BizAdminService extends BizBaseService {
 
     @Autowired
     private BizOrganizationService bizOrganizationService;
+
+    @Autowired
+    private AppSubOrganizationService appSubOrganizationService;
 
     @Autowired
     private BizSuperAdminService bizSuperAdminService;
@@ -968,6 +971,36 @@ public class BizAdminService extends BizBaseService {
                 bizResult.setObject(BizConstant.Message.SUCCESS_COMMON);
                 bizAppCacheService.reloadCacheItem(BizCacheEnum.CANDIDATE_PROFILE);
                 bizAppCacheService.reloadCacheItem(BizCacheEnum.CANDIDATE_BIOGRAPHY);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
+    public BizResult getSubOrganizations(String sessionId) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notBlank(sessionId, EzErrorCode.SESSION_INVALID);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthAdminSession session = authorizedAdminSession(sessionId);
+                Map<String, String> subOrgMap = new HashMap<>();
+                List<BizSubOrganization> subOrgs = appSubOrganizationService
+                        .getSubOrganizationByOrgId(session.getOrgId());
+                for (BizSubOrganization bizSubOrganization : subOrgs) {
+                    subOrgMap.put(bizSubOrganization.getSubOrgId(), bizSubOrganization.getName());
+                }
+
+                bizResult.setSuccess(true);
+                bizResult.setObject(subOrgMap);
             }
 
             @Override

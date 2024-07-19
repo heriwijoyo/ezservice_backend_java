@@ -28,7 +28,6 @@ public class BizProcessTemplate {
         String resultCode = "N";
         try {
             boolean result = handler.onProcess(event);
-            handler.onFinish();
             resultCode = result ? "Y" : "N";
         } catch (Exception e) {
             resultCode = "E";
@@ -57,6 +56,7 @@ public class BizProcessTemplate {
             }
 
             LOGGER.info(logInfo);
+            handler.onFinish();
         }
     }
 

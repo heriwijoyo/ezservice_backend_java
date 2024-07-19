@@ -58,6 +58,11 @@ public class WebAppController {
         renderCachedWebApp(getProfileContent(), servletResponse);
     }
 
+    @GetMapping(value = "/webapp/dataUpload.htm")
+    private void dataUpload(HttpServletResponse servletResponse) {
+        renderCachedWebApp(getDataUploadContent(), servletResponse);
+    }
+
     @GetMapping(value = "/webapp/whatsapp.htm")
     private void webWhatsapp(HttpServletResponse servletResponse) {
         renderCachedWebApp(getWhatsappContent(), servletResponse);
@@ -208,6 +213,11 @@ public class WebAppController {
     @Cacheable(value = BizCacheKey.WEBAPP_PROFILE)
     public String getProfileContent() {
         return getWebAppContent(WebAppPage.PROFILE);
+    }
+
+    @Cacheable(value = BizCacheKey.WEBAPP_DATA_UPLOAD)
+    public String getDataUploadContent() {
+        return getWebAppContent(WebAppPage.DATA_UPLOAD);
     }
 
     @Cacheable(value = BizCacheKey.WEBAPP_WHATSAPP)

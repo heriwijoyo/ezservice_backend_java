@@ -40,6 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -54,7 +55,8 @@ public class WebApiAdminController {
     private BizAdminService bizAdminService;
 
     @PostMapping(value = "/webapp/api/getAppData.json")
-    private WebApiResult<BizAdminAppData> getAppData(@RequestParam(name = "sessionId", required = false) String sessionId) {
+    private WebApiResult<BizAdminAppData> getAppData(
+            @RequestParam(name = "sessionId", required = false) String sessionId) {
         final WebApiResult<BizAdminAppData> result = new WebApiResult<>();
         WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_APP_DATA, result, new WebApiControllerTemplate.Handler<BizAdminAppData>() {
             @Override
@@ -79,7 +81,8 @@ public class WebApiAdminController {
     }
 
     @PostMapping(value = "/webapp/api/getDashboardData.json")
-    private WebApiResult<List<BizDashboardData>> getDashboardData(@RequestParam(name = "sessionId", required = false) String sessionId) {
+    private WebApiResult<List<BizDashboardData>> getDashboardData(
+            @RequestParam(name = "sessionId", required = false) String sessionId) {
         final WebApiResult<List<BizDashboardData>> result = new WebApiResult<>();
         WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_DASHBOARD, result, new WebApiControllerTemplate.Handler<List<BizDashboardData>>() {
             @Override
@@ -141,8 +144,7 @@ public class WebApiAdminController {
             @RequestParam(name = "sessionId", required = false) String sessionId,
             @RequestParam(name = "itemId", required = false) String itemId,
             @RequestParam(name = "section", required = false) String section,
-            @RequestParam(name = "value", required = false) String value
-    ) {
+            @RequestParam(name = "value", required = false) String value) {
         final WebApiResult<String> result = new WebApiResult<>();
         WebApiControllerTemplate.execute(WebEvent.WEB_API_UPDATE_IMAGE_GALLERY, result, new WebApiControllerTemplate.Handler<String>() {
             @Override
@@ -175,7 +177,7 @@ public class WebApiAdminController {
     private WebApiPageResult<BizWebSimpleNews> getNews(
             @RequestParam(name = "sessionId", required = false) String sessionId,
             @RequestParam(name = "pageNumber", required = false) int pageNumber,
-            @RequestParam(name = "pageSize", required = false) int pageSize ) {
+            @RequestParam(name = "pageSize", required = false) int pageSize) {
         final WebApiPageResult<BizWebSimpleNews> result = new WebApiPageResult<>();
         WebApiControllerTemplate.execute(WebEvent.WEB_API_NEWS_GET, result, new WebApiControllerTemplate.PageHandler<BizWebSimpleNews>() {
             @Override
@@ -206,7 +208,7 @@ public class WebApiAdminController {
     @PostMapping(value = "/webapp/api/newsDetail.json")
     private WebApiResult<BizWebDetailNews> newsDetail(
             @RequestParam(name = "sessionId", required = false) String sessionId,
-            @RequestParam(name = "newsId", required = false) String newsId ) {
+            @RequestParam(name = "newsId", required = false) String newsId) {
         final WebApiResult<BizWebDetailNews> result = new WebApiResult<>();
         WebApiControllerTemplate.execute(WebEvent.WEB_API_NEWS_DETAIL, result, new WebApiControllerTemplate.Handler<BizWebDetailNews>() {
             @Override
@@ -238,7 +240,7 @@ public class WebApiAdminController {
             @RequestParam(name = "sessionId", required = false) String sessionId,
             @RequestParam(name = "itemId", required = false) String itemId,
             @RequestParam(name = "section", required = false) String section,
-            @RequestParam(name = "value", required = false) String value ) {
+            @RequestParam(name = "value", required = false) String value) {
         final WebApiResult<String> result = new WebApiResult<>();
         WebApiControllerTemplate.execute(WebEvent.WEB_API_NEWS_FLAG_SWITCH, result, new WebApiControllerTemplate.Handler<String>() {
             @Override
@@ -271,7 +273,7 @@ public class WebApiAdminController {
     private WebApiPageResult<AppEvent> events(
             @RequestParam(name = "sessionId", required = false) String sessionId,
             @RequestParam(name = "pageNumber", required = false) int pageNumber,
-            @RequestParam(name = "pageSize", required = false) int pageSize ) {
+            @RequestParam(name = "pageSize", required = false) int pageSize) {
         final WebApiPageResult<AppEvent> result = new WebApiPageResult<>();
         WebApiControllerTemplate.execute(WebEvent.WEB_API_EVENT_GET, result, new WebApiControllerTemplate.PageHandler<AppEvent>() {
             @Override
@@ -302,7 +304,7 @@ public class WebApiAdminController {
     @PostMapping(value = "/webapp/api/eventDetail.json")
     private WebApiResult<AppEvent> eventDetail(
             @RequestParam(name = "sessionId", required = false) String sessionId,
-            @RequestParam(name = "eventId", required = false) String eventId ) {
+            @RequestParam(name = "eventId", required = false) String eventId) {
         final WebApiResult<AppEvent> result = new WebApiResult<>();
         WebApiControllerTemplate.execute(WebEvent.WEB_API_EVENT_DETAIL, result, new WebApiControllerTemplate.Handler<AppEvent>() {
             @Override
@@ -334,7 +336,7 @@ public class WebApiAdminController {
             @RequestParam(name = "sessionId", required = false) String sessionId,
             @RequestParam(name = "itemId", required = false) String itemId,
             @RequestParam(name = "section", required = false) String section,
-            @RequestParam(name = "value", required = false) String value ) {
+            @RequestParam(name = "value", required = false) String value) {
         final WebApiResult<String> result = new WebApiResult<>();
         WebApiControllerTemplate.execute(WebEvent.WEB_API_EVENT_FLAG_SWITCH, result, new WebApiControllerTemplate.Handler<String>() {
             @Override
@@ -367,7 +369,7 @@ public class WebApiAdminController {
     private WebApiPageResult<VideoCard> videoCards(
             @RequestParam(name = "sessionId", required = false) String sessionId,
             @RequestParam(name = "pageNumber", required = false) int pageNumber,
-            @RequestParam(name = "pageSize", required = false) int pageSize ) {
+            @RequestParam(name = "pageSize", required = false) int pageSize) {
         final WebApiPageResult<VideoCard> result = new WebApiPageResult<>();
         WebApiControllerTemplate.execute(WebEvent.WEB_API_VIDEO_CARD_GET, result, new WebApiControllerTemplate.PageHandler<VideoCard>() {
             @Override
@@ -549,7 +551,7 @@ public class WebApiAdminController {
             @RequestParam(name = "sessionId", required = false) String sessionId,
             @RequestParam(name = "pageNumber", required = false) int pageNumber,
             @RequestParam(name = "pageSize", required = false) int pageSize,
-            @RequestParam(name = "keyword", required = false) String keyword ) {
+            @RequestParam(name = "keyword", required = false) String keyword) {
         final WebApiPageResult<BizWhatsappLog> result = new WebApiPageResult<>();
         WebApiControllerTemplate.execute(WebEvent.WEB_API_WHATSAPP_LOG, result, new WebApiControllerTemplate.PageHandler<BizWhatsappLog>() {
             @Override
@@ -581,7 +583,7 @@ public class WebApiAdminController {
     @PostMapping(value = "/webapp/api/resendWhatsapp.json")
     private WebApiResult<String> resendWhatsapp(
             @RequestParam(name = "sessionId", required = false) String sessionId,
-            @RequestParam(name = "mid", required = false) String messageId ) {
+            @RequestParam(name = "mid", required = false) String messageId) {
         final WebApiResult<String> result = new WebApiResult<>();
         WebApiControllerTemplate.execute(WebEvent.WEB_API_RESEND_WHATSAPP, result, new WebApiControllerTemplate.Handler<String>() {
             @Override
@@ -610,7 +612,7 @@ public class WebApiAdminController {
             @RequestParam(name = "sessionId", required = false) String sessionId,
             @RequestParam(name = "pageNumber", required = false) int pageNumber,
             @RequestParam(name = "pageSize", required = false) int pageSize,
-            @RequestParam(name = "keyword", required = false) String keyword ) {
+            @RequestParam(name = "keyword", required = false) String keyword) {
         final WebApiPageResult<AppDocument> result = new WebApiPageResult<>();
         WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_APP_DOCUMENTS, result, new WebApiControllerTemplate.PageHandler<AppDocument>() {
             @Override
@@ -629,6 +631,29 @@ public class WebApiAdminController {
                     return (PageResult<AppDocument>) object;
                 }
                 return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/subOrganizations.json")
+    private WebApiResult<Map<String, String>> getSubOrganizations(
+            @RequestParam(name = "sessionId", required = false) String sessionId) {
+        final WebApiResult<Map<String, String>> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_SUB_ORGANIZATIONS, result, new WebApiControllerTemplate.Handler<Map<String, String>>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                return bizAdminService.getSubOrganizations(sessionId);
+            }
+
+            @Override
+            public Map<String, String> convertResult(Object object) {
+                return (Map<String, String>)object;
             }
 
             @Override
