@@ -21,6 +21,8 @@ import java.util.List;
 @Repository
 public interface CoreMemberRepository  extends JpaRepository<CoreMemberDO, String> {
 
+    List<CoreMemberDO> findByMemberIdIn(List<String> memberIds);
+
     List<CoreMemberDO> findByOrgId(String orgId);
 
     List<CoreMemberDO> findByOrgIdAndRolesContains(String orgId, String roles);
@@ -32,4 +34,8 @@ public interface CoreMemberRepository  extends JpaRepository<CoreMemberDO, Strin
     @Query("SELECT new id.ezclouds.core.member.dataobject.CoreGroupCountDO(cm.subOrgId, COUNT(cm.subOrgId)) "
             + "FROM CoreMemberDO AS cm WHERE cm.orgId = ?1 AND cm.createdTime >= ?2 AND cm.createdTime <= ?3 GROUP BY cm.subOrgId")
     List<CoreGroupCountDO> fetchGroupCountBySubOrg(String orgId, String startTime, String endTime);
+
+    @Query("SELECT new id.ezclouds.core.member.dataobject.CoreGroupCountDO(cm.referrerId, COUNT(cm.referrerId)) "
+            + "FROM CoreMemberDO AS cm WHERE cm.orgId = ?1 AND cm.createdTime >= ?2 AND cm.subOrgId IS NULL GROUP BY cm.referrerId")
+    List<CoreGroupCountDO> fetchEmptyGroupCountByReferrerId(String orgId, String startTime);
 }

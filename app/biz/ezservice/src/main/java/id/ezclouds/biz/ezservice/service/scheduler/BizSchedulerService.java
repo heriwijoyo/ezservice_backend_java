@@ -8,6 +8,7 @@ import id.ezclouds.biz.ezservice.enums.BizSchedulerScene;
 import id.ezclouds.biz.ezservice.service.async.BizThreadSharedResource;
 import id.ezclouds.biz.ezservice.service.async.event.BizProcessEvent;
 import id.ezclouds.biz.ezservice.service.async.processor.BizSyncMemberUnionProcessor;
+import id.ezclouds.biz.ezservice.service.processor.BizCheckNoSubOrgProcessor;
 import id.ezclouds.biz.ezservice.service.processor.BizSchedulerMinuteProcessor;
 import id.ezclouds.biz.ezservice.service.processor.BizSubOrgDailyMonitorProcessor;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
@@ -36,6 +37,9 @@ public class BizSchedulerService {
     @Autowired
     private BizSubOrgDailyMonitorProcessor bizSubOrgDailyMonitorProcessor;
 
+    @Autowired
+    private BizCheckNoSubOrgProcessor bizCheckNoSubOrgProcessor;
+
     public BizResult execute(String scene) {
         return BizSchedulerTemplate.execute(scene, new BizSchedulerTemplate.Handler() {
             @Override
@@ -59,6 +63,9 @@ public class BizSchedulerService {
                         break;
                     case RJL_SEND_SUB_ORG_REPORT_DAILY:
                         bizSubOrgDailyMonitorProcessor.process("RJL0");
+                        break;
+                    case DAILY_CHECK_NO_SUB_ORG:
+                        bizCheckNoSubOrgProcessor.process("RJL0");
                         break;
                 }
             }

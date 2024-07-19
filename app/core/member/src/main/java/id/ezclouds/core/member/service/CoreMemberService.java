@@ -168,6 +168,16 @@ public class CoreMemberService {
                 .collect(Collectors.toList());
     }
 
+    public Map<String, String> getMemberNamesMap(List<String> memberIds) {
+        Map<String, String> memberNamesMap = new HashMap<>();
+        List<CoreMemberDO> coreMembers = coreMemberRepository
+                .findByMemberIdIn(memberIds);
+        for (CoreMemberDO coreMemberDO : coreMembers) {
+            memberNamesMap.put(coreMemberDO.getMemberId(), coreMemberDO.getName());
+        }
+        return memberNamesMap;
+    }
+
     public List<CoreMemberExtension> getAllMemberExtensions(String orgId) {
         return coreMemberExtensionRepository
                 .findByOrgId(orgId)
@@ -245,6 +255,22 @@ public class CoreMemberService {
 
         List<CoreGroupCountDO> coreGroupCount = coreMemberRepository
                 .fetchGroupCountBySubOrg(orgId, startTime, endTime);
+        for (CoreGroupCountDO groupCountDO : coreGroupCount) {
+            if (StringUtil.isNotBlank(groupCountDO.getGroupValue())) {
+                String groupValue = groupCountDO.getGroupValue();
+                Long groupCount = groupCountDO.getGroupCount();
+                result.put(groupValue, groupCount);
+            }
+        }
+
+        return result;
+    }
+
+    public Map<String, Long> getEmptyGroupCountByReferrerId(String orgId, String startTime) {
+        Map<String, Long> result = new HashMap<>();
+
+        List<CoreGroupCountDO> coreGroupCount = coreMemberRepository
+                .fetchEmptyGroupCountByReferrerId(orgId, startTime);
         for (CoreGroupCountDO groupCountDO : coreGroupCount) {
             if (StringUtil.isNotBlank(groupCountDO.getGroupValue())) {
                 String groupValue = groupCountDO.getGroupValue();
