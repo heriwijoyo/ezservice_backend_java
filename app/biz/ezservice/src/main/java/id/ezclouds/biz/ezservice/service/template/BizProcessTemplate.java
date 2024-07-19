@@ -33,7 +33,7 @@ public class BizProcessTemplate {
             resultCode = "E";
             EzAppContextHolder
                     .getContext()
-                    .appendErrorStackTrace(ExceptionUtil.getErrorContext(e));
+                    .appendErrorStackTrace(ExceptionUtil.getStackTrace(e));
         } finally {
             String traceId = EzAppContextHolder.getContext().getTraceId();
             String timeCost = EzAppContextHolder.getContext().getTimeCost();
