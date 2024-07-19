@@ -24,7 +24,7 @@ public class MemberRegisterDigestLog extends BaseDigestLog<BizMemberRegisterResu
         String requestData;
         if (request instanceof MemberRegisterRequest) {
             MemberRegisterRequest registerRequest = (MemberRegisterRequest) request;
-            requestData = "idCard="+ registerRequest.getIdCardNumber() +",phone="+ registerRequest.getPhone() +"name="+ registerRequest.getName();
+            requestData = "idCard="+ registerRequest.getIdCardNumber() +",phone="+ registerRequest.getPhone() +",name="+ registerRequest.getName();
         } else {
             requestData = "NULL";
         }

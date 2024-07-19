@@ -139,6 +139,10 @@ public class BizMemberService extends BizBaseService {
 
                 if (bizRegisterMode == BizMemberRegisterMode.BY_RECRUITER) {
                     AssertUtil.isTrue(memberRoles.contains(BizMemberRole.OP_RECRUITER.getCode()), EzErrorCode.UNAUTHORIZED);
+                    if (StringUtil.isBlank(request.getSubOrgId())) {
+                        CoreMember referrerMember = coreMemberService.getOptimisticCoreMember(sessionInfo.getMemberId());
+                        request.setSubOrgId(referrerMember.getSubOrgId());
+                    }
                 }
                 if (bizRegisterMode == BizMemberRegisterMode.BY_SUB_ORG_ADMIN) {
                     AssertUtil.isTrue(memberRoles.contains(BizMemberRole.ADMIN_SUB_ORG.getCode()), EzErrorCode.UNAUTHORIZED);
