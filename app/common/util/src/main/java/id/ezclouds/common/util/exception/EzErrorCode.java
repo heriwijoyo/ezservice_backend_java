@@ -42,7 +42,7 @@ public enum EzErrorCode {
     CORE_SEQUENCE_ERROR("CORE_SEQUENCE_ERROR", "Core Sequence Error"),
     IDEMPOTENT_ERROR("IDEMPOTENT_ERROR", "Idempotent Error"),
 
-    SCHEDULER_OVERLAP("SCHEDULER_OVERLAP", "Scheduler Overlap"),
+    SCHEDULER_PRIORITY_OVERLAP("SCHEDULER_PRIORITY_OVERLAP", "Scheduler Overlap"),
 
     ;
 
