@@ -25,10 +25,10 @@ import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: BizImportMemberProcessor.java, v 0.1 2024‐07‐07 6:35 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: BizOldImportMemberProcessor.java, v 0.1 2024‐07‐07 6:35 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class BizImportMemberProcessor implements BizAsyncProcessor {
+public class BizOldImportMemberProcessor implements BizOldAsyncProcessor {
 
     @Autowired
     private BizMemberImportRepository bizMemberImportRepository;

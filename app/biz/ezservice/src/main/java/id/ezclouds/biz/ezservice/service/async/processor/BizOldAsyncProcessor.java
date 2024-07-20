@@ -8,9 +8,9 @@ import id.ezclouds.biz.ezservice.service.request.BizAsyncProcessRequest;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: BizAsyncProcessor.java, v 0.1 2024‐07‐06 2:43 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: BizOldAsyncProcessor.java, v 0.1 2024‐07‐06 2:43 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public interface BizAsyncProcessor {
+public interface BizOldAsyncProcessor {
 
     void process(BizAsyncProcessRequest request);
 }

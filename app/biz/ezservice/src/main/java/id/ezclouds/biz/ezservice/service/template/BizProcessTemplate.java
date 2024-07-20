@@ -6,7 +6,9 @@ package id.ezclouds.biz.ezservice.service.template;
 
 import id.ezclouds.biz.ezservice.service.async.event.BizProcessEvent;
 import id.ezclouds.common.util.StringUtil;
+import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.ExceptionUtil;
+import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import org.slf4j.Logger;
@@ -23,11 +25,15 @@ public class BizProcessTemplate {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommonLoggerConstant.ASYNC_PROCESS);
 
     public static void execute(BizProcessEvent event, Handler handler) {
-        EzAppContextHolder.init(event);
-
         String resultCode = "N";
         try {
-            boolean result = handler.onProcess(event);
+            AssertUtil.notNull(event, EzErrorCode.ILLEGAL_ACTION);
+            AssertUtil.isTrue(event != BizProcessEvent.UNKNOWN, EzErrorCode.ILLEGAL_ACTION);
+            handler.doStart(event);
+
+            EzAppContextHolder.init(event);
+
+            boolean result = handler.doProcess(event);
             resultCode = result ? "Y" : "N";
         } catch (Exception e) {
             resultCode = "E";
@@ -56,13 +62,18 @@ public class BizProcessTemplate {
             }
 
             LOGGER.info(logInfo);
-            handler.onFinish();
+
+            if (event == null) {
+                event = BizProcessEvent.UNKNOWN;
+            }
+            handler.doFinish(event);
         }
     }
 
     public interface Handler {
-        boolean onProcess(BizProcessEvent processEvent);
-        void onFinish();
+        void doStart(BizProcessEvent processEvent);
+        boolean doProcess(BizProcessEvent processEvent);
+        void doFinish(BizProcessEvent processEvent);
         List<String> getLogData();
     }
 }

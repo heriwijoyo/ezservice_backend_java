@@ -48,7 +48,12 @@ public class BizSubOrgDailyMonitorProcessor {
 
         BizProcessTemplate.execute(BizProcessEvent.SUB_ORG_DAILY_MONITOR, new BizProcessTemplate.Handler() {
             @Override
-            public boolean onProcess(BizProcessEvent processEvent) {
+            public void doStart(BizProcessEvent processEvent) {
+
+            }
+
+            @Override
+            public boolean doProcess(BizProcessEvent processEvent) {
                 bizThreadSharedResource.startProcess(processEvent.getEventCode());
 
                 String reportMessage = fetchLastNDaysReport(orgId, 5);
@@ -62,7 +67,7 @@ public class BizSubOrgDailyMonitorProcessor {
             }
 
             @Override
-            public void onFinish() {
+            public void doFinish(BizProcessEvent processEvent) {
                 bizThreadSharedResource.stopProcess();
             }
 

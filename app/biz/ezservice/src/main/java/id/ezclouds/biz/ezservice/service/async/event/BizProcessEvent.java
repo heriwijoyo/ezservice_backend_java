@@ -13,10 +13,16 @@ import id.ezclouds.core.shared.context.EzAppEvent;
 public enum BizProcessEvent implements EzAppEvent {
 
     SYNC_MEMBER_UNION("SYNC_MEMBER_UNION"),
+    GENERATE_REPORT("GENERATE_REPORT"),
     SCHEDULER_MINUTE("SCHEDULER_MINUTE"),
     SUB_ORG_DAILY_MONITOR("SUB_ORG_DAILY_MONITOR"),
     DAILY_CHECK_NO_SUB_ORG("DAILY_CHECK_NO_SUB_ORG"),
 
+    SAMPLE_ONE("SAMPLE_ONE"),
+    SAMPLE_TWO("SAMPLE_TWO"),
+    SAMPLE_THREE("SAMPLE_THREE"),
+
+    UNKNOWN("UNKNOWN"),
     ;
     private final String code;
 

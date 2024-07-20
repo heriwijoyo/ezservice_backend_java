@@ -30,14 +30,18 @@ public class BizSchedulerMinuteProcessor {
 
         BizProcessTemplate.execute(BizProcessEvent.SCHEDULER_MINUTE, new BizProcessTemplate.Handler() {
             @Override
-            public boolean onProcess(BizProcessEvent processEvent) {
+            public void doStart(BizProcessEvent processEvent) {
+            }
+
+            @Override
+            public boolean doProcess(BizProcessEvent processEvent) {
                 bizThreadSharedResource.startProcess(processEvent.getEventCode());
                 logData.add("I_AM_DUMMY_PROCESS");
                 return true;
             }
 
             @Override
-            public void onFinish() {
+            public void doFinish(BizProcessEvent processEvent) {
                 bizThreadSharedResource.stopProcess();
             }
 

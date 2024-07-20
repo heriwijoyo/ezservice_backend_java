@@ -82,7 +82,12 @@ public class BizSyncMemberUnionProcessor {
 
         BizProcessTemplate.execute(BizProcessEvent.SYNC_MEMBER_UNION, new BizProcessTemplate.Handler() {
             @Override
-            public boolean onProcess(BizProcessEvent processEvent) {
+            public void doStart(BizProcessEvent processEvent) {
+
+            }
+
+            @Override
+            public boolean doProcess(BizProcessEvent processEvent) {
                 bizThreadSharedResource.startProcess(processEvent.getEventCode());
                 // prepare necessary data
                 List<BizSubOrganizationDO> subOrgs = appSubOrganizationRepository.findByOrgId(orgId);
@@ -182,7 +187,7 @@ public class BizSyncMemberUnionProcessor {
             }
 
             @Override
-            public void onFinish() {
+            public void doFinish(BizProcessEvent bizProcessEvent) {
                 bizThreadSharedResource.stopProcess();
             }
 

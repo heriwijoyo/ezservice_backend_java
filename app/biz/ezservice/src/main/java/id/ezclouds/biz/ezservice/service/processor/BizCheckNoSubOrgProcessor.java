@@ -41,7 +41,11 @@ public class BizCheckNoSubOrgProcessor {
         String reportReceiver = "6281281150355";
         BizProcessTemplate.execute(BizProcessEvent.DAILY_CHECK_NO_SUB_ORG, new BizProcessTemplate.Handler() {
             @Override
-            public boolean onProcess(BizProcessEvent processEvent) {
+            public void doStart(BizProcessEvent processEvent) {
+            }
+
+            @Override
+            public boolean doProcess(BizProcessEvent processEvent) {
                 bizThreadSharedResource.startProcess(processEvent.getEventCode());
 
                 Date yesterday = DateUtil.getDateAfterDays(new Date(), -1);
@@ -52,7 +56,7 @@ public class BizCheckNoSubOrgProcessor {
                 String reportDate = DateUtil.getFormattedDate(yesterday, DateUtil.FORMAT_DATE);
                 String reportMsg = "Referrer without SubOrg ("+ reportDate +"):\n";
                 if (result.size() < 1) {
-                    reportMsg += "- TIDAK ADA -";
+                    reportMsg += "- TIDAK ADA";
                 } else {
                     List<String> referrerIds = new ArrayList<>();
                     for (Map.Entry<String, Long> entry : result.entrySet()) {
@@ -77,7 +81,7 @@ public class BizCheckNoSubOrgProcessor {
             }
 
             @Override
-            public void onFinish() {
+            public void doFinish(BizProcessEvent processEvent) {
                 bizThreadSharedResource.stopProcess();
             }
 

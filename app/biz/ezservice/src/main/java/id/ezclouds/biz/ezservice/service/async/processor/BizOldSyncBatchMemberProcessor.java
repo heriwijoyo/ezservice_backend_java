@@ -24,10 +24,10 @@ import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: BizSyncBatchMemberProcessor.java, v 0.1 2024‐07‐11 4:41 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: BizOldSyncBatchMemberProcessor.java, v 0.1 2024‐07‐11 4:41 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class BizSyncBatchMemberProcessor implements BizAsyncProcessor {
+public class BizOldSyncBatchMemberProcessor implements BizOldAsyncProcessor {
 
     @Autowired
     private CoreMemberService coreMemberService;

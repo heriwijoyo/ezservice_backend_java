@@ -49,8 +49,8 @@ import java.util.TimeZone;
         "id.ezclouds.biz.ezservice.service.app.processor.repo",
         "id.ezclouds.biz.ezservice.subbiz.arahindonesia.dataobject"
 })
-@EnableCaching
-@EnableAsync
+@EnableCaching(proxyTargetClass = true)
+@EnableAsync(proxyTargetClass = true)
 public class BifrostWebApplication {
 
     @PostConstruct

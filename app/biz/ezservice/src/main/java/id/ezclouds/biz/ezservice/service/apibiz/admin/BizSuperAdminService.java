@@ -14,7 +14,7 @@ import id.ezclouds.biz.ezservice.model.admin.BizOrganization;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganizationDetail;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
-import id.ezclouds.biz.ezservice.service.async.processor.BizCommonReportProcessor;
+import id.ezclouds.biz.ezservice.service.async.processor.BizOldCommonReportProcessor;
 import id.ezclouds.biz.ezservice.service.async.processor.BizSyncMemberUnionProcessor;
 import id.ezclouds.biz.ezservice.service.core.BizCacheEnum;
 import id.ezclouds.biz.ezservice.service.core.BizDataImportService;
@@ -72,7 +72,7 @@ public class BizSuperAdminService extends BizBaseService {
     private BizDataImportService bizDataImportService;
 
     @Autowired
-    private BizCommonReportProcessor bizCommonReportProcessor;
+    private BizOldCommonReportProcessor bizCommonReportProcessor;
 
     @Autowired
     private BizSyncMemberUnionProcessor bizSyncMemberUnionProcessor;

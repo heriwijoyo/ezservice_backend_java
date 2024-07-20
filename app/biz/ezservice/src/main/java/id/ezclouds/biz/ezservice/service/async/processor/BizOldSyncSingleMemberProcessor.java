@@ -18,10 +18,10 @@ import org.springframework.stereotype.Service;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: BizSyncSingleMemberProcessor.java, v 0.1 2024‐07‐11 10:06 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: BizOldSyncSingleMemberProcessor.java, v 0.1 2024‐07‐11 10:06 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class BizSyncSingleMemberProcessor implements BizAsyncProcessor {
+public class BizOldSyncSingleMemberProcessor implements BizOldAsyncProcessor {
 
     @Autowired
     private BizMemberImportRepository bizMemberImportRepository;
