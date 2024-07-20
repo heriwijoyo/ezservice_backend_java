@@ -9,6 +9,7 @@ import id.ezclouds.biz.ezservice.service.async.event.BizProcessEvent;
 import id.ezclouds.biz.ezservice.service.template.BizProcessTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -34,6 +35,7 @@ public abstract class BizAsyncProcessor implements BizProcessor {
     protected abstract boolean onProcess(Object request, List<String> logData);
 
     @Override
+    @Transactional
     public void process(Object request) {
         final List<String> logData = new ArrayList<>();
         BizProcessTemplate.execute(getProcessEvent(), new BizProcessTemplate.Handler() {

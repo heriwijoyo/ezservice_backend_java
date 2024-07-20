@@ -16,7 +16,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -26,7 +25,6 @@ import java.util.List;
 @Service
 @Scope(value = "prototype")
 @Async
-@Transactional
 public class BizGenerateSubOrgReportProcessor extends BizAsyncProcessor {
 
     @Autowired
