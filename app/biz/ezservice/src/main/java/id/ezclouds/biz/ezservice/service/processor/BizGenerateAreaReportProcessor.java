@@ -35,6 +35,7 @@ import java.util.Map;
 @Service
 @Scope(value = "prototype")
 @Async
+@Transactional
 public class BizGenerateAreaReportProcessor extends BizAsyncProcessor {
 
     @Autowired
