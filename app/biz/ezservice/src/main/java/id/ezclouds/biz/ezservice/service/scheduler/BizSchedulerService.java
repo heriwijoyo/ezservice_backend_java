@@ -7,7 +7,7 @@ package id.ezclouds.biz.ezservice.service.scheduler;
 import id.ezclouds.biz.ezservice.enums.BizSchedulerScene;
 import id.ezclouds.biz.ezservice.service.async.BizThreadSharedResource;
 import id.ezclouds.biz.ezservice.service.processor.event.BizProcessEvent;
-import id.ezclouds.biz.ezservice.service.async.processor.BizSyncMemberUnionProcessor;
+import id.ezclouds.biz.ezservice.service.processor.BizSyncMemberUnionProcessor;
 import id.ezclouds.biz.ezservice.service.processor.*;
 import id.ezclouds.biz.ezservice.service.processor.sample.BizSampleOneProcessor;
 import id.ezclouds.biz.ezservice.service.processor.sample.BizSampleTwoProcessor;
