@@ -5,7 +5,7 @@
 package id.ezclouds.biz.ezservice.service.processor;
 
 import id.ezclouds.biz.ezservice.enums.BizReportByTime;
-import id.ezclouds.biz.ezservice.service.async.event.BizProcessEvent;
+import id.ezclouds.biz.ezservice.service.processor.event.BizProcessEvent;
 import id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO;
 import id.ezclouds.biz.ezservice.service.core.dataobject.BizReportTimeSeriesDO;
 import id.ezclouds.biz.ezservice.service.core.repo.BizMemberUnionRepository;

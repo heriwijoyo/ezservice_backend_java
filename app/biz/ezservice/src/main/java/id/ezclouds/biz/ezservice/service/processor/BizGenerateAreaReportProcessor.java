@@ -5,7 +5,7 @@
 package id.ezclouds.biz.ezservice.service.processor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import id.ezclouds.biz.ezservice.service.async.event.BizProcessEvent;
+import id.ezclouds.biz.ezservice.service.processor.event.BizProcessEvent;
 import id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO;
 import id.ezclouds.biz.ezservice.service.core.dataobject.BizReportByAreaDO;
 import id.ezclouds.biz.ezservice.service.core.repo.BizMemberUnionRepository;

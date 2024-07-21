@@ -4,7 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.service.processor.sample;
 
-import id.ezclouds.biz.ezservice.service.async.event.BizProcessEvent;
+import id.ezclouds.biz.ezservice.service.processor.event.BizProcessEvent;
 import id.ezclouds.biz.ezservice.service.processor.BizAsyncProcessor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Async;

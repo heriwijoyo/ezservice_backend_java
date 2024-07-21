@@ -4,7 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.service.template;
 
-import id.ezclouds.biz.ezservice.service.async.event.BizProcessEvent;
+import id.ezclouds.biz.ezservice.service.processor.event.BizProcessEvent;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.ExceptionUtil;

@@ -5,7 +5,7 @@
 package id.ezclouds.biz.ezservice.service.processor;
 
 import id.ezclouds.biz.ezservice.service.async.BizThreadSharedResource;
-import id.ezclouds.biz.ezservice.service.async.event.BizProcessEvent;
+import id.ezclouds.biz.ezservice.service.processor.event.BizProcessEvent;
 import id.ezclouds.biz.ezservice.service.template.BizProcessTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;

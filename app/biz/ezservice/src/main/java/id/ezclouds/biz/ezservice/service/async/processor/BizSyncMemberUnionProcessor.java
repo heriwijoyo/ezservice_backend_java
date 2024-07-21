@@ -6,7 +6,7 @@ package id.ezclouds.biz.ezservice.service.async.processor;
 
 import id.ezclouds.biz.ezservice.converter.BizMemberConverter;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
-import id.ezclouds.biz.ezservice.service.async.event.BizProcessEvent;
+import id.ezclouds.biz.ezservice.service.processor.event.BizProcessEvent;
 import id.ezclouds.biz.ezservice.service.async.parser.BizMemberUnionConverter;
 import id.ezclouds.biz.ezservice.service.core.dataobject.*;
 import id.ezclouds.biz.ezservice.service.core.repo.*;

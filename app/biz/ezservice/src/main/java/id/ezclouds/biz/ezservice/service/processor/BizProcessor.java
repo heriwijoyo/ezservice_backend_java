@@ -4,7 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.service.processor;
 
-import id.ezclouds.biz.ezservice.service.async.event.BizProcessEvent;
+import id.ezclouds.biz.ezservice.service.processor.event.BizProcessEvent;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)

@@ -4,7 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.service.processor;
 
-import id.ezclouds.biz.ezservice.service.async.event.BizProcessEvent;
+import id.ezclouds.biz.ezservice.service.processor.event.BizProcessEvent;
 
 import java.util.HashMap;
 import java.util.Map;

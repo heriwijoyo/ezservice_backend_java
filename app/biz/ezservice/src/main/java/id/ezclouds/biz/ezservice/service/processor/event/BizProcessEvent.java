@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.biz.ezservice.service.async.event;
+package id.ezclouds.biz.ezservice.service.processor.event;
 
 import id.ezclouds.core.shared.context.EzAppEvent;
 
