@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.biz.ezservice.service.async;
+package id.ezclouds.biz.ezservice.service.processor.shared;
 
 import id.ezclouds.common.util.StringUtil;
 import org.springframework.stereotype.Component;

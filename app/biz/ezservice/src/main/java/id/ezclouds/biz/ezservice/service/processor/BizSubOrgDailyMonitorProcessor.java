@@ -5,7 +5,7 @@
 package id.ezclouds.biz.ezservice.service.processor;
 
 import id.ezclouds.biz.ezservice.enums.BizConnectType;
-import id.ezclouds.biz.ezservice.service.async.BizThreadSharedResource;
+import id.ezclouds.biz.ezservice.service.processor.shared.BizThreadSharedResource;
 import id.ezclouds.biz.ezservice.service.processor.event.BizProcessEvent;
 import id.ezclouds.biz.ezservice.service.inner.service.BizConnectInnerService;
 import id.ezclouds.biz.ezservice.service.template.BizProcessTemplate;

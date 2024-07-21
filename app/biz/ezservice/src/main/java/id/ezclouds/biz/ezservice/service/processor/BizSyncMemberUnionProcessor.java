@@ -10,7 +10,6 @@ import id.ezclouds.biz.ezservice.service.processor.event.BizProcessEvent;
 import id.ezclouds.biz.ezservice.service.async.parser.BizMemberUnionConverter;
 import id.ezclouds.biz.ezservice.service.core.dataobject.*;
 import id.ezclouds.biz.ezservice.service.core.repo.*;
-import id.ezclouds.biz.ezservice.service.processor.BizAsyncProcessor;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.dataobject.BizSubOrganizationDO;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.repo.AppSubOrganizationRepository;
 import id.ezclouds.core.member.model.CoreMember;
