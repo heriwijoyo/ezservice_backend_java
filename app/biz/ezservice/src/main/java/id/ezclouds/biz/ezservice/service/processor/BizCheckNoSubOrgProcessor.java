@@ -5,7 +5,6 @@
 package id.ezclouds.biz.ezservice.service.processor;
 
 import id.ezclouds.biz.ezservice.enums.BizConnectType;
-import id.ezclouds.biz.ezservice.service.processor.shared.BizThreadSharedResource;
 import id.ezclouds.biz.ezservice.service.processor.event.BizProcessEvent;
 import id.ezclouds.biz.ezservice.service.inner.service.BizConnectInnerService;
 import id.ezclouds.common.util.DateUtil;
@@ -25,9 +24,6 @@ import java.util.*;
 @Scope(value = "prototype")
 @Async
 public class BizCheckNoSubOrgProcessor extends BizAsyncProcessor {
-
-    @Autowired
-    private BizThreadSharedResource bizThreadSharedResource;
 
     @Autowired
     private CoreMemberService coreMemberService;

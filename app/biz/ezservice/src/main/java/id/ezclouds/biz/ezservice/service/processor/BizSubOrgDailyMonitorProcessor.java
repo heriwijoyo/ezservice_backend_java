@@ -5,14 +5,11 @@
 package id.ezclouds.biz.ezservice.service.processor;
 
 import id.ezclouds.biz.ezservice.enums.BizConnectType;
-import id.ezclouds.biz.ezservice.service.processor.shared.BizThreadSharedResource;
 import id.ezclouds.biz.ezservice.service.processor.event.BizProcessEvent;
 import id.ezclouds.biz.ezservice.service.inner.service.BizConnectInnerService;
-import id.ezclouds.biz.ezservice.service.template.BizProcessTemplate;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.dataobject.BizSubOrganizationDO;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.repo.AppSubOrganizationRepository;
 import id.ezclouds.common.util.DateUtil;
-import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.member.service.CoreMemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -26,10 +23,7 @@ import java.util.*;
  */
 @Service
 @Async
-public class BizSubOrgDailyMonitorProcessor {
-
-    @Autowired
-    private BizThreadSharedResource bizThreadSharedResource;
+public class BizSubOrgDailyMonitorProcessor extends BizAsyncProcessor {
 
     @Autowired
     private AppSubOrganizationRepository appSubOrganizationRepository;
@@ -40,42 +34,28 @@ public class BizSubOrgDailyMonitorProcessor {
     @Autowired
     private BizConnectInnerService bizConnectInnerService;
 
-    public void process(String orgId) {
-        final List<String> logData = new ArrayList<>();
+    @Override
+    public BizProcessEvent getProcessEvent() {
+        return BizProcessEvent.SUB_ORG_DAILY_MONITOR;
+    }
+
+    @Override
+    protected int maxProcessTime() {
+        return 5 * 60 * 1000;
+    }
+
+    @Override
+    protected boolean onProcess(Object request, List<String> logData) {
+        final String orgId = (String) request;
         logData.add("ORG_ID="+ orgId);
 
         List<String> reportPhoneReceiver = Arrays.asList("6281281150355", "6285310197009", "6281328602519");
-
-        BizProcessTemplate.execute(BizProcessEvent.SUB_ORG_DAILY_MONITOR, new BizProcessTemplate.Handler() {
-            @Override
-            public void doStart(BizProcessEvent processEvent) {
-
-            }
-
-            @Override
-            public boolean doProcess(BizProcessEvent processEvent) {
-                bizThreadSharedResource.startProcess(processEvent.getEventCode());
-
-                String reportMessage = fetchLastNDaysReport(orgId, 5);
-
-                for (String reportReceiver : reportPhoneReceiver) {
-                    bizConnectInnerService
-                            .sendMessage(BizConnectType.WHATSAPP, orgId, reportReceiver, reportMessage);
-                }
-
-                return true;
-            }
-
-            @Override
-            public void doFinish(BizProcessEvent processEvent) {
-                bizThreadSharedResource.stopProcess();
-            }
-
-            @Override
-            public List<String> getLogData() {
-                return logData;
-            }
-        });
+        String reportMessage = fetchLastNDaysReport(orgId, 5);
+        for (String reportReceiver : reportPhoneReceiver) {
+            bizConnectInnerService
+                    .sendMessage(BizConnectType.WHATSAPP, orgId, reportReceiver, reportMessage);
+        }
+        return true;
     }
 
     private String fetchLastNDaysReport(String orgId, int nDays) {
@@ -83,13 +63,13 @@ public class BizSubOrgDailyMonitorProcessor {
                 .findByOrgId(orgId);
         Date today = new Date();
 
-        String resultMsg = StringUtil.EMPTY;
+        String resultMsg = "Report per Komunitas "+ nDays +" hari terakhir:\n\n";
         for (int i = 1; i <= nDays; i++) {
             Date reportDate = DateUtil.getDateAfterDays(today, -i);
             String startTime = DateUtil.getFormattedDayStart(reportDate);
             String endTime = DateUtil.getFormattedDayEnd(reportDate);
 
-            resultMsg += "Report Komunitas *"+ DateUtil.getFormattedDate(reportDate, DateUtil.FORMAT_DATE) + "*\n";
+            resultMsg += "*"+ DateUtil.getFormattedDate(reportDate, DateUtil.FORMAT_DATE) + "*\n";
 
             Map<String, Long> result = coreMemberService
                     .getGroupCountBySubOrg(orgId, startTime, endTime);
