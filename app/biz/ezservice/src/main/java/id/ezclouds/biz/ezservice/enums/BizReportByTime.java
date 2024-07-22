@@ -10,26 +10,20 @@ package id.ezclouds.biz.ezservice.enums;
  */
 public enum BizReportByTime {
 
-    RJL_DAILY_SUB_ORG_PERFORMANCE("RJL_DAILY_SUB_ORG_PERFORMANCE", "RJL0", BizTimePeriod.DAILY),
+    DAILY_SUB_ORG_PERFORMANCE("RJL_DAILY_SUB_ORG_PERFORMANCE", BizTimePeriod.DAILY),
 
     ;
 
     private final String id;
-    private final String orgId;
     private final BizTimePeriod bizTimePeriod;
 
-    BizReportByTime(String id, String orgId, BizTimePeriod bizTimePeriod) {
+    BizReportByTime(String id, BizTimePeriod bizTimePeriod) {
         this.id = id;
-        this.orgId = orgId;
         this.bizTimePeriod = bizTimePeriod;
     }
 
     public String getId() {
         return id;
-    }
-
-    public String getOrgId() {
-        return orgId;
     }
 
     public BizTimePeriod getBizTimePeriod() {

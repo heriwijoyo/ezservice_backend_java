@@ -60,7 +60,7 @@ public class BizGenerateTimeSeriesReportProcessor extends BizAsyncProcessor {
         bizReportTimeSeriesRepository.deleteByOrgId(orgId);
         for (BizReportByTime bizReportByTime : BizReportByTime.values()) {
             switch (bizReportByTime) {
-                case RJL_DAILY_SUB_ORG_PERFORMANCE:
+                case DAILY_SUB_ORG_PERFORMANCE:
                     generateDailySubOrgPerformance(logData, orgId, "APP", subOrgs, bizReportByTime.getId());
                     break;
             }
