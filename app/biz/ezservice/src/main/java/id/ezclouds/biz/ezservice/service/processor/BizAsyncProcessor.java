@@ -35,7 +35,7 @@ public abstract class BizAsyncProcessor implements BizProcessor {
     protected abstract boolean onProcess(Object request, List<String> logData);
 
     @Override
-    @Transactional
+    @Transactional(Transactional.TxType.NEVER)
     public void process(Object request) {
         final List<String> logData = new ArrayList<>();
         BizProcessTemplate.execute(getProcessEvent(), new BizProcessTemplate.Handler() {
