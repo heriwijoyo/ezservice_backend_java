@@ -10,6 +10,7 @@ import id.ezclouds.biz.ezservice.service.processor.event.BizProcessEvent;
 import id.ezclouds.biz.ezservice.service.async.parser.BizMemberUnionConverter;
 import id.ezclouds.biz.ezservice.service.core.dataobject.*;
 import id.ezclouds.biz.ezservice.service.core.repo.*;
+import id.ezclouds.biz.ezservice.service.processor.inner.BizMemberUnionInnerProcessor;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.dataobject.BizSubOrganizationDO;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.repo.AppSubOrganizationRepository;
 import id.ezclouds.core.member.model.CoreMember;
@@ -20,7 +21,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.*;
 
 /**
@@ -36,13 +36,13 @@ public class BizSyncMemberUnionProcessor extends BizAsyncProcessor {
     private AppSubOrganizationRepository appSubOrganizationRepository;
 
     @Autowired
+    private BizMemberUnionInnerProcessor bizMemberUnionInnerProcessor;
+
+    @Autowired
     private CoreMemberService coreMemberService;
 
     @Autowired
     private BizMemberImportRepository bizMemberImportRepository;
-
-    @Autowired
-    private BizMemberUnionRepository bizMemberUnionRepository;
 
     @Autowired
     private BizMemberUnionDuplicateRepository bizMemberUnionDuplicateRepository;
@@ -57,29 +57,6 @@ public class BizSyncMemberUnionProcessor extends BizAsyncProcessor {
         return 10 * 60 * 1000;
     }
 
-    @Transactional
-    public void clearAllMemberUnion(String orgId, List<String> logData) {
-        long deletedUnion = bizMemberUnionRepository.deleteByOrgId(orgId);
-        long deleteDuplicate = bizMemberUnionDuplicateRepository.deleteByOrgId(orgId);
-        logData.add("DEL_UNION=" + deletedUnion);
-        logData.add("DEL_DUPLICATE=" + deleteDuplicate);
-    }
-
-    @Transactional(Transactional.TxType.REQUIRES_NEW)
-    public void tryToStoreMemberUnion(BizMemberUnionDO memberUnionDO) {
-        bizMemberUnionRepository.saveAndFlush(memberUnionDO);
-    }
-
-    @Transactional(Transactional.TxType.REQUIRES_NEW)
-    public void tryStoreDuplicate(BizMemberUnionDO memberUnionDO) {
-        if (memberUnionDO == null) {
-            return;
-        }
-        try {
-            bizMemberUnionDuplicateRepository.saveAndFlush(memberUnionDO);
-        } catch (Exception ignored) {}
-    }
-
     @Override
     protected boolean onProcess(Object request, List<String> logData) {
         final String orgId = (String) request;
@@ -87,7 +64,10 @@ public class BizSyncMemberUnionProcessor extends BizAsyncProcessor {
         List<BizSubOrganizationDO> subOrgs = appSubOrganizationRepository.findByOrgId(orgId);
 
         // 1. clear all member union by orgId
-        clearAllMemberUnion(orgId, logData);
+        long deletedUnion = bizMemberUnionInnerProcessor.deleteAllMemberUnion(orgId);
+        long deleteDuplicate = bizMemberUnionInnerProcessor.deleteAllMemberUnionDuplicate(orgId);
+        logData.add("DEL_UNION=" + deletedUnion);
+        logData.add("DEL_DUPLICATE=" + deleteDuplicate);
 
         // 2. query all biz member id registered by app
         List<String> membersId = coreMemberService.getAllMemberIds(orgId);
@@ -108,11 +88,11 @@ public class BizSyncMemberUnionProcessor extends BizAsyncProcessor {
                     if (unionDO != null) {
                         unionDO.setOrgId(orgId);
                         unionDO.setSubOrgName(getSubOrgName(subOrgs, unionDO.getSubOrgId()));
-                        tryToStoreMemberUnion(unionDO);
+                        bizMemberUnionInnerProcessor.storeMemberUnion(unionDO);
                         syncSuccessCount++;
                     }
                 } catch (Exception ignored) {
-                    tryStoreDuplicate(unionDO);
+                    bizMemberUnionInnerProcessor.storeMemberUnionDuplicate(unionDO);
                     syncFailCount++;
                 }
             }
@@ -130,10 +110,10 @@ public class BizSyncMemberUnionProcessor extends BizAsyncProcessor {
             unionDO.setSubOrgName(getSubOrgName(subOrgs, unionDO.getSubOrgId()));
             unionDO.setRole("L");
             try {
-                bizMemberUnionRepository.saveAndFlush(unionDO);
+                bizMemberUnionInnerProcessor.storeMemberUnion(unionDO);
                 importSyncSuccessCount++;
             } catch (Exception ignored) {
-                tryStoreDuplicate(unionDO);
+                bizMemberUnionInnerProcessor.storeMemberUnionDuplicate(unionDO);
                 importSyncFailCount++;
             }
         }
