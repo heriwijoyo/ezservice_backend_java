@@ -9,8 +9,7 @@ import id.ezclouds.biz.ezservice.service.processor.event.BizProcessEvent;
 import id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO;
 import id.ezclouds.biz.ezservice.service.core.dataobject.BizReportByAreaDO;
 import id.ezclouds.biz.ezservice.service.core.repo.BizMemberUnionRepository;
-import id.ezclouds.biz.ezservice.service.core.repo.BizReportByAreaRepository;
-import id.ezclouds.biz.ezservice.service.core.repo.BizReportBySubOrgRepository;
+import id.ezclouds.biz.ezservice.service.processor.inner.BizAreaReportInnerProcessor;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
@@ -23,7 +22,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,19 +36,16 @@ import java.util.Map;
 public class BizGenerateAreaReportProcessor extends BizAsyncProcessor {
 
     @Autowired
-    private BizMemberUnionRepository bizMemberUnionRepository;
+    private BizAreaReportInnerProcessor bizAreaReportInnerProcessor;
 
     @Autowired
-    private BizReportByAreaRepository bizReportByAreaRepository;
+    private BizMemberUnionRepository bizMemberUnionRepository;
 
     @Autowired
     private CoreAppDistrictRepository coreAppDistrictRepository;
 
     @Autowired
     private CoreAppVillageRepository coreAppVillageRepository;
-
-    @Autowired
-    private BizReportBySubOrgRepository bizReportBySubOrgRepository;
 
     @Override
     public BizProcessEvent getProcessEvent() {
@@ -66,7 +61,7 @@ public class BizGenerateAreaReportProcessor extends BizAsyncProcessor {
     protected boolean onProcess(Object request, List<String> logData) {
         String orgId = (String) request;
 
-        long deletedReportArea = bizReportByAreaRepository.deleteByOrgId(orgId);
+        long deletedReportArea = bizAreaReportInnerProcessor.deleteAllReport(orgId);
         logData.add("DEL_REPORT_AREA="+ deletedReportArea);
 
         String currentTime = DateUtil.getCurrentFormattedDate();
@@ -90,8 +85,7 @@ public class BizGenerateAreaReportProcessor extends BizAsyncProcessor {
         return true;
     }
 
-    @Transactional(Transactional.TxType.REQUIRES_NEW)
-    public void generateAreaReport(String currentTime, String orgId, String source, String districtName, String villageName) {
+    private void generateAreaReport(String currentTime, String orgId, String source, String districtName, String villageName) {
         BizReportByAreaDO reportByArea = new BizReportByAreaDO();
         reportByArea.setId(HashUtil.createHash(currentTime, orgId, source, districtName, villageName));
         reportByArea.setSource(source);
@@ -158,6 +152,6 @@ public class BizGenerateAreaReportProcessor extends BizAsyncProcessor {
         }
         reportByArea.setGenderOther(otherGender);
 
-        bizReportByAreaRepository.saveAndFlush(reportByArea);
+        bizAreaReportInnerProcessor.storeBizReport(reportByArea);
     }
 }
