@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -46,16 +47,25 @@ public class BizGenerateSubOrgReportProcessor extends BizAsyncProcessor {
     @Override
     protected boolean onProcess(Object request, List<String> logData) {
         final String orgId = (String) request;
+        logData.add("ORG_ID="+ orgId);
 
-        bizReportBySubOrgRepository.deleteByOrgId(orgId);
+        clearCurrentReport(orgId, logData);
+
         String currentTime = DateUtil.getCurrentFormattedDate();
-        generateSubOrgReport(currentTime, orgId, "APP");
-        generateSubOrgReport(currentTime, orgId, "IMPORT");
+        generateSubOrgReport(currentTime, orgId, "APP", logData);
+        generateSubOrgReport(currentTime, orgId, "IMPORT", logData);
 
         return true;
     }
 
-    private void generateSubOrgReport(String currentTime, String orgId, String source) {
+    @Transactional
+    public void clearCurrentReport(String orgId, List<String> logData) {
+        long deleted = bizReportBySubOrgRepository.deleteByOrgId(orgId);
+        logData.add("DEL_REPORT="+ deleted);
+    }
+
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public void generateSubOrgReport(String currentTime, String orgId, String source, List<String> logData) {
         List<BizCustomQueryGroupDO> subOrgGroups = bizMemberUnionRepository
                 .fetchGroupSubOrg(orgId, source);
         for (BizCustomQueryGroupDO subOrgGroup : subOrgGroups) {
@@ -93,5 +103,6 @@ public class BizGenerateSubOrgReportProcessor extends BizAsyncProcessor {
             report.setGenderOther(otherGender);
             bizReportBySubOrgRepository.saveAndFlush(report);
         }
+        logData.add("SUBORG_COUNT="+ subOrgGroups.size());
     }
 }

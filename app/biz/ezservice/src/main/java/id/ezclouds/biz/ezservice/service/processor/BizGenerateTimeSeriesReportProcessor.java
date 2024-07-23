@@ -20,6 +20,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -55,6 +56,7 @@ public class BizGenerateTimeSeriesReportProcessor extends BizAsyncProcessor {
     @Override
     protected boolean onProcess(Object request, List<String> logData) {
         final String orgId = (String) request;
+        logData.add("ORG_ID="+ orgId);
         List<BizSubOrganizationDO> subOrgs = appSubOrganizationRepository.findByOrgId(orgId);
 
         bizReportTimeSeriesRepository.deleteByOrgId(orgId);
@@ -69,7 +71,8 @@ public class BizGenerateTimeSeriesReportProcessor extends BizAsyncProcessor {
         return true;
     }
 
-    private void generateDailySubOrgPerformance(List<String> logData, String orgId, String source, List<BizSubOrganizationDO> subOrgs, String reportId) {
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public void generateDailySubOrgPerformance(List<String> logData, String orgId, String source, List<BizSubOrganizationDO> subOrgs, String reportId) {
         Date startDate = DateUtil.parseFormattedDate("2024-06-24 22:00:00", DateUtil.FORMAT_DATETIME_DEFAULT);
         Date endDate = new Date();
         List<String> timePeriods = new ArrayList<>();

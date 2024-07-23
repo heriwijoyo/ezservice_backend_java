@@ -20,6 +20,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 /**
@@ -56,6 +57,29 @@ public class BizSyncMemberUnionProcessor extends BizAsyncProcessor {
         return 10 * 60 * 1000;
     }
 
+    @Transactional
+    public void clearAllMemberUnion(String orgId, List<String> logData) {
+        long deletedUnion = bizMemberUnionRepository.deleteByOrgId(orgId);
+        long deleteDuplicate = bizMemberUnionDuplicateRepository.deleteByOrgId(orgId);
+        logData.add("DEL_UNION=" + deletedUnion);
+        logData.add("DEL_DUPLICATE=" + deleteDuplicate);
+    }
+
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public void tryToStoreMemberUnion(BizMemberUnionDO memberUnionDO) {
+        bizMemberUnionRepository.saveAndFlush(memberUnionDO);
+    }
+
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public void tryStoreDuplicate(BizMemberUnionDO memberUnionDO) {
+        if (memberUnionDO == null) {
+            return;
+        }
+        try {
+            bizMemberUnionDuplicateRepository.saveAndFlush(memberUnionDO);
+        } catch (Exception ignored) {}
+    }
+
     @Override
     protected boolean onProcess(Object request, List<String> logData) {
         final String orgId = (String) request;
@@ -63,10 +87,7 @@ public class BizSyncMemberUnionProcessor extends BizAsyncProcessor {
         List<BizSubOrganizationDO> subOrgs = appSubOrganizationRepository.findByOrgId(orgId);
 
         // 1. clear all member union by orgId
-        long deletedUnion = bizMemberUnionRepository.deleteByOrgId(orgId);
-        long deleteDuplicate = bizMemberUnionDuplicateRepository.deleteByOrgId(orgId);
-        logData.add("DEL_UNION=" + deletedUnion);
-        logData.add("DEL_DUPLICATE=" + deleteDuplicate);
+        clearAllMemberUnion(orgId, logData);
 
         // 2. query all biz member id registered by app
         List<String> membersId = coreMemberService.getAllMemberIds(orgId);
@@ -87,7 +108,7 @@ public class BizSyncMemberUnionProcessor extends BizAsyncProcessor {
                     if (unionDO != null) {
                         unionDO.setOrgId(orgId);
                         unionDO.setSubOrgName(getSubOrgName(subOrgs, unionDO.getSubOrgId()));
-                        bizMemberUnionRepository.saveAndFlush(unionDO);
+                        tryToStoreMemberUnion(unionDO);
                         syncSuccessCount++;
                     }
                 } catch (Exception ignored) {
@@ -130,14 +151,5 @@ public class BizSyncMemberUnionProcessor extends BizAsyncProcessor {
             }
         }
         return "UNDEFINED";
-    }
-
-    private void tryStoreDuplicate(BizMemberUnionDO memberUnionDO) {
-        if (memberUnionDO == null) {
-            return;
-        }
-        try {
-            bizMemberUnionDuplicateRepository.saveAndFlush(memberUnionDO);
-        } catch (Exception ignored) {}
     }
 }

@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,6 +90,7 @@ public class BizGenerateAreaReportProcessor extends BizAsyncProcessor {
         return true;
     }
 
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     public void generateAreaReport(String currentTime, String orgId, String source, String districtName, String villageName) {
         BizReportByAreaDO reportByArea = new BizReportByAreaDO();
         reportByArea.setId(HashUtil.createHash(currentTime, orgId, source, districtName, villageName));
