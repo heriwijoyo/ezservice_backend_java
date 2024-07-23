@@ -11,8 +11,10 @@ import id.ezclouds.biz.ezservice.service.async.parser.BizMemberUnionConverter;
 import id.ezclouds.biz.ezservice.service.core.dataobject.*;
 import id.ezclouds.biz.ezservice.service.core.repo.*;
 import id.ezclouds.biz.ezservice.service.processor.inner.BizMemberUnionInnerProcessor;
+import id.ezclouds.biz.ezservice.service.processor.shared.ProcessorConstant;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.dataobject.BizSubOrganizationDO;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.repo.AppSubOrganizationRepository;
+import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
 import id.ezclouds.core.member.service.CoreMemberService;
@@ -81,6 +83,11 @@ public class BizSyncMemberUnionProcessor extends BizAsyncProcessor {
                 BizMemberUnionDO unionDO = null;
                 try {
                     CoreMember coreMember = coreMemberService.getOptimisticCoreMember(memberId);
+                    String subOrgId = coreMember.getSubOrgId();
+                    if (StringUtil.isNotBlank(subOrgId) && ProcessorConstant.getBlacklistSubOrgs(orgId).contains(subOrgId)) {
+                        continue;
+                    }
+
                     CoreMemberExtension memberExtension = coreMemberService.getPessimisticCoreMemberExtension(memberId);
                     BizMember bizMember = BizMemberConverter.convert(coreMember, memberExtension);
 

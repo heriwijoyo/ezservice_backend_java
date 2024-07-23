@@ -11,6 +11,7 @@ import id.ezclouds.biz.ezservice.service.processor.BizSyncMemberUnionProcessor;
 import id.ezclouds.biz.ezservice.service.processor.*;
 import id.ezclouds.biz.ezservice.service.processor.sample.BizSampleOneProcessor;
 import id.ezclouds.biz.ezservice.service.processor.sample.BizSampleTwoProcessor;
+import id.ezclouds.biz.ezservice.service.processor.shared.ProcessorConstant;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizSchedulerTemplate;
 import id.ezclouds.common.util.assertion.AssertUtil;
@@ -95,15 +96,15 @@ public class BizSchedulerService {
                         bizGroupProcessor.addProcessor(bizGenerateAreaReportProcessor);
                         bizGroupProcessor.addProcessor(bizGenerateSubOrgReportProcessor);
                         bizGroupProcessor.addProcessor(bizGenerateTimeSeriesReportProcessor);
-                        bizGroupProcessor.processInSequence("RJL0");
+                        bizGroupProcessor.processInSequence(ProcessorConstant.ORG_ID_RJL);
                         break;
 
                     case RJL_DAILY_SEND_SUB_ORG_REPORT:
-                        bizSubOrgDailyMonitorProcessor.process("RJL0");
+                        bizSubOrgDailyMonitorProcessor.process(ProcessorConstant.ORG_ID_RJL);
                         break;
 
                     case RJL_DAILY_CHECK_NO_SUB_ORG:
-                        bizCheckNoSubOrgProcessor.process("RJL0");
+                        bizCheckNoSubOrgProcessor.process(ProcessorConstant.ORG_ID_RJL);
                         break;
 
                     case SAMPLE_SEQUENCE:
