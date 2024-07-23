@@ -92,7 +92,7 @@ public class BizSyncMemberUnionProcessor extends BizAsyncProcessor {
                         syncSuccessCount++;
                     }
                 } catch (Exception ignored) {
-                    bizMemberUnionInnerProcessor.storeMemberUnionDuplicate(unionDO);
+                    tryStoreMemberUnionDuplicate(unionDO);
                     syncFailCount++;
                 }
             }
@@ -113,7 +113,7 @@ public class BizSyncMemberUnionProcessor extends BizAsyncProcessor {
                 bizMemberUnionInnerProcessor.storeMemberUnion(unionDO);
                 importSyncSuccessCount++;
             } catch (Exception ignored) {
-                bizMemberUnionInnerProcessor.storeMemberUnionDuplicate(unionDO);
+                tryStoreMemberUnionDuplicate(unionDO);
                 importSyncFailCount++;
             }
         }
@@ -131,5 +131,11 @@ public class BizSyncMemberUnionProcessor extends BizAsyncProcessor {
             }
         }
         return "UNDEFINED";
+    }
+
+    private void tryStoreMemberUnionDuplicate(BizMemberUnionDO memberUnionDO) {
+        try {
+            bizMemberUnionInnerProcessor.storeMemberUnionDuplicate(memberUnionDO);
+        } catch (Exception ignored) {}
     }
 }
