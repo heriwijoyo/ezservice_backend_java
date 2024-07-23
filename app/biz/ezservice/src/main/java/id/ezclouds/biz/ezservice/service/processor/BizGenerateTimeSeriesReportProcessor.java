@@ -9,7 +9,7 @@ import id.ezclouds.biz.ezservice.service.processor.event.BizProcessEvent;
 import id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO;
 import id.ezclouds.biz.ezservice.service.core.dataobject.BizReportTimeSeriesDO;
 import id.ezclouds.biz.ezservice.service.core.repo.BizMemberUnionRepository;
-import id.ezclouds.biz.ezservice.service.core.repo.BizReportTimeSeriesRepository;
+import id.ezclouds.biz.ezservice.service.processor.inner.BizTimeSeriesReportInnerProcessor;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.dataobject.BizSubOrganizationDO;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.repo.AppSubOrganizationRepository;
 import id.ezclouds.common.util.DateUtil;
@@ -20,7 +20,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,13 +34,13 @@ import java.util.List;
 public class BizGenerateTimeSeriesReportProcessor extends BizAsyncProcessor {
 
     @Autowired
+    private BizTimeSeriesReportInnerProcessor bizTimeSeriesReportInnerProcessor;
+
+    @Autowired
     private AppSubOrganizationRepository appSubOrganizationRepository;
 
     @Autowired
     private BizMemberUnionRepository bizMemberUnionRepository;
-
-    @Autowired
-    private BizReportTimeSeriesRepository bizReportTimeSeriesRepository;
 
     @Override
     public BizProcessEvent getProcessEvent() {
@@ -59,7 +58,9 @@ public class BizGenerateTimeSeriesReportProcessor extends BizAsyncProcessor {
         logData.add("ORG_ID="+ orgId);
         List<BizSubOrganizationDO> subOrgs = appSubOrganizationRepository.findByOrgId(orgId);
 
-        bizReportTimeSeriesRepository.deleteByOrgId(orgId);
+        long deleted = bizTimeSeriesReportInnerProcessor.deleteAllReport(orgId);
+        logData.add("DEL="+ deleted);
+
         for (BizReportByTime bizReportByTime : BizReportByTime.values()) {
             switch (bizReportByTime) {
                 case DAILY_SUB_ORG_PERFORMANCE:
@@ -71,8 +72,7 @@ public class BizGenerateTimeSeriesReportProcessor extends BizAsyncProcessor {
         return true;
     }
 
-    @Transactional(Transactional.TxType.REQUIRES_NEW)
-    public void generateDailySubOrgPerformance(List<String> logData, String orgId, String source, List<BizSubOrganizationDO> subOrgs, String reportId) {
+    private void generateDailySubOrgPerformance(List<String> logData, String orgId, String source, List<BizSubOrganizationDO> subOrgs, String reportId) {
         Date startDate = DateUtil.parseFormattedDate("2024-06-24 22:00:00", DateUtil.FORMAT_DATETIME_DEFAULT);
         Date endDate = new Date();
         List<String> timePeriods = new ArrayList<>();
@@ -81,7 +81,7 @@ public class BizGenerateTimeSeriesReportProcessor extends BizAsyncProcessor {
             timePeriods.add(DateUtil.getFormattedDate(startDate, DateUtil.FORMAT_DATE));
             startDate = DateUtil.getDateAfterDays(startDate, 1);
         }
-        logData.add("DATE_TOTAL="+ timePeriods.size());
+        logData.add("PERIOD_TOTAL="+ timePeriods.size());
 
         for (String timePeriod : timePeriods) {
             List<BizCustomQueryGroupDO> groupDates = bizMemberUnionRepository
@@ -95,7 +95,7 @@ public class BizGenerateTimeSeriesReportProcessor extends BizAsyncProcessor {
                 bizReport.setGroupValue(groupValue);
                 bizReport.setTimeFrame(timePeriod);
                 bizReport.setTimeValue(getTimeSeriesValue(groupDates, groupValue));
-                bizReportTimeSeriesRepository.saveAndFlush(bizReport);
+                bizTimeSeriesReportInnerProcessor.storeReport(bizReport);
             }
         }
     }

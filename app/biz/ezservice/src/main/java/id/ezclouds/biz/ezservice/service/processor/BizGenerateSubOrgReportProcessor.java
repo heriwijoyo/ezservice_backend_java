@@ -8,7 +8,7 @@ import id.ezclouds.biz.ezservice.service.processor.event.BizProcessEvent;
 import id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO;
 import id.ezclouds.biz.ezservice.service.core.dataobject.BizReportBySubOrgDO;
 import id.ezclouds.biz.ezservice.service.core.repo.BizMemberUnionRepository;
-import id.ezclouds.biz.ezservice.service.core.repo.BizReportBySubOrgRepository;
+import id.ezclouds.biz.ezservice.service.processor.inner.BizSubOrgReportInnerProcessor;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -29,10 +28,10 @@ import java.util.List;
 public class BizGenerateSubOrgReportProcessor extends BizAsyncProcessor {
 
     @Autowired
-    private BizMemberUnionRepository bizMemberUnionRepository;
+    private BizSubOrgReportInnerProcessor bizSubOrgReportInnerProcessor;
 
     @Autowired
-    private BizReportBySubOrgRepository bizReportBySubOrgRepository;
+    private BizMemberUnionRepository bizMemberUnionRepository;
 
     @Override
     public BizProcessEvent getProcessEvent() {
@@ -49,7 +48,8 @@ public class BizGenerateSubOrgReportProcessor extends BizAsyncProcessor {
         final String orgId = (String) request;
         logData.add("ORG_ID="+ orgId);
 
-        clearCurrentReport(orgId, logData);
+        long deleted = bizSubOrgReportInnerProcessor.deleteAllReport(orgId);
+        logData.add("DEL_REPORT="+ deleted);
 
         String currentTime = DateUtil.getCurrentFormattedDate();
         generateSubOrgReport(currentTime, orgId, "APP", logData);
@@ -58,14 +58,7 @@ public class BizGenerateSubOrgReportProcessor extends BizAsyncProcessor {
         return true;
     }
 
-    @Transactional
-    public void clearCurrentReport(String orgId, List<String> logData) {
-        long deleted = bizReportBySubOrgRepository.deleteByOrgId(orgId);
-        logData.add("DEL_REPORT="+ deleted);
-    }
-
-    @Transactional(Transactional.TxType.REQUIRES_NEW)
-    public void generateSubOrgReport(String currentTime, String orgId, String source, List<String> logData) {
+    private void generateSubOrgReport(String currentTime, String orgId, String source, List<String> logData) {
         List<BizCustomQueryGroupDO> subOrgGroups = bizMemberUnionRepository
                 .fetchGroupSubOrg(orgId, source);
         for (BizCustomQueryGroupDO subOrgGroup : subOrgGroups) {
@@ -101,7 +94,7 @@ public class BizGenerateSubOrgReportProcessor extends BizAsyncProcessor {
                 }
             }
             report.setGenderOther(otherGender);
-            bizReportBySubOrgRepository.saveAndFlush(report);
+            bizSubOrgReportInnerProcessor.storeReport(report);
         }
         logData.add("SUBORG_COUNT="+ subOrgGroups.size());
     }
