@@ -5,6 +5,7 @@
 package id.ezclouds.core.bifrost.app.web;
 
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
+import id.ezclouds.biz.ezservice.service.apibiz.admin.BizSuperAdminService;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
@@ -35,9 +36,22 @@ public class AdminWebController {
     @Autowired
     private BizAdminService bizAdminService;
 
+    @Autowired
+    private BizSuperAdminService bizSuperAdminService;
+
     @GetMapping(value = "/webapp")
-    private void adminHome(@RequestParam(name = "sid", required = false) String sid, HttpServletResponse response) throws IOException {
+    private void adminHome(HttpServletResponse response) throws IOException {
         response.sendRedirect("/webapp/login.htm");
+    }
+
+    @GetMapping(value = "/webapp/superadmin")
+    private void superAdminCreateSession(HttpServletResponse response) throws IOException {
+        BizResult bizResult = bizSuperAdminService.createSuperAdminSession(false);
+        if (bizResult.isSuccess()) {
+            response.sendRedirect("/webapp/login.htm");
+        } else {
+            response.setStatus(404);
+        }
     }
 
     @PostMapping(value = "/webapp/login.json", consumes = {MediaType.ALL_VALUE})

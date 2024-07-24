@@ -77,7 +77,7 @@ public class BizSuperAdminService extends BizBaseService {
     @Autowired
     private BizSyncMemberUnionProcessor bizSyncMemberUnionProcessor;
 
-    public BizResult createSuperAdminSession() {
+    public BizResult createSuperAdminSession(boolean shouldScrambleCode) {
         final BizResult bizResult = new BizResult();
         BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
             @Override
@@ -100,22 +100,32 @@ public class BizSuperAdminService extends BizBaseService {
                 createRequest.setMemberId(CoreConstant.SU_ORG_ID);
                 createRequest.setMemberRoles("SUPERUSER");
 
-                String scrambledCode = "";
                 CoreAuthAdminSession session = coreAuthService.adminCreateSession(createRequest);
                 String sessionCode = session.getSessionCode();
-                for (int i = 0; i < sessionCode.length(); i++) {
-                    String codePart = sessionCode.substring(i, i+1);
-                    int codePartNumber = Integer.parseInt(codePart);
-                    int newCodePart;
-                    if (codePartNumber == 9) {
-                        newCodePart = 0;
-                    } else {
-                        newCodePart = codePartNumber + 1;
-                    }
-                    scrambledCode += String.valueOf(newCodePart);
-                }
 
-                bizResult.setObject("SUCCESS :: "+ scrambledCode);
+                if (shouldScrambleCode) {
+                    String scrambledCode = "";
+                    for (int i = 0; i < sessionCode.length(); i++) {
+                        String codePart = sessionCode.substring(i, i+1);
+                        int codePartNumber = Integer.parseInt(codePart);
+                        int newCodePart;
+                        if (codePartNumber == 9) {
+                            newCodePart = 0;
+                        } else {
+                            newCodePart = codePartNumber + 1;
+                        }
+                        scrambledCode += String.valueOf(newCodePart);
+                    }
+                    bizResult.setObject(scrambledCode);
+                } else {
+                    bizResult.setObject(sessionCode);
+                    bizConnectInnerService.sendMessage(
+                            BizConnectType.WHATSAPP,
+                            "RJL0",
+                            "6281281150355",
+                            "Admin Login Code:\n\n"+ sessionCode
+                    );
+                }
                 bizResult.setSuccess(true);
             }
 

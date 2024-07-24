@@ -41,7 +41,7 @@ public class LocalController {
         }
         else {
             EzAppContextHolder.init(SuperAdminEvent.SU_CREATE_WEB_SESSION);
-            BizResult bizResult = bizSuperAdminService.createSuperAdminSession();
+            BizResult bizResult = bizSuperAdminService.createSuperAdminSession(true);
 
             response.setStatus(HttpStatus.OK.value());
             if (bizResult.isSuccess()) {
