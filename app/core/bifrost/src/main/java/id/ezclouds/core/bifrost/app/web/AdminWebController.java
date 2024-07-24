@@ -11,6 +11,7 @@ import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.core.bifrost.app.api.digestlog.EmptyDigestLog;
+import id.ezclouds.core.bifrost.app.api.event.SuperAdminEvent;
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import id.ezclouds.core.shared.util.DigestLogUtil;
@@ -46,6 +47,7 @@ public class AdminWebController {
 
     @GetMapping(value = "/webapp/superadmin")
     private void superAdminCreateSession(HttpServletResponse response) throws IOException {
+        EzAppContextHolder.init(SuperAdminEvent.SU_CREATE_WEB_SESSION);
         BizResult bizResult = bizSuperAdminService.createSuperAdminSession(false);
         if (bizResult.isSuccess()) {
             response.sendRedirect("/webapp/login.htm");
