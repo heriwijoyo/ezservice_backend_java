@@ -25,5 +25,10 @@
             <artifactId>ezclouds-core-shared</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>id.ezclouds.common</groupId>
+            <artifactId>ezclouds-common-facade</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 </project>

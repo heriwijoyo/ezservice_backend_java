@@ -13,5 +13,11 @@
     <groupId>id.ezclouds.common</groupId>
     <artifactId>ezclouds-common-facade</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>id.ezclouds.common</groupId>
+            <artifactId>ezclouds-common-model</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
 </project>
