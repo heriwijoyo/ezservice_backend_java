@@ -74,7 +74,6 @@ public class LocalController {
         }
     }
 
-
     @GetMapping(value = "/api/local/scheduler/{scene}")
     private void localSchedulerHandler(@PathVariable("scene") String scene, HttpServletRequest request, HttpServletResponse response) throws IOException {
         String localAddr = request.getLocalAddr();

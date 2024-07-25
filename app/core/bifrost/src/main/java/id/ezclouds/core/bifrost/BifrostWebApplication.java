@@ -24,7 +24,8 @@ import java.util.TimeZone;
         "id.ezclouds.core.shared",
         "id.ezclouds.core.member",
         "id.ezclouds.core.auth",
-        "id.ezclouds.core.integration"
+        "id.ezclouds.core.integration",
+        "id.ezclouds.core.dal"
 })
 @ImportResource({ "classpath:/META-INF/ezclouds/spring/config.xml" })
 @EnableJpaRepositories(basePackages = {

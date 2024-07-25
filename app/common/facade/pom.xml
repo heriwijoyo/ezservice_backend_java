@@ -10,15 +10,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>id.ezclouds.core</groupId>
-    <artifactId>ezclouds-core-dal</artifactId>
+    <groupId>id.ezclouds.common</groupId>
+    <artifactId>ezclouds-common-facade</artifactId>
 
-    <dependencies>
-        <dependency>
-            <groupId>id.ezclouds.common</groupId>
-            <artifactId>ezclouds-common-facade</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-    </dependencies>
 
 </project>

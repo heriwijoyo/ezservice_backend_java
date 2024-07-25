@@ -14,6 +14,7 @@
 		<module>app/test/core</module>
         <module>app/core/process</module>
         <module>app/core/dal</module>
+        <module>app/common/facade</module>
     </modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>

@@ -5,6 +5,7 @@
 package id.ezclouds.core.bifrost.core;
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.BeanFactoryAnnotationUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,10 @@ public class SpringContextConfig implements ApplicationContextAware {
 
     public static <T extends Object> T getBean(Class<T> beanClass) {
         return context.getBean(beanClass);
+    }
+
+    public static <T extends Object> T getBeanWithQualifier(Class<T> beanClass, String qualifier) {
+        return BeanFactoryAnnotationUtils.qualifiedBeanOfType(context.getAutowireCapableBeanFactory(), beanClass, qualifier);
     }
 
     @Override

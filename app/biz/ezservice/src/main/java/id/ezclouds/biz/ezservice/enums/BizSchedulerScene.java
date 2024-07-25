@@ -17,6 +17,7 @@ public enum BizSchedulerScene {
 
     SAMPLE_SEQUENCE("SAMPLE_SEQUENCE"),
     SAMPLE_ASYNC("SAMPLE_ASYNC"),
+    SAMPLE_DAL("SAMPLE_DAL"),
     UNKNOWN("UNKNOWN"),
 
     ;
