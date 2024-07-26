@@ -19,13 +19,16 @@ import java.util.TimeZone;
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BifrostWebApplication.java, v 0.1 2023‐06‐18 11:31 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
 @SpringBootApplication(scanBasePackages = {
-        "id.ezclouds.core.bifrost",
         "id.ezclouds.biz.ezservice",
-        "id.ezclouds.core.shared",
-        "id.ezclouds.core.member",
+        "id.ezclouds.common.param",
+        "id.ezclouds.common.util",
         "id.ezclouds.core.auth",
+        "id.ezclouds.core.bifrost",
+        "id.ezclouds.core.dal",
         "id.ezclouds.core.integration",
-        "id.ezclouds.core.dal"
+        "id.ezclouds.core.member",
+        "id.ezclouds.core.process",
+        "id.ezclouds.core.shared"
 })
 @ImportResource({ "classpath:/META-INF/ezclouds/spring/config.xml" })
 @EnableJpaRepositories(basePackages = {

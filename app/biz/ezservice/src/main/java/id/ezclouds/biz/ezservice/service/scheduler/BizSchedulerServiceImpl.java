@@ -4,7 +4,6 @@
  */
 package id.ezclouds.biz.ezservice.service.scheduler;
 
-import id.ezclouds.biz.ezservice.enums.BizSchedulerScene;
 import id.ezclouds.biz.ezservice.service.processor.shared.BizThreadSharedResource;
 import id.ezclouds.biz.ezservice.service.processor.event.BizProcessEvent;
 import id.ezclouds.biz.ezservice.service.processor.BizSyncMemberUnionProcessor;
@@ -12,8 +11,10 @@ import id.ezclouds.biz.ezservice.service.processor.*;
 import id.ezclouds.biz.ezservice.service.processor.sample.BizSampleOneProcessor;
 import id.ezclouds.biz.ezservice.service.processor.sample.BizSampleTwoProcessor;
 import id.ezclouds.biz.ezservice.service.processor.shared.ProcessorConstant;
-import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizSchedulerTemplate;
+import id.ezclouds.common.facade.biz.BizSchedulerService;
+import id.ezclouds.common.model.process.SchedulerScene;
+import id.ezclouds.common.model.result.BaseResult;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +26,11 @@ import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: BizSchedulerService.java, v 0.1 2024‐07‐18 12:41 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: BizSchedulerServiceImpl.java, v 0.1 2024‐07‐18 12:41 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
 @Scope(value = "prototype")
-public class BizSchedulerService {
+public class BizSchedulerServiceImpl implements BizSchedulerService {
 
     @Autowired
     private BizThreadSharedResource bizThreadSharedResource;
@@ -64,7 +65,7 @@ public class BizSchedulerService {
     @Autowired
     private BizSampleTwoProcessor bizSampleTwoProcessor;
 
-    public BizResult execute(String scene) {
+    public BaseResult execute(String scene) {
 
         final List<String> highPriorityProcess = new ArrayList<>();
         highPriorityProcess.add(BizProcessEvent.SYNC_MEMBER_UNION.getEventCode());
@@ -74,8 +75,8 @@ public class BizSchedulerService {
 
         return BizSchedulerTemplate.execute(scene, new BizSchedulerTemplate.Handler() {
             @Override
-            public void preProcess(BizSchedulerScene schedulerScene) {
-                AssertUtil.isNotTrue(schedulerScene == BizSchedulerScene.UNKNOWN, EzErrorCode.ILLEGAL_ACTION);
+            public void preProcess(SchedulerScene schedulerScene) {
+                AssertUtil.isNotTrue(schedulerScene == SchedulerScene.UNKNOWN, EzErrorCode.ILLEGAL_ACTION);
 
                 boolean isOnProcess = bizThreadSharedResource.isOnProcess();
                 String onProcessEvent = bizThreadSharedResource.getProcessEvent();
@@ -84,7 +85,7 @@ public class BizSchedulerService {
             }
 
             @Override
-            public void process(BizSchedulerScene schedulerScene) {
+            public void process(SchedulerScene schedulerScene) {
                 switch (schedulerScene) {
                     case MINUTE:
                         bizSchedulerMinuteProcessor.process();

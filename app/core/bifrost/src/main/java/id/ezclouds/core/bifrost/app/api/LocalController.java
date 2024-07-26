@@ -6,7 +6,9 @@ package id.ezclouds.core.bifrost.app.api;
 
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizSuperAdminService;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
-import id.ezclouds.biz.ezservice.service.scheduler.BizSchedulerService;
+import id.ezclouds.common.facade.process.SchedulerProcessor;
+import id.ezclouds.common.model.result.BaseResult;
+import id.ezclouds.common.util.facade.BeanFacadeUtil;
 import id.ezclouds.core.bifrost.app.api.event.SuperAdminEvent;
 import id.ezclouds.core.shared.context.EzAppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +31,10 @@ public class LocalController {
     @Autowired
     private BizSuperAdminService bizSuperAdminService;
 
+    /**
     @Autowired
-    private BizSchedulerService bizSchedulerService;
+    private BizSchedulerServiceImpl bizSchedulerServiceImpl;
+     */
 
     @GetMapping(value = "/api/local/auth.json")
     private void localSuperUserAuth(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -74,6 +78,7 @@ public class LocalController {
         }
     }
 
+    /**
     @GetMapping(value = "/api/local/scheduler/{scene}")
     private void localSchedulerHandler(@PathVariable("scene") String scene, HttpServletRequest request, HttpServletResponse response) throws IOException {
         String localAddr = request.getLocalAddr();
@@ -82,7 +87,7 @@ public class LocalController {
             response.setStatus(HttpStatus.NOT_FOUND.value());
         }
         else {
-            BizResult bizResult = bizSchedulerService.execute(scene);
+            BizResult bizResult = bizSchedulerServiceImpl.execute(scene);
             response.setStatus(HttpStatus.OK.value());
 
             String responseBody;
@@ -92,6 +97,23 @@ public class LocalController {
                 responseBody = "N - "+ bizResult.getErrorCode();
             }
             response.getWriter().write(responseBody);
+            response.getWriter().flush();
+        }
+    }*/
+
+    @GetMapping(value = "/api/local/scheduler/{scene}")
+    private void localScheduleHandler(@PathVariable("scene") String scene, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String localAddr = request.getLocalAddr();
+
+        if (!"127.0.0.1".equals(localAddr)) {
+            response.setStatus(HttpStatus.NOT_FOUND.value());
+        }
+        else {
+            SchedulerProcessor schedulerProcessor = BeanFacadeUtil.getBean(SchedulerProcessor.class);
+            BaseResult result = schedulerProcessor.execute(scene);
+
+            response.setStatus(HttpStatus.OK.value());
+            response.getWriter().write(result.getResultCode());
             response.getWriter().flush();
         }
     }
