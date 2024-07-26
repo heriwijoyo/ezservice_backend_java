@@ -10,8 +10,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>id.ezclouds.common</groupId>
-    <artifactId>ezclouds-common-param</artifactId>
+    <groupId>id.ezclouds.core</groupId>
+    <artifactId>ezclouds-core-param</artifactId>
 
     <dependencies>
         <dependency>

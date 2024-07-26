@@ -43,11 +43,6 @@
             <version>1.0.0</version>
         </dependency>
         <dependency>
-            <groupId>id.ezclouds.common</groupId>
-            <artifactId>ezclouds-common-param</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
             <groupId>id.ezclouds.core</groupId>
             <artifactId>ezclouds-core-auth</artifactId>
             <version>1.0.0</version>
@@ -65,6 +60,11 @@
         <dependency>
             <groupId>id.ezclouds.core</groupId>
             <artifactId>ezclouds-core-member</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>id.ezclouds.core</groupId>
+            <artifactId>ezclouds-core-param</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>

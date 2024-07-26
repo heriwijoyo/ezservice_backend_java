@@ -20,13 +20,13 @@ import java.util.TimeZone;
  * @version $Id: BifrostWebApplication.java, v 0.1 2023‐06‐18 11:31 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
 @SpringBootApplication(scanBasePackages = {
         "id.ezclouds.biz.ezservice",
-        "id.ezclouds.common.param",
         "id.ezclouds.common.util",
         "id.ezclouds.core.auth",
         "id.ezclouds.core.bifrost",
         "id.ezclouds.core.dal",
         "id.ezclouds.core.integration",
         "id.ezclouds.core.member",
+        "id.ezclouds.core.param",
         "id.ezclouds.core.process",
         "id.ezclouds.core.shared"
 })
