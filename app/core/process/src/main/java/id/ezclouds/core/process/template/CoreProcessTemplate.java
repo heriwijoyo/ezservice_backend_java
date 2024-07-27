@@ -4,6 +4,11 @@
  */
 package id.ezclouds.core.process.template;
 
+import id.ezclouds.common.util.StringUtil;
+import id.ezclouds.common.util.assertion.AssertUtil;
+import id.ezclouds.common.util.context.EzAppContextHolder;
+import id.ezclouds.common.util.exception.ExceptionUtil;
+import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.core.process.model.BizProcessEvent;
 import org.slf4j.Logger;
@@ -20,7 +25,49 @@ public class CoreProcessTemplate {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommonLoggerConstant.ASYNC_PROCESS);
 
     public static void execute(BizProcessEvent event, Handler handler) {
+        String resultCode = "N";
+        try {
+            AssertUtil.notNull(event, EzErrorCode.ILLEGAL_ACTION);
+            AssertUtil.isTrue(event != BizProcessEvent.UNKNOWN, EzErrorCode.ILLEGAL_ACTION);
+            handler.doStart(event);
 
+            EzAppContextHolder.init(event);
+
+            boolean result = handler.doProcess(event);
+            resultCode = result ? "Y" : "N";
+        } catch (Exception e) {
+            resultCode = "E";
+            EzAppContextHolder
+                    .getContext()
+                    .appendErrorStackTrace(ExceptionUtil.getStackTrace(e));
+        } finally {
+            String traceId = EzAppContextHolder.getContext().getTraceId();
+            String timeCost = EzAppContextHolder.getContext().getTimeCost();
+
+            String logInfo = traceId +
+                    "," +
+                    event.getEventCode() +
+                    "," +
+                    resultCode +
+                    "," +
+                    timeCost +
+                    "," +
+                    String.join(",", handler.getLogData());
+
+            String errorStackTrace = EzAppContextHolder
+                    .getContext()
+                    .getErrorStackTrace();
+            if (StringUtil.isNotBlank(errorStackTrace)) {
+                logInfo += "," + errorStackTrace;
+            }
+
+            LOGGER.info(logInfo);
+
+            if (event == null) {
+                event = BizProcessEvent.UNKNOWN;
+            }
+            handler.doFinish(event);
+        }
     }
 
     public interface Handler {
