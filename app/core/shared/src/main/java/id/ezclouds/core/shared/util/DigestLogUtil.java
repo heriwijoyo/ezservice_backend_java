@@ -6,8 +6,8 @@ package id.ezclouds.core.shared.util;
 
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.logger.DigestLog;
-import id.ezclouds.core.shared.context.EzAppContext;
-import id.ezclouds.core.shared.context.EzAppContextHolder;
+import id.ezclouds.common.util.context.EzAppContext;
+import id.ezclouds.common.util.context.EzAppContextHolder;
 import org.slf4j.Logger;
 
 /**

@@ -19,7 +19,7 @@ import id.ezclouds.biz.ezservice.service.app.dataobject.AppConfigDO;
 import id.ezclouds.biz.ezservice.service.app.repo.AppConfigRepository;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
-import id.ezclouds.core.shared.context.EzAppContextHolder;
+import id.ezclouds.common.util.context.EzAppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
