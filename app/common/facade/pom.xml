@@ -15,6 +15,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>id.ezclouds.common</groupId>
             <artifactId>ezclouds-common-model</artifactId>
             <version>1.0.0</version>

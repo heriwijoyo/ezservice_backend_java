@@ -175,6 +175,22 @@
         </encoder>
     </appender>
 
+    <appender name="EZDAL_File"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/${APP_NAME}/ez-dal.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/ez-dal.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d --- [%thread]%m%n</pattern>
+        </encoder>
+    </appender>
+
     <logger name="API_CONTROLLER" additivity="false">
         <level value="INFO" />
         <appender-ref ref="API_CONTROLLER_${APP_LOG_TYPE}" />
@@ -220,6 +236,12 @@
     <logger name="SCHEDULER" additivity="false">
         <level value="INFO" />
         <appender-ref ref="SCHEDULER_${APP_LOG_TYPE}" />
+        <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
+    </logger>
+
+    <logger name="EZDAL" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="EZDAL_${APP_LOG_TYPE}" />
         <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
     </logger>
 

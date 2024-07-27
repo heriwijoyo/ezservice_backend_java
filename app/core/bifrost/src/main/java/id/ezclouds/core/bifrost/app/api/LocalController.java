@@ -6,6 +6,7 @@ package id.ezclouds.core.bifrost.app.api;
 
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizSuperAdminService;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
+import id.ezclouds.common.facade.dal.EzSampleDAO;
 import id.ezclouds.common.facade.process.SchedulerProcessor;
 import id.ezclouds.common.model.result.BaseResult;
 import id.ezclouds.common.util.facade.BeanFacadeUtil;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -114,6 +116,28 @@ public class LocalController {
 
             response.setStatus(HttpStatus.OK.value());
             response.getWriter().write(result.getResultCode());
+            response.getWriter().flush();
+        }
+    }
+
+    @GetMapping(value = "/api/local/trigger/sample")
+    private void localTriggerSample(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String localAddr = request.getLocalAddr();
+
+        if (!"127.0.0.1".equals(localAddr)) {
+            response.setStatus(HttpStatus.NOT_FOUND.value());
+        } else {
+            EzSampleDAO ezSampleDAO = BeanFacadeUtil.getBean(EzSampleDAO.class);
+            String sample = ezSampleDAO.getSample();
+            Long count = ezSampleDAO.getSampleCount();
+            List<String> list = ezSampleDAO.getSampleList();
+
+            try {
+                String ex = ezSampleDAO.getException();
+            } catch (Exception ignored) {}
+
+            response.setStatus(HttpStatus.OK.value());
+            response.getWriter().write(sample +","+ count +","+ list.size());
             response.getWriter().flush();
         }
     }
