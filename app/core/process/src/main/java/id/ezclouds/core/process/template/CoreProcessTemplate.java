@@ -19,6 +19,9 @@ public class CoreProcessTemplate {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CommonLoggerConstant.ASYNC_PROCESS);
 
+    public static void execute(BizProcessEvent event, Handler handler) {
+
+    }
 
     public interface Handler {
         void doStart(BizProcessEvent processEvent);

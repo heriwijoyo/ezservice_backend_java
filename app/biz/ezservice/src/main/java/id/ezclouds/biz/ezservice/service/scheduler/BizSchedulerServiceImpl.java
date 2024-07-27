@@ -4,7 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.service.scheduler;
 
-import id.ezclouds.biz.ezservice.service.processor.shared.BizThreadSharedResource;
+import id.ezclouds.common.util.thread.BizThreadSharedResource;
 import id.ezclouds.biz.ezservice.service.processor.event.BizProcessEvent;
 import id.ezclouds.biz.ezservice.service.processor.BizSyncMemberUnionProcessor;
 import id.ezclouds.biz.ezservice.service.processor.*;

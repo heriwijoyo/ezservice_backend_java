@@ -4,12 +4,11 @@
  */
 package id.ezclouds.biz.ezservice.service.processor;
 
-import id.ezclouds.biz.ezservice.service.processor.shared.BizThreadSharedResource;
+import id.ezclouds.common.util.thread.BizThreadSharedResource;
 import id.ezclouds.biz.ezservice.service.processor.event.BizProcessEvent;
 import id.ezclouds.biz.ezservice.service.template.BizProcessTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
