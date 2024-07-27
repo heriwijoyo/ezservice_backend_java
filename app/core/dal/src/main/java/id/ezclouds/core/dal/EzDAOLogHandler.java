@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.dal;
 
+import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.exception.ExceptionUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -11,6 +12,8 @@ import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -28,7 +31,17 @@ public class EzDAOLogHandler {
 
     @AfterReturning(value = "@annotation(id.ezclouds.common.model.annotation.EzDAOLogger)", returning = "retValue")
     public void after(JoinPoint joinPoint, Object retValue) {
-        EzDAOProfiler.end(getInvokeTarget(joinPoint), "Y", "1");
+        String resultValue = StringUtil.EMPTY;
+        if (retValue instanceof String) {
+            resultValue = (String) retValue;
+        }
+        if (retValue instanceof Long) {
+            resultValue = ""+ retValue;
+        }
+        if (retValue instanceof List) {
+            resultValue = ""+ ((List)retValue).size();
+        }
+        EzDAOProfiler.end(getInvokeTarget(joinPoint), "Y", resultValue);
     }
 
     @AfterThrowing(value = "@annotation(id.ezclouds.common.model.annotation.EzDAOLogger)", throwing = "e")

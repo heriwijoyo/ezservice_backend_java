@@ -142,13 +142,16 @@ public class BizMemberService extends BizBaseService {
                     if (StringUtil.isBlank(request.getSubOrgId())) {
                         CoreMember referrerMember = coreMemberService.getOptimisticCoreMember(sessionInfo.getMemberId());
                         request.setSubOrgId(referrerMember.getSubOrgId());
+                        request.setRoles("");
                     }
                 }
                 if (bizRegisterMode == BizMemberRegisterMode.BY_SUB_ORG_ADMIN) {
                     AssertUtil.isTrue(memberRoles.contains(BizMemberRole.ADMIN_SUB_ORG.getCode()), EzErrorCode.UNAUTHORIZED);
+                    request.setRoles("");
                 }
                 if (bizRegisterMode == BizMemberRegisterMode.BY_ORG_ADMIN) {
                     AssertUtil.isTrue(memberRoles.contains(BizMemberRole.ADMIN_ORG.getCode()), EzErrorCode.UNAUTHORIZED);
+                    request.setRoles("OP_RECRUITER");
                 }
 
                 request.setReferrerId(sessionInfo.getMemberId());
