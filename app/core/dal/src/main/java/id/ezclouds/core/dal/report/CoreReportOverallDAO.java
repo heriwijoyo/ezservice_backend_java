@@ -7,6 +7,8 @@ package id.ezclouds.core.dal.report;
 import id.ezclouds.common.facade.dal.report.BizReportOverallDAO;
 import id.ezclouds.common.model.annotation.EzDAOLogger;
 import id.ezclouds.common.model.report.BizReportOverall;
+import id.ezclouds.common.util.DateUtil;
+import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.core.dal.report.converter.BizReportOverallConverter;
 import id.ezclouds.core.dal.report.dataobject.CoreReportOverallDO;
 import id.ezclouds.core.dal.report.repo.CoreReportOverallRepository;
@@ -28,6 +30,28 @@ public class CoreReportOverallDAO implements BizReportOverallDAO {
     public void store(BizReportOverall bizReportOverall) {
         CoreReportOverallDO coreReportOverallDO = BizReportOverallConverter.convert(bizReportOverall);
         coreReportOverallRepository.saveAndFlush(coreReportOverallDO);
+    }
+
+    @EzDAOLogger
+    @Override
+    public void reStore(BizReportOverall bizReportOverall) {
+        String currentTime = DateUtil.getCurrentFormattedDate();
+        CoreReportOverallDO reportOverallDO = coreReportOverallRepository
+                .findByOrgIdAndKeyId(bizReportOverall.getOrgId(), bizReportOverall.getKeyId());
+        if (reportOverallDO == null) {
+            reportOverallDO = new CoreReportOverallDO();
+            reportOverallDO.setId(
+                    HashUtil.createHash(
+                            bizReportOverall.getOrgId(),
+                            bizReportOverall.getKeyId(),
+                            currentTime
+                    )
+            );
+        }
+
+        reportOverallDO.setCount(bizReportOverall.getCount());
+        reportOverallDO.setCreatedTime(currentTime);
+        coreReportOverallRepository.saveAndFlush(reportOverallDO);
     }
 
     @EzDAOLogger

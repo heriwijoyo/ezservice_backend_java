@@ -12,6 +12,7 @@ public enum BizReportOverallKey {
 
     TOTAL_MEMBER_UNION("TOTAL_MEMBER_UNION"),
     TOTAL_SUB_ORGANIZATION("TOTAL_SUB_ORGANIZATION"),
+    TOTAL_TPS("TOTAL_TPS"),
 
     ;
     private final String code;

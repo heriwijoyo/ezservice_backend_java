@@ -10,6 +10,9 @@ import id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO;
 import id.ezclouds.biz.ezservice.service.core.dataobject.BizReportByAreaDO;
 import id.ezclouds.biz.ezservice.service.core.repo.BizMemberUnionRepository;
 import id.ezclouds.biz.ezservice.service.processor.inner.BizAreaReportInnerProcessor;
+import id.ezclouds.common.facade.dal.report.BizReportOverallDAO;
+import id.ezclouds.common.model.report.BizReportOverall;
+import id.ezclouds.common.model.report.BizReportOverallKey;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
@@ -47,6 +50,9 @@ public class BizGenerateAreaReportProcessor extends BizAsyncProcessor {
     @Autowired
     private CoreAppVillageRepository coreAppVillageRepository;
 
+    @Autowired
+    private BizReportOverallDAO bizReportOverallDAO;
+
     @Override
     public BizProcessEvent getProcessEvent() {
         return BizProcessEvent.GENERATE_REPORT_BY_AREA;
@@ -66,6 +72,8 @@ public class BizGenerateAreaReportProcessor extends BizAsyncProcessor {
 
         String currentTime = DateUtil.getCurrentFormattedDate();
 
+        int totalTps = 0;
+
         List<EzCoreAppDistrictDO> districts = coreAppDistrictRepository.findByRegencyId("1802");
         logData.add("DISTRICT_TOTAL="+ districts.size());
         int villageTotal = 0;
@@ -77,15 +85,25 @@ public class BizGenerateAreaReportProcessor extends BizAsyncProcessor {
             villageTotal += villages.size();
             if (villages.size() > 0) {
                 for (EzCoreAppVillageDO village : villages) {
-                    generateAreaReport(currentTime, orgId, "APP", districtDO.getName(), village.getName());
+                    int tpsCount = generateAreaReport(currentTime, orgId, "APP", districtDO.getName(), village.getName());
+                    totalTps += tpsCount;
                 }
             }
         }
         logData.add("VILLAGE_TOTAL="+ villageTotal);
+
+        BizReportOverall reportOverall = new BizReportOverall();
+        reportOverall.setOrgId(orgId);
+        reportOverall.setKeyId(BizReportOverallKey.TOTAL_TPS.getCode());
+        reportOverall.setCount(totalTps);
+        bizReportOverallDAO.reStore(reportOverall);
+        logData.add("TPS_TOTAL="+ totalTps);
         return true;
     }
 
-    private void generateAreaReport(String currentTime, String orgId, String source, String districtName, String villageName) {
+    private int generateAreaReport(String currentTime, String orgId, String source, String districtName, String villageName) {
+        //TODO: move this calculation to proper processor
+        int groupTpsTotal = 0;
         BizReportByAreaDO reportByArea = new BizReportByAreaDO();
         reportByArea.setId(HashUtil.createHash(currentTime, orgId, source, districtName, villageName));
         reportByArea.setSource(source);
@@ -108,6 +126,7 @@ public class BizGenerateAreaReportProcessor extends BizAsyncProcessor {
 
             List<BizCustomQueryGroupDO> groupTps = bizMemberUnionRepository
                     .villageLevelFetchTpsGroup(orgId, source, districtName, villageName);
+            groupTpsTotal += groupTps.size();
             if (groupTps.size() > 0) {
                 Map<String, Long> tpsData = new HashMap<>();
                 for (BizCustomQueryGroupDO tpsGroup : groupTps) {
@@ -153,5 +172,7 @@ public class BizGenerateAreaReportProcessor extends BizAsyncProcessor {
         reportByArea.setGenderOther(otherGender);
 
         bizAreaReportInnerProcessor.storeBizReport(reportByArea);
+
+        return groupTpsTotal;
     }
 }

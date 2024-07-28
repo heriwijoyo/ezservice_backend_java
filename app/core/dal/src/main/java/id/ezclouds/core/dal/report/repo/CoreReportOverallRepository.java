@@ -15,4 +15,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CoreReportOverallRepository extends JpaRepository<CoreReportOverallDO, String> {
     long deleteByOrgId(String orgId);
+    CoreReportOverallDO findByOrgIdAndKeyId(String orgId, String keyId);
 }

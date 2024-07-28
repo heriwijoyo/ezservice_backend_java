@@ -13,5 +13,6 @@ import id.ezclouds.common.model.report.BizReportOverall;
 public interface BizReportOverallDAO {
 
     void store(BizReportOverall bizReportOverall);
+    void reStore(BizReportOverall bizReportOverall);
     long deleteAll(String orgId);
 }
