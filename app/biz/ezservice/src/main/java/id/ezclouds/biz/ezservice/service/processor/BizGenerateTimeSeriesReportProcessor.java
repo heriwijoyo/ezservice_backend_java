@@ -5,7 +5,7 @@
 package id.ezclouds.biz.ezservice.service.processor;
 
 import id.ezclouds.biz.ezservice.enums.BizReportByTime;
-import id.ezclouds.biz.ezservice.enums.BizTimePeriod;
+import id.ezclouds.common.util.TimeSeriesUtil;
 import id.ezclouds.biz.ezservice.service.processor.event.BizProcessEvent;
 import id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO;
 import id.ezclouds.biz.ezservice.service.core.dataobject.BizReportTimeSeriesDO;
@@ -13,7 +13,6 @@ import id.ezclouds.biz.ezservice.service.core.repo.BizMemberUnionRepository;
 import id.ezclouds.biz.ezservice.service.processor.inner.BizTimeSeriesReportInnerProcessor;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.dataobject.BizSubOrganizationDO;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.repo.AppSubOrganizationRepository;
-import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.shared.repo.CoreAppDistrictRepository;
@@ -23,8 +22,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -68,7 +65,7 @@ public class BizGenerateTimeSeriesReportProcessor extends BizAsyncProcessor {
         long deleted = bizTimeSeriesReportInnerProcessor.deleteAllReport(orgId);
         logData.add("DEL="+ deleted);
 
-        List<String> timePeriods = getTimePeriods(BizTimePeriod.DAILY, "2024-06-24 22:00:00");
+        List<String> timePeriods = TimeSeriesUtil.getDailySeriesFrom("2024-06-24", 1);
 
         for (BizReportByTime bizReportByTime : BizReportByTime.values()) {
             switch (bizReportByTime) {
@@ -118,23 +115,6 @@ public class BizGenerateTimeSeriesReportProcessor extends BizAsyncProcessor {
                 bizTimeSeriesReportInnerProcessor.storeReport(bizReport);
             }
         }
-    }
-
-    private List<String> getTimePeriods(BizTimePeriod period, String startDateTime) {
-        Date startDate = DateUtil.parseFormattedDate(startDateTime, DateUtil.FORMAT_DATETIME_DEFAULT);
-        Date endDate = new Date();
-        List<String> timePeriods = new ArrayList<>();
-
-        switch (period) {
-            case DAILY:
-                while (startDate.before(endDate)) {
-                    timePeriods.add(DateUtil.getFormattedDate(startDate, DateUtil.FORMAT_DATE));
-                    startDate = DateUtil.getDateAfterDays(startDate, 1);
-                }
-                break;
-        }
-
-        return timePeriods;
     }
 
     private long getTimeSeriesValue(List<BizCustomQueryGroupDO> groupResult, String groupValue) {

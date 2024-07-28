@@ -4,6 +4,8 @@
  */
 package id.ezclouds.biz.ezservice.enums;
 
+import id.ezclouds.common.util.enums.BizTimePeriod;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizReportByTime.java, v 0.1 2024‐07‐17 1:43 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
