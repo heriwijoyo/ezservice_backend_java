@@ -5,6 +5,7 @@
 package id.ezclouds.core.dal;
 
 import id.ezclouds.common.util.StringUtil;
+import id.ezclouds.common.util.context.EzAppContextHolder;
 import id.ezclouds.common.util.exception.ExceptionUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -26,6 +27,9 @@ public class EzDAOLogHandler {
     @Before("@annotation(id.ezclouds.common.model.annotation.EzDAOLogger)")
     public void before(JoinPoint joinPoint) {
         String traceId = "_";
+        if (EzAppContextHolder.getContext() != null) {
+            traceId = EzAppContextHolder.getContext().getTraceId();
+        }
         EzDAOProfiler.start(traceId, "RJL0", getInvokeTarget(joinPoint));
     }
 

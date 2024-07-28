@@ -10,9 +10,6 @@ import id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO;
 import id.ezclouds.biz.ezservice.service.core.dataobject.BizReportByAreaDO;
 import id.ezclouds.biz.ezservice.service.core.repo.BizMemberUnionRepository;
 import id.ezclouds.biz.ezservice.service.processor.inner.BizAreaReportInnerProcessor;
-import id.ezclouds.common.facade.dal.report.BizReportOverallDAO;
-import id.ezclouds.common.model.report.BizReportOverall;
-import id.ezclouds.common.model.report.BizReportOverallKey;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
@@ -49,9 +46,6 @@ public class BizGenerateAreaReportProcessor extends BizAsyncProcessor {
 
     @Autowired
     private CoreAppVillageRepository coreAppVillageRepository;
-
-    @Autowired
-    private BizReportOverallDAO bizReportOverallDAO;
 
     @Override
     public BizProcessEvent getProcessEvent() {
@@ -92,11 +86,7 @@ public class BizGenerateAreaReportProcessor extends BizAsyncProcessor {
         }
         logData.add("VILLAGE_TOTAL="+ villageTotal);
 
-        BizReportOverall reportOverall = new BizReportOverall();
-        reportOverall.setOrgId(orgId);
-        reportOverall.setKeyId(BizReportOverallKey.TOTAL_TPS.getCode());
-        reportOverall.setCount(totalTps);
-        bizReportOverallDAO.reStore(reportOverall);
+        bizAreaReportInnerProcessor.storeTpsCoverage(orgId, totalTps);
         logData.add("TPS_TOTAL="+ totalTps);
         return true;
     }
