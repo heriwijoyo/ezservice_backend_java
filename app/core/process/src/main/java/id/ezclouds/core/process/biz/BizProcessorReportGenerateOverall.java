@@ -4,7 +4,8 @@
  */
 package id.ezclouds.core.process.biz;
 
-import id.ezclouds.common.util.StringUtil;
+import id.ezclouds.common.facade.dal.member.BizMemberUnionDAO;
+import id.ezclouds.common.util.facade.BeanFacadeUtil;
 import id.ezclouds.core.process.model.BizProcessEvent;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,9 @@ public class BizProcessorReportGenerateOverall extends BizAsyncProcessor {
         String orgId = (String) request;
         logData.add("ORG_ID="+ orgId);
 
+        BizMemberUnionDAO bizMemberUnionDAO = BeanFacadeUtil.getBean(BizMemberUnionDAO.class);
+        long totalMember = bizMemberUnionDAO.countByOrgId(orgId);
+        logData.add("TOTAL_MEMBER=" + totalMember);
 
         return true;
     }

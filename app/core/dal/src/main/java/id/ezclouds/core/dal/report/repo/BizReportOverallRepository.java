@@ -4,7 +4,7 @@
  */
 package id.ezclouds.core.dal.report.repo;
 
-import id.ezclouds.core.dal.report.dataobject.BizReportOverallDO;
+import id.ezclouds.core.dal.report.dataobject.CoreReportOverallDO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,5 +13,5 @@ import org.springframework.stereotype.Repository;
  * @version $Id: BizReportOverallRepository.java, v 0.1 2024‐07‐28 7:44 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Repository
-public interface BizReportOverallRepository extends JpaRepository<BizReportOverallDO, String> {
+public interface BizReportOverallRepository extends JpaRepository<CoreReportOverallDO, String> {
 }

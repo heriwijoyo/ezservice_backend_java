@@ -5,7 +5,7 @@
 package id.ezclouds.core.dal.report.converter;
 
 import id.ezclouds.common.model.report.BizReportOverall;
-import id.ezclouds.core.dal.report.dataobject.BizReportOverallDO;
+import id.ezclouds.core.dal.report.dataobject.CoreReportOverallDO;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -13,8 +13,8 @@ import id.ezclouds.core.dal.report.dataobject.BizReportOverallDO;
  */
 public class BizReportOverallConverter {
 
-    public static BizReportOverallDO convert(BizReportOverall model) {
-        BizReportOverallDO dataObject = new BizReportOverallDO();
+    public static CoreReportOverallDO convert(BizReportOverall model) {
+        CoreReportOverallDO dataObject = new CoreReportOverallDO();
         dataObject.setId(model.getId());
         dataObject.setOrgId(model.getOrgId());
         dataObject.setScene(model.getScene());

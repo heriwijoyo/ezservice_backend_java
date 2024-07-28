@@ -32,7 +32,7 @@ import java.util.TimeZone;
 })
 @ImportResource({ "classpath:/META-INF/ezclouds/spring/config.xml" })
 @EnableJpaRepositories(basePackages = {
-        "id.ezclouds.common.dal",
+        "id.ezclouds.core.dal",
         "id.ezclouds.core.shared",
         "id.ezclouds.core.member",
         "id.ezclouds.core.auth",
@@ -43,7 +43,7 @@ import java.util.TimeZone;
         "id.ezclouds.biz.ezservice.subbiz.arahindonesia.repo"
 })
 @EntityScan(basePackages = {
-        "id.ezclouds.common.dal",
+        "id.ezclouds.core.dal",
         "id.ezclouds.core.shared",
         "id.ezclouds.core.member",
         "id.ezclouds.core.auth",
