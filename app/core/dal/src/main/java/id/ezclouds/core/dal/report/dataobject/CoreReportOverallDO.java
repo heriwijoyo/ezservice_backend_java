@@ -24,14 +24,14 @@ public class CoreReportOverallDO {
     @Column(name = "org_id")
     private String orgId;
 
-    @Column(name = "scene")
-    private String scene;
-
     @Column(name = "key_id")
     private String keyId;
 
     @Column(name = "count")
     private int count;
+
+    @Column(name = "created_time")
+    private String createdTime;
 
     public String getId() {
         return id;
@@ -49,14 +49,6 @@ public class CoreReportOverallDO {
         this.orgId = orgId;
     }
 
-    public String getScene() {
-        return scene;
-    }
-
-    public void setScene(String scene) {
-        this.scene = scene;
-    }
-
     public String getKeyId() {
         return keyId;
     }
@@ -71,5 +63,13 @@ public class CoreReportOverallDO {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
     }
 }

@@ -17,9 +17,9 @@ public class BizReportOverallConverter {
         CoreReportOverallDO dataObject = new CoreReportOverallDO();
         dataObject.setId(model.getId());
         dataObject.setOrgId(model.getOrgId());
-        dataObject.setScene(model.getScene());
         dataObject.setKeyId(model.getKeyId());
         dataObject.setCount(model.getCount());
+        dataObject.setCreatedTime(model.getCreatedTime());
         return dataObject;
     }
 }

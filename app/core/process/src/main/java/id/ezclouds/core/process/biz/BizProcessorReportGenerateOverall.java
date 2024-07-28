@@ -5,8 +5,10 @@
 package id.ezclouds.core.process.biz;
 
 import id.ezclouds.common.facade.dal.member.BizMemberUnionDAO;
-import id.ezclouds.common.util.facade.BeanFacadeUtil;
+import id.ezclouds.common.facade.dal.report.BizReportOverallDAO;
+import id.ezclouds.core.process.biz.inner.BizInnerProcessorReportGenerateOverall;
 import id.ezclouds.core.process.model.BizProcessEvent;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +19,12 @@ import java.util.List;
  */
 @Service
 public class BizProcessorReportGenerateOverall extends BizAsyncProcessor {
+
+    @Autowired
+    private BizMemberUnionDAO bizMemberUnionDAO;
+
+    @Autowired
+    private BizInnerProcessorReportGenerateOverall bizInnerProcessorReportGenerateOverall;
 
     @Override
     public BizProcessEvent getProcessEvent() {
@@ -33,9 +41,12 @@ public class BizProcessorReportGenerateOverall extends BizAsyncProcessor {
         String orgId = (String) request;
         logData.add("ORG_ID="+ orgId);
 
-        BizMemberUnionDAO bizMemberUnionDAO = BeanFacadeUtil.getBean(BizMemberUnionDAO.class);
+        long deleted = bizInnerProcessorReportGenerateOverall.deleteAllReport(orgId);
+        logData.add("DELETED="+ deleted);
+
         long totalMember = bizMemberUnionDAO.countByOrgId(orgId);
         logData.add("TOTAL_MEMBER=" + totalMember);
+        bizInnerProcessorReportGenerateOverall.storeReport(orgId, "ANUAN", (int)totalMember);
 
         return true;
     }

@@ -29,4 +29,10 @@ public class CoreReportOverallDAO implements BizReportOverallDAO {
         CoreReportOverallDO coreReportOverallDO = BizReportOverallConverter.convert(bizReportOverall);
         bizReportOverallRepository.saveAndFlush(coreReportOverallDO);
     }
+
+    @EzDAOLogger
+    @Override
+    public long deleteAll(String orgId) {
+        return bizReportOverallRepository.deleteByOrgId(orgId);
+    }
 }

@@ -14,4 +14,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface BizReportOverallRepository extends JpaRepository<CoreReportOverallDO, String> {
+    long deleteByOrgId(String orgId);
 }

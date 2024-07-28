@@ -12,9 +12,9 @@ public class BizReportOverall {
 
     private String id;
     private String orgId;
-    private String scene;
     private String keyId;
     private int count;
+    private String createdTime;
 
     public String getId() {
         return id;
@@ -32,14 +32,6 @@ public class BizReportOverall {
         this.orgId = orgId;
     }
 
-    public String getScene() {
-        return scene;
-    }
-
-    public void setScene(String scene) {
-        this.scene = scene;
-    }
-
     public String getKeyId() {
         return keyId;
     }
@@ -54,5 +46,13 @@ public class BizReportOverall {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
     }
 }
