@@ -9,6 +9,7 @@ import id.ezclouds.biz.ezservice.service.core.dataobject.BizMemberImportDO;
 import id.ezclouds.biz.ezservice.service.core.dataobject.BizMemberUnionDO;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
+import id.ezclouds.common.util.StringUtil;
 
 import java.util.Arrays;
 
@@ -31,7 +32,7 @@ public class BizMemberUnionConverter {
         unionDO.setSourceId(bizMember.getMemberId());
         unionDO.setSubOrgId(bizMember.getSubOrganization().getSubOrgId());
         unionDO.setRole(getRole(bizMember.getReferrerId()));
-        unionDO.setName(bizMember.getName());
+        unionDO.setName(StringUtil.toTitleCase(bizMember.getName()));
         unionDO.setGender(bizMember.getGender().getCode());
         unionDO.setDateOfBirth(bizMember.getDateOfBirth());
         unionDO.setPhone(bizMember.getPhone());

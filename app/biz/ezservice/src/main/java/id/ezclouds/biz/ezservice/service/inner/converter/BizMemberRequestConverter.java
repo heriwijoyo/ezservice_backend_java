@@ -7,6 +7,7 @@ package id.ezclouds.biz.ezservice.service.inner.converter;
 import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.service.request.BizMemberRegisterRequest;
 import id.ezclouds.common.util.DateUtil;
+import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
 import id.ezclouds.core.member.model.MemberStatus;
@@ -23,7 +24,7 @@ public class BizMemberRequestConverter {
         coreMember.setSourceId(request.getExtendInfo().get(AppConstant.ExtKey.SOURCE_ID));
         coreMember.setReferrerId(request.getReferrerId());
         coreMember.setRoles(request.getRoles());
-        coreMember.setName(request.getName());
+        coreMember.setName(StringUtil.toTitleCase(request.getName()));
         coreMember.setNickname(request.getNickname());
         coreMember.setGender(request.getBizGender().getCode());
         coreMember.setDateOfBirth(request.getDateOfBirth());

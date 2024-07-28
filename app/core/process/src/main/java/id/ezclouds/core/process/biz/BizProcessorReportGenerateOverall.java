@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.process.biz;
 
+import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.process.model.BizProcessEvent;
 import org.springframework.stereotype.Service;
 
