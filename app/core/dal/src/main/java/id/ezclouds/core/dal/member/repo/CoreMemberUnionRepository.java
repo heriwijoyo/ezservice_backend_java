@@ -14,6 +14,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface CoreMemberUnionRepository extends JpaRepository<CoreMemberUnionDO, String> {
-
     long countByOrgId(String orgId);
 }

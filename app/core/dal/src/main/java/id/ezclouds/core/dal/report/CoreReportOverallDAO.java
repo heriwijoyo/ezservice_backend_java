@@ -9,7 +9,7 @@ import id.ezclouds.common.model.annotation.EzDAOLogger;
 import id.ezclouds.common.model.report.BizReportOverall;
 import id.ezclouds.core.dal.report.converter.BizReportOverallConverter;
 import id.ezclouds.core.dal.report.dataobject.CoreReportOverallDO;
-import id.ezclouds.core.dal.report.repo.BizReportOverallRepository;
+import id.ezclouds.core.dal.report.repo.CoreReportOverallRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,18 +21,18 @@ import org.springframework.stereotype.Component;
 public class CoreReportOverallDAO implements BizReportOverallDAO {
 
     @Autowired
-    private BizReportOverallRepository bizReportOverallRepository;
+    private CoreReportOverallRepository coreReportOverallRepository;
 
     @EzDAOLogger
     @Override
     public void store(BizReportOverall bizReportOverall) {
         CoreReportOverallDO coreReportOverallDO = BizReportOverallConverter.convert(bizReportOverall);
-        bizReportOverallRepository.saveAndFlush(coreReportOverallDO);
+        coreReportOverallRepository.saveAndFlush(coreReportOverallDO);
     }
 
     @EzDAOLogger
     @Override
     public long deleteAll(String orgId) {
-        return bizReportOverallRepository.deleteByOrgId(orgId);
+        return coreReportOverallRepository.deleteByOrgId(orgId);
     }
 }
