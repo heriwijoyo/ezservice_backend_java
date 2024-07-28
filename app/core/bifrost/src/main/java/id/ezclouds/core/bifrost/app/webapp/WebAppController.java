@@ -21,6 +21,7 @@ import id.ezclouds.common.util.context.EzAppContextHolder;
 import id.ezclouds.core.shared.util.DigestLogUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -47,6 +48,9 @@ public class WebAppController {
     private static final String ASSET_INCLUDE_LAYOUT = "webapp/include/layout.incl";
     private static final String ASSET_INCLUDE_HEADER = "webapp/include/header.incl";
     private static final String ASSET_INCLUDE_NAVIGATION = "webapp/include/navigation.incl";
+
+    @Autowired
+    private CoreAuthService coreAuthService;
 
     @GetMapping(value = "/webapp/videocard.htm")
     private void webAppVideoCard(HttpServletResponse servletResponse) {
@@ -92,7 +96,7 @@ public class WebAppController {
             @PathVariable("orgCode") String orgCode,
             @PathVariable("sessionId") String sessionId,
             HttpServletResponse servletResponse) {
-        EzAppContextHolder.init(WebEvent.WEB_PAGE_ADMIN_PUBLIC_REPORT);
+        EzAppContextHolder.init(WebEvent.WEB_PAGE_ADMIN_PUBLIC_DATA_APP);
         boolean renderSuccess;
         try {
             AssertUtil.notBlank(orgCode, EzErrorCode.ILLEGAL_PARAM);
@@ -106,6 +110,35 @@ public class WebAppController {
             String htmlLayout = getReportPublicContent(WebAppPage.DATA_PUBLIC_LIMITED.getAssetFile());
             String htmlContent = htmlLayout
                     .replace("PAGE_TITLE", "Data Aplikasi")
+                    .replace("ORG_CODE", orgCode)
+                    .replace("INCLUDE_SESSION_ID", sessionId);
+            renderSuccess = renderCachedWebApp(htmlContent, servletResponse);
+        } catch (Exception e) {
+            e.printStackTrace();
+            renderSuccess = renderCachedWebApp(null, servletResponse);
+        }
+        DigestLogUtil.logWebDigest(LOGGER, getDigestLog(renderSuccess));
+    }
+
+    @GetMapping(value = "/application/report/{orgCode}/{sessionId}")
+    private void webReportPage(
+            @PathVariable("orgCode") String orgCode,
+            @PathVariable("sessionId") String sessionId,
+            HttpServletResponse servletResponse) {
+        EzAppContextHolder.init(WebEvent.WEB_PAGE_ADMIN_PUBLIC_REPORT);
+        boolean renderSuccess;
+        try {
+            AssertUtil.notBlank(orgCode, EzErrorCode.ILLEGAL_PARAM);
+            AssertUtil.notBlank(sessionId, EzErrorCode.ILLEGAL_PARAM);
+
+            CoreAuthAdminSession session = SpringContextConfig
+                    .getBean(CoreAuthService.class)
+                    .adminAuthWebSessionId(sessionId);
+            AssertUtil.isTrue(orgCode.equals(session.getOrgCode()), EzErrorCode.SESSION_INVALID);
+
+            String htmlLayout = getReportPublicContent(WebAppPage.REPORT_PUBLIC_LIMITED.getAssetFile());
+            String htmlContent = htmlLayout
+                    .replace("PAGE_TITLE", "Report")
                     .replace("ORG_CODE", orgCode)
                     .replace("INCLUDE_SESSION_ID", sessionId);
             renderSuccess = renderCachedWebApp(htmlContent, servletResponse);
