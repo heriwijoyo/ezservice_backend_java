@@ -5,6 +5,9 @@
 package id.ezclouds.core.dal.organization;
 
 import id.ezclouds.common.facade.dal.organization.BizSubOrganizationDAO;
+import id.ezclouds.common.model.annotation.EzDAOLogger;
+import id.ezclouds.core.dal.organization.repo.CoreSubOrganizationRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,8 +17,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class CoreSubOrganizationDAO implements BizSubOrganizationDAO {
 
+    @Autowired
+    private CoreSubOrganizationRepository coreSubOrganizationRepository;
+
+    @EzDAOLogger
     @Override
     public long countByOrgId(String orgId) {
-        return 0;
+        return coreSubOrganizationRepository.countByOrgId(orgId);
     }
 }
