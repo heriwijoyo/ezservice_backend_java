@@ -6,6 +6,7 @@ package id.ezclouds.core.process.biz;
 
 import id.ezclouds.common.facade.dal.member.BizMemberUnionDAO;
 import id.ezclouds.common.facade.dal.report.BizReportOverallDAO;
+import id.ezclouds.common.model.report.BizReportOverallKey;
 import id.ezclouds.core.process.biz.inner.BizInnerProcessorReportGenerateOverall;
 import id.ezclouds.core.process.model.BizProcessEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,7 @@ public class BizProcessorReportGenerateOverall extends BizAsyncProcessor {
 
         long totalMember = bizMemberUnionDAO.countByOrgId(orgId);
         logData.add("TOTAL_MEMBER=" + totalMember);
-        bizInnerProcessorReportGenerateOverall.storeReport(orgId, "ANUAN", (int)totalMember);
+        bizInnerProcessorReportGenerateOverall.storeReport(orgId, BizReportOverallKey.TOTAL_MEMBER_UNION.getCode(), (int)totalMember);
 
         return true;
     }
