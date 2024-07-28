@@ -47,6 +47,8 @@ public class CoreReportOverallDAO implements BizReportOverallDAO {
                             currentTime
                     )
             );
+            reportOverallDO.setOrgId(bizReportOverall.getOrgId());
+            reportOverallDO.setKeyId(bizReportOverall.getKeyId());
         }
 
         reportOverallDO.setCount(bizReportOverall.getCount());
