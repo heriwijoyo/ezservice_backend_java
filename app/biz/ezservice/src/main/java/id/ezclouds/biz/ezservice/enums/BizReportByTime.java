@@ -11,6 +11,7 @@ package id.ezclouds.biz.ezservice.enums;
 public enum BizReportByTime {
 
     DAILY_SUB_ORG_PERFORMANCE("DAILY_SUB_ORG_PERFORMANCE", BizTimePeriod.DAILY),
+    DAILY_AREA_PERFORMANCE("DAILY_AREA_PERFORMANCE", BizTimePeriod.DAILY),
 
     ;
 
