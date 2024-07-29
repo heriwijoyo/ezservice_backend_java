@@ -4,15 +4,65 @@
  */
 package id.ezclouds.common.model.report;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.util.List;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizMainReport.java, v 0.1 2024‐07‐29 3:38 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
 public class BizMainReport {
 
-    private String totalSubOrg;
-    private String totalMember;
-    private String totalTps;
-    private String memberToday = "0";
+    private int totalSubOrg;
+    private int totalMember;
+    private int totalTps;
+    private int memberToday = 0;
 
+    private List<BizTimeSeriesReport> timeSeriesReports;
 
+    public int getTotalSubOrg() {
+        return totalSubOrg;
+    }
+
+    public void setTotalSubOrg(int totalSubOrg) {
+        this.totalSubOrg = totalSubOrg;
+    }
+
+    public int getTotalMember() {
+        return totalMember;
+    }
+
+    public void setTotalMember(int totalMember) {
+        this.totalMember = totalMember;
+    }
+
+    public int getTotalTps() {
+        return totalTps;
+    }
+
+    public void setTotalTps(int totalTps) {
+        this.totalTps = totalTps;
+    }
+
+    public int getMemberToday() {
+        return memberToday;
+    }
+
+    public void setMemberToday(int memberToday) {
+        this.memberToday = memberToday;
+    }
+
+    public List<BizTimeSeriesReport> getTimeSeriesReports() {
+        return timeSeriesReports;
+    }
+
+    public void setTimeSeriesReports(List<BizTimeSeriesReport> timeSeriesReports) {
+        this.timeSeriesReports = timeSeriesReports;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
 }

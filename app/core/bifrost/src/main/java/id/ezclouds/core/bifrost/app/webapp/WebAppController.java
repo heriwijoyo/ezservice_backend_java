@@ -7,9 +7,13 @@ package id.ezclouds.core.bifrost.app.webapp;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.ezservice.service.apibiz.BizMemberService;
 import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
+import id.ezclouds.common.facade.biz.BizReportService;
+import id.ezclouds.common.model.report.BizMainReport;
+import id.ezclouds.common.model.report.BizTimeSeriesReport;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
+import id.ezclouds.common.util.facade.BeanFacadeUtil;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.core.auth.model.CoreAuthAdminSession;
@@ -51,6 +55,9 @@ public class WebAppController {
 
     @Autowired
     private CoreAuthService coreAuthService;
+
+    @Autowired
+    private BizReportService bizReportService;
 
     @GetMapping(value = "/webapp/videocard.htm")
     private void webAppVideoCard(HttpServletResponse servletResponse) {
@@ -135,6 +142,12 @@ public class WebAppController {
                     .getBean(CoreAuthService.class)
                     .adminAuthWebSessionId(sessionId);
             AssertUtil.isTrue(orgCode.equals(session.getOrgCode()), EzErrorCode.SESSION_INVALID);
+
+            BizMainReport mainReport = BeanFacadeUtil.getBean(BizReportService.class).getMainReport(session.getOrgId());
+            for (BizTimeSeriesReport timeSeriesReport : mainReport.getTimeSeriesReports()) {
+                String anuan = new ObjectMapper().writeValueAsString(timeSeriesReport);
+                System.out.println(anuan);
+            }
 
             String htmlLayout = getReportPublicContent(WebAppPage.REPORT_PUBLIC_LIMITED.getAssetFile());
             String htmlContent = htmlLayout
