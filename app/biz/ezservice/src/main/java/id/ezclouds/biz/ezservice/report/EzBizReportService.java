@@ -83,15 +83,27 @@ public class EzBizReportService implements BizReportService {
     private List<BizTimeSeriesData> parseTimeSeriesData(List<String> timeFrames, List<BizReportTimeSeries> reportTimeSeries) {
         List<BizTimeSeriesData> data = new ArrayList<>();
 
-        for (BizReportTimeSeries timeSeries : reportTimeSeries) {
-            String groupValue = timeSeries.getGroupValue();
-            BizTimeSeriesData timeSeriesData = new BizTimeSeriesData();
-            timeSeriesData.setName(groupValue);
-            timeSeriesData.setType("line");
-            timeSeriesData.setData(getTimeValues(timeFrames, reportTimeSeries, groupValue));
-            data.add(timeSeriesData);
+        for (String groupValue : distinctGroupValue(reportTimeSeries)) {
+            List<Integer> timeValues = getTimeValues(timeFrames, reportTimeSeries, groupValue);
+            if (isNotEmptyValue(timeValues)) {
+                BizTimeSeriesData timeSeriesData = new BizTimeSeriesData();
+                timeSeriesData.setName(groupValue);
+                timeSeriesData.setType("line");
+                timeSeriesData.setData(timeValues);
+                data.add(timeSeriesData);
+            }
         }
         return data;
+    }
+
+    private List<String> distinctGroupValue(List<BizReportTimeSeries> reportTimeSeries) {
+        List<String> distinctValues = new ArrayList<>();
+        for (BizReportTimeSeries timeSeries : reportTimeSeries) {
+            if (!distinctValues.contains(timeSeries.getGroupValue())) {
+                distinctValues.add(timeSeries.getGroupValue());
+            }
+        }
+        return distinctValues;
     }
 
     private List<Integer> getTimeValues(List<String> timeFrames, List<BizReportTimeSeries> reportTimeSeries, String groupValue) {
@@ -107,5 +119,13 @@ public class EzBizReportService implements BizReportService {
             timeValues.add(value);
         }
         return timeValues;
+    }
+
+    private boolean isNotEmptyValue(List<Integer> values) {
+        int total = 0;
+        for (Integer item : values) {
+            total += item;
+        }
+        return total > 0;
     }
 }

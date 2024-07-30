@@ -111,7 +111,7 @@ public class BizGenerateTimeSeriesReportProcessor extends BizAsyncProcessor {
                 bizReport.setReportId(reportId);
                 bizReport.setGroupValue(groupValue);
                 bizReport.setTimeFrame(timePeriod);
-                bizReport.setTimeValue(getTimeSeriesValue(groupDates, groupValue));
+                bizReport.setTimeValue(getTimeSeriesValue(groupDates, subOrganization.getSubOrgId()));
                 bizTimeSeriesReportInnerProcessor.storeReport(bizReport);
             }
         }
