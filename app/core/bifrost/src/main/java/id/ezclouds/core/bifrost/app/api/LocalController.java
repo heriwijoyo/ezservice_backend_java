@@ -59,8 +59,8 @@ public class LocalController {
         }
     }
 
-    @GetMapping(value = "/api/local/authPublic.json")
-    private void localSuperUserCreatePublicSession(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @GetMapping(value = "/api/local/authPublic/{orgCode}")
+    private void localSuperUserCreatePublicSession(@PathVariable("orgCode") String orgCode, HttpServletRequest request, HttpServletResponse response) throws IOException {
         String localAddr = request.getLocalAddr();
 
         if (!"127.0.0.1".equals(localAddr)) {
@@ -68,7 +68,7 @@ public class LocalController {
         }
         else {
             EzAppContextHolder.init(SuperAdminEvent.SU_CREATE_PUBLIC_SESSION);
-            BizResult bizResult = bizSuperAdminService.createSuperAdminPublicSession();
+            BizResult bizResult = bizSuperAdminService.createSuperAdminPublicSession(orgCode);
 
             response.setStatus(HttpStatus.OK.value());
             if (bizResult.isSuccess()) {

@@ -137,7 +137,7 @@ public class BizSuperAdminService extends BizBaseService {
         return bizResult;
     }
 
-    public BizResult createSuperAdminPublicSession() {
+    public BizResult createSuperAdminPublicSession(String orgCode) {
         final BizResult bizResult = new BizResult();
         BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
             @Override
@@ -147,7 +147,7 @@ public class BizSuperAdminService extends BizBaseService {
             public void onBizProcess() throws Exception {
                 CoreAdminCommonSessionCreateRequest createRequest = new CoreAdminCommonSessionCreateRequest();
                 createRequest.setOrgId(CoreConstant.SU_ORG_ID);
-                createRequest.setOrgCode(CoreConstant.RJL_ORG_CODE);
+                createRequest.setOrgCode(orgCode);
                 createRequest.setScene(CoreAuthAdminScene.WEB_PUBLIC_SESSION.getCode());
                 createRequest.setAppId(CoreConstant.SU_ORG_ID);
                 createRequest.setClientId(CoreConstant.SU_ORG_ID);
