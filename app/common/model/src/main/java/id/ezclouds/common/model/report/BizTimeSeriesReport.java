@@ -13,24 +13,20 @@ import java.util.List;
  */
 public class BizTimeSeriesReport {
 
-    private String title;
-    private List<BizTimeSeriesData> series = new ArrayList<>();
+    private String ezTitle;
+    private final List<BizTimeSeriesData> series = new ArrayList<>();
     private List<String> labels;
 
-    public String getTitle() {
-        return title;
+    public String getEzTitle() {
+        return ezTitle;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setEzTitle(String ezTitle) {
+        this.ezTitle = ezTitle;
     }
 
     public List<BizTimeSeriesData> getSeries() {
         return series;
-    }
-
-    public void setSeries(List<BizTimeSeriesData> series) {
-        this.series = series;
     }
 
     public List<String> getLabels() {

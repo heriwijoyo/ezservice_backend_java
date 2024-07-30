@@ -5,14 +5,14 @@
 package id.ezclouds.biz.ezservice.report;
 
 import id.ezclouds.common.facade.biz.BizReportService;
+import id.ezclouds.common.model.chart.BizApexChartConfig;
+import id.ezclouds.common.model.constant.BizReportConstant;
 import id.ezclouds.common.model.report.BizMainReport;
 import id.ezclouds.common.model.report.BizTimeSeriesData;
-import id.ezclouds.common.model.report.BizTimeSeriesReport;
 import id.ezclouds.common.util.TimeSeriesUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -31,9 +31,22 @@ public class EzBizReportService implements BizReportService {
         mainReport.setMemberToday(87);
 
         List<String> timeSeries = TimeSeriesUtil.getLastNDailySeries(5, 1);
-        BizTimeSeriesReport timeSeriesReport = new BizTimeSeriesReport();
-        timeSeriesReport.setTitle("Progress Harian per Komunitas");
-        timeSeriesReport.setLabels(timeSeries);
+
+        mainReport
+                .getTimeSeriesReportMap()
+                .put(BizReportConstant.TS_SUB_ORG, getChart("Progress Harian per Komunitas", timeSeries));
+
+        mainReport
+                .getTimeSeriesReportMap()
+                .put(BizReportConstant.TS_DISTRICT, getChart("Progress Harian per Kecamatan", timeSeries));
+
+        return mainReport;
+    }
+
+    private BizApexChartConfig getChart(String title, List<String> labels) {
+        BizApexChartConfig timeSeriesReport = new BizApexChartConfig();
+        timeSeriesReport.setEzTitle(title);
+        timeSeriesReport.setLabels(labels);
 
         BizTimeSeriesData seriesDataA = new BizTimeSeriesData();
         seriesDataA.setName("Komunitas A");
@@ -47,9 +60,6 @@ public class EzBizReportService implements BizReportService {
 
         timeSeriesReport.getSeries().add(seriesDataA);
         timeSeriesReport.getSeries().add(seriesDataB);
-
-        mainReport.setTimeSeriesReports(Collections.singletonList(timeSeriesReport));
-
-        return mainReport;
+        return timeSeriesReport;
     }
 }

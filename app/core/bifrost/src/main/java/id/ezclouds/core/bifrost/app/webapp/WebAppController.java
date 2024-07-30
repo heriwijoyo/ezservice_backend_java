@@ -38,7 +38,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -143,17 +145,21 @@ public class WebAppController {
                     .adminAuthWebSessionId(sessionId);
             AssertUtil.isTrue(orgCode.equals(session.getOrgCode()), EzErrorCode.SESSION_INVALID);
 
-            BizMainReport mainReport = BeanFacadeUtil.getBean(BizReportService.class).getMainReport(session.getOrgId());
-            for (BizTimeSeriesReport timeSeriesReport : mainReport.getTimeSeriesReports()) {
-                String anuan = new ObjectMapper().writeValueAsString(timeSeriesReport);
-                System.out.println(anuan);
-            }
-
             String htmlLayout = getReportPublicContent(WebAppPage.REPORT_PUBLIC_LIMITED.getAssetFile());
             String htmlContent = htmlLayout
-                    .replace("PAGE_TITLE", "Report")
-                    .replace("ORG_CODE", orgCode)
-                    .replace("INCLUDE_SESSION_ID", sessionId);
+                    .replace("HTML_TITLE_PAGE", "MSA Report Center")
+                    .replace("INNER_PAGE_TITLE", "MSA Report Center");
+
+            BizMainReport mainReport = BeanFacadeUtil
+                    .getBean(BizReportService.class)
+                    .getMainReport(session.getOrgId());
+
+            Map<String, String> webDataMap = WebAppDataMapper.getDataMap(mainReport);
+            for (Map.Entry<String, String> webDataMapEntry : webDataMap.entrySet()) {
+                htmlContent = htmlContent
+                        .replace(webDataMapEntry.getKey(), webDataMapEntry.getValue());
+            }
+
             renderSuccess = renderCachedWebApp(htmlContent, servletResponse);
         } catch (Exception e) {
             e.printStackTrace();

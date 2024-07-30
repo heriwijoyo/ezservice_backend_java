@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>MSA Center Report</title>
+    <title>HTML_TITLE_PAGE</title>
     <link rel="stylesheet" href="../../../assets/report/css/vendors.css">
     <style type="text/css">
 		@media (min-width: 1px) {
@@ -19,16 +19,13 @@
 
 <body class="hold-transition light-skin sidebar-mini theme-primary fixed sidebar-collapse">
 
-<div class="wrapper">
-    <div id="loader"></div>
-
+<div class="wrapper" style="height:auto">
     <div class="content-wrapper">
         <div class="container-full">
-            <!-- Main content -->
             <section class="content">
                 <div>
                     <div class="mb-20 d-flex b-0 justify-content-between align-items-center">
-                        <h2 class="mt-0 mb-5 fw-600">MSA Report Center</h2>
+                        <h2 class="mt-0 mb-5 fw-600">INNER_PAGE_TITLE</h2>
                     </div>
                 </div>
 
@@ -39,7 +36,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="bs-5 ps-10 border-primary">
                                         <p class="text-fade mb-10">Total Komunitas</p>
-                                        <h2 class="my-0 fw-700">0</h2>
+                                        <h2 class="my-0 fw-700">TOTAL_SUB_ORG</h2>
                                     </div>
                                 </div>
                             </div>
@@ -51,7 +48,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="bs-5 ps-10 border-primary">
                                         <p class="text-fade mb-10">Total Rekrut</p>
-                                        <h2 class="my-0 fw-700">0</h2>
+                                        <h2 class="my-0 fw-700">TOTAL_MEMBER</h2>
                                     </div>
                                 </div>
                             </div>
@@ -63,7 +60,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="bs-5 ps-10 border-primary">
                                         <p class="text-fade mb-10">TPS Coverage</p>
-                                        <h2 class="my-0 fw-700">0</h2>
+                                        <h2 class="my-0 fw-700">TOTAL_TPS</h2>
                                     </div>
                                 </div>
                             </div>
@@ -75,7 +72,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="bs-5 ps-10 border-primary">
                                         <p class="text-fade mb-10">Rekrut Hari Ini</p>
-                                        <h2 class="my-0 fw-700">0</h2>
+                                        <h2 class="my-0 fw-700">MEMBER_TODAY</h2>
                                     </div>
                                 </div>
                             </div>
@@ -84,72 +81,48 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-xl-12 col-lg-12">
+                    <div class="col-xl-6 col-lg-6">
                         <div class="box rounded-4">
                             <div class="box-header d-flex b-0 justify-content-between align-items-center pb-0">
-                                <h3 class="box-title">Progress Harian per Komunitas</h3>
+                                <h3 class="box-title">REPORT_TS_TITLE_SUB_ORG</h3>
                             </div>
                             <div class="box-body py-0">
                                 <div class="row">
-                                    <div class="col-lg-9 p-0">
-                                        <div id="chart-Overall" class="me-0"></div>
+                                    <div class="col-lg-12 p-0">
+                                        <div id="chart-time-series-sub-org" class="me-0"></div>
                                     </div>
-                                    <div class="col-lg-3 bg-light rounded align-self-center">
+                                    <!--div class="col-lg-3 bg-light rounded align-self-center">
                                         <div class="row  py-10 me-1">
                                             <div class="col-lg-12 col-md-4">
                                                 <div class="mb-25">
-                                                    <p class="text-fade mb-5"><i class="fa-solid fa-circle text-primary"></i> Amount</p class="text-fade">
-                                                    <p class="text-fade mb-5"><i class="fa-solid fa-circle text-primary"></i> Amount</p class="text-fade">
-                                                    <p class="text-fade mb-5"><i class="fa-solid fa-circle text-primary"></i> Amount</p class="text-fade">
-                                                    <p class="text-fade mb-5"><i class="fa-solid fa-circle text-primary"></i> Amount</p class="text-fade">
-                                                    <p class="text-fade mb-5"><i class="fa-solid fa-circle text-primary"></i> Amount</p class="text-fade">
-                                                    <p class="text-fade mb-5"><i class="fa-solid fa-circle text-primary"></i> Amount</p class="text-fade">
-                                                    <p class="text-fade mb-5"><i class="fa-solid fa-circle text-primary"></i> Amount</p class="text-fade">
-                                                    <p class="text-fade mb-5"><i class="fa-solid fa-circle text-primary"></i> Amount</p class="text-fade">
-                                                    <p class="text-fade mb-5"><i class="fa-solid fa-circle text-primary"></i> Amount</p class="text-fade">
-                                                    <p class="text-fade mb-5"><i class="fa-solid fa-circle text-primary"></i> Amount</p class="text-fade">
-                                                    <p class="text-fade mb-5"><i class="fa-solid fa-circle text-primary"></i> Amount</p class="text-fade">
-                                                    <p class="text-fade mb-5"><i class="fa-solid fa-circle text-primary"></i> Amount</p class="text-fade">
+                                                    <p class="text-fade mb-5"><i class="fa-solid fa-circle text-primary"/> Additional Info</p>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div-->
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-xl-12 col-lg-12">
+                    <div class="col-xl-6 col-lg-6">
                         <div class="box rounded-4">
                             <div class="box-header d-flex b-0 justify-content-between align-items-center pb-0">
-                                <h3 class="box-title">Progress Harian per Kecamatan</h3>
+                                <h3 class="box-title">REPORT_TS_TITLE_DISTRICT</h3>
                             </div>
                             <div class="box-body py-0">
                                 <div class="row">
-                                    <div class="col-lg-9 p-0">
-                                        <div id="chart-Overall" class="me-0"></div>
+                                    <div class="col-lg-12 p-0">
+                                        <div id="chart-time-series-district" class="me-0"></div>
                                     </div>
-                                    <div class="col-lg-3 bg-light rounded align-self-center">
+                                    <!--div class="col-lg-3 bg-light rounded align-self-center">
                                         <div class="row  py-10 me-1">
                                             <div class="col-lg-12 col-md-4">
                                                 <div class="mb-25">
-                                                    <p class="text-fade mb-5"><i class="fa-solid fa-circle text-primary"></i> Amount</p class="text-fade">
-                                                    <p class="text-fade mb-5"><i class="fa-solid fa-circle text-primary"></i> Amount</p class="text-fade">
-                                                    <p class="text-fade mb-5"><i class="fa-solid fa-circle text-primary"></i> Amount</p class="text-fade">
-                                                    <p class="text-fade mb-5"><i class="fa-solid fa-circle text-primary"></i> Amount</p class="text-fade">
-                                                    <p class="text-fade mb-5"><i class="fa-solid fa-circle text-primary"></i> Amount</p class="text-fade">
-                                                    <p class="text-fade mb-5"><i class="fa-solid fa-circle text-primary"></i> Amount</p class="text-fade">
-                                                    <p class="text-fade mb-5"><i class="fa-solid fa-circle text-primary"></i> Amount</p class="text-fade">
-                                                    <p class="text-fade mb-5"><i class="fa-solid fa-circle text-primary"></i> Amount</p class="text-fade">
-                                                    <p class="text-fade mb-5"><i class="fa-solid fa-circle text-primary"></i> Amount</p class="text-fade">
-                                                    <p class="text-fade mb-5"><i class="fa-solid fa-circle text-primary"></i> Amount</p class="text-fade">
-                                                    <p class="text-fade mb-5"><i class="fa-solid fa-circle text-primary"></i> Amount</p class="text-fade">
-                                                    <p class="text-fade mb-5"><i class="fa-solid fa-circle text-primary"></i> Amount</p class="text-fade">
+                                                    <p class="text-fade mb-5"><i class="fa-solid fa-circle text-primary"/> Additional Info</p>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div-->
                                 </div>
                             </div>
                         </div>
@@ -281,40 +254,26 @@
                     </div>
                 </div>
             </section>
-            <!-- /.content -->
         </div>
     </div>
-    <!-- /.content-wrapper -->
-
     <footer class="main-footer bt-1">
         &copy; 2024 ArahIndonesia. All Rights Reserved.
     </footer>
 
 </div>
 
-
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.8/jquery.slimscroll.min.js"></script>
-<!-- Vendor JS -->
 <script src="../../../assets/report/js/jquery-3.6.0.min.js"></script>
-<script src="../../../assets/report/js/chat-popup.js"></script>
-<script src="../../../assets/report/js/feather.min.js"></script>
-<script src="../../../assets/report/js/jquery.flot.js"></script>
-<script src="../../../assets/report/js/jquery.flot.resize.js"></script>
-<script src="../../../assets/report/js/jquery.flot.pie.js"></script>
-<script src="../../../assets/report/js/jquery.flot.categories.js"></script>
-<script src="../../../assets/report/js/echarts-en.min.js"></script>
 <script src="../../../assets/report/js/apexcharts.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
-<script src="../../../assets/report/js/d3.min.js"></script>
-<script src="../../../assets/report/js/c3.min.js"></script>
-<script src="../../../assets/report/js/raphael.min.js"></script>
-<script src="../../../assets/report/js/morris.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	var chart = new ApexCharts(document.querySelector("#chart-time-series-sub-org"), $.parseJSON('TS_DATA_SUB_ORG'));
+	chart.render();
 
-<script src="../../../assets/report/js/demo.js"></script>
-<script src="../../../assets/report/js/template.js"></script>
-<script src="../../../assets/report/js/dashboard2.js"></script>
-<script src="../../../assets/report/js/rescalendar.js"></script>
-<script src="../../../assets/report/js/horizontal-calendar.js"></script>
+	var chart2 = new ApexCharts(document.querySelector("#chart-time-series-district"), $.parseJSON('TS_DATA_DISTRICT'));
+	chart2.render();
+});
+</script>
+
 </body>
 </html>

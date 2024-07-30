@@ -7,7 +7,9 @@ package id.ezclouds.common.model.report;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -19,7 +21,7 @@ public class BizMainReport {
     private int totalTps;
     private int memberToday = 0;
 
-    private List<BizTimeSeriesReport> timeSeriesReports;
+    private final Map<String, BizTimeSeriesReport> timeSeriesReportMap = new HashMap<>();
 
     public int getTotalSubOrg() {
         return totalSubOrg;
@@ -53,16 +55,7 @@ public class BizMainReport {
         this.memberToday = memberToday;
     }
 
-    public List<BizTimeSeriesReport> getTimeSeriesReports() {
-        return timeSeriesReports;
-    }
-
-    public void setTimeSeriesReports(List<BizTimeSeriesReport> timeSeriesReports) {
-        this.timeSeriesReports = timeSeriesReports;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    public Map<String, BizTimeSeriesReport> getTimeSeriesReportMap() {
+        return timeSeriesReportMap;
     }
 }
