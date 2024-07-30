@@ -45,9 +45,6 @@ public class BizProcessorReportGenerateOverall extends BizAsyncProcessor {
         String orgId = (String) request;
         logData.add("ORG_ID="+ orgId);
 
-        long deleted = bizInnerProcessorReportGenerateOverall.deleteAllReport(orgId);
-        logData.add("DELETED="+ deleted);
-
         long totalMember = bizMemberUnionDAO.countByOrgId(orgId);
         logData.add("TOTAL_MEMBER=" + totalMember);
         bizInnerProcessorReportGenerateOverall.storeReport(orgId, BizReportOverallKey.TOTAL_MEMBER_UNION.getCode(), (int)totalMember);

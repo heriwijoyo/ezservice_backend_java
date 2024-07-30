@@ -30,13 +30,10 @@ public class BizInnerProcessorReportGenerateOverall {
 
     @Transactional
     public void storeReport(String orgId, String keyId, int count) {
-        String currentTime = DateUtil.getCurrentFormattedDate();
         BizReportOverall reportOverall = new BizReportOverall();
-        reportOverall.setId(HashUtil.createHash(orgId, keyId, currentTime));
         reportOverall.setOrgId(orgId);
         reportOverall.setKeyId(keyId);
         reportOverall.setCount(count);
-        reportOverall.setCreatedTime(currentTime);
-        bizReportOverallDAO.store(reportOverall);
+        bizReportOverallDAO.reStore(reportOverall);
     }
 }
