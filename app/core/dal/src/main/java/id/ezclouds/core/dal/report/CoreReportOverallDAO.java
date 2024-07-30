@@ -15,6 +15,9 @@ import id.ezclouds.core.dal.report.repo.CoreReportOverallRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: CoreReportOverallDAO.java, v 0.1 2024‐07‐28 7:54 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -60,5 +63,15 @@ public class CoreReportOverallDAO implements BizReportOverallDAO {
     @Override
     public long deleteAll(String orgId) {
         return coreReportOverallRepository.deleteByOrgId(orgId);
+    }
+
+    @EzDAOLogger
+    @Override
+    public List<BizReportOverall> getAllReport(String orgId) {
+        return coreReportOverallRepository
+                .findByOrgId(orgId)
+                .stream()
+                .map(BizReportOverallConverter::convert)
+                .collect(Collectors.toList());
     }
 }

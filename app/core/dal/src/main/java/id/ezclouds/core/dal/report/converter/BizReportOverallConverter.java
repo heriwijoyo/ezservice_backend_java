@@ -22,4 +22,15 @@ public class BizReportOverallConverter {
         dataObject.setCreatedTime(model.getCreatedTime());
         return dataObject;
     }
+
+    public static BizReportOverall convert(CoreReportOverallDO modelDO) {
+        if (modelDO == null) { return null; }
+        BizReportOverall reportOverall = new BizReportOverall();
+        reportOverall.setOrgId(modelDO.getOrgId());
+        reportOverall.setKeyId(modelDO.getKeyId());
+        reportOverall.setCount(modelDO.getCount());
+        reportOverall.setCreatedTime(modelDO.getCreatedTime());
+        reportOverall.setId(modelDO.getId());
+        return reportOverall;
+    }
 }

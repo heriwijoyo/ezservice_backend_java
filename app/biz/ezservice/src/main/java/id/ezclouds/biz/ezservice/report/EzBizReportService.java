@@ -5,11 +5,15 @@
 package id.ezclouds.biz.ezservice.report;
 
 import id.ezclouds.common.facade.biz.BizReportService;
+import id.ezclouds.common.facade.dal.report.BizReportOverallDAO;
 import id.ezclouds.common.model.chart.BizApexChartConfig;
 import id.ezclouds.common.model.constant.BizReportConstant;
 import id.ezclouds.common.model.report.BizMainReport;
+import id.ezclouds.common.model.report.BizReportOverall;
+import id.ezclouds.common.model.report.BizReportOverallKey;
 import id.ezclouds.common.model.report.BizTimeSeriesData;
 import id.ezclouds.common.util.TimeSeriesUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -22,13 +26,19 @@ import java.util.List;
 @Service
 public class EzBizReportService implements BizReportService {
 
+    @Autowired
+    private BizReportOverallDAO bizReportOverallDAO;
+
     @Override
     public BizMainReport getMainReport(String orgId) {
+        List<BizReportOverall> reportOveralls = bizReportOverallDAO
+                .getAllReport(orgId);
+
         BizMainReport mainReport = new BizMainReport();
-        mainReport.setTotalMember(13638);
-        mainReport.setTotalSubOrg(7);
-        mainReport.setTotalTps(412);
-        mainReport.setMemberToday(87);
+        mainReport.setTotalMember(getOverallCount(reportOveralls, BizReportOverallKey.TOTAL_MEMBER_UNION));
+        mainReport.setTotalSubOrg(getOverallCount(reportOveralls, BizReportOverallKey.TOTAL_SUB_ORGANIZATION));
+        mainReport.setTotalTps(getOverallCount(reportOveralls, BizReportOverallKey.TOTAL_TPS));
+        mainReport.setMemberToday(getOverallCount(reportOveralls, BizReportOverallKey.MEMBER_TODAY));
 
         List<String> timeSeries = TimeSeriesUtil.getLastNDailySeries(5, 1);
 
@@ -41,6 +51,15 @@ public class EzBizReportService implements BizReportService {
                 .put(BizReportConstant.TS_DISTRICT, getChart("Progress Harian per Kecamatan", timeSeries));
 
         return mainReport;
+    }
+
+    private int getOverallCount(List<BizReportOverall> reportOveralls, BizReportOverallKey key) {
+        for (BizReportOverall reportOverall : reportOveralls) {
+            if (key.getCode().equals(reportOverall.getKeyId())) {
+                return reportOverall.getCount();
+            }
+        }
+        return 0;
     }
 
     private BizApexChartConfig getChart(String title, List<String> labels) {

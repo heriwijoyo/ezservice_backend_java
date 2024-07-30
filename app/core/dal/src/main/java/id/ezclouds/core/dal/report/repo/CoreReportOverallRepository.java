@@ -8,6 +8,8 @@ import id.ezclouds.core.dal.report.dataobject.CoreReportOverallDO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: CoreReportOverallRepository.java, v 0.1 2024‐07‐28 7:44 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -16,4 +18,5 @@ import org.springframework.stereotype.Repository;
 public interface CoreReportOverallRepository extends JpaRepository<CoreReportOverallDO, String> {
     long deleteByOrgId(String orgId);
     CoreReportOverallDO findByOrgIdAndKeyId(String orgId, String keyId);
+    List<CoreReportOverallDO> findByOrgId(String orgId);
 }
