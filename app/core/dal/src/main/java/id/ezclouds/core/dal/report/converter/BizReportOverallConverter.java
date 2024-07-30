@@ -5,7 +5,9 @@
 package id.ezclouds.core.dal.report.converter;
 
 import id.ezclouds.common.model.report.BizReportOverall;
+import id.ezclouds.common.model.report.BizReportTimeSeries;
 import id.ezclouds.core.dal.report.dataobject.CoreReportOverallDO;
+import id.ezclouds.core.dal.report.dataobject.CoreReportTimeSeriesDO;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -32,5 +34,17 @@ public class BizReportOverallConverter {
         reportOverall.setCreatedTime(modelDO.getCreatedTime());
         reportOverall.setId(modelDO.getId());
         return reportOverall;
+    }
+
+    public static BizReportTimeSeries convert(CoreReportTimeSeriesDO modelDO) {
+        if (modelDO == null) { return null; }
+        BizReportTimeSeries reportTimeSeries = new BizReportTimeSeries();
+        reportTimeSeries.setId(modelDO.getId());
+        reportTimeSeries.setOrgId(modelDO.getOrgId());
+        reportTimeSeries.setReportId(modelDO.getReportId());
+        reportTimeSeries.setGroupValue(modelDO.getGroupValue());
+        reportTimeSeries.setTimeFrame(modelDO.getTimeFrame());
+        reportTimeSeries.setTimeValue((int)modelDO.getTimeValue());
+        return reportTimeSeries;
     }
 }

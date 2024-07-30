@@ -4,19 +4,19 @@
  */
 package id.ezclouds.biz.ezservice.report;
 
+import id.ezclouds.biz.ezservice.enums.BizReportByTime;
 import id.ezclouds.common.facade.biz.BizReportService;
 import id.ezclouds.common.facade.dal.report.BizReportOverallDAO;
+import id.ezclouds.common.facade.dal.report.BizReportTimeSeriesDAO;
 import id.ezclouds.common.model.chart.BizApexChartConfig;
 import id.ezclouds.common.model.constant.BizReportConstant;
-import id.ezclouds.common.model.report.BizMainReport;
-import id.ezclouds.common.model.report.BizReportOverall;
-import id.ezclouds.common.model.report.BizReportOverallKey;
-import id.ezclouds.common.model.report.BizTimeSeriesData;
+import id.ezclouds.common.model.report.*;
+import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.TimeSeriesUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,6 +29,9 @@ public class EzBizReportService implements BizReportService {
     @Autowired
     private BizReportOverallDAO bizReportOverallDAO;
 
+    @Autowired
+    private BizReportTimeSeriesDAO bizReportTimeSeriesDAO;
+
     @Override
     public BizMainReport getMainReport(String orgId) {
         List<BizReportOverall> reportOveralls = bizReportOverallDAO
@@ -40,15 +43,20 @@ public class EzBizReportService implements BizReportService {
         mainReport.setTotalTps(getOverallCount(reportOveralls, BizReportOverallKey.TOTAL_TPS));
         mainReport.setMemberToday(getOverallCount(reportOveralls, BizReportOverallKey.MEMBER_TODAY));
 
-        List<String> timeSeries = TimeSeriesUtil.getLastNDailySeries(5, 1);
+
+        List<String> timeFrames = TimeSeriesUtil.getLastNDailySeries(10, 1);
+        List<BizReportTimeSeries> timeSeriesSubOrg = bizReportTimeSeriesDAO
+                .getReports(orgId, BizReportByTime.DAILY_SUB_ORG_PERFORMANCE.getId(), timeFrames);
+        List<BizReportTimeSeries> timeSeriesDistrict = bizReportTimeSeriesDAO
+                .getReports(orgId, BizReportByTime.DAILY_AREA_PERFORMANCE.getId(), timeFrames);
 
         mainReport
                 .getTimeSeriesReportMap()
-                .put(BizReportConstant.TS_SUB_ORG, getChart("Progress Harian per Komunitas", timeSeries));
+                .put(BizReportConstant.TS_SUB_ORG, generateTimeSeriesChart("Progress Harian per Komunitas", timeSeriesSubOrg, timeFrames));
 
         mainReport
                 .getTimeSeriesReportMap()
-                .put(BizReportConstant.TS_DISTRICT, getChart("Progress Harian per Kecamatan", timeSeries));
+                .put(BizReportConstant.TS_DISTRICT, generateTimeSeriesChart("Progress Harian per Kecamatan", timeSeriesDistrict, timeFrames));
 
         return mainReport;
     }
@@ -62,23 +70,42 @@ public class EzBizReportService implements BizReportService {
         return 0;
     }
 
-    private BizApexChartConfig getChart(String title, List<String> labels) {
-        BizApexChartConfig timeSeriesReport = new BizApexChartConfig();
-        timeSeriesReport.setEzTitle(title);
-        timeSeriesReport.setLabels(labels);
+    private BizApexChartConfig generateTimeSeriesChart(String title, List<BizReportTimeSeries> data, List<String> timeFrames) {
+        BizApexChartConfig apexChartConfig = new BizApexChartConfig();
+        apexChartConfig.setEzTitle(title);
+        apexChartConfig.setLabels(timeFrames);
+        apexChartConfig
+                .getSeries()
+                .addAll(parseTimeSeriesData(timeFrames, data));
+        return apexChartConfig;
+    }
 
-        BizTimeSeriesData seriesDataA = new BizTimeSeriesData();
-        seriesDataA.setName("Komunitas A");
-        seriesDataA.setType("line");
-        seriesDataA.setData(Arrays.asList(8,4,7,3,4));
+    private List<BizTimeSeriesData> parseTimeSeriesData(List<String> timeFrames, List<BizReportTimeSeries> reportTimeSeries) {
+        List<BizTimeSeriesData> data = new ArrayList<>();
 
-        BizTimeSeriesData seriesDataB = new BizTimeSeriesData();
-        seriesDataB.setName("Komunitas B");
-        seriesDataB.setType("line");
-        seriesDataB.setData(Arrays.asList(4,7,5,2,9));
+        for (BizReportTimeSeries timeSeries : reportTimeSeries) {
+            String groupValue = timeSeries.getGroupValue();
+            BizTimeSeriesData timeSeriesData = new BizTimeSeriesData();
+            timeSeriesData.setName(groupValue);
+            timeSeriesData.setType("line");
+            timeSeriesData.setData(getTimeValues(timeFrames, reportTimeSeries, groupValue));
+            data.add(timeSeriesData);
+        }
+        return data;
+    }
 
-        timeSeriesReport.getSeries().add(seriesDataA);
-        timeSeriesReport.getSeries().add(seriesDataB);
-        return timeSeriesReport;
+    private List<Integer> getTimeValues(List<String> timeFrames, List<BizReportTimeSeries> reportTimeSeries, String groupValue) {
+        List<Integer> timeValues = new ArrayList<>();
+        for (String timeFrame : timeFrames) {
+            int value = 0;
+            for (BizReportTimeSeries timeSeries : reportTimeSeries) {
+                if (StringUtil.equalsNotNull(groupValue, timeSeries.getGroupValue())
+                        && StringUtil.equalsNotNull(timeFrame, timeSeries.getTimeFrame())) {
+                    value = timeSeries.getTimeValue();
+                }
+            }
+            timeValues.add(value);
+        }
+        return timeValues;
     }
 }
