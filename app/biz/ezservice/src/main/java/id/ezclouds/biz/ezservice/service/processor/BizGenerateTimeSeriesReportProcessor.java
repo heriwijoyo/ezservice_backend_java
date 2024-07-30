@@ -104,7 +104,7 @@ public class BizGenerateTimeSeriesReportProcessor extends BizAsyncProcessor {
             List<BizCustomQueryGroupDO> groupDates = bizMemberUnionRepository
                     .fetchDateSeriesBySubOrgGroup(orgId, source, timePeriod);
             for (BizSubOrganizationDO subOrganization : subOrgs) {
-                String groupValue = subOrganization.getSubOrgId();
+                String groupValue = subOrganization.getName();
                 BizReportTimeSeriesDO bizReport = new BizReportTimeSeriesDO();
                 bizReport.setId(HashUtil.createHash(orgId, reportId, groupValue, timePeriod));
                 bizReport.setOrgId(orgId);
