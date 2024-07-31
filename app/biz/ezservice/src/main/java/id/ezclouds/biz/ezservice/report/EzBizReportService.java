@@ -6,6 +6,7 @@ package id.ezclouds.biz.ezservice.report;
 
 import id.ezclouds.biz.ezservice.enums.BizReportByTime;
 import id.ezclouds.common.facade.biz.BizReportService;
+import id.ezclouds.common.facade.dal.report.BizReportByAreaDAO;
 import id.ezclouds.common.facade.dal.report.BizReportOverallDAO;
 import id.ezclouds.common.facade.dal.report.BizReportTimeSeriesDAO;
 import id.ezclouds.common.model.chart.BizApexChartConfig;
@@ -17,7 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -31,6 +34,9 @@ public class EzBizReportService implements BizReportService {
 
     @Autowired
     private BizReportTimeSeriesDAO bizReportTimeSeriesDAO;
+
+    @Autowired
+    private BizReportByAreaDAO bizReportByAreaDAO;
 
     @Override
     public BizMainReport getMainReport(String orgId) {
@@ -57,6 +63,12 @@ public class EzBizReportService implements BizReportService {
         mainReport
                 .getTimeSeriesReportMap()
                 .put(BizReportConstant.TS_DISTRICT, generateTimeSeriesChart("Progress Harian per Kecamatan", timeSeriesDistrict, timeFrames));
+
+        List<BizReportByArea> reportByAreas = bizReportByAreaDAO
+                .getReportDistrictAllSource(orgId);
+        mainReport
+                .getBizReportByAreaMap()
+                .put(BizReportConstant.RECAP_DISTRICT, mergeAllSource(reportByAreas));
 
         return mainReport;
     }
@@ -127,5 +139,28 @@ public class EzBizReportService implements BizReportService {
             total += item;
         }
         return total > 0;
+    }
+
+    private List<BizReportByArea> mergeAllSource(List<BizReportByArea> origin) {
+        Map<String, BizReportByArea> reportMap = new HashMap<>();
+        for (BizReportByArea reportByArea : origin) {
+            String reportKey = reportByArea.getDistrictName();
+            if (reportMap.get(reportKey) == null) {
+                reportMap.put(reportKey, reportByArea);
+            } else {
+                mergeValue(reportMap.get(reportKey), reportByArea);
+            }
+        }
+
+        return new ArrayList<>(reportMap.values());
+    }
+
+    private void mergeValue(BizReportByArea origin, BizReportByArea addition) {
+        origin.addVoterTotal(addition.getVoterTotal());
+        origin.addVoterStrong(addition.getVoterStrong());
+        origin.addVoterLazy(addition.getVoterLazy());
+        origin.addGenderMale(addition.getGenderMale());
+        origin.addGenderFemale(addition.getGenderFemale());
+        origin.addGenderOther(addition.getGenderOther());
     }
 }

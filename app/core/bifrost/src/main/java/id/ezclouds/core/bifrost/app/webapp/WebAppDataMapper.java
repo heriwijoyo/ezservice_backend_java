@@ -7,9 +7,12 @@ package id.ezclouds.core.bifrost.app.webapp;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.common.model.constant.BizReportConstant;
 import id.ezclouds.common.model.report.BizMainReport;
+import id.ezclouds.common.model.report.BizReportByArea;
 import id.ezclouds.common.model.report.BizTimeSeriesReport;
+import id.ezclouds.common.util.StringUtil;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,10 +23,10 @@ public class WebAppDataMapper {
 
     public static Map<String, String> getDataMap(BizMainReport mainReport) {
         Map<String, String> dataMap = new HashMap<>();
-        dataMap.put(BizReportConstant.TOTAL_SUB_ORG, ""+ mainReport.getTotalSubOrg());
-        dataMap.put(BizReportConstant.TOTAL_MEMBER, ""+ mainReport.getTotalMember());
-        dataMap.put(BizReportConstant.TOTAL_TPS, ""+ mainReport.getTotalTps());
-        dataMap.put(BizReportConstant.MEMBER_TODAY, ""+ mainReport.getMemberToday());
+        dataMap.put(BizReportConstant.TOTAL_SUB_ORG, StringUtil.thousandFormat(mainReport.getTotalSubOrg()));
+        dataMap.put(BizReportConstant.TOTAL_MEMBER, StringUtil.thousandFormat(mainReport.getTotalMember()));
+        dataMap.put(BizReportConstant.TOTAL_TPS, StringUtil.thousandFormat(mainReport.getTotalTps()));
+        dataMap.put(BizReportConstant.MEMBER_TODAY, StringUtil.thousandFormat(mainReport.getMemberToday()));
 
         BizTimeSeriesReport subOrgTsReport = mainReport
                 .getTimeSeriesReportMap()
@@ -37,6 +40,11 @@ public class WebAppDataMapper {
         dataMap.put(BizReportConstant.REPORT_TS_TITLE_DISTRICT, districtTsReport.getEzTitle());
         dataMap.put(BizReportConstant.TS_DATA_DISTRICT, getJsonValue(districtTsReport));
 
+        List<BizReportByArea> recapByDistrict = mainReport
+                .getBizReportByAreaMap()
+                .get(BizReportConstant.RECAP_DISTRICT);
+        dataMap.put(BizReportConstant.RECAP_DISTRICT, parseRowHTML(recapByDistrict));
+
         return dataMap;
     }
 
@@ -46,5 +54,49 @@ public class WebAppDataMapper {
             jsonValue = new ObjectMapper().writeValueAsString(object);
         } catch (Exception ignored) {}
         return jsonValue;
+    }
+
+    private static String parseRowHTML(List<BizReportByArea> reports) {
+        StringBuilder sb = new StringBuilder();
+        int number = 1;
+        for (BizReportByArea reportByArea : reports) {
+            sb.append("<tr>");
+            sb.append("<td>");
+            sb.append(number);
+            sb.append("</td>");
+
+            sb.append("<td>");
+            sb.append(reportByArea.getDistrictName());
+            sb.append("</td>");
+
+            sb.append("<td>");
+            sb.append(reportByArea.getVoterTotal());
+            sb.append("</td>");
+
+            sb.append("<td>");
+            sb.append(reportByArea.getVoterStrong());
+            sb.append("</td>");
+
+            sb.append("<td>");
+            sb.append(reportByArea.getVoterLazy());
+            sb.append("</td>");
+
+            sb.append("<td>");
+            sb.append(reportByArea.getGenderMale());
+            sb.append("</td>");
+
+            sb.append("<td>");
+            sb.append(reportByArea.getGenderFemale());
+            sb.append("</td>");
+
+            sb.append("<td>");
+            sb.append(StringUtil.defaultIfNull(reportByArea.getTpsData()));
+            sb.append("</td>");
+
+            sb.append("</tr>");
+
+            number++;
+        }
+        return sb.toString();
     }
 }

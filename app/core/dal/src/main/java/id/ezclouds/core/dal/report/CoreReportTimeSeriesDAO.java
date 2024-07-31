@@ -7,7 +7,7 @@ package id.ezclouds.core.dal.report;
 import id.ezclouds.common.facade.dal.report.BizReportTimeSeriesDAO;
 import id.ezclouds.common.model.annotation.EzDAOLogger;
 import id.ezclouds.common.model.report.BizReportTimeSeries;
-import id.ezclouds.core.dal.report.converter.BizReportOverallConverter;
+import id.ezclouds.core.dal.report.converter.BizReportConverter;
 import id.ezclouds.core.dal.report.repo.CoreReportTimeSeriesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,7 +31,7 @@ public class CoreReportTimeSeriesDAO implements BizReportTimeSeriesDAO {
         return coreReportTimeSeriesRepository
                 .findByOrgIdAndAndReportIdAndTimeFrameIn(orgId, reportId, timeFrames)
                 .stream()
-                .map(BizReportOverallConverter::convert)
+                .map(BizReportConverter::convert)
                 .collect(Collectors.toList());
     }
 }

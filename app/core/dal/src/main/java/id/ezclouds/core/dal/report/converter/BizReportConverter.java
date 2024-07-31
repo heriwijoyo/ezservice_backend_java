@@ -4,16 +4,18 @@
  */
 package id.ezclouds.core.dal.report.converter;
 
+import id.ezclouds.common.model.report.BizReportByArea;
 import id.ezclouds.common.model.report.BizReportOverall;
 import id.ezclouds.common.model.report.BizReportTimeSeries;
+import id.ezclouds.core.dal.report.dataobject.CoreReportByAreaDO;
 import id.ezclouds.core.dal.report.dataobject.CoreReportOverallDO;
 import id.ezclouds.core.dal.report.dataobject.CoreReportTimeSeriesDO;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: BizReportOverallConverter.java, v 0.1 2024‐07‐28 8:05 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: BizReportConverter.java, v 0.1 2024‐07‐28 8:05 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class BizReportOverallConverter {
+public class BizReportConverter {
 
     public static CoreReportOverallDO convert(BizReportOverall model) {
         CoreReportOverallDO dataObject = new CoreReportOverallDO();
@@ -46,5 +48,22 @@ public class BizReportOverallConverter {
         reportTimeSeries.setTimeFrame(modelDO.getTimeFrame());
         reportTimeSeries.setTimeValue((int)modelDO.getTimeValue());
         return reportTimeSeries;
+    }
+
+    public static BizReportByArea convert(CoreReportByAreaDO modelDO) {
+        if (modelDO == null) { return null; }
+        BizReportByArea reportByArea = new BizReportByArea();
+        reportByArea.setOrgId(modelDO.getOrgId());
+        reportByArea.setSource(modelDO.getSource());
+        reportByArea.setDistrictName(modelDO.getDistrictName());
+        reportByArea.setVillageName(modelDO.getVillageName());
+        reportByArea.setVoterTotal(modelDO.getVoterTotal());
+        reportByArea.setVoterStrong(modelDO.getVoterStrong());
+        reportByArea.setVoterLazy(modelDO.getVoterLazy());
+        reportByArea.setGenderMale(modelDO.getGenderMale());
+        reportByArea.setGenderFemale(modelDO.getGenderFemale());
+        reportByArea.setGenderOther(modelDO.getGenderOther());
+        reportByArea.setTpsData(modelDO.getTpsData());
+        return reportByArea;
     }
 }

@@ -9,7 +9,7 @@ import id.ezclouds.common.model.annotation.EzDAOLogger;
 import id.ezclouds.common.model.report.BizReportOverall;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
-import id.ezclouds.core.dal.report.converter.BizReportOverallConverter;
+import id.ezclouds.core.dal.report.converter.BizReportConverter;
 import id.ezclouds.core.dal.report.dataobject.CoreReportOverallDO;
 import id.ezclouds.core.dal.report.repo.CoreReportOverallRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class CoreReportOverallDAO implements BizReportOverallDAO {
     @EzDAOLogger
     @Override
     public void store(BizReportOverall bizReportOverall) {
-        CoreReportOverallDO coreReportOverallDO = BizReportOverallConverter.convert(bizReportOverall);
+        CoreReportOverallDO coreReportOverallDO = BizReportConverter.convert(bizReportOverall);
         coreReportOverallRepository.saveAndFlush(coreReportOverallDO);
     }
 
@@ -71,7 +71,7 @@ public class CoreReportOverallDAO implements BizReportOverallDAO {
         return coreReportOverallRepository
                 .findByOrgId(orgId)
                 .stream()
-                .map(BizReportOverallConverter::convert)
+                .map(BizReportConverter::convert)
                 .collect(Collectors.toList());
     }
 }

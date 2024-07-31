@@ -104,4 +104,15 @@ public class StringUtil {
         }
         return titleCase.toString();
     }
+
+    public static String thousandFormat(int number) {
+        return String.format("%,d", number);
+    }
+
+    public static String defaultIfNull(String origin) {
+        if (origin == null) {
+            return EMPTY;
+        }
+        return origin;
+    }
 }

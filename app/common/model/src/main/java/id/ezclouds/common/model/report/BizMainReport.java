@@ -4,9 +4,6 @@
  */
 package id.ezclouds.common.model.report;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +19,7 @@ public class BizMainReport {
     private int memberToday = 0;
 
     private final Map<String, BizTimeSeriesReport> timeSeriesReportMap = new HashMap<>();
+    private final Map<String, List<BizReportByArea>> bizReportByAreaMap = new HashMap<>();
 
     public int getTotalSubOrg() {
         return totalSubOrg;
@@ -57,5 +55,9 @@ public class BizMainReport {
 
     public Map<String, BizTimeSeriesReport> getTimeSeriesReportMap() {
         return timeSeriesReportMap;
+    }
+
+    public Map<String, List<BizReportByArea>> getBizReportByAreaMap() {
+        return bizReportByAreaMap;
     }
 }
