@@ -5,9 +5,11 @@
 package id.ezclouds.core.dal.report.converter;
 
 import id.ezclouds.common.model.report.BizReportByArea;
+import id.ezclouds.common.model.report.BizReportBySubOrg;
 import id.ezclouds.common.model.report.BizReportOverall;
 import id.ezclouds.common.model.report.BizReportTimeSeries;
 import id.ezclouds.core.dal.report.dataobject.CoreReportByAreaDO;
+import id.ezclouds.core.dal.report.dataobject.CoreReportBySubOrgDO;
 import id.ezclouds.core.dal.report.dataobject.CoreReportOverallDO;
 import id.ezclouds.core.dal.report.dataobject.CoreReportTimeSeriesDO;
 
@@ -65,5 +67,20 @@ public class BizReportConverter {
         reportByArea.setGenderOther(modelDO.getGenderOther());
         reportByArea.setTpsData(modelDO.getTpsData());
         return reportByArea;
+    }
+
+    public static BizReportBySubOrg convert(CoreReportBySubOrgDO modelDO) {
+        if (modelDO == null) { return null; }
+        BizReportBySubOrg reportBySubOrg = new BizReportBySubOrg();
+        reportBySubOrg.setOrgId(modelDO.getOrgId());
+        reportBySubOrg.setSource(modelDO.getSource());
+        reportBySubOrg.setSubOrgName(modelDO.getSubOrgName());
+        reportBySubOrg.setVoterTotal(modelDO.getVoterTotal());
+        reportBySubOrg.setVoterStrong(modelDO.getVoterStrong());
+        reportBySubOrg.setVoterLazy(modelDO.getVoterLazy());
+        reportBySubOrg.setGenderMale(modelDO.getGenderMale());
+        reportBySubOrg.setGenderFemale(modelDO.getGenderFemale());
+        reportBySubOrg.setGenderOther(modelDO.getGenderOther());
+        return reportBySubOrg;
     }
 }
