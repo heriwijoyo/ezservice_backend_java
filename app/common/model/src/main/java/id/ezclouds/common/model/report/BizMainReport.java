@@ -4,6 +4,7 @@
  */
 package id.ezclouds.common.model.report;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,9 @@ public class BizMainReport {
     private int memberToday = 0;
 
     private final Map<String, BizTimeSeriesReport> timeSeriesReportMap = new HashMap<>();
-    private final Map<String, List<BizReportByArea>> bizReportByAreaMap = new HashMap<>();
+
+    private final List<BizReportBySubOrg> bizReportBySubOrgs = new ArrayList<>();
+    private final List<BizReportByArea> bizReportByAreas = new ArrayList<>();
 
     public int getTotalSubOrg() {
         return totalSubOrg;
@@ -57,7 +60,11 @@ public class BizMainReport {
         return timeSeriesReportMap;
     }
 
-    public Map<String, List<BizReportByArea>> getBizReportByAreaMap() {
-        return bizReportByAreaMap;
+    public List<BizReportBySubOrg> getBizReportBySubOrgs() {
+        return bizReportBySubOrgs;
+    }
+
+    public List<BizReportByArea> getBizReportByAreas() {
+        return bizReportByAreas;
     }
 }

@@ -18,6 +18,7 @@ public class BizReportConstant {
     public static final String TS_DATA_SUB_ORG  = "TS_DATA_SUB_ORG";
     public static final String TS_DATA_DISTRICT  = "TS_DATA_DISTRICT";
 
+    public static final String RECAP_SUB_ORG       = "RECAP_SUB_ORG";
     public static final String RECAP_DISTRICT       = "RECAP_DISTRICT";
 
 

@@ -9,7 +9,6 @@ import id.ezclouds.biz.ezservice.service.apibiz.BizMemberService;
 import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.common.facade.biz.BizReportService;
 import id.ezclouds.common.model.report.BizMainReport;
-import id.ezclouds.common.model.report.BizTimeSeriesReport;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
@@ -38,7 +37,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

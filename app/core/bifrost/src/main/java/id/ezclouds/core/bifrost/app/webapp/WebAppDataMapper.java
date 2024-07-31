@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.common.model.constant.BizReportConstant;
 import id.ezclouds.common.model.report.BizMainReport;
 import id.ezclouds.common.model.report.BizReportByArea;
+import id.ezclouds.common.model.report.BizReportBySubOrg;
 import id.ezclouds.common.model.report.BizTimeSeriesReport;
 import id.ezclouds.common.util.StringUtil;
 
@@ -40,10 +41,8 @@ public class WebAppDataMapper {
         dataMap.put(BizReportConstant.REPORT_TS_TITLE_DISTRICT, districtTsReport.getEzTitle());
         dataMap.put(BizReportConstant.TS_DATA_DISTRICT, getJsonValue(districtTsReport));
 
-        List<BizReportByArea> recapByDistrict = mainReport
-                .getBizReportByAreaMap()
-                .get(BizReportConstant.RECAP_DISTRICT);
-        dataMap.put(BizReportConstant.RECAP_DISTRICT, parseRowHTML(recapByDistrict));
+        dataMap.put(BizReportConstant.RECAP_SUB_ORG, parseRowSubOrgHTML(mainReport.getBizReportBySubOrgs()));
+        dataMap.put(BizReportConstant.RECAP_DISTRICT, parseRowDistrictHTML(mainReport.getBizReportByAreas()));
 
         return dataMap;
     }
@@ -56,7 +55,47 @@ public class WebAppDataMapper {
         return jsonValue;
     }
 
-    private static String parseRowHTML(List<BizReportByArea> reports) {
+    private static String parseRowSubOrgHTML(List<BizReportBySubOrg> reports) {
+        StringBuilder sb = new StringBuilder();
+        int number = 1;
+        for (BizReportBySubOrg reportByArea : reports) {
+            sb.append("<tr>");
+            sb.append("<td>");
+            sb.append(number);
+            sb.append("</td>");
+
+            sb.append("<td>");
+            sb.append(reportByArea.getSubOrgName());
+            sb.append("</td>");
+
+            sb.append("<td>");
+            sb.append(reportByArea.getVoterTotal());
+            sb.append("</td>");
+
+            sb.append("<td>");
+            sb.append(reportByArea.getVoterStrong());
+            sb.append("</td>");
+
+            sb.append("<td>");
+            sb.append(reportByArea.getVoterLazy());
+            sb.append("</td>");
+
+            sb.append("<td>");
+            sb.append(reportByArea.getGenderMale());
+            sb.append("</td>");
+
+            sb.append("<td>");
+            sb.append(reportByArea.getGenderFemale());
+            sb.append("</td>");
+
+            sb.append("</tr>");
+
+            number++;
+        }
+        return sb.toString();
+    }
+
+    private static String parseRowDistrictHTML(List<BizReportByArea> reports) {
         StringBuilder sb = new StringBuilder();
         int number = 1;
         for (BizReportByArea reportByArea : reports) {

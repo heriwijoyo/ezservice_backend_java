@@ -7,6 +7,7 @@ package id.ezclouds.biz.ezservice.report;
 import id.ezclouds.biz.ezservice.enums.BizReportByTime;
 import id.ezclouds.common.facade.biz.BizReportService;
 import id.ezclouds.common.facade.dal.report.BizReportByAreaDAO;
+import id.ezclouds.common.facade.dal.report.BizReportBySubOrgDAO;
 import id.ezclouds.common.facade.dal.report.BizReportOverallDAO;
 import id.ezclouds.common.facade.dal.report.BizReportTimeSeriesDAO;
 import id.ezclouds.common.model.chart.BizApexChartConfig;
@@ -34,6 +35,9 @@ public class EzBizReportService implements BizReportService {
 
     @Autowired
     private BizReportTimeSeriesDAO bizReportTimeSeriesDAO;
+
+    @Autowired
+    private BizReportBySubOrgDAO bizReportBySubOrgDAO;
 
     @Autowired
     private BizReportByAreaDAO bizReportByAreaDAO;
@@ -67,8 +71,8 @@ public class EzBizReportService implements BizReportService {
         List<BizReportByArea> reportByAreas = bizReportByAreaDAO
                 .getReportDistrictAllSource(orgId);
         mainReport
-                .getBizReportByAreaMap()
-                .put(BizReportConstant.RECAP_DISTRICT, mergeAllSource(reportByAreas));
+                .getBizReportByAreas()
+                .addAll(mergeAllSource(reportByAreas));
 
         return mainReport;
     }
