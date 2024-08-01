@@ -19,7 +19,7 @@ import java.util.Arrays;
  */
 public class BizMemberUnionConverter {
 
-    private static String[] orgAdminIds = {"2000210000000000", "2000110000000000", "2000410000000000"};
+    private static String[] orgAdminIds = {"2000210000000000", "2000110000000000", "2000710000000023"};
 
     public static BizMemberUnionDO convert(BizMember bizMember) {
         if (bizMember == null) { return null; }
