@@ -98,6 +98,13 @@ public class WebAppController {
         DigestLogUtil.logWebDigest(LOGGER, getDigestLog(success));
     }
 
+    @GetMapping(value = "/webapp/addMember.htm")
+    private void webAddMember(HttpServletResponse servletResponse) {
+        EzAppContextHolder.init(WebEvent.WEB_PAGE_ADMIN_ADD_MEMBER);
+        boolean success = renderCachedWebApp(getWebAppContent(WebAppPage.ADD_MEMBER), servletResponse);
+        DigestLogUtil.logWebDigest(LOGGER, getDigestLog(success));
+    }
+
     @GetMapping(value = "/webapp/data/{orgCode}/{sessionId}")
     private void webDataPage(
             @PathVariable("orgCode") String orgCode,

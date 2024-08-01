@@ -384,6 +384,7 @@
                                 </table>
                             </div>
                             <div class="col-sm-12">
+                                <button id="addMemberBtnSubmit" class="button button-rounded waves-effect waves-float pull-right">ADD MEMBER</button>
                                 <button id="addAdminBtnSubmit" class="button button-rounded waves-effect waves-float pull-right">ADD ADMIN</button>
                             </div>
                         </div>
@@ -953,6 +954,10 @@
         });
         $('#addAdminBtnSubmit').click(function(){
             EzDashboardBizService.showNewAdminForm();
+        });
+        $('#addMemberBtnSubmit').click(function(){
+            let orgId = EzWebAppClient.getUrlParameter('id');
+            window.location.replace('addMember.htm?id='+ orgId);
         });
         $('#newAdminCancelButton').click(function(){
             EzDashboardBizService.hideNewAdminForm();

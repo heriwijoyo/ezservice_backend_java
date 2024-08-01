@@ -15,6 +15,7 @@ public enum WebAppPage {
     WHATSAPP("webapp/whatsapp.htm"),
     DOCUMENTS("webapp/documents.htm"),
 
+    ADD_MEMBER("webapp/addMember.htm"),
     CONFIG("webapp/config.htm"),
     SPECIAL_PROCESS("webapp/specialProcess.htm"),
     DATA_PUBLIC_LIMITED("webapp/data.htm"),
