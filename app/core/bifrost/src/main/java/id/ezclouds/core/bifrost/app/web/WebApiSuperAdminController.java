@@ -15,6 +15,7 @@ import id.ezclouds.biz.ezservice.service.app.model.BizAppConfig;
 import id.ezclouds.biz.ezservice.service.request.BizDataImportRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
+import id.ezclouds.core.shared.model.CoreArea;
 import id.ezclouds.core.shared.result.PageResult;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
@@ -143,6 +144,36 @@ public class WebApiSuperAdminController {
             public BizOrganizationDetail convertResult(Object object) {
                 if (object instanceof BizOrganizationDetail) {
                     return (BizOrganizationDetail) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/addMemberRequiredData.json")
+    private WebApiResult<BizMemberRequiredData> addMemberRequiredData(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "orgId", required = false) String orgId) {
+        final WebApiResult<BizMemberRequiredData> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_MEMBER_REQUIRED_DATA, result, new WebApiControllerTemplate.Handler<BizMemberRequiredData>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizWebDetailRequest<String> request = new BizWebDetailRequest<>();
+                request.setSessionId(sessionId);
+                request.setObject(orgId);
+                return bizSuperAdminService.getMemberRequiredData(request);
+            }
+
+            @Override
+            public BizMemberRequiredData convertResult(Object object) {
+                if (object instanceof BizMemberRequiredData) {
+                    return (BizMemberRequiredData) object;
                 }
                 return null;
             }
@@ -491,6 +522,32 @@ public class WebApiSuperAdminController {
             @Override
             public String convertResult(Object object) {
                 return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/coreArea.json")
+    private WebApiResult<List<CoreArea>> coreArea(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "level", required = false) String level,
+            @RequestParam(name = "parentId", required = false) String parentId) {
+        final WebApiResult<List<CoreArea>> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_CORE_AREA, result, new WebApiControllerTemplate.Handler<List<CoreArea>>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                return bizSuperAdminService
+                        .getCoreAreas(sessionId, level, parentId);
+            }
+
+            @Override
+            public List<CoreArea> convertResult(Object object) {
+                return (List<CoreArea>) object;
             }
 
             @Override

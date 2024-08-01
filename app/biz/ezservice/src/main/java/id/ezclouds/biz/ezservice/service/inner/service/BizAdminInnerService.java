@@ -12,6 +12,7 @@ import id.ezclouds.biz.ezservice.model.AppConfig;
 import id.ezclouds.biz.ezservice.model.BizWhatsappLog;
 import id.ezclouds.biz.ezservice.model.VideoCard;
 import id.ezclouds.biz.ezservice.model.admin.BizApplicationConfig;
+import id.ezclouds.biz.ezservice.model.admin.BizMemberRequiredData;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganization;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganizationDetail;
 import id.ezclouds.biz.ezservice.model.event.AppEvent;
@@ -32,6 +33,7 @@ import id.ezclouds.biz.ezservice.service.app.request.AppImageGalleryRequest;
 import id.ezclouds.biz.ezservice.service.app.request.NewsCreateRequest;
 import id.ezclouds.biz.ezservice.service.app.request.VideoCardCreateRequest;
 import id.ezclouds.biz.ezservice.service.request.web.BizWebUpdateItemRequest;
+import id.ezclouds.biz.ezservice.subbiz.arahindonesia.service.AppSubOrganizationService;
 import id.ezclouds.core.integration.dataservice.model.WhatsappLog;
 import id.ezclouds.core.integration.request.WhatsappLogRequest;
 import id.ezclouds.core.integration.request.WhatsappResendRequest;
@@ -130,6 +132,9 @@ public class BizAdminInnerService {
 
     @Autowired
     private AppDocumentService appDocumentService;
+
+    @Autowired
+    private AppSubOrganizationService appSubOrganizationService;
 
     public void createAppBuildPackage(String orgId, String platformId, int versionCode, String versionName) throws EzErrorException {
         BizAppBuildPackage buildPackage = new BizAppBuildPackage();
@@ -383,6 +388,15 @@ public class BizAdminInnerService {
         EzCoreOrganizationDO organizationDO = coreOrganizationService.getOrganizationById(orgId);
         AssertUtil.notNull(organizationDO, EzErrorCode.DATA_NOT_FOUND);
         return convert(organizationDO);
+    }
+
+    public BizMemberRequiredData getMemberRequiredData(String orgId) {
+        BizMemberRequiredData data = new BizMemberRequiredData();
+        data.setAdminMembers(getOrgAdminMembers(orgId));
+        data.setBizSubOrganizations(
+                appSubOrganizationService.getSubOrganizationByOrgId(orgId)
+        );
+        return data;
     }
 
     @Transactional
