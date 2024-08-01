@@ -9,6 +9,7 @@ import id.ezclouds.common.facade.process.SchedulerProcessor;
 import id.ezclouds.common.model.result.BaseResult;
 import id.ezclouds.common.util.facade.BeanFacadeUtil;
 import id.ezclouds.core.process.biz.BizProcessorReportGenerateOverall;
+import id.ezclouds.core.process.biz.BizProcessorReportUpdateMember;
 import id.ezclouds.core.process.model.CoreSchedulerScene;
 import id.ezclouds.core.process.template.CoreSchedulerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class CoreSchedulerProcessor implements SchedulerProcessor {
 
     @Autowired
     private BizProcessorReportGenerateOverall bizProcessorReportGenerateOverall;
+
+    @Autowired
+    private BizProcessorReportUpdateMember bizProcessorReportUpdateMember;
 
     @Override
     public BaseResult execute(String scene) {
@@ -49,6 +53,9 @@ public class CoreSchedulerProcessor implements SchedulerProcessor {
                 switch (schedulerScene) {
                     case RJL_DAILY_REPORT_OVERALL:
                         bizProcessorReportGenerateOverall.process("RJL0");
+                        break;
+                    case RJL_HOURLY_MEMBER_TODAY:
+                        bizProcessorReportUpdateMember.process("RJL0");
                         break;
                 }
             }
