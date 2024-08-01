@@ -68,6 +68,12 @@ public class EzBizReportService implements BizReportService {
                 .getTimeSeriesReportMap()
                 .put(BizReportConstant.TS_DISTRICT, generateTimeSeriesChart("Progress Harian per Kecamatan", timeSeriesDistrict, timeFrames));
 
+        List<BizReportBySubOrg> reportBySubOrgs = bizReportBySubOrgDAO
+                .getReportAllSource(orgId);
+        mainReport
+                .getBizReportBySubOrgs()
+                .addAll(mergeAllSubOrg(reportBySubOrgs));
+
         List<BizReportByArea> reportByAreas = bizReportByAreaDAO
                 .getReportDistrictAllSource(orgId);
         mainReport
@@ -143,6 +149,29 @@ public class EzBizReportService implements BizReportService {
             total += item;
         }
         return total > 0;
+    }
+
+    private List<BizReportBySubOrg> mergeAllSubOrg(List<BizReportBySubOrg> origin) {
+        Map<String, BizReportBySubOrg> reportMap = new HashMap<>();
+        for (BizReportBySubOrg reportBySubOrg : origin) {
+            String reportKey = reportBySubOrg.getSubOrgName();
+            if (reportMap.get(reportKey) == null) {
+                reportMap.put(reportKey, reportBySubOrg);
+            } else {
+                mergeSubOrgValue(reportMap.get(reportKey), reportBySubOrg);
+            }
+        }
+
+        return new ArrayList<>(reportMap.values());
+    }
+
+    private void mergeSubOrgValue(BizReportBySubOrg origin, BizReportBySubOrg addition) {
+        origin.addVoterTotal(addition.getVoterTotal());
+        origin.addVoterStrong(addition.getVoterStrong());
+        origin.addVoterLazy(addition.getVoterLazy());
+        origin.addGenderMale(addition.getGenderMale());
+        origin.addGenderFemale(addition.getGenderFemale());
+        origin.addGenderOther(addition.getGenderOther());
     }
 
     private List<BizReportByArea> mergeAllSource(List<BizReportByArea> origin) {

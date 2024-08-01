@@ -69,23 +69,23 @@ public class WebAppDataMapper {
             sb.append("</td>");
 
             sb.append("<td>");
-            sb.append(reportByArea.getVoterTotal());
+            sb.append(StringUtil.thousandFormat(reportByArea.getVoterTotal()));
             sb.append("</td>");
 
             sb.append("<td>");
-            sb.append(reportByArea.getVoterStrong());
+            sb.append(StringUtil.thousandFormat(reportByArea.getVoterStrong()));
             sb.append("</td>");
 
             sb.append("<td>");
-            sb.append(reportByArea.getVoterLazy());
+            sb.append(StringUtil.thousandFormat(reportByArea.getVoterLazy()));
             sb.append("</td>");
 
             sb.append("<td>");
-            sb.append(reportByArea.getGenderMale());
+            sb.append(StringUtil.thousandFormat(reportByArea.getGenderMale()));
             sb.append("</td>");
 
             sb.append("<td>");
-            sb.append(reportByArea.getGenderFemale());
+            sb.append(StringUtil.thousandFormat(reportByArea.getGenderFemale()));
             sb.append("</td>");
 
             sb.append("</tr>");
@@ -109,27 +109,23 @@ public class WebAppDataMapper {
             sb.append("</td>");
 
             sb.append("<td>");
-            sb.append(reportByArea.getVoterTotal());
+            sb.append(StringUtil.thousandFormat(reportByArea.getVoterTotal()));
             sb.append("</td>");
 
             sb.append("<td>");
-            sb.append(reportByArea.getVoterStrong());
+            sb.append(StringUtil.thousandFormat(reportByArea.getVoterStrong()));
             sb.append("</td>");
 
             sb.append("<td>");
-            sb.append(reportByArea.getVoterLazy());
+            sb.append(StringUtil.thousandFormat(reportByArea.getVoterLazy()));
             sb.append("</td>");
 
             sb.append("<td>");
-            sb.append(reportByArea.getGenderMale());
+            sb.append(StringUtil.thousandFormat(reportByArea.getGenderMale()));
             sb.append("</td>");
 
             sb.append("<td>");
-            sb.append(reportByArea.getGenderFemale());
-            sb.append("</td>");
-
-            sb.append("<td>");
-            sb.append(StringUtil.defaultIfNull(reportByArea.getTpsData()));
+            sb.append(StringUtil.thousandFormat(reportByArea.getGenderFemale()));
             sb.append("</td>");
 
             sb.append("</tr>");

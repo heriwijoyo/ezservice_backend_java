@@ -52,12 +52,20 @@ public class BizReportBySubOrg {
         this.voterTotal = voterTotal;
     }
 
+    public void addVoterTotal(int addition) {
+        this.voterTotal += addition;
+    }
+
     public int getVoterStrong() {
         return voterStrong;
     }
 
     public void setVoterStrong(int voterStrong) {
         this.voterStrong = voterStrong;
+    }
+
+    public void addVoterStrong(int addition) {
+        this.voterStrong += addition;
     }
 
     public int getVoterLazy() {
@@ -68,12 +76,20 @@ public class BizReportBySubOrg {
         this.voterLazy = voterLazy;
     }
 
+    public void addVoterLazy(int addition) {
+        this.voterLazy += addition;
+    }
+
     public int getGenderMale() {
         return genderMale;
     }
 
     public void setGenderMale(int genderMale) {
         this.genderMale = genderMale;
+    }
+
+    public void addGenderMale(int addition) {
+        this.genderMale += addition;
     }
 
     public int getGenderFemale() {
@@ -84,11 +100,19 @@ public class BizReportBySubOrg {
         this.genderFemale = genderFemale;
     }
 
+    public void addGenderFemale(int addition) {
+        this.genderFemale += addition;
+    }
+
     public int getGenderOther() {
         return genderOther;
     }
 
     public void setGenderOther(int genderOther) {
         this.genderOther = genderOther;
+    }
+
+    public void addGenderOther(int addition) {
+        this.genderOther += addition;
     }
 }
