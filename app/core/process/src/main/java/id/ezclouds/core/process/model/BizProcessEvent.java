@@ -13,6 +13,7 @@ import id.ezclouds.common.util.context.EzAppEvent;
 public enum BizProcessEvent implements EzAppEvent {
 
     GENERATE_REPORT_OVERALL("GENERATE_REPORT_OVERALL"),
+    GENERATE_REPORT_MEMBER_TODAY("GENERATE_REPORT_MEMBER_TODAY"),
     UNKNOWN("UNKNOWN"),
     ;
     private final String code;

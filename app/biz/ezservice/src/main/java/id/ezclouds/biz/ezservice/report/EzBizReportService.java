@@ -155,6 +155,9 @@ public class EzBizReportService implements BizReportService {
         Map<String, BizReportBySubOrg> reportMap = new HashMap<>();
         for (BizReportBySubOrg reportBySubOrg : origin) {
             String reportKey = reportBySubOrg.getSubOrgName();
+            if ("UNDEFINED".equals(reportKey)) {
+                continue;
+            }
             if (reportMap.get(reportKey) == null) {
                 reportMap.put(reportKey, reportBySubOrg);
             } else {
