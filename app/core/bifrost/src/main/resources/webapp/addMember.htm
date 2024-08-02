@@ -111,7 +111,7 @@
                             <div class="form-group col-sm-12">
                                 <div class="form-line">
                                     <div class="font-12">District</div>
-                                    <select class="form-control show-tick" id="district">
+                                    <select class="form-control show-tick" id="districtId">
                                         <option value="1802010">WONOSOBO</option>
                                         <option value="1802011">SEMAKA</option>
                                         <option value="1802012">BANDAR NEGERI SEMUONG</option>
@@ -138,20 +138,20 @@
                             <div class="form-group col-sm-12">
                                 <div class="form-line">
                                     <div class="font-12">Village</div>
-                                    <select class="form-control show-tick" id="village">
+                                    <select class="form-control show-tick" id="villageId">
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group col-sm-12">
                                 <div class="form-line">
                                     <div class="font-12">RW</div>
-                                    <input type="text" class="form-control" id="rw" placeholder="RW">
+                                    <input type="text" class="form-control" id="rukunWarga" placeholder="RW">
                                 </div>
                             </div>
                             <div class="form-group col-sm-12">
                                 <div class="form-line">
                                     <div class="font-12">RT</div>
-                                    <input type="text" class="form-control" id="rt" placeholder="RT">
+                                    <input type="text" class="form-control" id="rukunTetangga" placeholder="RT">
                                 </div>
                             </div>
                             <div class="form-group col-sm-12">
@@ -162,8 +162,8 @@
                             </div>
 
                             <div class="col-sm-12">
-                                <img id="orgUpdateLoader" src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right">
-                                <button id="orgIconUpdateBtn" class="button button-rounded waves-effect waves-float pull-right" type="submit">SUBMIT</button>
+                                <img id="btnLoader" src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right">
+                                <button id="btnSubmit" class="button button-rounded waves-effect waves-float pull-right" type="submit">SUBMIT</button>
                             </div>
 
                         </div>
@@ -179,7 +179,7 @@
     var EzAdminUrl = {
         GET_MEMBER_REQUIRED_DATA: 'api/addMemberRequiredData.json',
         GET_CORE_AREA: 'api/coreArea.json',
-        REGISTER_MEMBER: ''
+        REGISTER_MEMBER: 'api/addMember.json'
     };
     var EzDashboardBizService = {
         start: function() {
@@ -192,7 +192,23 @@
                 EzDashboardBizService.alertInvalidOrg();
             } else {
                  EzWebAppClient.callApiService(EzAdminUrl.GET_MEMBER_REQUIRED_DATA, {
-                    orgId: orgId
+                    orgId: orgId,
+                    referrerId: $('#referrer_id').val(),
+                    subOrgId: $('#sub_org_id').val(),
+                    name: $('#name').val(),
+                    gender: $('#gender').val(),
+                    dateOfBirth: $('#dateOfBirth').val(),
+                    phone: $('#phone').val(),
+                    education: $('#education').val(),
+                    occupation: $('#occupation').val(),
+                    religion: $('#religion').val(),
+                    ethnic: $('#ethnic').val(),
+                    idCardNumber: $('#idCardNumber').val(),
+                    districtId: $('#districtId').val(),
+                    villageId: $('#villageId').val(),
+                    rukunWarga: $('#rukunWarga').val(),
+                    rukunTetangga: $('#rukunTetangga').val(),
+                    tpsNo: $('#tpsNo').val()
                  });
             }
         },
@@ -202,6 +218,13 @@
                 parentId : parentId
             });
         },
+        submitMember: function() {
+            EzDashboardBizService.showLoader();
+            let orgId = EzWebAppClient.getUrlParameter('id');
+            EzWebAppClient.callApiService(EzAdminUrl.REGISTER_MEMBER, {
+                orgId : orgId
+            });
+        },
         handleApiBizResult: function(url, response) {
             if (url === EzAdminUrl.GET_MEMBER_REQUIRED_DATA) {
                 EzDashboardBizService.parseData(response.data);
@@ -209,10 +232,18 @@
             if (url === EzAdminUrl.GET_CORE_AREA) {
                 EzDashboardBizService.parseVillage(response.data);
             }
+            if (url === EzAdminUrl.REGISTER_MEMBER) {
+                alert(response.data);
+                EzDashboardBizService.hideLoader();
+            }
         },
         handleApiBizFailed: function(url, message) {
             if (url === EzAdminUrl.GET_ORGANIZATION_DETAIL) {
                 EzDashboardBizService.alertInvalidOrg();
+            }
+            if (url === EzAdminUrl.REGISTER_MEMBER) {
+                alert(message);
+                EzDashboardBizService.hideLoader();
             }
         },
         parseData: function(data) {
@@ -237,6 +268,14 @@
         alertInvalidOrg: function() {
             alert('Invalid Organization');
             window.location.replace('organization.htm');
+        },
+        showLoader: function() {
+            $('#btnLoader').show();
+            $('#btnSubmit').hide();
+        },
+        hideLoader: function() {
+            $('#btnLoader').hide();
+            $('#btnSubmit').show();
         }
     };
 
@@ -264,6 +303,9 @@
 
         $('#district').change(function(){
             EzDashboardBizService.fetchCoreArea('VILLAGE', $('#district').val());
+        });
+        $('#btnSubmit').click(function(){
+            EzDashboardBizService.submitMember();
         });
 
     });

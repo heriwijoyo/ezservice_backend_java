@@ -152,6 +152,14 @@ public class CoreMemberService {
                 .collect(Collectors.toList());
     }
 
+    public List<CoreMember> getUniqueMember(String orgId, String phone) {
+        return coreMemberRepository
+                .findByOrgIdAndPhone(orgId, phone)
+                .stream()
+                .map(CoreMemberConverter::convert)
+                .collect(Collectors.toList());
+    }
+
     public List<String> getAllMemberIds(String orgId) {
         return coreMemberRepository
                 .findByOrgId(orgId)

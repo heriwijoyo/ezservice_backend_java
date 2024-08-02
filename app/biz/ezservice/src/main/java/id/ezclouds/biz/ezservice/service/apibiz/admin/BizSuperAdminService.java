@@ -31,6 +31,7 @@ import id.ezclouds.biz.ezservice.service.request.web.*;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.common.util.facade.BeanFacadeUtil;
 import id.ezclouds.core.auth.model.CoreAuthAdminScene;
+import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.shared.result.PageResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.biz.ezservice.util.BizExtendInfoUtil;
@@ -450,6 +451,47 @@ public class BizSuperAdminService extends BizBaseService {
             public void onBizProcess() throws Exception {
                 authorizeSuperUserMember(request.getSessionId());
                 bizAdminInnerService.adminOrgCreateMember(request.getOrgId(), request.getData());
+                bizResult.setSuccess(true);
+                bizResult.setObject("OPERATION SUCCESS");
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
+    public BizResult createBizMember(BizWebCreateRequest<BizMember> request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notNull(request.getData(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getOrgId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getData().getReferrerId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notNull(request.getData().getSubOrganization(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getData().getSubOrganization().getSubOrgId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getData().getName(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getData().getPhone(), EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                authorizeSuperUserMember(request.getSessionId());
+                List<CoreMember> members = bizAdminInnerService
+                        .getUniqueMember(request.getOrgId(), request.getData().getPhone());
+                if (members != null && members.size() > 0) {
+                    bizResult.setSuccess(false);
+                    bizResult.setObject("Member Unique Check Not Pass");
+                    return;
+                }
+
+                bizAdminInnerService
+                        .createMember(request.getOrgId(), request.getData());
                 bizResult.setSuccess(true);
                 bizResult.setObject("OPERATION SUCCESS");
             }

@@ -9,12 +9,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.ezservice.enums.BizImportScene;
 import id.ezclouds.biz.ezservice.model.admin.*;
+import id.ezclouds.biz.ezservice.model.member.BizGender;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizSuperAdminService;
 import id.ezclouds.biz.ezservice.service.app.model.BizAppConfig;
 import id.ezclouds.biz.ezservice.service.request.BizDataImportRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
+import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.core.shared.model.CoreArea;
 import id.ezclouds.core.shared.result.PageResult;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
@@ -358,6 +360,73 @@ public class WebApiSuperAdminController {
                 request.setOrgId(orgId);
                 request.setData(bizMember);
                 return bizSuperAdminService.adminOrgCreateMember(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                if (object instanceof String) {
+                    return (String) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/addMember.json")
+    private WebApiResult<String> addMember(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "orgId", required = false) String orgId,
+            @RequestParam(name = "referrerId", required = false) String referrerId,
+            @RequestParam(name = "subOrgId", required = false) String subOrgId,
+            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "gender", required = false) String gender,
+            @RequestParam(name = "dateOfBirth", required = false) String dateOfBirth,
+            @RequestParam(name = "phone", required = false) String phone,
+            @RequestParam(name = "education", required = false) String education,
+            @RequestParam(name = "occupation", required = false) String occupation,
+            @RequestParam(name = "religion", required = false) String religion,
+            @RequestParam(name = "ethnic", required = false) String ethnic,
+            @RequestParam(name = "idCardNumber", required = false) String idCardNumber,
+            @RequestParam(name = "districtId", required = false) String districtId,
+            @RequestParam(name = "villageId", required = false) String villageId,
+            @RequestParam(name = "rukunWarga", required = false) String rukunWarga,
+            @RequestParam(name = "rukunTetangga", required = false) String rukunTetangga,
+            @RequestParam(name = "tpsNo", required = false) String tpsNo
+    ) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_CREATE_ADMIN_ORG, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizMember bizMember = new BizMember();
+                bizMember.setOrgId(orgId);
+                bizMember.setReferrerId(referrerId);
+                bizMember.setSubOrganization(new BizSubOrganization(subOrgId));
+                bizMember.setName(name);
+                bizMember.setGender(BizGender.getByCode(gender));
+                bizMember.setDateOfBirth(dateOfBirth);
+                bizMember.setPhone(phone);
+                bizMember.setEducation(education);
+                bizMember.setOccupation(occupation);
+                bizMember.setReligion(religion);
+                bizMember.setEthnic(ethnic);
+                bizMember.setIdCardNumber(idCardNumber);
+                bizMember.setDistrictId(districtId);
+                bizMember.setVillageId(villageId);
+                bizMember.setRukunWarga(rukunWarga);
+                bizMember.setRukunTetangga(rukunTetangga);
+                bizMember.setTpsNumber(tpsNo);
+
+                BizWebCreateRequest<BizMember> request = new BizWebCreateRequest<>();
+                request.setSessionId(sessionId);
+                request.setOrgId(orgId);
+                request.setData(bizMember);
+                return bizSuperAdminService.createBizMember(request);
             }
 
             @Override

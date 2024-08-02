@@ -503,6 +503,42 @@ public class BizAdminInnerService {
         );
     }
 
+    public List<CoreMember> getUniqueMember(String orgId, String phone) {
+        return coreMemberService.getUniqueMember(orgId, phone);
+    }
+
+    public void createMember(String orgId, BizMember bizMember) throws Exception {
+        BizApplicationConfig bizApplicationConfig = getAppConfig(orgId);
+        String orgCode = getOrganizationById(orgId).getCode();
+        String appId = bizApplicationConfig.getAppId();
+
+        bizMember.setRoles(BizMemberRole.OP_RECRUITER.getCode());
+        bizMember.setPhoneVerified(false);
+        bizMember.setEmailVerified(false);
+        bizMember.setAddressVerified(false);
+        bizMember.setCreatedTime(DateUtil.getCurrentFormattedDate());
+        bizMember.setModifiedTime(DateUtil.getCurrentFormattedDate());
+
+        CoreMember coreMember = BizMemberConverter.convert(bizMember);
+        coreMember.setSourceId("BACKOFFICE");
+        coreMember.setMemberStatus(MemberStatus.ACTIVE);
+        BizMemberInfo bizMemberInfo = bizMemberInnerService
+                .adminOrgCreateMember(orgId, orgCode, appId, coreMember);
+
+        //generate member password
+        String newPassword = RandomUtil.generateNumberCode(6);
+        coreAuthService.updateMemberClientPassword(bizMemberInfo.getBizMemberClient().getClientId(), newPassword);
+
+        AppConfig appConfig = appConfigService.getAppConfig(orgId);
+        bizConnectInnerService.memberSendPassword(
+                orgId,
+                bizMemberInfo.getBizMember().getPhone(),
+                newPassword,
+                appConfig.getAppName(),
+                appConfig.getAndroidUpdateUrl()
+        );
+    }
+
     public void refreshAllDirectories() {
         coreOrganizationService
                 .getActiveOrganizations()

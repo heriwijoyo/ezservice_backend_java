@@ -20,6 +20,13 @@ public class BizSubOrganization {
     private String createdTime;
     private int status;
 
+    public BizSubOrganization() {
+    }
+
+    public BizSubOrganization(String subOrgId) {
+        this.subOrgId = subOrgId;
+    }
+
     public String getOrgId() {
         return orgId;
     }
