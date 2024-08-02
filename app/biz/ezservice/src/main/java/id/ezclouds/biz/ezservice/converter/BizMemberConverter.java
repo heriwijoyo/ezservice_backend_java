@@ -118,6 +118,11 @@ public class BizMemberConverter {
         coreMember.setAddressVerified(bizMember.isAddressVerified());
         coreMember.setCreatedTime(bizMember.getCreatedTime());
         coreMember.setModifiedTime(bizMember.getModifiedTime());
+        if (bizMember.getSubOrganization() != null) {
+            coreMember.setSubOrgId(
+                    bizMember.getSubOrganization().getSubOrgId()
+            );
+        }
         return coreMember;
     }
 }

@@ -34,10 +34,12 @@ import id.ezclouds.biz.ezservice.service.app.request.NewsCreateRequest;
 import id.ezclouds.biz.ezservice.service.app.request.VideoCardCreateRequest;
 import id.ezclouds.biz.ezservice.service.request.web.BizWebUpdateItemRequest;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.service.AppSubOrganizationService;
+import id.ezclouds.common.model.constant.OrgConstant;
 import id.ezclouds.core.integration.dataservice.model.WhatsappLog;
 import id.ezclouds.core.integration.request.WhatsappLogRequest;
 import id.ezclouds.core.integration.request.WhatsappResendRequest;
 import id.ezclouds.core.integration.result.EzConnectResult;
+import id.ezclouds.core.shared.model.CoreArea;
 import id.ezclouds.core.shared.result.BizPageInfo;
 import id.ezclouds.core.shared.result.PageResult;
 import id.ezclouds.common.util.DateUtil;
@@ -68,6 +70,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -135,6 +138,9 @@ public class BizAdminInnerService {
 
     @Autowired
     private AppSubOrganizationService appSubOrganizationService;
+
+    @Autowired
+    private CoreAreaService coreAreaService;
 
     public void createAppBuildPackage(String orgId, String platformId, int versionCode, String versionName) throws EzErrorException {
         BizAppBuildPackage buildPackage = new BizAppBuildPackage();
@@ -518,6 +524,29 @@ public class BizAdminInnerService {
         bizMember.setAddressVerified(false);
         bizMember.setCreatedTime(DateUtil.getCurrentFormattedDate());
         bizMember.setModifiedTime(DateUtil.getCurrentFormattedDate());
+
+        if (OrgConstant.ORG_ID_RJL.equals(orgId)) {
+            bizMember.setProvinceId("18");
+            bizMember.setProvinceName("LAMPUNG");
+            bizMember.setRegencyId("1802");
+            bizMember.setRegencyName("KABUPATEN TANGGAMUS");
+
+            List<CoreArea> district = coreAreaService
+                    .getDistrictByIds(
+                            Collections.singletonList(bizMember.getDistrictId())
+                    );
+            if (district != null && district.size() > 0) {
+                bizMember.setDistrictName(district.get(0).getName());
+            }
+
+            List<CoreArea> village = coreAreaService
+                    .getVillageByIds(
+                            Collections.singletonList(bizMember.getVillageId())
+                    );
+            if (village != null && village.size() > 0) {
+                bizMember.setVillageName(village.get(0).getName());
+            }
+        }
 
         CoreMember coreMember = BizMemberConverter.convert(bizMember);
         coreMember.setSourceId("BACKOFFICE");
