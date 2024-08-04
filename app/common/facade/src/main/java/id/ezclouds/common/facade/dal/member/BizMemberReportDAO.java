@@ -10,4 +10,5 @@ package id.ezclouds.common.facade.dal.member;
  */
 public interface BizMemberReportDAO {
     long countToday(String orgId);
+    long countYesterday(String orgId);
 }

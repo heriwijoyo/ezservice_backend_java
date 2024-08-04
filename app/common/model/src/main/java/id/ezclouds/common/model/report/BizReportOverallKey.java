@@ -14,6 +14,7 @@ public enum BizReportOverallKey {
     TOTAL_SUB_ORGANIZATION("TOTAL_SUB_ORGANIZATION"),
     TOTAL_TPS("TOTAL_TPS"),
     MEMBER_TODAY("MEMBER_TODAY"),
+    MEMBER_YESTERDAY("MEMBER_YESTERDAY"),
 
     ;
     private final String code;

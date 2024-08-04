@@ -32,4 +32,14 @@ public class CoreMemberReportDAO implements BizMemberReportDAO {
         return coreMemberReportRepository
                 .countByOrgIdWithinDate(orgId, startDate, endDate);
     }
+
+    @EzDAOLogger
+    @Override
+    public long countYesterday(String orgId) {
+        Date yesterday = DateUtil.getDateAfterDays(new Date(), -1);
+        String startDate = DateUtil.getFormattedDayStart(yesterday);
+        String endDate = DateUtil.getFormattedDayEnd(yesterday);
+        return coreMemberReportRepository
+                .countByOrgIdWithinDate(orgId, startDate, endDate);
+    }
 }

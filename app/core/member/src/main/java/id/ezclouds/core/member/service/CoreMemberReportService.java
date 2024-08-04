@@ -23,4 +23,9 @@ public class CoreMemberReportService implements MemberReportService {
     public long countToday(String orgId) {
         return bizMemberReportDAO.countToday(orgId);
     }
+
+    @Override
+    public long countYesterday(String orgId) {
+        return bizMemberReportDAO.countYesterday(orgId);
+    }
 }

@@ -10,4 +10,5 @@ package id.ezclouds.common.facade.member;
  */
 public interface MemberReportService {
     long countToday(String orgId);
+    long countYesterday(String orgId);
 }
