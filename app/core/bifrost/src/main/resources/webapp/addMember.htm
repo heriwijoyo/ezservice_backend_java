@@ -184,7 +184,7 @@
     var EzDashboardBizService = {
         start: function() {
             EzDashboardBizService.fetchData();
-            EzDashboardBizService.fetchCoreArea('VILLAGE', $('#district').val());
+            EzDashboardBizService.fetchCoreArea('VILLAGE', $('#districtId').val());
         },
         fetchData: function() {
             let orgId = EzWebAppClient.getUrlParameter('id');
@@ -192,23 +192,7 @@
                 EzDashboardBizService.alertInvalidOrg();
             } else {
                  EzWebAppClient.callApiService(EzAdminUrl.GET_MEMBER_REQUIRED_DATA, {
-                    orgId: orgId,
-                    referrerId: $('#referrer_id').val(),
-                    subOrgId: $('#sub_org_id').val(),
-                    name: $('#name').val(),
-                    gender: $('#gender').val(),
-                    dateOfBirth: $('#dateOfBirth').val(),
-                    phone: $('#phone').val(),
-                    education: $('#education').val(),
-                    occupation: $('#occupation').val(),
-                    religion: $('#religion').val(),
-                    ethnic: $('#ethnic').val(),
-                    idCardNumber: $('#idCardNumber').val(),
-                    districtId: $('#districtId').val(),
-                    villageId: $('#villageId').val(),
-                    rukunWarga: $('#rukunWarga').val(),
-                    rukunTetangga: $('#rukunTetangga').val(),
-                    tpsNo: $('#tpsNo').val()
+                    orgId: orgId
                  });
             }
         },
@@ -222,7 +206,23 @@
             EzDashboardBizService.showLoader();
             let orgId = EzWebAppClient.getUrlParameter('id');
             EzWebAppClient.callApiService(EzAdminUrl.REGISTER_MEMBER, {
-                orgId : orgId
+                orgId : orgId,
+                referrerId: $('#referrer_id').val(),
+                subOrgId: $('#sub_org_id').val(),
+                name: $('#name').val(),
+                gender: $('#gender').val(),
+                dateOfBirth: $('#dateOfBirth').val(),
+                phone: $('#phone').val(),
+                education: $('#education').val(),
+                occupation: $('#occupation').val(),
+                religion: $('#religion').val(),
+                ethnic: $('#ethnic').val(),
+                idCardNumber: $('#idCardNumber').val(),
+                districtId: $('#districtId').val(),
+                villageId: $('#villageId').val(),
+                rukunWarga: $('#rukunWarga').val(),
+                rukunTetangga: $('#rukunTetangga').val(),
+                tpsNo: $('#tpsNo').val()
             });
         },
         handleApiBizResult: function(url, response) {
@@ -263,7 +263,7 @@
             for(i = 0; i < data.length; i++) {
                 villageOption += '<option value="'+ data[i].id +'">'+ data[i].name +'</option>';
             }
-            $('#village').html(villageOption);
+            $('#villageId').html(villageOption);
         },
         alertInvalidOrg: function() {
             alert('Invalid Organization');
@@ -301,8 +301,8 @@
         });
         EzWebAppClient.start();
 
-        $('#district').change(function(){
-            EzDashboardBizService.fetchCoreArea('VILLAGE', $('#district').val());
+        $('#districtId').change(function(){
+            EzDashboardBizService.fetchCoreArea('VILLAGE', $('#districtId').val());
         });
         $('#btnSubmit').click(function(){
             EzDashboardBizService.submitMember();

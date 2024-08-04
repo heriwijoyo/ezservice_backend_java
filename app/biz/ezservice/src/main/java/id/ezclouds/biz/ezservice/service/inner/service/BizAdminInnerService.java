@@ -548,11 +548,8 @@ public class BizAdminInnerService {
             }
         }
 
-        CoreMember coreMember = BizMemberConverter.convert(bizMember);
-        coreMember.setSourceId("BACKOFFICE");
-        coreMember.setMemberStatus(MemberStatus.ACTIVE);
         BizMemberInfo bizMemberInfo = bizMemberInnerService
-                .adminOrgCreateMember(orgId, orgCode, appId, coreMember);
+                .createCoreMember(orgId, orgCode, appId, bizMember);
 
         //generate member password
         String newPassword = RandomUtil.generateNumberCode(6);

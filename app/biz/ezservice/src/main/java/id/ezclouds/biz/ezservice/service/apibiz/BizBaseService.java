@@ -99,7 +99,7 @@ public class BizBaseService {
             case DATA_NOT_FOUND:
                 return "Data not found";
             default:
-                return AppConstant.MESSAGE_SYSTEM_ABNORMAL;
+                return ezErrorCode.getDescription();
         }
     }
 

@@ -161,6 +161,46 @@ public class BizMemberInnerService {
         return bizMemberInfo;
     }
 
+    @Transactional
+    public BizMemberInfo createCoreMember(String orgId, String orgCode, String appId, BizMember bizMember) {
+        String memberId = coreSequenceService.generateSequence(orgId, orgCode, CoreSequenceScene.CORE_MEMBER_ID.getCode());
+        String shard = ShardUtil.getShardId(memberId);
+
+        CoreMember coreMember = BizMemberConverter.convert(bizMember);
+        coreMember.setMemberId(memberId);
+        coreMember.setShard(shard);
+        coreMemberService.store(coreMember);
+
+        bizMember.setMemberId(memberId);
+        CoreMemberExtension memberExtension = BizMemberConverter
+                .convertExtension(bizMember);
+        memberExtension.setOrgId(orgId);
+        memberExtension.setMemberId(memberId);
+        memberExtension.setShard(shard);
+        coreMemberService.store(memberExtension);
+
+        CoreAuthMemberClient memberClient = new CoreAuthMemberClient();
+        memberClient.setOrgId(orgId);
+        memberClient.setShard(shard);
+        memberClient.setAppId(appId);
+        memberClient.setMemberId(memberId);
+        memberClient.setLoginType(DEFAULT_LOGIN_TYPE);
+        memberClient.setLoginId(coreMember.getPhone());
+        memberClient.setStatus(BizStatus.ACTIVE.getCode());
+        coreAuthService.createMemberClient(memberClient);
+
+        CoreMember storedMember = coreMemberService.getOptimisticCoreMember(memberId);
+        CoreAuthMemberClient storedMemberClient = coreAuthService.getOptimisticMemberClient(DEFAULT_LOGIN_TYPE, memberId);
+
+        BizMember storedBizMember = BizMemberConverter.convert(storedMember, null);
+        BizMemberClient bizMemberClient = BizMemberClientConverter.convert(storedMemberClient);
+
+        BizMemberInfo bizMemberInfo = new BizMemberInfo();
+        bizMemberInfo.setBizMember(storedBizMember);
+        bizMemberInfo.setBizMemberClient(bizMemberClient);
+        return bizMemberInfo;
+    }
+
     public BizPageInfo<CoreMember> getMemberPage(String orgId, BizPageRequest request) {
         request.setSortBy("createdTime");
         request.setSort("DESC");

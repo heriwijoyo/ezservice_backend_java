@@ -484,12 +484,9 @@ public class BizSuperAdminService extends BizBaseService {
                 authorizeSuperUserMember(request.getSessionId());
                 List<CoreMember> members = bizAdminInnerService
                         .getUniqueMember(request.getOrgId(), request.getData().getPhone());
-                if (members != null && members.size() > 0) {
-                    bizResult.setSuccess(false);
-                    bizResult.setObject("Member Unique Check Not Pass");
-                    return;
+                if (members != null) {
+                    AssertUtil.isNotTrue(members.size() > 0, EzErrorCode.IDEMPOTENT_ERROR);
                 }
-
                 bizAdminInnerService
                         .createMember(request.getOrgId(), request.getData());
                 bizResult.setSuccess(true);
