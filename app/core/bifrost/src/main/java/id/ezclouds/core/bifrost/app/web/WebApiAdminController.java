@@ -22,6 +22,7 @@ import id.ezclouds.biz.ezservice.service.app.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
+import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.core.shared.result.PageResult;
 import id.ezclouds.common.util.exception.ExceptionUtil;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
@@ -642,18 +643,29 @@ public class WebApiAdminController {
     }
 
     @PostMapping(value = "/webapp/api/subOrganizations.json")
-    private WebApiResult<Map<String, String>> getSubOrganizations(
-            @RequestParam(name = "sessionId", required = false) String sessionId) {
-        final WebApiResult<Map<String, String>> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_SUB_ORGANIZATIONS, result, new WebApiControllerTemplate.Handler<Map<String, String>>() {
+    private WebApiPageResult<BizSubOrganization> getSubOrganizations(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "pageNumber", required = false) int pageNumber,
+            @RequestParam(name = "pageSize", required = false) int pageSize,
+            @RequestParam(name = "keyword", required = false) String keyword) {
+        final WebApiPageResult<BizSubOrganization> result = new WebApiPageResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_SUB_ORGANIZATIONS, result, new WebApiControllerTemplate.PageHandler<BizSubOrganization>() {
             @Override
             public BizResult onProcess() throws Exception {
-                return bizAdminService.getSubOrganizations(sessionId);
+                BizWebPageRequest request = new BizWebPageRequest();
+                request.setSessionId(sessionId);
+                request.setPageNumber(pageNumber);
+                request.setPageSize(pageSize);
+                request.setKeyword(keyword);
+                return bizAdminService.getSubOrganizations(request);
             }
 
             @Override
-            public Map<String, String> convertResult(Object object) {
-                return (Map<String, String>)object;
+            public PageResult<BizSubOrganization> convertResult(Object object) {
+                if (object instanceof PageResult) {
+                    return (PageResult<BizSubOrganization>) object;
+                }
+                return null;
             }
 
             @Override

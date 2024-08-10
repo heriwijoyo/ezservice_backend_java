@@ -33,9 +33,13 @@ public final class BizCacheKey {
     public static final String WEBAPP_EVENT_UPDATE      = "WEBAPP_EVENT_UPDATE";
     public static final String WEBAPP_PROFILE           = "WEBAPP_PROFILE";
     public static final String WEBAPP_VIDEO_CARD        = "WEBAPP_VIDEO_CARD";
-    public static final String WEBAPP_DATA_UPLOAD       = "WEBAPP_DATA_UPLOAD";
     public static final String WEBAPP_WHATSAPP          = "WEBAPP_WHATSAPP";
     public static final String WEBAPP_DOCUMENTS         = "WEBAPP_DOCUMENTS";
+
+    public static final String WEBAPP_SUB_ORGANIZATION  = "WEBAPP_SUB_ORGANIZATION";
+    public static final String WEBAPP_MEMBERS           = "WEBAPP_MEMBERS";
+    public static final String WEBAPP_MEMBER_ADD        = "WEBAPP_MEMBER_ADD";
+    public static final String WEBAPP_DATA_UPLOAD       = "WEBAPP_DATA_UPLOAD";
 
     public static final String WEBAPP_ORGANIZATION      = "WEBAPP_ORGANIZATION";
     public static final String WEBAPP_ORGANIZATION_ADD  = "WEBAPP_ORGANIZATION_ADD";

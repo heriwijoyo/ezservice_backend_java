@@ -17,9 +17,13 @@ import id.ezclouds.biz.ezservice.subbiz.arahindonesia.repo.AppSubOrganizationRep
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.shared.enums.CoreSequenceScene;
+import id.ezclouds.core.shared.result.PageResult;
 import id.ezclouds.core.shared.service.CoreSequenceService;
+import id.ezclouds.core.shared.util.PageResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -87,6 +91,16 @@ public class AppSubOrganizationService {
                 .stream()
                 .filter(subOrg -> orgId.equals(subOrg.getOrgId()))
                 .collect(Collectors.toList());
+    }
+
+    public PageResult<BizSubOrganization> getSubOrganizations(String orgId, PageRequest pageRequest) {
+        Page<BizSubOrganizationDO> findResult = appSubOrganizationRepository
+                .findByOrgId(orgId, pageRequest);
+
+        return PageResultUtil.convertFindResult(findResult, input -> input
+                .stream()
+                .map(BizModelConverter::convert)
+                .collect(Collectors.toList()));
     }
 
     public BizPageInfo pageQuery(BizPageRequest request) {

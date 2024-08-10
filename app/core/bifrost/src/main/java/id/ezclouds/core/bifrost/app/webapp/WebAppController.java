@@ -109,11 +109,6 @@ public class WebAppController {
         renderCachedWebApp(getProfileContent(), servletResponse);
     }
 
-    @GetMapping(value = "/webapp/dataUpload.htm")
-    private void dataUpload(HttpServletResponse servletResponse) {
-        renderCachedWebApp(getDataUploadContent(), servletResponse);
-    }
-
     @GetMapping(value = "/webapp/whatsapp.htm")
     private void webWhatsapp(HttpServletResponse servletResponse) {
         renderCachedWebApp(getWhatsappContent(), servletResponse);
@@ -122,6 +117,26 @@ public class WebAppController {
     @GetMapping(value = "/webapp/documents.htm")
     private void webDocuments(HttpServletResponse servletResponse) {
         renderCachedWebApp(getDocumentsContent(), servletResponse);
+    }
+
+    @GetMapping(value = "/webapp/subOrganizations.htm")
+    private void webSubOrganizations(HttpServletResponse servletResponse) {
+        renderCachedWebApp(getSubOrganizationContent(), servletResponse);
+    }
+
+    @GetMapping(value = "/webapp/members.htm")
+    private void webMembers(HttpServletResponse servletResponse) {
+        renderCachedWebApp(getMembersContent(), servletResponse);
+    }
+
+    @GetMapping(value = "/webapp/memberAdd.htm")
+    private void webMemberAdd(HttpServletResponse servletResponse) {
+        renderCachedWebApp(getMemberAddContent(), servletResponse);
+    }
+
+    @GetMapping(value = "/webapp/dataUpload.htm")
+    private void dataUpload(HttpServletResponse servletResponse) {
+        renderCachedWebApp(getDataUploadContent(), servletResponse);
     }
 
     @GetMapping(value = "/webapp/organization.htm")
@@ -367,11 +382,6 @@ public class WebAppController {
         return getWebAppContent(WebAppPage.PROFILE);
     }
 
-    @Cacheable(value = BizCacheKey.WEBAPP_DATA_UPLOAD)
-    public String getDataUploadContent() {
-        return getWebAppContent(WebAppPage.DATA_UPLOAD);
-    }
-
     @Cacheable(value = BizCacheKey.WEBAPP_WHATSAPP)
     public String getWhatsappContent() {
         return getWebAppContent(WebAppPage.WHATSAPP);
@@ -380,6 +390,26 @@ public class WebAppController {
     @Cacheable(value = BizCacheKey.WEBAPP_DOCUMENTS)
     public String getDocumentsContent() {
         return getWebAppContent(WebAppPage.DOCUMENTS);
+    }
+
+    @Cacheable(value = BizCacheKey.WEBAPP_SUB_ORGANIZATION)
+    public String getSubOrganizationContent() {
+        return getWebAppContent(WebAppPage.SUB_ORGANIZATIONS);
+    }
+
+    @Cacheable(value = BizCacheKey.WEBAPP_MEMBERS)
+    public String getMembersContent() {
+        return getWebAppContent(WebAppPage.MEMBERS);
+    }
+
+    @Cacheable(value = BizCacheKey.WEBAPP_MEMBER_ADD)
+    public String getMemberAddContent() {
+        return getWebAppContent(WebAppPage.MEMBER_ADD);
+    }
+
+    @Cacheable(value = BizCacheKey.WEBAPP_DATA_UPLOAD)
+    public String getDataUploadContent() {
+        return getWebAppContent(WebAppPage.DATA_UPLOAD);
     }
 
     @Cacheable(value = BizCacheKey.WEBAPP_ORGANIZATION)

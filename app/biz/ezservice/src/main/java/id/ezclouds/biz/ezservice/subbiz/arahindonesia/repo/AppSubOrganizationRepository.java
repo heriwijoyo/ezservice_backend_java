@@ -5,6 +5,8 @@
 package id.ezclouds.biz.ezservice.subbiz.arahindonesia.repo;
 
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.dataobject.BizSubOrganizationDO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,4 +20,6 @@ import java.util.List;
 public interface AppSubOrganizationRepository extends JpaRepository<BizSubOrganizationDO, String> {
 
     List<BizSubOrganizationDO> findByOrgId(String orgId);
+
+    Page<BizSubOrganizationDO> findByOrgId(String orgId, Pageable pageable);
 }

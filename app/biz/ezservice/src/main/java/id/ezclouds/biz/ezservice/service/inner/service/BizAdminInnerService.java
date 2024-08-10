@@ -33,6 +33,7 @@ import id.ezclouds.biz.ezservice.service.app.request.AppImageGalleryRequest;
 import id.ezclouds.biz.ezservice.service.app.request.NewsCreateRequest;
 import id.ezclouds.biz.ezservice.service.app.request.VideoCardCreateRequest;
 import id.ezclouds.biz.ezservice.service.request.web.BizWebUpdateItemRequest;
+import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.service.AppSubOrganizationService;
 import id.ezclouds.common.model.constant.OrgConstant;
 import id.ezclouds.core.integration.dataservice.model.WhatsappLog;
@@ -288,6 +289,11 @@ public class BizAdminInnerService {
     public PageResult<AppDocument> getAppDocuments(String orgId, int pageNumber, int pageSize, String sortBy, String sort) {
         PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortBy, sort);
         return appDocumentService.getAppDocuments(orgId, pageRequest);
+    }
+
+    public PageResult<BizSubOrganization> getSubOrganizations(String orgId, int pageNumber, int pageSize, String sortBy, String sort) {
+        PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortBy, sort);
+        return appSubOrganizationService.getSubOrganizations(orgId, pageRequest);
     }
 
     public PageResult<BizWhatsappLog> getWhatsappLog(String orgId, String phone, int pageNumber, int pageSize, String sortBy, String sort) {

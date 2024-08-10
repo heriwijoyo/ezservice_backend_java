@@ -19,9 +19,13 @@ public enum WebAppPage {
     EVENT_UPDATE("webapp/eventUpdate.htm"),
     VIDEO_CARD("webapp/videocard.htm"),
     PROFILE("webapp/profile.htm"),
-    DATA_UPLOAD("webapp/dataUpload.htm"),
     WHATSAPP("webapp/whatsapp.htm"),
     DOCUMENTS("webapp/documents.htm"),
+
+    SUB_ORGANIZATIONS("webapp/subOrganizations.htm"),
+    MEMBERS("webapp/members.htm"),
+    MEMBER_ADD("webapp/memberAdd.htm"),
+    DATA_UPLOAD("webapp/dataUpload.htm"),
 
     ORGANIZATION("webapp/organization.htm"),
     ORGANIZATION_ADD("webapp/organizationAdd.htm"),

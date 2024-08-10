@@ -1005,26 +1005,27 @@ public class BizAdminService extends BizBaseService {
         return bizResult;
     }
 
-    public BizResult getSubOrganizations(String sessionId) {
+    public BizResult getSubOrganizations(BizWebPageRequest request) {
         final BizResult bizResult = new BizResult();
         BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
             @Override
             public void onRequestCheck() throws EzErrorException {
-                AssertUtil.notBlank(sessionId, EzErrorCode.SESSION_INVALID);
+                validateBizPageRequest(request);
             }
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession session = authorizedAdminSession(sessionId);
-                Map<String, String> subOrgMap = new HashMap<>();
-                List<BizSubOrganization> subOrgs = appSubOrganizationService
-                        .getSubOrganizationByOrgId(session.getOrgId());
-                for (BizSubOrganization bizSubOrganization : subOrgs) {
-                    subOrgMap.put(bizSubOrganization.getSubOrgId(), bizSubOrganization.getName());
-                }
+                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                PageResult<BizSubOrganization> appDocsResult = bizAdminInnerService.getSubOrganizations(
+                        session.getOrgId(),
+                        request.getPageNumber(),
+                        request.getPageSize(),
+                        "createdTime",
+                        "desc"
+                );
 
+                bizResult.setObject(appDocsResult);
                 bizResult.setSuccess(true);
-                bizResult.setObject(subOrgMap);
             }
 
             @Override
