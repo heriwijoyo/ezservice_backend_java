@@ -9,6 +9,7 @@ package id.ezclouds.core.bifrost.app.webapp;
  * @version $Id: WebAppPage.java, v 0.1 2024‐04‐27 9:59 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
 public enum WebAppPage {
 
+    HOME("webapp/home.htm"),
     VIDEO_CARD("webapp/videocard.htm"),
     PROFILE("webapp/profile.htm"),
     DATA_UPLOAD("webapp/dataUpload.htm"),

@@ -59,6 +59,11 @@ public class WebAppController {
     @Autowired
     private BizReportService bizReportService;
 
+    @GetMapping(value = "/webapp/home.htm")
+    private void webAppHome(HttpServletResponse servletResponse) {
+        renderCachedWebApp(getHomeContent(), servletResponse);
+    }
+
     @GetMapping(value = "/webapp/videocard.htm")
     private void webAppVideoCard(HttpServletResponse servletResponse) {
         renderCachedWebApp(getVideoCardContent(), servletResponse);
@@ -260,6 +265,11 @@ public class WebAppController {
             success = false;
         }
         DigestLogUtil.logWebDigest(LOGGER, getDigestLog(success));
+    }
+
+    @Cacheable(value = BizCacheKey.WEBAPP_HOME)
+    public String getHomeContent() {
+        return getWebAppContent(WebAppPage.HOME);
     }
 
     @Cacheable(value = BizCacheKey.WEBAPP_VIDEO_CARD)

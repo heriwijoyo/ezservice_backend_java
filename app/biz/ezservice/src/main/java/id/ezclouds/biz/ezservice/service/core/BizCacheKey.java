@@ -23,6 +23,7 @@ public final class BizCacheKey {
     public static final String CANDIDATE_BIOGRAPHY      = "CANDIDATE_BIOGRAPHY";
 
 
+    public static final String WEBAPP_HOME              = "WEBAPP_HOME";
     public static final String WEBAPP_PROFILE           = "WEBAPP_PROFILE";
     public static final String WEBAPP_VIDEO_CARD        = "WEBAPP_VIDEO_CARD";
     public static final String WEBAPP_DATA_UPLOAD       = "WEBAPP_DATA_UPLOAD";
