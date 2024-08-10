@@ -120,7 +120,6 @@ public class CoreAdminService {
                 "APP_VIDEO_CARD,Manage Video Card,videocard.htm,smart_display",
                 "APP_PROFILE,Candidate Profile,profile.htm,assignment_ind",
                 "APP_DOCUMENTS,Documents,documents.htm,picture_as_pdf",
-                "DATA_UPLOAD,Data Upload,dataUpload.htm,upload_file",
                 "WHATSAPP_LOG,Whatsapp Logs,whatsapp.htm,sms"
         );
         for (int i = 0; i < initMenus.size(); i++) {
@@ -144,7 +143,6 @@ public class CoreAdminService {
                 "APP_VIDEO_CARD",
                 "APP_PROFILE",
                 "APP_DOCUMENTS",
-                "DATA_UPLOAD",
                 "WHATSAPP_LOG"
         );
         for (String permission : initPermission) {

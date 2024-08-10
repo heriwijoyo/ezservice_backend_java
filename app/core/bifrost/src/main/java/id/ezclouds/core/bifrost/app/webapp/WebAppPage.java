@@ -25,7 +25,7 @@ public enum WebAppPage {
 
     ORGANIZATION("webapp/organization.htm"),
     ORGANIZATION_ADD("webapp/organizationAdd.htm"),
-    ORGANIZATION_DETAIL("webapp/organizatonDetail.htm"),
+    ORGANIZATION_DETAIL("webapp/organizationDetail.htm"),
     ADD_MEMBER("webapp/addMember.htm"),
     CONFIG("webapp/config.htm"),
     SPECIAL_PROCESS("webapp/specialProcess.htm"),

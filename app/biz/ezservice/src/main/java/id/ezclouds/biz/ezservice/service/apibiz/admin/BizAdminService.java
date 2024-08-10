@@ -269,6 +269,30 @@ public class BizAdminService extends BizBaseService {
                 adminAppData.setPermission(permission);
                 adminAppData.setMenu(menu);
 
+                List<CoreAdminBOMenu> specialMenu = new ArrayList<>();
+                String hasSubOrg = organization.getExtendInfo().get("HAS_SUB_ORG");
+                if (Boolean.parseBoolean(hasSubOrg)) {
+                    CoreAdminBOMenu subOrgMenu = new CoreAdminBOMenu();
+                    subOrgMenu.setMenuName("Communities");
+                    subOrgMenu.setMenuUrl("subOrganizations.htm");
+                    subOrgMenu.setMenuIcon("groups");
+
+                    specialMenu.add(subOrgMenu);
+                }
+                CoreAdminBOMenu memberMenu = new CoreAdminBOMenu();
+                memberMenu.setMenuName("Members");
+                memberMenu.setMenuUrl("members.htm");
+                memberMenu.setMenuIcon("group");
+                specialMenu.add(memberMenu);
+
+                CoreAdminBOMenu dataUploadMenu = new CoreAdminBOMenu();
+                dataUploadMenu.setMenuName("Data Upload");
+                dataUploadMenu.setMenuUrl("dataUpload.htm");
+                dataUploadMenu.setMenuIcon("upload_file");
+                specialMenu.add(dataUploadMenu);
+
+                adminAppData.setSpecialMenu(specialMenu);
+
                 bizResult.setSuccess(true);
                 bizResult.setObject(adminAppData);
             }

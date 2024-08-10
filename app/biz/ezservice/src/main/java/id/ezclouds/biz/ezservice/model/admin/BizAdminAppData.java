@@ -22,6 +22,7 @@ public class BizAdminAppData {
     private String memberPhone;
     private List<CoreAdminBOPermission> permission;
     private List<CoreAdminBOMenu> menu;
+    private List<CoreAdminBOMenu> specialMenu;
 
     public String getOrgName() {
         return orgName;
@@ -77,5 +78,13 @@ public class BizAdminAppData {
 
     public void setMenu(List<CoreAdminBOMenu> menu) {
         this.menu = menu;
+    }
+
+    public List<CoreAdminBOMenu> getSpecialMenu() {
+        return specialMenu;
+    }
+
+    public void setSpecialMenu(List<CoreAdminBOMenu> specialMenu) {
+        this.specialMenu = specialMenu;
     }
 }
