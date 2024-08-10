@@ -1036,6 +1036,38 @@ public class BizAdminService extends BizBaseService {
         return bizResult;
     }
 
+    public BizResult createSubOrganization(BizWebCreateRequest<BizSubOrganization> request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notNull(request.getData(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getData().getName(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getData().getAddress(), EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                request.getData().setOrgId(session.getOrgId());
+                request.getData().setOrgCode(session.getOrgCode());
+
+                appSubOrganizationService.createSubOrganization(request.getData());
+
+                bizResult.setSuccess(true);
+                bizResult.setObject(WebAdminConstant.OPERATION_SUCCESS);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
     private void validateBizPageRequest(BizWebPageRequest request) throws EzErrorException {
         AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
         AssertUtil.notNull(request.getPageNumber(), EzErrorCode.ILLEGAL_PARAM);

@@ -676,6 +676,40 @@ public class WebApiAdminController {
         return result;
     }
 
+    @PostMapping(value = "/webapp/api/createSubOrganization.json")
+    private WebApiResult<String> createSubOrganization(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "address", required = false) String address
+    ) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_CREATE_SUB_ORGANIZATION, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizSubOrganization subOrganization = new BizSubOrganization();
+                subOrganization.setName(name);
+                subOrganization.setAddress(address);
+
+                BizWebCreateRequest<BizSubOrganization> bizRequest = new BizWebCreateRequest<>();
+                bizRequest.setSessionId(sessionId);
+                bizRequest.setData(subOrganization);
+
+                return bizAdminService.createSubOrganization(bizRequest);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
     @PostMapping(value = "/webapp/api/adminCommonPost.json")
     private WebApiResult<String> adminUpload(@RequestPart("imageFile") MultipartFile multipartFile, @RequestPart("postData") String postData) {
         WebApiResult<String> result = new WebApiResult<>();

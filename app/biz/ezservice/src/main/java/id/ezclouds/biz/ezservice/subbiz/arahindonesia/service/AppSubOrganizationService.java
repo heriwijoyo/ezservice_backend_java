@@ -77,6 +77,16 @@ public class AppSubOrganizationService {
         appSubOrganizationRepository.saveAndFlush(bizSubOrganizationDO);
     }
 
+    @Transactional
+    public void createSubOrganization(BizSubOrganization subOrganization) {
+        create(
+                subOrganization.getName(),
+                subOrganization.getAddress(),
+                subOrganization.getOrgId(),
+                subOrganization.getOrgCode()
+        );
+    }
+
     @Cacheable(BizCacheKey.SUB_ORGANIZATION_ALL)
     public List<BizSubOrganization> getAllSubOrganization() {
         return appSubOrganizationRepository

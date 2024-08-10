@@ -23,8 +23,8 @@
                             <tr>
                                 <th width="5%">No</th>
                                 <th width="30%">Name</th>
-                                <th width="50%">Address</th>
-                                <th width="10%">Created Time</th>
+                                <th width="40%">Address</th>
+                                <th width="15%">Created Time</th>
                                 <th width="10%" class="text-center">Status</th>
                             </tr>
                             </thead>
@@ -42,28 +42,25 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="largeModalLabel">Upload New Document</h4>
+                <h4 class="modal-title" id="largeModalLabel">Create New Community</h4>
             </div>
             <div class="modal-body">
                 <div class="row clearfix">
                     <div class="form-group form-float col-sm-12">
                         <div class="form-line">
-                            <div class="font-12">Document Title</div>
-                            <input type="text" class="form-control" id="docTitle" placeholder="Document Title" required>
+                            <div class="font-12">Community Name</div>
+                            <input type="text" class="form-control" id="name" placeholder="Community Name" required>
                         </div>
                     </div>
-                    <div class="col-sm-6" style="margin-bottom: 0px;">
-                        <div class="form-group">
-                            <div class="font-12 ex1">Image/PDF ( JPG, JPEG, PNG, PDF )</div>
-                            <form id="newDocsForm" enctype="multipart/form-data" method="post">
-                                <input type="file" accept="image/jpg,image/jpeg,image/gif,image/png,application/pdf" name="imageFile" data-max-file-size="3M" data-allowed-file-extensions="jpg jpeg png pdf" required/>
-                            </form>
-                            <!--img id="imagePreview" style="max-width:100%"-->
+                    <div class="form-group form-float col-sm-12">
+                        <div class="form-line">
+                            <div class="font-12">Community Address</div>
+                            <input type="text" class="form-control" id="address" placeholder="Community Address" required>
                         </div>
                     </div>
                     <div class="col-sm-12">
-                        <button id="newDocsSubmitButton" class="button button-rounded waves-effect waves-float pull-right" type="submit" name="submit">SUBMIT</button>
-                        <button id="newDocsCancelButton" class="button button-rounded button-light waves-effect waves-float pull-right" type="submit" name="submit">CANCEL</button>
+                        <button id="submitButton" class="button button-rounded waves-effect waves-float pull-right" type="submit" name="submit">SUBMIT</button>
+                        <button id="cancelButton" class="button button-rounded button-light waves-effect waves-float pull-right" type="submit" name="submit">CANCEL</button>
                     </div>
                 </div>
             </div>
@@ -73,56 +70,54 @@
 
 <script type="text/javascript">
     var EzAdminUrl = {
-        APP_DOCS_GET: 'api/getAppDocuments.json',
-        ADMIN_COMMON_POST: 'api/adminCommonPost.json'
+        SUB_ORGANIZATIONS_GET: 'api/subOrganizations.json',
+        SUB_ORGANIZATIONS_CREATE: 'api/createSubOrganization.json'
     };
     var EzDashboardBizService = {
         start: function() {
-            //EzDashboardBizService.fetchData();
+            EzDashboardBizService.fetchData();
         },
         fetchData: function() {
-            EzWebAppClient.callApiService(EzAdminUrl.APP_DOCS_GET, {
-                sessionId: EzWebAppClient.getSessionId(),
+            EzWebAppClient.callApiService(EzAdminUrl.SUB_ORGANIZATIONS_GET, {
                 pageNumber: EzDashboardBizService.data.pageNumber,
                 pageSize: EzDashboardBizService.data.pageSize
             });
         },
         handleApiBizResult: function(url, response) {
-            if (url === EzAdminUrl.APP_DOCS_GET) {
+            if (url === EzAdminUrl.SUB_ORGANIZATIONS_GET) {
                 EzDashboardBizService.reloadPageResultView(response);
             }
-            if (url === EzAdminUrl.ADMIN_COMMON_POST) {
+            if (url === EzAdminUrl.SUB_ORGANIZATIONS_CREATE) {
                 alert(response.data);
                 EzDashboardBizService.hideFormNewImage();
                 EzDashboardBizService.fetchData();
             }
         },
         handleApiBizFailed: function(url, message) {
-            if (url === EzAdminUrl.ADMIN_COMMON_POST) {
+            if (url === EzAdminUrl.SUB_ORGANIZATIONS_CREATE) {
                 alert(message);
             }
         },
         reloadPageResultView: function(response) {
             $('#rowsContainer').html('');
             for(let i=0; i<response.pageResult.data.length; i++) {
+                let rowNum = i + 1;
                 let rowData = response.pageResult.data[i];
-                let fileInfo = '<b>Title: '+ rowData.title +'</b><br>Created Time: '+ rowData.createdTime +'<br>'+ rowData.docUrl;
                 let itemRow = $.parseHTML(DashTemplate);
-                $(itemRow).find('.rowType').html(rowData.type);
-                $(itemRow).find('.rowInfo').html(fileInfo);
-                $(itemRow).find('.rowStatus').html(rowData.status);
+                $(itemRow).find('.colNum').html(rowNum);
+                $(itemRow).find('.colName').html(rowData.name);
+                $(itemRow).find('.colAddress').html(rowData.address);
+                $(itemRow).find('.colCreate').html(rowData.createdTime);
+                $(itemRow).find('.colStatus').html(rowData.status);
                 $('#rowsContainer').append(itemRow);
             }
             $('.pager').html(EzWebAppClient.renderPager(response.pageResult));
         },
-        submitDocument: function() {
-            let postData = {
-                scene: 'ADMIN_DOCS_GALLERY',
-                extendInfo: {
-                    TITLE: $('#docTitle').val()
-                }
-            };
-            EzWebAppClient.postMultipartForm('newDocsForm', postData, EzAdminUrl.ADMIN_COMMON_POST, '');
+        submitCreate: function() {
+            EzWebAppClient.callApiService(EzAdminUrl.SUB_ORGANIZATIONS_CREATE, {
+                name : $('#name').val(),
+                address : $('#address').val()
+            });
         },
         showFormNewImage: function() {
             $('#modal-form-new').removeClass('fade');
@@ -142,7 +137,7 @@
         },
         data: {
             pageNumber: 1,
-            pageSize: 5,
+            pageSize: 20,
             result: null
         }
     };
@@ -171,19 +166,21 @@
         $('#form-add-new-btn').click(function(){
             EzDashboardBizService.showFormNewImage();
         });
-        $('#newDocsCancelButton').click(function(){
+        $('#cancelButton').click(function(){
             EzDashboardBizService.hideFormNewImage();
         });
-        $('#newDocsSubmitButton').click(function(){
-            EzDashboardBizService.submitDocument();
+        $('#submitButton').click(function(){
+            EzDashboardBizService.submitCreate();
         });
     });
 
     var DashTemplate = ''+
         '<tr>'+
-            '<td class="rowType" style="vertical-align: middle;"></td>'+
-            '<td class="rowInfo" style="vertical-align: middle;"></td>'+
-            '<td class="rowStatus" style="vertical-align: middle;"></td>'+
+            '<td class="colNum" style="vertical-align: middle;"></td>'+
+            '<td class="colName" style="vertical-align: middle;"></td>'+
+            '<td class="colAddress" style="vertical-align: middle;"></td>'+
+            '<td class="colCreate" style="vertical-align: middle;"></td>'+
+            '<td class="colStatus text-center" style="vertical-align: middle;"></td>'+
         '</tr>';
 
 </script>
