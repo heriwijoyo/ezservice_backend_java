@@ -64,6 +64,41 @@ public class WebAppController {
         renderCachedWebApp(getHomeContent(), servletResponse);
     }
 
+    @GetMapping(value = "/webapp/appgallery.htm")
+    private void webAppGallery(HttpServletResponse servletResponse) {
+        renderCachedWebApp(getGalleryContent(), servletResponse);
+    }
+
+    @GetMapping(value = "/webapp/news.htm")
+    private void webAppNews(HttpServletResponse servletResponse) {
+        renderCachedWebApp(getNewsContent(), servletResponse);
+    }
+
+    @GetMapping(value = "/webapp/newsAdd.htm")
+    private void webAppNewsAdd(HttpServletResponse servletResponse) {
+        renderCachedWebApp(getNewsAddContent(), servletResponse);
+    }
+
+    @GetMapping(value = "/webapp/newsUpdate.htm")
+    private void webAppNewsUpdate(HttpServletResponse servletResponse) {
+        renderCachedWebApp(getNewsUpdateContent(), servletResponse);
+    }
+
+    @GetMapping(value = "/webapp/events.htm")
+    private void webAppEvent(HttpServletResponse servletResponse) {
+        renderCachedWebApp(getEventContent(), servletResponse);
+    }
+
+    @GetMapping(value = "/webapp/eventAdd.htm")
+    private void webAppEventAdd(HttpServletResponse servletResponse) {
+        renderCachedWebApp(getEventAddContent(), servletResponse);
+    }
+
+    @GetMapping(value = "/webapp/eventUpdate.htm")
+    private void webAppEventUpdate(HttpServletResponse servletResponse) {
+        renderCachedWebApp(getEventUpdateContent(), servletResponse);
+    }
+
     @GetMapping(value = "/webapp/videocard.htm")
     private void webAppVideoCard(HttpServletResponse servletResponse) {
         renderCachedWebApp(getVideoCardContent(), servletResponse);
@@ -87,6 +122,21 @@ public class WebAppController {
     @GetMapping(value = "/webapp/documents.htm")
     private void webDocuments(HttpServletResponse servletResponse) {
         renderCachedWebApp(getDocumentsContent(), servletResponse);
+    }
+
+    @GetMapping(value = "/webapp/organization.htm")
+    private void webAppOrganization(HttpServletResponse servletResponse) {
+        renderCachedWebApp(getOrganizationContent(), servletResponse);
+    }
+
+    @GetMapping(value = "/webapp/addOrganization.htm")
+    private void webAppOrganizationAdd(HttpServletResponse servletResponse) {
+        renderCachedWebApp(getOrganizationAddContent(), servletResponse);
+    }
+
+    @GetMapping(value = "/webapp/organizationDetail.htm")
+    private void webAppOrganizationDetail(HttpServletResponse servletResponse) {
+        renderCachedWebApp(getOrganizationDetailContent(), servletResponse);
     }
 
     @GetMapping(value = "/webapp/config.htm")
@@ -272,6 +322,41 @@ public class WebAppController {
         return getWebAppContent(WebAppPage.HOME);
     }
 
+    @Cacheable(value = BizCacheKey.WEBAPP_GALLERY)
+    public String getGalleryContent() {
+        return getWebAppContent(WebAppPage.GALLERY);
+    }
+
+    @Cacheable(value = BizCacheKey.WEBAPP_NEWS)
+    public String getNewsContent() {
+        return getWebAppContent(WebAppPage.NEWS);
+    }
+
+    @Cacheable(value = BizCacheKey.WEBAPP_NEWS_ADD)
+    public String getNewsAddContent() {
+        return getWebAppContent(WebAppPage.NEWS_ADD);
+    }
+
+    @Cacheable(value = BizCacheKey.WEBAPP_NEWS_UPDATE)
+    public String getNewsUpdateContent() {
+        return getWebAppContent(WebAppPage.NEWS_UPDATE);
+    }
+
+    @Cacheable(value = BizCacheKey.WEBAPP_EVENT)
+    public String getEventContent() {
+        return getWebAppContent(WebAppPage.EVENT);
+    }
+
+    @Cacheable(value = BizCacheKey.WEBAPP_EVENT_ADD)
+    public String getEventAddContent() {
+        return getWebAppContent(WebAppPage.EVENT_ADD);
+    }
+
+    @Cacheable(value = BizCacheKey.WEBAPP_EVENT_UPDATE)
+    public String getEventUpdateContent() {
+        return getWebAppContent(WebAppPage.EVENT_UPDATE);
+    }
+
     @Cacheable(value = BizCacheKey.WEBAPP_VIDEO_CARD)
     public String getVideoCardContent() {
         return getWebAppContent(WebAppPage.VIDEO_CARD);
@@ -295,6 +380,21 @@ public class WebAppController {
     @Cacheable(value = BizCacheKey.WEBAPP_DOCUMENTS)
     public String getDocumentsContent() {
         return getWebAppContent(WebAppPage.DOCUMENTS);
+    }
+
+    @Cacheable(value = BizCacheKey.WEBAPP_ORGANIZATION)
+    public String getOrganizationContent() {
+        return getWebAppContent(WebAppPage.ORGANIZATION);
+    }
+
+    @Cacheable(value = BizCacheKey.WEBAPP_ORGANIZATION_ADD)
+    public String getOrganizationAddContent() {
+        return getWebAppContent(WebAppPage.ORGANIZATION_ADD);
+    }
+
+    @Cacheable(value = BizCacheKey.WEBAPP_ORGANIZATION_DETAIL)
+    public String getOrganizationDetailContent() {
+        return getWebAppContent(WebAppPage.ORGANIZATION_DETAIL);
     }
 
     @Cacheable(value = BizCacheKey.WEBAPP_REPORT_PUBLIC)

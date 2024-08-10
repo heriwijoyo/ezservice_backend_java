@@ -10,12 +10,22 @@ package id.ezclouds.core.bifrost.app.webapp;
 public enum WebAppPage {
 
     HOME("webapp/home.htm"),
+    GALLERY("webapp/gallery.htm"),
+    NEWS("webapp/news.htm"),
+    NEWS_ADD("webapp/newsAdd.htm"),
+    NEWS_UPDATE("webapp/newsUpdate.htm"),
+    EVENT("webapp/events.htm"),
+    EVENT_ADD("webapp/eventAdd.htm"),
+    EVENT_UPDATE("webapp/eventUpdate.htm"),
     VIDEO_CARD("webapp/videocard.htm"),
     PROFILE("webapp/profile.htm"),
     DATA_UPLOAD("webapp/dataUpload.htm"),
     WHATSAPP("webapp/whatsapp.htm"),
     DOCUMENTS("webapp/documents.htm"),
 
+    ORGANIZATION("webapp/organization.htm"),
+    ORGANIZATION_ADD("webapp/organizationAdd.htm"),
+    ORGANIZATION_DETAIL("webapp/organizatonDetail.htm"),
     ADD_MEMBER("webapp/addMember.htm"),
     CONFIG("webapp/config.htm"),
     SPECIAL_PROCESS("webapp/specialProcess.htm"),
