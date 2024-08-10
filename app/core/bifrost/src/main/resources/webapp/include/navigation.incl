@@ -51,6 +51,11 @@
             <li class="header">MENU</li>
         </ul>
     </div>
+    <div class="menu">
+        <ul id="special-menu-container" class="list">
+            <li class="header">SPECIAL MENU</li>
+        </ul>
+    </div>
     <div class="legal">
         <div class="copyright">
             Copyright 2023 EzService Tech

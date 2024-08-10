@@ -10,7 +10,7 @@ package id.ezclouds.core.bifrost.app.webapp;
 public enum WebAppPage {
 
     HOME("webapp/home.htm"),
-    GALLERY("webapp/gallery.htm"),
+    GALLERY("webapp/appgallery.htm"),
     NEWS("webapp/news.htm"),
     NEWS_ADD("webapp/newsAdd.htm"),
     NEWS_UPDATE("webapp/newsUpdate.htm"),
