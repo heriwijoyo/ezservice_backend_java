@@ -14,7 +14,7 @@ import java.util.List;
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: PageResultUtil.java, v 0.1 2024‐08‐11 6:35 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class PageResultUtil {
+public final class PageResultUtil {
 
     public static <I, O> PageResult<O> convertFindResult(Page<I> findResult, ModelConverter<I, O> converter) {
         PageResult<O> pageResult = new PageResult<>();
@@ -35,5 +35,11 @@ public class PageResultUtil {
 
         pageResult.setData(outputList);
         return pageResult;
+    }
+
+    public static <O, A> void adjustPageResult(PageResult<O> pageResult, ModelAdjuster<O> adjuster) {
+        for (O origin : pageResult.getData()) {
+            adjuster.adjust(origin);
+        }
     }
 }

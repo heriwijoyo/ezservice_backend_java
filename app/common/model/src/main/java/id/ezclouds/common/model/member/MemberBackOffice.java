@@ -12,6 +12,7 @@ public class MemberBackOffice {
 
     private String memberId;
     private String memberName;
+    private String subOrgId;
     private String subOrgName;
     private String idCardNumber;
 
@@ -29,6 +30,14 @@ public class MemberBackOffice {
 
     public void setMemberName(String memberName) {
         this.memberName = memberName;
+    }
+
+    public String getSubOrgId() {
+        return subOrgId;
+    }
+
+    public void setSubOrgId(String subOrgId) {
+        this.subOrgId = subOrgId;
     }
 
     public String getSubOrgName() {

@@ -2,29 +2,17 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.core.dal.organization.dataobject;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+package id.ezclouds.common.model.organization;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: CoreSubOrganizationDO.java, v 0.1 2024‐07‐28 9:06 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: SubOrganization.java, v 0.1 2024‐08‐11 8:59 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-@Entity
-@Table(name = "biz_sub_organization")
-public class CoreSubOrganizationDO {
+public class SubOrganization {
 
-    @Id
-    @Column(name = "sub_org_id")
     private String subOrgId;
-    @Column(name = "org_id")
     private String orgId;
-    @Column(name = "name")
     private String name;
-    @Column(name = "address")
     private String address;
 
     public String getSubOrgId() {

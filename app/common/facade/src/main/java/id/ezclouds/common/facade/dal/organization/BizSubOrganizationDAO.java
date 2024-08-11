@@ -4,10 +4,15 @@
  */
 package id.ezclouds.common.facade.dal.organization;
 
+import id.ezclouds.common.model.organization.SubOrganization;
+
+import java.util.List;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizSubOrganizationDAO.java, v 0.1 2024‐07‐28 8:59 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 public interface BizSubOrganizationDAO {
     long countByOrgId(String orgId);
+    List<SubOrganization> getByOrgId(String orgId);
 }

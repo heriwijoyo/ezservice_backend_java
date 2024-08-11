@@ -67,7 +67,6 @@ public class CoreMemberBackOfficeDAO implements BizMemberBackOfficeDAO {
         List<CoreMemberExtBackOfficeDO> memberExtensions = coreMemberExtBackOfficeRepository
                 .findByMemberIdIn(memberIds);
 
-
         return PageResultUtil.convertFindResult(findResult, new MemberBackOfficeResultConverter(memberExtensions));
     }
 }

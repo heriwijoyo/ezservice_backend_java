@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: ListModelConverter.java, v 0.1 2024‐05‐17 10:36 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: PageResultConverter.java, v 0.1 2024‐05‐17 10:36 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 public interface PageResultConverter<I, O> {
     List<O> convert(List<I> input);
