@@ -11,16 +11,26 @@ package id.ezclouds.common.model.member;
 public class MemberBackOffice {
 
     private String memberId;
+    private String orgId;
     private String subOrgId;
     private String subOrgName;
     private String memberName;
+    private String gender;
+    private String dateOfBirth;
     private String phone;
+    private String education;
+    private String occupation;
+    private String religion;
+    private String ethnic;
 
     private String idCardNumber;
     private String provinceName;
     private String regencyName;
     private String districtName;
     private String villageName;
+    private String rukunWarga;
+    private String rukunTetangga;
+    private String tpsNumber;
 
     public String getMemberId() {
         return memberId;
@@ -28,6 +38,14 @@ public class MemberBackOffice {
 
     public void setMemberId(String memberId) {
         this.memberId = memberId;
+    }
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
     }
 
     public String getMemberName() {
@@ -60,6 +78,54 @@ public class MemberBackOffice {
 
     public void setSubOrgName(String subOrgName) {
         this.subOrgName = subOrgName;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getEducation() {
+        return education;
+    }
+
+    public void setEducation(String education) {
+        this.education = education;
+    }
+
+    public String getOccupation() {
+        return occupation;
+    }
+
+    public void setOccupation(String occupation) {
+        this.occupation = occupation;
+    }
+
+    public String getReligion() {
+        return religion;
+    }
+
+    public void setReligion(String religion) {
+        this.religion = religion;
+    }
+
+    public String getEthnic() {
+        return ethnic;
+    }
+
+    public void setEthnic(String ethnic) {
+        this.ethnic = ethnic;
     }
 
     public String getIdCardNumber() {
@@ -100,5 +166,29 @@ public class MemberBackOffice {
 
     public void setVillageName(String villageName) {
         this.villageName = villageName;
+    }
+
+    public String getRukunWarga() {
+        return rukunWarga;
+    }
+
+    public void setRukunWarga(String rukunWarga) {
+        this.rukunWarga = rukunWarga;
+    }
+
+    public String getRukunTetangga() {
+        return rukunTetangga;
+    }
+
+    public void setRukunTetangga(String rukunTetangga) {
+        this.rukunTetangga = rukunTetangga;
+    }
+
+    public String getTpsNumber() {
+        return tpsNumber;
+    }
+
+    public void setTpsNumber(String tpsNumber) {
+        this.tpsNumber = tpsNumber;
     }
 }

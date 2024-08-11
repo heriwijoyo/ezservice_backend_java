@@ -36,6 +36,12 @@ public class CoreMemberExtBackOfficeDO {
     @Column(name = "village_name")
     private String villageName;
 
+    @Column(name = "rukun_warga")
+    private String rukunWarga;
+
+    @Column(name = "rukun_tetangga")
+    private String rukunTetangga;
+
     public String getMemberExtensionId() {
         return memberExtensionId;
     }
@@ -90,5 +96,21 @@ public class CoreMemberExtBackOfficeDO {
 
     public void setVillageName(String villageName) {
         this.villageName = villageName;
+    }
+
+    public String getRukunWarga() {
+        return rukunWarga;
+    }
+
+    public void setRukunWarga(String rukunWarga) {
+        this.rukunWarga = rukunWarga;
+    }
+
+    public String getRukunTetangga() {
+        return rukunTetangga;
+    }
+
+    public void setRukunTetangga(String rukunTetangga) {
+        this.rukunTetangga = rukunTetangga;
     }
 }

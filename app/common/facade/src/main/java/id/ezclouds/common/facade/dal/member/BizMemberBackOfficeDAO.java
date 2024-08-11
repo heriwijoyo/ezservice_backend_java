@@ -14,4 +14,5 @@ import id.ezclouds.common.model.result.PageResult;
  */
 public interface BizMemberBackOfficeDAO {
     PageResult<MemberBackOffice> getMemberPage(BizPageRequest bizPageRequest);
+    MemberBackOffice getMemberDetail(String memberId);
 }

@@ -25,6 +25,7 @@ import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
+import id.ezclouds.common.model.member.MemberBackOffice;
 import id.ezclouds.common.model.request.WebBizPageRequest;
 import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.common.util.exception.ExceptionUtil;
@@ -829,6 +830,30 @@ public class WebApiAdminController {
                     return (String) object;
                 }
                 return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/memberDetail.json")
+    private WebApiResult<MemberBackOffice> memberDetail(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "memberId", required = false) String memberId) {
+        final WebApiResult<MemberBackOffice> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_MEMBER_DETAIL, result, new WebApiControllerTemplate.Handler<MemberBackOffice>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                return bizAdminService.getMemberBackOffice(sessionId, memberId);
+            }
+
+            @Override
+            public MemberBackOffice convertResult(Object object) {
+                return (MemberBackOffice) object;
             }
 
             @Override

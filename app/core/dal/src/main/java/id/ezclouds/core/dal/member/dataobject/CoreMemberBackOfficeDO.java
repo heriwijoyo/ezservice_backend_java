@@ -27,8 +27,27 @@ public class CoreMemberBackOfficeDO {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "gender")
+    private String gender;
+
+    @Column(name = "date_of_birth")
+    private String dateOfBirth;
+
     @Column(name = "phone")
     private String phone;
+
+    @Column(name = "education")
+    private String education;
+
+    @Column(name = "occupation")
+    private String occupation;
+
+    @Column(name = "religion")
+    private String religion;
+
+    @Column(name = "ethnic")
+    private String ethnic;
+
 
     @Column(name = "created_time")
     private String createdTime;
@@ -65,12 +84,60 @@ public class CoreMemberBackOfficeDO {
         this.name = name;
     }
 
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
     public String getPhone() {
         return phone;
     }
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getEducation() {
+        return education;
+    }
+
+    public void setEducation(String education) {
+        this.education = education;
+    }
+
+    public String getOccupation() {
+        return occupation;
+    }
+
+    public void setOccupation(String occupation) {
+        this.occupation = occupation;
+    }
+
+    public String getReligion() {
+        return religion;
+    }
+
+    public void setReligion(String religion) {
+        this.religion = religion;
+    }
+
+    public String getEthnic() {
+        return ethnic;
+    }
+
+    public void setEthnic(String ethnic) {
+        this.ethnic = ethnic;
     }
 
     public String getCreatedTime() {

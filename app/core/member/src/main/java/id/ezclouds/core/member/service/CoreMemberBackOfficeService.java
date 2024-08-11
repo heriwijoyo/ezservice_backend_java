@@ -41,4 +41,18 @@ public class CoreMemberBackOfficeService implements MemberBackOfficeService {
 
         return result;
     }
+
+    @Override
+    public MemberBackOffice getMemberDetail(String memberId) {
+        MemberBackOffice memberBackOffice = bizMemberBackOfficeDAO.getMemberDetail(memberId);
+        if (memberBackOffice == null) {
+            return null;
+        }
+
+        SubOrganization subOrganization = bizSubOrganizationDAO
+                .getById(memberBackOffice.getSubOrgId());
+        new MemberBackOfficeAdjuster(subOrganization).adjust(memberBackOffice);
+
+        return memberBackOffice;
+    }
 }

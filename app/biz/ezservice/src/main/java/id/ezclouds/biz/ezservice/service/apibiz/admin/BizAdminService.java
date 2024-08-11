@@ -1202,6 +1202,37 @@ public class BizAdminService extends BizBaseService {
         return bizResult;
     }
 
+    public BizResult getMemberBackOffice(String sessionId, String memberId) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notBlank(sessionId, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(memberId, EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthAdminSession session = authorizedAdminSession(sessionId);
+                MemberBackOffice member = BeanFacadeUtil
+                        .getBean(MemberBackOfficeService.class)
+                        .getMemberDetail(memberId);
+
+                AssertUtil.notNull(member, EzErrorCode.DATA_NOT_FOUND);
+                AssertUtil.isTrue(StringUtil.equals(session.getOrgId(), member.getOrgId()), EzErrorCode.DATA_NOT_FOUND);
+
+                bizResult.setSuccess(true);
+                bizResult.setObject(member);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
     private void validateWebBizPageRequest(WebBizPageRequest request) throws EzErrorException {
         AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
         AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);

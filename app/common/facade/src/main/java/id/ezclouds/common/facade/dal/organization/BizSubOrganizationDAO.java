@@ -15,4 +15,5 @@ import java.util.List;
 public interface BizSubOrganizationDAO {
     long countByOrgId(String orgId);
     List<SubOrganization> getByOrgId(String orgId);
+    SubOrganization getById(String subOrgId);
 }

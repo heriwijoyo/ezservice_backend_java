@@ -40,4 +40,14 @@ public class CoreSubOrganizationDAO implements BizSubOrganizationDAO {
 
         return ListModelConvertUtil.convert(findResult, new CoreSubOrganizationResultConverter());
     }
+
+    @EzDAOLogger
+    @Override
+    public SubOrganization getById(String subOrgId) {
+        CoreSubOrganizationDO subOrganizationDO = coreSubOrganizationRepository
+                .findById(subOrgId)
+                .orElse(null);
+
+        return new CoreSubOrganizationResultConverter().convert(subOrganizationDO);
+    }
 }

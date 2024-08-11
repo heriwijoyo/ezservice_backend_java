@@ -28,6 +28,12 @@ public class MemberBackOfficeAdjuster implements ModelAdjuster<MemberBackOffice>
         }
     }
 
+    public MemberBackOfficeAdjuster(SubOrganization subOrganization) {
+        if (subOrganization != null) {
+            subOrganizationMap.put(subOrganization.getSubOrgId(), subOrganization);
+        }
+    }
+
     @Override
     public void adjust(MemberBackOffice origin) {
         SubOrganization subOrganization = subOrganizationMap.get(origin.getSubOrgId());

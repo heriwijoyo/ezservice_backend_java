@@ -29,12 +29,25 @@ public class MemberBackOfficeResultConverter extends TemplateModelConverter<Core
         }
     }
 
+    public MemberBackOfficeResultConverter(CoreMemberExtBackOfficeDO memberExtension) {
+        if (memberExtension != null) {
+            memberExtensionMap.put(memberExtension.getMemberId(), memberExtension);
+        }
+    }
+
     @Override
     protected MemberBackOffice safeConvert(CoreMemberBackOfficeDO input) {
         MemberBackOffice memberBackOffice = new MemberBackOffice();
         memberBackOffice.setMemberId(input.getMemberId());
+        memberBackOffice.setOrgId(input.getOrgId());
         memberBackOffice.setMemberName(input.getName());
+        memberBackOffice.setGender(input.getGender());
+        memberBackOffice.setDateOfBirth(input.getDateOfBirth());
         memberBackOffice.setPhone(input.getPhone());
+        memberBackOffice.setEducation(input.getEducation());
+        memberBackOffice.setOccupation(input.getOccupation());
+        memberBackOffice.setReligion(input.getReligion());
+        memberBackOffice.setEthnic(input.getEthnic());
         memberBackOffice.setSubOrgId(input.getSubOrgId());
 
         CoreMemberExtBackOfficeDO extBackOfficeDO = memberExtensionMap.get(input.getMemberId());
@@ -44,6 +57,9 @@ public class MemberBackOfficeResultConverter extends TemplateModelConverter<Core
             memberBackOffice.setRegencyName(extBackOfficeDO.getRegencyName());
             memberBackOffice.setDistrictName(extBackOfficeDO.getDistrictName());
             memberBackOffice.setVillageName(extBackOfficeDO.getVillageName());
+            memberBackOffice.setRukunWarga(extBackOfficeDO.getRukunWarga());
+            memberBackOffice.setRukunTetangga(extBackOfficeDO.getRukunTetangga());
+            //memberBackOffice.setTpsNumber(extBackOfficeDO.getTpsNo());
         }
         return memberBackOffice;
     }

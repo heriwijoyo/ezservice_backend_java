@@ -69,4 +69,23 @@ public class CoreMemberBackOfficeDAO implements BizMemberBackOfficeDAO {
 
         return PageResultUtil.convertFindResult(findResult, new MemberBackOfficeResultConverter(memberExtensions));
     }
+
+    @EzDAOLogger
+    @Override
+    public MemberBackOffice getMemberDetail(String memberId) {
+        CoreMemberBackOfficeDO memberBackOfficeDO = coreMemberBackOfficeRepository
+                .findById(memberId)
+                .orElse(null);
+
+        if (memberBackOfficeDO == null) {
+            return null;
+        }
+
+        CoreMemberExtBackOfficeDO memberExtBackOfficeDO = coreMemberExtBackOfficeRepository
+                .findByMemberId(memberId);
+
+        MemberBackOfficeResultConverter converter = new MemberBackOfficeResultConverter(memberExtBackOfficeDO);
+
+        return converter.convert(memberBackOfficeDO);
+    }
 }
