@@ -14,6 +14,7 @@ public class MemberBackOffice {
     private String orgId;
     private String subOrgId;
     private String subOrgName;
+    private String roles;
     private String memberName;
     private String gender;
     private String dateOfBirth;
@@ -46,6 +47,14 @@ public class MemberBackOffice {
 
     public void setOrgId(String orgId) {
         this.orgId = orgId;
+    }
+
+    public String getRoles() {
+        return roles;
+    }
+
+    public void setRoles(String roles) {
+        this.roles = roles;
     }
 
     public String getMemberName() {

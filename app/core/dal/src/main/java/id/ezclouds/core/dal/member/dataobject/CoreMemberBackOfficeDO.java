@@ -27,6 +27,9 @@ public class CoreMemberBackOfficeDO {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "roles")
+    private String roles;
+
     @Column(name = "gender")
     private String gender;
 
@@ -47,7 +50,6 @@ public class CoreMemberBackOfficeDO {
 
     @Column(name = "ethnic")
     private String ethnic;
-
 
     @Column(name = "created_time")
     private String createdTime;
@@ -82,6 +84,14 @@ public class CoreMemberBackOfficeDO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getRoles() {
+        return roles;
+    }
+
+    public void setRoles(String roles) {
+        this.roles = roles;
     }
 
     public String getGender() {

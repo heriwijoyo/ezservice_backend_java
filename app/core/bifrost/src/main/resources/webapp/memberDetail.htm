@@ -11,6 +11,11 @@
                 <div class="card corner-radius">
                     <div class="header">
                         <h2>MEMBER DETAIL</h2>
+                        <div class="header-dropdown m-r--5">
+                            <a href="javascript:void(0)">
+                                <button id="btnUpdateRoles" type="button" class="button button-rounded btn-offset waves-effect waves-float">UPDATE ROLES</button>
+                            </a>
+                        </div>
                     </div>
                     <div class="body">
                         <div class="row clearfix">
@@ -154,7 +159,7 @@
                             <div class="form-group col-sm-12">
                                 <div class="form-line">
                                     <div class="font-12">No TPS</div>
-                                    <input type="text" class="form-control" id="tpsNo" placeholder="No TPS" disabled>
+                                    <input type="text" class="form-control" id="tpsNumber" placeholder="No TPS" disabled>
                                 </div>
                             </div>
 
@@ -251,6 +256,7 @@
             $('#gender').val(data.gender);
             $('#dateOfBirth').val(data.dateOfBirth);
             $('#phone').val(data.phone);
+            $('#idCardNumber').val(data.idCardNumber);
             $('#education').val(data.education);
             $('#occupation').val(data.occupation);
             $('#religion').val(data.religion);

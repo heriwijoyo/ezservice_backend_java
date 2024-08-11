@@ -42,6 +42,8 @@ public class CoreMemberExtBackOfficeDO {
     @Column(name = "rukun_tetangga")
     private String rukunTetangga;
 
+    private String tpsNumber;
+
     public String getMemberExtensionId() {
         return memberExtensionId;
     }
@@ -112,5 +114,13 @@ public class CoreMemberExtBackOfficeDO {
 
     public void setRukunTetangga(String rukunTetangga) {
         this.rukunTetangga = rukunTetangga;
+    }
+
+    public String getTpsNumber() {
+        return tpsNumber;
+    }
+
+    public void setTpsNumber(String tpsNumber) {
+        this.tpsNumber = tpsNumber;
     }
 }

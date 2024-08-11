@@ -40,6 +40,7 @@ public class MemberBackOfficeResultConverter extends TemplateModelConverter<Core
         MemberBackOffice memberBackOffice = new MemberBackOffice();
         memberBackOffice.setMemberId(input.getMemberId());
         memberBackOffice.setOrgId(input.getOrgId());
+        memberBackOffice.setRoles(input.getRoles());
         memberBackOffice.setMemberName(input.getName());
         memberBackOffice.setGender(input.getGender());
         memberBackOffice.setDateOfBirth(input.getDateOfBirth());
@@ -59,7 +60,7 @@ public class MemberBackOfficeResultConverter extends TemplateModelConverter<Core
             memberBackOffice.setVillageName(extBackOfficeDO.getVillageName());
             memberBackOffice.setRukunWarga(extBackOfficeDO.getRukunWarga());
             memberBackOffice.setRukunTetangga(extBackOfficeDO.getRukunTetangga());
-            //memberBackOffice.setTpsNumber(extBackOfficeDO.getTpsNo());
+            memberBackOffice.setTpsNumber(extBackOfficeDO.getTpsNumber());
         }
         return memberBackOffice;
     }
