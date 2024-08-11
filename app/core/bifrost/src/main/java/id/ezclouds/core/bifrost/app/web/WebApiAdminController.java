@@ -26,6 +26,7 @@ import id.ezclouds.biz.ezservice.service.request.web.*;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.common.model.member.MemberBackOffice;
+import id.ezclouds.common.model.organization.SubOrganization;
 import id.ezclouds.common.model.request.WebBizPageRequest;
 import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.common.util.exception.ExceptionUtil;
@@ -670,6 +671,29 @@ public class WebApiAdminController {
                     return (PageResult<BizSubOrganization>) object;
                 }
                 return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/subOrganizationAll.json")
+    private WebApiResult<List<SubOrganization>> subOrganizationAll(
+            @RequestParam(name = "sessionId", required = false) String sessionId) {
+        final WebApiResult<List<SubOrganization>> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_SUB_ORGANIZATION_ALL, result, new WebApiControllerTemplate.Handler<List<SubOrganization>>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                return bizAdminService.getSubOrganizationAll(sessionId);
+            }
+
+            @Override
+            public List<SubOrganization> convertResult(Object object) {
+                return (List<SubOrganization>) object;
             }
 
             @Override

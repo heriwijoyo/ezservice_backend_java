@@ -5,7 +5,7 @@
 package id.ezclouds.core.member.service;
 
 import id.ezclouds.common.facade.dal.member.BizMemberBackOfficeDAO;
-import id.ezclouds.common.facade.dal.organization.BizSubOrganizationDAO;
+import id.ezclouds.common.facade.dal.organization.SubOrganizationDAO;
 import id.ezclouds.common.facade.member.MemberBackOfficeService;
 import id.ezclouds.common.model.member.MemberBackOffice;
 import id.ezclouds.common.model.organization.SubOrganization;
@@ -27,14 +27,14 @@ import java.util.List;
 public class CoreMemberBackOfficeService implements MemberBackOfficeService {
 
     @Autowired
-    private BizSubOrganizationDAO bizSubOrganizationDAO;
+    private SubOrganizationDAO subOrganizationDAO;
 
     @Autowired
     private BizMemberBackOfficeDAO bizMemberBackOfficeDAO;
 
     @Override
     public PageResult<MemberBackOffice> getMemberPage(BizPageRequest request) {
-        List<SubOrganization> subOrganizations = bizSubOrganizationDAO
+        List<SubOrganization> subOrganizations = subOrganizationDAO
                 .getByOrgId(request.getOrgId());
 
         PageResult<MemberBackOffice> result = bizMemberBackOfficeDAO.getMemberPage(request);
@@ -51,7 +51,7 @@ public class CoreMemberBackOfficeService implements MemberBackOfficeService {
         }
 
         if (StringUtil.isNotBlank(memberBackOffice.getSubOrgId())) {
-            SubOrganization subOrganization = bizSubOrganizationDAO
+            SubOrganization subOrganization = subOrganizationDAO
                     .getById(memberBackOffice.getSubOrgId());
             new MemberBackOfficeAdjuster(subOrganization).adjust(memberBackOffice);
         }

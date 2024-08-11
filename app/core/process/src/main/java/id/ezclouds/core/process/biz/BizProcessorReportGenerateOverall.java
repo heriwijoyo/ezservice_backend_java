@@ -5,7 +5,7 @@
 package id.ezclouds.core.process.biz;
 
 import id.ezclouds.common.facade.dal.member.BizMemberUnionDAO;
-import id.ezclouds.common.facade.dal.organization.BizSubOrganizationDAO;
+import id.ezclouds.common.facade.dal.organization.SubOrganizationDAO;
 import id.ezclouds.common.facade.member.MemberReportService;
 import id.ezclouds.common.model.report.BizReportOverallKey;
 import id.ezclouds.core.process.biz.inner.BizInnerProcessorReportGenerateOverall;
@@ -26,7 +26,7 @@ public class BizProcessorReportGenerateOverall extends BizAsyncProcessor {
     private BizMemberUnionDAO bizMemberUnionDAO;
 
     @Autowired
-    private BizSubOrganizationDAO bizSubOrganizationDAO;
+    private SubOrganizationDAO subOrganizationDAO;
 
     @Autowired
     private BizInnerProcessorReportGenerateOverall bizInnerProcessorReportGenerateOverall;
@@ -53,7 +53,7 @@ public class BizProcessorReportGenerateOverall extends BizAsyncProcessor {
         logData.add("TOTAL_MEMBER=" + totalMember);
         bizInnerProcessorReportGenerateOverall.storeReport(orgId, BizReportOverallKey.TOTAL_MEMBER_UNION.getCode(), (int)totalMember);
 
-        long totalSubOrg = bizSubOrganizationDAO.countByOrgId(orgId) - 1;
+        long totalSubOrg = subOrganizationDAO.countByOrgId(orgId) - 1;
         logData.add("TOTAL_SUB_ORG=" + totalSubOrg);
         bizInnerProcessorReportGenerateOverall.storeReport(orgId, BizReportOverallKey.TOTAL_SUB_ORGANIZATION.getCode(), (int)totalSubOrg);
 

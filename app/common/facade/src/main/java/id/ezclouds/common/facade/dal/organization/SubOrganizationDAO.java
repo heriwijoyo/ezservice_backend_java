@@ -10,9 +10,9 @@ import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: BizSubOrganizationDAO.java, v 0.1 2024‐07‐28 8:59 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: SubOrganizationDAO.java, v 0.1 2024‐07‐28 8:59 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public interface BizSubOrganizationDAO {
+public interface SubOrganizationDAO {
     long countByOrgId(String orgId);
     List<SubOrganization> getByOrgId(String orgId);
     SubOrganization getById(String subOrgId);

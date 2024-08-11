@@ -4,7 +4,7 @@
  */
 package id.ezclouds.core.dal.organization;
 
-import id.ezclouds.common.facade.dal.organization.BizSubOrganizationDAO;
+import id.ezclouds.common.facade.dal.organization.SubOrganizationDAO;
 import id.ezclouds.common.model.annotation.EzDAOLogger;
 import id.ezclouds.common.model.organization.SubOrganization;
 import id.ezclouds.common.model.util.ListModelConvertUtil;
@@ -21,7 +21,7 @@ import java.util.List;
  * @version $Id: CoreSubOrganizationDAO.java, v 0.1 2024‐07‐28 9:03 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Component
-public class CoreSubOrganizationDAO implements BizSubOrganizationDAO {
+public class CoreSubOrganizationDAO implements SubOrganizationDAO {
 
     @Autowired
     private CoreSubOrganizationRepository coreSubOrganizationRepository;
