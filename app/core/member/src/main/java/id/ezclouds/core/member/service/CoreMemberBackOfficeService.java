@@ -12,6 +12,7 @@ import id.ezclouds.common.model.organization.SubOrganization;
 import id.ezclouds.common.model.request.BizPageRequest;
 import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.common.model.util.PageResultUtil;
+import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.member.converter.MemberBackOfficeAdjuster;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,9 +50,11 @@ public class CoreMemberBackOfficeService implements MemberBackOfficeService {
             return null;
         }
 
-        SubOrganization subOrganization = bizSubOrganizationDAO
-                .getById(memberBackOffice.getSubOrgId());
-        new MemberBackOfficeAdjuster(subOrganization).adjust(memberBackOffice);
+        if (StringUtil.isNotBlank(memberBackOffice.getSubOrgId())) {
+            SubOrganization subOrganization = bizSubOrganizationDAO
+                    .getById(memberBackOffice.getSubOrgId());
+            new MemberBackOfficeAdjuster(subOrganization).adjust(memberBackOffice);
+        }
 
         return memberBackOffice;
     }
