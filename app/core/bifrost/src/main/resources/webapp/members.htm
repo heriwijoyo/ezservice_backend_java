@@ -11,8 +11,8 @@
                     <div class="header">
                         <h2>MANAGE MEMBERS</h2>
                         <div class="header-dropdown m-r--5">
-                            <a href="javascript:void(0)">
-                                <button id="form-add-new-btn" type="button" class="button button-rounded btn-offset waves-effect waves-float">ADD</button>
+                            <a href="memberAdd.htm">
+                                <button type="button" class="button button-rounded btn-offset waves-effect waves-float">ADD NEW MEMBER</button>
                             </a>
                         </div>
                     </div>
@@ -141,14 +141,6 @@
                 address : $('#address').val()
             });
         },
-        showFormNewImage: function() {
-            $('#modal-form-new').removeClass('fade');
-            $('#modal-form-new').addClass('show');
-        },
-        hideFormNewImage: function() {
-            $('#modal-form-new').removeClass('show');
-            $('#modal-form-new').addClass('fade');
-        },
         prev: function() {
             EzDashboardBizService.data.pageNumber--;
             EzDashboardBizService.fetchData();
@@ -189,12 +181,6 @@
         });
         EzWebAppClient.start();
 
-        $('#form-add-new-btn').click(function(){
-            EzDashboardBizService.showFormNewImage();
-        });
-        $('#cancelButton').click(function(){
-            EzDashboardBizService.hideFormNewImage();
-        });
         $('#submitButton').click(function(){
             EzDashboardBizService.submitCreate();
         });

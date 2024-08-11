@@ -400,7 +400,7 @@ public class WebApiSuperAdminController {
             @RequestParam(name = "tpsNo", required = false) String tpsNo
     ) {
         final WebApiResult<String> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_CREATE_ADMIN_ORG, result, new WebApiControllerTemplate.Handler<String>() {
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_CREATE_MEMBER, result, new WebApiControllerTemplate.Handler<String>() {
             @Override
             public BizResult onProcess() throws Exception {
                 BizMember bizMember = new BizMember();

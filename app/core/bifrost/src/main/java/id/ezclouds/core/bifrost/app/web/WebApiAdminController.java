@@ -12,6 +12,7 @@ import id.ezclouds.biz.ezservice.model.BizWhatsappLog;
 import id.ezclouds.biz.ezservice.model.VideoCard;
 import id.ezclouds.biz.ezservice.model.admin.*;
 import id.ezclouds.biz.ezservice.model.event.AppEvent;
+import id.ezclouds.biz.ezservice.model.member.BizGender;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.model.news.BizWebDetailNews;
 import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
@@ -32,6 +33,7 @@ import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;
 import id.ezclouds.core.bifrost.app.web.result.WebApiPageResult;
 import id.ezclouds.core.bifrost.app.web.result.WebApiResult;
+import id.ezclouds.core.shared.model.CoreArea;
 import id.ezclouds.core.shared.util.DigestLogUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -735,6 +737,121 @@ public class WebApiAdminController {
             @Override
             public PageResult<BizMember> convertResult(Object object) {
                 return (PageResult<BizMember>) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/memberAddRequiredData.json")
+    private WebApiResult<BizMemberRequiredData> addMemberRequiredData(
+            @RequestParam(name = "sessionId", required = false) String sessionId) {
+        final WebApiResult<BizMemberRequiredData> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_MEMBER_REQUIRED_DATA, result, new WebApiControllerTemplate.Handler<BizMemberRequiredData>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizWebDetailRequest<String> request = new BizWebDetailRequest<>();
+                request.setSessionId(sessionId);
+                return bizAdminService.getMemberRequiredData(request);
+            }
+
+            @Override
+            public BizMemberRequiredData convertResult(Object object) {
+                if (object instanceof BizMemberRequiredData) {
+                    return (BizMemberRequiredData) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/memberAdd.json")
+    private WebApiResult<String> addMember(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "subOrgId", required = false) String subOrgId,
+            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "gender", required = false) String gender,
+            @RequestParam(name = "dateOfBirth", required = false) String dateOfBirth,
+            @RequestParam(name = "phone", required = false) String phone,
+            @RequestParam(name = "education", required = false) String education,
+            @RequestParam(name = "occupation", required = false) String occupation,
+            @RequestParam(name = "religion", required = false) String religion,
+            @RequestParam(name = "ethnic", required = false) String ethnic,
+            @RequestParam(name = "idCardNumber", required = false) String idCardNumber,
+            @RequestParam(name = "districtId", required = false) String districtId,
+            @RequestParam(name = "villageId", required = false) String villageId,
+            @RequestParam(name = "rukunWarga", required = false) String rukunWarga,
+            @RequestParam(name = "rukunTetangga", required = false) String rukunTetangga,
+            @RequestParam(name = "tpsNo", required = false) String tpsNo
+    ) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_CREATE_MEMBER, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizMember bizMember = new BizMember();
+                bizMember.setSubOrganization(new BizSubOrganization(subOrgId));
+                bizMember.setName(name);
+                bizMember.setGender(BizGender.getByCode(gender));
+                bizMember.setDateOfBirth(dateOfBirth);
+                bizMember.setPhone(phone);
+                bizMember.setEducation(education);
+                bizMember.setOccupation(occupation);
+                bizMember.setReligion(religion);
+                bizMember.setEthnic(ethnic);
+                bizMember.setIdCardNumber(idCardNumber);
+                bizMember.setDistrictId(districtId);
+                bizMember.setVillageId(villageId);
+                bizMember.setRukunWarga(rukunWarga);
+                bizMember.setRukunTetangga(rukunTetangga);
+                bizMember.setTpsNumber(tpsNo);
+
+                BizWebCreateRequest<BizMember> request = new BizWebCreateRequest<>();
+                request.setSessionId(sessionId);
+                request.setData(bizMember);
+                return bizAdminService.createBizMember(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                if (object instanceof String) {
+                    return (String) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/adminCoreArea.json")
+    private WebApiResult<List<CoreArea>> coreArea(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "level", required = false) String level,
+            @RequestParam(name = "parentId", required = false) String parentId) {
+        final WebApiResult<List<CoreArea>> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_CORE_AREA, result, new WebApiControllerTemplate.Handler<List<CoreArea>>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                return bizAdminService.getCoreAreas(sessionId, level, parentId);
+            }
+
+            @Override
+            public List<CoreArea> convertResult(Object object) {
+                return (List<CoreArea>) object;
             }
 
             @Override
