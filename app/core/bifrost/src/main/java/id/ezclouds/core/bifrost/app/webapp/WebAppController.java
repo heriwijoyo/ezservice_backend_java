@@ -134,6 +134,11 @@ public class WebAppController {
         renderCachedWebApp(getMemberAddContent(), servletResponse);
     }
 
+    @GetMapping(value = "/webapp/memberDetail.htm")
+    private void webMemberDetail(HttpServletResponse servletResponse) {
+        renderCachedWebApp(getMemberDetailContent(), servletResponse);
+    }
+
     @GetMapping(value = "/webapp/dataUpload.htm")
     private void dataUpload(HttpServletResponse servletResponse) {
         renderCachedWebApp(getDataUploadContent(), servletResponse);
@@ -405,6 +410,11 @@ public class WebAppController {
     @Cacheable(value = BizCacheKey.WEBAPP_MEMBER_ADD)
     public String getMemberAddContent() {
         return getWebAppContent(WebAppPage.MEMBER_ADD);
+    }
+
+    @Cacheable(value = BizCacheKey.WEBAPP_MEMBER_DETAIL)
+    public String getMemberDetailContent() {
+        return getWebAppContent(WebAppPage.MEMBER_DETAIL);
     }
 
     @Cacheable(value = BizCacheKey.WEBAPP_DATA_UPLOAD)

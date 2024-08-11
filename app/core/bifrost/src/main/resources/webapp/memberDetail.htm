@@ -10,7 +10,7 @@
             <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
                 <div class="card corner-radius">
                     <div class="header">
-                        <h2>ADD NEW MEMBER</h2>
+                        <h2>MEMBER DETAIL</h2>
                     </div>
                     <div class="body">
                         <div class="row clearfix">
@@ -20,24 +20,6 @@
                                     <div class="font-12">Sub Organization</div>
                                     <select class="form-control show-tick" id="sub_org_id">
                                     </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group col-sm-12">
-                                <div class="form-line">
-                                    <div class="font-12">Select Roles</div>
-                                    <div class="roles form-line">
-                                        <input type="checkbox" id="recruiter" value="OP_RECRUITER">
-                                        <label for="recruiter"> RECRUITER</label>
-                                    </div>
-                                    <div class="roles form-line">
-                                        <input type="checkbox" id="surveyor" value="OP_SURVEYOR">
-                                        <label for="surveyor"> SURVEYOR</label>
-                                    </div>
-                                    <div class="roles form-line">
-                                        <input type="checkbox" id="voteGuardian" value="OP_VOTE_GUARDIAN">
-                                        <label for="voteGuardian"> JAGA SUARA</label>
-                                    </div>
                                 </div>
                             </div>
 
@@ -173,7 +155,7 @@
 
                             <div class="col-sm-12">
                                 <img id="btnLoader" src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right">
-                                <button id="btnSubmit" class="button button-rounded waves-effect waves-float pull-right" type="submit">SUBMIT</button>
+                                <button id="btnSubmit" class="button button-rounded waves-effect waves-float pull-right" type="submit">UPDATE</button>
                             </div>
 
                         </div>
@@ -197,7 +179,7 @@
             EzDashboardBizService.fetchCoreArea('VILLAGE', $('#districtId').val());
         },
         fetchData: function() {
-             EzWebAppClient.callApiService(EzAdminUrl.GET_MEMBER_REQUIRED_DATA, {});
+             //EzWebAppClient.callApiService(EzAdminUrl.GET_MEMBER_REQUIRED_DATA, {});
         },
         fetchCoreArea: function(level, parentId) {
             EzWebAppClient.callApiService(EzAdminUrl.GET_CORE_AREA, {
@@ -212,7 +194,6 @@
                 orgId : orgId,
                 referrerId: $('#referrer_id').val(),
                 subOrgId: $('#sub_org_id').val(),
-                roles: EzDashboardBizService.parseRoles(),
                 name: $('#name').val(),
                 gender: $('#gender').val(),
                 dateOfBirth: $('#dateOfBirth').val(),
@@ -250,13 +231,6 @@
                 EzDashboardBizService.hideLoader();
                 window.location.replace('members.htm');
             }
-        },
-        parseRoles: function() {
-            var roles = [];
-            $('.roles input:checked').each(function(){
-                roles.push(this.value);
-            });
-            return roles.join(',');
         },
         parseData: function(data) {
             var memberOption = '';

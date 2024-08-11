@@ -779,6 +779,7 @@ public class WebApiAdminController {
     private WebApiResult<String> addMember(
             @RequestParam(name = "sessionId", required = false) String sessionId,
             @RequestParam(name = "subOrgId", required = false) String subOrgId,
+            @RequestParam(name = "roles", required = false) String roles,
             @RequestParam(name = "name", required = false) String name,
             @RequestParam(name = "gender", required = false) String gender,
             @RequestParam(name = "dateOfBirth", required = false) String dateOfBirth,
@@ -800,6 +801,7 @@ public class WebApiAdminController {
             public BizResult onProcess() throws Exception {
                 BizMember bizMember = new BizMember();
                 bizMember.setSubOrganization(new BizSubOrganization(subOrgId));
+                bizMember.setRoles(roles);
                 bizMember.setName(name);
                 bizMember.setGender(BizGender.getByCode(gender));
                 bizMember.setDateOfBirth(dateOfBirth);

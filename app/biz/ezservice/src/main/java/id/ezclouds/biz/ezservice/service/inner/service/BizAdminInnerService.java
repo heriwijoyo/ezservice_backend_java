@@ -534,7 +534,6 @@ public class BizAdminInnerService {
         String orgCode = getOrganizationById(orgId).getCode();
         String appId = bizApplicationConfig.getAppId();
 
-        bizMember.setRoles(BizMemberRole.OP_RECRUITER.getCode());
         bizMember.setPhoneVerified(false);
         bizMember.setEmailVerified(false);
         bizMember.setAddressVerified(false);
@@ -567,6 +566,9 @@ public class BizAdminInnerService {
         BizMemberInfo bizMemberInfo = bizMemberInnerService
                 .createCoreMember(orgId, orgCode, appId, bizMember);
 
+        if (StringUtil.isBlank(bizMember.getRoles())) {
+            return;
+        }
         //generate member password
         String newPassword = RandomUtil.generateNumberCode(6);
         coreAuthService.updateMemberClientPassword(bizMemberInfo.getBizMemberClient().getClientId(), newPassword);
