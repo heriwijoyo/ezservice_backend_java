@@ -24,6 +24,18 @@ public class CoreMemberExtBackOfficeDO {
     @Column(name = "id_card_number")
     private String idCardNumber;
 
+    @Column(name = "province_name")
+    private String provinceName;
+
+    @Column(name = "regency_name")
+    private String regencyName;
+
+    @Column(name = "district_name")
+    private String districtName;
+
+    @Column(name = "village_name")
+    private String villageName;
+
     public String getMemberExtensionId() {
         return memberExtensionId;
     }
@@ -46,5 +58,37 @@ public class CoreMemberExtBackOfficeDO {
 
     public void setIdCardNumber(String idCardNumber) {
         this.idCardNumber = idCardNumber;
+    }
+
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
+    }
+
+    public String getRegencyName() {
+        return regencyName;
+    }
+
+    public void setRegencyName(String regencyName) {
+        this.regencyName = regencyName;
+    }
+
+    public String getDistrictName() {
+        return districtName;
+    }
+
+    public void setDistrictName(String districtName) {
+        this.districtName = districtName;
+    }
+
+    public String getVillageName() {
+        return villageName;
+    }
+
+    public void setVillageName(String villageName) {
+        this.villageName = villageName;
     }
 }

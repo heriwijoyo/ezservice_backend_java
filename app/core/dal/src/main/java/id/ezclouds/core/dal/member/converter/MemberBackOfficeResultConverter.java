@@ -34,11 +34,16 @@ public class MemberBackOfficeResultConverter extends TemplateModelConverter<Core
         MemberBackOffice memberBackOffice = new MemberBackOffice();
         memberBackOffice.setMemberId(input.getMemberId());
         memberBackOffice.setMemberName(input.getName());
+        memberBackOffice.setPhone(input.getPhone());
         memberBackOffice.setSubOrgId(input.getSubOrgId());
 
         CoreMemberExtBackOfficeDO extBackOfficeDO = memberExtensionMap.get(input.getMemberId());
         if (extBackOfficeDO != null) {
             memberBackOffice.setIdCardNumber(extBackOfficeDO.getIdCardNumber());
+            memberBackOffice.setProvinceName(extBackOfficeDO.getProvinceName());
+            memberBackOffice.setRegencyName(extBackOfficeDO.getRegencyName());
+            memberBackOffice.setDistrictName(extBackOfficeDO.getDistrictName());
+            memberBackOffice.setVillageName(extBackOfficeDO.getVillageName());
         }
         return memberBackOffice;
     }

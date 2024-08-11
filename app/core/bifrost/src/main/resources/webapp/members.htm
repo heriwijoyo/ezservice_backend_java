@@ -27,7 +27,6 @@
                                 <th width="15%">Phone</th>
                                 <th width="15%">NIK</th>
                                 <th width="30%">Address</th>
-                                <th width="10%" class="text-center">Detail</th>
                             </tr>
                             </thead>
                             <tbody id="rowsContainer"></tbody>
@@ -102,19 +101,39 @@
         },
         reloadPageResultView: function(response) {
             $('#rowsContainer').html('');
+            let rowNum = EzDashboardBizService.numberStart();
             for(let i=0; i<response.pageResult.data.length; i++) {
-                let rowNum = i + 1;
                 let rowData = response.pageResult.data[i];
                 let itemRow = $.parseHTML(DashTemplate);
                 $(itemRow).find('.colNum').html(rowNum);
                 $(itemRow).find('.colComm').html(rowData.subOrgName);
-                $(itemRow).find('.colName').html(rowData.name);
+                $(itemRow).find('.colName').html(EzDashboardBizService.composeNameLink(rowData));
                 $(itemRow).find('.colPhone').html(rowData.phone);
-                $(itemRow).find('.colCreate').html(rowData.createdTime);
-                $(itemRow).find('.colStatus').html(rowData.status);
+                $(itemRow).find('.colIdCard').html(rowData.idCardNumber);
+                $(itemRow).find('.colAddr').html(EzDashboardBizService.composeAddress(rowData));
                 $('#rowsContainer').append(itemRow);
+                rowNum++;
             }
             $('.pager').html(EzWebAppClient.renderPager(response.pageResult));
+        },
+        composeNameLink: function(data) {
+            return '<a href="memberDetail.htm?id='+ data.memberId +'">' + data.memberName + '</a>';
+        },
+        composeAddress: function(data) {
+            let address = '';
+            if (data.villageName != null) {
+                address += data.villageName;
+            }
+            if (data.districtName != null) {
+                address += ', ' + data.districtName;
+            }
+            if (data.regencyName != null) {
+                address += ', ' + data.regencyName;
+            }
+            if (data.provinceName != null) {
+                address += ', ' + data.provinceName;
+            }
+            return address;
         },
         submitCreate: function() {
             EzWebAppClient.callApiService(EzAdminUrl.SUB_ORGANIZATIONS_CREATE, {
@@ -132,11 +151,15 @@
         },
         prev: function() {
             EzDashboardBizService.data.pageNumber--;
-            EzDashboardBizService.fetchNews();
+            EzDashboardBizService.fetchData();
         },
         next: function() {
             EzDashboardBizService.data.pageNumber++;
-            EzDashboardBizService.fetchNews();
+            EzDashboardBizService.fetchData();
+        },
+        numberStart: function() {
+            let data = EzDashboardBizService.data;
+            return ((data.pageNumber - 1) * data.pageSize) + 1;
         },
         data: {
             pageNumber: 1,
@@ -183,8 +206,8 @@
             '<td class="colComm" style="vertical-align: middle;"></td>'+
             '<td class="colName" style="vertical-align: middle;"></td>'+
             '<td class="colPhone" style="vertical-align: middle;"></td>'+
-            '<td class="colCreate" style="vertical-align: middle;"></td>'+
-            '<td class="colStatus text-center" style="vertical-align: middle;"></td>'+
+            '<td class="colIdCard" style="vertical-align: middle;"></td>'+
+            '<td class="colAddr" style="vertical-align: middle;"></td>'+
         '</tr>';
 
 </script>

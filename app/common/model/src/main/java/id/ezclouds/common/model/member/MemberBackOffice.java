@@ -11,10 +11,16 @@ package id.ezclouds.common.model.member;
 public class MemberBackOffice {
 
     private String memberId;
-    private String memberName;
     private String subOrgId;
     private String subOrgName;
+    private String memberName;
+    private String phone;
+
     private String idCardNumber;
+    private String provinceName;
+    private String regencyName;
+    private String districtName;
+    private String villageName;
 
     public String getMemberId() {
         return memberId;
@@ -30,6 +36,14 @@ public class MemberBackOffice {
 
     public void setMemberName(String memberName) {
         this.memberName = memberName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getSubOrgId() {
@@ -54,5 +68,37 @@ public class MemberBackOffice {
 
     public void setIdCardNumber(String idCardNumber) {
         this.idCardNumber = idCardNumber;
+    }
+
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
+    }
+
+    public String getRegencyName() {
+        return regencyName;
+    }
+
+    public void setRegencyName(String regencyName) {
+        this.regencyName = regencyName;
+    }
+
+    public String getDistrictName() {
+        return districtName;
+    }
+
+    public void setDistrictName(String districtName) {
+        this.districtName = districtName;
+    }
+
+    public String getVillageName() {
+        return villageName;
+    }
+
+    public void setVillageName(String villageName) {
+        this.villageName = villageName;
     }
 }
