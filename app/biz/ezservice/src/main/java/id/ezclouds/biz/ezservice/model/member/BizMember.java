@@ -18,6 +18,8 @@ public class BizMember {
     private String orgId;
     //AppExtension
     private BizSubOrganization subOrganization;
+    private String subOrgId;
+    private String subOrgName;
 
     //CoreMember
     private String memberId;
@@ -77,6 +79,22 @@ public class BizMember {
 
     public void setSubOrganization(BizSubOrganization subOrganization) {
         this.subOrganization = subOrganization;
+    }
+
+    public String getSubOrgId() {
+        return subOrgId;
+    }
+
+    public void setSubOrgId(String subOrgId) {
+        this.subOrgId = subOrgId;
+    }
+
+    public String getSubOrgName() {
+        return subOrgName;
+    }
+
+    public void setSubOrgName(String subOrgName) {
+        this.subOrgName = subOrgName;
     }
 
     public String getMemberId() {

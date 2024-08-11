@@ -12,6 +12,7 @@ import id.ezclouds.biz.ezservice.model.BizWhatsappLog;
 import id.ezclouds.biz.ezservice.model.VideoCard;
 import id.ezclouds.biz.ezservice.model.admin.*;
 import id.ezclouds.biz.ezservice.model.event.AppEvent;
+import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.model.news.BizWebDetailNews;
 import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
 import id.ezclouds.biz.ezservice.model.profile.BizCandidateProfile;
@@ -23,7 +24,8 @@ import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
-import id.ezclouds.core.shared.result.PageResult;
+import id.ezclouds.common.model.request.WebBizPageRequest;
+import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.common.util.exception.ExceptionUtil;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
@@ -41,7 +43,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -700,6 +701,40 @@ public class WebApiAdminController {
             @Override
             public String convertResult(Object object) {
                 return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/members.json")
+    private WebApiPageResult<BizMember> getMembers(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "pageNumber", required = false) int pageNumber,
+            @RequestParam(name = "pageSize", required = false) int pageSize,
+            @RequestParam(name = "searchScene", required = false) String searchScene,
+            @RequestParam(name = "searchKeyword", required = false) String searchKeyword
+    ) {
+        final WebApiPageResult<BizMember> result = new WebApiPageResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_MEMBERS, result, new WebApiControllerTemplate.PageHandler<BizMember>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                WebBizPageRequest request = new WebBizPageRequest();
+                request.setSessionId(sessionId);
+                request.setPageNumber(pageNumber);
+                request.setPageSize(pageSize);
+                request.setSearchScene(searchScene);
+                request.setSearchKeyword(searchKeyword);
+                return bizAdminService.getMembersPage(request);
+            }
+
+            @Override
+            public PageResult<BizMember> convertResult(Object object) {
+                return (PageResult<BizMember>) object;
             }
 
             @Override

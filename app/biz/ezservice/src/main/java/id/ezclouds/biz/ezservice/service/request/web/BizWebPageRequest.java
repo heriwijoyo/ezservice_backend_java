@@ -15,6 +15,7 @@ public class BizWebPageRequest {
     private int pageSize;
     private String sortBy;
     private String sort;
+    private String keySection;
     private String keyword;
 
     public String getSessionId() {
@@ -55,6 +56,14 @@ public class BizWebPageRequest {
 
     public void setSort(String sort) {
         this.sort = sort;
+    }
+
+    public String getKeySection() {
+        return keySection;
+    }
+
+    public void setKeySection(String keySection) {
+        this.keySection = keySection;
     }
 
     public String getKeyword() {

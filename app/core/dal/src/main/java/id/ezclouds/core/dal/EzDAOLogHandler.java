@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.dal;
 
+import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.context.EzAppContextHolder;
 import id.ezclouds.common.util.exception.ExceptionUtil;
@@ -44,6 +45,9 @@ public class EzDAOLogHandler {
         }
         if (retValue instanceof List) {
             resultValue = ""+ ((List)retValue).size();
+        }
+        if (retValue instanceof PageResult) {
+            resultValue = ""+ ((PageResult)retValue).getNumberRecord();
         }
         EzDAOProfiler.end(getInvokeTarget(joinPoint), "Y", resultValue);
     }

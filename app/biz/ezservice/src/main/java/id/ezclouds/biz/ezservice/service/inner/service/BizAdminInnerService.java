@@ -42,7 +42,7 @@ import id.ezclouds.core.integration.request.WhatsappResendRequest;
 import id.ezclouds.core.integration.result.EzConnectResult;
 import id.ezclouds.core.shared.model.CoreArea;
 import id.ezclouds.core.shared.result.BizPageInfo;
-import id.ezclouds.core.shared.result.PageResult;
+import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.RandomUtil;
@@ -294,6 +294,16 @@ public class BizAdminInnerService {
     public PageResult<BizSubOrganization> getSubOrganizations(String orgId, int pageNumber, int pageSize, String sortBy, String sort) {
         PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortBy, sort);
         return appSubOrganizationService.getSubOrganizations(orgId, pageRequest);
+    }
+
+    public PageResult<BizMember> getBizMembers(String orgId, int pageNumber, int pageSize, String sortBy, String sort) {
+        Map<String, String> subOrgNameMap = appSubOrganizationService.getSubOrgNameMap(orgId);
+        PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortBy, sort);
+        PageResult<CoreMember> coreMembers = coreMemberService.getCoreMembers(orgId, pageRequest);
+        return PageResultUtil.convert(coreMembers, input -> input
+                .stream()
+                .map(core -> BizMemberConverter.convertSimple(core, subOrgNameMap))
+                .collect(Collectors.toList()));
     }
 
     public PageResult<BizWhatsappLog> getWhatsappLog(String orgId, String phone, int pageNumber, int pageSize, String sortBy, String sort) {

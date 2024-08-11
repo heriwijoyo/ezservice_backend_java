@@ -6,7 +6,6 @@ package id.ezclouds.biz.ezservice.service.apibiz.admin;
 
 import id.ezclouds.biz.ezservice.config.BizPublicUrlResolver;
 import id.ezclouds.biz.ezservice.config.BizPublicUrlResolverImpl;
-import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.constant.BizConstant;
 import id.ezclouds.biz.ezservice.enums.BizMemberRole;
 import id.ezclouds.biz.ezservice.converter.BizAdminConverter;
@@ -17,6 +16,7 @@ import id.ezclouds.biz.ezservice.model.VideoCard;
 import id.ezclouds.biz.ezservice.model.admin.*;
 import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
 import id.ezclouds.biz.ezservice.model.event.AppEvent;
+import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.model.news.BizWebDetailNews;
 import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
 import id.ezclouds.biz.ezservice.model.profile.WebCandidateBio;
@@ -32,8 +32,13 @@ import id.ezclouds.biz.ezservice.service.request.web.*;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.service.AppSubOrganizationService;
+import id.ezclouds.common.facade.member.MemberBackOfficeService;
+import id.ezclouds.common.model.constant.PageSort;
+import id.ezclouds.common.model.member.MemberBackOffice;
+import id.ezclouds.common.model.request.WebBizPageRequest;
+import id.ezclouds.common.util.facade.BeanFacadeUtil;
 import id.ezclouds.core.integration.result.EzConnectResult;
-import id.ezclouds.core.shared.result.PageResult;
+import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.StringUtil;
@@ -1066,6 +1071,45 @@ public class BizAdminService extends BizBaseService {
             }
         });
         return bizResult;
+    }
+
+    public BizResult getMembersPage(WebBizPageRequest request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                validateWebBizPageRequest(request);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                request.setOrgId(session.getOrgId());
+                request.setPageSort(PageSort.NEWEST);
+
+                PageResult<MemberBackOffice> memberResult = BeanFacadeUtil
+                        .getBean(MemberBackOfficeService.class)
+                        .getMemberPage(request);
+
+                bizResult.setObject(memberResult);
+                bizResult.setSuccess(true);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
+    private void validateWebBizPageRequest(WebBizPageRequest request) throws EzErrorException {
+        AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+        AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
+        AssertUtil.notNull(request.getPageNumber(), EzErrorCode.ILLEGAL_PARAM);
+        AssertUtil.isTrue(request.getPageNumber() > 0, EzErrorCode.ILLEGAL_PARAM);
+        AssertUtil.notNull(request.getPageSize(), EzErrorCode.ILLEGAL_PARAM);
+        AssertUtil.isTrue(request.getPageSize() > 0, EzErrorCode.ILLEGAL_PARAM);
     }
 
     private void validateBizPageRequest(BizWebPageRequest request) throws EzErrorException {

@@ -18,7 +18,7 @@ import id.ezclouds.biz.ezservice.service.request.web.*;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.core.shared.model.CoreArea;
-import id.ezclouds.core.shared.result.PageResult;
+import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;

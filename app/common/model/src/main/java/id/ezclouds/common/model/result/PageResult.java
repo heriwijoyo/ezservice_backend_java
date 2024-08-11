@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.core.shared.result;
+package id.ezclouds.common.model.result;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

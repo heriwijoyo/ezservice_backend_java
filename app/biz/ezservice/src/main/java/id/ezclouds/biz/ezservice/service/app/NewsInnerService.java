@@ -15,7 +15,7 @@ import id.ezclouds.biz.ezservice.service.app.repo.NewsRepository;
 import id.ezclouds.biz.ezservice.service.app.request.NewsCreateRequest;
 import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
 import id.ezclouds.core.shared.result.BizPageInfo;
-import id.ezclouds.core.shared.result.PageResult;
+import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.biz.ezservice.util.PageRequestUtil;
 import id.ezclouds.core.shared.util.PageResultUtil;
 import id.ezclouds.common.util.DateUtil;

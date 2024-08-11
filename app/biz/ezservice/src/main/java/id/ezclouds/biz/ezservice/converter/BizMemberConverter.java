@@ -15,6 +15,9 @@ import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
 import id.ezclouds.core.member.model.MemberStatus;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizMemberConverter.java, v 0.1 2023‐12‐11 9:33 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -103,6 +106,43 @@ public class BizMemberConverter {
         bizMember.setRukunWarga(extension.getRukunWarga());
         bizMember.setRukunTetangga(extension.getRukunTetangga());
         bizMember.setTpsNumber(extension.getTpsNumber());
+        return bizMember;
+    }
+
+    public static BizMember convertSimple(CoreMember member, Map<String, String> subOrgNameMap) {
+        if (member == null) { return null; }
+        BizMember bizMember = new BizMember();
+        bizMember.setMemberId(member.getMemberId());
+        bizMember.setReferrerId(member.getReferrerId());
+        bizMember.setRoles(member.getRoles());
+        bizMember.setName(member.getName());
+        bizMember.setNickname(member.getNickname());
+        bizMember.setPhone(member.getPhone());
+        bizMember.setEducation(member.getEducation());
+        bizMember.setOccupation(member.getOccupation());
+        bizMember.setReligion(member.getReligion());
+        bizMember.setEthnic(member.getEthnic());
+        bizMember.setDateOfBirth(member.getDateOfBirth());
+        bizMember.setGender(BizGender.getByCode(member.getGender()));
+        bizMember.setEmail(member.getEmail());
+        bizMember.setAddress(member.getAddress());
+        bizMember.setPhoneVerified(member.isPhoneVerified());
+        bizMember.setEmailVerified(member.isEmailVerified());
+        bizMember.setAddressVerified(member.isAddressVerified());
+        BizStatus bizStatus = BizStatus.getByCode(member.getMemberStatus().getCode());
+        bizMember.setStatus(bizStatus);
+        bizMember.setAvatarUrl(member.getAvatarUrl());
+        bizMember.setCreatedTime(member.getCreatedTime());
+
+        BizSubOrganization subOrganization = new BizSubOrganization();
+        if (StringUtil.isNotBlank(member.getSubOrgId())) {
+            subOrganization.setOrgId(member.getOrgId());
+            subOrganization.setSubOrgId(member.getSubOrgId());
+
+            bizMember.setSubOrgId(member.getSubOrgId());
+            bizMember.setSubOrgName(subOrgNameMap.get(member.getSubOrgId()));
+        }
+
         return bizMember;
     }
 

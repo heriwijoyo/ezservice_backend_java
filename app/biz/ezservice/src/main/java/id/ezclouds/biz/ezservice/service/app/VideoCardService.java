@@ -6,12 +6,11 @@ package id.ezclouds.biz.ezservice.service.app;
 
 import id.ezclouds.biz.ezservice.converter.BizModelConverter;
 import id.ezclouds.biz.ezservice.model.VideoCard;
-import id.ezclouds.biz.ezservice.service.app.model.AppDocument;
 import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.biz.ezservice.service.app.request.VideoCardCreateRequest;
 import id.ezclouds.biz.ezservice.service.app.dataobject.VideoCardDO;
 import id.ezclouds.biz.ezservice.service.app.repo.VideoCardRepository;
-import id.ezclouds.core.shared.result.PageResult;
+import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;

@@ -32,7 +32,7 @@ import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.common.util.facade.BeanFacadeUtil;
 import id.ezclouds.core.auth.model.CoreAuthAdminScene;
 import id.ezclouds.core.member.model.CoreMember;
-import id.ezclouds.core.shared.result.PageResult;
+import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.biz.ezservice.util.BizExtendInfoUtil;
 import id.ezclouds.common.util.DateUtil;
