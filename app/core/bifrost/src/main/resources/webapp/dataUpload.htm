@@ -68,6 +68,13 @@
             if (url === EzConfigApiUrl.GET_SUB_ORGANIZATIONS) {
                 EzBizAppService.parseSubOrgItemHTML(response.data);
             }
+            if (url === EzConfigApiUrl.CSV_UPLOAD_URL) {
+                alert(response.data);
+                $('#btnLoader').hide();
+                $('#btnSubmit').show();
+                $('#importFile').val('');
+            }
+
         },
         parseSubOrgItemHTML: function(data) {
             var optionHTML = '';
@@ -76,32 +83,11 @@
             }
             $('#subOrgId').html(optionHTML);
         },
-        showImportForm: function(subOrgName) {
-            $('#modal-import-form').removeClass('fade');
-            $('#modal-import-form').addClass('show');
-            $('#upload-title').html(subOrgName);
-        },
-        hideImportForm: function() {
-            $('#modal-import-form').removeClass('show');
-            $('#modal-import-form').addClass('fade');
-        },
-        resetImportForm: function() {
-            $('#importFile').val('');
-            $('#importCancelButton').show();
-            $('#importSubmitButton').show();
-            $('#importLoader').hide();
-        },
         submitImportForm: function() {
-            $('#importCancelButton').hide();
-            $('#importSubmitButton').hide();
-            $('#importLoader').show();
             let postData = {
-                orgId : $('#orgId').val(),
-                subOrgId : $('#subOrgId').val(),
-                fileId : $('#fileId').val(),
-                scene : $('#importScene').val()
+                subOrgId : $('#subOrgId').val()
             };
-            EzWebAppClient.postMultipartForm('importForm', postData, EzConfigApiUrl.CSV_UPLOAD_URL, 'IMPORT_FILE');
+            EzWebAppClient.postMultipartForm('importForm', postData, EzConfigApiUrl.CSV_UPLOAD_URL, '');
         }
     };
 
@@ -127,5 +113,11 @@
             EzBizAppService.start();
         });
         EzWebAppClient.start();
+
+        $('#btnSubmit').click(function(){
+            $('#btnLoader').show();
+            $('#btnSubmit').hide();
+            EzBizAppService.submitImportForm();
+        });
     });
 </script>

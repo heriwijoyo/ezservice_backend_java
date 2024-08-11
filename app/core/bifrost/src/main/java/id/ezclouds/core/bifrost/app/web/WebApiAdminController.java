@@ -913,6 +913,17 @@ public class WebApiAdminController {
         return result;
     }
 
+    @PostMapping(value = "/webapp/api/csvUpload.json")
+    private WebApiResult<String> csvUpload(
+            @RequestPart("importFile") MultipartFile multipartFile,
+            @RequestPart("postData") String postData) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        result.setSessionExpired(false);
+        result.setSuccess(true);
+        result.setData("OK BOZZ");
+        return result;
+    }
+
     @PostMapping(value = "/webapp/api/adminCommonPost.json")
     private WebApiResult<String> adminUpload(@RequestPart("imageFile") MultipartFile multipartFile, @RequestPart("postData") String postData) {
         WebApiResult<String> result = new WebApiResult<>();
