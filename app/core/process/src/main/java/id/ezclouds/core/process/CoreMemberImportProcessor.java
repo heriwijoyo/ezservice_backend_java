@@ -4,7 +4,11 @@
  */
 package id.ezclouds.core.process;
 
+import id.ezclouds.common.facade.dal.area.AreaDistrictDAO;
+import id.ezclouds.common.facade.dal.area.AreaVillageDAO;
 import id.ezclouds.common.facade.process.MemberImportProcessor;
+import id.ezclouds.common.model.area.District;
+import id.ezclouds.common.model.area.Village;
 import id.ezclouds.common.model.constant.OrgConstant;
 import id.ezclouds.common.model.member.BizMemberImport;
 import id.ezclouds.common.model.request.FileStreamImportRequest;
@@ -21,10 +25,7 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -35,6 +36,12 @@ public class CoreMemberImportProcessor implements MemberImportProcessor {
 
     @Autowired
     private BizMemberImportProcessor bizMemberImportProcessor;
+
+    @Autowired
+    private AreaDistrictDAO areaDistrictDAO;
+
+    @Autowired
+    private AreaVillageDAO areaVillageDAO;
 
     private Map<String, String> districtIdMap = new HashMap<>();
     private Map<String, String> villageIdMap = new HashMap<>();
@@ -57,7 +64,8 @@ public class CoreMemberImportProcessor implements MemberImportProcessor {
                 String subOrgId = request.getSubOrgId();
 
                 if (OrgConstant.ORG_ID_RJL.equals(orgId)) {
-
+                    loadAndMapDistricts(Collections.singletonList("1802"));
+                    loadAndMapVillages(new ArrayList<>(districtIdMap.values()));
                 }
 
                 bizMemberImportProcessor.deleteAllImport(orgId, subOrgId);
@@ -91,8 +99,18 @@ public class CoreMemberImportProcessor implements MemberImportProcessor {
         return baseResult;
     }
 
-    private void loadAndMapDistricts(String regencyId) {
+    private void loadAndMapDistricts(List<String> regencyIds) {
+        List<District> districts = areaDistrictDAO.getByRegencyIds(regencyIds);
+        for (District district : districts) {
+            districtIdMap.put(district.getName(), district.getId());
+        }
+    }
 
+    private void loadAndMapVillages(List<String> districtIds) {
+        List<Village> villages = areaVillageDAO.getByDistrictIds(districtIds);
+        for (Village village : villages) {
+            villageIdMap.put(village.getName(), village.getId());
+        }
     }
 
     private void processCsvDataLine(String line, String orgId, String subOrgId) {
@@ -141,11 +159,13 @@ public class CoreMemberImportProcessor implements MemberImportProcessor {
         memberImport.setTpsNumber(parseTpsNumber(fetchSafeColumnData(columnData, 11)));
         memberImport.setCreatedTime(currentTime);
 
-        if ("RJL0".equals(orgId)) {
+        if (OrgConstant.ORG_ID_RJL.equals(orgId)) {
             memberImport.setProvinceId("18");
             memberImport.setProvinceName("LAMPUNG");
             memberImport.setRegencyId("1802");
             memberImport.setRegencyName("KABUPATEN TANGGAMUS");
+            memberImport.setDistrictId(districtIdMap.get(memberImport.getDistrictName()));
+            memberImport.setVillageId(villageIdMap.get(memberImport.getVillageName()));
         }
 
         return memberImport;

@@ -52,7 +52,7 @@ public class CoreMemberImportDO {
     private String provinceName;
     @Column(name = "regency_id")
     private String regencyId;
-    @Column(name = "regency_id")
+    @Column(name = "regency_name")
     private String regencyName;
     @Column(name = "district_id")
     private String districtId;

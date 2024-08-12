@@ -46,8 +46,20 @@ public class CoreMemberImportFailedDO {
     private String ethnic;
     @Column(name = "id_card_number")
     private String idCardNumber;
+    @Column(name = "province_id")
+    private String provinceId;
+    @Column(name = "province_name")
+    private String provinceName;
+    @Column(name = "regency_id")
+    private String regencyId;
+    @Column(name = "regency_name")
+    private String regencyName;
+    @Column(name = "district_id")
+    private String districtId;
     @Column(name = "district_name")
     private String districtName;
+    @Column(name = "village_id")
+    private String villageId;
     @Column(name = "village_name")
     private String villageName;
     @Column(name = "rukun_warga")
@@ -169,6 +181,54 @@ public class CoreMemberImportFailedDO {
 
     public void setIdCardNumber(String idCardNumber) {
         this.idCardNumber = idCardNumber;
+    }
+
+    public String getProvinceId() {
+        return provinceId;
+    }
+
+    public void setProvinceId(String provinceId) {
+        this.provinceId = provinceId;
+    }
+
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
+    }
+
+    public String getRegencyId() {
+        return regencyId;
+    }
+
+    public void setRegencyId(String regencyId) {
+        this.regencyId = regencyId;
+    }
+
+    public String getRegencyName() {
+        return regencyName;
+    }
+
+    public void setRegencyName(String regencyName) {
+        this.regencyName = regencyName;
+    }
+
+    public String getDistrictId() {
+        return districtId;
+    }
+
+    public void setDistrictId(String districtId) {
+        this.districtId = districtId;
+    }
+
+    public String getVillageId() {
+        return villageId;
+    }
+
+    public void setVillageId(String villageId) {
+        this.villageId = villageId;
     }
 
     public String getDistrictName() {
