@@ -11,6 +11,7 @@ import id.ezclouds.common.model.member.MemberBackOffice;
 import id.ezclouds.common.model.request.BizPageRequest;
 import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.common.model.util.PageResultUtil;
+import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.core.dal.member.converter.MemberBackOfficeResultConverter;
 import id.ezclouds.core.dal.member.dataobject.CoreMemberBackOfficeDO;
 import id.ezclouds.core.dal.member.dataobject.CoreMemberExtBackOfficeDO;
@@ -87,5 +88,18 @@ public class CoreMemberBackOfficeDAO implements BizMemberBackOfficeDAO {
         MemberBackOfficeResultConverter converter = new MemberBackOfficeResultConverter(memberExtBackOfficeDO);
 
         return converter.convert(memberBackOfficeDO);
+    }
+
+    @EzDAOLogger
+    @Override
+    public void updateRoles(String memberId, String roles) {
+        CoreMemberBackOfficeDO memberBackOfficeDO = coreMemberBackOfficeRepository
+                .findById(memberId)
+                .orElse(null);
+        if (memberBackOfficeDO != null) {
+            memberBackOfficeDO.setRoles(roles);
+            memberBackOfficeDO.setModifiedTime(DateUtil.getCurrentFormattedDate());
+            coreMemberBackOfficeRepository.saveAndFlush(memberBackOfficeDO);
+        }
     }
 }

@@ -14,6 +14,7 @@ public enum EzErrorCode {
     ILLEGAL_ACTION("ILLEGAL_ACTION", "Illegal Action"),
     ILLEGAL_PARAM("ILLEGAL_PARAM", "Illegal Parameter"),
     UNAUTHORIZED("UNAUTHORIZED", "Unauthorized"),
+
     MEMBER_LOGIN_FAILED("MEMBER_LOGIN_FAILED", "Member Login Failed"),
     MEMBER_NOT_FOUND("MEMBER_NOT_FOUND", "Member Not Found"),
     MEMBER_CLIENT_NOT_FOUND("MEMBER_CLIENT_NOT_FOUND", "Member Client Not Found"),
@@ -21,6 +22,7 @@ public enum EzErrorCode {
     MEMBER_CLIENT_FROZEN("MEMBER_CLIENT_FROZEN", "Member Client Frozen"),
     MEMBER_CLIENT_ABNORMAL("MEMBER_CLIENT_ABNORMAL", "Member Client Abnormal"),
     MEMBER_UNAUTHORIZED("MEMBER_UNAUTHORIZED", "Member Unauthorized"),
+
     SESSION_CODE_INVALID("SESSION_CODE_INVALID", "Session Code Invalid"),
     SESSION_INVALID("SESSION_INVALID", "Session Invalid"),
     SESSION_EXPIRED("SESSION_EXPIRED", "Session Expired"),
@@ -34,8 +36,9 @@ public enum EzErrorCode {
     MULTIPARTFILE_EMPTY("MULTIPARTFILE_EMPTY", "MultipartFile Empy"),
     MULTIPARTFILE_TYPE_UNDEFINED("MULTIPARTFILE_TYPE_UNDEFINED", "MultipartFile Type Undefined"),
     MULTIPARTFILE_TYPE_UNSUPPORTED("MULTIPARTFILE_TYPE_UNSUPPORTED", "MultipartFile Type Unsupported"),
-
     MEDIA_NOT_FOUND("MEDIA_NOT_FOUND", "Media Not Found"),
+
+    ACTION_NOT_ALLOWED("ACTION_NOT_ALLOWED", "Action Not Allowed"),
 
     SYSTEM_STORE_FILE_FAILED("SYSTEM_STORE_FILE_FAILED", "System Store File Failed"),
     SYSTEM_FILE_ERROR("SYSTEM_FILE_ERROR", "System File Error"),

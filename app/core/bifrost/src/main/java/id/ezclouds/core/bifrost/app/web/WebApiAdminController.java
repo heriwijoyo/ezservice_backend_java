@@ -938,6 +938,31 @@ public class WebApiAdminController {
         return result;
     }
 
+    @PostMapping(value = "/webapp/api/memberUpdateRoles.json")
+    private WebApiResult<String> memberUpdateRoles(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "memberId", required = false) String memberId,
+            @RequestParam(name = "roles", required = false) String roles) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_MEMBER_UPDATE_ROLES, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                return bizAdminService.memberUpdateRoles(sessionId, memberId, roles);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
     @PostMapping(value = "/webapp/api/adminCommonPost.json")
     private WebApiResult<String> adminUpload(@RequestPart("imageFile") MultipartFile multipartFile, @RequestPart("postData") String postData) {
         WebApiResult<String> result = new WebApiResult<>();

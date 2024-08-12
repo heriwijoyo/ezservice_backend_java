@@ -30,6 +30,13 @@
 
                             <div class="form-group col-sm-12">
                                 <div class="form-line">
+                                    <div class="font-12">Roles</div>
+                                    <input type="text" class="form-control" id="roles" placeholder="No Roles" disabled>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
                                     <div class="font-12">Name</div>
                                     <input type="text" class="form-control" id="name" placeholder="Name" disabled>
                                 </div>
@@ -215,13 +222,11 @@
 <script type="text/javascript">
     var EzAdminUrl = {
         GET_MEMBER_DETAIL: 'api/memberDetail.json',
-        GET_MEMBER_REQUIRED_DATA: 'api/memberAddRequiredData.json',
-        GET_CORE_AREA: 'api/adminCoreArea.json'
+        MEMBER_UPDATE_ROLES: 'api/memberUpdateRoles.json'
     };
     var EzDashboardBizService = {
         start: function() {
             EzDashboardBizService.fetchData();
-            //EzDashboardBizService.fetchCoreArea('VILLAGE', $('#districtId').val());
         },
         fetchData: function() {
             let memberId = EzWebAppClient.getUrlParameter('id');
@@ -233,45 +238,22 @@
                 });
             }
         },
-        fetchCoreArea: function(level, parentId) {
-            EzWebAppClient.callApiService(EzAdminUrl.GET_CORE_AREA, {
-                level : level,
-                parentId : parentId
-            });
-        },
-        submitMember: function() {
+        submitUpdateRoles: function() {
             EzDashboardBizService.showLoader();
-            let orgId = EzWebAppClient.getUrlParameter('id');
-            EzWebAppClient.callApiService(EzAdminUrl.REGISTER_MEMBER, {
-                orgId : orgId,
-                referrerId: $('#referrer_id').val(),
-                subOrgId: $('#sub_org_id').val(),
-                name: $('#name').val(),
-                gender: $('#gender').val(),
-                dateOfBirth: $('#dateOfBirth').val(),
-                phone: $('#phone').val(),
-                education: $('#education').val(),
-                occupation: $('#occupation').val(),
-                religion: $('#religion').val(),
-                ethnic: $('#ethnic').val(),
-                idCardNumber: $('#idCardNumber').val(),
-                districtId: $('#districtId').val(),
-                villageId: $('#villageId').val(),
-                rukunWarga: $('#rukunWarga').val(),
-                rukunTetangga: $('#rukunTetangga').val(),
-                tpsNo: $('#tpsNo').val()
+            let memberId = EzWebAppClient.getUrlParameter('id');
+            EzWebAppClient.callApiService(EzAdminUrl.MEMBER_UPDATE_ROLES, {
+                memberId : memberId,
+                roles : EzDashboardBizService.fetchRoles()
             });
         },
         handleApiBizResult: function(url, response) {
             if (url === EzAdminUrl.GET_MEMBER_DETAIL) {
                 EzDashboardBizService.parseData(response.data);
             }
-            if (url === EzAdminUrl.GET_CORE_AREA) {
-                EzDashboardBizService.parseVillage(response.data);
-            }
-            if (url === EzAdminUrl.REGISTER_MEMBER) {
+            if (url === EzAdminUrl.MEMBER_UPDATE_ROLES) {
                 alert(response.data);
                 EzDashboardBizService.hideLoader();
+                window.location.reload();
             }
         },
         handleApiBizFailed: function(url, message) {
@@ -280,6 +262,10 @@
                 EzDashboardBizService.hideLoader();
                 window.location.replace('members.htm');
             }
+            if (url === EzAdminUrl.MEMBER_UPDATE_ROLES) {
+                alert(message);
+                EzDashboardBizService.hideLoader();
+            }
         },
         alertInvalidMemberId: function() {
             alert('Invalid Member ID');
@@ -287,6 +273,7 @@
         },
         parseData: function(data) {
             $('#subOrgName').val(data.subOrgName);
+            $('#roles').val(data.roles);
             $('#name').val(data.memberName);
             $('#gender').val(data.gender);
             $('#dateOfBirth').val(data.dateOfBirth);
@@ -303,13 +290,6 @@
             $('#tpsNumber').val(data.tpsNumber);
 
             EzDashboardBizService.parseRoles(data.roles);
-        },
-        parseVillage: function(data) {
-            var villageOption = '';
-            for(i = 0; i < data.length; i++) {
-                villageOption += '<option value="'+ data[i].id +'">'+ data[i].name +'</option>';
-            }
-            $('#villageId').html(villageOption);
         },
         fetchRoles: function() {
             var roles = [];
@@ -369,6 +349,9 @@
         });
         $('#cancelButton').click(function(){
             EzWebAppViewHelper.hideAppModal('modal-form');
+        });
+        $('#submitButton').click(function(){
+            EzDashboardBizService.submitUpdateRoles();
         });
 
     });

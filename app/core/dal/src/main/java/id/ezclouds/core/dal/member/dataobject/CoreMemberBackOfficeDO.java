@@ -54,6 +54,9 @@ public class CoreMemberBackOfficeDO {
     @Column(name = "created_time")
     private String createdTime;
 
+    @Column(name = "modified_time")
+    private String modifiedTime;
+
     public String getMemberId() {
         return memberId;
     }
@@ -158,4 +161,11 @@ public class CoreMemberBackOfficeDO {
         this.createdTime = createdTime;
     }
 
+    public String getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(String modifiedTime) {
+        this.modifiedTime = modifiedTime;
+    }
 }

@@ -35,6 +35,7 @@ import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.service.AppSubOrganizationService;
 import id.ezclouds.common.facade.member.MemberBackOfficeService;
+import id.ezclouds.common.facade.member.MemberUpdateService;
 import id.ezclouds.common.facade.organization.SubOrganizationService;
 import id.ezclouds.common.facade.process.MemberImportProcessor;
 import id.ezclouds.common.model.constant.PageSort;
@@ -1266,6 +1267,48 @@ public class BizAdminService extends BizBaseService {
         return bizResult;
     }
 
+    public BizResult memberUpdateRoles(String sessionId, String memberId, String roles) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notBlank(sessionId, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(memberId, EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthAdminSession session = authorizedAdminSession(sessionId);
+                MemberBackOffice member = BeanFacadeUtil
+                        .getBean(MemberBackOfficeService.class)
+                        .getMemberDetail(memberId);
+
+                AssertUtil.isTrue(StringUtil.equals(session.getOrgId(), member.getOrgId()), EzErrorCode.ACTION_NOT_ALLOWED);
+                AssertUtil.isNotTrue(isMemberHasAdminRole(member.getRoles()), EzErrorCode.ACTION_NOT_ALLOWED);
+                AssertUtil.isNotTrue(StringUtil.isBlank(member.getRoles()) && StringUtil.isBlank(roles), EzErrorCode.ACTION_NOT_ALLOWED);
+                AssertUtil.isNotTrue(StringUtil.equals(member.getRoles(), roles), EzErrorCode.ACTION_NOT_ALLOWED);
+
+                BeanFacadeUtil
+                        .getBean(MemberUpdateService.class)
+                        .updateRoles(memberId, roles);
+
+                //previous roles was empty, so update the client password and notify them
+                if (StringUtil.isBlank(member.getRoles())) {
+                    System.out.println("Update Password and send WA");
+                }
+
+                bizResult.setSuccess(true);
+                bizResult.setObject(WebAdminConstant.OPERATION_SUCCESS);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
     public BizResult uploadMemberData(String sessionId, String subOrgId, MultipartFile multipartFile) {
         final BizResult bizResult = new BizResult();
         BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
@@ -1350,9 +1393,7 @@ public class BizAdminService extends BizBaseService {
     private CoreAuthAdminSession authorizedAdminSession(String sessionId) throws Exception {
         CoreAuthAdminSession session = coreAuthService.adminAuthWebSessionId(sessionId);
         AssertUtil.notNull(session, EzErrorCode.SESSION_INVALID);
-        AssertUtil.notBlank(session.getMemberRoles(), EzErrorCode.MEMBER_UNAUTHORIZED);
-        List<String> roles = Arrays.asList(session.getMemberRoles().split(","));
-        AssertUtil.isTrue(roles.contains(BizMemberRole.ADMIN_ORG.getCode()), EzErrorCode.MEMBER_UNAUTHORIZED);
+        AssertUtil.isTrue(isMemberHasAdminRole(session.getMemberRoles()), EzErrorCode.MEMBER_UNAUTHORIZED);
         return session;
     }
 
@@ -1370,5 +1411,13 @@ public class BizAdminService extends BizBaseService {
                 return true;
         }
         return false;
+    }
+
+    private boolean isMemberHasAdminRole(String role) {
+        if (StringUtil.isBlank(role)) {
+            return false;
+        }
+        List<String> roles = Arrays.asList(role.split(","));
+        return roles.contains(BizMemberRole.ADMIN_ORG.getCode());
     }
 }
