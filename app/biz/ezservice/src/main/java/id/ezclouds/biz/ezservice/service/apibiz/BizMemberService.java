@@ -136,6 +136,7 @@ public class BizMemberService extends BizBaseService {
                 AssertUtil.isTrue(memberRoles.size() > 0, EzErrorCode.UNAUTHORIZED);
 
                 BizMemberRegisterMode bizRegisterMode = request.getRegisterMode();
+                request.setRoles("");
 
                 if (bizRegisterMode == BizMemberRegisterMode.BY_RECRUITER) {
                     AssertUtil.isTrue(memberRoles.contains(BizMemberRole.OP_RECRUITER.getCode()), EzErrorCode.UNAUTHORIZED);
