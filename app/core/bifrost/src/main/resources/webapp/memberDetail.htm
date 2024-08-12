@@ -177,6 +177,41 @@
 
 </section>
 
+<div class="modal fade" id="modal-form" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="largeModalLabel">Update Member Roles</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row clearfix">
+                    <div class="form-group col-sm-12">
+                        <div class="form-line">
+                            <div class="font-12">Select Roles</div>
+                            <div class="roles form-line">
+                                <input type="checkbox" id="recruiter" value="OP_RECRUITER">
+                                <label for="recruiter"> RECRUITER</label>
+                            </div>
+                            <div class="roles form-line">
+                                <input type="checkbox" id="surveyor" value="OP_SURVEYOR">
+                                <label for="surveyor"> SURVEYOR</label>
+                            </div>
+                            <div class="roles form-line">
+                                <input type="checkbox" id="voteGuardian" value="OP_VOTE_GUARDIAN">
+                                <label for="voteGuardian"> JAGA SUARA</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <button id="submitButton" class="button button-rounded waves-effect waves-float pull-right" type="submit" name="submit">SUBMIT</button>
+                        <button id="cancelButton" class="button button-rounded button-light waves-effect waves-float pull-right" type="submit" name="submit">CANCEL</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
     var EzAdminUrl = {
         GET_MEMBER_DETAIL: 'api/memberDetail.json',
@@ -266,6 +301,8 @@
             $('#rukunWarga').val(data.rukunWarga);
             $('#rukunTetangga').val(data.rukunTetangga);
             $('#tpsNumber').val(data.tpsNumber);
+
+            EzDashboardBizService.parseRoles(data.roles);
         },
         parseVillage: function(data) {
             var villageOption = '';
@@ -273,6 +310,21 @@
                 villageOption += '<option value="'+ data[i].id +'">'+ data[i].name +'</option>';
             }
             $('#villageId').html(villageOption);
+        },
+        fetchRoles: function() {
+            var roles = [];
+            $('.roles input:checked').each(function(){
+                roles.push(this.value);
+            });
+            return roles.join(',');
+        },
+        parseRoles: function(data) {
+            let roles = data.split(',');
+            $('.roles input').each(function(){
+                if (roles.includes(this.value)) {
+                    $(this).prop('checked', true);
+                }
+            });
         },
         showLoader: function() {
             $('#btnLoader').show();
@@ -311,6 +363,12 @@
         });
         $('#btnSubmit').click(function(){
             EzDashboardBizService.submitMember();
+        });
+        $('#btnUpdateRoles').click(function(){
+            EzWebAppViewHelper.showAppModal('modal-form');
+        });
+        $('#cancelButton').click(function(){
+            EzWebAppViewHelper.hideAppModal('modal-form');
         });
 
     });

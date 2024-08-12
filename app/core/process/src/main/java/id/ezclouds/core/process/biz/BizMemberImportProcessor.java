@@ -6,7 +6,6 @@ package id.ezclouds.core.process.biz;
 
 import id.ezclouds.common.facade.dal.member.BizMemberImportDAO;
 import id.ezclouds.common.model.member.BizMemberImport;
-import id.ezclouds.common.model.request.FileStreamImportRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

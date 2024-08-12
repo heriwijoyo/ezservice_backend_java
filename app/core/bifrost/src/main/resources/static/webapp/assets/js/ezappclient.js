@@ -43,6 +43,14 @@ var EzWebAppViewHelper = {
                 '</div>'+
             '</div>';
         $(document.body).append($.parseHTML(commonModal));
+    },
+    showAppModal: function(modalId) {
+        $('#'+ modalId).removeClass('fade');
+        $('#'+ modalId).addClass('show');
+    },
+    hideAppModal: function(modalId) {
+        $('#'+ modalId).removeClass('show');
+        $('#'+ modalId).addClass('fade');
     }
 };
 var EzApiUrl = {

@@ -152,6 +152,10 @@ public class BizMemberService extends BizBaseService {
                 if (bizRegisterMode == BizMemberRegisterMode.BY_ORG_ADMIN) {
                     AssertUtil.isTrue(memberRoles.contains(BizMemberRole.ADMIN_ORG.getCode()), EzErrorCode.UNAUTHORIZED);
                     request.setRoles("OP_RECRUITER");
+                    //tmp close member registration from app
+                    bizResult.setSuccess(false);
+                    bizResult.setErrorMessage("Fitur ini tidak dapat digunakan untuk sementara waktu. Gunakan fitur pada web admin untuk mendaftarkan anggota baru");
+                    return;
                 }
 
                 request.setReferrerId(sessionInfo.getMemberId());

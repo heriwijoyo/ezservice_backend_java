@@ -40,7 +40,6 @@ public class CoreMemberImportDAO implements BizMemberImportDAO {
                 .deleteByOrgIdAndSubOrgId(orgId, subOrgId);
     }
 
-    @EzDAOLogger
     @Override
     public void storeMember(BizMemberImport memberImport) {
         MemberImportStoreConverter converter = new MemberImportStoreConverter();
@@ -48,7 +47,6 @@ public class CoreMemberImportDAO implements BizMemberImportDAO {
                 .saveAndFlush(converter.convert(memberImport));
     }
 
-    @EzDAOLogger
     @Override
     public void storeMemberFailed(BizMemberImport memberImport) {
         MemberImportStoreFailedConverter converter = new MemberImportStoreFailedConverter();
