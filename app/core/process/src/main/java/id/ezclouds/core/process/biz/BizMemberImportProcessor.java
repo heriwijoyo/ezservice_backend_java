@@ -5,6 +5,7 @@
 package id.ezclouds.core.process.biz;
 
 import id.ezclouds.common.facade.dal.member.BizMemberImportDAO;
+import id.ezclouds.common.model.member.BizMemberImport;
 import id.ezclouds.common.model.request.FileStreamImportRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,9 +32,13 @@ public class BizMemberImportProcessor {
         return bizMemberImportDAO.deleteAllImportFailed(orgId, subOrgId);
     }
 
-    public boolean process(FileStreamImportRequest request) {
-
-        return true;
+    @Transactional
+    public void storeMember(BizMemberImport memberImport) {
+        bizMemberImportDAO.storeMember(memberImport);
     }
 
+    @Transactional
+    public void storeMemberFailed(BizMemberImport memberImport) {
+        bizMemberImportDAO.storeMemberFailed(memberImport);
+    }
 }
