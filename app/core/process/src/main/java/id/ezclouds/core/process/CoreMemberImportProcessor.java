@@ -5,6 +5,7 @@
 package id.ezclouds.core.process;
 
 import id.ezclouds.common.facade.process.MemberImportProcessor;
+import id.ezclouds.common.model.constant.OrgConstant;
 import id.ezclouds.common.model.member.BizMemberImport;
 import id.ezclouds.common.model.request.FileStreamImportRequest;
 import id.ezclouds.common.model.result.BaseResult;
@@ -21,7 +22,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -32,6 +35,9 @@ public class CoreMemberImportProcessor implements MemberImportProcessor {
 
     @Autowired
     private BizMemberImportProcessor bizMemberImportProcessor;
+
+    private Map<String, String> districtIdMap = new HashMap<>();
+    private Map<String, String> villageIdMap = new HashMap<>();
 
     @Override
     public BaseResult process(FileStreamImportRequest request) {
@@ -49,6 +55,10 @@ public class CoreMemberImportProcessor implements MemberImportProcessor {
                 //TODO: add request validation later
                 String orgId = request.getOrgId();
                 String subOrgId = request.getSubOrgId();
+
+                if (OrgConstant.ORG_ID_RJL.equals(orgId)) {
+
+                }
 
                 bizMemberImportProcessor.deleteAllImport(orgId, subOrgId);
                 bizMemberImportProcessor.deleteAllImportFailed(orgId, subOrgId);
@@ -79,6 +89,10 @@ public class CoreMemberImportProcessor implements MemberImportProcessor {
         });
 
         return baseResult;
+    }
+
+    private void loadAndMapDistricts(String regencyId) {
+
     }
 
     private void processCsvDataLine(String line, String orgId, String subOrgId) {
@@ -126,6 +140,13 @@ public class CoreMemberImportProcessor implements MemberImportProcessor {
         memberImport.setVillageName(fetchSafeColumnData(columnData, 10));
         memberImport.setTpsNumber(parseTpsNumber(fetchSafeColumnData(columnData, 11)));
         memberImport.setCreatedTime(currentTime);
+
+        if ("RJL0".equals(orgId)) {
+            memberImport.setProvinceId("18");
+            memberImport.setProvinceName("LAMPUNG");
+            memberImport.setRegencyId("1802");
+            memberImport.setRegencyName("KABUPATEN TANGGAMUS");
+        }
 
         return memberImport;
     }

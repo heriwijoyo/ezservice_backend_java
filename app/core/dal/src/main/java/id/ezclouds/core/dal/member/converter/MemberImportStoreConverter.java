@@ -31,7 +31,13 @@ public class MemberImportStoreConverter extends TemplateModelConverter<BizMember
         memberImportDO.setReligion(input.getReligion());
         memberImportDO.setEthnic(input.getEthnic());
         memberImportDO.setIdCardNumber(input.getIdCardNumber());
+        memberImportDO.setProvinceId(input.getProvinceId());
+        memberImportDO.setProvinceName(input.getProvinceName());
+        memberImportDO.setRegencyId(input.getRegencyId());
+        memberImportDO.setRegencyName(input.getRegencyName());
+        memberImportDO.setDistrictId(input.getDistrictId());
         memberImportDO.setDistrictName(input.getDistrictName());
+        memberImportDO.setVillageId(input.getVillageId());
         memberImportDO.setVillageName(input.getVillageName());
         memberImportDO.setRukunWarga(input.getRukunWarga());
         memberImportDO.setRukunTetangga(input.getRukunTetangga());

@@ -24,7 +24,13 @@ public class BizMemberImport {
     private String religion;
     private String ethnic;
     private String idCardNumber;
+    private String provinceId;
+    private String provinceName;
+    private String regencyId;
+    private String regencyName;
+    private String districtId;
     private String districtName;
+    private String villageId;
     private String villageName;
     private String rukunWarga;
     private String rukunTetangga;
@@ -141,6 +147,54 @@ public class BizMemberImport {
 
     public void setIdCardNumber(String idCardNumber) {
         this.idCardNumber = idCardNumber;
+    }
+
+    public String getProvinceId() {
+        return provinceId;
+    }
+
+    public void setProvinceId(String provinceId) {
+        this.provinceId = provinceId;
+    }
+
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
+    }
+
+    public String getRegencyId() {
+        return regencyId;
+    }
+
+    public void setRegencyId(String regencyId) {
+        this.regencyId = regencyId;
+    }
+
+    public String getRegencyName() {
+        return regencyName;
+    }
+
+    public void setRegencyName(String regencyName) {
+        this.regencyName = regencyName;
+    }
+
+    public String getDistrictId() {
+        return districtId;
+    }
+
+    public void setDistrictId(String districtId) {
+        this.districtId = districtId;
+    }
+
+    public String getVillageId() {
+        return villageId;
+    }
+
+    public void setVillageId(String villageId) {
+        this.villageId = villageId;
     }
 
     public String getDistrictName() {
