@@ -1293,7 +1293,7 @@ public class BizAdminService extends BizBaseService {
                         .updateRoles(memberId, roles);
 
                 //previous roles was empty, so update the client password and notify them
-                if (StringUtil.isBlank(member.getRoles())) {
+                if (StringUtil.isBlank(member.getRoles()) && StringUtil.isNotBlank(member.getPhone()) && member.getPhone().length() > 10) {
                     System.out.println("Update Password and send WA");
                 }
 
