@@ -12,6 +12,8 @@ import id.ezclouds.common.util.context.EzAppEvent;
  */
 public enum BizProcessEvent implements EzAppEvent {
 
+    MEMBER_IMPORT_CSV("MEMBER_IMPORT_CSV"),
+
     GENERATE_REPORT_OVERALL("GENERATE_REPORT_OVERALL"),
     GENERATE_REPORT_MEMBER_TODAY("GENERATE_REPORT_MEMBER_TODAY"),
     UNKNOWN("UNKNOWN"),

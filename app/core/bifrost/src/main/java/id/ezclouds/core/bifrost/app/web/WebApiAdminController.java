@@ -916,11 +916,25 @@ public class WebApiAdminController {
     @PostMapping(value = "/webapp/api/csvUpload.json")
     private WebApiResult<String> csvUpload(
             @RequestPart("importFile") MultipartFile multipartFile,
-            @RequestPart("postData") String postData) {
+            @RequestPart("sessionId") String sessionId,
+            @RequestPart("subOrgId") String subOrgId) {
         final WebApiResult<String> result = new WebApiResult<>();
-        result.setSessionExpired(false);
-        result.setSuccess(true);
-        result.setData("OK BOZZ");
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_IMPORT_MEMBER_CSV, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                return bizAdminService.uploadMemberData(sessionId, subOrgId, multipartFile);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
         return result;
     }
 

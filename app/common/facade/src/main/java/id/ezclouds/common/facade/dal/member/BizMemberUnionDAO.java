@@ -9,7 +9,5 @@ package id.ezclouds.common.facade.dal.member;
  * @version $Id: BizMemberUnionDAO.java, v 0.1 2024‐07‐28 6:02 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 public interface BizMemberUnionDAO {
-
     long countByOrgId(String orgId);
-
 }

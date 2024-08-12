@@ -119,6 +119,42 @@ var EzWebAppClient = {
             EzWebAppClient.alertSessionExpired();
         }
     },
+    postMultipartFormData: function(formId, postData, url, tag) {
+        let sessionId = EzWebAppClient.getSessionId();
+        if (sessionId.length != 32) {
+            EzWebAppClient.alertSessionExpired();
+        } else {
+            if (postData == undefined || postData == null) {
+                postData = {};
+            }
+            postData.sessionId = sessionId;
+
+            let data = new FormData($('#'+formId)[0]);
+
+            for (const [key, value] of Object.entries(postData)) {
+                data.append(key, value);
+            }
+
+            $.ajax({
+                type: 'POST',
+                enctype: 'multipart/form-data',
+                url: url,
+                data: data,
+                processData: false,
+                contentType: false,
+                cache: false,
+                timeout: 600000,
+                success: function(response) {
+                    EzWebAppClient.apiCallSuccessHandler(url+tag, response);
+                },
+                error: function(xhr) {
+                    if (EzWebAppClient.apiCallErrorHandler!==undefined) {
+                        EzWebAppClient.apiCallErrorHandler(xhr);
+                    }
+                }
+            });
+        }
+    },
     postMultipartForm: function(formId, postData, url, tag) {
         let sessionId = EzWebAppClient.getSessionId();
         if (sessionId.length != 32) {

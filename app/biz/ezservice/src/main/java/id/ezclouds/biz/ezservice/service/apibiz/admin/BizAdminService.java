@@ -36,10 +36,13 @@ import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.service.AppSubOrganizationService;
 import id.ezclouds.common.facade.member.MemberBackOfficeService;
 import id.ezclouds.common.facade.organization.SubOrganizationService;
+import id.ezclouds.common.facade.process.MemberImportProcessor;
 import id.ezclouds.common.model.constant.PageSort;
 import id.ezclouds.common.model.member.MemberBackOffice;
 import id.ezclouds.common.model.organization.SubOrganization;
+import id.ezclouds.common.model.request.FileStreamImportRequest;
 import id.ezclouds.common.model.request.WebBizPageRequest;
+import id.ezclouds.common.model.result.BaseResult;
 import id.ezclouds.common.util.facade.BeanFacadeUtil;
 import id.ezclouds.core.integration.result.EzConnectResult;
 import id.ezclouds.common.model.result.PageResult;
@@ -65,6 +68,7 @@ import id.ezclouds.core.shared.service.CoreAdminService;
 import id.ezclouds.core.shared.service.CoreFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -1252,6 +1256,41 @@ public class BizAdminService extends BizBaseService {
 
                 bizResult.setSuccess(true);
                 bizResult.setObject(member);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
+    public BizResult uploadMemberData(String sessionId, String subOrgId, MultipartFile multipartFile) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notBlank(sessionId, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(subOrgId, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notNull(multipartFile, EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                CoreAuthAdminSession session = authorizedAdminSession(sessionId);
+                FileStreamImportRequest importRequest = new FileStreamImportRequest();
+                importRequest.setOrgId(session.getOrgId());
+                importRequest.setSubOrgId(subOrgId);
+                importRequest.setInputStream(multipartFile.getInputStream());
+
+                BaseResult baseResult = BeanFacadeUtil
+                        .getBean(MemberImportProcessor.class)
+                        .process(importRequest);
+
+                bizResult.setSuccess(baseResult.isSuccess());
+                bizResult.setObject(baseResult.getObject());
+                bizResult.setErrorMessage(baseResult.getErrorMessage());
             }
 
             @Override

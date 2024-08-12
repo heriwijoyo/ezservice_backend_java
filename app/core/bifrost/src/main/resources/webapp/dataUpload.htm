@@ -87,7 +87,7 @@
             let postData = {
                 subOrgId : $('#subOrgId').val()
             };
-            EzWebAppClient.postMultipartForm('importForm', postData, EzConfigApiUrl.CSV_UPLOAD_URL, '');
+            EzWebAppClient.postMultipartFormData('importForm', postData, EzConfigApiUrl.CSV_UPLOAD_URL, '');
         }
     };
 

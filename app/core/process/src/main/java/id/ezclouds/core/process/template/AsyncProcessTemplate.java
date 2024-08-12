@@ -20,9 +20,9 @@ import java.util.List;
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: AsyncProcessTemplate.java, v 0.1 2024‐07‐28 5:03 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class CoreProcessTemplate {
+public class AsyncProcessTemplate {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CommonLoggerConstant.CORE_PROCESS);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommonLoggerConstant.ASYNC_PROCESS);
 
     public static void execute(BizProcessEvent event, Handler handler) {
         String resultCode = "N";

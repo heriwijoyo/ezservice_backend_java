@@ -6,7 +6,7 @@ package id.ezclouds.core.process.biz;
 
 import id.ezclouds.common.util.thread.BizThreadSharedResource;
 import id.ezclouds.core.process.model.BizProcessEvent;
-import id.ezclouds.core.process.template.CoreProcessTemplate;
+import id.ezclouds.core.process.template.AsyncProcessTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public abstract class BizAsyncProcessor implements BizProcessor {
     @Override
     public void process(Object request) {
         final List<String> logData = new ArrayList<>();
-        CoreProcessTemplate.execute(getProcessEvent(), new CoreProcessTemplate.Handler() {
+        AsyncProcessTemplate.execute(getProcessEvent(), new AsyncProcessTemplate.Handler() {
             @Override
             public void doStart(BizProcessEvent processEvent) {
                 onStart(processEvent);
