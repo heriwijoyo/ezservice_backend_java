@@ -1,8 +1,8 @@
 /**
  * Ezclouds.id
- * Copyright (c) 2020‐2023 All Rights Reserved.
+ * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.biz.ezservice.service.app.dataobject;
+package id.ezclouds.core.dal.auth.dataobject;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,21 +11,37 @@ import javax.persistence.Table;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: AuthAppClient.java, v 0.1 2023‐12‐07 2:41 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: EzAuthAppClientDO.java, v 0.1 2024‐08‐13 5:34 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Entity
-@Table(name = "app_client")
-public class AppClientDO {
-
-    private String id;
-    private String orgId;
-    private String appId;
-    private String clientId;
-    private String clientSecret;
-    private int status;
+@Table(name = "ez_auth_app_client")
+public class EzAuthAppClientDO {
 
     @Id
     @Column(name = "id")
+    private String id;
+
+    @Column(name = "org_id")
+    private String orgId;
+
+    @Column(name = "app_id")
+    private String appId;
+
+    @Column(name = "client_id")
+    private String clientId;
+
+    @Column(name = "client_secret")
+    private String clientSecret;
+
+    @Column(name = "created_time")
+    private String createdTime;
+
+    @Column(name = "modified_time")
+    private String modifiedTime;
+
+    @Column(name = "status")
+    private int status;
+
     public String getId() {
         return id;
     }
@@ -34,7 +50,6 @@ public class AppClientDO {
         this.id = id;
     }
 
-    @Column(name = "org_id")
     public String getOrgId() {
         return orgId;
     }
@@ -43,7 +58,6 @@ public class AppClientDO {
         this.orgId = orgId;
     }
 
-    @Column(name = "app_id")
     public String getAppId() {
         return appId;
     }
@@ -52,7 +66,6 @@ public class AppClientDO {
         this.appId = appId;
     }
 
-    @Column(name = "client_id")
     public String getClientId() {
         return clientId;
     }
@@ -61,7 +74,6 @@ public class AppClientDO {
         this.clientId = clientId;
     }
 
-    @Column(name = "client_secret")
     public String getClientSecret() {
         return clientSecret;
     }
@@ -70,7 +82,22 @@ public class AppClientDO {
         this.clientSecret = clientSecret;
     }
 
-    @Column(name = "status")
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(String modifiedTime) {
+        this.modifiedTime = modifiedTime;
+    }
+
     public int getStatus() {
         return status;
     }

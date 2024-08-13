@@ -6,9 +6,9 @@ package id.ezclouds.common.model.auth;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: AppClient.java, v 0.1 2024‐08‐12 9:05 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: AuthAppClient.java, v 0.1 2024‐08‐12 9:05 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class AppClient {
+public class AuthAppClient {
 
     private String clientId;
     private String orgId;

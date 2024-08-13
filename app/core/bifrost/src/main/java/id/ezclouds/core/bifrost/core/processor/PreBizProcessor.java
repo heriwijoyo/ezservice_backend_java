@@ -32,11 +32,11 @@ public class PreBizProcessor {
 
         if (event instanceof ApiEvent) {
             RequestAppClient reqClient = apiRequest.getAppClient();
-            AssertUtil.notNull(reqClient, EzErrorCode.ILLEGAL_PARAM, "Request.AppClient is null");
-            AssertUtil.notBlank(reqClient.getOrganizationId(), EzErrorCode.ILLEGAL_PARAM, "Request.AppClient.organizationId is blank");
-            AssertUtil.notBlank(reqClient.getApplicationId(), EzErrorCode.ILLEGAL_PARAM, "Request.AppClient.applicationId is blank");
-            AssertUtil.notBlank(reqClient.getClientId(), EzErrorCode.ILLEGAL_PARAM, "Request.AppClient.clientId is blank");
-            AssertUtil.notBlank(reqClient.getClientSecret(), EzErrorCode.ILLEGAL_PARAM, "Request.AppClient.clientSecret is blank");
+            AssertUtil.notNull(reqClient, EzErrorCode.ILLEGAL_PARAM, "Request.AuthAppClient is null");
+            AssertUtil.notBlank(reqClient.getOrganizationId(), EzErrorCode.ILLEGAL_PARAM, "Request.AuthAppClient.organizationId is blank");
+            AssertUtil.notBlank(reqClient.getApplicationId(), EzErrorCode.ILLEGAL_PARAM, "Request.AuthAppClient.applicationId is blank");
+            AssertUtil.notBlank(reqClient.getClientId(), EzErrorCode.ILLEGAL_PARAM, "Request.AuthAppClient.clientId is blank");
+            AssertUtil.notBlank(reqClient.getClientSecret(), EzErrorCode.ILLEGAL_PARAM, "Request.AuthAppClient.clientSecret is blank");
 
             CoreAuthResult<CoreOrganization> clientAuthResult = bizAuthService.authAppClient(
                     reqClient.getOrganizationId(),

@@ -34,10 +34,12 @@ import id.ezclouds.biz.ezservice.service.request.web.*;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.service.AppSubOrganizationService;
+import id.ezclouds.common.facade.auth.AuthAppClientService;
 import id.ezclouds.common.facade.member.MemberBackOfficeService;
 import id.ezclouds.common.facade.member.MemberUpdateService;
 import id.ezclouds.common.facade.organization.SubOrganizationService;
 import id.ezclouds.common.facade.process.MemberImportProcessor;
+import id.ezclouds.common.model.auth.AuthAppClient;
 import id.ezclouds.common.model.constant.PageSort;
 import id.ezclouds.common.model.member.MemberBackOffice;
 import id.ezclouds.common.model.organization.SubOrganization;
@@ -1295,6 +1297,14 @@ public class BizAdminService extends BizBaseService {
                 //previous roles was empty, so update the client password and notify them
                 if (StringUtil.isBlank(member.getRoles()) && StringUtil.isNotBlank(member.getPhone()) && member.getPhone().length() > 10) {
                     System.out.println("Update Password and send WA");
+                    AuthAppClient authAppClient = BeanFacadeUtil
+                            .getBean(AuthAppClientService.class)
+                            .getByOrgId(session.getOrgId());
+
+                    if (authAppClient != null) {
+                        authAppClient.getAppId();
+
+                    }
                 }
 
                 bizResult.setSuccess(true);
