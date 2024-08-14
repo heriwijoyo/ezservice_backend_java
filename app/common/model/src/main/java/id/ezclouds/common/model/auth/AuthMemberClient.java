@@ -6,9 +6,9 @@ package id.ezclouds.common.model.auth;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: MemberClient.java, v 0.1 2024‐08‐12 9:07 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: AuthMemberClient.java, v 0.1 2024‐08‐12 9:07 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class MemberClient {
+public class AuthMemberClient {
 
     private String clientId;
     private String orgId;
@@ -19,6 +19,7 @@ public class MemberClient {
     private String loginId;
     private String loginPassword;
     private String createdTime;
+    private int status;
 
     public String getClientId() {
         return clientId;
@@ -90,5 +91,13 @@ public class MemberClient {
 
     public void setCreatedTime(String createdTime) {
         this.createdTime = createdTime;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }
