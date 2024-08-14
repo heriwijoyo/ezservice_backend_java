@@ -48,7 +48,7 @@ import id.ezclouds.common.model.request.FileStreamImportRequest;
 import id.ezclouds.common.model.request.WebBizPageRequest;
 import id.ezclouds.common.model.result.BaseResult;
 import id.ezclouds.common.util.facade.BeanFacadeUtil;
-import id.ezclouds.core.integration.result.EzConnectResult;
+import id.ezclouds.common.model.integration.EzConnectResult;
 import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.DateUtil;

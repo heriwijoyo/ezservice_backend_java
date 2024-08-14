@@ -39,7 +39,7 @@ import id.ezclouds.common.model.constant.OrgConstant;
 import id.ezclouds.core.integration.dataservice.model.WhatsappLog;
 import id.ezclouds.common.model.integration.WhatsappLogRequest;
 import id.ezclouds.common.model.integration.WhatsappResendRequest;
-import id.ezclouds.core.integration.result.EzConnectResult;
+import id.ezclouds.common.model.integration.EzConnectResult;
 import id.ezclouds.core.shared.model.CoreArea;
 import id.ezclouds.core.shared.result.BizPageInfo;
 import id.ezclouds.common.model.result.PageResult;
@@ -52,7 +52,7 @@ import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.auth.model.CoreAuthAppClient;
 import id.ezclouds.core.auth.service.CoreAuthService;
-import id.ezclouds.core.integration.service.EzConnectService;
+import id.ezclouds.core.integration.service.CoreConnectService;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.MemberStatus;
 import id.ezclouds.core.member.service.CoreMemberService;
@@ -129,7 +129,7 @@ public class BizAdminInnerService {
     private CoreAdminService coreAdminService;
 
     @Autowired
-    private EzConnectService ezConnectService;
+    private CoreConnectService coreConnectService;
 
     @Autowired
     private CoreFileService coreFileService;
@@ -312,7 +312,7 @@ public class BizAdminInnerService {
         request.setOrgId(orgId);
         request.setPhone(phone);
         request.setPageRequest(pageRequest);
-        EzConnectResult connectResult = ezConnectService.getWhatsappLog(request);
+        EzConnectResult connectResult = coreConnectService.getWhatsappLog(request);
 
         AssertUtil.notNull(connectResult, EzErrorCode.SYSTEM_ERROR);
         AssertUtil.isTrue(connectResult.isSuccess(), EzErrorCode.SYSTEM_ERROR);
@@ -330,7 +330,7 @@ public class BizAdminInnerService {
         WhatsappResendRequest resendRequest = new WhatsappResendRequest();
         resendRequest.setOrgId(orgId);
         resendRequest.setMessageId(messageId);
-        return ezConnectService.resendWhatsapp(resendRequest);
+        return coreConnectService.resendWhatsapp(resendRequest);
     }
 
     public void updateVideoCard(VideoCard videoCard) {

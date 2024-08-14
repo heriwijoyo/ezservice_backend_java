@@ -35,7 +35,7 @@ import id.ezclouds.core.auth.result.CoreCommonSession;
 import id.ezclouds.core.auth.result.CoreAuthResult;
 import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
 import id.ezclouds.common.model.integration.WhatsappSendRequest;
-import id.ezclouds.core.integration.service.EzConnectService;
+import id.ezclouds.core.integration.service.CoreConnectService;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
 import id.ezclouds.core.member.service.CoreMemberService;
@@ -70,7 +70,7 @@ public class BizAuthService extends BizBaseService {
     private AppConfigService appConfigService;
 
     @Autowired
-    private EzConnectService ezConnectService;
+    private CoreConnectService coreConnectService;
 
     public CoreAuthResult<CoreOrganization> authAppClient(String orgId, String appId, String clientId, String clientSecret) {
         CoreAuthResult<CoreOrganization> bizAuthResult = new CoreAuthResult<>();
@@ -370,7 +370,7 @@ public class BizAuthService extends BizBaseService {
             request.setOrgId(commonSession.getOrgId());
             request.setPhoneNumber(commonSession.getVerifyTarget());
             request.setMessage(whatsappMessage);
-            ezConnectService.sendWhatsappMessage(request);
+            coreConnectService.sendWhatsappMessage(request);
         }
     }
 }

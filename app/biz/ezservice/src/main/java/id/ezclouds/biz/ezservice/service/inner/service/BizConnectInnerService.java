@@ -9,7 +9,7 @@ import id.ezclouds.biz.ezservice.converter.BizMessageTemplateConverter;
 import id.ezclouds.biz.ezservice.enums.BizConnectType;
 import id.ezclouds.biz.ezservice.service.app.AppConfigService;
 import id.ezclouds.common.model.integration.WhatsappSendRequest;
-import id.ezclouds.core.integration.service.EzConnectService;
+import id.ezclouds.core.integration.service.CoreConnectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +27,7 @@ public class BizConnectInnerService {
     private AppConfigService appConfigService;
 
     @Autowired
-    private EzConnectService ezConnectService;
+    private CoreConnectService coreConnectService;
 
     public void memberSendPassword(String orgId, String phone, String password, String appName, String downloadUrl) {
         String messageTemplate = appConfigService
@@ -44,7 +44,7 @@ public class BizConnectInnerService {
             request.setOrgId(orgId);
             request.setPhoneNumber(phone);
             request.setMessage(whatsappMessage);
-            ezConnectService.sendWhatsappMessage(request);
+            coreConnectService.sendWhatsappMessage(request);
         }
     }
 
@@ -52,7 +52,7 @@ public class BizConnectInnerService {
         switch (connectType) {
             case WHATSAPP:
                 WhatsappSendRequest sendRequest = composeWhatsappSendRequest(orgId, target, message);
-                ezConnectService.sendWhatsappMessage(sendRequest);
+                coreConnectService.sendWhatsappMessage(sendRequest);
                 break;
         }
     }

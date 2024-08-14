@@ -6,6 +6,7 @@ package id.ezclouds.common.facade.integration;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: EzConnectService.java, v 0.1 2024‐08‐14 7:51 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
+ * @version $Id: EzConnectService.java, v 0.1 2024‐08‐14 7:51 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ */
 public interface EzConnectService {
 }

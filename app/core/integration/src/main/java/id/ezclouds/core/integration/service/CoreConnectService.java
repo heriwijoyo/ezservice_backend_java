@@ -12,7 +12,7 @@ import id.ezclouds.core.integration.dataservice.model.WhatsappLog;
 import id.ezclouds.common.model.integration.WhatsappLogRequest;
 import id.ezclouds.common.model.integration.WhatsappResendRequest;
 import id.ezclouds.common.model.integration.WhatsappSendRequest;
-import id.ezclouds.core.integration.result.EzConnectResult;
+import id.ezclouds.common.model.integration.EzConnectResult;
 import id.ezclouds.core.integration.service.client.service.WatzapClientService;
 import id.ezclouds.core.integration.service.client.request.WatzapSendRequest;
 import id.ezclouds.core.shared.result.BizPageInfo;
@@ -22,10 +22,10 @@ import org.springframework.stereotype.Service;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: EzConnectService.java, v 0.1 2024‐02‐05 1:29 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: CoreConnectService.java, v 0.1 2024‐02‐05 1:29 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class EzConnectService {
+public class CoreConnectService {
 
     @Autowired
     private CoreConfigService coreConfigService;
