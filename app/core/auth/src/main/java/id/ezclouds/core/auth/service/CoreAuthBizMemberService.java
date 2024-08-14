@@ -9,12 +9,10 @@ import id.ezclouds.common.facade.dal.auth.AuthAppClientDAO;
 import id.ezclouds.common.facade.dal.auth.AuthMemberClientDAO;
 import id.ezclouds.common.model.auth.AuthAppClient;
 import id.ezclouds.common.model.auth.AuthMemberClient;
-import id.ezclouds.common.model.auth.AuthMemberClientLoginType;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.RandomUtil;
 import id.ezclouds.common.util.ShardUtil;
-import id.ezclouds.core.auth.dataobject.EzAuthMemberClientDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -76,5 +74,11 @@ public class CoreAuthBizMemberService implements AuthBizMemberService {
 
         authMemberClientDAO.updateLoginPassword(clientId, encryptPassword);
         return newPassword;
+    }
+
+    @Override
+    @Transactional
+    public void invalidateMemberSession(String orgId, String client) {
+
     }
 }

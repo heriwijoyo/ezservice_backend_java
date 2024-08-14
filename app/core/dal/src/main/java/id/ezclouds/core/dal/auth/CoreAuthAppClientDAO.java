@@ -8,8 +8,8 @@ import id.ezclouds.common.facade.dal.auth.AuthAppClientDAO;
 import id.ezclouds.common.model.annotation.EzDAOLogger;
 import id.ezclouds.common.model.auth.AuthAppClient;
 import id.ezclouds.core.dal.auth.converter.EzAuthAppClientQueryConverter;
-import id.ezclouds.core.dal.auth.dataobject.EzAuthAppClientDO;
-import id.ezclouds.core.dal.auth.repo.EzAuthAppClientRepository;
+import id.ezclouds.core.dal.auth.dataobject.DalAuthAppClientDO;
+import id.ezclouds.core.dal.auth.repo.DalAuthAppClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,12 +21,12 @@ import org.springframework.stereotype.Component;
 public class CoreAuthAppClientDAO implements AuthAppClientDAO {
 
     @Autowired
-    private EzAuthAppClientRepository ezAuthAppClientRepository;
+    private DalAuthAppClientRepository dalAuthAppClientRepository;
 
     @EzDAOLogger
     @Override
     public AuthAppClient getByOrgId(String orgId) {
-        EzAuthAppClientDO result = ezAuthAppClientRepository
+        DalAuthAppClientDO result = dalAuthAppClientRepository
                 .findByOrgId(orgId);
 
         return new EzAuthAppClientQueryConverter()

@@ -13,4 +13,5 @@ import id.ezclouds.common.model.auth.AuthMemberClient;
 public interface AuthBizMemberService {
     AuthMemberClient getMemberClientOrCreateIfNotExist(String orgId, String memberId, String loginType, String loginId);
     String resetLoginPassword(String clientId);
+    void invalidateMemberSession(String orgId, String client);
 }

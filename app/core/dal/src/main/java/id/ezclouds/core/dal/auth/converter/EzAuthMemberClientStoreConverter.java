@@ -6,17 +6,17 @@ package id.ezclouds.core.dal.auth.converter;
 
 import id.ezclouds.common.model.auth.AuthMemberClient;
 import id.ezclouds.common.model.util.TemplateModelConverter;
-import id.ezclouds.core.dal.auth.dataobject.EzAuthMemberClientDO;
+import id.ezclouds.core.dal.auth.dataobject.DalAuthMemberClientDO;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: EzAuthMemberClientStoreConverter.java, v 0.1 2024‐08‐14 6:04 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class EzAuthMemberClientStoreConverter extends TemplateModelConverter<AuthMemberClient, EzAuthMemberClientDO> {
+public class EzAuthMemberClientStoreConverter extends TemplateModelConverter<AuthMemberClient, DalAuthMemberClientDO> {
 
     @Override
-    protected EzAuthMemberClientDO safeConvert(AuthMemberClient input) {
-        EzAuthMemberClientDO memberClientDO = new EzAuthMemberClientDO();
+    protected DalAuthMemberClientDO safeConvert(AuthMemberClient input) {
+        DalAuthMemberClientDO memberClientDO = new DalAuthMemberClientDO();
         memberClientDO.setClientId(input.getClientId());
         memberClientDO.setOrgId(input.getOrgId());
         memberClientDO.setShard(input.getShard());

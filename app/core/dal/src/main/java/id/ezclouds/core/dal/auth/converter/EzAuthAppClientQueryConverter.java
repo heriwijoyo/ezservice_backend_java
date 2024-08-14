@@ -6,16 +6,16 @@ package id.ezclouds.core.dal.auth.converter;
 
 import id.ezclouds.common.model.auth.AuthAppClient;
 import id.ezclouds.common.model.util.TemplateModelConverter;
-import id.ezclouds.core.dal.auth.dataobject.EzAuthAppClientDO;
+import id.ezclouds.core.dal.auth.dataobject.DalAuthAppClientDO;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: EzAuthAppClientQueryConverter.java, v 0.1 2024‐08‐13 5:39 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class EzAuthAppClientQueryConverter extends TemplateModelConverter<EzAuthAppClientDO, AuthAppClient> {
+public class EzAuthAppClientQueryConverter extends TemplateModelConverter<DalAuthAppClientDO, AuthAppClient> {
 
     @Override
-    protected AuthAppClient safeConvert(EzAuthAppClientDO input) {
+    protected AuthAppClient safeConvert(DalAuthAppClientDO input) {
         AuthAppClient authAppClient = new AuthAppClient();
         authAppClient.setOrgId(input.getOrgId());
         authAppClient.setAppId(input.getAppId());

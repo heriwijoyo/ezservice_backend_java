@@ -41,6 +41,7 @@ import id.ezclouds.common.model.integration.WhatsappLog;
 import id.ezclouds.common.model.integration.WhatsappLogRequest;
 import id.ezclouds.common.model.integration.WhatsappResendRequest;
 import id.ezclouds.common.model.integration.EzConnectResult;
+import id.ezclouds.common.util.facade.BeanFacadeUtil;
 import id.ezclouds.core.shared.model.CoreArea;
 import id.ezclouds.core.shared.result.BizPageInfo;
 import id.ezclouds.common.model.result.PageResult;
@@ -127,9 +128,6 @@ public class BizAdminInnerService {
 
     @Autowired
     private CoreAdminService coreAdminService;
-
-    @Autowired
-    private EzConnectService ezConnectService;
 
     @Autowired
     private CoreFileService coreFileService;
@@ -312,7 +310,9 @@ public class BizAdminInnerService {
         request.setOrgId(orgId);
         request.setPhone(phone);
         request.setPageRequest(pageRequest);
-        EzConnectResult connectResult = ezConnectService.getWhatsappLog(request);
+        EzConnectResult connectResult = BeanFacadeUtil
+                .getBean(EzConnectService.class)
+                .getWhatsappLog(request);
 
         AssertUtil.notNull(connectResult, EzErrorCode.SYSTEM_ERROR);
         AssertUtil.isTrue(connectResult.isSuccess(), EzErrorCode.SYSTEM_ERROR);
@@ -330,7 +330,9 @@ public class BizAdminInnerService {
         WhatsappResendRequest resendRequest = new WhatsappResendRequest();
         resendRequest.setOrgId(orgId);
         resendRequest.setMessageId(messageId);
-        return ezConnectService.resendWhatsapp(resendRequest);
+        return BeanFacadeUtil
+                .getBean(EzConnectService.class)
+                .resendWhatsapp(resendRequest);
     }
 
     public void updateVideoCard(VideoCard videoCard) {

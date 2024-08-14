@@ -11,11 +11,11 @@ import javax.persistence.Table;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: EzAuthMemberClientDO.java, v 0.1 2024‐08‐13 11:26 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: DalAuthMemberClientDO.java, v 0.1 2024‐08‐13 11:26 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Entity
 @Table(name = "ez_auth_member_client")
-public class EzAuthMemberClientDO {
+public class DalAuthMemberClientDO {
 
     @Id
     @Column(name = "client_id")
