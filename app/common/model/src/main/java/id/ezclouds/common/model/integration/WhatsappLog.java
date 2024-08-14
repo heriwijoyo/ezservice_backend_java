@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.core.integration.dataservice.model;
+package id.ezclouds.common.model.integration;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)

@@ -9,7 +9,7 @@ import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.integration.dataservice.ConnectDbLoggerService;
-import id.ezclouds.core.integration.dataservice.model.WhatsappLog;
+import id.ezclouds.common.model.integration.WhatsappLog;
 import id.ezclouds.common.model.integration.WhatsappLogRequest;
 import id.ezclouds.common.model.integration.WhatsappResendRequest;
 import id.ezclouds.common.model.integration.WhatsappSendRequest;

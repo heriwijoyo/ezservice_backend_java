@@ -15,7 +15,7 @@ import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
 import id.ezclouds.biz.ezservice.model.profile.CandidateBio;
 import id.ezclouds.biz.ezservice.model.profile.CandidateProfileItem;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.dataobject.BizSubOrganizationDO;
-import id.ezclouds.core.integration.dataservice.model.WhatsappLog;
+import id.ezclouds.common.model.integration.WhatsappLog;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)

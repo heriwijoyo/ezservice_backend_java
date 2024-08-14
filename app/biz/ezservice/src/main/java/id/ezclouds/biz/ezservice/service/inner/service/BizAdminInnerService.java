@@ -37,7 +37,7 @@ import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.service.AppSubOrganizationService;
 import id.ezclouds.common.facade.integration.EzConnectService;
 import id.ezclouds.common.model.constant.OrgConstant;
-import id.ezclouds.core.integration.dataservice.model.WhatsappLog;
+import id.ezclouds.common.model.integration.WhatsappLog;
 import id.ezclouds.common.model.integration.WhatsappLogRequest;
 import id.ezclouds.common.model.integration.WhatsappResendRequest;
 import id.ezclouds.common.model.integration.EzConnectResult;

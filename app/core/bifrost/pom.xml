@@ -54,11 +54,6 @@
         </dependency>
         <dependency>
             <groupId>id.ezclouds.core</groupId>
-            <artifactId>ezclouds-core-integration</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>id.ezclouds.core</groupId>
             <artifactId>ezclouds-core-member</artifactId>
             <version>1.0.0</version>
         </dependency>

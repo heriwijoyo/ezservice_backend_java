@@ -8,7 +8,7 @@ import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.integration.dataservice.dataobject.WatzapLogDO;
-import id.ezclouds.core.integration.dataservice.model.WhatsappLog;
+import id.ezclouds.common.model.integration.WhatsappLog;
 import id.ezclouds.core.integration.dataservice.repo.EzCoreConnectLogsWatzapRepository;
 import id.ezclouds.common.model.integration.WhatsappLogRequest;
 import id.ezclouds.common.model.integration.WhatsappSendRequest;
