@@ -34,7 +34,7 @@ import id.ezclouds.core.auth.request.CoreMemberCommonSessionRequest;
 import id.ezclouds.core.auth.result.CoreCommonSession;
 import id.ezclouds.core.auth.result.CoreAuthResult;
 import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
-import id.ezclouds.core.integration.request.WhatsappSendRequest;
+import id.ezclouds.common.model.integration.WhatsappSendRequest;
 import id.ezclouds.core.integration.service.EzConnectService;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;

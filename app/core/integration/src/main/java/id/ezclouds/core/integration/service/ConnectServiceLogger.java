@@ -7,7 +7,7 @@ package id.ezclouds.core.integration.service;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.exception.ExceptionUtil;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
-import id.ezclouds.core.integration.request.ConnectRequest;
+import id.ezclouds.common.model.integration.ConnectRequest;
 import id.ezclouds.core.integration.result.EzConnectResult;
 import id.ezclouds.common.util.context.EzAppContextHolder;
 import org.slf4j.Logger;

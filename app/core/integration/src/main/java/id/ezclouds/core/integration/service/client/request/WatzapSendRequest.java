@@ -4,7 +4,7 @@
  */
 package id.ezclouds.core.integration.service.client.request;
 
-import id.ezclouds.core.integration.request.ConnectRequest;
+import id.ezclouds.common.model.integration.ConnectRequest;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

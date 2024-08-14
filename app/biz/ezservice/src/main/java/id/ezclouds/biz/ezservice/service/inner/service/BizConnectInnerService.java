@@ -8,7 +8,7 @@ import id.ezclouds.biz.ezservice.constant.BizConstant;
 import id.ezclouds.biz.ezservice.converter.BizMessageTemplateConverter;
 import id.ezclouds.biz.ezservice.enums.BizConnectType;
 import id.ezclouds.biz.ezservice.service.app.AppConfigService;
-import id.ezclouds.core.integration.request.WhatsappSendRequest;
+import id.ezclouds.common.model.integration.WhatsappSendRequest;
 import id.ezclouds.core.integration.service.EzConnectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
