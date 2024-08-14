@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.integration.service;
 
+import id.ezclouds.common.facade.integration.EzConnectService;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
@@ -25,7 +26,7 @@ import org.springframework.stereotype.Service;
  * @version $Id: CoreConnectService.java, v 0.1 2024‐02‐05 1:29 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class CoreConnectService {
+public class CoreConnectService implements EzConnectService {
 
     @Autowired
     private CoreConfigService coreConfigService;
@@ -36,6 +37,7 @@ public class CoreConnectService {
     @Autowired
     private ConnectDbLoggerService connectDbLoggerService;
 
+    @Override
     public EzConnectResult sendWhatsappMessage(WhatsappSendRequest request) {
         final EzConnectResult result = new EzConnectResult();
 
@@ -76,6 +78,7 @@ public class CoreConnectService {
         return result;
     }
 
+    @Override
     public EzConnectResult getWhatsappLog(WhatsappLogRequest request) {
         final EzConnectResult result = new EzConnectResult();
         ConnectServiceTemplate.execute(request, result, new ConnectServiceTemplate.Handler() {
@@ -96,6 +99,7 @@ public class CoreConnectService {
         return result;
     }
 
+    @Override
     public EzConnectResult resendWhatsapp(WhatsappResendRequest request) {
         final EzConnectResult result = new EzConnectResult();
         ConnectServiceTemplate.execute(null, result, new ConnectServiceTemplate.Handler() {
