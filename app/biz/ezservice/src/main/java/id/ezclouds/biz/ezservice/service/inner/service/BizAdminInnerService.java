@@ -515,14 +515,7 @@ public class BizAdminInnerService {
         String newPassword = RandomUtil.generateNumberCode(6);
         coreAuthService.updateMemberClientPassword(bizMemberInfo.getBizMemberClient().getClientId(), newPassword);
 
-        AppConfig appConfig = appConfigService.getAppConfig(orgId);
-        bizConnectInnerService.memberSendPassword(
-                orgId,
-                bizMemberInfo.getBizMember().getPhone(),
-                newPassword,
-                appConfig.getAppName(),
-                appConfig.getAndroidUpdateUrl()
-        );
+        memberSendPassword(orgId, bizMemberInfo.getBizMember().getPhone(), newPassword);
     }
 
     public List<CoreMember> getUniqueMember(String orgId, String phone) {
@@ -573,11 +566,15 @@ public class BizAdminInnerService {
         String newPassword = RandomUtil.generateNumberCode(6);
         coreAuthService.updateMemberClientPassword(bizMemberInfo.getBizMemberClient().getClientId(), newPassword);
 
+        memberSendPassword(orgId, bizMemberInfo.getBizMember().getPhone(), newPassword);
+    }
+
+    public void memberSendPassword(String orgId, String phone, String password) {
         AppConfig appConfig = appConfigService.getAppConfig(orgId);
         bizConnectInnerService.memberSendPassword(
                 orgId,
-                bizMemberInfo.getBizMember().getPhone(),
-                newPassword,
+                phone,
+                password,
                 appConfig.getAppName(),
                 appConfig.getAndroidUpdateUrl()
         );

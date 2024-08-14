@@ -1306,7 +1306,7 @@ public class BizAdminService extends BizBaseService {
                     if (StringUtil.isBlank(memberClient.getLoginPassword())) {
                         String newPassword = authBizMemberService
                                 .resetLoginPassword(memberClient.getClientId());
-
+                        bizAdminInnerService.memberSendPassword(session.getOrgId(), member.getPhone(), newPassword);
                     }
                 }
 
