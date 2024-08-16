@@ -15,8 +15,16 @@ import id.ezclouds.core.dal.biz.dataobject.EzBizCommonTableDO;
 public class BizCommonTableConverter extends CommonDOModelConverter<EzBizCommonTableDO, BizCommonTable> {
 
     @Override
-    protected BizCommonTable safeConvertQuery(EzBizCommonTableDO input) {
-        return null;
+    protected BizCommonTable safeConvertQuery(EzBizCommonTableDO dataObject) {
+        BizCommonTable bizCommonTable = new BizCommonTable();
+        bizCommonTable.setTableId(dataObject.getTableId());
+        bizCommonTable.setOrgId(dataObject.getOrgId());
+        bizCommonTable.setCode(dataObject.getCode());
+        bizCommonTable.setTitle(dataObject.getTitle());
+        bizCommonTable.setColumns(dataObject.getColumns());
+        bizCommonTable.setConfig(dataObject.getConfig());
+        bizCommonTable.setStatus(dataObject.getStatus());
+        return bizCommonTable;
     }
 
     @Override

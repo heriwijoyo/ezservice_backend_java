@@ -21,6 +21,7 @@ import java.util.TimeZone;
 @SpringBootApplication(scanBasePackages = {
         "id.ezclouds.biz.ezservice",
         "id.ezclouds.common.util",
+        "id.ezclouds.core.admin",
         "id.ezclouds.core.auth",
         "id.ezclouds.core.bifrost",
         "id.ezclouds.core.dal",

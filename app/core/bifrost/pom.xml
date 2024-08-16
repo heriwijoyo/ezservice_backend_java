@@ -44,6 +44,11 @@
         </dependency>
         <dependency>
             <groupId>id.ezclouds.core</groupId>
+            <artifactId>ezclouds-core-admin</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>id.ezclouds.core</groupId>
             <artifactId>ezclouds-core-auth</artifactId>
             <version>1.0.0</version>
         </dependency>
