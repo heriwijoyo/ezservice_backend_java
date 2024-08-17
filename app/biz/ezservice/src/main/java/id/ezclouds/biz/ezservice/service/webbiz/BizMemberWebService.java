@@ -8,7 +8,7 @@ import id.ezclouds.biz.ezservice.enums.ImageRestriction;
 import id.ezclouds.biz.ezservice.enums.WebLoadImageScene;
 import id.ezclouds.biz.ezservice.service.app.BizOrganizationService;
 import id.ezclouds.biz.ezservice.service.request.BizImageLoadRequest;
-import id.ezclouds.biz.ezservice.service.result.BizResult;
+import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;

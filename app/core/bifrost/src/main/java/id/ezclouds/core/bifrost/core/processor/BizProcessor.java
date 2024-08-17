@@ -4,7 +4,7 @@
  */
 package id.ezclouds.core.bifrost.core.processor;
 
-import id.ezclouds.biz.ezservice.service.result.BizResult;
+import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiRequest;

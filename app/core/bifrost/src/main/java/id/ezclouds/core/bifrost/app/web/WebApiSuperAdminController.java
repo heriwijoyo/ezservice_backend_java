@@ -15,7 +15,7 @@ import id.ezclouds.biz.ezservice.service.apibiz.admin.BizSuperAdminService;
 import id.ezclouds.biz.ezservice.service.app.model.BizAppConfig;
 import id.ezclouds.biz.ezservice.service.request.BizDataImportRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
-import id.ezclouds.biz.ezservice.service.result.BizResult;
+import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.core.shared.model.CoreArea;
 import id.ezclouds.common.model.result.PageResult;

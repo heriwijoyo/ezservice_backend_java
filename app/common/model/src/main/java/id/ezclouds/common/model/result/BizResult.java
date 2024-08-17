@@ -2,10 +2,9 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2023 All Rights Reserved.
  */
-package id.ezclouds.biz.ezservice.service.result;
+package id.ezclouds.common.model.result;
 
 import id.ezclouds.common.util.exception.EzErrorCode;
-import id.ezclouds.common.model.result.BizPageInfo;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

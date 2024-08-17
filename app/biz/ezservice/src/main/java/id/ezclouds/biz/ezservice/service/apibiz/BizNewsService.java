@@ -12,7 +12,7 @@ import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
 import id.ezclouds.biz.ezservice.service.app.NewsInnerService;
 import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
 import id.ezclouds.common.model.result.BizPageInfo;
-import id.ezclouds.biz.ezservice.service.result.BizResult;
+import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;

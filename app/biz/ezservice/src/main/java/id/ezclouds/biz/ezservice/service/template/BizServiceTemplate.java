@@ -5,7 +5,7 @@
 package id.ezclouds.biz.ezservice.service.template;
 
 import id.ezclouds.biz.ezservice.service.request.BizRequest;
-import id.ezclouds.biz.ezservice.service.result.BizResult;
+import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.util.exception.ExceptionUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;

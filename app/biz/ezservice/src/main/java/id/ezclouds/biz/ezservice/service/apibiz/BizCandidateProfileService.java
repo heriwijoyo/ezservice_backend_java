@@ -16,7 +16,7 @@ import id.ezclouds.biz.ezservice.service.app.AppImageGalleryService;
 import id.ezclouds.biz.ezservice.service.app.CandidateBioService;
 import id.ezclouds.biz.ezservice.service.app.CandidateProfileItemService;
 import id.ezclouds.biz.ezservice.service.app.model.AppImageGallery;
-import id.ezclouds.biz.ezservice.service.result.BizResult;
+import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;

@@ -22,7 +22,7 @@ import id.ezclouds.biz.ezservice.service.result.BizMemberLoginResult;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.service.app.BizOrganizationService;
 import id.ezclouds.biz.ezservice.service.request.BizMemberLoginRequest;
-import id.ezclouds.biz.ezservice.service.result.BizResult;
+import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.common.facade.integration.EzConnectService;
 import id.ezclouds.common.util.StringUtil;

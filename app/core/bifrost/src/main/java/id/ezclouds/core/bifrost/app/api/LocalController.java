@@ -5,7 +5,7 @@
 package id.ezclouds.core.bifrost.app.api;
 
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizSuperAdminService;
-import id.ezclouds.biz.ezservice.service.result.BizResult;
+import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.facade.dal.EzSampleDAO;
 import id.ezclouds.common.facade.process.SchedulerProcessor;
 import id.ezclouds.common.model.result.BaseResult;

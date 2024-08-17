@@ -7,7 +7,7 @@ package id.ezclouds.core.bifrost.app.api;
 import id.ezclouds.biz.ezservice.service.apibiz.BizAppDocumentService;
 import id.ezclouds.biz.ezservice.service.apibiz.BizMemberService;
 import id.ezclouds.biz.ezservice.service.apibiz.BizSubOrganizationService;
-import id.ezclouds.biz.ezservice.service.result.BizResult;
+import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiPageRequest;
 import id.ezclouds.core.bifrost.core.converter.BizRequestConverter;

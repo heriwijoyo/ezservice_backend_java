@@ -4,7 +4,7 @@
  */
 package id.ezclouds.core.bifrost.app.web;
 
-import id.ezclouds.biz.ezservice.service.result.BizResult;
+import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.facade.admin.BizAdminConfigService;
 import id.ezclouds.common.model.request.admin.CommonTableCreateRequest;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
