@@ -16,7 +16,7 @@ import id.ezclouds.common.model.integration.WhatsappSendRequest;
 import id.ezclouds.common.model.integration.EzConnectResult;
 import id.ezclouds.core.integration.service.client.service.WatzapClientService;
 import id.ezclouds.core.integration.service.client.request.WatzapSendRequest;
-import id.ezclouds.core.shared.result.BizPageInfo;
+import id.ezclouds.common.model.result.BizPageInfo;
 import id.ezclouds.core.shared.service.CoreConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -7,7 +7,7 @@ package id.ezclouds.core.admin.service;
 import id.ezclouds.common.facade.admin.BizAdminConfigService;
 import id.ezclouds.common.facade.dal.admin.BizCommonTableDAO;
 import id.ezclouds.common.model.biz.BizCommonTable;
-import id.ezclouds.common.model.request.admin.CreateCommonTableRequest;
+import id.ezclouds.common.model.request.admin.CommonTableCreateRequest;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class CoreAdminConfigService implements BizAdminConfigService {
     private BizCommonTableDAO bizCommonTableDAO;
 
     @Override
-    public BizCommonTable createBizCommonTable(CreateCommonTableRequest request) {
+    public BizCommonTable createBizCommonTable(CommonTableCreateRequest request) {
         String currentTime = DateUtil.getCurrentFormattedDate();
         BizCommonTable bizCommonTable = new BizCommonTable();
         bizCommonTable.setTableId(HashUtil.createHash(request.getOrgId(), request.getCode(), currentTime));

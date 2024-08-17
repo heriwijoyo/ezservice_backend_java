@@ -74,6 +74,8 @@ public enum WebEvent implements EzAppEvent {
     WEB_API_MEMBER_REQUIRED_DATA("WEB_API_MEMBER_REQUIRED_DATA"),
     WEB_API_CORE_AREA("WEB_API_CORE_AREA"),
 
+    WEB_API_BIZ_COMMON_TABLE_CREATE("WEB_API_BIZ_COMMON_TABLE_CREATE"),
+
     ;
 
     private final String code;

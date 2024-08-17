@@ -10,7 +10,7 @@ import id.ezclouds.biz.ezservice.service.app.converter.AppModelConverter;
 import id.ezclouds.biz.ezservice.service.app.dataobject.AppMessageMemberDO;
 import id.ezclouds.biz.ezservice.service.app.repo.AppMessageMemberRepository;
 import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
-import id.ezclouds.core.shared.result.BizPageInfo;
+import id.ezclouds.common.model.result.BizPageInfo;
 import id.ezclouds.biz.ezservice.util.PageRequestUtil;
 import id.ezclouds.core.shared.util.PageResultUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;

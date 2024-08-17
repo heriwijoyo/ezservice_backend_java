@@ -6,9 +6,10 @@ package id.ezclouds.common.model.request.admin;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: CreateCommonTableRequest.java, v 0.1 2024‐08‐16 12:56 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: CommonTableCreateRequest.java, v 0.1 2024‐08‐16 12:56 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class CreateCommonTableRequest {
+public class
+CommonTableCreateRequest {
 
     private String orgId;
     private String code;

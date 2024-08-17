@@ -16,22 +16,19 @@
 INCLUDE_SMART_FORM_CLIENT
 <script type="text/javascript">
     var EzAdminUrl = {
-        COMMON_TABLE_CREATE: 'api/commonTableCreate.json'
+        COMMON_TABLE_CREATE: 'api/biz/commonTableCreate.json'
     };
     var EzDashboardBizService = {
         start: function() {
             EzSmartFormClientStarter.start();
-            //EzDashboardBizService.fetchData();
-        },
-        fetchData: function() {
-             EzWebAppClient.callApiService(EzAdminUrl.GET_MEMBER_REQUIRED_DATA, {});
         },
         submitCommonTable: function() {
             EzWebAppClient.callApiService(EzAdminUrl.COMMON_TABLE_CREATE, {
-                orgId : orgId,
-                referrerId: $('#referrer_id').val(),
-                subOrgId: $('#sub_org_id').val(),
-                tpsNo: $('#tpsNo').val()
+                orgId : $('#selectOrgId').val(),
+                code: $('#tableCode').val(),
+                title: $('#tableTitle').val(),
+                column: $('#tableColumn').val(),
+                config: $('#tableConfig').val()
             });
         },
         handleApiBizResult: function(url, response) {
@@ -68,6 +65,10 @@ INCLUDE_SMART_FORM_CLIENT
             EzDashboardBizService.next();
         });
         EzWebAppClient.start();
+
+        $('#formSubmitBtn').click(function(){
+            EzDashboardBizService.submitCommonTable();
+        });
     });
 </script>
 </body>

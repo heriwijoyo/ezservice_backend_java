@@ -43,7 +43,7 @@ import id.ezclouds.common.model.integration.WhatsappResendRequest;
 import id.ezclouds.common.model.integration.EzConnectResult;
 import id.ezclouds.common.util.facade.BeanFacadeUtil;
 import id.ezclouds.core.shared.model.CoreArea;
-import id.ezclouds.core.shared.result.BizPageInfo;
+import id.ezclouds.common.model.result.BizPageInfo;
 import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;

@@ -5,7 +5,7 @@
 package id.ezclouds.biz.ezservice.service.result;
 
 import id.ezclouds.common.util.exception.EzErrorCode;
-import id.ezclouds.core.shared.result.BizPageInfo;
+import id.ezclouds.common.model.result.BizPageInfo;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

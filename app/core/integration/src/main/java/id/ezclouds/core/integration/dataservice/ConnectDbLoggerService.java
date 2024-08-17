@@ -14,7 +14,7 @@ import id.ezclouds.common.model.integration.WhatsappLogRequest;
 import id.ezclouds.common.model.integration.WhatsappSendRequest;
 import id.ezclouds.core.integration.service.client.request.WatzapSendRequest;
 import id.ezclouds.core.integration.service.client.response.WatzapResponse;
-import id.ezclouds.core.shared.result.BizPageInfo;
+import id.ezclouds.common.model.result.BizPageInfo;
 import id.ezclouds.core.shared.util.PageResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

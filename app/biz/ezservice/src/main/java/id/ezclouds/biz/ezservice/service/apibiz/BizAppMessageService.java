@@ -9,7 +9,7 @@ import id.ezclouds.biz.ezservice.model.app.SimpleAppMessage;
 import id.ezclouds.biz.ezservice.service.app.AppMessageService;
 import id.ezclouds.biz.ezservice.service.request.BizDetailRequest;
 import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
-import id.ezclouds.core.shared.result.BizPageInfo;
+import id.ezclouds.common.model.result.BizPageInfo;
 import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
 import id.ezclouds.common.util.assertion.AssertUtil;

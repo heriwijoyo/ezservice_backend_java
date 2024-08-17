@@ -17,7 +17,7 @@ import id.ezclouds.biz.ezservice.service.inner.converter.BizMemberRequestConvert
 import id.ezclouds.biz.ezservice.service.request.BizMemberRegisterRequest;
 import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
 import id.ezclouds.common.util.RandomUtil;
-import id.ezclouds.core.shared.result.BizPageInfo;
+import id.ezclouds.common.model.result.BizPageInfo;
 import id.ezclouds.biz.ezservice.util.PageRequestUtil;
 import id.ezclouds.common.util.ShardUtil;
 import id.ezclouds.common.util.StringUtil;
