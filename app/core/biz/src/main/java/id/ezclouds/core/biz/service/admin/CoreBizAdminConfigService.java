@@ -4,8 +4,12 @@
  */
 package id.ezclouds.core.biz.service.admin;
 
+import id.ezclouds.common.facade.admin.AdminConfigService;
+import id.ezclouds.common.facade.auth.AuthAdminService;
 import id.ezclouds.common.facade.biz.admin.BizAdminConfigService;
 import id.ezclouds.common.facade.template.BizServiceTemplate;
+import id.ezclouds.common.model.auth.AuthAdminSession;
+import id.ezclouds.common.model.auth.AuthRole;
 import id.ezclouds.common.model.biz.BizCommonTable;
 import id.ezclouds.common.model.message.CommonMessageConstant;
 import id.ezclouds.common.model.request.admin.CommonTableCreateRequest;
@@ -16,15 +20,21 @@ import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.BizErrorMessageHelper;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: CoreAdminConfigService.java, v 0.1 2024‐08‐17 1:37 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: CoreBizAdminConfigService.java, v 0.1 2024‐08‐17 1:37 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class CoreAdminConfigService implements BizAdminConfigService {
+public class CoreBizAdminConfigService implements BizAdminConfigService {
 
+    @Autowired
+    private AuthAdminService authAdminService;
+
+    @Autowired
+    private AdminConfigService adminConfigService;
 
     @Override
     public BizResult createBizCommonTable(CommonTableCreateRequest request) {
@@ -33,10 +43,15 @@ public class CoreAdminConfigService implements BizAdminConfigService {
             @Override
             public void onRequestCheck() throws EzErrorException {
                 AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
             }
 
             @Override
             public void onBizProcess() throws Exception {
+                AuthAdminSession session = authAdminService
+                        .authenticateAdminSession(request.getSessionId());
+                authAdminService.authorizeSessionForRole(session, AuthRole.SUPERUSER);
+
                 String currentTime = DateUtil.getCurrentFormattedDate();
                 BizCommonTable bizCommonTable = new BizCommonTable();
                 bizCommonTable.setTableId(HashUtil.createHash(request.getOrgId(), request.getCode(), currentTime));
@@ -47,7 +62,7 @@ public class CoreAdminConfigService implements BizAdminConfigService {
                 bizCommonTable.setConfig(request.getConfig());
                 bizCommonTable.setCreatedTime(currentTime);
                 bizCommonTable.setStatus(1);
-                //adminConfigInnerService.createBizCommonTable(bizCommonTable);
+                adminConfigService.createBizCommonTable(bizCommonTable);
 
                 bizResult.setSuccess(true);
                 bizResult.setObject(CommonMessageConstant.BIZ_OPERATION_SUCCESS);
