@@ -4,6 +4,8 @@
  */
 package id.ezclouds.biz.ezservice.service.request;
 
+import id.ezclouds.common.model.request.BizRequest;
+
 import java.util.List;
 
 /**

@@ -10,7 +10,7 @@ import id.ezclouds.biz.ezservice.service.app.AppSurveyDataService;
 import id.ezclouds.biz.ezservice.service.app.request.AppSurveyResponseRequest;
 import id.ezclouds.biz.ezservice.service.request.BizSurveySubmitRequest;
 import id.ezclouds.common.model.result.BizResult;
-import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
+import id.ezclouds.common.facade.template.BizServiceTemplate;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;

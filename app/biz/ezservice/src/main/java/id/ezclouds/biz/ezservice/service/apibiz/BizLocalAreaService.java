@@ -6,7 +6,7 @@ package id.ezclouds.biz.ezservice.service.apibiz;
 
 import id.ezclouds.biz.ezservice.service.request.BizLocalAreaRequest;
 import id.ezclouds.common.model.result.BizResult;
-import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
+import id.ezclouds.common.facade.template.BizServiceTemplate;
 import id.ezclouds.common.util.CollectionUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;

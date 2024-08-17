@@ -50,7 +50,7 @@ import id.ezclouds.common.model.result.BaseResult;
 import id.ezclouds.common.util.facade.BeanFacadeUtil;
 import id.ezclouds.common.model.integration.EzConnectResult;
 import id.ezclouds.common.model.result.PageResult;
-import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
+import id.ezclouds.common.facade.template.BizServiceTemplate;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;

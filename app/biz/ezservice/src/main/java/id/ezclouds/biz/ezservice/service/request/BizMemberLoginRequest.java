@@ -4,6 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.service.request;
 
+import id.ezclouds.common.model.request.BizRequest;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

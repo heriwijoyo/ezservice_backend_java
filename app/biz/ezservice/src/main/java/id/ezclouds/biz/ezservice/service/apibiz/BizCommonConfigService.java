@@ -15,7 +15,7 @@ import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
 import id.ezclouds.biz.ezservice.service.app.*;
 import id.ezclouds.biz.ezservice.service.app.model.AppImageGallery;
 import id.ezclouds.common.model.result.BizResult;
-import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
+import id.ezclouds.common.facade.template.BizServiceTemplate;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;

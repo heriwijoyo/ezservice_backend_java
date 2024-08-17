@@ -5,6 +5,7 @@
 package id.ezclouds.biz.ezservice.service.request;
 
 import id.ezclouds.biz.ezservice.enums.WebLoadImageScene;
+import id.ezclouds.common.model.request.BizRequest;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)

@@ -4,7 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.service.app.request;
 
-import id.ezclouds.biz.ezservice.service.request.BizRequest;
+import id.ezclouds.common.model.request.BizRequest;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
