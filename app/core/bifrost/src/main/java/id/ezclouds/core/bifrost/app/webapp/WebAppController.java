@@ -21,6 +21,7 @@ import id.ezclouds.core.bifrost.app.api.digestlog.EmptyDigestLog;
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;
 import id.ezclouds.core.bifrost.core.SpringContextConfig;
 import id.ezclouds.common.util.context.EzAppContextHolder;
+import id.ezclouds.core.bifrost.core.util.WebComponentRenderer;
 import id.ezclouds.core.shared.util.DigestLogUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -482,6 +483,10 @@ public class WebAppController {
             String headerContent = readHtmlContent(ASSET_INCLUDE_HEADER);
             String navigationContent = readHtmlContent(ASSET_INCLUDE_NAVIGATION);
             String pageContent = readHtmlContent(webAppPage.getAssetFile());
+            String searchComponent = WebComponentRenderer.getListSearchComponent(webAppPage);
+            if (StringUtil.isNotBlank(searchComponent)) {
+                pageContent = pageContent.replace("INCLUDE_SEARCH_COMPONENT", searchComponent);
+            }
 
             String htmlContent = layoutContent
                     .replace("INCLUDE_HEADER", headerContent)

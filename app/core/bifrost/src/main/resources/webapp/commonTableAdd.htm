@@ -1,0 +1,324 @@
+<section class="content">
+    <ol class="breadcrumb">
+        <li><a href="home.htm">Dashboard</a></li>
+        <li><a href="organization.htm">Manage Organization</a></li>
+        <li class="active">Add Member</li>
+    </ol>
+
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                <div class="card corner-radius">
+                    <div class="header">
+                        <h2>ADD NEW MEMBER</h2>
+                    </div>
+                    <div class="body">
+                        <div class="row clearfix">
+
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Sub Organization</div>
+                                    <select class="form-control show-tick" id="sub_org_id">
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Select Roles</div>
+                                    <div class="roles form-line">
+                                        <input type="checkbox" id="recruiter" value="OP_RECRUITER">
+                                        <label for="recruiter"> RECRUITER</label>
+                                    </div>
+                                    <div class="roles form-line">
+                                        <input type="checkbox" id="surveyor" value="OP_SURVEYOR">
+                                        <label for="surveyor"> SURVEYOR</label>
+                                    </div>
+                                    <div class="roles form-line">
+                                        <input type="checkbox" id="voteGuardian" value="OP_VOTE_GUARDIAN">
+                                        <label for="voteGuardian"> JAGA SUARA</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Name</div>
+                                    <input type="text" class="form-control" id="name" placeholder="Name">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Gender</div>
+                                    <select class="form-control show-tick" id="gender">
+                                        <option value="MALE">MALE</option>
+                                        <option value="FEMALE">FEMALE</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Date of Birth</div>
+                                    <input type="text" class="form-control" id="dateOfBirth" placeholder="Date of Birth">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Phone</div>
+                                    <input type="text" class="form-control" id="phone" placeholder="Phone">
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Education</div>
+                                    <select class="form-control show-tick" id="education">
+                                        <option value="SD">SD</option>
+                                        <option value="SMP">SMP</option>
+                                        <option value="SMA">SMA</option>
+                                        <option value="D3">D3</option>
+                                        <option value="S1">S1</option>
+                                        <option value="LAINNYA">LAINNYA</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Occupation</div>
+                                    <input type="text" class="form-control" id="occupation" placeholder="Occupation">
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Religion</div>
+                                    <select class="form-control show-tick" id="religion">
+                                        <option value="ISLAM">ISLAM</option>
+                                        <option value="LAINNYA">LAINNYA</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Ethnic</div>
+                                    <select class="form-control show-tick" id="ethnic">
+                                        <option value="JAWA">JAWA</option>
+                                        <option value="LAMPUNG">LAMPUNG</option>
+                                        <option value="SUNDA">SUNDA</option>
+                                        <option value="JASENG">JASENG</option>
+                                        <option value="SEMENDO">SEMENDO</option>
+                                        <option value="LAINNYA">LAINNYA</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">No KTP</div>
+                                    <input type="text" class="form-control" id="idCardNumber" placeholder="No KTP">
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">District</div>
+                                    <select class="form-control show-tick" id="districtId">
+                                        <option value="1802010">WONOSOBO</option>
+                                        <option value="1802011">SEMAKA</option>
+                                        <option value="1802012">BANDAR NEGERI SEMUONG</option>
+                                        <option value="1802020">KOTA AGUNG</option>
+                                        <option value="1802021">PEMATANG SAWA</option>
+                                        <option value="1802022">KOTA AGUNG TIMUR</option>
+                                        <option value="1802023">KOTA AGUNG BARAT</option>
+                                        <option value="1802030">PULAU PANGGUNG</option>
+                                        <option value="1802031">ULUBELU</option>
+                                        <option value="1802032">AIR NANINGAN</option>
+                                        <option value="1802040">TALANG PADANG</option>
+                                        <option value="1802041">SUMBEREJO</option>
+                                        <option value="1802042">GISTING</option>
+                                        <option value="1802043">GUNUNG ALIP</option>
+                                        <option value="1802050">PUGUNG</option>
+                                        <option value="1802101">BULOK</option>
+                                        <option value="1802110">CUKUH BALAK</option>
+                                        <option value="1802111">KELUMBAYAN</option>
+                                        <option value="1802112">LIMAU</option>
+                                        <option value="1802113">KELUMBAYAN BARAT</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Village</div>
+                                    <select class="form-control show-tick" id="villageId">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">RW</div>
+                                    <input type="text" class="form-control" id="rukunWarga" placeholder="RW">
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">RT</div>
+                                    <input type="text" class="form-control" id="rukunTetangga" placeholder="RT">
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">No TPS</div>
+                                    <input type="text" class="form-control" id="tpsNo" placeholder="No TPS">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <img id="btnLoader" src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right">
+                                <button id="btnSubmit" class="button button-rounded waves-effect waves-float pull-right" type="submit">SUBMIT</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<script type="text/javascript">
+    var EzAdminUrl = {
+        GET_MEMBER_REQUIRED_DATA: 'api/memberAddRequiredData.json',
+        GET_CORE_AREA: 'api/adminCoreArea.json',
+        REGISTER_MEMBER: 'api/memberAdd.json'
+    };
+    var EzDashboardBizService = {
+        start: function() {
+            EzDashboardBizService.fetchData();
+            EzDashboardBizService.fetchCoreArea('VILLAGE', $('#districtId').val());
+        },
+        fetchData: function() {
+             EzWebAppClient.callApiService(EzAdminUrl.GET_MEMBER_REQUIRED_DATA, {});
+        },
+        fetchCoreArea: function(level, parentId) {
+            EzWebAppClient.callApiService(EzAdminUrl.GET_CORE_AREA, {
+                level : level,
+                parentId : parentId
+            });
+        },
+        submitMember: function() {
+            EzDashboardBizService.showLoader();
+            let orgId = EzWebAppClient.getUrlParameter('id');
+            EzWebAppClient.callApiService(EzAdminUrl.REGISTER_MEMBER, {
+                orgId : orgId,
+                referrerId: $('#referrer_id').val(),
+                subOrgId: $('#sub_org_id').val(),
+                roles: EzDashboardBizService.parseRoles(),
+                name: $('#name').val(),
+                gender: $('#gender').val(),
+                dateOfBirth: $('#dateOfBirth').val(),
+                phone: $('#phone').val(),
+                education: $('#education').val(),
+                occupation: $('#occupation').val(),
+                religion: $('#religion').val(),
+                ethnic: $('#ethnic').val(),
+                idCardNumber: $('#idCardNumber').val(),
+                districtId: $('#districtId').val(),
+                villageId: $('#villageId').val(),
+                rukunWarga: $('#rukunWarga').val(),
+                rukunTetangga: $('#rukunTetangga').val(),
+                tpsNo: $('#tpsNo').val()
+            });
+        },
+        handleApiBizResult: function(url, response) {
+            if (url === EzAdminUrl.GET_MEMBER_REQUIRED_DATA) {
+                EzDashboardBizService.parseData(response.data);
+            }
+            if (url === EzAdminUrl.GET_CORE_AREA) {
+                EzDashboardBizService.parseVillage(response.data);
+            }
+            if (url === EzAdminUrl.REGISTER_MEMBER) {
+                alert(response.data);
+                EzDashboardBizService.hideLoader();
+            }
+        },
+        handleApiBizFailed: function(url, message) {
+            if (url === EzAdminUrl.GET_ORGANIZATION_DETAIL) {
+                EzDashboardBizService.alertInvalidOrg();
+            }
+            if (url === EzAdminUrl.REGISTER_MEMBER) {
+                alert(message);
+                EzDashboardBizService.hideLoader();
+                window.location.replace('members.htm');
+            }
+        },
+        parseRoles: function() {
+            var roles = [];
+            $('.roles input:checked').each(function(){
+                roles.push(this.value);
+            });
+            return roles.join(',');
+        },
+        parseData: function(data) {
+            var memberOption = '';
+            for(i = 0; i < data.adminMembers.length; i++) {
+                memberOption += '<option value="'+ data.adminMembers[i].memberId +'">'+ data.adminMembers[i].name +'</option>';
+            }
+            $('#referrer_id').html(memberOption);
+            var subOrgOption = '';
+            for(i = 0; i < data.bizSubOrganizations.length; i++) {
+                subOrgOption += '<option value="'+ data.bizSubOrganizations[i].subOrgId +'">'+ data.bizSubOrganizations[i].name +'</option>';
+            }
+            $('#sub_org_id').html(subOrgOption);
+        },
+        parseVillage: function(data) {
+            var villageOption = '';
+            for(i = 0; i < data.length; i++) {
+                villageOption += '<option value="'+ data[i].id +'">'+ data[i].name +'</option>';
+            }
+            $('#villageId').html(villageOption);
+        },
+        showLoader: function() {
+            $('#btnLoader').show();
+            $('#btnSubmit').hide();
+        },
+        hideLoader: function() {
+            $('#btnLoader').hide();
+            $('#btnSubmit').show();
+        }
+    };
+
+    $(document).ready(function(){
+        EzWebAppClient.onApiBizSuccess(function(url, response){
+            EzDashboardBizService.handleApiBizResult(url, response);
+        });
+        EzWebAppClient.onApiBizFailed(function(url, message){
+            console.log(url +' --- '+ message);
+            EzDashboardBizService.handleApiBizFailed(url, message);
+        });
+        EzWebAppClient.onApiCallError(function(xhr){
+            console.log(xhr);
+        });
+        EzWebAppClient.onReady(function(){
+            EzDashboardBizService.start();
+        });
+        EzWebAppClient.onPrev(function(){
+            EzDashboardBizService.prev();
+        });
+        EzWebAppClient.onNext(function(){
+            EzDashboardBizService.next();
+        });
+        EzWebAppClient.start();
+
+        $('#districtId').change(function(){
+            EzDashboardBizService.fetchCoreArea('VILLAGE', $('#districtId').val());
+        });
+        $('#btnSubmit').click(function(){
+            EzDashboardBizService.submitMember();
+        });
+
+    });
+
+</script>
+</body>
+
+</html>
