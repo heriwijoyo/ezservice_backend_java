@@ -2,9 +2,9 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.core.admin.service;
+package id.ezclouds.core.biz.service.admin;
 
-import id.ezclouds.common.facade.admin.BizAdminConfigService;
+import id.ezclouds.common.facade.biz.admin.BizAdminConfigService;
 import id.ezclouds.common.facade.template.BizServiceTemplate;
 import id.ezclouds.common.model.biz.BizCommonTable;
 import id.ezclouds.common.model.message.CommonMessageConstant;
@@ -16,11 +16,7 @@ import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.BizErrorMessageHelper;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
-import id.ezclouds.core.admin.service.innerService.AdminConfigInnerService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -29,11 +25,8 @@ import javax.transaction.Transactional;
 @Service
 public class CoreAdminConfigService implements BizAdminConfigService {
 
-    @Autowired
-    private AdminConfigInnerService adminConfigInnerService;
 
     @Override
-    @Transactional
     public BizResult createBizCommonTable(CommonTableCreateRequest request) {
         final BizResult bizResult = new BizResult();
         BizServiceTemplate.execute(request, bizResult, new BizServiceTemplate.Handler() {
@@ -54,7 +47,7 @@ public class CoreAdminConfigService implements BizAdminConfigService {
                 bizCommonTable.setConfig(request.getConfig());
                 bizCommonTable.setCreatedTime(currentTime);
                 bizCommonTable.setStatus(1);
-                adminConfigInnerService.createBizCommonTable(bizCommonTable);
+                //adminConfigInnerService.createBizCommonTable(bizCommonTable);
 
                 bizResult.setSuccess(true);
                 bizResult.setObject(CommonMessageConstant.BIZ_OPERATION_SUCCESS);
@@ -80,12 +73,12 @@ public class CoreAdminConfigService implements BizAdminConfigService {
 
             @Override
             public void onBizProcess() throws Exception {
-                BizCommonTable commonTable = adminConfigInnerService
-                        .getByCode(orgId, code);
-                AssertUtil.notNull(commonTable, EzErrorCode.DATA_NOT_FOUND);
+//                BizCommonTable commonTable = adminConfigInnerService
+//                        .getByCode(orgId, code);
+//                AssertUtil.notNull(commonTable, EzErrorCode.DATA_NOT_FOUND);
 
                 bizResult.setSuccess(true);
-                bizResult.setObject(commonTable);
+                bizResult.setObject(null);
             }
 
             @Override
