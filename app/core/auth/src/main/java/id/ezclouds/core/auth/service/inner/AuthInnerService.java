@@ -23,10 +23,10 @@ import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: InnerAuthService.java, v 0.1 2024‐02‐10 5:10 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: AuthInnerService.java, v 0.1 2024‐02‐10 5:10 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class InnerAuthService {
+public class AuthInnerService {
 
     @Autowired
     private EzAuthAdminCommonSessionRepository ezAuthAdminCommonSessionRepository;
@@ -84,7 +84,7 @@ public class InnerAuthService {
         return sessionDO.getSessionId();
     }
 
-    public EzAuthAdminCommonSessionDO authWebSessionId(String sessionId) {
+    public EzAuthAdminCommonSessionDO authGetAndTouch(String sessionId) {
         EzAuthAdminCommonSessionDO sessionDO = ezAuthAdminCommonSessionRepository
                 .findById(sessionId)
                 .orElse(null);
