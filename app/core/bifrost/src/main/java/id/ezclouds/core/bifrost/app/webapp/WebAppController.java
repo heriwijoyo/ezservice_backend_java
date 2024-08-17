@@ -21,7 +21,7 @@ import id.ezclouds.core.bifrost.app.api.digestlog.EmptyDigestLog;
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;
 import id.ezclouds.core.bifrost.core.SpringContextConfig;
 import id.ezclouds.common.util.context.EzAppContextHolder;
-import id.ezclouds.core.bifrost.core.util.WebComponentRenderer;
+import id.ezclouds.core.bifrost.core.component.WebComponentRenderer;
 import id.ezclouds.core.shared.util.DigestLogUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
