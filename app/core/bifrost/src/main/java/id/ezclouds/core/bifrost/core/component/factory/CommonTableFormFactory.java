@@ -33,13 +33,33 @@ public class CommonTableFormFactory extends CommonWebAppFormFactory {
         selectOrgField.setLabel("Select Organization");
         selectOrgField.setFieldType(WebFormFieldType.SELECT);
         selectOrgField.setOptionDSType(WebFormOptionDSType.REMOTE);
-        selectOrgField.setOptionDSRemoteUrl("organizations.json");
+        selectOrgField.setOptionDSRemoteUrl("option/organizations.json");
+        fields.add(selectOrgField);
 
         WebFormField inputCodeField = new WebFormField();
         inputCodeField.setFieldId("tableCode");
         inputCodeField.setFieldType(WebFormFieldType.INPUT_TEXT);
         inputCodeField.setLabel("Table Code");
         fields.add(inputCodeField);
+
+        WebFormField inputTitleField = new WebFormField();
+        inputTitleField.setFieldId("tableTitle");
+        inputTitleField.setFieldType(WebFormFieldType.INPUT_TEXT);
+        inputTitleField.setLabel("Table Title");
+        fields.add(inputTitleField);
+
+        WebFormField textAreaColumnField = new WebFormField();
+        textAreaColumnField.setFieldId("tableTitle");
+        textAreaColumnField.setFieldType(WebFormFieldType.TEXT_AREA);
+        textAreaColumnField.setLabel("Table Columns");
+        fields.add(textAreaColumnField);
+
+
+        WebFormField textAreaConfigField = new WebFormField();
+        textAreaConfigField.setFieldId("tableTitle");
+        textAreaConfigField.setFieldType(WebFormFieldType.TEXT_AREA);
+        textAreaConfigField.setLabel("Table Config");
+        fields.add(textAreaConfigField);
 
         return fields;
     }
