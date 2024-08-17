@@ -56,7 +56,7 @@ import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
-import id.ezclouds.core.auth.model.CoreAuthAdminSession;
+import id.ezclouds.common.model.auth.AuthAdminSession;
 import id.ezclouds.core.auth.request.CoreAdminCommonSessionCreateRequest;
 import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
 import id.ezclouds.core.member.model.CoreMember;
@@ -132,7 +132,7 @@ public class BizAdminService extends BizBaseService {
                 createRequest.setMemberId(sessionInfo.getMemberId());
                 createRequest.setMemberRoles(sessionInfo.getMemberRoles());
 
-                CoreAuthAdminSession adminSession = coreAuthService.adminCreateSession(createRequest);
+                AuthAdminSession adminSession = coreAuthService.adminCreateSession(createRequest);
                 BizAdminSession bizAdminSession = BizAdminConverter.convert(adminSession);
 
                 bizResult.setObject(bizAdminSession);
@@ -247,7 +247,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(sessionId);
+                AuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(sessionId);
                 authorizeSuperUserOrAdminMember(adminSession.getMemberRoles());
                 CoreOrganization organization = bizOrganizationService.getOrganizationById(adminSession.getOrgId());
 
@@ -334,7 +334,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession session = authorizedAdminSession(sessionId);
+                AuthAdminSession session = authorizedAdminSession(sessionId);
                 List<CoreAdminDashboard> dashboards =  coreAdminService.getAdminDashboardAllActive(session.getOrgId());
 
                 List<BizDashboardData> bizDashboard = dashboards
@@ -376,7 +376,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(request.getSessionId());
+                AuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(request.getSessionId());
                 authorizeAdminMember(adminSession.getMemberRoles());
 
                 if (StringUtil.isBlank(request.getSortBy())) {
@@ -424,7 +424,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession adminSession = authorizedAdminSession(request.getSessionId());
+                AuthAdminSession adminSession = authorizedAdminSession(request.getSessionId());
 
                 String result = bizAdminInnerService.updateImageGallery(
                         adminSession.getOrgId(),
@@ -457,7 +457,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                AuthAdminSession session = authorizedAdminSession(request.getSessionId());
                 BizPublicUrlResolver urlResolver = new BizPublicUrlResolverImpl(appRootPublicUrl, session.getOrgCode());
                 PageResult<BizWebSimpleNews> newsResult = bizAdminInnerService.getSimpleNews(
                         session.getOrgId(),
@@ -492,7 +492,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                AuthAdminSession session = authorizedAdminSession(request.getSessionId());
                 BizWebDetailNews detailNews = bizAdminInnerService.getNewsDetail(session.getOrgId(), request.getObject());
                 BizPublicUrlResolver urlResolver = new BizPublicUrlResolverImpl(appRootPublicUrl, session.getOrgCode());
                 BizAnnotationProcessor.annotatePublicConfig(detailNews, urlResolver);
@@ -523,7 +523,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                AuthAdminSession session = authorizedAdminSession(request.getSessionId());
                 bizAdminInnerService.newsFlagSwitch(
                         session.getOrgId(),
                         request.getItemId(),
@@ -553,7 +553,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                AuthAdminSession session = authorizedAdminSession(request.getSessionId());
                 BizPublicUrlResolver urlResolver = new BizPublicUrlResolverImpl(appRootPublicUrl, session.getOrgCode());
                 PageResult<AppEvent> eventsResult = bizAdminInnerService.getEvents(
                         session.getOrgId(),
@@ -588,7 +588,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                AuthAdminSession session = authorizedAdminSession(request.getSessionId());
                 AppEvent appEvent = bizAdminInnerService.getEventDetail(session.getOrgId(), request.getObject());
                 BizPublicUrlResolver urlResolver = new BizPublicUrlResolverImpl(appRootPublicUrl, session.getOrgCode());
                 BizAnnotationProcessor.annotatePublicConfig(appEvent, urlResolver);
@@ -619,7 +619,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                AuthAdminSession session = authorizedAdminSession(request.getSessionId());
                 bizAdminInnerService.eventFlagSwitch(
                         session.getOrgId(),
                         request.getItemId(),
@@ -648,7 +648,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                AuthAdminSession session = authorizedAdminSession(request.getSessionId());
                 BizPublicUrlResolver urlResolver = new BizPublicUrlResolverImpl(appRootPublicUrl, session.getOrgCode());
                 PageResult<VideoCard> vCardResult = bizAdminInnerService.getVideoCards(
                         session.getOrgId(),
@@ -687,7 +687,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                AuthAdminSession session = authorizedAdminSession(request.getSessionId());
                 authorizeAdminMember(session.getMemberRoles());
                 request.getObject().setOrgId(session.getOrgId());
                 bizAdminInnerService.updateVideoCard(request.getObject());
@@ -714,7 +714,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                AuthAdminSession session = authorizedAdminSession(request.getSessionId());
                 PageResult<BizWhatsappLog> pageResult = bizAdminInnerService.getWhatsappLog(
                         session.getOrgId(),
                         request.getKeyword(),
@@ -748,7 +748,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                AuthAdminSession session = authorizedAdminSession(request.getSessionId());
                 if (StringUtil.isBlank(request.getOrgId())) {
                     request.setOrgId(session.getOrgId());
                 }
@@ -779,7 +779,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                AuthAdminSession session = authorizedAdminSession(request.getSessionId());
                 BizPublicUrlResolver urlResolver = new BizPublicUrlResolverImpl(appRootPublicUrl, session.getOrgCode());
                 PageResult<AppDocument> appDocsResult = bizAdminInnerService.getAppDocuments(
                         session.getOrgId(),
@@ -826,7 +826,7 @@ public class BizAdminService extends BizBaseService {
                     return;
                 }
 
-                CoreAuthAdminSession session = coreAuthService.adminAuthWebSessionId(request.getSessionId());
+                AuthAdminSession session = coreAuthService.adminAuthWebSessionId(request.getSessionId());
                 PublicFileResolver fileInfo = coreFileService.resolvePublicFileInfo(session.getOrgId());
 
                 String fileName = DateUtil.getTimeNowToString() + "." + request.getFileExtension();
@@ -925,7 +925,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                AuthAdminSession session = authorizedAdminSession(request.getSessionId());
                 authorizeAdminMember(session.getMemberRoles());
                 request.setOrgId(session.getOrgId());
                 bizAdminInnerService.commonSwitchFlag(switchFlagObject, request);
@@ -951,7 +951,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession session = authorizedAdminSession(sessionId);
+                AuthAdminSession session = authorizedAdminSession(sessionId);
                 authorizeAdminMember(session.getMemberRoles());
                 bizResult.setSuccess(true);
                 bizResult.setObject(bizAdminInnerService.getCandidateProfile(session.getOrgId(), session.getOrgCode()));
@@ -977,7 +977,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                AuthAdminSession session = authorizedAdminSession(request.getSessionId());
                 authorizeAdminMember(session.getMemberRoles());
                 bizAdminInnerService.profileBioUpdate(session.getOrgId(), request.getData());
                 bizResult.setSuccess(true);
@@ -1005,7 +1005,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                AuthAdminSession session = authorizedAdminSession(request.getSessionId());
                 bizAdminInnerService.validateExtendInfo(request.getExtendInfo(), "VISION", "MISSION", "CONTACT_NUMBER");
                 bizAdminInnerService.profileUpdate(session.getOrgId(), request.getExtendInfo());
                 bizResult.setSuccess(true);
@@ -1032,7 +1032,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                AuthAdminSession session = authorizedAdminSession(request.getSessionId());
                 PageResult<BizSubOrganization> appDocsResult = bizAdminInnerService.getSubOrganizations(
                         session.getOrgId(),
                         request.getPageNumber(),
@@ -1063,7 +1063,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession session = authorizedAdminSession(sessionId);
+                AuthAdminSession session = authorizedAdminSession(sessionId);
                 List<SubOrganization> subOrganizations = BeanFacadeUtil
                         .getBean(SubOrganizationService.class)
                         .getSubOrganizationAll(session.getOrgId());
@@ -1094,7 +1094,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                AuthAdminSession session = authorizedAdminSession(request.getSessionId());
                 request.getData().setOrgId(session.getOrgId());
                 request.getData().setOrgCode(session.getOrgCode());
 
@@ -1122,7 +1122,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                AuthAdminSession session = authorizedAdminSession(request.getSessionId());
                 request.setOrgId(session.getOrgId());
                 request.setPageSort(PageSort.NEWEST);
 
@@ -1153,7 +1153,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                AuthAdminSession session = authorizedAdminSession(request.getSessionId());
 
                 BizMemberRequiredData requiredData = bizAdminInnerService.getMemberRequiredData(session.getOrgId());
                 bizResult.setSuccess(true);
@@ -1215,7 +1215,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession session = authorizedAdminSession(request.getSessionId());
+                AuthAdminSession session = authorizedAdminSession(request.getSessionId());
                 request.setOrgId(session.getOrgId());
                 request.getData().setOrgId(session.getOrgId());
                 request.getData().setReferrerId(session.getMemberId());
@@ -1250,7 +1250,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession session = authorizedAdminSession(sessionId);
+                AuthAdminSession session = authorizedAdminSession(sessionId);
                 MemberBackOffice member = BeanFacadeUtil
                         .getBean(MemberBackOfficeService.class)
                         .getMemberDetail(memberId);
@@ -1281,7 +1281,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession session = authorizedAdminSession(sessionId);
+                AuthAdminSession session = authorizedAdminSession(sessionId);
                 MemberBackOffice member = BeanFacadeUtil
                         .getBean(MemberBackOfficeService.class)
                         .getMemberDetail(memberId);
@@ -1334,7 +1334,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthAdminSession session = authorizedAdminSession(sessionId);
+                AuthAdminSession session = authorizedAdminSession(sessionId);
                 FileStreamImportRequest importRequest = new FileStreamImportRequest();
                 importRequest.setOrgId(session.getOrgId());
                 importRequest.setSubOrgId(subOrgId);
@@ -1403,8 +1403,8 @@ public class BizAdminService extends BizBaseService {
         AssertUtil.notBlank(request.getValue(), EzErrorCode.ILLEGAL_PARAM);
     }
 
-    private CoreAuthAdminSession authorizedAdminSession(String sessionId) throws Exception {
-        CoreAuthAdminSession session = coreAuthService.adminAuthWebSessionId(sessionId);
+    private AuthAdminSession authorizedAdminSession(String sessionId) throws Exception {
+        AuthAdminSession session = coreAuthService.adminAuthWebSessionId(sessionId);
         AssertUtil.notNull(session, EzErrorCode.SESSION_INVALID);
         AssertUtil.isTrue(isMemberHasAdminRole(session.getMemberRoles()), EzErrorCode.MEMBER_UNAUTHORIZED);
         return session;

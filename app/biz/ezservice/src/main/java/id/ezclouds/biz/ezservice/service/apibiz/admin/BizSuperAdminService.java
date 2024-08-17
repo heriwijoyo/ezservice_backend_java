@@ -41,7 +41,7 @@ import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
-import id.ezclouds.core.auth.model.CoreAuthAdminSession;
+import id.ezclouds.common.model.auth.AuthAdminSession;
 import id.ezclouds.core.auth.request.CoreAdminCommonSessionCreateRequest;
 import id.ezclouds.core.shared.constant.CoreConstant;
 import id.ezclouds.core.shared.file.PublicFileResolver;
@@ -91,9 +91,9 @@ public class BizSuperAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                List<CoreAuthAdminSession> currentSessions = coreAuthService
+                List<AuthAdminSession> currentSessions = coreAuthService
                         .adminGetSession(CoreConstant.SU_ORG_ID, CoreConstant.SU_ORG_ID);
-                for (CoreAuthAdminSession session : currentSessions) {
+                for (AuthAdminSession session : currentSessions) {
                     coreAuthService.adminLogoutSession(session.getSessionId());
                 }
 
@@ -106,7 +106,7 @@ public class BizSuperAdminService extends BizBaseService {
                 createRequest.setMemberId(CoreConstant.SU_ORG_ID);
                 createRequest.setMemberRoles("SUPERUSER");
 
-                CoreAuthAdminSession session = coreAuthService.adminCreateSession(createRequest);
+                AuthAdminSession session = coreAuthService.adminCreateSession(createRequest);
                 String sessionCode = session.getSessionCode();
 
                 if (shouldScrambleCode) {
@@ -160,7 +160,7 @@ public class BizSuperAdminService extends BizBaseService {
                 createRequest.setMemberId(CoreConstant.SU_ORG_ID);
                 createRequest.setMemberRoles("PUBLIC_ACCESS");
 
-                CoreAuthAdminSession session = coreAuthService.adminCreateSession(createRequest);
+                AuthAdminSession session = coreAuthService.adminCreateSession(createRequest);
 
                 bizResult.setObject("SUCCESS :: "+ session.getSessionId());
                 bizResult.setSuccess(true);
@@ -748,7 +748,7 @@ public class BizSuperAdminService extends BizBaseService {
     }
 
     private void authorizeSuperUserMember(String sessionId) throws Exception {
-        CoreAuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(sessionId);
+        AuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(sessionId);
         AssertUtil.notBlank(adminSession.getMemberRoles(), EzErrorCode.MEMBER_UNAUTHORIZED);
         List<String> roles = Arrays.asList(adminSession.getMemberRoles().split(","));
         AssertUtil.isTrue(roles.contains(BizMemberRole.SUPERUSER.getCode()), EzErrorCode.MEMBER_UNAUTHORIZED);

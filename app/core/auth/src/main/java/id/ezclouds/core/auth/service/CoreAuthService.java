@@ -13,8 +13,8 @@ import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.core.auth.constant.CoreAuthConstant;
 import id.ezclouds.core.auth.converter.CoreAuthModelConverter;
 import id.ezclouds.core.auth.dataobject.*;
+import id.ezclouds.common.model.auth.AuthAdminSession;
 import id.ezclouds.core.auth.model.CoreAuthAdminScene;
-import id.ezclouds.core.auth.model.CoreAuthAdminSession;
 import id.ezclouds.core.auth.model.CoreAuthAppClient;
 import id.ezclouds.core.auth.model.CoreAuthMemberClient;
 import id.ezclouds.core.auth.repo.EzAuthAppClientRepository;
@@ -374,7 +374,7 @@ public class CoreAuthService {
         ezAuthMemberClientRepository.saveAndFlush(clientDO);
     }
 
-    public CoreAuthAdminSession adminCreateSession(CoreAdminCommonSessionCreateRequest request) throws Exception {
+    public AuthAdminSession adminCreateSession(CoreAdminCommonSessionCreateRequest request) throws Exception {
         EzAuthAdminCommonSessionDO sessionDO = null;
 
         int maxRetry = 10;
@@ -424,7 +424,7 @@ public class CoreAuthService {
         return null;
     }
 
-    public List<CoreAuthAdminSession> adminGetSession(String orgId, String memberId) {
+    public List<AuthAdminSession> adminGetSession(String orgId, String memberId) {
         return innerAuthService
                 .getAdminSession(orgId, memberId)
                 .stream()
@@ -440,9 +440,9 @@ public class CoreAuthService {
         return innerAuthService.adminValidateSessionId(sessionId);
     }
 
-    public CoreAuthAdminSession adminAuthWebSessionId(String sessionId) throws Exception {
+    public AuthAdminSession adminAuthWebSessionId(String sessionId) throws Exception {
         EzAuthAdminCommonSessionDO sessionDO = innerAuthService.authWebSessionId(sessionId);
-        CoreAuthAdminSession session = new CoreAuthAdminSession();
+        AuthAdminSession session = new AuthAdminSession();
         session.setOrgId(sessionDO.getOrgId());
         session.setOrgCode(sessionDO.getOrgCode());
         session.setMemberId(sessionDO.getMemberId());
