@@ -7,6 +7,8 @@ package id.ezclouds.core.admin.service;
 import id.ezclouds.common.facade.admin.AdminConfigService;
 import id.ezclouds.common.facade.dal.admin.BizCommonTableDAO;
 import id.ezclouds.common.model.biz.BizCommonTable;
+import id.ezclouds.common.model.request.WebBizPageRequest;
+import id.ezclouds.common.model.result.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,11 @@ public class CoreAdminConfigService implements AdminConfigService {
 
     @Autowired
     private BizCommonTableDAO bizCommonTableDAO;
+
+    @Override
+    public PageResult<BizCommonTable> getBizCommonTables(WebBizPageRequest request) {
+        return bizCommonTableDAO.getCommonTables(request);
+    }
 
     @Override
     @Transactional

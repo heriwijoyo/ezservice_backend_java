@@ -49,7 +49,7 @@ public class CommonTableFormFactory extends CommonWebAppFormFactory {
         fields.add(inputTitleField);
 
         WebFormField textAreaColumnField = new WebFormField();
-        textAreaColumnField.setFieldId("tableColumn");
+        textAreaColumnField.setFieldId("tableColumns");
         textAreaColumnField.setFieldType(WebFormFieldType.TEXT_AREA);
         textAreaColumnField.setLabel("Table Columns");
         fields.add(textAreaColumnField);

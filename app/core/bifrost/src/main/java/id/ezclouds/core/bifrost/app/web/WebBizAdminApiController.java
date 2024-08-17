@@ -4,12 +4,17 @@
  */
 package id.ezclouds.core.bifrost.app.web;
 
+import id.ezclouds.common.model.biz.BizCommonTable;
+import id.ezclouds.common.model.request.WebBizPageRequest;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.facade.biz.admin.BizAdminConfigService;
 import id.ezclouds.common.model.request.admin.CommonTableCreateRequest;
+import id.ezclouds.common.model.result.PageResult;
+import id.ezclouds.common.model.util.WebBizPageRequestFactory;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;
+import id.ezclouds.core.bifrost.app.web.result.WebApiPageResult;
 import id.ezclouds.core.bifrost.app.web.result.WebApiResult;
 import id.ezclouds.core.shared.util.DigestLogUtil;
 import org.slf4j.Logger;
@@ -56,6 +61,41 @@ public class WebBizAdminApiController {
             @Override
             public String convertResult(Object object) {
                 return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/biz/commonTables.json")
+    private WebApiPageResult<BizCommonTable> commonTables(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "pageNumber", required = false) int pageNumber,
+            @RequestParam(name = "pageSize", required = false) int pageSize,
+            @RequestParam(name = "searchScene", required = false) String searchScene,
+            @RequestParam(name = "searchKeyword", required = false) String searchKeyword) {
+        final WebApiPageResult<BizCommonTable> result = new WebApiPageResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_BIZ_COMMON_TABLES, result, new WebApiControllerTemplate.PageHandler<BizCommonTable>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                WebBizPageRequest request = WebBizPageRequestFactory
+                        .createRequest(
+                                sessionId,
+                                pageNumber,
+                                pageSize,
+                                searchScene,
+                                searchKeyword
+                        );
+                return bizAdminConfigService.getBizCommonTables(request);
+            }
+
+            @Override
+            public PageResult<BizCommonTable> convertResult(Object object) {
+                return (PageResult<BizCommonTable>) object;
             }
 
             @Override

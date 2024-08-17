@@ -4,6 +4,7 @@
  */
 package id.ezclouds.common.model.util;
 
+import id.ezclouds.common.model.converter.DOModelConverter;
 import id.ezclouds.common.model.result.PageResult;
 import org.springframework.data.domain.Page;
 
@@ -30,6 +31,27 @@ public final class PageResultUtil {
         if (findResult.getContent() != null) {
             findResult.getContent().forEach(input -> {
                 outputList.add(converter.convert(input));
+            });
+        }
+
+        pageResult.setData(outputList);
+        return pageResult;
+    }
+
+    public static <I, O> PageResult<O> convertFindResult(Page<I> findResult, DOModelConverter<I, O> converter) {
+        PageResult<O> pageResult = new PageResult<>();
+        pageResult.setPageNumber(findResult.getPageable().getPageNumber() + 1);
+        pageResult.setPageSize(findResult.getPageable().getPageSize());
+        pageResult.setNumberRecord(findResult.getNumberOfElements());
+        pageResult.setTotalPage(findResult.getTotalPages());
+        pageResult.setTotalRecord((int)findResult.getTotalElements());
+        pageResult.setHasNext(findResult.hasNext());
+        pageResult.setHasPrevious(findResult.hasPrevious());
+
+        List<O> outputList = new ArrayList<>();
+        if (findResult.getContent() != null) {
+            findResult.getContent().forEach(input -> {
+                outputList.add(converter.convertQuery(input));
             });
         }
 

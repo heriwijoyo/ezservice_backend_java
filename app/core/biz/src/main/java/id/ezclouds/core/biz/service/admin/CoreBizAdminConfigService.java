@@ -12,8 +12,11 @@ import id.ezclouds.common.model.auth.AuthAdminSession;
 import id.ezclouds.common.model.auth.AuthRole;
 import id.ezclouds.common.model.biz.BizCommonTable;
 import id.ezclouds.common.model.message.CommonMessageConstant;
+import id.ezclouds.common.model.request.WebBizPageRequest;
 import id.ezclouds.common.model.request.admin.CommonTableCreateRequest;
 import id.ezclouds.common.model.result.BizResult;
+import id.ezclouds.common.model.result.PageResult;
+import id.ezclouds.common.model.util.BizWebPageRequestValidator;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
@@ -35,6 +38,36 @@ public class CoreBizAdminConfigService implements BizAdminConfigService {
 
     @Autowired
     private AdminConfigService adminConfigService;
+
+    @Override
+    public BizResult getBizCommonTables(WebBizPageRequest request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(request, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                BizWebPageRequestValidator.validate(request);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                AuthAdminSession session = authAdminService
+                        .authenticateAdminSession(request.getSessionId());
+                authAdminService.authorizeSessionForRole(session, AuthRole.SUPERUSER);
+
+                PageResult<BizCommonTable> result = adminConfigService
+                        .getBizCommonTables(request);
+
+                bizResult.setSuccess(true);
+                bizResult.setObject(result);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return BizErrorMessageHelper.getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
 
     @Override
     public BizResult createBizCommonTable(CommonTableCreateRequest request) {

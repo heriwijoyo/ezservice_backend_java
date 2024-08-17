@@ -12,7 +12,7 @@ import org.springframework.data.domain.Sort;
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizPageRequest.java, v 0.1 2024‐08‐10 11:54 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class BizPageRequest {
+public class BizPageRequest extends BizRequest {
 
     private String orgId;
     private int pageNumber;

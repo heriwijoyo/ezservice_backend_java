@@ -23,12 +23,12 @@
                             <thead>
                             <tr>
                                 <th width="5%">No</th>
-                                <th width="10%">Community</th>
-                                <th width="10%">Roles</th>
-                                <th width="15%">Name</th>
-                                <th width="10%">Phone</th>
-                                <th width="10%">NIK</th>
-                                <th width="40%">Address</th>
+                                <th width="10%">Org ID</th>
+                                <th width="10%">Code</th>
+                                <th width="15%">Title</th>
+                                <th width="25%">Columns</th>
+                                <th width="25%">Config</th>
+                                <th width="10%">Create Time</th>
                             </tr>
                             </thead>
                             <tbody id="rowsContainer"></tbody>
@@ -43,15 +43,14 @@
 
 <script type="text/javascript">
     var EzAdminUrl = {
-        MEMBERS_GET: 'api/members.json',
-        MEMBER_CREATE: 'api/createMember.json'
+        COMMON_TABLES_GET: 'api/biz/commonTables.json'
     };
     var EzDashboardBizService = {
         start: function() {
             EzDashboardBizService.fetchData();
         },
         fetchData: function() {
-            EzWebAppClient.callApiService(EzAdminUrl.MEMBERS_GET, {
+            EzWebAppClient.callApiService(EzAdminUrl.COMMON_TABLES_GET, {
                 searchScene: EzDashboardBizService.data.searchScene,
                 searchKeyword: EzDashboardBizService.data.searchKeyword,
                 pageNumber: EzDashboardBizService.data.pageNumber,
@@ -59,13 +58,8 @@
             });
         },
         handleApiBizResult: function(url, response) {
-            if (url === EzAdminUrl.MEMBERS_GET) {
+            if (url === EzAdminUrl.COMMON_TABLES_GET) {
                 EzDashboardBizService.reloadPageResultView(response);
-            }
-            if (url === EzAdminUrl.MEMBER_CREATE) {
-                alert(response.data);
-                EzDashboardBizService.hideFormNewImage();
-                EzDashboardBizService.fetchData();
             }
         },
         handleApiBizFailed: function(url, message) {
@@ -80,12 +74,12 @@
                 let rowData = response.pageResult.data[i];
                 let itemRow = $.parseHTML(DashTemplate);
                 $(itemRow).find('.colNum').html(rowNum);
-                $(itemRow).find('.colComm').html(rowData.subOrgName);
-                $(itemRow).find('.colRoles').html(rowData.roles);
-                $(itemRow).find('.colName').html(EzDashboardBizService.composeNameLink(rowData));
-                $(itemRow).find('.colPhone').html(rowData.phone);
-                $(itemRow).find('.colIdCard').html(rowData.idCardNumber);
-                $(itemRow).find('.colAddr').html(EzDashboardBizService.composeAddress(rowData));
+                $(itemRow).find('.colOrg').html(rowData.orgId);
+                $(itemRow).find('.colCode').html(rowData.code);
+                $(itemRow).find('.colTitle').html(rowData.title);
+                $(itemRow).find('.colColumns').html(rowData.columns);
+                $(itemRow).find('.colConfig').html(rowData.config);
+                $(itemRow).find('.colCreate').html(rowData.createdTime);
                 $('#rowsContainer').append(itemRow);
                 rowNum++;
             }
@@ -177,12 +171,12 @@
     var DashTemplate = ''+
         '<tr>'+
             '<td class="colNum" style="vertical-align: middle;"></td>'+
-            '<td class="colComm" style="vertical-align: middle;"></td>'+
-            '<td class="colRoles" style="vertical-align: middle;"></td>'+
-            '<td class="colName" style="vertical-align: middle;"></td>'+
-            '<td class="colPhone" style="vertical-align: middle;"></td>'+
-            '<td class="colIdCard" style="vertical-align: middle;"></td>'+
-            '<td class="colAddr" style="vertical-align: middle;"></td>'+
+            '<td class="colOrg" style="vertical-align: middle;"></td>'+
+            '<td class="colCode" style="vertical-align: middle;"></td>'+
+            '<td class="colTitle" style="vertical-align: middle;"></td>'+
+            '<td class="colColumns" style="vertical-align: middle;"></td>'+
+            '<td class="colConfig" style="vertical-align: middle;"></td>'+
+            '<td class="colCreate" style="vertical-align: middle;"></td>'+
         '</tr>';
 
 </script>
