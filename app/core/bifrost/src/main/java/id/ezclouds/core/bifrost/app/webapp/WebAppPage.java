@@ -6,7 +6,8 @@ package id.ezclouds.core.bifrost.app.webapp;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: WebAppPage.java, v 0.1 2024‐04‐27 9:59 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
+ * @version $Id: WebAppPage.java, v 0.1 2024‐04‐27 9:59 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ */
 public enum WebAppPage {
 
     HOME("webapp/home.htm"),
@@ -36,6 +37,10 @@ public enum WebAppPage {
     SPECIAL_PROCESS("webapp/specialProcess.htm"),
     DATA_PUBLIC_LIMITED("webapp/data.htm"),
     REPORT_PUBLIC_LIMITED("webapp/report.htm"),
+
+    COMMON_TABLES("webapp/commonTables.htm"),
+    COMMON_TABLE_ADD("webapp/commonTableAdd.htm"),
+    COMMON_TABLE_DETAIL("webapp/commonTableDetail.htm"),
 
     ;
 

@@ -180,6 +180,21 @@ public class WebAppController {
         DigestLogUtil.logWebDigest(LOGGER, getDigestLog(success));
     }
 
+    @GetMapping(value = "/webapp/commonTables.htm")
+    private void webCommonTables(HttpServletResponse servletResponse) {
+        renderCachedWebApp(getCommonTablesContent(), servletResponse);
+    }
+
+    @GetMapping(value = "/webapp/commonTableAdd.htm")
+    private void webCommonTableAdd(HttpServletResponse servletResponse) {
+        renderCachedWebApp(getCommonTableAddContent(), servletResponse);
+    }
+
+    @GetMapping(value = "/webapp/commonTableDetail.htm")
+    private void webCommonTableDetail(HttpServletResponse servletResponse) {
+        renderCachedWebApp(getCommonTableDetailContent(), servletResponse);
+    }
+
     @GetMapping(value = "/webapp/data/{orgCode}/{sessionId}")
     private void webDataPage(
             @PathVariable("orgCode") String orgCode,
@@ -435,6 +450,21 @@ public class WebAppController {
     @Cacheable(value = BizCacheKey.WEBAPP_ORGANIZATION_DETAIL)
     public String getOrganizationDetailContent() {
         return getWebAppContent(WebAppPage.ORGANIZATION_DETAIL);
+    }
+
+    @Cacheable(value = BizCacheKey.WEBAPP_TABLES)
+    public String getCommonTablesContent() {
+        return getWebAppContent(WebAppPage.COMMON_TABLES);
+    }
+
+    @Cacheable(value = BizCacheKey.WEBAPP_TABLE_ADD)
+    public String getCommonTableAddContent() {
+        return getWebAppContent(WebAppPage.COMMON_TABLE_ADD);
+    }
+
+    @Cacheable(value = BizCacheKey.WEBAPP_TABLE_DETAIL)
+    public String getCommonTableDetailContent() {
+        return getWebAppContent(WebAppPage.COMMON_TABLE_DETAIL);
     }
 
     @Cacheable(value = BizCacheKey.WEBAPP_REPORT_PUBLIC)

@@ -45,6 +45,9 @@ public final class BizCacheKey {
     public static final String WEBAPP_ORGANIZATION      = "WEBAPP_ORGANIZATION";
     public static final String WEBAPP_ORGANIZATION_ADD  = "WEBAPP_ORGANIZATION_ADD";
     public static final String WEBAPP_ORGANIZATION_DETAIL = "WEBAPP_ORGANIZATION_DETAIL";
+    public static final String WEBAPP_TABLES            = "WEBAPP_TABLES";
+    public static final String WEBAPP_TABLE_ADD         = "WEBAPP_TABLE_ADD";
+    public static final String WEBAPP_TABLE_DETAIL      = "WEBAPP_TABLE_DETAIL";
 
     public static final String WEBAPP_REPORT_PUBLIC     = "WEBAPP_REPORT_PUBLIC";
 }

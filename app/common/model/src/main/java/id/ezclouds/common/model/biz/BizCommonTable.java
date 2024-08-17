@@ -16,6 +16,7 @@ public class BizCommonTable {
     private String title;
     private String columns;
     private String config;
+    private String createdTime;
     private int status;
 
     public String getTableId() {
@@ -64,6 +65,14 @@ public class BizCommonTable {
 
     public void setConfig(String config) {
         this.config = config;
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
     }
 
     public int getStatus() {

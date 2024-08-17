@@ -4,7 +4,7 @@
  */
 package id.ezclouds.core.dal.biz;
 
-import id.ezclouds.common.facade.dal.biz.BizCommonTableDAO;
+import id.ezclouds.common.facade.dal.admin.BizCommonTableDAO;
 import id.ezclouds.common.model.annotation.EzDAOLogger;
 import id.ezclouds.common.model.biz.BizCommonTable;
 import id.ezclouds.core.dal.biz.converter.BizCommonTableConverter;

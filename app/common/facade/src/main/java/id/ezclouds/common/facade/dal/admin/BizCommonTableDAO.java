@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.common.facade.dal.biz;
+package id.ezclouds.common.facade.dal.admin;
 
 import id.ezclouds.common.model.biz.BizCommonTable;
 

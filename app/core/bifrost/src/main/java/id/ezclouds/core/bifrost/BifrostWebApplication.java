@@ -19,7 +19,7 @@ import java.util.TimeZone;
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BifrostWebApplication.java, v 0.1 2023‐06‐18 11:31 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
 @SpringBootApplication(scanBasePackages = {
-        "id.ezclouds.biz.ezservice",
+        "id.ezclouds.admin.ezservice",
         "id.ezclouds.common.util",
         "id.ezclouds.core.admin",
         "id.ezclouds.core.auth",
@@ -38,10 +38,10 @@ import java.util.TimeZone;
         "id.ezclouds.core.member",
         "id.ezclouds.core.auth",
         "id.ezclouds.core.integration.dataservice.repo",
-        "id.ezclouds.biz.ezservice.service.app.repo",
-        "id.ezclouds.biz.ezservice.service.core.repo",
-        "id.ezclouds.biz.ezservice.service.app.processor.repo",
-        "id.ezclouds.biz.ezservice.subbiz.arahindonesia.repo"
+        "id.ezclouds.admin.ezservice.service.app.repo",
+        "id.ezclouds.admin.ezservice.service.core.repo",
+        "id.ezclouds.admin.ezservice.service.app.processor.repo",
+        "id.ezclouds.admin.ezservice.subbiz.arahindonesia.repo"
 })
 @EntityScan(basePackages = {
         "id.ezclouds.core.dal",
@@ -49,10 +49,10 @@ import java.util.TimeZone;
         "id.ezclouds.core.member",
         "id.ezclouds.core.auth",
         "id.ezclouds.core.integration.dataservice.dataobject",
-        "id.ezclouds.biz.ezservice.service.app.dataobject",
-        "id.ezclouds.biz.ezservice.service.core.dataobject",
-        "id.ezclouds.biz.ezservice.service.app.processor.repo",
-        "id.ezclouds.biz.ezservice.subbiz.arahindonesia.dataobject"
+        "id.ezclouds.admin.ezservice.service.app.dataobject",
+        "id.ezclouds.admin.ezservice.service.core.dataobject",
+        "id.ezclouds.admin.ezservice.service.app.processor.repo",
+        "id.ezclouds.admin.ezservice.subbiz.arahindonesia.dataobject"
 })
 @EnableCaching(proxyTargetClass = true)
 @EnableAsync(proxyTargetClass = true)
