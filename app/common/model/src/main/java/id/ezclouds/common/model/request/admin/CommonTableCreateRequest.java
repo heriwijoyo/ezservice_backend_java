@@ -8,8 +8,7 @@ package id.ezclouds.common.model.request.admin;
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: CommonTableCreateRequest.java, v 0.1 2024‐08‐16 12:56 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class
-CommonTableCreateRequest {
+public class CommonTableCreateRequest extends WebAdminRequest {
 
     private String orgId;
     private String code;

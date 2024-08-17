@@ -30,6 +30,7 @@ public enum EzErrorCode {
     SESSION_VERIFY_FAILED("SESSION_VERIFY_FAILED", "Session Verify Failed"),
 
     DATA_NOT_FOUND("DATA_NOT_FOUND", "Data Not Found"),
+    OPERATION_DATA_STORE_FAILED("OPERATION_DATA_STORE_FAILED", "Operation Data Store Failed"),
 
     UPLOAD_SCENE_EMPTY("UPLOAD_SCENE_EMPTY", "Upload Scene Empty"),
     UPLOAD_SCENE_NOT_ALLOWED("UPLOAD_SCENE_NOT_ALLOWED", "Upload Scene Not Allowed"),

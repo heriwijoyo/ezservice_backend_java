@@ -11,6 +11,7 @@ import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;
 import id.ezclouds.core.bifrost.app.web.result.WebApiResult;
+import id.ezclouds.core.shared.util.DigestLogUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: WebBizApiController.java, v 0.1 2024‐08‐17 3:54 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: WebBizAdminApiController.java, v 0.1 2024‐08‐17 3:54 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @RestController
-public class WebBizApiController {
+public class WebBizAdminApiController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CommonLoggerConstant.WEB_API_CONTROLLER);
 
@@ -36,27 +37,30 @@ public class WebBizApiController {
             @RequestParam(name = "orgId", required = false) String orgId,
             @RequestParam(name = "code", required = false) String code,
             @RequestParam(name = "title", required = false) String title,
-            @RequestParam(name = "column", required = false) String column,
+            @RequestParam(name = "columns", required = false) String columns,
             @RequestParam(name = "config", required = false) String config) {
         final WebApiResult<String> result = new WebApiResult<>();
         WebApiControllerTemplate.execute(WebEvent.WEB_API_BIZ_COMMON_TABLE_CREATE, result, new WebApiControllerTemplate.Handler<String>() {
             @Override
             public BizResult onProcess() throws Exception {
                 CommonTableCreateRequest request = new CommonTableCreateRequest();
+                request.setSessionId(sessionId);
                 request.setOrgId(orgId);
-                bizAdminConfigService.createBizCommonTable(null);
-
-                return null;
+                request.setCode(code);
+                request.setTitle(title);
+                request.setColumns(columns);
+                request.setConfig(config);
+                return bizAdminConfigService.createBizCommonTable(request);
             }
 
             @Override
             public String convertResult(Object object) {
-                return null;
+                return (String) object;
             }
 
             @Override
             public void onDigestLog(DigestLog digestLog) {
-
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
             }
         });
         return result;
