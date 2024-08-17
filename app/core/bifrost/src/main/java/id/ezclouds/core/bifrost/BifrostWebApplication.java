@@ -23,6 +23,7 @@ import java.util.TimeZone;
         "id.ezclouds.common.util",
         "id.ezclouds.core.admin",
         "id.ezclouds.core.auth",
+        "id.ezclouds.core.biz",
         "id.ezclouds.core.bifrost",
         "id.ezclouds.core.dal",
         "id.ezclouds.core.integration",
