@@ -22,7 +22,7 @@ INCLUDE_SMART_FORM_CLIENT
         start: function() {
             EzSmartFormClientStarter.start();
         },
-        submitCommonTable: function() {
+        submitForm: function() {
             EzWebAppClient.callApiService(EzAdminUrl.COMMON_TABLE_CREATE, {
                 orgId : $('#selectOrgId').val(),
                 code: $('#tableCode').val(),
@@ -65,10 +65,6 @@ INCLUDE_SMART_FORM_CLIENT
             EzDashboardBizService.next();
         });
         EzWebAppClient.start();
-
-        $('#formSubmitBtn').click(function(){
-            EzDashboardBizService.submitCommonTable();
-        });
     });
 </script>
 </body>

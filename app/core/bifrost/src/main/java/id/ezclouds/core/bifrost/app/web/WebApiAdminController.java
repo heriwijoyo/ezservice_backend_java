@@ -23,6 +23,7 @@ import id.ezclouds.biz.ezservice.service.app.model.AppDocument;
 import id.ezclouds.biz.ezservice.service.app.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
+import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.common.model.member.MemberBackOffice;
@@ -219,7 +220,7 @@ public class WebApiAdminController {
         WebApiControllerTemplate.execute(WebEvent.WEB_API_NEWS_DETAIL, result, new WebApiControllerTemplate.Handler<BizWebDetailNews>() {
             @Override
             public BizResult onProcess() throws Exception {
-                BizWebDetailRequest<String> request = new BizWebDetailRequest<>();
+                WebBizDetailRequest<String> request = new WebBizDetailRequest<>();
                 request.setSessionId(sessionId);
                 request.setObject(newsId);
                 return bizAdminService.getNewsDetail(request);
@@ -315,7 +316,7 @@ public class WebApiAdminController {
         WebApiControllerTemplate.execute(WebEvent.WEB_API_EVENT_DETAIL, result, new WebApiControllerTemplate.Handler<AppEvent>() {
             @Override
             public BizResult onProcess() throws Exception {
-                BizWebDetailRequest<String> request = new BizWebDetailRequest<>();
+                WebBizDetailRequest<String> request = new WebBizDetailRequest<>();
                 request.setSessionId(sessionId);
                 request.setObject(eventId);
                 return bizAdminService.getEventDetail(request);
@@ -779,7 +780,7 @@ public class WebApiAdminController {
         WebApiControllerTemplate.execute(WebEvent.WEB_API_MEMBER_REQUIRED_DATA, result, new WebApiControllerTemplate.Handler<BizMemberRequiredData>() {
             @Override
             public BizResult onProcess() throws Exception {
-                BizWebDetailRequest<String> request = new BizWebDetailRequest<>();
+                WebBizDetailRequest<String> request = new WebBizDetailRequest<>();
                 request.setSessionId(sessionId);
                 return bizAdminService.getMemberRequiredData(request);
             }

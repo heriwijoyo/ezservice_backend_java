@@ -15,6 +15,7 @@ import id.ezclouds.biz.ezservice.service.apibiz.admin.BizSuperAdminService;
 import id.ezclouds.biz.ezservice.service.app.model.BizAppConfig;
 import id.ezclouds.biz.ezservice.service.request.BizDataImportRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
+import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.core.shared.model.CoreArea;
@@ -136,7 +137,7 @@ public class WebApiSuperAdminController {
         WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_ORGANIZATION_DETAIL, result, new WebApiControllerTemplate.Handler<BizOrganizationDetail>() {
             @Override
             public BizResult onProcess() throws Exception {
-                BizWebDetailRequest<String> request = new BizWebDetailRequest<>();
+                WebBizDetailRequest<String> request = new WebBizDetailRequest<>();
                 request.setSessionId(sessionId);
                 request.setObject(orgId);
                 return bizSuperAdminService.getOrganizationDetail(request);
@@ -166,7 +167,7 @@ public class WebApiSuperAdminController {
         WebApiControllerTemplate.execute(WebEvent.WEB_API_MEMBER_REQUIRED_DATA, result, new WebApiControllerTemplate.Handler<BizMemberRequiredData>() {
             @Override
             public BizResult onProcess() throws Exception {
-                BizWebDetailRequest<String> request = new BizWebDetailRequest<>();
+                WebBizDetailRequest<String> request = new WebBizDetailRequest<>();
                 request.setSessionId(sessionId);
                 request.setObject(orgId);
                 return bizSuperAdminService.getMemberRequiredData(request);

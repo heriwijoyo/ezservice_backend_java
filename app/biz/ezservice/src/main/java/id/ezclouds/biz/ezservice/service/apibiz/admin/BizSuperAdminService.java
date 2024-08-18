@@ -28,6 +28,7 @@ import id.ezclouds.biz.ezservice.service.request.BizDataImportRequest;
 import id.ezclouds.biz.ezservice.service.request.BizLocalAreaRequest;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
+import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.util.facade.BeanFacadeUtil;
 import id.ezclouds.core.auth.model.CoreAuthAdminScene;
@@ -217,7 +218,7 @@ public class BizSuperAdminService extends BizBaseService {
         return bizResult;
     }
 
-    public BizResult getOrganizationDetail(BizWebDetailRequest<String> request) {
+    public BizResult getOrganizationDetail(WebBizDetailRequest<String> request) {
         final BizResult bizResult = new BizResult();
         BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
             @Override
@@ -315,7 +316,7 @@ public class BizSuperAdminService extends BizBaseService {
         return bizResult;
     }
 
-    public BizResult getMemberRequiredData(BizWebDetailRequest<String> request) {
+    public BizResult getMemberRequiredData(WebBizDetailRequest<String> request) {
         final BizResult bizResult = new BizResult();
         BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
             @Override

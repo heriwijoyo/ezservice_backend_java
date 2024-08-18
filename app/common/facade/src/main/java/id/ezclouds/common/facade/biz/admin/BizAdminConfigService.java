@@ -6,6 +6,7 @@ package id.ezclouds.common.facade.biz.admin;
 
 import id.ezclouds.common.model.request.WebBizPageRequest;
 import id.ezclouds.common.model.request.admin.CommonTableCreateRequest;
+import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
 import id.ezclouds.common.model.result.BizResult;
 
 /**
@@ -15,5 +16,5 @@ import id.ezclouds.common.model.result.BizResult;
 public interface BizAdminConfigService {
     BizResult getBizCommonTables(WebBizPageRequest request);
     BizResult createBizCommonTable(CommonTableCreateRequest request);
-    BizResult getByCode(String orgId, String code);
+    BizResult getBizCommonTable(WebBizDetailRequest<String> request);
 }

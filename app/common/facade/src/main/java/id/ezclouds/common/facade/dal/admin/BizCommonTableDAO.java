@@ -15,5 +15,6 @@ import id.ezclouds.common.model.result.PageResult;
 public interface BizCommonTableDAO {
     PageResult<BizCommonTable> getCommonTables(WebBizPageRequest request);
     void store(BizCommonTable bizCommonTable);
+    BizCommonTable getByTableId(String tableId);
     BizCommonTable getByCode(String orgId, String code);
 }

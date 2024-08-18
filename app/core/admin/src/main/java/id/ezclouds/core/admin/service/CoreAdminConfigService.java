@@ -34,4 +34,9 @@ public class CoreAdminConfigService implements AdminConfigService {
     public void createBizCommonTable(BizCommonTable bizCommonTable) {
         bizCommonTableDAO.store(bizCommonTable);
     }
+
+    @Override
+    public BizCommonTable getBizCommonTable(String tableId) {
+        return bizCommonTableDAO.getByTableId(tableId);
+    }
 }

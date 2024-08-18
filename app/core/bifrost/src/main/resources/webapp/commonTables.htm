@@ -75,7 +75,7 @@
                 let itemRow = $.parseHTML(DashTemplate);
                 $(itemRow).find('.colNum').html(rowNum);
                 $(itemRow).find('.colOrg').html(rowData.orgId);
-                $(itemRow).find('.colCode').html(rowData.code);
+                $(itemRow).find('.colCode').html(EzDashboardBizService.composeCodeLink(rowData));
                 $(itemRow).find('.colTitle').html(rowData.title);
                 $(itemRow).find('.colColumns').html(rowData.columns);
                 $(itemRow).find('.colConfig').html(rowData.config);
@@ -85,8 +85,8 @@
             }
             $('.pager').html(EzWebAppClient.renderPager(response.pageResult));
         },
-        composeNameLink: function(data) {
-            return '<a href="memberDetail.htm?id='+ data.memberId +'">' + data.memberName + '</a>';
+        composeCodeLink: function(data) {
+            return '<a href="commonTableDetail.htm?id='+ data.tableId +'">' + data.code + '</a>';
         },
         composeAddress: function(data) {
             let address = '';

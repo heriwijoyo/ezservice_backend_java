@@ -12,10 +12,19 @@ import java.util.List;
  */
 public class WebAppForm {
 
+    private String pageDefault;
     private String title;
     private List<WebFormField> fields;
     private List<WebFormButton> topButtons;
     private List<WebFormButton> bottomButtons;
+
+    public String getPageDefault() {
+        return pageDefault;
+    }
+
+    public void setPageDefault(String pageDefault) {
+        this.pageDefault = pageDefault;
+    }
 
     public String getTitle() {
         return title;

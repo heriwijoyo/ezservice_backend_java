@@ -2,13 +2,15 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.biz.ezservice.service.request.web;
+package id.ezclouds.common.model.request.admin;
+
+import id.ezclouds.common.model.request.BizRequest;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: BizWebDetailRequest.java, v 0.1 2024‐03‐29 2:37 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: WebBizDetailRequest.java, v 0.1 2024‐03‐29 2:37 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class BizWebDetailRequest<T> {
+public class WebBizDetailRequest<T> extends BizRequest {
 
     private String sessionId;
     private T object;

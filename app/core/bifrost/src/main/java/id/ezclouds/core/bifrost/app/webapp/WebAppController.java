@@ -472,7 +472,13 @@ public class WebAppController {
 
     @Cacheable(value = BizCacheKey.WEBAPP_TABLE_DETAIL)
     public String getCommonTableDetailContent() {
-        return getWebAppContent(WebAppPage.COMMON_TABLE_DETAIL);
+        String webAppContent = getWebAppContent(WebAppPage.COMMON_TABLE_DETAIL);
+        CommonTableFormFactory tableFormFactory = new CommonTableFormFactory();
+        tableFormFactory.setDetail(true);
+        WebAppForm webAppForm = tableFormFactory.create();
+        return webAppContent
+                .replace("INCLUDE_DYNAMIC_FORM", WebAppFormRenderer.renderForm(webAppForm))
+                .replace("INCLUDE_SMART_FORM_CLIENT", WebAppFormRenderer.renderSmartFormClientDetail(webAppForm));
     }
 
     @Cacheable(value = BizCacheKey.WEBAPP_REPORT_PUBLIC)

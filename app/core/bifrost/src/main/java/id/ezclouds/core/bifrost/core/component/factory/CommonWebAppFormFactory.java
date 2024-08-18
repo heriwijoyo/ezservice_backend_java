@@ -17,15 +17,18 @@ import java.util.List;
  */
 public abstract class CommonWebAppFormFactory implements WebAppFormFactory {
 
+    protected abstract String getPageDefault();
     protected abstract String getTitle();
     protected abstract List<WebFormField> composeFields();
     protected abstract List<WebFormButton> composeTopButtons();
     protected abstract List<WebFormButton> composeBottomButtons();
 
+    private boolean isDetail = false;
 
     @Override
     public WebAppForm create() {
         WebAppForm webAppForm = new WebAppForm();
+        webAppForm.setPageDefault(getPageDefault());
         webAppForm.setTitle(getTitle());
 
         if (composeFields() != null) {
@@ -47,5 +50,13 @@ public abstract class CommonWebAppFormFactory implements WebAppFormFactory {
         }
 
         return webAppForm;
+    }
+
+    protected boolean isDetail() {
+        return isDetail;
+    }
+
+    public void setDetail(boolean detail) {
+        isDetail = detail;
     }
 }

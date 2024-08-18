@@ -43,10 +43,39 @@ public final class WebAppFormRenderer {
 
         for (WebFormField field : webAppForm.getFields()) {
             if (field.getFieldType() == WebFormFieldType.SELECT && field.getOptionDSType() == WebFormOptionDSType.REMOTE) {
-                smartFormClientSb.append("EzSmartFormClient.fetchRemoteOptions('"+ field.getFieldId() +"', '"+ field.getOptionDSRemoteUrl() +"');");
+                smartFormClientSb.append("EzSmartFormClient.fetchAndParseRemoteOption('"+ field.getFieldId() +"', '"+ field.getOptionDSRemoteUrl() +"');");
             }
         }
 
+        for (WebFormButton button : webAppForm.getBottomButtons()) {
+            if (button.getButtonType() == WebFormButtonType.SUBMIT_FORM) {
+                smartFormClientSb.append("$('#"+ button.getBtnId() +"').click(function(){EzDashboardBizService.submitForm();});");
+            }
+        }
+
+        smartFormClientSb.append("}};</script>");
+        return smartFormClientSb.toString();
+    }
+
+    public static String renderSmartFormClientDetail(WebAppForm webAppForm) {
+        StringBuilder smartFormClientSb = new StringBuilder();
+        smartFormClientSb.append("<script type=\"text/javascript\" src=\"assets/js/ezsmart-form-client.js\"></script>");
+        smartFormClientSb.append("<script type=\"text/javascript\"> var EzSmartFormClientStarter = { pageDefault: '"+ webAppForm.getPageDefault() +"', startDetail: function() {");
+        smartFormClientSb.append("EzSmartFormClient.validateDetailId();");
+
+        for (WebFormField field : webAppForm.getFields()) {
+            if (field.getFieldType() == WebFormFieldType.SELECT && field.getOptionDSType() == WebFormOptionDSType.REMOTE) {
+                smartFormClientSb.append("EzSmartFormClient.fetchAndStoreRemoteOption('"+ field.getFieldId() +"', '"+ field.getOptionDSRemoteUrl() +"');");
+            }
+        }
+
+        for (WebFormButton button : webAppForm.getBottomButtons()) {
+            if (button.getButtonType() == WebFormButtonType.SUBMIT_FORM) {
+                smartFormClientSb.append("$('#"+ button.getBtnId() +"').click(function(){EzDashboardBizService.submitForm();});");
+            }
+        }
+
+        smartFormClientSb.append("EzDashboardBizService.fetchData(EzSmartFormClient.detailId);");
         smartFormClientSb.append("}};</script>");
         return smartFormClientSb.toString();
     }

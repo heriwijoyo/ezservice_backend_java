@@ -6,6 +6,7 @@ package id.ezclouds.core.bifrost.app.web;
 
 import id.ezclouds.common.model.biz.BizCommonTable;
 import id.ezclouds.common.model.request.WebBizPageRequest;
+import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.facade.biz.admin.BizAdminConfigService;
 import id.ezclouds.common.model.request.admin.CommonTableCreateRequest;
@@ -96,6 +97,33 @@ public class WebBizAdminApiController {
             @Override
             public PageResult<BizCommonTable> convertResult(Object object) {
                 return (PageResult<BizCommonTable>) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/biz/commonTable.json")
+    private WebApiResult<BizCommonTable> commonTable(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "detailId", required = false) String detailId) {
+        final WebApiResult<BizCommonTable> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_BIZ_COMMON_TABLE_DETAIL, result, new WebApiControllerTemplate.Handler<BizCommonTable>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                WebBizDetailRequest<String> request = new WebBizDetailRequest<>();
+                request.setSessionId(sessionId);
+                request.setObject(detailId);
+                return bizAdminConfigService.getBizCommonTable(request);
+            }
+
+            @Override
+            public BizCommonTable convertResult(Object object) {
+                return (BizCommonTable) object;
             }
 
             @Override

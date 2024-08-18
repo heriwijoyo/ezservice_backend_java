@@ -14,6 +14,7 @@ import id.ezclouds.common.model.biz.BizCommonTable;
 import id.ezclouds.common.model.message.CommonMessageConstant;
 import id.ezclouds.common.model.request.WebBizPageRequest;
 import id.ezclouds.common.model.request.admin.CommonTableCreateRequest;
+import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.common.model.util.BizWebPageRequestValidator;
@@ -110,23 +111,26 @@ public class CoreBizAdminConfigService implements BizAdminConfigService {
     }
 
     @Override
-    public BizResult getByCode(String orgId, String code) {
+    public BizResult getBizCommonTable(WebBizDetailRequest<String> request) {
         final BizResult bizResult = new BizResult();
         BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
             @Override
             public void onRequestCheck() throws EzErrorException {
-                AssertUtil.notBlank(orgId, EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(code, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getObject(), EzErrorCode.ILLEGAL_PARAM);
             }
 
             @Override
             public void onBizProcess() throws Exception {
-//                BizCommonTable commonTable = adminConfigInnerService
-//                        .getByCode(orgId, code);
-//                AssertUtil.notNull(commonTable, EzErrorCode.DATA_NOT_FOUND);
+                AuthAdminSession session = authAdminService.authenticateAdminSession(request.getSessionId());
+                authAdminService.authorizeSessionForRole(session, AuthRole.SUPERUSER);
+
+                BizCommonTable bizCommonTable = adminConfigService.getBizCommonTable(request.getObject());
+                AssertUtil.notNull(bizCommonTable, EzErrorCode.DATA_NOT_FOUND);
 
                 bizResult.setSuccess(true);
-                bizResult.setObject(null);
+                bizResult.setObject(bizCommonTable);
             }
 
             @Override

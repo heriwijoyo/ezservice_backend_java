@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
  * @version $Id: EzBizCommonTableRepository.java, v 0.1 2024‐08‐16 6:11 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Repository
-public interface EzBizCommonTableRepository extends JpaRepository<EzBizCommonTableDO, BizCommonTable> {
+public interface EzBizCommonTableRepository extends JpaRepository<EzBizCommonTableDO, String> {
     Page<EzBizCommonTableDO> findByCodeContains(String code, Pageable pageable);
     EzBizCommonTableDO findByOrgIdAndCode(String orgId, String code);
 }

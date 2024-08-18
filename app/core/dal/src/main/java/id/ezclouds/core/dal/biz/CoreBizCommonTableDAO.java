@@ -52,6 +52,16 @@ public class CoreBizCommonTableDAO implements BizCommonTableDAO {
 
     @EzDAOLogger
     @Override
+    public BizCommonTable getByTableId(String tableId) {
+        return new BizCommonTableConverter().convertQuery(
+                ezBizCommonTableRepository
+                .findById(tableId)
+                .orElse(null)
+        );
+    }
+
+    @EzDAOLogger
+    @Override
     public BizCommonTable getByCode(String orgId, String code) {
         return new BizCommonTableConverter().convertQuery(
                 ezBizCommonTableRepository

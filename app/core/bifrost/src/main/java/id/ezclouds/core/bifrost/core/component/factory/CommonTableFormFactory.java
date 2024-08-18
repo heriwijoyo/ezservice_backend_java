@@ -5,10 +5,7 @@
 package id.ezclouds.core.bifrost.core.component.factory;
 
 
-import id.ezclouds.core.bifrost.core.component.WebFormButton;
-import id.ezclouds.core.bifrost.core.component.WebFormField;
-import id.ezclouds.core.bifrost.core.component.WebFormFieldType;
-import id.ezclouds.core.bifrost.core.component.WebFormOptionDSType;
+import id.ezclouds.core.bifrost.core.component.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +17,13 @@ import java.util.List;
 public class CommonTableFormFactory extends CommonWebAppFormFactory {
 
     @Override
+    protected String getPageDefault() {
+        return "commonTables.htm";
+    }
+
+    @Override
     protected String getTitle() {
-        return "CREATE NEW TABLE";
+        return isDetail() ? "COMMON TABLE DETAIL" : "CREATE NEW TABLE";
     }
 
     @Override
@@ -72,8 +74,9 @@ public class CommonTableFormFactory extends CommonWebAppFormFactory {
     protected List<WebFormButton> composeBottomButtons() {
         List<WebFormButton> buttons = new ArrayList<>();
         WebFormButton submitBtn = new WebFormButton();
+        submitBtn.setButtonType(WebFormButtonType.SUBMIT_FORM);
         submitBtn.setBtnId("formSubmitBtn");
-        submitBtn.setLabel("SUBMIT");
+        submitBtn.setLabel(isDetail()? "UPDATE" : "SUBMIT");
         buttons.add(submitBtn);
         return buttons;
     }
