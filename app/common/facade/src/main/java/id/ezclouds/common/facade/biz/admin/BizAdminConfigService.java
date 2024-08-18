@@ -4,9 +4,11 @@
  */
 package id.ezclouds.common.facade.biz.admin;
 
+import id.ezclouds.common.model.biz.BizCommonTable;
 import id.ezclouds.common.model.request.WebBizPageRequest;
 import id.ezclouds.common.model.request.admin.CommonTableCreateRequest;
 import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
+import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
 import id.ezclouds.common.model.result.BizResult;
 
 /**
@@ -16,5 +18,6 @@ import id.ezclouds.common.model.result.BizResult;
 public interface BizAdminConfigService {
     BizResult getBizCommonTables(WebBizPageRequest request);
     BizResult createBizCommonTable(CommonTableCreateRequest request);
+    BizResult updateBizCommonTable(WebBizUpdateRequest<BizCommonTable> request);
     BizResult getBizCommonTable(WebBizDetailRequest<String> request);
 }

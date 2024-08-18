@@ -31,6 +31,7 @@ import id.ezclouds.biz.ezservice.service.inner.service.BizAdminInnerService;
 import id.ezclouds.biz.ezservice.service.request.BizLocalAreaRequest;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
+import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
 import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
@@ -687,7 +688,7 @@ public class BizAdminService extends BizBaseService {
         return bizResult;
     }
 
-    public BizResult updateVideoCard(BizWebUpdateRequest<VideoCard> request) {
+    public BizResult updateVideoCard(WebBizUpdateRequest<VideoCard> request) {
         final BizResult bizResult = new BizResult();
         BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
             @Override
@@ -1403,7 +1404,7 @@ public class BizAdminService extends BizBaseService {
         AssertUtil.notBlank(request.getValue(), EzErrorCode.ILLEGAL_PARAM);
     }
 
-    private void validateBizUpdateRequest(BizWebUpdateRequest request) {
+    private void validateBizUpdateRequest(WebBizUpdateRequest request) {
         AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
         AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
         AssertUtil.notNull(request.getObject(), EzErrorCode.ILLEGAL_PARAM);

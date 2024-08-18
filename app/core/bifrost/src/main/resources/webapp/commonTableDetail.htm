@@ -29,22 +29,27 @@ INCLUDE_SMART_FORM_CLIENT
             });
         },
         submitForm: function() {
-            console.log('AKU TERSUBMIT');
+            EzWebAppClient.callApiService(EzAdminUrl.COMMON_TABLE_UPDATE, {
+                tableId: EzSmartFormClient.detailId,
+                orgId : $('#selectOrgId').val(),
+                code: $('#tableCode').val(),
+                title: $('#tableTitle').val(),
+                columns: $('#tableColumns').val(),
+                config: $('#tableConfig').val()
+            });
         },
         handleApiBizResult: function(url, response) {
             if (url === EzAdminUrl.COMMON_TABLE_DETAIL) {
                 EzDashboardBizService.parseData(response.data);
             }
+            if (url === EzAdminUrl.COMMON_TABLE_UPDATE) {
+                alert(response.data);
+                EzSmartFormClient.goToPageDefault();
+            }
         },
         handleApiBizFailed: function(url, message) {
-            if (url === EzAdminUrl.GET_MEMBER_DETAIL) {
+            if (url === EzAdminUrl.COMMON_TABLE_UPDATE) {
                 alert(message);
-                EzDashboardBizService.hideLoader();
-                window.location.replace('members.htm');
-            }
-            if (url === EzAdminUrl.MEMBER_UPDATE_ROLES) {
-                alert(message);
-                EzDashboardBizService.hideLoader();
             }
         },
         parseData: function(data) {

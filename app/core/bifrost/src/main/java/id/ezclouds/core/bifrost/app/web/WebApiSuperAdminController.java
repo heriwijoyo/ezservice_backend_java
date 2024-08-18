@@ -15,6 +15,7 @@ import id.ezclouds.biz.ezservice.service.apibiz.admin.BizSuperAdminService;
 import id.ezclouds.biz.ezservice.service.app.model.BizAppConfig;
 import id.ezclouds.biz.ezservice.service.request.BizDataImportRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
+import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
 import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
@@ -212,7 +213,7 @@ public class WebApiSuperAdminController {
                 organization.setContactEmail(contactEmail);
                 organization.setStatus(status);
 
-                BizWebUpdateRequest<BizOrganization> request = new BizWebUpdateRequest<>();
+                WebBizUpdateRequest<BizOrganization> request = new WebBizUpdateRequest<>();
                 request.setSessionId(sessionId);
                 request.setObject(organization);
                 return bizSuperAdminService.updateOrganization(request);
@@ -254,7 +255,7 @@ public class WebApiSuperAdminController {
                 applicationConfig.setCreatedTime(createdTime);
                 applicationConfig.setStatus(status);
 
-                BizWebUpdateRequest<BizApplicationConfig> request = new BizWebUpdateRequest<>();
+                WebBizUpdateRequest<BizApplicationConfig> request = new WebBizUpdateRequest<>();
                 request.setSessionId(sessionId);
                 request.setObject(applicationConfig);
                 return bizSuperAdminService.updateAppConfig(request);
@@ -285,7 +286,7 @@ public class WebApiSuperAdminController {
         WebApiControllerTemplate.execute(WebEvent.WEB_API_UPDATE_APP_CONFIG, result, new WebApiControllerTemplate.Handler<String>() {
             @Override
             public BizResult onProcess() throws Exception {
-                BizWebUpdateRequest<List<BizAppConfig>> request = new BizWebUpdateRequest<>();
+                WebBizUpdateRequest<List<BizAppConfig>> request = new WebBizUpdateRequest<>();
                 request.setSessionId(sessionId);
                 request.setOrgId(orgId);
                 request.setObject(new ObjectMapper().readValue(mapData, new TypeReference<List<BizAppConfig>>(){}));
@@ -317,7 +318,7 @@ public class WebApiSuperAdminController {
         WebApiControllerTemplate.execute(WebEvent.WEB_API_UPDATE_CORE_ORG_CONFIG, result, new WebApiControllerTemplate.Handler<String>() {
             @Override
             public BizResult onProcess() throws Exception {
-                BizWebUpdateRequest<Map<String, String>> request = new BizWebUpdateRequest<>();
+                WebBizUpdateRequest<Map<String, String>> request = new WebBizUpdateRequest<>();
                 request.setSessionId(sessionId);
                 request.setOrgId(orgId);
                 request.setObject(new ObjectMapper().readValue(mapData, new TypeReference<Map<String, String>>(){}));

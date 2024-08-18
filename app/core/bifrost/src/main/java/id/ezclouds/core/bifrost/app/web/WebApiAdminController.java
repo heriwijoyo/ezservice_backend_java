@@ -23,6 +23,7 @@ import id.ezclouds.biz.ezservice.service.app.model.AppDocument;
 import id.ezclouds.biz.ezservice.service.app.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
+import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
 import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
@@ -420,7 +421,7 @@ public class WebApiAdminController {
                 videoCard.setSection(section);
                 videoCard.setSectionName(sectionLabel);
                 videoCard.setTargetUrl(targetUrl);
-                BizWebUpdateRequest<VideoCard> request = new BizWebUpdateRequest<>();
+                WebBizUpdateRequest<VideoCard> request = new WebBizUpdateRequest<>();
                 request.setSessionId(sessionId);
                 request.setObject(videoCard);
                 return bizAdminService.updateVideoCard(request);

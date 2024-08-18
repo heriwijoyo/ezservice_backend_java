@@ -28,6 +28,7 @@ import id.ezclouds.biz.ezservice.service.request.BizDataImportRequest;
 import id.ezclouds.biz.ezservice.service.request.BizLocalAreaRequest;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
+import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
 import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.util.facade.BeanFacadeUtil;
@@ -278,7 +279,7 @@ public class BizSuperAdminService extends BizBaseService {
         return bizResult;
     }
 
-    public BizResult updateOrganization(BizWebUpdateRequest<BizOrganization> request) {
+    public BizResult updateOrganization(WebBizUpdateRequest<BizOrganization> request) {
         final BizResult bizResult = new BizResult();
         BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
             @Override
@@ -343,7 +344,7 @@ public class BizSuperAdminService extends BizBaseService {
         return bizResult;
     }
 
-    public BizResult updateAppConfig(BizWebUpdateRequest<BizApplicationConfig> request) {
+    public BizResult updateAppConfig(WebBizUpdateRequest<BizApplicationConfig> request) {
         final BizResult bizResult = new BizResult();
         BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
             @Override
@@ -381,7 +382,7 @@ public class BizSuperAdminService extends BizBaseService {
         return bizResult;
     }
 
-    public BizResult updateBizAppConfig(BizWebUpdateRequest<List<BizAppConfig>> request) {
+    public BizResult updateBizAppConfig(WebBizUpdateRequest<List<BizAppConfig>> request) {
         final BizResult bizResult = new BizResult();
         BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
             @Override
@@ -408,7 +409,7 @@ public class BizSuperAdminService extends BizBaseService {
         return bizResult;
     }
 
-    public BizResult updateCoreOrgConfig(BizWebUpdateRequest<Map<String, String>> request) {
+    public BizResult updateCoreOrgConfig(WebBizUpdateRequest<Map<String, String>> request) {
         final BizResult bizResult = new BizResult();
         BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
             @Override

@@ -38,8 +38,11 @@ var EzSmartFormClient = {
     validateDetailId: function() {
         if (EzWebAppClient.isBlank(EzSmartFormClient.detailId)) {
             alert('Invalid Detail ID');
-            window.location.replace(EzSmartFormClientStarter.pageDefault);
+            EzSmartFormClient.goToPageDefault();
         }
+    },
+    goToPageDefault: function() {
+        window.location.replace(EzSmartFormClientStarter.pageDefault);
     },
     fetchAndStoreRemoteOption: function(selectId, remoteUrl) {
         let postData = {

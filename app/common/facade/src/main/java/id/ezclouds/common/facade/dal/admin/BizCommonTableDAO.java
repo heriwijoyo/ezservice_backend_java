@@ -13,8 +13,14 @@ import id.ezclouds.common.model.result.PageResult;
  * @version $Id: BizCommonTableDAO.java, v 0.1 2024‐08‐16 1:31 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 public interface BizCommonTableDAO {
+
     PageResult<BizCommonTable> getCommonTables(WebBizPageRequest request);
+
     void store(BizCommonTable bizCommonTable);
+
+    void update(BizCommonTable bizCommonTable);
+
     BizCommonTable getByTableId(String tableId);
+
     BizCommonTable getByCode(String orgId, String code);
 }

@@ -7,6 +7,7 @@ package id.ezclouds.core.bifrost.app.web;
 import id.ezclouds.common.model.biz.BizCommonTable;
 import id.ezclouds.common.model.request.WebBizPageRequest;
 import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
+import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.facade.biz.admin.BizAdminConfigService;
 import id.ezclouds.common.model.request.admin.CommonTableCreateRequest;
@@ -57,6 +58,46 @@ public class WebBizAdminApiController {
                 request.setColumns(columns);
                 request.setConfig(config);
                 return bizAdminConfigService.createBizCommonTable(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/biz/commonTableUpdate.json")
+    private WebApiResult<String> updateCommonTable(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "tableId", required = false) String tableId,
+            @RequestParam(name = "orgId", required = false) String orgId,
+            @RequestParam(name = "code", required = false) String code,
+            @RequestParam(name = "title", required = false) String title,
+            @RequestParam(name = "columns", required = false) String columns,
+            @RequestParam(name = "config", required = false) String config) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_BIZ_COMMON_TABLE_UPDATE, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizCommonTable commonTable = new BizCommonTable();
+                commonTable.setTableId(tableId);
+                commonTable.setOrgId(orgId);
+                commonTable.setCode(code);
+                commonTable.setTitle(title);
+                commonTable.setColumns(columns);
+                commonTable.setConfig(config);
+
+                WebBizUpdateRequest<BizCommonTable> request = new WebBizUpdateRequest<>();
+                request.setSessionId(sessionId);
+                request.setObject(commonTable);
+                return bizAdminConfigService.updateBizCommonTable(request);
             }
 
             @Override

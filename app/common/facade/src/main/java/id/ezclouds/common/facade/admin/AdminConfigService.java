@@ -15,5 +15,6 @@ import id.ezclouds.common.model.result.PageResult;
 public interface AdminConfigService {
     PageResult<BizCommonTable> getBizCommonTables(WebBizPageRequest request);
     void createBizCommonTable(BizCommonTable bizCommonTable);
+    void updateBizCommonTable(BizCommonTable bizCommonTable);
     BizCommonTable getBizCommonTable(String tableId);
 }

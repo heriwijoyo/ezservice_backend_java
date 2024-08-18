@@ -36,6 +36,12 @@ public class CoreAdminConfigService implements AdminConfigService {
     }
 
     @Override
+    @Transactional
+    public void updateBizCommonTable(BizCommonTable bizCommonTable) {
+        bizCommonTableDAO.update(bizCommonTable);
+    }
+
+    @Override
     public BizCommonTable getBizCommonTable(String tableId) {
         return bizCommonTableDAO.getByTableId(tableId);
     }

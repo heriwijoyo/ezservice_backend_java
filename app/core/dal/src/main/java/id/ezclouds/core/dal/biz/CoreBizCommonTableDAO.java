@@ -11,6 +11,8 @@ import id.ezclouds.common.model.request.WebBizPageRequest;
 import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.common.model.util.PageResultUtil;
 import id.ezclouds.common.util.StringUtil;
+import id.ezclouds.common.util.assertion.AssertUtil;
+import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.core.dal.biz.converter.BizCommonTableConverter;
 import id.ezclouds.core.dal.biz.dataobject.EzBizCommonTableDO;
 import id.ezclouds.core.dal.biz.repo.EzBizCommonTableRepository;
@@ -48,6 +50,21 @@ public class CoreBizCommonTableDAO implements BizCommonTableDAO {
     public void store(BizCommonTable bizCommonTable) {
         ezBizCommonTableRepository
                 .saveAndFlush(new BizCommonTableConverter().convertStore(bizCommonTable));
+    }
+
+    @EzDAOLogger
+    @Override
+    public void update(BizCommonTable bizCommonTable) {
+        EzBizCommonTableDO tableDO = ezBizCommonTableRepository
+                .findById(bizCommonTable.getTableId())
+                .orElse(null);
+        AssertUtil.notNull(tableDO, EzErrorCode.DATA_NOT_FOUND);
+
+        tableDO.setTitle(bizCommonTable.getTitle());
+        tableDO.setCode(bizCommonTable.getCode());
+        tableDO.setColumns(bizCommonTable.getColumns());
+        tableDO.setConfig(bizCommonTable.getConfig());
+        ezBizCommonTableRepository.saveAndFlush(tableDO);
     }
 
     @EzDAOLogger

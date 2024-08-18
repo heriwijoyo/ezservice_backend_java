@@ -15,6 +15,7 @@ import id.ezclouds.common.model.message.CommonMessageConstant;
 import id.ezclouds.common.model.request.WebBizPageRequest;
 import id.ezclouds.common.model.request.admin.CommonTableCreateRequest;
 import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
+import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.common.model.util.BizWebPageRequestValidator;
@@ -97,6 +98,42 @@ public class CoreBizAdminConfigService implements BizAdminConfigService {
                 bizCommonTable.setCreatedTime(currentTime);
                 bizCommonTable.setStatus(1);
                 adminConfigService.createBizCommonTable(bizCommonTable);
+
+                bizResult.setSuccess(true);
+                bizResult.setObject(CommonMessageConstant.BIZ_OPERATION_SUCCESS);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return BizErrorMessageHelper.getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
+    @Override
+    public BizResult updateBizCommonTable(WebBizUpdateRequest<BizCommonTable> request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(request, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notNull(request.getObject(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getObject().getOrgId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getObject().getTableId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getObject().getCode(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getObject().getTitle(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getObject().getColumns(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getObject().getConfig(), EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                AuthAdminSession session = authAdminService.authenticateAdminSession(request.getSessionId());
+                authAdminService.authorizeSessionForRole(session, AuthRole.SUPERUSER);
+
+                adminConfigService.updateBizCommonTable(request.getObject());
 
                 bizResult.setSuccess(true);
                 bizResult.setObject(CommonMessageConstant.BIZ_OPERATION_SUCCESS);
