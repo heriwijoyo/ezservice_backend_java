@@ -308,7 +308,20 @@ public class BizAdminService extends BizBaseService {
                 dataUploadMenu.setMenuIcon("upload_file");
                 specialMenu.add(dataUploadMenu);
 
-                adminAppData.setSpecialMenu(specialMenu);
+                if (isMemberHasAdminRole(adminSession.getMemberRoles())) {
+                    adminAppData.setSpecialMenu(specialMenu);
+                }
+
+                if (isSuperUserMember(adminSession.getMemberRoles())) {
+                    adminAppData.setSpecialMenu(new ArrayList<>());
+
+                    CoreAdminBOMenu menuTable = new CoreAdminBOMenu();
+                    menuTable.setMenuName("Common Tables");
+                    menuTable.setMenuUrl("commonTables.htm");
+                    menuTable.setMenuIcon("table_view");
+
+                    adminAppData.getSpecialMenu().add(menuTable);
+                }
 
                 bizResult.setSuccess(true);
                 bizResult.setObject(adminAppData);
@@ -1432,5 +1445,13 @@ public class BizAdminService extends BizBaseService {
         }
         List<String> roles = Arrays.asList(role.split(","));
         return roles.contains(BizMemberRole.ADMIN_ORG.getCode());
+    }
+
+    private boolean isSuperUserMember(String role) {
+        if (StringUtil.isBlank(role)) {
+            return false;
+        }
+        List<String> roles = Arrays.asList(role.split(","));
+        return roles.contains(BizMemberRole.SUPERUSER.getCode());
     }
 }
