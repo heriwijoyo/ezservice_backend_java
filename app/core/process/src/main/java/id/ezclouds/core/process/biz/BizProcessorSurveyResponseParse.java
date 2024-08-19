@@ -5,13 +5,18 @@
 package id.ezclouds.core.process.biz;
 
 import id.ezclouds.common.model.biz.survey.BizSurveyResponse;
+import id.ezclouds.common.model.biz.survey.BizSurveyResponseParserConfig;
 import id.ezclouds.common.model.request.process.SurveyResponseParseProcessRequest;
+import id.ezclouds.common.util.HashUtil;
+import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.process.biz.inner.BizInnerProcessorSurveyResponseParse;
 import id.ezclouds.core.process.model.BizProcessEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -33,9 +38,23 @@ public class BizProcessorSurveyResponseParse extends BizAsyncProcessor {
         SurveyResponseParseProcessRequest processRequest = (SurveyResponseParseProcessRequest) request;
 
         List<BizSurveyResponse> responses = bizInnerProcessorSurveyResponseParse
-                .getSurveyResponses(processRequest.getOrgId(), processRequest.getSurveyId());
+                .getSurveyResponses(processRequest.getOrgId(), processRequest.getSurveyId())
+                .stream()
+                .filter(item -> StringUtil.isBlank(item.getProcessId()))
+                .collect(Collectors.toList());
 
-        System.out.println("response size: "+ responses.size());
+        if (responses.size() < 1) {
+            return true;
+        }
+
+        Map<String, BizSurveyResponseParserConfig> parserConfigMap = bizInnerProcessorSurveyResponseParse
+                .getParserConfigMap(processRequest.getOrgId(), processRequest.getSurveyId());
+
+        for (BizSurveyResponse response : responses) {
+            String parserId = HashUtil.createHash(response.getOrgId(), response.getSurveyId(), response.getQuestionVersion());
+            bizInnerProcessorSurveyResponseParse
+                    .parseAndStore(response, parserConfigMap.get(parserId));
+        }
 
         return true;
     }
