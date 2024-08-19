@@ -108,45 +108,45 @@ public class EzCommonDataSurveyDO {
     public String q009a;
     @Column(name = "q_009_o")
     public String q009o;
-    @Column(name = "q_000_a")
+    @Column(name = "q_010_a")
     public String q010a;
-    @Column(name = "q_000_o")
+    @Column(name = "q_010_o")
     public String q010o;
-    @Column(name = "q_001_a")
+    @Column(name = "q_011_a")
     public String q011a;
-    @Column(name = "q_001_o")
+    @Column(name = "q_011_o")
     public String q011o;
-    @Column(name = "q_002_a")
+    @Column(name = "q_012_a")
     public String q012a;
-    @Column(name = "q_002_o")
+    @Column(name = "q_012_o")
     public String q012o;
-    @Column(name = "q_003_a")
+    @Column(name = "q_013_a")
     public String q013a;
-    @Column(name = "q_003_o")
+    @Column(name = "q_013_o")
     public String q013o;
-    @Column(name = "q_004_a")
+    @Column(name = "q_014_a")
     public String q014a;
-    @Column(name = "q_004_o")
+    @Column(name = "q_014_o")
     public String q014o;
-    @Column(name = "q_005_a")
+    @Column(name = "q_015_a")
     public String q015a;
-    @Column(name = "q_005_o")
+    @Column(name = "q_015_o")
     public String q015o;
-    @Column(name = "q_006_a")
+    @Column(name = "q_016_a")
     public String q016a;
-    @Column(name = "q_006_o")
+    @Column(name = "q_016_o")
     public String q016o;
-    @Column(name = "q_007_a")
+    @Column(name = "q_017_a")
     public String q017a;
-    @Column(name = "q_007_o")
+    @Column(name = "q_017_o")
     public String q017o;
-    @Column(name = "q_008_a")
+    @Column(name = "q_018_a")
     public String q018a;
-    @Column(name = "q_008_o")
+    @Column(name = "q_018_o")
     public String q018o;
-    @Column(name = "q_009_a")
+    @Column(name = "q_019_a")
     public String q019a;
-    @Column(name = "q_009_o")
+    @Column(name = "q_019_o")
     public String q019o;
     @Column(name = "q_020_a")
     public String q020a;

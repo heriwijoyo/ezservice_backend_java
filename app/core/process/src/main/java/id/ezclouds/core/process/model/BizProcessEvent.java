@@ -16,6 +16,9 @@ public enum BizProcessEvent implements EzAppEvent {
 
     GENERATE_REPORT_OVERALL("GENERATE_REPORT_OVERALL"),
     GENERATE_REPORT_MEMBER_TODAY("GENERATE_REPORT_MEMBER_TODAY"),
+
+    SURVEY_RESPONSE_PARSE("SURVEY_RESPONSE_PARSE"),
+
     UNKNOWN("UNKNOWN"),
     ;
     private final String code;
