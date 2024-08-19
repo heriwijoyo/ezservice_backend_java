@@ -8,6 +8,7 @@ import id.ezclouds.common.facade.dal.biz.BizSurveyResponseDAO;
 import id.ezclouds.common.model.annotation.EzDAOLogger;
 import id.ezclouds.common.model.biz.survey.BizSurveyResponse;
 import id.ezclouds.core.dal.biz.converter.BizSurveyResponseConverter;
+import id.ezclouds.core.dal.biz.dataobject.EzSurveyResponseDO;
 import id.ezclouds.core.dal.biz.repo.EzSurveyResponseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -34,5 +35,20 @@ public class CoreSurveyResponseDAO implements BizSurveyResponseDAO {
                 .stream()
                 .map(converter::convertQuery)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateResponse(String responseId, String processId, String processTime, String processMessage) {
+        EzSurveyResponseDO response = ezSurveyResponseRepository
+                .findById(responseId)
+                .orElse(null);
+
+        if (response != null) {
+            response.setProcessId(processId);
+            response.setProcessTime(processTime);
+            response.setProcessMessage(processMessage);
+
+            ezSurveyResponseRepository.saveAndFlush(response);
+        }
     }
 }

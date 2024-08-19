@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.process.biz;
 
+import id.ezclouds.common.model.biz.survey.AppCommonDataSurvey;
 import id.ezclouds.common.model.biz.survey.BizSurveyResponse;
 import id.ezclouds.common.model.biz.survey.BizSurveyResponseParserConfig;
 import id.ezclouds.common.model.request.process.SurveyResponseParseProcessRequest;
@@ -36,6 +37,8 @@ public class BizProcessorSurveyResponseParse extends BizAsyncProcessor {
     @Override
     protected boolean onProcess(Object request, List<String> logData) {
         SurveyResponseParseProcessRequest processRequest = (SurveyResponseParseProcessRequest) request;
+        logData.add("ORG_ID="+ processRequest.getOrgId());
+        logData.add("SURVEY_ID="+ processRequest.getSurveyId());
 
         List<BizSurveyResponse> responses = bizInnerProcessorSurveyResponseParse
                 .getSurveyResponses(processRequest.getOrgId(), processRequest.getSurveyId())
@@ -43,6 +46,7 @@ public class BizProcessorSurveyResponseParse extends BizAsyncProcessor {
                 .filter(item -> StringUtil.isBlank(item.getProcessId()))
                 .collect(Collectors.toList());
 
+        logData.add("COUNT="+ responses.size());
         if (responses.size() < 1) {
             return true;
         }
@@ -52,8 +56,31 @@ public class BizProcessorSurveyResponseParse extends BizAsyncProcessor {
 
         for (BizSurveyResponse response : responses) {
             String parserId = HashUtil.createHash(response.getOrgId(), response.getSurveyId(), response.getQuestionVersion());
-            bizInnerProcessorSurveyResponseParse
-                    .parseAndStore(response, parserConfigMap.get(parserId));
+            BizSurveyResponseParserConfig parserConfig = parserConfigMap.get(parserId);
+
+            AppCommonDataSurvey dataSurvey = null;
+            String processMessage = "SUCCESS";
+            try {
+                dataSurvey = bizInnerProcessorSurveyResponseParse
+                        .parseResponse(response, parserConfig);
+            } catch (Exception e) {
+                processMessage = e.getMessage();
+            }
+
+            if (dataSurvey != null) {
+                try {
+                    bizInnerProcessorSurveyResponseParse
+                            .storeCommonData(dataSurvey);
+                } catch (Exception e2) {
+                    processMessage = e2.getMessage();
+                }
+            }
+
+            try {
+                String processId = dataSurvey == null ? null : dataSurvey.dataId;
+                bizInnerProcessorSurveyResponseParse
+                        .updateResponse(response.getId(), processId, response.getProcessTime(), processMessage);
+            } catch (Exception ignored) {}
         }
 
         return true;
