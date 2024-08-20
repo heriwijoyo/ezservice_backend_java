@@ -17,7 +17,7 @@ import id.ezclouds.biz.ezservice.service.inner.converter.BizMemberRequestConvert
 import id.ezclouds.biz.ezservice.service.request.BizMemberRegisterRequest;
 import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
 import id.ezclouds.common.util.RandomUtil;
-import id.ezclouds.core.shared.result.BizPageInfo;
+import id.ezclouds.common.model.result.BizPageInfo;
 import id.ezclouds.biz.ezservice.util.PageRequestUtil;
 import id.ezclouds.common.util.ShardUtil;
 import id.ezclouds.common.util.StringUtil;
@@ -26,7 +26,7 @@ import id.ezclouds.core.auth.service.CoreAuthService;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
 import id.ezclouds.core.member.service.CoreMemberService;
-import id.ezclouds.core.shared.context.EzAppContextHolder;
+import id.ezclouds.common.util.context.EzAppContextHolder;
 import id.ezclouds.core.shared.enums.CoreSequenceScene;
 import id.ezclouds.core.shared.model.CorePageInfo;
 import id.ezclouds.core.shared.service.CoreSequenceService;
@@ -157,6 +157,46 @@ public class BizMemberInnerService {
 
         BizMemberInfo bizMemberInfo = new BizMemberInfo();
         bizMemberInfo.setBizMember(bizMember);
+        bizMemberInfo.setBizMemberClient(bizMemberClient);
+        return bizMemberInfo;
+    }
+
+    @Transactional
+    public BizMemberInfo createCoreMember(String orgId, String orgCode, String appId, BizMember bizMember) {
+        String memberId = coreSequenceService.generateSequence(orgId, orgCode, CoreSequenceScene.CORE_MEMBER_ID.getCode());
+        String shard = ShardUtil.getShardId(memberId);
+
+        CoreMember coreMember = BizMemberConverter.convert(bizMember);
+        coreMember.setMemberId(memberId);
+        coreMember.setShard(shard);
+        coreMemberService.store(coreMember);
+
+        bizMember.setMemberId(memberId);
+        CoreMemberExtension memberExtension = BizMemberConverter
+                .convertExtension(bizMember);
+        memberExtension.setOrgId(orgId);
+        memberExtension.setMemberId(memberId);
+        memberExtension.setShard(shard);
+        coreMemberService.store(memberExtension);
+
+        CoreAuthMemberClient memberClient = new CoreAuthMemberClient();
+        memberClient.setOrgId(orgId);
+        memberClient.setShard(shard);
+        memberClient.setAppId(appId);
+        memberClient.setMemberId(memberId);
+        memberClient.setLoginType(DEFAULT_LOGIN_TYPE);
+        memberClient.setLoginId(coreMember.getPhone());
+        memberClient.setStatus(BizStatus.ACTIVE.getCode());
+        coreAuthService.createMemberClient(memberClient);
+
+        CoreMember storedMember = coreMemberService.getOptimisticCoreMember(memberId);
+        CoreAuthMemberClient storedMemberClient = coreAuthService.getOptimisticMemberClient(DEFAULT_LOGIN_TYPE, memberId);
+
+        BizMember storedBizMember = BizMemberConverter.convert(storedMember, null);
+        BizMemberClient bizMemberClient = BizMemberClientConverter.convert(storedMemberClient);
+
+        BizMemberInfo bizMemberInfo = new BizMemberInfo();
+        bizMemberInfo.setBizMember(storedBizMember);
         bizMemberInfo.setBizMemberClient(bizMemberClient);
         return bizMemberInfo;
     }

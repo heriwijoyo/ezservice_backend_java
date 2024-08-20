@@ -15,7 +15,7 @@ import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
 import id.ezclouds.biz.ezservice.model.profile.CandidateBio;
 import id.ezclouds.biz.ezservice.model.profile.CandidateProfileItem;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.dataobject.BizSubOrganizationDO;
-import id.ezclouds.core.integration.dataservice.model.WhatsappLog;
+import id.ezclouds.common.model.integration.WhatsappLog;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -29,6 +29,8 @@ public class BizModelConverter {
         subOrganization.setSubOrgId(subOrganizationDO.getSubOrgId());
         subOrganization.setName(subOrganizationDO.getName());
         subOrganization.setAddress(subOrganizationDO.getAddress());
+        subOrganization.setCreatedTime(subOrganizationDO.getCreatedTime());
+        subOrganization.setStatus(subOrganizationDO.getStatus());
         return subOrganization;
     }
 

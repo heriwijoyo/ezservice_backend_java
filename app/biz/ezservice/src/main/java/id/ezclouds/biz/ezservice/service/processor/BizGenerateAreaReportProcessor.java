@@ -66,6 +66,8 @@ public class BizGenerateAreaReportProcessor extends BizAsyncProcessor {
 
         String currentTime = DateUtil.getCurrentFormattedDate();
 
+        int totalTps = 0;
+
         List<EzCoreAppDistrictDO> districts = coreAppDistrictRepository.findByRegencyId("1802");
         logData.add("DISTRICT_TOTAL="+ districts.size());
         int villageTotal = 0;
@@ -77,15 +79,21 @@ public class BizGenerateAreaReportProcessor extends BizAsyncProcessor {
             villageTotal += villages.size();
             if (villages.size() > 0) {
                 for (EzCoreAppVillageDO village : villages) {
-                    generateAreaReport(currentTime, orgId, "APP", districtDO.getName(), village.getName());
+                    int tpsCount = generateAreaReport(currentTime, orgId, "APP", districtDO.getName(), village.getName());
+                    totalTps += tpsCount;
                 }
             }
         }
         logData.add("VILLAGE_TOTAL="+ villageTotal);
+
+        bizAreaReportInnerProcessor.storeTpsCoverage(orgId, totalTps);
+        logData.add("TPS_TOTAL="+ totalTps);
         return true;
     }
 
-    private void generateAreaReport(String currentTime, String orgId, String source, String districtName, String villageName) {
+    private int generateAreaReport(String currentTime, String orgId, String source, String districtName, String villageName) {
+        //TODO: move this calculation to proper processor
+        int groupTpsTotal = 0;
         BizReportByAreaDO reportByArea = new BizReportByAreaDO();
         reportByArea.setId(HashUtil.createHash(currentTime, orgId, source, districtName, villageName));
         reportByArea.setSource(source);
@@ -108,6 +116,7 @@ public class BizGenerateAreaReportProcessor extends BizAsyncProcessor {
 
             List<BizCustomQueryGroupDO> groupTps = bizMemberUnionRepository
                     .villageLevelFetchTpsGroup(orgId, source, districtName, villageName);
+            groupTpsTotal += groupTps.size();
             if (groupTps.size() > 0) {
                 Map<String, Long> tpsData = new HashMap<>();
                 for (BizCustomQueryGroupDO tpsGroup : groupTps) {
@@ -153,5 +162,7 @@ public class BizGenerateAreaReportProcessor extends BizAsyncProcessor {
         reportByArea.setGenderOther(otherGender);
 
         bizAreaReportInnerProcessor.storeBizReport(reportByArea);
+
+        return groupTpsTotal;
     }
 }

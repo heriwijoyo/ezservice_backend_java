@@ -15,8 +15,11 @@ import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
  */
 public class BizMember {
 
+    private String orgId;
     //AppExtension
     private BizSubOrganization subOrganization;
+    private String subOrgId;
+    private String subOrgName;
 
     //CoreMember
     private String memberId;
@@ -62,12 +65,36 @@ public class BizMember {
     private String rukunTetangga;
     private String tpsNumber;
 
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
+
     public BizSubOrganization getSubOrganization() {
         return subOrganization;
     }
 
     public void setSubOrganization(BizSubOrganization subOrganization) {
         this.subOrganization = subOrganization;
+    }
+
+    public String getSubOrgId() {
+        return subOrgId;
+    }
+
+    public void setSubOrgId(String subOrgId) {
+        this.subOrgId = subOrgId;
+    }
+
+    public String getSubOrgName() {
+        return subOrgName;
+    }
+
+    public void setSubOrgName(String subOrgName) {
+        this.subOrgName = subOrgName;
     }
 
     public String getMemberId() {

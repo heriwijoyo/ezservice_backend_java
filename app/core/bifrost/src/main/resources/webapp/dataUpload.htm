@@ -3,41 +3,49 @@
         <li class="active">Upload Data</li>
     </ol>
 
-    <div class="container-fluid" id="fade-in">
-        <div id="dashboard-container" class="row"></div>
-    </div>
-</section>
-
-<div class="modal fade" id="modal-import-form" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="upload-title"></h4>
-            </div>
-            <div class="modal-body">
-                <div class="row clearfix">
-                    <div class="col-sm-6" style="margin-bottom: 0px;">
-                        <div class="form-group">
-                            <div class="font-12 ex1">CSV File</div>
-                            <form id="importForm" enctype="multipart/form-data" method="post">
-                                <input type="file" id="importFile" name="importFile" data-allowed-file-extensions="csv" required/>
-                            </form>
-                        </div>
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                <div class="card corner-radius">
+                    <div class="header">
+                        <h2>UPLOAD DATA CSV</h2>
                     </div>
-                    <div class="col-sm-12">
-                        <img id="importLoader" src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right">
-                        <button id="importSubmitButton" class="button button-rounded waves-effect waves-float pull-right" type="submit" name="submit">SUBMIT</button>
-                        <button id="importCancelButton" class="button button-rounded button-light waves-effect waves-float pull-right" type="submit" name="submit">CANCEL</button>
+                    <div class="body">
+                        <div class="row clearfix">
+
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Sub Organization</div>
+                                    <select class="form-control show-tick" id="subOrgId"></select>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">CSV File</div>
+                                    <form id="importForm" enctype="multipart/form-data" method="post">
+                                        <input type="file" id="importFile" name="importFile" data-allowed-file-extensions="csv" required/>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <img id="btnLoader" src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right">
+                                <button id="btnSubmit" class="button button-rounded waves-effect waves-float pull-right" type="submit">SUBMIT</button>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+
+</section>
 
 <script type="text/javascript">
     var EzConfigApiUrl = {
-        GET_SUB_ORGANIZATIONS: 'api/subOrganizations.json',
+        GET_SUB_ORGANIZATIONS: 'api/subOrganizationAll.json',
         CSV_UPLOAD_URL: 'api/csvUpload.json'
     };
 
@@ -60,51 +68,26 @@
             if (url === EzConfigApiUrl.GET_SUB_ORGANIZATIONS) {
                 EzBizAppService.parseSubOrgItemHTML(response.data);
             }
+            if (url === EzConfigApiUrl.CSV_UPLOAD_URL) {
+                alert(response.data);
+                $('#btnLoader').hide();
+                $('#btnSubmit').show();
+                $('#importFile').val('');
+            }
+
         },
         parseSubOrgItemHTML: function(data) {
-            for (const [key, value] of Object.entries(data)) {
-                let itemRow = $.parseHTML(''+
-                    '<a class="btn-sub-org-upload" href="#" onclick="EzBizAppService.uploadForm(\''+ key +'\',\''+ value +'\')">'+
-                        '<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">'+
-                            '<div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">'+
-                                '<br>'+
-                                '<div class="color-name uppercase"></div>'+
-                                '<div class="color-name"><i class="material-icons">groups</i></div>'+
-                                '<div class="color-class-name">'+ value +'</div>'+
-                                '<br>'+
-                            '</div>'+
-                        '</div>'+
-                    '</a>'+
-                '');
-                $('#dashboard-container').append(itemRow);
+            var optionHTML = '';
+            for (let i = 0; i < data.length; i++) {
+                optionHTML += '<option value="'+ data[i].subOrgId +'">'+ data[i].name +'</option>';
             }
-        },
-        showImportForm: function(subOrgName) {
-            $('#modal-import-form').removeClass('fade');
-            $('#modal-import-form').addClass('show');
-            $('#upload-title').html(subOrgName);
-        },
-        hideImportForm: function() {
-            $('#modal-import-form').removeClass('show');
-            $('#modal-import-form').addClass('fade');
-        },
-        resetImportForm: function() {
-            $('#importFile').val('');
-            $('#importCancelButton').show();
-            $('#importSubmitButton').show();
-            $('#importLoader').hide();
+            $('#subOrgId').html(optionHTML);
         },
         submitImportForm: function() {
-            $('#importCancelButton').hide();
-            $('#importSubmitButton').hide();
-            $('#importLoader').show();
             let postData = {
-                orgId : $('#orgId').val(),
-                subOrgId : $('#subOrgId').val(),
-                fileId : $('#fileId').val(),
-                scene : $('#importScene').val()
+                subOrgId : $('#subOrgId').val()
             };
-            EzWebAppClient.postMultipartForm('importForm', postData, EzConfigApiUrl.CSV_UPLOAD_URL, 'IMPORT_FILE');
+            EzWebAppClient.postMultipartFormData('importForm', postData, EzConfigApiUrl.CSV_UPLOAD_URL, '');
         }
     };
 
@@ -130,5 +113,11 @@
             EzBizAppService.start();
         });
         EzWebAppClient.start();
+
+        $('#btnSubmit').click(function(){
+            $('#btnLoader').show();
+            $('#btnSubmit').hide();
+            EzBizAppService.submitImportForm();
+        });
     });
 </script>

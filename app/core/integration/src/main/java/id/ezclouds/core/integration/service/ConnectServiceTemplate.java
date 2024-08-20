@@ -6,9 +6,9 @@ package id.ezclouds.core.integration.service;
 
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
-import id.ezclouds.core.integration.request.ConnectRequest;
-import id.ezclouds.core.integration.result.EzConnectResult;
-import id.ezclouds.core.shared.context.EzAppContextHolder;
+import id.ezclouds.common.model.integration.ConnectRequest;
+import id.ezclouds.common.model.integration.EzConnectResult;
+import id.ezclouds.common.util.context.EzAppContextHolder;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)

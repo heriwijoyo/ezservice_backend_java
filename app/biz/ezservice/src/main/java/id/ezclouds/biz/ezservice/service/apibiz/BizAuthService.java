@@ -22,24 +22,25 @@ import id.ezclouds.biz.ezservice.service.result.BizMemberLoginResult;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.service.app.BizOrganizationService;
 import id.ezclouds.biz.ezservice.service.request.BizMemberLoginRequest;
-import id.ezclouds.biz.ezservice.service.result.BizResult;
-import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
+import id.ezclouds.common.model.result.BizResult;
+import id.ezclouds.common.facade.template.BizServiceTemplate;
+import id.ezclouds.common.facade.integration.EzConnectService;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
+import id.ezclouds.common.util.facade.BeanFacadeUtil;
 import id.ezclouds.core.auth.request.CoreAppClientAuthRequest;
 import id.ezclouds.core.auth.request.CoreMemberClientAuthRequest;
 import id.ezclouds.core.auth.request.CoreMemberCommonSessionRequest;
 import id.ezclouds.core.auth.result.CoreCommonSession;
 import id.ezclouds.core.auth.result.CoreAuthResult;
 import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
-import id.ezclouds.core.integration.request.WhatsappSendRequest;
-import id.ezclouds.core.integration.service.EzConnectService;
+import id.ezclouds.common.model.integration.WhatsappSendRequest;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
 import id.ezclouds.core.member.service.CoreMemberService;
-import id.ezclouds.core.shared.context.EzAppContextHolder;
+import id.ezclouds.common.util.context.EzAppContextHolder;
 import id.ezclouds.core.shared.model.CoreOrganization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,9 +69,6 @@ public class BizAuthService extends BizBaseService {
 
     @Autowired
     private AppConfigService appConfigService;
-
-    @Autowired
-    private EzConnectService ezConnectService;
 
     public CoreAuthResult<CoreOrganization> authAppClient(String orgId, String appId, String clientId, String clientSecret) {
         CoreAuthResult<CoreOrganization> bizAuthResult = new CoreAuthResult<>();
@@ -370,7 +368,9 @@ public class BizAuthService extends BizBaseService {
             request.setOrgId(commonSession.getOrgId());
             request.setPhoneNumber(commonSession.getVerifyTarget());
             request.setMessage(whatsappMessage);
-            ezConnectService.sendWhatsappMessage(request);
+            BeanFacadeUtil
+                    .getBean(EzConnectService.class)
+                    .sendWhatsappMessage(request);
         }
     }
 }

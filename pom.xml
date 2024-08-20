@@ -10,11 +10,16 @@
 		<module>app/core/shared</module>
 		<module>app/core/auth</module>
 		<module>app/core/integration</module>
-		<module>app/common/util</module>
-		<module>app/test/core</module>
+		<module>app/core/param</module>
         <module>app/core/process</module>
         <module>app/core/dal</module>
-    </modules>
+		<module>app/common/util</module>
+        <module>app/common/facade</module>
+		<module>app/common/model</module>
+		<module>app/test/core</module>
+		<module>app/core/admin</module>
+		<module>app/core/biz</module>
+	</modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>

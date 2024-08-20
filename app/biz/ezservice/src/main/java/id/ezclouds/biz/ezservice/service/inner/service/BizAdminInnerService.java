@@ -12,6 +12,7 @@ import id.ezclouds.biz.ezservice.model.AppConfig;
 import id.ezclouds.biz.ezservice.model.BizWhatsappLog;
 import id.ezclouds.biz.ezservice.model.VideoCard;
 import id.ezclouds.biz.ezservice.model.admin.BizApplicationConfig;
+import id.ezclouds.biz.ezservice.model.admin.BizMemberRequiredData;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganization;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganizationDetail;
 import id.ezclouds.biz.ezservice.model.event.AppEvent;
@@ -32,12 +33,18 @@ import id.ezclouds.biz.ezservice.service.app.request.AppImageGalleryRequest;
 import id.ezclouds.biz.ezservice.service.app.request.NewsCreateRequest;
 import id.ezclouds.biz.ezservice.service.app.request.VideoCardCreateRequest;
 import id.ezclouds.biz.ezservice.service.request.web.BizWebUpdateItemRequest;
-import id.ezclouds.core.integration.dataservice.model.WhatsappLog;
-import id.ezclouds.core.integration.request.WhatsappLogRequest;
-import id.ezclouds.core.integration.request.WhatsappResendRequest;
-import id.ezclouds.core.integration.result.EzConnectResult;
-import id.ezclouds.core.shared.result.BizPageInfo;
-import id.ezclouds.core.shared.result.PageResult;
+import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
+import id.ezclouds.biz.ezservice.subbiz.arahindonesia.service.AppSubOrganizationService;
+import id.ezclouds.common.facade.integration.EzConnectService;
+import id.ezclouds.common.model.constant.OrgConstant;
+import id.ezclouds.common.model.integration.WhatsappLog;
+import id.ezclouds.common.model.integration.WhatsappLogRequest;
+import id.ezclouds.common.model.integration.WhatsappResendRequest;
+import id.ezclouds.common.model.integration.EzConnectResult;
+import id.ezclouds.common.util.facade.BeanFacadeUtil;
+import id.ezclouds.core.shared.model.CoreArea;
+import id.ezclouds.common.model.result.BizPageInfo;
+import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.RandomUtil;
@@ -47,7 +54,6 @@ import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.auth.model.CoreAuthAppClient;
 import id.ezclouds.core.auth.service.CoreAuthService;
-import id.ezclouds.core.integration.service.EzConnectService;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.MemberStatus;
 import id.ezclouds.core.member.service.CoreMemberService;
@@ -66,6 +72,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -123,13 +130,16 @@ public class BizAdminInnerService {
     private CoreAdminService coreAdminService;
 
     @Autowired
-    private EzConnectService ezConnectService;
-
-    @Autowired
     private CoreFileService coreFileService;
 
     @Autowired
     private AppDocumentService appDocumentService;
+
+    @Autowired
+    private AppSubOrganizationService appSubOrganizationService;
+
+    @Autowired
+    private CoreAreaService coreAreaService;
 
     public void createAppBuildPackage(String orgId, String platformId, int versionCode, String versionName) throws EzErrorException {
         BizAppBuildPackage buildPackage = new BizAppBuildPackage();
@@ -279,13 +289,30 @@ public class BizAdminInnerService {
         return appDocumentService.getAppDocuments(orgId, pageRequest);
     }
 
+    public PageResult<BizSubOrganization> getSubOrganizations(String orgId, int pageNumber, int pageSize, String sortBy, String sort) {
+        PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortBy, sort);
+        return appSubOrganizationService.getSubOrganizations(orgId, pageRequest);
+    }
+
+    public PageResult<BizMember> getBizMembers(String orgId, int pageNumber, int pageSize, String sortBy, String sort) {
+        Map<String, String> subOrgNameMap = appSubOrganizationService.getSubOrgNameMap(orgId);
+        PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortBy, sort);
+        PageResult<CoreMember> coreMembers = coreMemberService.getCoreMembers(orgId, pageRequest);
+        return PageResultUtil.convert(coreMembers, input -> input
+                .stream()
+                .map(core -> BizMemberConverter.convertSimple(core, subOrgNameMap))
+                .collect(Collectors.toList()));
+    }
+
     public PageResult<BizWhatsappLog> getWhatsappLog(String orgId, String phone, int pageNumber, int pageSize, String sortBy, String sort) {
         PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortBy, sort);
         WhatsappLogRequest request = new WhatsappLogRequest();
         request.setOrgId(orgId);
         request.setPhone(phone);
         request.setPageRequest(pageRequest);
-        EzConnectResult connectResult = ezConnectService.getWhatsappLog(request);
+        EzConnectResult connectResult = BeanFacadeUtil
+                .getBean(EzConnectService.class)
+                .getWhatsappLog(request);
 
         AssertUtil.notNull(connectResult, EzErrorCode.SYSTEM_ERROR);
         AssertUtil.isTrue(connectResult.isSuccess(), EzErrorCode.SYSTEM_ERROR);
@@ -303,7 +330,9 @@ public class BizAdminInnerService {
         WhatsappResendRequest resendRequest = new WhatsappResendRequest();
         resendRequest.setOrgId(orgId);
         resendRequest.setMessageId(messageId);
-        return ezConnectService.resendWhatsapp(resendRequest);
+        return BeanFacadeUtil
+                .getBean(EzConnectService.class)
+                .resendWhatsapp(resendRequest);
     }
 
     public void updateVideoCard(VideoCard videoCard) {
@@ -383,6 +412,15 @@ public class BizAdminInnerService {
         EzCoreOrganizationDO organizationDO = coreOrganizationService.getOrganizationById(orgId);
         AssertUtil.notNull(organizationDO, EzErrorCode.DATA_NOT_FOUND);
         return convert(organizationDO);
+    }
+
+    public BizMemberRequiredData getMemberRequiredData(String orgId) {
+        BizMemberRequiredData data = new BizMemberRequiredData();
+        data.setAdminMembers(getOrgAdminMembers(orgId));
+        data.setBizSubOrganizations(
+                appSubOrganizationService.getSubOrganizationByOrgId(orgId)
+        );
+        return data;
     }
 
     @Transactional
@@ -479,11 +517,66 @@ public class BizAdminInnerService {
         String newPassword = RandomUtil.generateNumberCode(6);
         coreAuthService.updateMemberClientPassword(bizMemberInfo.getBizMemberClient().getClientId(), newPassword);
 
+        memberSendPassword(orgId, bizMemberInfo.getBizMember().getPhone(), newPassword);
+    }
+
+    public List<CoreMember> getUniqueMember(String orgId, String phone) {
+        return coreMemberService.getUniqueMember(orgId, phone);
+    }
+
+    public void createMember(String orgId, BizMember bizMember) throws Exception {
+        BizApplicationConfig bizApplicationConfig = getAppConfig(orgId);
+        String orgCode = getOrganizationById(orgId).getCode();
+        String appId = bizApplicationConfig.getAppId();
+
+        bizMember.setPhoneVerified(false);
+        bizMember.setEmailVerified(false);
+        bizMember.setAddressVerified(false);
+        bizMember.setCreatedTime(DateUtil.getCurrentFormattedDate());
+        bizMember.setModifiedTime(DateUtil.getCurrentFormattedDate());
+
+        if (OrgConstant.ORG_ID_RJL.equals(orgId)) {
+            bizMember.setProvinceId("18");
+            bizMember.setProvinceName("LAMPUNG");
+            bizMember.setRegencyId("1802");
+            bizMember.setRegencyName("KABUPATEN TANGGAMUS");
+
+            List<CoreArea> district = coreAreaService
+                    .getDistrictByIds(
+                            Collections.singletonList(bizMember.getDistrictId())
+                    );
+            if (district != null && district.size() > 0) {
+                bizMember.setDistrictName(district.get(0).getName());
+            }
+
+            List<CoreArea> village = coreAreaService
+                    .getVillageByIds(
+                            Collections.singletonList(bizMember.getVillageId())
+                    );
+            if (village != null && village.size() > 0) {
+                bizMember.setVillageName(village.get(0).getName());
+            }
+        }
+
+        BizMemberInfo bizMemberInfo = bizMemberInnerService
+                .createCoreMember(orgId, orgCode, appId, bizMember);
+
+        if (StringUtil.isBlank(bizMember.getRoles())) {
+            return;
+        }
+        //generate member password
+        String newPassword = RandomUtil.generateNumberCode(6);
+        coreAuthService.updateMemberClientPassword(bizMemberInfo.getBizMemberClient().getClientId(), newPassword);
+
+        memberSendPassword(orgId, bizMemberInfo.getBizMember().getPhone(), newPassword);
+    }
+
+    public void memberSendPassword(String orgId, String phone, String password) {
         AppConfig appConfig = appConfigService.getAppConfig(orgId);
         bizConnectInnerService.memberSendPassword(
                 orgId,
-                bizMemberInfo.getBizMember().getPhone(),
-                newPassword,
+                phone,
+                password,
                 appConfig.getAppName(),
                 appConfig.getAndroidUpdateUrl()
         );

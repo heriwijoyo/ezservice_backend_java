@@ -1,0 +1,97 @@
+<section class="content">
+    <ol class="breadcrumb">
+        <li><a href="home.htm">Dashboard</a></li>
+        <li><a href="commonTables.htm">Common Tables</a></li>
+        <li class="active">Table Detail</li>
+    </ol>
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                INCLUDE_DYNAMIC_FORM
+            </div>
+        </div>
+    </div>
+</section>
+
+INCLUDE_SMART_FORM_CLIENT
+<script type="text/javascript">
+    var EzAdminUrl = {
+        COMMON_TABLE_DETAIL: 'api/biz/commonTable.json',
+        COMMON_TABLE_UPDATE: 'api/biz/commonTableUpdate.json'
+    };
+    var EzDashboardBizService = {
+        start: function() {
+            EzSmartFormClientStarter.startDetail();
+        },
+        fetchData: function(detailId) {
+            EzWebAppClient.callApiService(EzAdminUrl.COMMON_TABLE_DETAIL, {
+                detailId : detailId
+            });
+        },
+        submitForm: function() {
+            EzWebAppClient.callApiService(EzAdminUrl.COMMON_TABLE_UPDATE, {
+                tableId: EzSmartFormClient.detailId,
+                orgId : $('#selectOrgId').val(),
+                code: $('#tableCode').val(),
+                title: $('#tableTitle').val(),
+                columns: $('#tableColumns').val(),
+                config: $('#tableConfig').val()
+            });
+        },
+        handleApiBizResult: function(url, response) {
+            if (url === EzAdminUrl.COMMON_TABLE_DETAIL) {
+                EzDashboardBizService.parseData(response.data);
+            }
+            if (url === EzAdminUrl.COMMON_TABLE_UPDATE) {
+                alert(response.data);
+                EzSmartFormClient.goToPageDefault();
+            }
+        },
+        handleApiBizFailed: function(url, message) {
+            if (url === EzAdminUrl.COMMON_TABLE_UPDATE) {
+                alert(message);
+            }
+        },
+        parseData: function(data) {
+            $('#tableCode').val(data.code);
+            $('#tableTitle').val(data.title);
+            $('#tableColumns').val(data.columns);
+            $('#tableConfig').val(data.config);
+            EzSmartFormClient.parseSelectedOption('selectOrgId', data.orgId);
+        },
+        showLoader: function() {
+            $('#btnLoader').show();
+            $('#btnSubmit').hide();
+        },
+        hideLoader: function() {
+            $('#btnLoader').hide();
+            $('#btnSubmit').show();
+        }
+    };
+
+    $(document).ready(function(){
+        EzWebAppClient.onApiBizSuccess(function(url, response){
+            EzDashboardBizService.handleApiBizResult(url, response);
+        });
+        EzWebAppClient.onApiBizFailed(function(url, message){
+            console.log(url +' --- '+ message);
+            EzDashboardBizService.handleApiBizFailed(url, message);
+        });
+        EzWebAppClient.onApiCallError(function(xhr){
+            console.log(xhr);
+        });
+        EzWebAppClient.onReady(function(){
+            EzDashboardBizService.start();
+        });
+        EzWebAppClient.onPrev(function(){
+            EzDashboardBizService.prev();
+        });
+        EzWebAppClient.onNext(function(){
+            EzDashboardBizService.next();
+        });
+        EzWebAppClient.start();
+    });
+</script>
+</body>
+
+</html>

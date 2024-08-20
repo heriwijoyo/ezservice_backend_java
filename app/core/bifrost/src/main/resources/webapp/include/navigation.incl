@@ -18,8 +18,8 @@
                         <i class="material-icons">more_vert</i>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="#"><i class="material-icons">person</i>Profile</a></li>
-                        <li><a href="#"><i class="material-icons">power_settings_new</i>Logout</a></li>
+                        <!--li><a href="#"><i class="material-icons">person</i>Profile</a></li-->
+                        <li><a class="btn-logout" href="#"><i class="material-icons">power_settings_new</i>Logout</a></li>
                     </ul>
                 </li>
 
@@ -40,8 +40,8 @@
             <div class="btn-group user-helper-dropdown">
                 <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                 <ul class="dropdown-menu pull-right">
-                    <li><a href="#"><i class="material-icons">person</i>Profile</a></li>
-                    <li><a href="#"><i class="material-icons">power_settings_new</i>Logout</a></li>
+                    <!--li><a href="#"><i class="material-icons">person</i>Profile</a></li-->
+                    <li><a class="btn-logout" href="#"><i class="material-icons">power_settings_new</i>Logout</a></li>
                 </ul>
             </div>
         </div>

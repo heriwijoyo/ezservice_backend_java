@@ -4,6 +4,8 @@
  */
 package id.ezclouds.biz.ezservice.service.request;
 
+import id.ezclouds.common.model.request.BizRequest;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizPageRequest.java, v 0.1 2024‐04‐07 11:58 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$

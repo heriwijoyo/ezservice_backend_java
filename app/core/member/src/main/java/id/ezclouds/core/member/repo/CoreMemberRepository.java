@@ -25,6 +25,8 @@ public interface CoreMemberRepository  extends JpaRepository<CoreMemberDO, Strin
 
     List<CoreMemberDO> findByOrgId(String orgId);
 
+    List<CoreMemberDO> findByOrgIdAndPhone(String orgId, String phone);
+
     List<CoreMemberDO> findByOrgIdAndRolesContains(String orgId, String roles);
 
     Page<CoreMemberDO> findByOrgId(String orgId, Pageable pageable);

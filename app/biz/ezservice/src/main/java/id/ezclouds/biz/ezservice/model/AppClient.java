@@ -6,7 +6,7 @@ package id.ezclouds.biz.ezservice.model;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: AppClient.java, v 0.1 2023‐12‐10 1:21 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: AuthAppClient.java, v 0.1 2023‐12‐10 1:21 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 public class AppClient {
 

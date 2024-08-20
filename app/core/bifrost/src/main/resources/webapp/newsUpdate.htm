@@ -1,0 +1,257 @@
+<section class="content">
+
+    <ol class="breadcrumb breadcrumb-offset">
+        <li><a href="home.htm">Dashboard</a></li>
+        <li><a href="news.htm">Manage News</a></li>
+        <li class="active">Update News</a></li>
+    </ol>
+
+    <div class="container-fluid" id="fade-in">
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                    <div class="card corner-radius">
+                        <div class="header">
+                            <h2>UPDATE NEWS</h2>
+                            <div class="header-dropdown m-r--5">
+                                <img id="submitLoader" src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right">
+                                <button id="add-news-submit" type="submit" name="submit" class="button button-rounded btn-offset bg-blue waves-effect pull-right">UPDATE</button>
+                            </div>
+                        </div>
+                        <div class="body">
+                            <div class="row clearfix">
+                                <div class="col-sm-5">
+                                    <div class="form-group">
+                                        <div class="font-12">News ID: </div>
+                                        <div id="newsId" class="font-12"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="font-12">News Title *</div>
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" id="newsTitle" placeholder="News Title" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="font-12">News Description *</div>
+                                        <div class="form-line">
+                                            <textarea class="form-control" id="newsDescription" cols="1" rows="3" required></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="font-12">News Date *</div>
+                                        <div class="form-line">
+                                            <input type="text" id="newsDate" class="datetimepicker form-control" placeholder="News Date" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="font-12">Category *</div>
+                                        <select class="form-control show-tick" id="newsCategory">
+                                            <option value="GENERAL">Berita Umum</option>
+                                            <option value="BUSINESS">Berita Bisnis</option>
+                                            <option value="ECONOMICS">Berita Ekonomi</option>
+                                            <option value="POLITICS">Berita Politik</option>
+                                            <option value="ELECTION">Berita Pemilu</option>
+                                            <option value="SPORT">Berita Olah Raga</option>
+                                            <option value="TECHNOLOGY">Berita Teknologi</option>
+                                            <option value="INTERNATIONAL">Berita Luar Negeri</option>
+                                        </select>
+                                    </div>
+
+                                    <div id="video_post">
+                                        <div class="font-12 ex1">Image Primary ( jpg / png ) *</div>
+                                        <div class="form-group">
+                                            <form id="add-news-form" method="post" enctype="multipart/form-data">
+                                                <input type="file" name="imageFile" class="dropify-image" data-max-file-size="2M" data-allowed-file-extensions="jpg jpeg png gif" required />
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="font-12">Source</div>
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" id="newsSource" placeholder="Source" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="font-12">Source URL</div>
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" id="newsSourceUrl" placeholder="Source URL" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-7">
+                                    <div class="font-12">Description *</div>
+                                    <div class="form-group" style="margin-top: 6px;">
+                                        <textarea class="form-control" id="newsContent" cols="60" rows="10" required></textarea>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    var EzAdminUrl = {
+        NEWS_DETAIL_GET: 'api/newsDetail.json',
+        ADMIN_COMMON_POST: 'api/adminCommonPost.json'
+    };
+    var EzDashboardBizService = {
+        start: function() {
+            EzDashboardBizService.fetchNewsDetail();
+        },
+        fetchNewsDetail: function() {
+            let newsId = EzWebAppClient.getUrlParameter('newsId');
+            if (EzWebAppClient.isBlank(newsId)) {
+                EzDashboardBizService.alertInvalidNews();
+            } else {
+                 EzWebAppClient.callApiService(EzAdminUrl.NEWS_DETAIL_GET, {
+                    newsId: newsId
+                 });
+            }
+        },
+        handleApiBizResult: function(url, response) {
+            if (url === EzAdminUrl.NEWS_DETAIL_GET) {
+                EzDashboardBizService.renderNewsDetail(response.data);
+            }
+            if (url === EzAdminUrl.ADMIN_COMMON_POST) {
+                alert(response.data);
+                window.location.reload();
+            }
+        },
+        handleApiBizFailed: function(url, message) {
+            if (url === EzAdminUrl.ADMIN_COMMON_POST) {
+                alert(message);
+                EzDashboardBizService.hideLoader();
+            }
+        },
+        postAddNewsForm: function() {
+            let postData = {
+                scene: 'ADMIN_NEWS_GALLERY_UPDATE',
+                extendInfo: {
+                    NEWS_ID: $('#newsId').html(),
+                    TITLE: $('#newsTitle').val(),
+                    DESCRIPTION: $('#newsDescription').val(),
+                    CATEGORY: $('#newsCategory').val(),
+                    PUBLISH_DATE: $('#newsDate').val(),
+                    SOURCE: $('#newsSource').val(),
+                    SOURCE_URL: $('#newsSourceUrl').val(),
+                    CONTENT: CKEDITOR.instances.newsContent.getData()
+                }
+            };
+            EzWebAppClient.postMultipartForm('add-news-form', postData, EzAdminUrl.ADMIN_COMMON_POST, '');
+        },
+        renderNewsDetail: function(data) {
+            $('#newsId').html(data.newsId);
+            $('#newsTitle').val(data.title);
+            $('#newsDescription').val(data.description);
+            $('#newsDate').val(data.publishDate);
+            $('#newsSource').val(data.source);
+            $('#newsSourceUrl').val(data.sourceUrl);
+            $('.dropify-render').html('<img src="'+ data.imageUrl +'"/>');
+            $('.dropify-preview').show();
+            CKEDITOR.instances.newsContent.setData(data.content);
+
+            $('#newsCategory > option').each(function(){
+                if (this.value == data.category) {
+                    $(this).prop('selected', true);
+                    $('#newsCategory').selectpicker('render');
+
+                }
+            });
+        },
+        showLoader: function() {
+            $('#add-news-submit').hide();
+            $('#submitLoader').show();
+        },
+        hideLoader: function() {
+            $('#submitLoader').hide();
+            $('#add-news-submit').show();
+        },
+        alertInvalidNews: function() {
+            alert('Invalid News ID');
+            window.location.replace('news.htm');
+        }
+    };
+
+    $(document).ready(function(){
+        EzWebAppClient.onApiBizSuccess(function(url, response){
+            EzDashboardBizService.handleApiBizResult(url, response);
+        });
+        EzWebAppClient.onApiBizFailed(function(url, message){
+            EzDashboardBizService.handleApiBizFailed(url, message);
+        });
+        EzWebAppClient.onApiCallError(function(xhr){
+            console.log(xhr);
+        });
+        EzWebAppClient.onReady(function(){
+            EzDashboardBizService.start();
+        });
+        EzWebAppClient.start();
+
+        $('#add-news-submit').click(function(event) {
+            event.preventDefault();
+            EzDashboardBizService.showLoader();
+            EzDashboardBizService.postAddNewsForm();
+        });
+
+
+        // dropify and timepicker
+        $('.dropify').dropify();
+        $('.dropify-image').dropify({
+            messages: {
+                default : '<center>Drag and drop a image here or click</center>',
+                error   : 'Ooops, something wrong appended.'
+            },
+            error: {
+                'fileSize': '<center>The file size is too big broo ({{ value }} max).</center>',
+                'minWidth': '<center>The image width is too small ({{ value }}}px min).</center>',
+                'maxWidth': '<center>The image width is too big ({{ value }}}px max).</center>',
+                'minHeight': '<center>The image height is too small ({{ value }}}px min).</center>',
+                'maxHeight': '<center>The image height is too big ({{ value }}px max).</center>',
+                'imageFormat': '<center>The image format is not allowed ({{ value }} only).</center>',
+                'fileExtension': '<center>The file is not allowed ({{ value }} only).</center>'
+            },
+        });
+        $('.dropify-notification').dropify({
+            messages: {
+                default : '<center>Drag and drop a image here or click<br>(Optional)</center>',
+            }
+        });
+        var drEvent = $('#input-file-events').dropify();
+        drEvent.on('dropify.beforeClear', function(event, element){
+            return confirm("Do you really want to delete \"" + element.file.name + "\" ?");
+        });
+        drEvent.on('dropify.afterClear', function(event, element){
+            alert('File deleted');
+        });
+        drEvent.on('dropify.errors', function(event, element){
+            console.log('Has Errors');
+        });
+        var drDestroy = $('#input-file-to-destroy').dropify();
+        drDestroy = drDestroy.data('dropify')
+        $('#toggleDropify').on('click', function(e){
+            e.preventDefault();
+            if (drDestroy.isDropified()) {
+                drDestroy.destroy();
+            } else {
+                drDestroy.init();
+            }
+        });
+        $('#newsDate').bootstrapMaterialDatePicker
+        ({
+            format: 'YYYY-MM-DD HH:mm:ss'
+        });
+
+        CKEDITOR.replace('newsContent');
+        CKEDITOR.config.height = 338;
+    });
+</script>

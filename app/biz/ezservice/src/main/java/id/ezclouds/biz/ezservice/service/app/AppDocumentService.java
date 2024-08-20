@@ -4,19 +4,15 @@
  */
 package id.ezclouds.biz.ezservice.service.app;
 
-import id.ezclouds.biz.ezservice.model.VideoCard;
 import id.ezclouds.biz.ezservice.service.app.dataobject.AppDocumentDO;
-import id.ezclouds.biz.ezservice.service.app.dataobject.VideoCardDO;
 import id.ezclouds.biz.ezservice.service.app.model.AppDocument;
 import id.ezclouds.biz.ezservice.service.app.repo.AppDocumentRepository;
 import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
-import id.ezclouds.biz.ezservice.service.result.BizResult;
 import id.ezclouds.biz.ezservice.util.PageRequestUtil;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
-import id.ezclouds.core.shared.converter.PageResultConverter;
-import id.ezclouds.core.shared.result.BizPageInfo;
-import id.ezclouds.core.shared.result.PageResult;
+import id.ezclouds.common.model.result.BizPageInfo;
+import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.core.shared.util.PageResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,7 +20,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**

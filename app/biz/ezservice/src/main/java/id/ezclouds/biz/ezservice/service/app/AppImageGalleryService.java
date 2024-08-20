@@ -10,7 +10,7 @@ import id.ezclouds.biz.ezservice.service.app.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.app.model.WebImageGallery;
 import id.ezclouds.biz.ezservice.service.app.repo.AppImageGalleryRepository;
 import id.ezclouds.biz.ezservice.service.app.request.AppImageGalleryRequest;
-import id.ezclouds.core.shared.result.PageResult;
+import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;

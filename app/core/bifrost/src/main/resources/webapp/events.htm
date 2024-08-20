@@ -1,0 +1,146 @@
+
+<section class="content">
+    <ol class="breadcrumb breadcrumb-offset">
+        <li><a href="home.htm">Dashboard</a></li>
+        <li class="active">Manage Events</a></li>
+    </ol>
+
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card corner-radius">
+                    <div class="header">
+                        <h2>MANAGE EVENTS</h2>
+                        <div class="header-dropdown m-r--5">
+                            <a href="eventAdd.htm">
+                                <button id="form-add-new-btn" type="button" class="button button-rounded btn-offset waves-effect waves-float">ADD EVENT</button>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: -10px;" class="body table-responsive">
+                        <table class="table table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th width="20%">Image</th>
+                                <th width="60%">Information</th>
+                                <th width="10%" class="text-center">Highlight</th>
+                                <th width="10%" class="text-center">Status</th>
+                            </tr>
+                            </thead>
+                            <tbody id="rowsContainer"></tbody>
+                        </table>
+                        <ul class="pager"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    var EzAdminUrl = {
+        EVENT_GET: 'api/events.json',
+        EVENT_STATUS_SWITCH: 'api/eventFlagSwitch.json'
+    };
+    var EzDashboardBizService = {
+        start: function() {
+            EzDashboardBizService.fetchEvents();
+        },
+        fetchEvents: function() {
+            EzWebAppClient.callApiService(EzAdminUrl.EVENT_GET, {
+                sessionId: EzWebAppClient.getSessionId(),
+                pageNumber: EzDashboardBizService.data.pageNumber,
+                pageSize: EzDashboardBizService.data.pageSize
+            });
+        },
+        handleApiBizResult: function(url, response) {
+            if (url === EzAdminUrl.EVENT_GET) {
+                EzDashboardBizService.data.result = response.pageResult;
+                EzDashboardBizService.reloadPageResultView(response);
+            }
+            if (url === EzAdminUrl.EVENT_STATUS_SWITCH) {
+                alert(response.data);
+                EzDashboardBizService.fetchEvents();
+            }
+        },
+        handleApiBizFailed: function(url, message) {
+            if (url === EzAdminUrl.EVENT_STATUS_SWITCH) {
+                alert(message);
+            }
+        },
+        reloadPageResultView: function(response) {
+            $('#rowsContainer').html('');
+            for(let i=0; i<response.pageResult.data.length; i++) {
+                let rowData = response.pageResult.data[i];
+                let title = '<a href="eventUpdate.htm?id='+ rowData.id +'"><b>'+ rowData.title +'</b></a><br>Category: '+ rowData.category +'<br>Location: '+ rowData.location + '<br>Date Start: '+ rowData.dateStart +'<br>Time Start: '+ rowData.timeStart +'<br>Date End: '+ rowData.dateEnd +'<br>Time End: '+ rowData.timeEnd +'<br><br>Description:<br>'+ rowData.description;
+                let itemRow = $.parseHTML(DashTemplate);
+                $(itemRow).find('.img-rounded').attr('src', rowData.imageUrl);
+                $(itemRow).find('.rowTitle').html(title);
+                $(itemRow).find('.rowHighlight').html(EzDashboardBizService.renderFlag(rowData.highlight,'highlight',rowData.id));
+                $(itemRow).find('.rowActive').html(EzDashboardBizService.renderFlag(rowData.status,'status',rowData.id));
+                $('#rowsContainer').append(itemRow);
+            }
+            $('.pager').html(EzWebAppClient.renderPager(response.pageResult));
+        },
+        renderFlag: function(flag,section,id) {
+            let flagText = flag == 1 ? 'ACTIVE' : 'NOT ACTIVE';
+            let switchFlag = flag == 1 ? '0' : '1';
+            return '<center>'+ flagText + '<br><button onClick="EzDashboardBizService.swithFlag(\''+id+'\',\''+section+'\',\''+switchFlag+'\')" class="button button-rounded waves-effect waves-float" type="submit">SWITCH</button></center>';
+        },
+        swithFlag: function(itemId,section,value) {
+            EzWebAppClient.callApiService(EzAdminUrl.EVENT_STATUS_SWITCH, {
+                sessionId: EzWebAppClient.getSessionId(),
+                itemId: itemId,
+                section: section,
+                value: value
+            });
+        },
+        prev: function() {
+            EzDashboardBizService.data.pageNumber--;
+            EzDashboardBizService.fetchEvents();
+        },
+        next: function() {
+            EzDashboardBizService.data.pageNumber++;
+            EzDashboardBizService.fetchEvents();
+        },
+        data: {
+            pageNumber: 1,
+            pageSize: 5,
+            result: null
+        }
+    };
+
+    $(document).ready(function(){
+        EzWebAppClient.onApiBizSuccess(function(url, response){
+            EzDashboardBizService.handleApiBizResult(url, response);
+        });
+        EzWebAppClient.onApiBizFailed(function(url, message){
+            EzDashboardBizService.handleApiBizFailed(url, message);
+        });
+        EzWebAppClient.onApiCallError(function(xhr){
+            console.log(xhr);
+        });
+        EzWebAppClient.onReady(function(){
+            EzDashboardBizService.start();
+        });
+        EzWebAppClient.onPrev(function(){
+            EzDashboardBizService.prev();
+        });
+        EzWebAppClient.onNext(function(){
+            EzDashboardBizService.next();
+        });
+        EzWebAppClient.start();
+    });
+
+    var DashTemplate = ''+
+        '<tr>'+
+            '<td style="vertical-align: middle;">'+
+                '<img class="img-rounded" style="object-fit:cover;" height="180px" width="240px">'+
+            '</td>'+
+            '<td class="rowTitle" style="vertical-align: middle;"></td>'+
+            '<td class="rowHighlight" style="vertical-align: middle;"></td>'+
+            '<td class="rowActive" style="vertical-align: middle;"></td>'+
+        '</tr>';
+
+</script>

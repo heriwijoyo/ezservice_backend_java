@@ -21,13 +21,13 @@ import id.ezclouds.biz.ezservice.service.app.AppProfileService;
 import id.ezclouds.biz.ezservice.service.request.BizMemberRegisterRequest;
 import id.ezclouds.biz.ezservice.service.request.BizMemberUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
-import id.ezclouds.biz.ezservice.service.request.BizRequest;
+import id.ezclouds.common.model.request.BizRequest;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.service.AppSubOrganizationService;
 import id.ezclouds.common.util.StringUtil;
-import id.ezclouds.core.shared.result.BizPageInfo;
-import id.ezclouds.biz.ezservice.service.result.BizResult;
-import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
+import id.ezclouds.common.model.result.BizPageInfo;
+import id.ezclouds.common.model.result.BizResult;
+import id.ezclouds.common.facade.template.BizServiceTemplate;
 import id.ezclouds.biz.ezservice.util.BizExtendInfoUtil;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
@@ -136,19 +136,27 @@ public class BizMemberService extends BizBaseService {
                 AssertUtil.isTrue(memberRoles.size() > 0, EzErrorCode.UNAUTHORIZED);
 
                 BizMemberRegisterMode bizRegisterMode = request.getRegisterMode();
+                request.setRoles("");
 
                 if (bizRegisterMode == BizMemberRegisterMode.BY_RECRUITER) {
                     AssertUtil.isTrue(memberRoles.contains(BizMemberRole.OP_RECRUITER.getCode()), EzErrorCode.UNAUTHORIZED);
                     if (StringUtil.isBlank(request.getSubOrgId())) {
                         CoreMember referrerMember = coreMemberService.getOptimisticCoreMember(sessionInfo.getMemberId());
                         request.setSubOrgId(referrerMember.getSubOrgId());
+                        request.setRoles("");
                     }
                 }
                 if (bizRegisterMode == BizMemberRegisterMode.BY_SUB_ORG_ADMIN) {
                     AssertUtil.isTrue(memberRoles.contains(BizMemberRole.ADMIN_SUB_ORG.getCode()), EzErrorCode.UNAUTHORIZED);
+                    request.setRoles("");
                 }
                 if (bizRegisterMode == BizMemberRegisterMode.BY_ORG_ADMIN) {
                     AssertUtil.isTrue(memberRoles.contains(BizMemberRole.ADMIN_ORG.getCode()), EzErrorCode.UNAUTHORIZED);
+                    request.setRoles("OP_RECRUITER");
+                    //tmp close member registration from app
+                    bizResult.setSuccess(false);
+                    bizResult.setErrorMessage("Fitur ini tidak dapat digunakan untuk sementara waktu. Gunakan fitur pada web admin untuk mendaftarkan anggota baru");
+                    return;
                 }
 
                 request.setReferrerId(sessionInfo.getMemberId());

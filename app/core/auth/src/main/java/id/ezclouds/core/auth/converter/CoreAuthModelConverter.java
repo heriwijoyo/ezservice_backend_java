@@ -7,7 +7,7 @@ package id.ezclouds.core.auth.converter;
 import id.ezclouds.core.auth.dataobject.EzAuthAdminCommonSessionDO;
 import id.ezclouds.core.auth.dataobject.EzAuthAppClientDO;
 import id.ezclouds.core.auth.dataobject.EzAuthMemberClientDO;
-import id.ezclouds.core.auth.model.CoreAuthAdminSession;
+import id.ezclouds.common.model.auth.AuthAdminSession;
 import id.ezclouds.core.auth.model.CoreAuthAppClient;
 import id.ezclouds.core.auth.model.CoreAuthMemberClient;
 
@@ -76,9 +76,9 @@ public class CoreAuthModelConverter {
         return clientDO;
     }
 
-    public static CoreAuthAdminSession convert(EzAuthAdminCommonSessionDO sessionDO) {
+    public static AuthAdminSession convert(EzAuthAdminCommonSessionDO sessionDO) {
         if (sessionDO == null) { return null; }
-        CoreAuthAdminSession session = new CoreAuthAdminSession();
+        AuthAdminSession session = new AuthAdminSession();
         session.setSessionId(sessionDO.getSessionId());
         session.setSessionCode(sessionDO.getSessionCode());
         session.setScene(sessionDO.getScene());

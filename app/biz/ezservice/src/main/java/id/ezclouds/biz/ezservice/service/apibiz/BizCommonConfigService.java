@@ -14,14 +14,14 @@ import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.model.news.BizSimpleNews;
 import id.ezclouds.biz.ezservice.service.app.*;
 import id.ezclouds.biz.ezservice.service.app.model.AppImageGallery;
-import id.ezclouds.biz.ezservice.service.result.BizResult;
-import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
+import id.ezclouds.common.model.result.BizResult;
+import id.ezclouds.common.facade.template.BizServiceTemplate;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.service.CoreMemberService;
-import id.ezclouds.core.shared.context.EzAppContextHolder;
+import id.ezclouds.common.util.context.EzAppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

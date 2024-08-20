@@ -1,0 +1,72 @@
+<section class="content">
+    <ol class="breadcrumb">
+        <li><a href="home.htm">Dashboard</a></li>
+        <li><a href="commonTables.htm">Common Tables</a></li>
+        <li class="active">Add Table</li>
+    </ol>
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                INCLUDE_DYNAMIC_FORM
+            </div>
+        </div>
+    </div>
+</section>
+
+INCLUDE_SMART_FORM_CLIENT
+<script type="text/javascript">
+    var EzAdminUrl = {
+        COMMON_TABLE_CREATE: 'api/biz/commonTableCreate.json'
+    };
+    var EzDashboardBizService = {
+        start: function() {
+            EzSmartFormClientStarter.start();
+        },
+        submitForm: function() {
+            EzWebAppClient.callApiService(EzAdminUrl.COMMON_TABLE_CREATE, {
+                orgId : $('#selectOrgId').val(),
+                code: $('#tableCode').val(),
+                title: $('#tableTitle').val(),
+                columns: $('#tableColumns').val(),
+                config: $('#tableConfig').val()
+            });
+        },
+        handleApiBizResult: function(url, response) {
+            if (url === EzAdminUrl.COMMON_TABLE_CREATE) {
+                alert(response.data);
+                window.location.replace('commonTables.htm');
+            }
+        },
+        handleApiBizFailed: function(url, message) {
+            if (url === EzAdminUrl.COMMON_TABLE_CREATE) {
+                alert(message);
+            }
+        }
+    };
+
+    $(document).ready(function(){
+        EzWebAppClient.onApiBizSuccess(function(url, response){
+            EzDashboardBizService.handleApiBizResult(url, response);
+        });
+        EzWebAppClient.onApiBizFailed(function(url, message){
+            console.log(url +' --- '+ message);
+            EzDashboardBizService.handleApiBizFailed(url, message);
+        });
+        EzWebAppClient.onApiCallError(function(xhr){
+            console.log(xhr);
+        });
+        EzWebAppClient.onReady(function(){
+            EzDashboardBizService.start();
+        });
+        EzWebAppClient.onPrev(function(){
+            EzDashboardBizService.prev();
+        });
+        EzWebAppClient.onNext(function(){
+            EzDashboardBizService.next();
+        });
+        EzWebAppClient.start();
+    });
+</script>
+</body>
+
+</html>

@@ -6,7 +6,7 @@ package id.ezclouds.core.bifrost.app.api.request;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: AppClient.java, v 0.1 2023‐12‐09 4:10 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: AuthAppClient.java, v 0.1 2023‐12‐09 4:10 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 public class RequestAppClient {
 

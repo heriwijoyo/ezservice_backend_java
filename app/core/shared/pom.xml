@@ -15,17 +15,17 @@
     <version>1.0.0</version>
 
     <dependencies>
-        <dependency>
-            <groupId>id.ezclouds.common</groupId>
-            <artifactId>ezclouds-common-util</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/com.opencsv/opencsv -->
         <dependency>
             <groupId>com.opencsv</groupId>
             <artifactId>opencsv</artifactId>
             <version>5.9</version>
+        </dependency>
+
+        <dependency>
+            <groupId>id.ezclouds.common</groupId>
+            <artifactId>ezclouds-common-facade</artifactId>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 </project>

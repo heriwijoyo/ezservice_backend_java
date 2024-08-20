@@ -71,11 +71,11 @@ public class BizSyncMemberUnionProcessor extends BizAsyncProcessor {
         logData.add("DEL_UNION=" + deletedUnion);
         logData.add("DEL_DUPLICATE=" + deleteDuplicate);
 
-        // 2. query all biz member id registered by app
+        // 2. query all admin member id registered by app
         List<String> membersId = coreMemberService.getAllMemberIds(orgId);
         logData.add("MEMBER_APP_COUNT=" + membersId.size());
 
-        // 3. query biz member detail and try to sync
+        // 3. query admin member detail and try to sync
         int syncSuccessCount = 0;
         int syncFailCount = 0;
         if (membersId.size() > 0) {

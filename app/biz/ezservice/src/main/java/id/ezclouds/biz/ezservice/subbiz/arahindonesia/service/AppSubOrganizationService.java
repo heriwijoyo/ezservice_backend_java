@@ -10,20 +10,26 @@ import id.ezclouds.biz.ezservice.service.app.repo.BizMemberRepository;
 import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.biz.ezservice.service.inner.service.BizPageQueryStrategy;
 import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
-import id.ezclouds.core.shared.result.BizPageInfo;
+import id.ezclouds.common.model.result.BizPageInfo;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.dataobject.BizSubOrganizationDO;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.repo.AppSubOrganizationRepository;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.shared.enums.CoreSequenceScene;
+import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.core.shared.service.CoreSequenceService;
+import id.ezclouds.core.shared.util.PageResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -73,6 +79,16 @@ public class AppSubOrganizationService {
         appSubOrganizationRepository.saveAndFlush(bizSubOrganizationDO);
     }
 
+    @Transactional
+    public void createSubOrganization(BizSubOrganization subOrganization) {
+        create(
+                subOrganization.getName(),
+                subOrganization.getAddress(),
+                subOrganization.getOrgId(),
+                subOrganization.getOrgCode()
+        );
+    }
+
     @Cacheable(BizCacheKey.SUB_ORGANIZATION_ALL)
     public List<BizSubOrganization> getAllSubOrganization() {
         return appSubOrganizationRepository
@@ -87,6 +103,25 @@ public class AppSubOrganizationService {
                 .stream()
                 .filter(subOrg -> orgId.equals(subOrg.getOrgId()))
                 .collect(Collectors.toList());
+    }
+
+    public Map<String, String> getSubOrgNameMap(String orgId) {
+        Map<String, String> map = new HashMap<>();
+        getSubOrganizationByOrgId(orgId)
+                .forEach(subOrganization -> {
+                    map.put(subOrganization.getSubOrgId(), subOrganization.getName());
+                });
+        return map;
+    }
+
+    public PageResult<BizSubOrganization> getSubOrganizations(String orgId, PageRequest pageRequest) {
+        Page<BizSubOrganizationDO> findResult = appSubOrganizationRepository
+                .findByOrgId(orgId, pageRequest);
+
+        return PageResultUtil.convertFindResult(findResult, input -> input
+                .stream()
+                .map(BizModelConverter::convert)
+                .collect(Collectors.toList()));
     }
 
     public BizPageInfo pageQuery(BizPageRequest request) {

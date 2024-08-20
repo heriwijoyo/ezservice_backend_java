@@ -4,7 +4,7 @@
  */
 package id.ezclouds.biz.ezservice.service.processor.event;
 
-import id.ezclouds.core.shared.context.EzAppEvent;
+import id.ezclouds.common.util.context.EzAppEvent;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)

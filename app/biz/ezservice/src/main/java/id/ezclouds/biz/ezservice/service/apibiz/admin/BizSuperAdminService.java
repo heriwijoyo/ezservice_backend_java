@@ -10,10 +10,12 @@ import id.ezclouds.biz.ezservice.enums.BizImportScene;
 import id.ezclouds.biz.ezservice.enums.BizMemberRole;
 import id.ezclouds.biz.ezservice.enums.BizUploadScene;
 import id.ezclouds.biz.ezservice.model.admin.BizApplicationConfig;
+import id.ezclouds.biz.ezservice.model.admin.BizMemberRequiredData;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganization;
 import id.ezclouds.biz.ezservice.model.admin.BizOrganizationDetail;
 import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.service.apibiz.BizBaseService;
+import id.ezclouds.biz.ezservice.service.apibiz.BizLocalAreaService;
 import id.ezclouds.biz.ezservice.service.async.processor.BizOldCommonReportProcessor;
 import id.ezclouds.biz.ezservice.service.processor.BizSyncMemberUnionProcessor;
 import id.ezclouds.biz.ezservice.service.core.BizCacheEnum;
@@ -23,12 +25,17 @@ import id.ezclouds.biz.ezservice.service.core.BizAppCacheService;
 import id.ezclouds.biz.ezservice.service.app.model.BizAppConfig;
 import id.ezclouds.biz.ezservice.service.inner.service.BizAdminInnerService;
 import id.ezclouds.biz.ezservice.service.request.BizDataImportRequest;
+import id.ezclouds.biz.ezservice.service.request.BizLocalAreaRequest;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
-import id.ezclouds.biz.ezservice.service.result.BizResult;
+import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
+import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
+import id.ezclouds.common.model.result.BizResult;
+import id.ezclouds.common.util.facade.BeanFacadeUtil;
 import id.ezclouds.core.auth.model.CoreAuthAdminScene;
-import id.ezclouds.core.shared.result.PageResult;
-import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
+import id.ezclouds.core.member.model.CoreMember;
+import id.ezclouds.common.model.result.PageResult;
+import id.ezclouds.common.facade.template.BizServiceTemplate;
 import id.ezclouds.biz.ezservice.util.BizExtendInfoUtil;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
@@ -36,7 +43,7 @@ import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
-import id.ezclouds.core.auth.model.CoreAuthAdminSession;
+import id.ezclouds.common.model.auth.AuthAdminSession;
 import id.ezclouds.core.auth.request.CoreAdminCommonSessionCreateRequest;
 import id.ezclouds.core.shared.constant.CoreConstant;
 import id.ezclouds.core.shared.file.PublicFileResolver;
@@ -46,6 +53,7 @@ import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -85,9 +93,9 @@ public class BizSuperAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                List<CoreAuthAdminSession> currentSessions = coreAuthService
+                List<AuthAdminSession> currentSessions = coreAuthService
                         .adminGetSession(CoreConstant.SU_ORG_ID, CoreConstant.SU_ORG_ID);
-                for (CoreAuthAdminSession session : currentSessions) {
+                for (AuthAdminSession session : currentSessions) {
                     coreAuthService.adminLogoutSession(session.getSessionId());
                 }
 
@@ -100,7 +108,7 @@ public class BizSuperAdminService extends BizBaseService {
                 createRequest.setMemberId(CoreConstant.SU_ORG_ID);
                 createRequest.setMemberRoles("SUPERUSER");
 
-                CoreAuthAdminSession session = coreAuthService.adminCreateSession(createRequest);
+                AuthAdminSession session = coreAuthService.adminCreateSession(createRequest);
                 String sessionCode = session.getSessionCode();
 
                 if (shouldScrambleCode) {
@@ -137,7 +145,7 @@ public class BizSuperAdminService extends BizBaseService {
         return bizResult;
     }
 
-    public BizResult createSuperAdminPublicSession() {
+    public BizResult createSuperAdminPublicSession(String orgCode) {
         final BizResult bizResult = new BizResult();
         BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
             @Override
@@ -147,14 +155,14 @@ public class BizSuperAdminService extends BizBaseService {
             public void onBizProcess() throws Exception {
                 CoreAdminCommonSessionCreateRequest createRequest = new CoreAdminCommonSessionCreateRequest();
                 createRequest.setOrgId(CoreConstant.SU_ORG_ID);
-                createRequest.setOrgCode(CoreConstant.RJL_ORG_CODE);
+                createRequest.setOrgCode(orgCode);
                 createRequest.setScene(CoreAuthAdminScene.WEB_PUBLIC_SESSION.getCode());
                 createRequest.setAppId(CoreConstant.SU_ORG_ID);
                 createRequest.setClientId(CoreConstant.SU_ORG_ID);
                 createRequest.setMemberId(CoreConstant.SU_ORG_ID);
                 createRequest.setMemberRoles("PUBLIC_ACCESS");
 
-                CoreAuthAdminSession session = coreAuthService.adminCreateSession(createRequest);
+                AuthAdminSession session = coreAuthService.adminCreateSession(createRequest);
 
                 bizResult.setObject("SUCCESS :: "+ session.getSessionId());
                 bizResult.setSuccess(true);
@@ -211,7 +219,7 @@ public class BizSuperAdminService extends BizBaseService {
         return bizResult;
     }
 
-    public BizResult getOrganizationDetail(BizWebDetailRequest<String> request) {
+    public BizResult getOrganizationDetail(WebBizDetailRequest<String> request) {
         final BizResult bizResult = new BizResult();
         BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
             @Override
@@ -271,7 +279,7 @@ public class BizSuperAdminService extends BizBaseService {
         return bizResult;
     }
 
-    public BizResult updateOrganization(BizWebUpdateRequest<BizOrganization> request) {
+    public BizResult updateOrganization(WebBizUpdateRequest<BizOrganization> request) {
         final BizResult bizResult = new BizResult();
         BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
             @Override
@@ -309,7 +317,34 @@ public class BizSuperAdminService extends BizBaseService {
         return bizResult;
     }
 
-    public BizResult updateAppConfig(BizWebUpdateRequest<BizApplicationConfig> request) {
+    public BizResult getMemberRequiredData(WebBizDetailRequest<String> request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getObject(), EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                authorizeSuperUserMember(request.getSessionId());
+
+                BizMemberRequiredData requiredData = bizAdminInnerService.getMemberRequiredData(request.getObject());
+                bizResult.setSuccess(true);
+                bizResult.setObject(requiredData);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
+    public BizResult updateAppConfig(WebBizUpdateRequest<BizApplicationConfig> request) {
         final BizResult bizResult = new BizResult();
         BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
             @Override
@@ -347,7 +382,7 @@ public class BizSuperAdminService extends BizBaseService {
         return bizResult;
     }
 
-    public BizResult updateBizAppConfig(BizWebUpdateRequest<List<BizAppConfig>> request) {
+    public BizResult updateBizAppConfig(WebBizUpdateRequest<List<BizAppConfig>> request) {
         final BizResult bizResult = new BizResult();
         BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
             @Override
@@ -374,7 +409,7 @@ public class BizSuperAdminService extends BizBaseService {
         return bizResult;
     }
 
-    public BizResult updateCoreOrgConfig(BizWebUpdateRequest<Map<String, String>> request) {
+    public BizResult updateCoreOrgConfig(WebBizUpdateRequest<Map<String, String>> request) {
         final BizResult bizResult = new BizResult();
         BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
             @Override
@@ -418,6 +453,44 @@ public class BizSuperAdminService extends BizBaseService {
             public void onBizProcess() throws Exception {
                 authorizeSuperUserMember(request.getSessionId());
                 bizAdminInnerService.adminOrgCreateMember(request.getOrgId(), request.getData());
+                bizResult.setSuccess(true);
+                bizResult.setObject("OPERATION SUCCESS");
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
+    public BizResult createBizMember(BizWebCreateRequest<BizMember> request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notNull(request.getData(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getOrgId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getData().getReferrerId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notNull(request.getData().getSubOrganization(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getData().getSubOrganization().getSubOrgId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getData().getName(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getData().getPhone(), EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                authorizeSuperUserMember(request.getSessionId());
+                List<CoreMember> members = bizAdminInnerService
+                        .getUniqueMember(request.getOrgId(), request.getData().getPhone());
+                if (members != null) {
+                    AssertUtil.isNotTrue(members.size() > 0, EzErrorCode.IDEMPOTENT_ERROR);
+                }
+                bizAdminInnerService
+                        .createMember(request.getOrgId(), request.getData());
                 bizResult.setSuccess(true);
                 bizResult.setObject("OPERATION SUCCESS");
             }
@@ -564,6 +637,37 @@ public class BizSuperAdminService extends BizBaseService {
         return bizResult;
     }
 
+    public BizResult getCoreAreas(String sessionId, String level, String parentId) {
+        BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notBlank(sessionId, EzErrorCode.SESSION_INVALID);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                authorizeSuperUserMember(sessionId);
+
+                BizLocalAreaRequest request = new BizLocalAreaRequest();
+                request.setAreaLevel(level);
+                request.setParentIds(Collections.singletonList(parentId));
+                BizResult result = BeanFacadeUtil
+                        .getBean(BizLocalAreaService.class)
+                        .getLocalArea(request);
+
+                bizResult.setSuccess(result.isSuccess());
+                bizResult.setObject(result.getObject());
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
     public BizResult commonImport(final BizDataImportRequest request) {
         final BizResult bizResult = new BizResult();
 
@@ -646,7 +750,7 @@ public class BizSuperAdminService extends BizBaseService {
     }
 
     private void authorizeSuperUserMember(String sessionId) throws Exception {
-        CoreAuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(sessionId);
+        AuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(sessionId);
         AssertUtil.notBlank(adminSession.getMemberRoles(), EzErrorCode.MEMBER_UNAUTHORIZED);
         List<String> roles = Arrays.asList(adminSession.getMemberRoles().split(","));
         AssertUtil.isTrue(roles.contains(BizMemberRole.SUPERUSER.getCode()), EzErrorCode.MEMBER_UNAUTHORIZED);

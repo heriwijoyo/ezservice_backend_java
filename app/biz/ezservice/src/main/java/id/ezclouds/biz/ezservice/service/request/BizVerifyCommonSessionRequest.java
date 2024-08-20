@@ -4,6 +4,8 @@
  */
 package id.ezclouds.biz.ezservice.service.request;
 
+import id.ezclouds.common.model.request.BizRequest;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizVerifyCommonSessionRequest.java, v 0.1 2024‐02‐05 9:57 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$

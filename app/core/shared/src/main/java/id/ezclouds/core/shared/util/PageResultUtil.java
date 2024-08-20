@@ -5,8 +5,8 @@
 package id.ezclouds.core.shared.util;
 
 import id.ezclouds.core.shared.converter.PageResultConverter;
-import id.ezclouds.core.shared.result.BizPageInfo;
-import id.ezclouds.core.shared.result.PageResult;
+import id.ezclouds.common.model.result.BizPageInfo;
+import id.ezclouds.common.model.result.PageResult;
 import org.springframework.data.domain.Page;
 
 /**

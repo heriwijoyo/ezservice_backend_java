@@ -7,7 +7,7 @@ package id.ezclouds.core.bifrost.core;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
-import id.ezclouds.core.shared.context.EzAppEvent;
+import id.ezclouds.common.util.context.EzAppEvent;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)

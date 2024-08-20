@@ -6,7 +6,7 @@ package id.ezclouds.biz.ezservice.converter;
 
 import id.ezclouds.biz.ezservice.model.BizStatus;
 import id.ezclouds.biz.ezservice.model.admin.BizAdminSession;
-import id.ezclouds.core.auth.model.CoreAuthAdminSession;
+import id.ezclouds.common.model.auth.AuthAdminSession;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -14,7 +14,7 @@ import id.ezclouds.core.auth.model.CoreAuthAdminSession;
  */
 public class BizAdminConverter {
 
-    public static BizAdminSession convert(CoreAuthAdminSession session) {
+    public static BizAdminSession convert(AuthAdminSession session) {
         if (session == null) { return null; }
         BizAdminSession bizSession = new BizAdminSession();
         bizSession.setSessionId(session.getSessionId());

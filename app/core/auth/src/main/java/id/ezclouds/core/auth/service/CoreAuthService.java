@@ -13,8 +13,8 @@ import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.core.auth.constant.CoreAuthConstant;
 import id.ezclouds.core.auth.converter.CoreAuthModelConverter;
 import id.ezclouds.core.auth.dataobject.*;
+import id.ezclouds.common.model.auth.AuthAdminSession;
 import id.ezclouds.core.auth.model.CoreAuthAdminScene;
-import id.ezclouds.core.auth.model.CoreAuthAdminSession;
 import id.ezclouds.core.auth.model.CoreAuthAppClient;
 import id.ezclouds.core.auth.model.CoreAuthMemberClient;
 import id.ezclouds.core.auth.repo.EzAuthAppClientRepository;
@@ -28,7 +28,7 @@ import id.ezclouds.core.auth.request.CoreMemberCommonSessionRequest;
 import id.ezclouds.core.auth.result.CoreCommonSession;
 import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
 import id.ezclouds.core.auth.result.CoreAuthResult;
-import id.ezclouds.core.auth.service.inner.InnerAuthService;
+import id.ezclouds.core.auth.service.inner.AuthInnerService;
 import id.ezclouds.core.shared.constant.CoreConstant;
 import id.ezclouds.core.shared.service.CoreConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +66,7 @@ public class CoreAuthService {
     private CoreConfigService coreConfigService;
 
     @Autowired
-    private InnerAuthService innerAuthService;
+    private AuthInnerService authInnerService;
 
     public CoreAuthResult<Void> authAppClient(CoreAppClientAuthRequest request) {
         CoreAuthResult<Void> authResult = new CoreAuthResult<>();
@@ -374,7 +374,7 @@ public class CoreAuthService {
         ezAuthMemberClientRepository.saveAndFlush(clientDO);
     }
 
-    public CoreAuthAdminSession adminCreateSession(CoreAdminCommonSessionCreateRequest request) throws Exception {
+    public AuthAdminSession adminCreateSession(CoreAdminCommonSessionCreateRequest request) throws Exception {
         EzAuthAdminCommonSessionDO sessionDO = null;
 
         int maxRetry = 10;
@@ -387,7 +387,7 @@ public class CoreAuthService {
                 if (CoreAuthAdminScene.WEB_PUBLIC_SESSION.getCode().equals(request.getScene())) {
                     sessionExpiryMins = CoreAuthConstant.PUBLIC_SESSION_EXPIRY_MINS;
                 } else {
-                    sessionExpiryMins = innerAuthService.getAdminCommonSessionExpMins(request.getOrgId());
+                    sessionExpiryMins = authInnerService.getAdminCommonSessionExpMins(request.getOrgId());
                 }
                 Date currentDate = new Date();
                 Date expiryDate = DateUtil.getDateAfterMins(currentDate, sessionExpiryMins);
@@ -411,7 +411,7 @@ public class CoreAuthService {
                 sessionDO.setExpiryTime(DateUtil.getFormattedDate(expiryDate));
                 sessionDO.setStatus(CoreAuthConstant.Status.ACTIVE);
 
-                innerAuthService.adminCreateSession(sessionDO);
+                authInnerService.adminCreateSession(sessionDO);
             } catch (Exception e) {
                 createError = true;
             }
@@ -424,8 +424,8 @@ public class CoreAuthService {
         return null;
     }
 
-    public List<CoreAuthAdminSession> adminGetSession(String orgId, String memberId) {
-        return innerAuthService
+    public List<AuthAdminSession> adminGetSession(String orgId, String memberId) {
+        return authInnerService
                 .getAdminSession(orgId, memberId)
                 .stream()
                 .map(CoreAuthModelConverter::convert)
@@ -433,16 +433,16 @@ public class CoreAuthService {
     }
 
     public String adminLoginBySessionCode(String sessionCode) throws Exception {
-        return innerAuthService.adminLoginBySessionCode(sessionCode);
+        return authInnerService.adminLoginBySessionCode(sessionCode);
     }
 
     public String adminValidateSessionId(String sessionId) throws Exception {
-        return innerAuthService.adminValidateSessionId(sessionId);
+        return authInnerService.adminValidateSessionId(sessionId);
     }
 
-    public CoreAuthAdminSession adminAuthWebSessionId(String sessionId) throws Exception {
-        EzAuthAdminCommonSessionDO sessionDO = innerAuthService.authWebSessionId(sessionId);
-        CoreAuthAdminSession session = new CoreAuthAdminSession();
+    public AuthAdminSession adminAuthWebSessionId(String sessionId) throws Exception {
+        EzAuthAdminCommonSessionDO sessionDO = authInnerService.authGetAndTouch(sessionId);
+        AuthAdminSession session = new AuthAdminSession();
         session.setOrgId(sessionDO.getOrgId());
         session.setOrgCode(sessionDO.getOrgCode());
         session.setMemberId(sessionDO.getMemberId());
@@ -451,7 +451,7 @@ public class CoreAuthService {
     }
 
     public void adminLogoutSession(String sessionId) {
-        innerAuthService.adminLogoutSession(sessionId);
+        authInnerService.adminLogoutSession(sessionId);
     }
 
     @Cacheable("coreAuthAppClient")

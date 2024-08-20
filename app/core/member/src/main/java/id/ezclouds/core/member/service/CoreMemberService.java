@@ -24,10 +24,11 @@ import id.ezclouds.core.member.model.MemberStatus;
 import id.ezclouds.core.member.repo.CoreMemberExtensionRepository;
 import id.ezclouds.core.member.repo.CoreMemberRepository;
 import id.ezclouds.core.member.util.CoreMemberConverter;
-import id.ezclouds.core.shared.converter.CoreModelConverter;
 import id.ezclouds.core.shared.enums.CoreSequenceScene;
 import id.ezclouds.core.shared.model.CorePageInfo;
+import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.core.shared.service.CoreSequenceService;
+import id.ezclouds.core.shared.util.PageResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -147,6 +148,14 @@ public class CoreMemberService {
 
     public List<CoreMember> getMemberByOrgIdAndRoles(String orgId, String roles) {
         return coreMemberRepository.findByOrgIdAndRolesContains(orgId, roles)
+                .stream()
+                .map(CoreMemberConverter::convert)
+                .collect(Collectors.toList());
+    }
+
+    public List<CoreMember> getUniqueMember(String orgId, String phone) {
+        return coreMemberRepository
+                .findByOrgIdAndPhone(orgId, phone)
                 .stream()
                 .map(CoreMemberConverter::convert)
                 .collect(Collectors.toList());
@@ -280,5 +289,14 @@ public class CoreMemberService {
         }
 
         return result;
+    }
+
+    public PageResult<CoreMember> getCoreMembers(String orgId, PageRequest pageRequest) {
+        Page<CoreMemberDO> findResult = coreMemberRepository
+                .findByOrgId(orgId, pageRequest);
+        return PageResultUtil.convertFindResult(findResult, input -> input
+                    .stream()
+                .map(CoreMemberConverter::convert)
+                .collect(Collectors.toList()));
     }
 }

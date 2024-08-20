@@ -77,4 +77,42 @@ public class StringUtil {
         }
         return str;
     }
+
+    public static String toTitleCase(String input) {
+        if (input == null) {
+            return null;
+        }
+        if (EMPTY.equals(input)) {
+            return EMPTY;
+        }
+
+        StringBuilder titleCase = new StringBuilder(input.length());
+        boolean nextCharTitleCase = true;
+
+        for (char c : input.toLowerCase().toCharArray()) {
+            if (Character.isSpaceChar(c) && !nextCharTitleCase) {
+                nextCharTitleCase = true;
+                titleCase.append(c);
+            } else if (nextCharTitleCase) {
+                if (!Character.isSpaceChar(c)) {
+                    nextCharTitleCase = false;
+                    titleCase.append(Character.toTitleCase(c));
+                }
+            } else {
+                titleCase.append(c);
+            }
+        }
+        return titleCase.toString();
+    }
+
+    public static String thousandFormat(int number) {
+        return String.format("%,d", number);
+    }
+
+    public static String defaultIfNull(String origin) {
+        if (origin == null) {
+            return EMPTY;
+        }
+        return origin;
+    }
 }

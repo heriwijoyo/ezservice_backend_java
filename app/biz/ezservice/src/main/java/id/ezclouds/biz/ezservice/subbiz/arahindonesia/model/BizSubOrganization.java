@@ -14,11 +14,19 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class BizSubOrganization {
 
     private String orgId;
+    private String orgCode;
     private String subOrgId;
     private String name;
     private String address;
     private String createdTime;
     private int status;
+
+    public BizSubOrganization() {
+    }
+
+    public BizSubOrganization(String subOrgId) {
+        this.subOrgId = subOrgId;
+    }
 
     public String getOrgId() {
         return orgId;
@@ -26,6 +34,14 @@ public class BizSubOrganization {
 
     public void setOrgId(String orgId) {
         this.orgId = orgId;
+    }
+
+    public String getOrgCode() {
+        return orgCode;
+    }
+
+    public void setOrgCode(String orgCode) {
+        this.orgCode = orgCode;
     }
 
     public String getSubOrgId() {

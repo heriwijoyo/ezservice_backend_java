@@ -4,7 +4,7 @@
  */
 package id.ezclouds.core.bifrost.app;
 
-import id.ezclouds.biz.ezservice.service.result.BizResult;
+import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.ExceptionUtil;
@@ -24,7 +24,7 @@ import id.ezclouds.core.bifrost.core.processor.BizProcessor;
 import id.ezclouds.core.bifrost.core.processor.PreBizProcessor;
 import id.ezclouds.core.bifrost.core.processor.WebProcessor;
 import id.ezclouds.core.bifrost.core.util.ErrorResultUtil;
-import id.ezclouds.core.shared.context.EzAppContextHolder;
+import id.ezclouds.common.util.context.EzAppContextHolder;
 import id.ezclouds.core.shared.util.DigestLogUtil;
 import org.slf4j.Logger;
 import org.springframework.web.multipart.MultipartFile;

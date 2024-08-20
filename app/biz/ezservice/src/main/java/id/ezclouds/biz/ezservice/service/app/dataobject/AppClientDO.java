@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: AppClient.java, v 0.1 2023‐12‐07 2:41 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: AuthAppClient.java, v 0.1 2023‐12‐07 2:41 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Entity
 @Table(name = "app_client")

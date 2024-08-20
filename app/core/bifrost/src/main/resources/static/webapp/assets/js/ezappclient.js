@@ -6,6 +6,9 @@ var EzWebAppViewHelper = {
             $('#common-modal').addClass('fade');
             EzWebAppViewHelper.onModalClose();
         });
+        $('.btn-logout').click(function(){
+            EzWebAppClient.logout();
+        });
     },
     showModalAlert: function(title,message,onClose) {
         EzWebAppViewHelper.onCustomModalClose = onClose;
@@ -40,6 +43,14 @@ var EzWebAppViewHelper = {
                 '</div>'+
             '</div>';
         $(document.body).append($.parseHTML(commonModal));
+    },
+    showAppModal: function(modalId) {
+        $('#'+ modalId).removeClass('fade');
+        $('#'+ modalId).addClass('show');
+    },
+    hideAppModal: function(modalId) {
+        $('#'+ modalId).removeClass('show');
+        $('#'+ modalId).addClass('fade');
     }
 };
 var EzApiUrl = {
@@ -58,6 +69,13 @@ var EzWebAppBizService = {
             $(menu).find('#left-menu-url').attr('href', response.data.menu[i].menuUrl);
             $(menu).find('#left-menu-name').html(response.data.menu[i].menuName);
             $(menu).find('#left-menu-icon').html(response.data.menu[i].menuIcon);
+            $('#left-menu-container').append(menu);
+        }
+        for (let i = 0; i < response.data.specialMenu.length; i++) {
+            let menu = $.parseHTML(EzWebAppHTMLTemplate.leftMenu);
+            $(menu).find('#left-menu-url').attr('href', response.data.specialMenu[i].menuUrl);
+            $(menu).find('#left-menu-name').html(response.data.specialMenu[i].menuName);
+            $(menu).find('#left-menu-icon').html(response.data.specialMenu[i].menuIcon);
             $('#left-menu-container').append(menu);
         }
         if (EzWebAppClient.onReadyHandler!==undefined) {
@@ -107,6 +125,42 @@ var EzWebAppClient = {
             EzWebAppClient.callApi(url, data);
         } else {
             EzWebAppClient.alertSessionExpired();
+        }
+    },
+    postMultipartFormData: function(formId, postData, url, tag) {
+        let sessionId = EzWebAppClient.getSessionId();
+        if (sessionId.length != 32) {
+            EzWebAppClient.alertSessionExpired();
+        } else {
+            if (postData == undefined || postData == null) {
+                postData = {};
+            }
+            postData.sessionId = sessionId;
+
+            let data = new FormData($('#'+formId)[0]);
+
+            for (const [key, value] of Object.entries(postData)) {
+                data.append(key, value);
+            }
+
+            $.ajax({
+                type: 'POST',
+                enctype: 'multipart/form-data',
+                url: url,
+                data: data,
+                processData: false,
+                contentType: false,
+                cache: false,
+                timeout: 600000,
+                success: function(response) {
+                    EzWebAppClient.apiCallSuccessHandler(url+tag, response);
+                },
+                error: function(xhr) {
+                    if (EzWebAppClient.apiCallErrorHandler!==undefined) {
+                        EzWebAppClient.apiCallErrorHandler(xhr);
+                    }
+                }
+            });
         }
     },
     postMultipartForm: function(formId, postData, url, tag) {
@@ -241,6 +295,12 @@ var EzWebAppClient = {
             }
         }
         return false;
+    },
+    logout: function() {
+        if (confirm('Are you sure want to logout?')) {
+            EzWebAppClient.removeSessionCookie();
+            window.location.replace('login.htm');
+        }
     },
     isBlank: function(param) {
         if (param === undefined || param == null || param == '') {

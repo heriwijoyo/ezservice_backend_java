@@ -1,0 +1,182 @@
+<section class="content">
+    <ol class="breadcrumb breadcrumb-offset">
+        <li><a href="home.htm">Dashboard</a></li>
+        <li class="active">Common Tables</a></li>
+    </ol>
+
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card corner-radius">
+                    <div class="header">
+                        <h2>MANAGE COMMON TABLES</h2>
+                        <div class="header-dropdown m-r--5">
+                            <a href="commonTableAdd.htm">
+                                <button type="button" class="button button-rounded btn-offset waves-effect waves-float">ADD NEW TABLE</button>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: -10px;" class="body table-responsive">
+                        INCLUDE_SEARCH_COMPONENT
+                        <table class="table table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th width="5%">No</th>
+                                <th width="10%">Org ID</th>
+                                <th width="10%">Code</th>
+                                <th width="15%">Title</th>
+                                <th width="25%">Columns</th>
+                                <th width="25%">Config</th>
+                                <th width="10%">Create Time</th>
+                            </tr>
+                            </thead>
+                            <tbody id="rowsContainer"></tbody>
+                        </table>
+                        <ul class="pager"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    var EzAdminUrl = {
+        COMMON_TABLES_GET: 'api/biz/commonTables.json'
+    };
+    var EzDashboardBizService = {
+        start: function() {
+            EzDashboardBizService.fetchData();
+        },
+        fetchData: function() {
+            EzWebAppClient.callApiService(EzAdminUrl.COMMON_TABLES_GET, {
+                searchScene: EzDashboardBizService.data.searchScene,
+                searchKeyword: EzDashboardBizService.data.searchKeyword,
+                pageNumber: EzDashboardBizService.data.pageNumber,
+                pageSize: EzDashboardBizService.data.pageSize
+            });
+        },
+        handleApiBizResult: function(url, response) {
+            if (url === EzAdminUrl.COMMON_TABLES_GET) {
+                EzDashboardBizService.reloadPageResultView(response);
+            }
+        },
+        handleApiBizFailed: function(url, message) {
+            if (url === EzAdminUrl.MEMBER_CREATE) {
+                alert(message);
+            }
+        },
+        reloadPageResultView: function(response) {
+            $('#rowsContainer').html('');
+            let rowNum = EzDashboardBizService.numberStart();
+            for(let i=0; i<response.pageResult.data.length; i++) {
+                let rowData = response.pageResult.data[i];
+                let itemRow = $.parseHTML(DashTemplate);
+                $(itemRow).find('.colNum').html(rowNum);
+                $(itemRow).find('.colOrg').html(rowData.orgId);
+                $(itemRow).find('.colCode').html(EzDashboardBizService.composeCodeLink(rowData));
+                $(itemRow).find('.colTitle').html(rowData.title);
+                $(itemRow).find('.colColumns').html(rowData.columns);
+                $(itemRow).find('.colConfig').html(rowData.config);
+                $(itemRow).find('.colCreate').html(rowData.createdTime);
+                $('#rowsContainer').append(itemRow);
+                rowNum++;
+            }
+            $('.pager').html(EzWebAppClient.renderPager(response.pageResult));
+        },
+        composeCodeLink: function(data) {
+            return '<a href="commonTableDetail.htm?id='+ data.tableId +'">' + data.code + '</a>';
+        },
+        composeAddress: function(data) {
+            let address = '';
+            if (data.villageName != null) {
+                address += data.villageName;
+            }
+            if (data.districtName != null) {
+                address += ', ' + data.districtName;
+            }
+            if (data.regencyName != null) {
+                address += ', ' + data.regencyName;
+            }
+            if (data.provinceName != null) {
+                address += ', ' + data.provinceName;
+            }
+            return address;
+        },
+        submitCreate: function() {
+            EzWebAppClient.callApiService(EzAdminUrl.SUB_ORGANIZATIONS_CREATE, {
+                name : $('#name').val(),
+                address : $('#address').val()
+            });
+        },
+        prev: function() {
+            EzDashboardBizService.data.pageNumber--;
+            EzDashboardBizService.fetchData();
+        },
+        next: function() {
+            EzDashboardBizService.data.pageNumber++;
+            EzDashboardBizService.fetchData();
+        },
+        numberStart: function() {
+            let data = EzDashboardBizService.data;
+            return ((data.pageNumber - 1) * data.pageSize) + 1;
+        },
+        data: {
+            searchScene: null,
+            searchKeyword: null,
+            pageNumber: 1,
+            pageSize: 20,
+            result: null
+        }
+    };
+
+    $(document).ready(function(){
+        EzWebAppClient.onApiBizSuccess(function(url, response){
+            EzDashboardBizService.handleApiBizResult(url, response);
+        });
+        EzWebAppClient.onApiBizFailed(function(url, message){
+            EzDashboardBizService.handleApiBizFailed(url, message);
+        });
+        EzWebAppClient.onApiCallError(function(xhr){
+            console.log(xhr);
+        });
+        EzWebAppClient.onReady(function(){
+            EzDashboardBizService.start();
+        });
+        EzWebAppClient.onPrev(function(){
+            EzDashboardBizService.prev();
+        });
+        EzWebAppClient.onNext(function(){
+            EzDashboardBizService.next();
+        });
+        EzWebAppClient.start();
+
+        $('#btnSearch').click(function(){
+            EzDashboardBizService.data.searchScene = $('#searchScene').val();
+            EzDashboardBizService.data.searchKeyword = $('#searchKeyword').val();
+            EzDashboardBizService.data.pageNumber = 1;
+            EzDashboardBizService.fetchData();
+        });
+
+        $('#btnSearchReset').click(function(){
+            $('#searchKeyword').val('');
+            EzDashboardBizService.data.searchScene = null;
+            EzDashboardBizService.data.searchKeyword = null;
+            EzDashboardBizService.data.pageNumber = 1;
+            EzDashboardBizService.fetchData();
+        });
+    });
+
+    var DashTemplate = ''+
+        '<tr>'+
+            '<td class="colNum" style="vertical-align: middle;"></td>'+
+            '<td class="colOrg" style="vertical-align: middle;"></td>'+
+            '<td class="colCode" style="vertical-align: middle;"></td>'+
+            '<td class="colTitle" style="vertical-align: middle;"></td>'+
+            '<td class="colColumns" style="vertical-align: middle;"></td>'+
+            '<td class="colConfig" style="vertical-align: middle;"></td>'+
+            '<td class="colCreate" style="vertical-align: middle;"></td>'+
+        '</tr>';
+
+</script>

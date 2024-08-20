@@ -10,12 +10,12 @@ import id.ezclouds.biz.ezservice.model.annotation.BizAnnotationProcessor;
 import id.ezclouds.biz.ezservice.service.app.AppDocumentService;
 import id.ezclouds.biz.ezservice.service.app.model.AppDocument;
 import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
-import id.ezclouds.biz.ezservice.service.result.BizResult;
-import id.ezclouds.biz.ezservice.service.template.BizServiceTemplate;
+import id.ezclouds.common.model.result.BizResult;
+import id.ezclouds.common.facade.template.BizServiceTemplate;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
-import id.ezclouds.core.shared.result.BizPageInfo;
+import id.ezclouds.common.model.result.BizPageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

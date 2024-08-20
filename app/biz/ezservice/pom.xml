@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>ezclouds-parent</artifactId>
-        <groupId>id.ezclouds.core</groupId>
+        <groupId>id.ezclouds</groupId>
         <version>1.0.0</version>
         <relativePath>../../../pom.xml</relativePath>
     </parent>
@@ -16,28 +16,24 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>id.ezclouds.core</groupId>
             <artifactId>ezclouds-core-shared</artifactId>
             <version>1.0.0</version>
         </dependency>
-
         <dependency>
             <groupId>id.ezclouds.core</groupId>
             <artifactId>ezclouds-core-member</artifactId>
             <version>1.0.0</version>
         </dependency>
-
-        <dependency>
-            <groupId>id.ezclouds.core</groupId>
-            <artifactId>ezclouds-core-integration</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
         <dependency>
             <groupId>id.ezclouds.common</groupId>
-            <artifactId>ezclouds-common-util</artifactId>
+            <artifactId>ezclouds-common-facade</artifactId>
             <version>1.0.0</version>
         </dependency>
-
     </dependencies>
 </project>

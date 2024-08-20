@@ -9,6 +9,7 @@ import id.ezclouds.biz.ezservice.service.core.dataobject.BizMemberImportDO;
 import id.ezclouds.biz.ezservice.service.core.dataobject.BizMemberUnionDO;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
+import id.ezclouds.common.util.StringUtil;
 
 import java.util.Arrays;
 
@@ -18,7 +19,7 @@ import java.util.Arrays;
  */
 public class BizMemberUnionConverter {
 
-    private static String[] orgAdminIds = {"2000210000000000", "2000110000000000", "2000410000000000"};
+    private static String[] orgAdminIds = {"2000210000000000", "2000110000000000", "2000710000000023"};
 
     public static BizMemberUnionDO convert(BizMember bizMember) {
         if (bizMember == null) { return null; }
@@ -31,7 +32,7 @@ public class BizMemberUnionConverter {
         unionDO.setSourceId(bizMember.getMemberId());
         unionDO.setSubOrgId(bizMember.getSubOrganization().getSubOrgId());
         unionDO.setRole(getRole(bizMember.getReferrerId()));
-        unionDO.setName(bizMember.getName());
+        unionDO.setName(StringUtil.toTitleCase(bizMember.getName()));
         unionDO.setGender(bizMember.getGender().getCode());
         unionDO.setDateOfBirth(bizMember.getDateOfBirth());
         unionDO.setPhone(bizMember.getPhone());

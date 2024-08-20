@@ -4,7 +4,7 @@
  */
 package id.ezclouds.core.bifrost.app.web.result;
 
-import id.ezclouds.core.shared.result.PageResult;
+import id.ezclouds.common.model.result.PageResult;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)

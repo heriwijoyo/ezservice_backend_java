@@ -6,14 +6,14 @@ package id.ezclouds.core.bifrost.app.web;
 
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
 import id.ezclouds.biz.ezservice.service.apibiz.admin.BizSuperAdminService;
-import id.ezclouds.biz.ezservice.service.result.BizResult;
+import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.core.bifrost.app.api.digestlog.EmptyDigestLog;
 import id.ezclouds.core.bifrost.app.api.event.SuperAdminEvent;
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;
-import id.ezclouds.core.shared.context.EzAppContextHolder;
+import id.ezclouds.common.util.context.EzAppContextHolder;
 import id.ezclouds.core.shared.util.DigestLogUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

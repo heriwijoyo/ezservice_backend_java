@@ -143,6 +143,22 @@
         </encoder>
     </appender>
 
+    <appender name="CORE_PROCESS_File"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/${APP_NAME}/core-process.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/core-process.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d --- [%thread]%m%n</pattern>
+        </encoder>
+    </appender>
+
     <appender name="ASYNC_PROCESS_File"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${APP_LOG_ROOT}/${APP_NAME}/async-process.log</file>
@@ -164,6 +180,22 @@
         <file>${APP_LOG_ROOT}/${APP_NAME}/scheduler.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/scheduler.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d --- [%thread]%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="EZDAL_File"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/${APP_NAME}/ez-dal.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/ez-dal.log.%d{yyyy-MM-dd}</fileNamePattern>
         </rollingPolicy>
         <append>true</append>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
@@ -211,6 +243,12 @@
         <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
     </logger>
 
+    <logger name="CORE_PROCESS" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="CORE_PROCESS_${APP_LOG_TYPE}" />
+        <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
+    </logger>
+
     <logger name="ASYNC_PROCESS" additivity="false">
         <level value="INFO" />
         <appender-ref ref="ASYNC_PROCESS_${APP_LOG_TYPE}" />
@@ -220,6 +258,12 @@
     <logger name="SCHEDULER" additivity="false">
         <level value="INFO" />
         <appender-ref ref="SCHEDULER_${APP_LOG_TYPE}" />
+        <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
+    </logger>
+
+    <logger name="EZDAL" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="EZDAL_${APP_LOG_TYPE}" />
         <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
     </logger>
 

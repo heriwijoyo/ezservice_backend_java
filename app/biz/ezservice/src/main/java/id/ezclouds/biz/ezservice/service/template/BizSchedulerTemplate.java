@@ -4,9 +4,8 @@
  */
 package id.ezclouds.biz.ezservice.service.template;
 
-import id.ezclouds.biz.ezservice.enums.BizSchedulerScene;
-import id.ezclouds.biz.ezservice.service.result.BizResult;
-import id.ezclouds.common.util.StringUtil;
+import id.ezclouds.common.model.process.SchedulerScene;
+import id.ezclouds.common.model.result.BaseResult;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
@@ -21,40 +20,38 @@ public class BizSchedulerTemplate {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CommonLoggerConstant.SCHEDULER);
 
-    public static BizResult execute(String scene, Handler handler) {
-        BizResult bizResult = new BizResult();
-        BizSchedulerScene schedulerScene = BizSchedulerScene.getByCode(scene);
+    public static BaseResult execute(String scene, Handler handler) {
+        BaseResult baseResult = new BaseResult();
+        SchedulerScene schedulerScene = SchedulerScene.getByCode(scene);
 
-        String resultCode = "N";
-        String errorCode = StringUtil.EMPTY;
         try {
             handler.preProcess(schedulerScene);
             handler.process(schedulerScene);
-            resultCode = "Y";
-            errorCode = "SUCCESS";
-            bizResult.setSuccess(true);
+            baseResult.setSuccess(true);
         } catch (Exception e) {
-            resultCode = "N";
+            String resultCode;
             if (e instanceof EzErrorException) {
-                errorCode = ((EzErrorException)e).getEzErrorCode().getCode();
+                resultCode = ((EzErrorException)e).getEzErrorCode().getCode();
             } else {
-                errorCode = EzErrorCode.SYSTEM_ERROR.getCode();
+                resultCode = EzErrorCode.SYSTEM_ERROR.getCode();
             }
+            baseResult.setSuccess(false);
+            baseResult.setResultCode(resultCode);
         } finally {
             String logInfo = schedulerScene.getCode() +
                     "," +
-                    resultCode +
+                    baseResult.getSuccessCode() +
                     "," +
-                    errorCode;
+                    baseResult.getResultCode();
 
             LOGGER.info(logInfo);
         }
 
-        return bizResult;
+        return baseResult;
     }
 
     public interface Handler {
-        void preProcess(BizSchedulerScene schedulerScene);
-        void process(BizSchedulerScene schedulerScene);
+        void preProcess(SchedulerScene schedulerScene);
+        void process(SchedulerScene schedulerScene);
     }
 }
