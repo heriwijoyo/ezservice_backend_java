@@ -1,3 +1,3 @@
 echo uploading jar...
 
-scp target/ezclouds-core-bifrost.jar ezapp@api.arahindonesia.id:/home/ezapp/jars
+scp target/EzCloudsServerApp.jar ezapp@api.arahindonesia.id:/home/ezapp/jars

@@ -1,8 +1,8 @@
 /**
  * Ezclouds.id
- * Copyright (c) 2020‐2023 All Rights Reserved.
+ * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.core.bifrost;
+package id.ezclouds.app.bootstrap;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,7 +17,8 @@ import java.util.TimeZone;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: BifrostWebApplication.java, v 0.1 2023‐06‐18 11:31 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$ */
+ * @version $Id: EzCloudsAppBootstrap.java, v 0.1 2024‐08‐21 6:57 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ */
 @SpringBootApplication(scanBasePackages = {
         "id.ezclouds.biz.ezservice",
         "id.ezclouds.common.util",
@@ -51,7 +52,7 @@ import java.util.TimeZone;
 })
 @EnableCaching(proxyTargetClass = true)
 @EnableAsync(proxyTargetClass = true)
-public class BifrostWebApplication {
+public class EzCloudsAppBootstrap {
 
     @PostConstruct
     public void init() {
@@ -59,7 +60,6 @@ public class BifrostWebApplication {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(BifrostWebApplication.class, args);
+        SpringApplication.run(EzCloudsAppBootstrap.class, args);
     }
 }
-
