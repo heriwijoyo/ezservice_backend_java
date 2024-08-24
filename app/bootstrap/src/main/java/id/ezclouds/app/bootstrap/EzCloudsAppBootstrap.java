@@ -33,7 +33,7 @@ import java.util.TimeZone;
         "id.ezclouds.core.process",
         "id.ezclouds.core.shared"
 })
-@ImportResource({ "classpath:/META-INF/ezclouds/spring/config.xml" })
+
 @EnableJpaRepositories(basePackages = {
         "id.ezclouds.core.dal",
         "id.ezclouds.core.shared",

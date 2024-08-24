@@ -12,6 +12,7 @@ import id.ezclouds.common.util.context.EzAppEvent;
  */
 public enum WebEvent implements EzAppEvent {
 
+    WEB_PAGE("WEB_PAGE"),
     GET_IMAGE_PUBLIC("GET_IMAGE_PUBLIC"),
     GET_IMAGE_PRIVATE("GET_IMAGE_PRIVATE"),
 

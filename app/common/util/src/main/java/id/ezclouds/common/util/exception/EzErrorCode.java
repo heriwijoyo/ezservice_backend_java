@@ -45,6 +45,7 @@ public enum EzErrorCode {
     SYSTEM_FILE_ERROR("SYSTEM_FILE_ERROR", "System File Error"),
     CORE_SEQUENCE_ERROR("CORE_SEQUENCE_ERROR", "Core Sequence Error"),
     IDEMPOTENT_ERROR("IDEMPOTENT_ERROR", "Idempotent Error"),
+    WEB_PAGE_ERROR("WEB_PAGE_ERROR", "Web Page Error"),
 
     SCHEDULER_PRIORITY_OVERLAP("SCHEDULER_PRIORITY_OVERLAP", "Scheduler Overlap"),
 

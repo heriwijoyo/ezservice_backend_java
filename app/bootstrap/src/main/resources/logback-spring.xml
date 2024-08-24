@@ -63,6 +63,22 @@
         </encoder>
     </appender>
 
+    <appender name="WEB_PAGES_CONTROLLER_File"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/${APP_NAME}/controller-web-pages.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/controller-web-pages.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d --- [%thread]%m%n</pattern>
+        </encoder>
+    </appender>
+
     <appender name="WEB_CONTROLLER_File"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${APP_LOG_ROOT}/${APP_NAME}/controller-web.log</file>
@@ -213,24 +229,6 @@
         <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
     </logger>
 
-    <logger name="WEB_CONTROLLER" additivity="false">
-        <level value="INFO" />
-        <appender-ref ref="WEB_CONTROLLER_${APP_LOG_TYPE}" />
-        <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
-    </logger>
-
-    <logger name="ADMIN_WEB_CONTROLLER" additivity="false">
-        <level value="INFO" />
-        <appender-ref ref="ADMIN_WEB_CONTROLLER_${APP_LOG_TYPE}" />
-        <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
-    </logger>
-
-    <logger name="WEB_API_CONTROLLER" additivity="false">
-        <level value="INFO" />
-        <appender-ref ref="WEB_API_CONTROLLER_${APP_LOG_TYPE}" />
-        <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
-    </logger>
-
     <logger name="APP_BIZ_SERVICE" additivity="false">
         <level value="INFO" />
         <appender-ref ref="APP_BIZ_SERVICE_${APP_LOG_TYPE}" />
@@ -264,6 +262,31 @@
     <logger name="EZDAL" additivity="false">
         <level value="INFO" />
         <appender-ref ref="EZDAL_${APP_LOG_TYPE}" />
+        <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
+    </logger>
+
+    <!-- WEB LOGGER RELATED -->
+    <logger name="WEB_PAGES_CONTROLLER" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="WEB_PAGES_CONTROLLER_${APP_LOG_TYPE}" />
+        <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
+    </logger>
+
+    <logger name="WEB_CONTROLLER" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="WEB_CONTROLLER_${APP_LOG_TYPE}" />
+        <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
+    </logger>
+
+    <logger name="ADMIN_WEB_CONTROLLER" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="ADMIN_WEB_CONTROLLER_${APP_LOG_TYPE}" />
+        <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
+    </logger>
+
+    <logger name="WEB_API_CONTROLLER" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="WEB_API_CONTROLLER_${APP_LOG_TYPE}" />
         <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
     </logger>
 
