@@ -12,7 +12,9 @@ import java.util.Map;
  */
 public interface BizObjectMapperService {
 
-    Map<String, String> parseJson(String json);
+    Map<String, String> jsonToMap(String json);
 
     Map<String, String> parseSurveyResponse(String json);
+
+    <T> T parseJson(String json, Class<T> clazz);
 }

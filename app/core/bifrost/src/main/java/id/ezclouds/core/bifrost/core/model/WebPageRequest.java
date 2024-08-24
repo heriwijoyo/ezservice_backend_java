@@ -13,7 +13,7 @@ public class WebPageRequest {
     private String path;
     private String section;
     private String pageId;
-    private String session;
+    private String sessionId;
 
     public String getPath() {
         return path;
@@ -39,11 +39,11 @@ public class WebPageRequest {
         this.pageId = pageId;
     }
 
-    public String getSession() {
-        return session;
+    public String getSessionId() {
+        return sessionId;
     }
 
-    public void setSession(String session) {
-        this.session = session;
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 }

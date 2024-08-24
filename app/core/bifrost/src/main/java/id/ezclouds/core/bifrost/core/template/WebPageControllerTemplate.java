@@ -72,7 +72,7 @@ public final class WebPageControllerTemplate {
                     pathLog,
                     sectionLog,
                     request.getPageId() == null ? "PAGE_ID_NULL" : request.getPageId(),
-                    request.getSession()
+                    request.getSessionId()
             );
         }
     }

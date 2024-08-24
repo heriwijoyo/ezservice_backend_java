@@ -7,6 +7,7 @@ package id.ezclouds.core.auth.service;
 import id.ezclouds.common.facade.auth.AuthAdminService;
 import id.ezclouds.common.model.auth.AuthAdminSession;
 import id.ezclouds.common.model.auth.AuthRole;
+import id.ezclouds.common.model.auth.AuthSessionScene;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
@@ -54,5 +55,15 @@ public class CoreAuthAdminService implements AuthAdminService {
                 .collect(Collectors.toList());
 
         AssertUtil.isTrue(authRoles.contains(role), EzErrorCode.UNAUTHORIZED);
+    }
+
+    @Override
+    public void authorizeWebPublicSession(String sessionId) throws EzErrorException {
+        AssertUtil.notBlank(sessionId, EzErrorCode.UNAUTHORIZED);
+        EzAuthAdminCommonSessionDO sessionDO = authInnerService.authGetAndTouch(sessionId);
+        AssertUtil.notNull(sessionDO, EzErrorCode.UNAUTHORIZED);
+        AssertUtil.isTrue(sessionDO.getStatus() == 1, EzErrorCode.UNAUTHORIZED);
+        AssertUtil.equals(AuthSessionScene.WEB_PUBLIC_SESSION.getCode(), sessionDO.getScene(), EzErrorCode.UNAUTHORIZED);
+        AssertUtil.equals(AuthRole.PUBLIC_ACCESS.getCode(), sessionDO.getMemberRoles(), EzErrorCode.UNAUTHORIZED);
     }
 }

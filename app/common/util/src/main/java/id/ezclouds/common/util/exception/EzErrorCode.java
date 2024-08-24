@@ -46,6 +46,8 @@ public enum EzErrorCode {
     CORE_SEQUENCE_ERROR("CORE_SEQUENCE_ERROR", "Core Sequence Error"),
     IDEMPOTENT_ERROR("IDEMPOTENT_ERROR", "Idempotent Error"),
     WEB_PAGE_ERROR("WEB_PAGE_ERROR", "Web Page Error"),
+    WEB_BIZ_PAGE_NOT_FOUND("WEB_BIZ_PAGE_NOT_FOUND", "Web Page Not Found"),
+    WEB_BIZ_PAGE_UNAUTHORIZED("WEB_BIZ_PAGE_UNAUTHORIZED", "Web Page Unauthorized"),
 
     SCHEDULER_PRIORITY_OVERLAP("SCHEDULER_PRIORITY_OVERLAP", "Scheduler Overlap"),
 

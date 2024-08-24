@@ -35,4 +35,8 @@ public class AssertUtil {
     public static void isNotTrue(boolean state, EzErrorCode ezErrorCode, String... message) throws EzErrorException {
         isTrue(!state, ezErrorCode, message);
     }
+
+    public static void equals(String str1, String str2, EzErrorCode ezErrorCode) throws EzErrorException {
+        isTrue(StringUtil.equalsNotNull(str1, str2), ezErrorCode);
+    }
 }

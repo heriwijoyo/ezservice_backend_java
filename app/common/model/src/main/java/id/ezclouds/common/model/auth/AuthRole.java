@@ -16,12 +16,17 @@ public enum AuthRole {
     OP_RECRUITER("OP_RECRUITER"),
     OP_SURVEYOR("OP_SURVEYOR"),
 
+    PUBLIC_ACCESS("PUBLIC_ACCESS"),
     UNKNOWN("UNKNOWN"),
     ;
     private final String code;
 
     AuthRole(String code) {
         this.code = code;
+    }
+
+    public String getCode() {
+        return code;
     }
 
     public static AuthRole getByCode(String code) {

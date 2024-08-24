@@ -81,10 +81,10 @@ public class BizInnerProcessorSurveyResponseParse {
         commonDataSurvey.submitterId = response.getSubmitterMemberId();
 
         Map<String, String> parserMap = bizObjectMapperService
-                .parseJson(parserConfig.getParserMapping());
+                .jsonToMap(parserConfig.getParserMapping());
 
         Map<String, String> responderMap = bizObjectMapperService
-                .parseJson(response.getResponderData());
+                .jsonToMap(response.getResponderData());
 
         Map<String, String> responseMap = bizObjectMapperService
                 .parseSurveyResponse(response.getResponseData());

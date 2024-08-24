@@ -24,7 +24,7 @@ import java.util.Map;
 public class CoreObjectMapperService implements BizObjectMapperService {
 
     @Override
-    public Map<String, String> parseJson(String json) {
+    public Map<String, String> jsonToMap(String json) {
         try {
             return new ObjectMapper()
                     .readValue(json, new TypeReference<Map<String, String>>(){});
@@ -55,6 +55,15 @@ public class CoreObjectMapperService implements BizObjectMapperService {
 
         } catch (JsonProcessingException e) {
             return objectMap;
+        }
+    }
+
+    @Override
+    public <T> T parseJson(String json, Class<T> clazz) {
+        try {
+            return new ObjectMapper().readValue(json, clazz);
+        } catch (Exception ignored) {
+            return null;
         }
     }
 }
