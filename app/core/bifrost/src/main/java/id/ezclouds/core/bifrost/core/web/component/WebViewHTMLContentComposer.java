@@ -50,7 +50,7 @@ public class WebViewHTMLContentComposer {
             htmlContentSb.append(commonTable.getData());
             htmlContentSb.append(",columns:");
             htmlContentSb.append(commonTable.getColumns());
-            htmlContentSb.append(",csvFileName:'download_data',");
+            htmlContentSb.append(",csvFileName:'"+ commonTable.getTitle() +"',");
             htmlContentSb.append(commonTable.getConfig());
             htmlContentSb.append("});});</script>");
 
