@@ -90,4 +90,14 @@ public class CoreBizCommonTableDAO implements BizCommonTableDAO {
                 .map(converter::convertQuery)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<BizCommonTable> getByPageId(String orgId, String pageId) {
+        BizCommonTableConverter converter = new BizCommonTableConverter();
+        return ezBizCommonTableRepository
+                .findByOrgIdAndPageId(orgId, pageId)
+                .stream()
+                .map(converter::convertQuery)
+                .collect(Collectors.toList());
+    }
 }

@@ -4,8 +4,8 @@
  */
 package id.ezclouds.core.bifrost.core.web.processor;
 
-import id.ezclouds.common.facade.dal.admin.BizCommonTableDAO;
 import id.ezclouds.common.model.biz.BizWebPageConfig;
+import id.ezclouds.core.bifrost.core.web.component.WebViewHTMLContentComposer;
 import id.ezclouds.core.bifrost.core.web.model.WebPageContentType;
 import id.ezclouds.core.bifrost.core.web.util.AssetUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +19,16 @@ import org.springframework.stereotype.Component;
 public class WebPageProcessor {
 
     @Autowired
-    private BizCommonTableDAO bizCommonTableDAO;
+    private WebViewHTMLContentComposer webViewHTMLContentComposer;
 
-    public String process(String orgId, BizWebPageConfig pageConfig) throws Exception {
+    public String process(String orgId, String pageId, BizWebPageConfig pageConfig, String content) throws Exception {
         WebPageContentType contentType = WebPageContentType.getByCode(pageConfig.getContentType());
-        String layoutHTML = AssetUtil.parseAssetContent(contentType.getPageLayout());
-        String pageHTML = layoutHTML.replace("PAGE_TITLE", pageConfig.getPageTitle());
+        String htmlLayout = AssetUtil.parseAssetContent(contentType.getPageLayout());
+        String htmlContent = webViewHTMLContentComposer.composeHTMLContent(orgId, pageId, contentType, content);
 
-
-
+        String pageHTML = htmlLayout
+                .replace("PAGE_TITLE", pageConfig.getPageTitle())
+                .replace("PAGE_CONTENT", htmlContent);
 
         return pageHTML;
     }

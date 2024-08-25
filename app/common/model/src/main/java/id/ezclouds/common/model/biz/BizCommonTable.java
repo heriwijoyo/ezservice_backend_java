@@ -13,6 +13,7 @@ public class BizCommonTable {
     private String tableId;
     private String orgId;
     private String code;
+    private String pageId;
     private String title;
     private String columns;
     private String config;
@@ -41,6 +42,14 @@ public class BizCommonTable {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getPageId() {
+        return pageId;
+    }
+
+    public void setPageId(String pageId) {
+        this.pageId = pageId;
     }
 
     public String getTitle() {

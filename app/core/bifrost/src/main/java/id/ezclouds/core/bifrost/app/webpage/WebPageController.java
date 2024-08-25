@@ -82,7 +82,8 @@ public class WebPageController {
                     authAdminService.authorizeWebPublicSession(request.getSessionId());
                 }
 
-                return webPageProcessor.process(bizWebPage.getOrgId(), pageConfig);
+                return webPageProcessor
+                        .process(bizWebPage.getOrgId(), bizWebPage.getPageId(), pageConfig, bizWebPage.getContent());
             }
 
             @Override

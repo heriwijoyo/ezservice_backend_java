@@ -10,7 +10,7 @@ package id.ezclouds.core.bifrost.core.web.model;
  */
 public enum  WebPageContentType {
 
-    COMMON_TABLE("COMMON_TABLE", "pages/layout/commonTables.htm"),
+    COMMON_TABLES("COMMON_TABLES", "pages/layout/commonTables.htm"),
     CUSTOM("CUSTOM", ""),
     ;
 

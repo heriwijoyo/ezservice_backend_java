@@ -25,4 +25,6 @@ public interface BizCommonTableDAO {
     BizCommonTable getByTableId(String tableId);
 
     List<BizCommonTable> getByCodes(String orgId, List<String> codes);
+
+    List<BizCommonTable> getByPageId(String orgId, String pageId);
 }

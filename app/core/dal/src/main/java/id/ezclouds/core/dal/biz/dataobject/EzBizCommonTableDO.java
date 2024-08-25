@@ -20,18 +20,28 @@ public class EzBizCommonTableDO {
     @Id
     @Column(name = "table_id")
     private String tableId;
+
     @Column(name = "org_id")
     private String orgId;
+
     @Column(name = "code")
     private String code;
+
+    @Column(name = "page_id")
+    private String pageId;
+
     @Column(name = "title")
     private String title;
+
     @Column(name = "columns")
     private String columns;
+
     @Column(name = "config")
     private String config;
+
     @Column(name = "created_time")
     private String createdTime;
+
     @Column(name = "status")
     private int status;
 
@@ -57,6 +67,14 @@ public class EzBizCommonTableDO {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getPageId() {
+        return pageId;
+    }
+
+    public void setPageId(String pageId) {
+        this.pageId = pageId;
     }
 
     public String getTitle() {
