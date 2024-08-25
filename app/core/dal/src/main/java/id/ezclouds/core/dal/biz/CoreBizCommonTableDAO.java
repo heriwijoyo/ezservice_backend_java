@@ -20,6 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: CoreBizCommonTableDAO.java, v 0.1 2024‐08‐16 1:39 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -72,17 +75,19 @@ public class CoreBizCommonTableDAO implements BizCommonTableDAO {
     public BizCommonTable getByTableId(String tableId) {
         return new BizCommonTableConverter().convertQuery(
                 ezBizCommonTableRepository
-                .findById(tableId)
-                .orElse(null)
+                        .findById(tableId)
+                        .orElse(null)
         );
     }
 
     @EzDAOLogger
     @Override
-    public BizCommonTable getByCode(String orgId, String code) {
-        return new BizCommonTableConverter().convertQuery(
-                ezBizCommonTableRepository
-                        .findByOrgIdAndCode(orgId, code)
-        );
+    public List<BizCommonTable> getByCodes(String orgId, List<String> codes) {
+        BizCommonTableConverter converter = new BizCommonTableConverter();
+        return ezBizCommonTableRepository
+                .findByOrgIdAndCodeIn(orgId, codes)
+                .stream()
+                .map(converter::convertQuery)
+                .collect(Collectors.toList());
     }
 }

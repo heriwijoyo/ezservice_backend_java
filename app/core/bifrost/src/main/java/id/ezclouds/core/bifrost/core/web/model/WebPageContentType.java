@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.core.bifrost.core.model;
+package id.ezclouds.core.bifrost.core.web.model;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -10,18 +10,20 @@ package id.ezclouds.core.bifrost.core.model;
  */
 public enum  WebPageContentType {
 
-    COMMON_TABLE("COMMON_TABLE"),
-    UNKNOWN("UNKNOWN"),
+    COMMON_TABLE("COMMON_TABLE", "pages/layout/commonTables.htm"),
+    CUSTOM("CUSTOM", ""),
     ;
 
     private final String code;
+    private final String pageLayout;
 
-    WebPageContentType(String code) {
+    WebPageContentType(String code, String pageLayout) {
         this.code = code;
+        this.pageLayout = pageLayout;
     }
 
-    public String getCode() {
-        return code;
+    public String getPageLayout() {
+        return pageLayout;
     }
 
     public static WebPageContentType getByCode(String code) {
@@ -30,6 +32,6 @@ public enum  WebPageContentType {
                 return contentType;
             }
         }
-        return UNKNOWN;
+        return CUSTOM;
     }
 }

@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.core.bifrost.core.template;
+package id.ezclouds.core.bifrost.core.web;
 
 import id.ezclouds.common.util.context.EzAppContext;
 import id.ezclouds.common.util.context.EzAppContextHolder;
@@ -11,10 +11,10 @@ import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.LogUtil;
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;
-import id.ezclouds.core.bifrost.core.model.WebPagePath;
-import id.ezclouds.core.bifrost.core.model.WebPageRequest;
-import id.ezclouds.core.bifrost.core.model.WebPageResult;
-import id.ezclouds.core.bifrost.core.model.WebPageSection;
+import id.ezclouds.core.bifrost.core.web.model.WebPagePath;
+import id.ezclouds.core.bifrost.core.web.model.WebPageRequest;
+import id.ezclouds.core.bifrost.core.web.model.WebPageResult;
+import id.ezclouds.core.bifrost.core.web.model.WebPageSection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -84,7 +84,7 @@ public final class WebPageControllerTemplate {
 
     public interface Handler {
         void checkRequest(WebPageRequest request);
-        String processWebContent(WebPageRequest request);
+        String processWebContent(WebPageRequest request) throws Exception;
         HttpServletResponse getServletResponse();
     }
 }

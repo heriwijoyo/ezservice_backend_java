@@ -11,11 +11,12 @@ import id.ezclouds.common.model.biz.BizWebPage;
 import id.ezclouds.common.model.biz.BizWebPageConfig;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
-import id.ezclouds.core.bifrost.core.model.WebPageAuthType;
-import id.ezclouds.core.bifrost.core.model.WebPagePath;
-import id.ezclouds.core.bifrost.core.model.WebPageRequest;
-import id.ezclouds.core.bifrost.core.model.WebPageSection;
-import id.ezclouds.core.bifrost.core.template.WebPageControllerTemplate;
+import id.ezclouds.core.bifrost.core.web.model.WebPageAuthType;
+import id.ezclouds.core.bifrost.core.web.model.WebPagePath;
+import id.ezclouds.core.bifrost.core.web.model.WebPageRequest;
+import id.ezclouds.core.bifrost.core.web.model.WebPageSection;
+import id.ezclouds.core.bifrost.core.web.processor.WebPageProcessor;
+import id.ezclouds.core.bifrost.core.web.WebPageControllerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +39,9 @@ public class WebPageController {
 
     @Autowired
     private AuthAdminService authAdminService;
+
+    @Autowired
+    private WebPageProcessor webPageProcessor;
 
     @GetMapping(path = {"/pages", "/pages/{path}/{section}/{pageId}/{sessionId}"})
     private void getWebPage(
@@ -66,7 +70,7 @@ public class WebPageController {
             }
 
             @Override
-            public String processWebContent(WebPageRequest request) {
+            public String processWebContent(WebPageRequest request) throws Exception {
                 BizWebPage bizWebPage = bizWebPageDAO.getWebPage(request.getPageId());
                 AssertUtil.notNull(bizWebPage, EzErrorCode.WEB_BIZ_PAGE_NOT_FOUND);
 
@@ -78,10 +82,7 @@ public class WebPageController {
                     authAdminService.authorizeWebPublicSession(request.getSessionId());
                 }
 
-
-                String htmlContent =  "<html><head><title>CROT</title></head><body><h4>WANZENG MEN..!!!</h4></body></html>";
-
-                return htmlContent;
+                return webPageProcessor.process(bizWebPage.getOrgId(), pageConfig);
             }
 
             @Override

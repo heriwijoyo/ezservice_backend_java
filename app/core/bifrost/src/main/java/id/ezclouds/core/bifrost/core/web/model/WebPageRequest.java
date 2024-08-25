@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.core.bifrost.core.model;
+package id.ezclouds.core.bifrost.core.web.model;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)

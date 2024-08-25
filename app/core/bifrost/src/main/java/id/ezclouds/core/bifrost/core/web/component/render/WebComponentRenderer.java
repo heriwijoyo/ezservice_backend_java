@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.core.bifrost.core.component.render;
+package id.ezclouds.core.bifrost.core.web.component.render;
 
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.bifrost.app.webapp.WebAppPage;
