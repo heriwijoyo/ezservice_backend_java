@@ -24,6 +24,7 @@ public class BizCommonTableConverter extends CommonDOModelConverter<EzBizCommonT
         bizCommonTable.setTitle(dataObject.getTitle());
         bizCommonTable.setColumns(dataObject.getColumns());
         bizCommonTable.setConfig(dataObject.getConfig());
+        bizCommonTable.setData(dataObject.getData());
         bizCommonTable.setCreatedTime(dataObject.getCreatedTime());
         bizCommonTable.setStatus(dataObject.getStatus());
         return bizCommonTable;
@@ -39,6 +40,7 @@ public class BizCommonTableConverter extends CommonDOModelConverter<EzBizCommonT
         tableDO.setTitle(model.getTitle());
         tableDO.setColumns(model.getColumns());
         tableDO.setConfig(model.getConfig());
+        tableDO.setData(model.getData());
         tableDO.setCreatedTime(model.getCreatedTime());
         tableDO.setStatus(model.getStatus());
         return tableDO;

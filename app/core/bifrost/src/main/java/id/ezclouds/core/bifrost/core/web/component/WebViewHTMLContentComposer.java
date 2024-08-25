@@ -43,6 +43,17 @@ public class WebViewHTMLContentComposer {
             htmlContentSb.append("<div id='");
             htmlContentSb.append(commonTable.getTableId());
             htmlContentSb.append("'></div>");
+
+            htmlContentSb.append("<script>document.addEventListener('DOMContentLoaded',function(){");
+            htmlContentSb.append("jspreadsheet(document.getElementById('"+ commonTable.getTableId() +"'),{");
+            htmlContentSb.append("data:");
+            htmlContentSb.append(commonTable.getData());
+            htmlContentSb.append(",columns:");
+            htmlContentSb.append(commonTable.getColumns());
+            htmlContentSb.append(",csvFileName:'download_data',");
+            htmlContentSb.append(commonTable.getConfig());
+            htmlContentSb.append("});});</script>");
+
             htmlContentSb.append("</div></div>");
         }
 

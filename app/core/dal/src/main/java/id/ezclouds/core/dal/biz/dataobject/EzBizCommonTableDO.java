@@ -39,6 +39,9 @@ public class EzBizCommonTableDO {
     @Column(name = "config")
     private String config;
 
+    @Column(name = "data")
+    private String data;
+
     @Column(name = "created_time")
     private String createdTime;
 
@@ -99,6 +102,14 @@ public class EzBizCommonTableDO {
 
     public void setConfig(String config) {
         this.config = config;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
     }
 
     public String getCreatedTime() {
