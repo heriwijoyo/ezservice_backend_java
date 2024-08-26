@@ -21,4 +21,6 @@ public interface CoreReportByAreaRepository extends JpaRepository<CoreReportByAr
     List<CoreReportByAreaDO> fetchDistrictAllSource(String orgId);
     @Query("SELECT cra FROM CoreReportByAreaDO cra WHERE cra.orgId = ?1 AND cra.source = ?2 AND cra.villageName = 'ALL'")
     List<CoreReportByAreaDO> fetchDistrictSource(String orgId, String source);
+
+    List<CoreReportByAreaDO> findByOrgIdAndSource(String orgId, String source);
 }

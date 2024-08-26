@@ -39,7 +39,7 @@ public class CoreReportByAreaDAO implements BizReportByAreaDAO {
     @Override
     public List<BizReportByArea> getReportDistrictSource(String orgId, String source) {
         return coreReportByAreaRepository
-                .fetchDistrictSource(orgId, source)
+                .findByOrgIdAndSource(orgId, source)
                 .stream()
                 .map(BizReportConverter::convert)
                 .collect(Collectors.toList());

@@ -82,13 +82,11 @@ public class CoreBizCommonTableDAO implements BizCommonTableDAO {
 
     @EzDAOLogger
     @Override
-    public List<BizCommonTable> getByCodes(String orgId, List<String> codes) {
-        BizCommonTableConverter converter = new BizCommonTableConverter();
-        return ezBizCommonTableRepository
-                .findByOrgIdAndCodeIn(orgId, codes)
-                .stream()
-                .map(converter::convertQuery)
-                .collect(Collectors.toList());
+    public BizCommonTable getByCode(String orgId, String code) {
+        return new BizCommonTableConverter().convertQuery(
+                ezBizCommonTableRepository
+                        .findByOrgIdAndCode(orgId, code)
+        );
     }
 
     @Override

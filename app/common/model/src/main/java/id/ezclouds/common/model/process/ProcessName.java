@@ -11,6 +11,7 @@ package id.ezclouds.common.model.process;
 public enum ProcessName {
 
     SURVEY_RESPONSE_PARSE("SURVEY_RESPONSE_PARSE"),
+    REPORT_AREA_COMMON_TABLE_PARSE("REPORT_AREA_COMMON_TABLE_PARSE"),
     UNKNOWN("UNKNOWN"),
 
     ;

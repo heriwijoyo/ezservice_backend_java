@@ -17,4 +17,6 @@ public interface BizObjectMapperService {
     Map<String, String> parseSurveyResponse(String json);
 
     <T> T parseJson(String json, Class<T> clazz);
+
+    String toJson(Object object);
 }

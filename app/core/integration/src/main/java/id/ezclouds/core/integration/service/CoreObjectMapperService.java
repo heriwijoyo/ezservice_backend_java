@@ -28,7 +28,7 @@ public class CoreObjectMapperService implements BizObjectMapperService {
         try {
             return new ObjectMapper()
                     .readValue(json, new TypeReference<Map<String, String>>(){});
-        } catch (JsonProcessingException e) {
+        } catch (Exception e) {
             return new HashMap<>();
         }
     }
@@ -63,6 +63,16 @@ public class CoreObjectMapperService implements BizObjectMapperService {
         try {
             return new ObjectMapper().readValue(json, clazz);
         } catch (Exception ignored) {
+            return null;
+        }
+    }
+
+    @Override
+    public String toJson(Object object) {
+        try {
+            return new ObjectMapper().writeValueAsString(object);
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }

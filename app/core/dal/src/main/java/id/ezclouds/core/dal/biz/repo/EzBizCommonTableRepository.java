@@ -19,6 +19,6 @@ import java.util.List;
 @Repository
 public interface EzBizCommonTableRepository extends JpaRepository<EzBizCommonTableDO, String> {
     Page<EzBizCommonTableDO> findByCodeContains(String code, Pageable pageable);
-    List<EzBizCommonTableDO> findByOrgIdAndCodeIn(String orgId, List<String> codes);
+    EzBizCommonTableDO findByOrgIdAndCode(String orgId, String code);
     List<EzBizCommonTableDO> findByOrgIdAndPageId(String orgId, String pageId);
 }
