@@ -50,8 +50,12 @@ public class BizMemberUnionDO {
     private String ethnic;
     @Column(name = "id_card_number")
     private String idCardNumber;
+    @Column(name = "district_id")
+    private String districtId;
     @Column(name = "district_name")
     private String districtName;
+    @Column(name = "village_id")
+    private String villageId;
     @Column(name = "village_name")
     private String villageName;
     @Column(name = "rukun_warga")
@@ -195,12 +199,28 @@ public class BizMemberUnionDO {
         this.idCardNumber = idCardNumber;
     }
 
+    public String getDistrictId() {
+        return districtId;
+    }
+
+    public void setDistrictId(String districtId) {
+        this.districtId = districtId;
+    }
+
     public String getDistrictName() {
         return districtName;
     }
 
     public void setDistrictName(String districtName) {
         this.districtName = districtName;
+    }
+
+    public String getVillageId() {
+        return villageId;
+    }
+
+    public void setVillageId(String villageId) {
+        this.villageId = villageId;
     }
 
     public String getVillageName() {

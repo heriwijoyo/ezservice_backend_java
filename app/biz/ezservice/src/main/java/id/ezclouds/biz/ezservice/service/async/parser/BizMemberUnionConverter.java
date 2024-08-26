@@ -41,7 +41,9 @@ public class BizMemberUnionConverter {
         unionDO.setReligion(bizMember.getReligion());
         unionDO.setEthnic(bizMember.getEthnic());
         unionDO.setIdCardNumber(bizMember.getIdCardNumber());
+        unionDO.setDistrictId(bizMember.getDistrictId());
         unionDO.setDistrictName(bizMember.getDistrictName());
+        unionDO.setVillageId(bizMember.getVillageId());
         unionDO.setVillageName(bizMember.getVillageName());
         unionDO.setRukunWarga(bizMember.getRukunWarga());
         unionDO.setRukunTetangga(bizMember.getRukunTetangga());
