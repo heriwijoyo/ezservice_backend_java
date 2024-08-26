@@ -29,19 +29,19 @@ public interface BizMemberUnionRepository extends JpaRepository<BizMemberUnionDO
             + "FROM BizMemberUnionDO AS bmu WHERE bmu.orgId = ?1 AND bmu.source = ?2 AND bmu.districtName = ?3 GROUP BY bmu.role")
     List<BizCustomQueryGroupDO> districtNameFetchRoleGroup(String orgId, String source, String districtName);
 
-    @Query("SELECT new id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO(bmu.role, COUNT(bmu.role)) "
+    @Query("SELECT new id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO(bmu.role, COUNT(*)) "
             + "FROM BizMemberUnionDO AS bmu WHERE bmu.orgId = ?1 AND bmu.source = ?2 AND bmu.districtName = ?3 AND bmu.villageName = ?4 GROUP BY bmu.role")
     List<BizCustomQueryGroupDO> villageLevelFetchRoleGroup(String orgId, String source, String districtName, String villageName);
 
-    @Query("SELECT new id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO(bmu.gender, COUNT(bmu.gender)) "
+    @Query("SELECT new id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO(bmu.gender, COUNT(*)) "
             + "FROM BizMemberUnionDO AS bmu WHERE bmu.orgId = ?1 AND bmu.source = ?2 AND bmu.districtName = ?3 GROUP BY bmu.gender")
     List<BizCustomQueryGroupDO> districtNameFetchGenderGroup(String orgId, String source, String districtName);
 
-    @Query("SELECT new id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO(bmu.gender, COUNT(bmu.gender)) "
+    @Query("SELECT new id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO(bmu.gender, COUNT(*)) "
             + "FROM BizMemberUnionDO AS bmu WHERE bmu.orgId = ?1 AND bmu.source = ?2 AND bmu.districtName = ?3 AND bmu.villageName = ?4 GROUP BY bmu.gender")
     List<BizCustomQueryGroupDO> villageLevelFetchGenderGroup(String orgId, String source, String districtName, String villageName);
 
-    @Query("SELECT new id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO(bmu.tpsNumber, COUNT(bmu.tpsNumber)) "
+    @Query("SELECT new id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO(bmu.tpsNumber, COUNT(*)) "
             + "FROM BizMemberUnionDO AS bmu WHERE bmu.orgId = ?1 AND bmu.source = ?2 AND bmu.districtName = ?3 AND bmu.villageName = ?4 GROUP BY bmu.tpsNumber")
     List<BizCustomQueryGroupDO> villageLevelFetchTpsGroup(String orgId, String source, String districtName, String villageName);
 
@@ -53,7 +53,7 @@ public interface BizMemberUnionRepository extends JpaRepository<BizMemberUnionDO
             + "FROM BizMemberUnionDO AS bmu WHERE bmu.orgId = ?1 AND bmu.source = ?2 AND bmu.subOrgName = ?3 GROUP BY bmu.role")
     List<BizCustomQueryGroupDO> fetchRoleBySubOrgGroup(String orgId, String source, String subOrgName);
 
-    @Query("SELECT new id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO(bmu.gender, COUNT(bmu.gender)) "
+    @Query("SELECT new id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO(bmu.gender, COUNT(*)) "
             + "FROM BizMemberUnionDO AS bmu WHERE bmu.orgId = ?1 AND bmu.source = ?2 AND bmu.subOrgName = ?3 GROUP BY bmu.gender")
     List<BizCustomQueryGroupDO> fetchGenderBySubOrgGroup(String orgId, String source, String subOrgName);
 
@@ -61,7 +61,7 @@ public interface BizMemberUnionRepository extends JpaRepository<BizMemberUnionDO
             + "FROM BizMemberUnionDO AS bmu WHERE bmu.orgId = ?1 AND bmu.source = ?2 AND bmu.createdDate = ?3 GROUP BY bmu.subOrgId")
     List<BizCustomQueryGroupDO> fetchDateSeriesBySubOrgGroup(String orgId, String source, String createdDate);
 
-    @Query("SELECT new id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO(bmu.districtName, COUNT(bmu.districtName)) "
+    @Query("SELECT new id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO(bmu.districtName, COUNT(*)) "
             + "FROM BizMemberUnionDO AS bmu WHERE bmu.orgId = ?1 AND bmu.source = ?2 AND bmu.createdDate = ?3 GROUP BY bmu.districtName")
     List<BizCustomQueryGroupDO> fetchDateSeriesByDistrictGroup(String orgId, String source, String createdDate);
 

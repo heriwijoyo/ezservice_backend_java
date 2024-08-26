@@ -142,7 +142,6 @@ public class BizGenerateAreaReportProcessor extends BizAsyncProcessor {
                 reportByArea.setVoterStrong(groupRole.getCount1Value());
             } else if ("L".equals(groupRole.getGroupName())) {
                 reportByArea.setVoterLazy(groupRole.getCount1Value());
-                totalVoter += groupRole.getCount1Value();
             } else {
                 reportByArea.setVoterOther(groupRole.getCount1Value());
             }
