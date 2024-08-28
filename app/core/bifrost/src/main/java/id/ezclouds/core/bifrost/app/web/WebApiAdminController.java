@@ -23,6 +23,9 @@ import id.ezclouds.biz.ezservice.service.app.model.AppDocument;
 import id.ezclouds.biz.ezservice.service.app.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
+import id.ezclouds.common.facade.biz.admin.BizAdminConfigService;
+import id.ezclouds.common.facade.biz.admin.BizAdminWhatsappService;
+import id.ezclouds.common.model.request.admin.WebAdminRequest;
 import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
 import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
 import id.ezclouds.common.model.result.BizResult;
@@ -61,6 +64,12 @@ public class WebApiAdminController {
 
     @Autowired
     private BizAdminService bizAdminService;
+
+    @Autowired
+    private BizAdminConfigService bizAdminConfigService;
+
+    @Autowired
+    private BizAdminWhatsappService bizAdminWhatsappService;
 
     @PostMapping(value = "/webapp/api/getAppData.json")
     private WebApiResult<BizAdminAppData> getAppData(
@@ -950,6 +959,85 @@ public class WebApiAdminController {
             @Override
             public BizResult onProcess() throws Exception {
                 return bizAdminService.memberUpdateRoles(sessionId, memberId, roles);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/watzapNumberKey.json")
+    private WebApiResult<String> watzapNumberKey(
+            @RequestParam(name = "sessionId", required = false) String sessionId) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_WHATSAPP_NUMBER_KEY, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                WebAdminRequest request = new WebAdminRequest();
+                request.setSessionId(sessionId);
+                return bizAdminConfigService.getWatzapNumberKey(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/numberKeyUpdate.json")
+    private WebApiResult<String> numberKeyUpdate(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "numberKey", required = false) String numberKey) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_WHATSAPP_NUMBER_KEY_UPDATE, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                WebBizUpdateRequest<String> request = new WebBizUpdateRequest<>();
+                request.setSessionId(sessionId);
+                request.setObject(numberKey);
+                return bizAdminConfigService.updateWatzapNumberKey(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/sendWhatsapp.json")
+    private WebApiResult<String> sendWhatsapp(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "message", required = false) String message) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_WHATSAPP_SEND, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                WebBizUpdateRequest<String> request = new WebBizUpdateRequest<>();
+                request.setSessionId(sessionId);
+                request.setObject(message);
+                return bizAdminWhatsappService.sendMessage(request);
             }
 
             @Override

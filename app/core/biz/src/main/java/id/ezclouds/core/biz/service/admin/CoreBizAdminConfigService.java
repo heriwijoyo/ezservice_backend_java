@@ -14,6 +14,7 @@ import id.ezclouds.common.model.biz.BizCommonTable;
 import id.ezclouds.common.model.message.CommonMessageConstant;
 import id.ezclouds.common.model.request.WebBizPageRequest;
 import id.ezclouds.common.model.request.admin.CommonTableCreateRequest;
+import id.ezclouds.common.model.request.admin.WebAdminRequest;
 import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
 import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
 import id.ezclouds.common.model.result.BizResult;
@@ -176,5 +177,15 @@ public class CoreBizAdminConfigService implements BizAdminConfigService {
             }
         });
         return bizResult;
+    }
+
+    @Override
+    public BizResult getWatzapNumberKey(WebAdminRequest request) {
+        return null;
+    }
+
+    @Override
+    public BizResult updateWatzapNumberKey(WebBizUpdateRequest<String> request) {
+        return null;
     }
 }
