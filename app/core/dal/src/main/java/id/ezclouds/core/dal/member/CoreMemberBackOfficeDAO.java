@@ -12,6 +12,8 @@ import id.ezclouds.common.model.request.BizPageRequest;
 import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.common.model.util.PageResultUtil;
 import id.ezclouds.common.util.DateUtil;
+import id.ezclouds.common.util.assertion.AssertUtil;
+import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.core.dal.member.converter.CoreMemberBackOfficeConverter;
 import id.ezclouds.core.dal.member.dataobject.CoreMemberBackOfficeDO;
 import id.ezclouds.core.dal.member.dataobject.CoreMemberExtBackOfficeDO;
@@ -102,9 +104,15 @@ public class CoreMemberBackOfficeDAO implements BizMemberBackOfficeDAO {
 
     @EzDAOLogger
     @Override
-    public void store(MemberBackOffice memberBackOffice) {
+    public void updateSubOrganization(String memberId, String subOrgId) {
+        CoreMemberBackOfficeDO memberBackOfficeDO = coreMemberBackOfficeRepository
+                .findById(memberId)
+                .orElse(null);
+        AssertUtil.notNull(memberBackOfficeDO, EzErrorCode.DATA_NOT_FOUND);
+
+        memberBackOfficeDO.setSubOrgId(subOrgId);
         coreMemberBackOfficeRepository
-                .saveAndFlush(new CoreMemberBackOfficeConverter().convertStore(memberBackOffice));
+                .saveAndFlush(memberBackOfficeDO);
     }
 
     @EzDAOLogger

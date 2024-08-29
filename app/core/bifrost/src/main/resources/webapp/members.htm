@@ -92,7 +92,7 @@
             $('.pager').html(EzWebAppClient.renderPager(response.pageResult));
         },
         composeNameLink: function(data) {
-            return '<a href="memberDetail.htm?id='+ data.memberId +'">' + data.memberName + '</a>';
+            return '<a href="memberDetail.htm?id='+ data.memberId +'">' + data.name + '</a>';
         },
         composeAddress: function(data) {
             let address = '';

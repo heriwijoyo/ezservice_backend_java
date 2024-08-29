@@ -89,7 +89,7 @@ public class WebApiControllerTemplate {
         return "UNKNOWN_RESULT";
     }
 
-    interface Handler<T> {
+    public interface Handler<T> {
         BizResult onProcess() throws Exception;
         T convertResult(Object object);
         void onDigestLog(DigestLog digestLog);

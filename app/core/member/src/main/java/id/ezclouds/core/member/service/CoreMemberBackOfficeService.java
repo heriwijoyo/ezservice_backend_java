@@ -65,17 +65,14 @@ public class CoreMemberBackOfficeService implements MemberBackOfficeService {
     public void memberUpdateSubOrganization(MemberBackOffice memberBackOffice, String subOrganizationId) {
         boolean needUpdateRefId = !StringUtil.equals(memberBackOffice.getSubOrgId(), subOrganizationId);
 
-        memberBackOffice.setSubOrgId(subOrganizationId);
-        bizMemberBackOfficeDAO.store(memberBackOffice);
+        bizMemberBackOfficeDAO.updateSubOrganization(memberBackOffice.getMemberId(), subOrganizationId);
 
         if (needUpdateRefId) {
             List<MemberBackOffice> refMembers = bizMemberBackOfficeDAO
                     .getByReferrerId(memberBackOffice.getMemberId());
 
             for (MemberBackOffice refMember : refMembers) {
-                refMember.setSubOrgId(subOrganizationId);
-
-                bizMemberBackOfficeDAO.store(refMember);
+                bizMemberBackOfficeDAO.updateSubOrganization(refMember.getMemberId(), subOrganizationId);
             }
         }
     }

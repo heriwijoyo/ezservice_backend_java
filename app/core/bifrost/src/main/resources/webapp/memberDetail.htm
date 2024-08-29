@@ -226,7 +226,7 @@
         GET_MEMBER_DETAIL: 'api/memberDetail.json',
         MEMBER_UPDATE_ROLES: 'api/memberUpdateRoles.json',
         GET_MEMBER_REQUIRED_DATA: 'api/memberAddRequiredData.json',
-        MEMBER_UPDATE_SUB_ORG: 'api/memberUpdateSubOrg.json',
+        MEMBER_UPDATE_SUB_ORG: 'api/memberUpdateSubOrg.json'
     };
     var EzDashboardBizService = {
         start: function() {
@@ -262,6 +262,10 @@
             if (url === EzAdminUrl.GET_MEMBER_REQUIRED_DATA) {
                 EzDashboardBizService.parseSubOrg(response.data);
             }
+            if (url === EzAdminUrl.MEMBER_UPDATE_SUB_ORG) {
+                alert(response.data);
+                $('#btnUpdateSubOrg').text('UPDATE COMMUNITY');
+            }
         },
         handleApiBizFailed: function(url, message) {
             if (url === EzAdminUrl.GET_MEMBER_DETAIL) {
@@ -281,7 +285,7 @@
         parseData: function(data) {
             $('#subOrgId').html('<option value="'+data.subOrgId+'">'+data.subOrgName+'</option>');
             $('#roles').val(data.roles);
-            $('#name').val(data.memberName);
+            $('#name').val(data.name);
             $('#gender').val(data.gender);
             $('#dateOfBirth').val(data.dateOfBirth);
             $('#phone').val(data.phone);

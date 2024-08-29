@@ -16,6 +16,13 @@ public class WebBizUpdateRequest<T> extends BizRequest {
     private String orgId;
     private T object;
 
+    public WebBizUpdateRequest() {
+    }
+
+    public WebBizUpdateRequest(T object) {
+        this.object = object;
+    }
+
     public String getSessionId() {
         return sessionId;
     }

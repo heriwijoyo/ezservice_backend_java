@@ -22,7 +22,7 @@ public interface BizMemberBackOfficeDAO {
 
     List<MemberBackOffice> getByReferrerId(String referrerId);
 
-    void store(MemberBackOffice memberBackOffice);
+    void updateSubOrganization(String memberId, String subOrgId);
 
     void updateRoles(String memberId, String roles);
 
