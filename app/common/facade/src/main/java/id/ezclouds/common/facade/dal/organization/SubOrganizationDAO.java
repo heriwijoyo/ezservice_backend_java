@@ -13,7 +13,10 @@ import java.util.List;
  * @version $Id: SubOrganizationDAO.java, v 0.1 2024‐07‐28 8:59 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 public interface SubOrganizationDAO {
+
     long countByOrgId(String orgId);
+
     List<SubOrganization> getByOrgId(String orgId);
+
     SubOrganization getById(String subOrgId);
 }

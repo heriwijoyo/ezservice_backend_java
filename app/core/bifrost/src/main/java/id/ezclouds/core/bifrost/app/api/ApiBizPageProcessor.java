@@ -5,7 +5,7 @@
 package id.ezclouds.core.bifrost.app.api;
 
 import id.ezclouds.biz.ezservice.service.apibiz.BizAppDocumentService;
-import id.ezclouds.biz.ezservice.service.apibiz.BizMemberService;
+import id.ezclouds.biz.ezservice.service.apibiz.OldBizMemberService;
 import id.ezclouds.biz.ezservice.service.apibiz.BizSubOrganizationService;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
@@ -28,7 +28,7 @@ public class ApiBizPageProcessor {
     private BizSubOrganizationService bizSubOrganizationService;
 
     @Autowired
-    private BizMemberService bizMemberService;
+    private OldBizMemberService oldBizMemberService;
 
     public BizResult process(ApiEvent event, ApiPageRequest request) {
         switch (event) {
@@ -39,7 +39,7 @@ public class ApiBizPageProcessor {
                 return bizSubOrganizationService.getSubBizOrganizations(BizRequestConverter.getBizPageRequest(request));
 
             case API_PAGE_MEMBER:
-                return bizMemberService.getMembers(BizRequestConverter.getBizPageRequest(request));
+                return oldBizMemberService.getMembers(BizRequestConverter.getBizPageRequest(request));
 
         }
         return null;

@@ -51,7 +51,7 @@ public class ApiBizProcessor implements BizProcessor {
     private BizMemberProfileService bizMemberProfileService;
 
     @Autowired
-    private BizMemberService bizMemberService;
+    private OldBizMemberService oldBizMemberService;
 
     @Autowired
     private BizAppEventService bizAppEventService;
@@ -103,7 +103,7 @@ public class ApiBizProcessor implements BizProcessor {
                 return bizAppEventService.getAppEventHome();
 
             case API_MEMBER_PROFILE:
-                return bizMemberService.getMemberProfile();
+                return oldBizMemberService.getMemberProfile();
 
             case API_MEMBER_LOGIN:
                 BizRequestConverter<BizMemberLoginRequest> loginConverter = new BizRequestConverter<>(BizRequestConverter.MEMBER_LOGIN);
@@ -131,7 +131,7 @@ public class ApiBizProcessor implements BizProcessor {
                 BizRequestConverter<BizMemberRegisterRequest> registerConverter = new BizRequestConverter<>(BizRequestConverter.MEMBER_REGISTER);
                 BizMemberRegisterRequest bizRequest = registerConverter.convert(apiRequest);
                 bizRequest.getExtendInfo().put(AppConstant.ExtKey.SOURCE_ID, SOURCE_ID);
-                return bizMemberService.registerMember(bizRequest);
+                return oldBizMemberService.registerMember(bizRequest);
 
             case API_SURVEY_SUBMIT:
                 BizRequestConverter<BizSurveySubmitRequest> submitSurvey = new BizRequestConverter<>(BizRequestConverter.SURVEY_SUBMIT);
@@ -141,7 +141,7 @@ public class ApiBizProcessor implements BizProcessor {
                 BizRequestConverter<BizMemberUploadRequest> uploadConverter = new BizRequestConverter<>(BizRequestConverter.BIZ_COMMON_UPLOAD);
                 BizMemberUploadRequest uploadRequest = uploadConverter.convert(apiRequest);
                 uploadRequest.setMultipartFile(file);
-                return bizMemberService.memberUploadMedia(uploadRequest);
+                return oldBizMemberService.memberUploadMedia(uploadRequest);
 
             case API_GET_LOCAL_AREA:
                 BizRequestConverter<BizLocalAreaRequest> localAreaConverter = new BizRequestConverter<>(BizRequestConverter.LOCAL_AREA);
@@ -158,7 +158,7 @@ public class ApiBizProcessor implements BizProcessor {
                 return bizSubOrganizationService.getSubBizOrganizations(BizRequestConverter.getBizPageRequest(apiRequest));
 
             case API_PAGE_MEMBER:
-                return bizMemberService.getMembers(BizRequestConverter.getBizPageRequest(apiRequest));
+                return oldBizMemberService.getMembers(BizRequestConverter.getBizPageRequest(apiRequest));
 
             case API_PAGE_APP_DOCUMENTS:
                 return bizAppDocumentService.getAppDocuments(BizRequestConverter.getBizPageRequest(apiRequest));
@@ -181,7 +181,7 @@ public class ApiBizProcessor implements BizProcessor {
                 return bizAdminService.logoutWebSession(apiRequest.getExtendInfo().get("WEB_SESSION_ID"));
 
             case API_ADMIN_MEMBER_UPDATE:
-                return bizMemberService.memberUpdate(BizRequestConverter.getBizRequest(apiRequest));
+                return oldBizMemberService.memberUpdate(BizRequestConverter.getBizRequest(apiRequest));
 
         }
 

@@ -48,10 +48,10 @@ import java.util.*;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: BizMemberService.java, v 0.1 2023‐12‐31 12:24 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: OldBizMemberService.java, v 0.1 2023‐12‐31 12:24 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class BizMemberService extends BizBaseService {
+public class OldBizMemberService extends BizBaseService {
 
     @Autowired
     private BizMemberInnerService bizMemberInnerService;

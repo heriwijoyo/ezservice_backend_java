@@ -13,5 +13,8 @@ import java.util.List;
  * @version $Id: SubOrganizationService.java, v 0.1 2024‐08‐11 2:14 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 public interface SubOrganizationService {
+
     List<SubOrganization> getSubOrganizationAll(String orgId);
+
+    SubOrganization getById(String subOrgId);
 }

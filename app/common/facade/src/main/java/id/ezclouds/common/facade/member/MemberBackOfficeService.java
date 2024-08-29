@@ -17,4 +17,6 @@ public interface MemberBackOfficeService {
     PageResult<MemberBackOffice> getMemberPage(BizPageRequest bizPageRequest);
 
     MemberBackOffice getMemberDetail(String memberId);
+
+    void memberUpdateSubOrganization(MemberBackOffice memberBackOffice, String subOrganizationId);
 }

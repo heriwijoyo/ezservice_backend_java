@@ -5,7 +5,7 @@
 package id.ezclouds.core.bifrost.app.webapp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import id.ezclouds.biz.ezservice.service.apibiz.BizMemberService;
+import id.ezclouds.biz.ezservice.service.apibiz.OldBizMemberService;
 import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.common.facade.biz.BizReportService;
 import id.ezclouds.common.model.report.BizMainReport;
@@ -315,7 +315,7 @@ public class WebAppController {
             AssertUtil.isTrue(orgCode.equals(session.getOrgCode()), EzErrorCode.SESSION_INVALID);
 
             List<List<String>> jsonData = SpringContextConfig
-                    .getBean(BizMemberService.class)
+                    .getBean(OldBizMemberService.class)
                     .getAllMemberData(session.getOrgId());
 
             success = renderJsonData(new ObjectMapper().writeValueAsString(jsonData), servletResponse);
@@ -345,7 +345,7 @@ public class WebAppController {
             AssertUtil.isTrue(orgCode.equals(session.getOrgCode()), EzErrorCode.SESSION_INVALID);
 
             List<List<String>> jsonData = SpringContextConfig
-                    .getBean(BizMemberService.class)
+                    .getBean(OldBizMemberService.class)
                     .getAllImportData(session.getOrgId());
 
             success = renderJsonData(new ObjectMapper().writeValueAsString(jsonData), servletResponse);
