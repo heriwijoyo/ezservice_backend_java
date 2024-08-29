@@ -70,7 +70,7 @@
                         </div>
                     </div>
                     <div class="col-sm-12">
-                        <button id="submitButton" class="button button-rounded waves-effect waves-float pull-right" type="submit" name="submit">SUBMIT</button>
+                        <button id="updateButton" class="button button-rounded waves-effect waves-float pull-right" type="submit" name="submit">SUBMIT</button>
                         <button class="cancelButton button button-rounded button-light waves-effect waves-float pull-right" type="submit" name="submit">CANCEL</button>
                     </div>
                 </div>
@@ -108,8 +108,8 @@
         GET_WHATSAPP_LOG: 'api/getWhatsappLog.json',
         WHATSAPP_RESEND: 'api/resendWhatsapp.json',
         WATZAP_NUMBER_KEY_GET: 'api/watzapNumberKey.json',
-        WATZAP_NUMBER_KEY_UPDATE: 'api/numberKeyUpdate.json',
-        WHATSAPP_SEND 'api/sendWhatsapp.json'
+        WATZAP_NUMBER_KEY_UPDATE: 'api/watzapNumberKeyUpdate.json',
+        WHATSAPP_SEND: 'api/sendWhatsapp.json'
     };
     var EzDashboardBizService = {
         start: function() {
@@ -131,6 +131,16 @@
                 });
             }
         },
+        fetchWatzapNumberKey: function() {
+            EzWebAppClient.callApiService(EzAdminUrl.WATZAP_NUMBER_KEY_GET, {});
+        },
+        updateWatzapNumberKey: function() {
+            EzWebAppClient.callApiService(EzAdminUrl.WATZAP_NUMBER_KEY_UPDATE, {
+                numberKey: $('#numberKey').val()
+            });
+        },
+        sendMessage: function() {
+        },
         handleApiBizResult: function(url, response) {
             if (url === EzAdminUrl.GET_WHATSAPP_LOG) {
                 EzDashboardBizService.data.result = response.pageResult;
@@ -139,6 +149,13 @@
             if (url === EzAdminUrl.WHATSAPP_RESEND) {
                 alert(response.data);
                 EzDashboardBizService.fetchData();
+            }
+            if (url === EzAdminUrl.WATZAP_NUMBER_KEY_GET) {
+                $('#numberKey').val(response.data);
+            }
+            if (url === EzAdminUrl.WATZAP_NUMBER_KEY_UPDATE) {
+                alert(response.data);
+                EzDashboardBizService.fetchWatzapNumberKey();
             }
         },
         reloadPageResultView: function(response) {
@@ -163,6 +180,7 @@
         showSetting: function() {
             $('#modal-setting').removeClass('fade');
             $('#modal-setting').addClass('show');
+            EzDashboardBizService.fetchWatzapNumberKey();
         },
         showSend: function() {
             $('#modal-send').removeClass('fade');
@@ -205,6 +223,7 @@
         });
         EzWebAppClient.onApiBizFailed(function(url, message){
             console.log(url +' --- '+ message);
+            alert(message);
         });
         EzWebAppClient.onApiCallError(function(xhr){
             console.log(xhr);
@@ -235,6 +254,12 @@
         });
         $('#buttonSend').click(function(){
             EzDashboardBizService.showSend();
+        });
+        $('#updateButton').click(function(){
+            EzDashboardBizService.updateWatzapNumberKey();
+        });
+        $('#sendButton').click(function(){
+            EzDashboardBizService.sendMessage();
         });
     });
 

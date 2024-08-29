@@ -999,8 +999,8 @@ public class WebApiAdminController {
         return result;
     }
 
-    @PostMapping(value = "/webapp/api/numberKeyUpdate.json")
-    private WebApiResult<String> numberKeyUpdate(
+    @PostMapping(value = "/webapp/api/watzapNumberKeyUpdate.json")
+    private WebApiResult<String> watzapNumberKeyUpdate(
             @RequestParam(name = "sessionId", required = false) String sessionId,
             @RequestParam(name = "numberKey", required = false) String numberKey) {
         final WebApiResult<String> result = new WebApiResult<>();
