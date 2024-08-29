@@ -140,13 +140,16 @@
             });
         },
         sendMessage: function() {
+            EzWebAppClient.callApiService(EzAdminUrl.WHATSAPP_SEND, {
+                message: $('#message').val()
+            });
         },
         handleApiBizResult: function(url, response) {
             if (url === EzAdminUrl.GET_WHATSAPP_LOG) {
                 EzDashboardBizService.data.result = response.pageResult;
                 EzDashboardBizService.reloadPageResultView(response);
             }
-            if (url === EzAdminUrl.WHATSAPP_RESEND) {
+            if (url === EzAdminUrl.WHATSAPP_RESEND || url === EzAdminUrl.WHATSAPP_SEND) {
                 alert(response.data);
                 EzDashboardBizService.fetchData();
             }
