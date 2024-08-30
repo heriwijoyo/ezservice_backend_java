@@ -10,15 +10,27 @@ package id.ezclouds.common.model.constant;
  */
 public enum SearchScene {
 
-    MEMBER_PHONE("MEMBER_PHONE"),
-    MEMBER_NAME_CONTAIN("MEMBER_NAME_CONTAIN"),
-    UNKNOWN("UNKNOWN"),
+    MEMBER_PHONE("MEMBER_PHONE", "Search By Phone"),
+    MEMBER_NAME_CONTAIN("MEMBER_NAME_CONTAIN", "Search By Name"),
+    MEMBER_REFERRER("MEMBER_REFERRER", "Search By Recruiter"),
+    CODE("CODE", "Search By Code"),
+    UNKNOWN("UNKNOWN", "Unknown"),
     ;
 
     private final String code;
+    private final String label;
 
-    SearchScene(String code) {
+    SearchScene(String code, String label) {
         this.code = code;
+        this.label = label;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getLabel() {
+        return label;
     }
 
     public static SearchScene getByCode(String code) {

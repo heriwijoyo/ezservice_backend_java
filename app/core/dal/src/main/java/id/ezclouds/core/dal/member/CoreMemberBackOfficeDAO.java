@@ -56,6 +56,11 @@ public class CoreMemberBackOfficeDAO implements BizMemberBackOfficeDAO {
                         .findByOrgIdAndNameContains(bizPageRequest.getOrgId(), bizPageRequest.getSearchKeyword(), bizPageRequest.toPageRequest());
                 break;
 
+            case MEMBER_REFERRER:
+                findResult = coreMemberBackOfficeRepository
+                        .findByOrgIdAndReferrerId(bizPageRequest.getOrgId(), bizPageRequest.getSearchKeyword(), bizPageRequest.toPageRequest());
+                break;
+
             default:
                 findResult = coreMemberBackOfficeRepository
                         .findByOrgId(bizPageRequest.getOrgId(), bizPageRequest.toPageRequest());

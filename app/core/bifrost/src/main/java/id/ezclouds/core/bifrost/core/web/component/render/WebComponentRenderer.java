@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.bifrost.core.web.component.render;
 
+import id.ezclouds.common.model.constant.SearchScene;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.bifrost.app.webapp.WebAppPage;
 
@@ -13,24 +14,20 @@ import id.ezclouds.core.bifrost.app.webapp.WebAppPage;
  */
 public final class WebComponentRenderer {
 
-    private static final String SEARCH_SCENE_PHONE = "MEMBER_PHONE=Search By Phone";
-    private static final String SEARCH_SCENE_NAME = "MEMBER_NAME=Search By Name";
-    private static final String SEARCH_SCENE_CODE = "CODE=Search By Code";
-
     public static String getListSearchComponent(WebAppPage webAppPage) {
 
         switch (webAppPage) {
             case MEMBERS:
-                return composeSearchComponentHtml(SEARCH_SCENE_PHONE, SEARCH_SCENE_NAME);
+                return composeSearchComponentHtml(SearchScene.MEMBER_PHONE, SearchScene.MEMBER_NAME_CONTAIN, SearchScene.MEMBER_REFERRER);
             case COMMON_TABLES:
-                return composeSearchComponentHtml(SEARCH_SCENE_CODE);
+                return composeSearchComponentHtml(SearchScene.CODE);
 
             default:
                 return StringUtil.EMPTY;
         }
     }
 
-    private static String composeSearchComponentHtml(String... scenes) {
+    private static String composeSearchComponentHtml(SearchScene... scenes) {
         if (scenes.length < 1) {
             return StringUtil.EMPTY;
         }
@@ -40,9 +37,8 @@ public final class WebComponentRenderer {
         componentSb.append("<tr><td><div class=\"form-line\">");
 
         componentSb.append("<select class=\"form-control show-tick\" id=\"searchScene\">");
-        for (String sceneStr : scenes) {
-            String[] sceneSplit = sceneStr.split("=");
-            componentSb.append("<option value=\""+ sceneSplit[0] +"\">"+ sceneSplit[1] +"</option>");
+        for (SearchScene scene : scenes) {
+            componentSb.append("<option value=\""+ scene.getCode() +"\">"+ scene.getLabel() +"</option>");
         }
         componentSb.append("</select></div></td>");
 
