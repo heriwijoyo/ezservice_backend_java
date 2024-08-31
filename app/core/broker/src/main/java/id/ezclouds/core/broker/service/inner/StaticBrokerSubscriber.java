@@ -21,7 +21,7 @@ public final class StaticBrokerSubscriber {
 
         switch (topicEvent) {
             case MEMBER_CLIENT_APP_LOGIN:
-                subscribers.add(MsgSubConstant.APP_CLIENT_LOGIN);
+                subscribers.add(MsgSubConstant.MEMBER_APP_CLIENT_LOGIN);
                 break;
             case CORE_MEMBER_REGISTER:
                 break;

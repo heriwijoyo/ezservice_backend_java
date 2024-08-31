@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
  * @version $Id: BizAppClientLoginReceiver.java, v 0.1 2024‐08‐31 1:08 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-@Qualifier(MsgSubConstant.APP_CLIENT_LOGIN)
+@Qualifier(MsgSubConstant.MEMBER_APP_CLIENT_LOGIN)
 public class BizAppClientLoginReceiver implements BrokerMessageReceiver {
 
     @Override
