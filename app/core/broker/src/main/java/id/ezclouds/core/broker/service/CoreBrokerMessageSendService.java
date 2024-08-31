@@ -63,7 +63,7 @@ public class CoreBrokerMessageSendService implements BrokerMessageSendService {
 
             // process request
             messageId = messageSendInnerService.storeMessage(message);
-            messageSendInnerService.dispatchMessage(messageId);
+            messageSendInnerService.dispatchMessage(topicEvent, messageId);
 
             result.setSuccess(true);
             result.setMessageId(messageId);

@@ -13,4 +13,6 @@ import id.ezclouds.common.model.broker.BrokerMessage;
 public interface BrokerMessageDAO {
 
     String storeMessage(BrokerMessage message);
+
+    BrokerMessage getMessage(String messageId);
 }

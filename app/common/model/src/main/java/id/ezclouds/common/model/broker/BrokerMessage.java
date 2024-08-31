@@ -10,12 +10,21 @@ package id.ezclouds.common.model.broker;
  */
 public class BrokerMessage {
 
+    private String messageId;
     private String orgId;
     private String source;
     private String topic;
     private String event;
     private String createdTime;
     private BrokerMessageData payload;
+
+    public String getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
+    }
 
     public String getOrgId() {
         return orgId;

@@ -4,12 +4,11 @@
  */
 package id.ezclouds.core.dal.broker;
 
+import id.ezclouds.common.facade.broker.BrokerMessageDataConvertService;
 import id.ezclouds.common.facade.dal.broker.BrokerMessageDAO;
-import id.ezclouds.common.facade.integration.BizObjectMapperService;
 import id.ezclouds.common.model.annotation.EzDAOLogger;
 import id.ezclouds.common.model.broker.BrokerMessage;
-import id.ezclouds.common.util.DateUtil;
-import id.ezclouds.common.util.HashUtil;
+import id.ezclouds.common.model.broker.BrokerMessageData;
 import id.ezclouds.core.dal.broker.converter.BrokerMessageConverter;
 import id.ezclouds.core.dal.broker.dataobject.EzBrokerMessageDO;
 import id.ezclouds.core.dal.broker.repo.EzBrokerMessageRepository;
@@ -27,19 +26,30 @@ public class CoreBrokerMessageDAO implements BrokerMessageDAO {
     private EzBrokerMessageRepository ezBrokerMessageRepository;
 
     @Autowired
-    private BizObjectMapperService bizObjectMapperService;
+    private BrokerMessageDataConvertService brokerMessageDataConvertService;
 
     @EzDAOLogger
     @Override
     public String storeMessage(BrokerMessage message) {
         BrokerMessageConverter converter = new BrokerMessageConverter();
         EzBrokerMessageDO messageDO = converter.convertStore(message);
-        String currentTime = DateUtil.getCurrentFormattedDate();
-        messageDO.setMessageId(HashUtil.createHash(message.getOrgId(), message.getTopic(), message.getEvent(), currentTime));
-        messageDO.setCreatedTime(currentTime);
-        messageDO.setPayload(bizObjectMapperService.toJson(message.getPayload()));
+        messageDO.setPayload(brokerMessageDataConvertService.convertPayload(message.getPayload()));
+
         return ezBrokerMessageRepository
                 .saveAndFlush(messageDO)
                 .getMessageId();
+    }
+
+    @EzDAOLogger
+    @Override
+    public BrokerMessage getMessage(String messageId) {
+        EzBrokerMessageDO messageDO = ezBrokerMessageRepository
+                .findById(messageId)
+                .orElse(null);
+        BrokerMessage message = new BrokerMessageConverter().convertQuery(messageDO);
+        BrokerMessageData messageData = brokerMessageDataConvertService
+                .parsePayload(message.getTopic(), message.getEvent(), messageDO.getPayload());
+        message.setPayload(messageData);
+        return message;
     }
 }
