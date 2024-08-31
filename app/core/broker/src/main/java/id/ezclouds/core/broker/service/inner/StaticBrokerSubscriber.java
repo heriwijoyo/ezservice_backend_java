@@ -2,8 +2,9 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.core.broker.subscriber;
+package id.ezclouds.core.broker.service.inner;
 
+import id.ezclouds.common.model.broker.MsgSubConstant;
 import id.ezclouds.core.broker.model.BrokerTopicEvent;
 
 import java.util.ArrayList;
@@ -19,6 +20,9 @@ public final class StaticBrokerSubscriber {
         List<String> subscribers = new ArrayList<>();
 
         switch (topicEvent) {
+            case MEMBER_CLIENT_APP_LOGIN:
+                subscribers.add(MsgSubConstant.APP_CLIENT_LOGIN);
+                break;
             case CORE_MEMBER_REGISTER:
                 break;
         }

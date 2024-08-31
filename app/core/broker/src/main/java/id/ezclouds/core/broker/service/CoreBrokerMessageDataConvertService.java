@@ -7,7 +7,7 @@ package id.ezclouds.core.broker.service;
 import id.ezclouds.common.facade.broker.BrokerMessageDataConvertService;
 import id.ezclouds.common.facade.integration.BizObjectMapperService;
 import id.ezclouds.common.model.broker.BrokerMessageData;
-import id.ezclouds.common.model.broker.authorization.AppClientAuthData;
+import id.ezclouds.common.model.broker.authorization.MemberAppClientAuthData;
 import id.ezclouds.common.model.broker.member.MemberRegisterMessageData;
 import id.ezclouds.core.broker.model.BrokerTopicEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +32,11 @@ public class CoreBrokerMessageDataConvertService implements BrokerMessageDataCon
     public BrokerMessageData parsePayload(String topic, String event, String payload) {
         BrokerTopicEvent topicEvent = BrokerTopicEvent.getByTopicAndEvent(topic, event);
         switch (topicEvent) {
+            case MEMBER_CLIENT_APP_LOGIN:
+                return bizObjectMapperService.parseJson(payload, MemberAppClientAuthData.class);
+
             case CORE_MEMBER_REGISTER:
                 return bizObjectMapperService.parseJson(payload, MemberRegisterMessageData.class);
-
-            case CORE_AUTHORIZATION:
-                return bizObjectMapperService.parseJson(payload, AppClientAuthData.class);
         }
         return null;
     }

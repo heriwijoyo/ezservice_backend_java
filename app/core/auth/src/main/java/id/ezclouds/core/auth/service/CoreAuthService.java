@@ -4,6 +4,9 @@
  */
 package id.ezclouds.core.auth.service;
 
+import id.ezclouds.common.facade.broker.BrokerMessageSendService;
+import id.ezclouds.common.model.broker.BrokerMessage;
+import id.ezclouds.common.model.broker.authorization.MemberAppClientAuthData;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.ShardUtil;
@@ -68,6 +71,9 @@ public class CoreAuthService {
     @Autowired
     private AuthInnerService authInnerService;
 
+    @Autowired
+    private BrokerMessageSendService brokerMessageSendService;
+
     public CoreAuthResult<Void> authAppClient(CoreAppClientAuthRequest request) {
         CoreAuthResult<Void> authResult = new CoreAuthResult<>();
 
@@ -108,6 +114,18 @@ public class CoreAuthService {
         sessionInfo.setSessionId(sessionDO.getSessionId());
         sessionInfo.setMemberId(memberClientDO.getMemberId());
         sessionInfo.setClientId(memberClientDO.getClientId());
+
+        MemberAppClientAuthData authData = new MemberAppClientAuthData();
+        authData.setMemberId(sessionInfo.getMemberId());
+        BrokerMessage message = new BrokerMessage();
+        message.setOrgId(request.getOrgId());
+        message.setSource("CORE_AUTH_SERVICE");
+        message.setTopic("CORE_AUTHORIZATION");
+        message.setEvent("MEMBER_CLIENT_APP_LOGIN");
+        message.setPayload(authData);
+
+        brokerMessageSendService.send(message);
+
         return sessionInfo;
     }
 
@@ -200,8 +218,7 @@ public class CoreAuthService {
                     if (compareDate.getTime() > activeDate.getTime()) {
                         inActiveSessionDOs.add(activeSessionDO);
                         activeSessionDO = activeDO;
-                    }
-                    else {
+                    } else {
                         inActiveSessionDOs.add(activeDO);
                     }
                 }

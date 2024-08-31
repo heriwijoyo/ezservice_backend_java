@@ -7,7 +7,7 @@ package id.ezclouds.core.broker.service.inner;
 import id.ezclouds.common.facade.dal.broker.BrokerMessageDAO;
 import id.ezclouds.common.model.broker.BrokerMessage;
 import id.ezclouds.common.model.broker.BrokerMessageData;
-import id.ezclouds.common.model.broker.authorization.AppClientAuthData;
+import id.ezclouds.common.model.broker.authorization.MemberAppClientAuthData;
 import id.ezclouds.common.model.broker.member.MemberRegisterMessageData;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -34,8 +35,8 @@ public class MessageSendInnerService {
 
     public void validateMessageData(BrokerTopicEvent topicEvent, BrokerMessageData messageData) {
         switch (topicEvent) {
-            case CORE_AUTHORIZATION:
-                AssertUtil.isTrue(messageData instanceof AppClientAuthData, EzErrorCode.ILLEGAL_PARAM);
+            case MEMBER_CLIENT_APP_LOGIN:
+                AssertUtil.isTrue(messageData instanceof MemberAppClientAuthData, EzErrorCode.ILLEGAL_PARAM);
                 break;
 
             case CORE_MEMBER_REGISTER:
@@ -53,6 +54,13 @@ public class MessageSendInnerService {
     }
 
     public void dispatchMessage(BrokerTopicEvent topicEvent, String messageId) {
+        List<String> subscribers = StaticBrokerSubscriber.getSubscribers(topicEvent);
+        if (subscribers.size() > 0) {
+            BrokerMessage message = brokerMessageDAO.getMessage(messageId);
 
+            for (String subscriberId : subscribers) {
+                processDispatchService.process(subscriberId, message);
+            }
+        }
     }
 }
