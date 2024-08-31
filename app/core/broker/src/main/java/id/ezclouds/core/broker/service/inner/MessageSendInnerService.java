@@ -8,7 +8,7 @@ import id.ezclouds.common.facade.dal.broker.BrokerMessageDAO;
 import id.ezclouds.common.model.broker.BrokerMessage;
 import id.ezclouds.common.model.broker.BrokerMessageData;
 import id.ezclouds.common.model.broker.authorization.MemberAppClientAuthData;
-import id.ezclouds.common.model.broker.member.MemberRegisterMessageData;
+import id.ezclouds.common.model.broker.member.MemberRegisterData;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
@@ -40,7 +40,7 @@ public class MessageSendInnerService {
                 break;
 
             case CORE_MEMBER_REGISTER:
-                AssertUtil.isTrue(messageData instanceof MemberRegisterMessageData, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.isTrue(messageData instanceof MemberRegisterData, EzErrorCode.ILLEGAL_PARAM);
                 break;
         }
     }

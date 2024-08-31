@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.core.biz;
+package id.ezclouds.core.biz.receiver;
 
 import id.ezclouds.common.facade.broker.BrokerMessageReceiver;
 import id.ezclouds.common.model.broker.BrokerMessageData;
@@ -25,11 +25,7 @@ public class BizAppClientLoginReceiver implements BrokerMessageReceiver {
     public MessageReceiveResult process(String topic, String event, BrokerMessageData data) {
         MessageReceiveResult result = new MessageReceiveResult();
 
-        System.out.println(topic);
-        System.out.println(event);
-
         if (data instanceof MemberAppClientAuthData) {
-            System.out.println(((MemberAppClientAuthData)data).getMemberId());
         }
 
         result.setSuccess(true);
