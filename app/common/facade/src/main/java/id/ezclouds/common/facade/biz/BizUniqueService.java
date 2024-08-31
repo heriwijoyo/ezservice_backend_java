@@ -12,6 +12,6 @@ import id.ezclouds.common.model.result.BizResult;
  */
 public interface BizUniqueService {
 
-    BizResult checkUnique(String orgId, String scenario, String param);
+    BizResult checkUniqueAndTouch(String orgId, String scenario, String param);
 
 }
