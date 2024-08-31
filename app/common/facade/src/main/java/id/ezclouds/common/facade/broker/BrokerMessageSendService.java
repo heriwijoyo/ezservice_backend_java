@@ -5,6 +5,7 @@
 package id.ezclouds.common.facade.broker;
 
 import id.ezclouds.common.model.broker.BrokerMessage;
+import id.ezclouds.common.model.result.MessageSendResult;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -12,6 +13,6 @@ import id.ezclouds.common.model.broker.BrokerMessage;
  */
 public interface BrokerMessageSendService {
 
-    void send(BrokerMessage message);
+    MessageSendResult send(BrokerMessage message);
 
 }
