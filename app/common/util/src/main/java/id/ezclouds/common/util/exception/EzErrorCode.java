@@ -40,6 +40,7 @@ public enum EzErrorCode {
     MEDIA_NOT_FOUND("MEDIA_NOT_FOUND", "Media Not Found"),
 
     ACTION_NOT_ALLOWED("ACTION_NOT_ALLOWED", "Action Not Allowed"),
+    BIZ_UNIQUE_FAILED("BIZ_UNIQUE_FAILED", "Biz Unique Failed"),
 
     SYSTEM_STORE_FILE_FAILED("SYSTEM_STORE_FILE_FAILED", "System Store File Failed"),
     SYSTEM_FILE_ERROR("SYSTEM_FILE_ERROR", "System File Error"),

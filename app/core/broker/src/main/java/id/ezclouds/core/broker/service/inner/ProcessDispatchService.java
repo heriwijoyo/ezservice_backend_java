@@ -27,7 +27,7 @@ public class ProcessDispatchService {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-
+            // TODO: log the dispatch info and result
         }
     }
 }
