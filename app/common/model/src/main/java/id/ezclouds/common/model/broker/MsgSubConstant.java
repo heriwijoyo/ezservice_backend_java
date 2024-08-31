@@ -10,5 +10,5 @@ package id.ezclouds.common.model.broker;
  */
 public final class MsgSubConstant {
 
-    public static final String MEMBER_APP_CLIENT_LOGIN = "ezCoreAppClientLoginReceiver";
+    public static final String MEMBER_APP_CLIENT_LOGIN = "ezCoreMemberAppClientLoginReceiver";
 }
