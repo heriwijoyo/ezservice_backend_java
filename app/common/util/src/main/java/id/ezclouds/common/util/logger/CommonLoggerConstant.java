@@ -17,6 +17,7 @@ public class CommonLoggerConstant {
     public static final String ASYNC_PROCESS        = "ASYNC_PROCESS";
     public static final String SCHEDULER            = "SCHEDULER";
     public static final String EZDAL                = "EZDAL";
+    public static final String BROKER               = "BROKER";
 
     public static final String WEB_CONTROLLER       = "WEB_CONTROLLER";
     public static final String WEB_PAGES_CONTROLLER = "WEB_PAGES_CONTROLLER";

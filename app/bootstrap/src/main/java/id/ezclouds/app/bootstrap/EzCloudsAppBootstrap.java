@@ -25,6 +25,7 @@ import java.util.TimeZone;
         "id.ezclouds.core.admin",
         "id.ezclouds.core.auth",
         "id.ezclouds.core.biz",
+        "id.ezclouds.core.broker",
         "id.ezclouds.core.bifrost",
         "id.ezclouds.core.dal",
         "id.ezclouds.core.integration",

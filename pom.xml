@@ -20,7 +20,8 @@
 		<module>app/test/core</module>
 		<module>app/core/admin</module>
 		<module>app/core/biz</module>
-	</modules>
+        <module>app/core/broker</module>
+    </modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
