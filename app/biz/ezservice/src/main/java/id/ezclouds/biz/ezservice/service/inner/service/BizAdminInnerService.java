@@ -109,7 +109,7 @@ public class BizAdminInnerService {
     private AppConfigService appConfigService;
 
     @Autowired
-    private CoreConfigService coreConfigService;
+    private LegacyCoreConfigService legacyCoreConfigService;
 
     @Autowired
     private CoreMemberService coreMemberService;
@@ -402,7 +402,7 @@ public class BizAdminInnerService {
         detail.setBizOrganization(getOrganizationById(orgId));
         detail.setBizApplicationConfig(getAppConfig(orgId));
         detail.setBizAppConfigs(appConfigService.getAppConfigByOrgId(orgId));
-        detail.setCoreOrgConfigMap(coreConfigService.getOrgConfigByOrgId(orgId));
+        detail.setCoreOrgConfigMap(legacyCoreConfigService.getOrgConfigByOrgId(orgId));
         detail.setAdminMembers(getOrgAdminMembers(orgId));
         detail.setBizAppBuildPackages(getAppBuildPackages(orgId));
         return detail;
@@ -489,7 +489,7 @@ public class BizAdminInnerService {
 
     public void saveCoreOrgConfig(String orgId, Map<String, String> configMap) {
         for (Map.Entry<String, String> entry : configMap.entrySet()) {
-            coreConfigService.saveCoreOrgConfig(orgId, entry.getKey(), entry.getValue());
+            legacyCoreConfigService.saveCoreOrgConfig(orgId, entry.getKey(), entry.getValue());
         }
     }
 

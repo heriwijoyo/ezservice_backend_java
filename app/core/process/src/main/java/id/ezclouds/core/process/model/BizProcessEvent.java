@@ -20,6 +20,8 @@ public enum BizProcessEvent implements EzAppEvent {
     SURVEY_RESPONSE_PARSE("SURVEY_RESPONSE_PARSE"),
     REPORT_AREA_COMMON_TABLE_PARSE("REPORT_AREA_COMMON_TABLE_PARSE"),
 
+    MASTER_DATA_AREA_INIT("MASTER_DATA_AREA_INIT"),
+
     UNKNOWN("UNKNOWN"),
     ;
     private final String code;

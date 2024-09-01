@@ -17,7 +17,7 @@ import id.ezclouds.common.model.integration.EzConnectResult;
 import id.ezclouds.core.integration.service.client.service.WatzapClientService;
 import id.ezclouds.core.integration.service.client.request.WatzapSendRequest;
 import id.ezclouds.common.model.result.BizPageInfo;
-import id.ezclouds.core.shared.service.CoreConfigService;
+import id.ezclouds.core.shared.service.LegacyCoreConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +29,7 @@ import org.springframework.stereotype.Service;
 public class CoreConnectService implements EzConnectService {
 
     @Autowired
-    private CoreConfigService coreConfigService;
+    private LegacyCoreConfigService legacyCoreConfigService;
 
     @Autowired
     private WatzapClientService watzapClientService;
@@ -53,11 +53,11 @@ public class CoreConnectService implements EzConnectService {
             @Override
             public void onProcess() throws Exception {
                 String orgId = request.getOrgId();
-                if (coreConfigService.isWatzapSendEnable(orgId)) {
+                if (legacyCoreConfigService.isWatzapSendEnable(orgId)) {
                     WatzapSendRequest sendRequest = new WatzapSendRequest();
-                    sendRequest.setApi_key(coreConfigService.getWatzapApiKey(orgId));
-                    sendRequest.setNumber_key(coreConfigService.getWatzapNumberKey(orgId));
-                    sendRequest.setApiUri(coreConfigService.getWatzapApiUri());
+                    sendRequest.setApi_key(legacyCoreConfigService.getWatzapApiKey(orgId));
+                    sendRequest.setNumber_key(legacyCoreConfigService.getWatzapNumberKey(orgId));
+                    sendRequest.setApiUri(legacyCoreConfigService.getWatzapApiUri());
                     sendRequest.setPhone_no(request.getPhoneNumber());
                     sendRequest.setMessage(request.getMessage());
 

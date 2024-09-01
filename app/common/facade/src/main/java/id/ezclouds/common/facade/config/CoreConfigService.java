@@ -1,0 +1,18 @@
+/**
+ * Ezclouds.id
+ * Copyright (c) 2020‐2024 All Rights Reserved.
+ */
+package id.ezclouds.common.facade.config;
+
+import id.ezclouds.common.model.config.CoreConfig;
+import id.ezclouds.common.model.config.CoreConfigType;
+
+/**
+ * @author Heri Wijoyo (heri.wijoyo@gmail.com)
+ * @version $Id: CoreConfigService.java, v 0.1 2024‐09‐01 10:39 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ */
+public interface CoreConfigService {
+
+    CoreConfig getOrgConfig(String orgId, CoreConfigType configType);
+
+}

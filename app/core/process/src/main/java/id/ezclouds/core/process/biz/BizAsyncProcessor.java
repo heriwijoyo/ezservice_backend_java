@@ -30,6 +30,8 @@ public abstract class BizAsyncProcessor implements BizProcessor {
     private Timer timer;
     private boolean isFinishedCalled = false;
 
+    protected final int PROCESS_TIME_MINUTE_10 = 10 * 60 * 1000;
+
     protected abstract int maxProcessTime();
     protected abstract boolean onProcess(Object request, List<String> logData);
 

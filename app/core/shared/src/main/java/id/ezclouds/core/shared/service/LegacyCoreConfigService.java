@@ -26,10 +26,10 @@ import java.util.stream.Collectors;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: CoreConfigService.java, v 0.1 2024‐02‐04 3:54 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: LegacyCoreConfigService.java, v 0.1 2024‐02‐04 3:54 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class CoreConfigService {
+public class LegacyCoreConfigService {
 
     @Autowired
     private CoreConfigRepository coreConfigRepository;

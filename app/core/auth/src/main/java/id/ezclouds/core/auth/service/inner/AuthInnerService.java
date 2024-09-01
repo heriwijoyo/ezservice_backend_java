@@ -13,7 +13,7 @@ import id.ezclouds.core.auth.dataobject.EzAuthAdminCommonSessionDO;
 import id.ezclouds.core.auth.model.CoreAuthAdminScene;
 import id.ezclouds.core.auth.repo.EzAuthAdminCommonSessionRepository;
 import id.ezclouds.core.shared.constant.CoreConstant;
-import id.ezclouds.core.shared.service.CoreConfigService;
+import id.ezclouds.core.shared.service.LegacyCoreConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +32,7 @@ public class AuthInnerService {
     private EzAuthAdminCommonSessionRepository ezAuthAdminCommonSessionRepository;
 
     @Autowired
-    private CoreConfigService coreConfigService;
+    private LegacyCoreConfigService legacyCoreConfigService;
 
     @Transactional
     public void adminCreateSession(EzAuthAdminCommonSessionDO sessionDO) {
@@ -127,7 +127,7 @@ public class AuthInnerService {
         if (CoreConstant.SU_ORG_ID.equals(orgId)) {
             return CoreConstant.SU_WEB_SESSION_EXPIRY_MINS;
         }
-        String expMins = coreConfigService.getOrgConfigValue(CoreConstant.ConfigKey.ADMIN_COMMON_SESSION_EXPIRY_MINS, orgId);
+        String expMins = legacyCoreConfigService.getOrgConfigValue(CoreConstant.ConfigKey.ADMIN_COMMON_SESSION_EXPIRY_MINS, orgId);
         return Integer.parseInt(expMins);
     }
 }

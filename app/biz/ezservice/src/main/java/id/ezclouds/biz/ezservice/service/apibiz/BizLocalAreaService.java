@@ -14,7 +14,7 @@ import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.shared.enums.CoreAreaLevel;
 import id.ezclouds.core.shared.model.CoreArea;
 import id.ezclouds.core.shared.service.CoreAreaService;
-import id.ezclouds.core.shared.service.CoreConfigService;
+import id.ezclouds.core.shared.service.LegacyCoreConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +29,7 @@ import java.util.List;
 public class BizLocalAreaService extends BizBaseService {
 
     @Autowired
-    private CoreConfigService coreConfigService;
+    private LegacyCoreConfigService legacyCoreConfigService;
 
     @Autowired
     private CoreAreaService coreAreaService;
@@ -49,8 +49,8 @@ public class BizLocalAreaService extends BizBaseService {
                 List<String> areaIds = request.getAreaIds();
                 List<String> parentIds = request.getParentIds();
                 if (coreAreaLevel == null) {
-                    coreAreaLevel = CoreAreaLevel.getByCode(coreConfigService.getCoreAreaLevelRoot(getOrgId()));
-                    areaIds = coreConfigService.getCoreAreaRootIds(getOrgId());
+                    coreAreaLevel = CoreAreaLevel.getByCode(legacyCoreConfigService.getCoreAreaLevelRoot(getOrgId()));
+                    areaIds = legacyCoreConfigService.getCoreAreaRootIds(getOrgId());
                 }
 
                 List<CoreArea> coreAreas = new ArrayList<>();

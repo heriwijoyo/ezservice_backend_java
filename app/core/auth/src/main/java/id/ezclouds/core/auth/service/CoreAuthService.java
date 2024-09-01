@@ -33,7 +33,7 @@ import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
 import id.ezclouds.core.auth.result.CoreAuthResult;
 import id.ezclouds.core.auth.service.inner.AuthInnerService;
 import id.ezclouds.core.shared.constant.CoreConstant;
-import id.ezclouds.core.shared.service.CoreConfigService;
+import id.ezclouds.core.shared.service.LegacyCoreConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -66,7 +66,7 @@ public class CoreAuthService {
     private EzAuthMemberCommonSessionRepository ezAuthMemberCommonSessionRepository;
 
     @Autowired
-    private CoreConfigService coreConfigService;
+    private LegacyCoreConfigService legacyCoreConfigService;
 
     @Autowired
     private AuthInnerService authInnerService;
@@ -131,7 +131,7 @@ public class CoreAuthService {
 
     @Transactional
     public EzAuthMemberClientSessionDO startMemberClientSession(EzAuthMemberClientDO memberClientDO, String deviceId) {
-        String configValue = coreConfigService.getOrgConfigValue(
+        String configValue = legacyCoreConfigService.getOrgConfigValue(
                 CoreConstant.ConfigKey.MEMBER_CLIENT_ALLOW_MULTIPLE_SESSION,
                 memberClientDO.getOrgId()
         );
@@ -495,12 +495,12 @@ public class CoreAuthService {
     }
 
     private int getMemberClientSessionExpDays(String orgId) {
-        String expDays = coreConfigService.getOrgConfigValue(CoreConstant.ConfigKey.MEMBER_CLIENT_SESSION_EXPIRY_DAYS, orgId);
+        String expDays = legacyCoreConfigService.getOrgConfigValue(CoreConstant.ConfigKey.MEMBER_CLIENT_SESSION_EXPIRY_DAYS, orgId);
         return Integer.parseInt(expDays);
     }
 
     private int getMemberCommonSessionExpMins(String orgId) {
-        String expMins = coreConfigService.getOrgConfigValue(CoreConstant.ConfigKey.MEMBER_COMMON_SESSION_EXPIRY_MINS, orgId);
+        String expMins = legacyCoreConfigService.getOrgConfigValue(CoreConstant.ConfigKey.MEMBER_COMMON_SESSION_EXPIRY_MINS, orgId);
         return Integer.parseInt(expMins);
     }
 
