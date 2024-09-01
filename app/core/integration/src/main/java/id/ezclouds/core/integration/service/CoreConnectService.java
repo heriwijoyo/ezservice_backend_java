@@ -4,7 +4,12 @@
  */
 package id.ezclouds.core.integration.service;
 
+import id.ezclouds.common.facade.config.CoreConfigService;
 import id.ezclouds.common.facade.integration.EzConnectService;
+import id.ezclouds.common.model.config.CoreCommonConfigType;
+import id.ezclouds.common.model.config.CoreConfig;
+import id.ezclouds.common.model.config.CoreConfigType;
+import id.ezclouds.common.model.config.CoreOrgConfigType;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
@@ -17,9 +22,10 @@ import id.ezclouds.common.model.integration.EzConnectResult;
 import id.ezclouds.core.integration.service.client.service.WatzapClientService;
 import id.ezclouds.core.integration.service.client.request.WatzapSendRequest;
 import id.ezclouds.common.model.result.BizPageInfo;
-import id.ezclouds.core.shared.service.LegacyCoreConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -29,7 +35,7 @@ import org.springframework.stereotype.Service;
 public class CoreConnectService implements EzConnectService {
 
     @Autowired
-    private LegacyCoreConfigService legacyCoreConfigService;
+    private CoreConfigService coreConfigService;
 
     @Autowired
     private WatzapClientService watzapClientService;
@@ -53,11 +59,20 @@ public class CoreConnectService implements EzConnectService {
             @Override
             public void onProcess() throws Exception {
                 String orgId = request.getOrgId();
-                if (legacyCoreConfigService.isWatzapSendEnable(orgId)) {
+                Map<CoreConfigType, CoreConfig> configMap = coreConfigService.getOrgConfigs(
+                        orgId,
+                        CoreOrgConfigType.WATZAP_SEND_ENABLE,
+                        CoreOrgConfigType.WATZAP_API_KEY,
+                        CoreOrgConfigType.WATZAP_NUMBER_KEY,
+                        CoreCommonConfigType.WATZAP_API_URI
+                );
+                boolean isWatzapEnable = configMap.get(CoreOrgConfigType.WATZAP_SEND_ENABLE).getBoolValue();
+
+                if (isWatzapEnable) {
                     WatzapSendRequest sendRequest = new WatzapSendRequest();
-                    sendRequest.setApi_key(legacyCoreConfigService.getWatzapApiKey(orgId));
-                    sendRequest.setNumber_key(legacyCoreConfigService.getWatzapNumberKey(orgId));
-                    sendRequest.setApiUri(legacyCoreConfigService.getWatzapApiUri());
+                    sendRequest.setApi_key(configMap.get(CoreOrgConfigType.WATZAP_API_KEY).getConfigValue());
+                    sendRequest.setNumber_key(configMap.get(CoreOrgConfigType.WATZAP_NUMBER_KEY).getConfigKey());
+                    sendRequest.setApiUri(configMap.get(CoreCommonConfigType.WATZAP_API_URI).getConfigValue());
                     sendRequest.setPhone_no(request.getPhoneNumber());
                     sendRequest.setMessage(request.getMessage());
 

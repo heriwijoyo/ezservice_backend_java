@@ -15,6 +15,14 @@ public class CoreConfig {
     private String configKey;
     private String configValue;
 
+    public Boolean getBoolValue() {
+        return Boolean.valueOf(configValue);
+    }
+
+    public int getIntValue() {
+        return Integer.parseInt(configValue);
+    }
+
     public String getConfigId() {
         return configId;
     }
