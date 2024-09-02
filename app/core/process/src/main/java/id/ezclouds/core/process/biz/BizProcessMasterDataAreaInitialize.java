@@ -4,7 +4,10 @@
  */
 package id.ezclouds.core.process.biz;
 
+import id.ezclouds.common.facade.config.CoreConfigService;
+import id.ezclouds.common.model.config.CoreOrgConfigType;
 import id.ezclouds.core.process.model.BizProcessEvent;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -13,6 +16,9 @@ import java.util.List;
  * @version $Id: BizProcessMasterDataAreaInitialize.java, v 0.1 2024‐09‐01 9:12 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 public class BizProcessMasterDataAreaInitialize extends BizAsyncProcessor {
+
+    @Autowired
+    private CoreConfigService coreConfigService;
 
     @Override
     public BizProcessEvent getProcessEvent() {
@@ -26,6 +32,9 @@ public class BizProcessMasterDataAreaInitialize extends BizAsyncProcessor {
 
     @Override
     protected boolean onProcess(Object request, List<String> logData) {
+        String orgId = (String) request;
+
+        coreConfigService.getOrgConfig(orgId, CoreOrgConfigType.CORE_AREA_LEVEL_ROOT);
         return false;
     }
 }

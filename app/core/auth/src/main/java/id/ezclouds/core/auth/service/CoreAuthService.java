@@ -428,6 +428,7 @@ public class CoreAuthService {
 
                 authInnerService.adminCreateSession(sessionDO);
             } catch (Exception e) {
+                e.printStackTrace();
                 createError = true;
             }
             retryCount++;

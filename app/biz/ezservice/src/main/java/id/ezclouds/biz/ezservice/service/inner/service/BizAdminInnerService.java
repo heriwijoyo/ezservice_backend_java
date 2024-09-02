@@ -75,7 +75,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -405,7 +404,7 @@ public class BizAdminInnerService {
         detail.setBizOrganization(getOrganizationById(orgId));
         detail.setBizApplicationConfig(getAppConfig(orgId));
         detail.setBizAppConfigs(appConfigService.getAppConfigByOrgId(orgId));
-        detail.setCoreOrgConfigMap(getCoreOrgConfigMap(orgId));
+        detail.setCoreOrgConfigMap(coreConfigService.getOrgRawConfigMap(orgId));
         detail.setAdminMembers(getOrgAdminMembers(orgId));
         detail.setBizAppBuildPackages(getAppBuildPackages(orgId));
         return detail;
@@ -717,13 +716,5 @@ public class BizAdminInnerService {
         modelSwitch.setItemId(request.getItemId());
         modelSwitch.setValue(request.getValue());
         return modelSwitch;
-    }
-
-    private Map<String, String> getCoreOrgConfigMap(String orgId) {
-        Map<String, String> configMap = new HashMap<>();
-        for (CoreConfig coreConfig : coreConfigService.getOrgConfigMap(orgId).values()) {
-            configMap.put(coreConfig.getConfigKey(), coreConfig.getConfigValue());
-        }
-        return configMap;
     }
 }

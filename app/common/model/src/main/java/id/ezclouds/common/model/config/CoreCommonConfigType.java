@@ -10,6 +10,7 @@ package id.ezclouds.common.model.config;
  */
 public enum CoreCommonConfigType implements CoreConfigType {
 
+    SUPER_ADMIN_SESSION_EXPIRY_MINS("SUPER_ADMIN_SESSION_EXPIRY_MINS"),
     WATZAP_API_URI("WATZAP_API_URI"),
 
     ;

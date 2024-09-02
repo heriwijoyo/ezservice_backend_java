@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -58,6 +60,17 @@ public class EzCoreConfigService implements CoreConfigService {
     }
 
     @Override
+    public Map<String, String> getOrgRawConfigMap(String orgId) {
+        List<CoreConfig> allConfigs = coreConfigDAO.getAllConfig(orgId);
+
+        Map<String, String> rawConfigMap = new LinkedHashMap<>();
+        for (CoreOrgConfigType configType : CoreOrgConfigType.values()) {
+            rawConfigMap.put(configType.getCode(), getOrgConfigValue(allConfigs, configType));
+        }
+        return rawConfigMap;
+    }
+
+    @Override
     @Transactional
     public void store(CoreConfig reqConfig) {
         CoreConfig dbCoreConfig = getExistConfig(reqConfig);
@@ -67,6 +80,15 @@ public class EzCoreConfigService implements CoreConfigService {
         dbCoreConfig.setConfigValue(reqConfig.getConfigValue());
 
         coreConfigDAO.store(dbCoreConfig);
+    }
+
+    private String getOrgConfigValue(List<CoreConfig> configs, CoreConfigType configType) {
+        for (CoreConfig coreConfig : configs) {
+            if (configType.getCode().equals(coreConfig.getConfigKey())) {
+                return coreConfig.getConfigValue() != null ? coreConfig.getConfigValue() : StringUtil.EMPTY;
+            }
+        }
+        return StringUtil.EMPTY;
     }
 
     private CoreConfig getExistConfig(CoreConfig reqConfig) {

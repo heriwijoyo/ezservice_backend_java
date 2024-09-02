@@ -14,6 +14,7 @@ import id.ezclouds.core.auth.constant.CoreAuthConstant;
 import id.ezclouds.core.auth.dataobject.EzAuthAdminCommonSessionDO;
 import id.ezclouds.core.auth.model.CoreAuthAdminScene;
 import id.ezclouds.core.auth.repo.EzAuthAdminCommonSessionRepository;
+import id.ezclouds.core.shared.constant.CoreConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -124,6 +125,10 @@ public class AuthInnerService {
     }
 
     public int getAdminCommonSessionExpMins(String orgId) {
+        //TODO: update logic with proper config
+        if (CoreConstant.SU_ORG_ID.equals(orgId)) {
+            return 30;
+        }
         return coreConfigService
                 .getOrgConfig(orgId, CoreOrgConfigType.ADMIN_COMMON_SESSION_EXPIRY_MINS)
                 .getIntValue();
