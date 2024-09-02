@@ -4,6 +4,8 @@
  */
 package id.ezclouds.core.auth.service.inner;
 
+import id.ezclouds.common.facade.config.CoreConfigService;
+import id.ezclouds.common.model.config.CoreOrgConfigType;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
@@ -12,8 +14,6 @@ import id.ezclouds.core.auth.constant.CoreAuthConstant;
 import id.ezclouds.core.auth.dataobject.EzAuthAdminCommonSessionDO;
 import id.ezclouds.core.auth.model.CoreAuthAdminScene;
 import id.ezclouds.core.auth.repo.EzAuthAdminCommonSessionRepository;
-import id.ezclouds.core.shared.constant.CoreConstant;
-import id.ezclouds.core.shared.service.LegacyCoreConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +32,7 @@ public class AuthInnerService {
     private EzAuthAdminCommonSessionRepository ezAuthAdminCommonSessionRepository;
 
     @Autowired
-    private LegacyCoreConfigService legacyCoreConfigService;
+    private CoreConfigService coreConfigService;
 
     @Transactional
     public void adminCreateSession(EzAuthAdminCommonSessionDO sessionDO) {
@@ -124,10 +124,8 @@ public class AuthInnerService {
     }
 
     public int getAdminCommonSessionExpMins(String orgId) {
-        if (CoreConstant.SU_ORG_ID.equals(orgId)) {
-            return CoreConstant.SU_WEB_SESSION_EXPIRY_MINS;
-        }
-        String expMins = legacyCoreConfigService.getOrgConfigValue(CoreConstant.ConfigKey.ADMIN_COMMON_SESSION_EXPIRY_MINS, orgId);
-        return Integer.parseInt(expMins);
+        return coreConfigService
+                .getOrgConfig(orgId, CoreOrgConfigType.ADMIN_COMMON_SESSION_EXPIRY_MINS)
+                .getIntValue();
     }
 }

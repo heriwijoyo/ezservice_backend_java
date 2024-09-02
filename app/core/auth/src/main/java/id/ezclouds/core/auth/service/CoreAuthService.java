@@ -5,8 +5,10 @@
 package id.ezclouds.core.auth.service;
 
 import id.ezclouds.common.facade.broker.BrokerMessageSendService;
+import id.ezclouds.common.facade.config.CoreConfigService;
 import id.ezclouds.common.model.broker.BrokerMessage;
 import id.ezclouds.common.model.broker.authorization.MemberAppClientAuthData;
+import id.ezclouds.common.model.config.CoreOrgConfigType;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.ShardUtil;
@@ -32,8 +34,6 @@ import id.ezclouds.core.auth.result.CoreCommonSession;
 import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
 import id.ezclouds.core.auth.result.CoreAuthResult;
 import id.ezclouds.core.auth.service.inner.AuthInnerService;
-import id.ezclouds.core.shared.constant.CoreConstant;
-import id.ezclouds.core.shared.service.LegacyCoreConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -66,7 +66,7 @@ public class CoreAuthService {
     private EzAuthMemberCommonSessionRepository ezAuthMemberCommonSessionRepository;
 
     @Autowired
-    private LegacyCoreConfigService legacyCoreConfigService;
+    private CoreConfigService coreConfigService;
 
     @Autowired
     private AuthInnerService authInnerService;
@@ -131,11 +131,9 @@ public class CoreAuthService {
 
     @Transactional
     public EzAuthMemberClientSessionDO startMemberClientSession(EzAuthMemberClientDO memberClientDO, String deviceId) {
-        String configValue = legacyCoreConfigService.getOrgConfigValue(
-                CoreConstant.ConfigKey.MEMBER_CLIENT_ALLOW_MULTIPLE_SESSION,
-                memberClientDO.getOrgId()
-        );
-        boolean allowMultipleSession = Boolean.parseBoolean(configValue);
+        boolean allowMultipleSession = coreConfigService
+                .getOrgConfig(memberClientDO.getOrgId(), CoreOrgConfigType.MEMBER_CLIENT_ALLOW_MULTIPLE_SESSION)
+                .getBoolValue();
 
         if (!allowMultipleSession) {
             List<EzAuthMemberClientSessionDO> activeSessions = ezAuthMemberClientSessionRepository
@@ -495,13 +493,15 @@ public class CoreAuthService {
     }
 
     private int getMemberClientSessionExpDays(String orgId) {
-        String expDays = legacyCoreConfigService.getOrgConfigValue(CoreConstant.ConfigKey.MEMBER_CLIENT_SESSION_EXPIRY_DAYS, orgId);
-        return Integer.parseInt(expDays);
+        return coreConfigService
+                .getOrgConfig(orgId, CoreOrgConfigType.MEMBER_CLIENT_SESSION_EXPIRY_DAYS)
+                .getIntValue();
     }
 
     private int getMemberCommonSessionExpMins(String orgId) {
-        String expMins = legacyCoreConfigService.getOrgConfigValue(CoreConstant.ConfigKey.MEMBER_COMMON_SESSION_EXPIRY_MINS, orgId);
-        return Integer.parseInt(expMins);
+        return coreConfigService
+                .getOrgConfig(orgId, CoreOrgConfigType.MEMBER_COMMON_SESSION_EXPIRY_MINS)
+                .getIntValue();
     }
 
     private boolean isSessionExpired(EzAuthMemberCommonSessionDO sessionDO) {
