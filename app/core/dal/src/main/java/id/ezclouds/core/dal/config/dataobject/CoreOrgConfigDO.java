@@ -11,11 +11,11 @@ import javax.persistence.Table;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: DAOCoreOrgConfigDO.java, v 0.1 2024‐08‐29 11:43 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: CoreOrgConfigDO.java, v 0.1 2024‐08‐29 11:43 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Entity
 @Table(name = "ez_core_org_config")
-public class DAOCoreOrgConfigDO {
+public class CoreOrgConfigDO {
 
     @Id
     @Column(name = "config_id")

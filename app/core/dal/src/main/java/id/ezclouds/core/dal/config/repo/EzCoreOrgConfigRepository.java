@@ -4,7 +4,7 @@
  */
 package id.ezclouds.core.dal.config.repo;
 
-import id.ezclouds.core.dal.config.dataobject.DAOCoreOrgConfigDO;
+import id.ezclouds.core.dal.config.dataobject.CoreOrgConfigDO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,9 +15,9 @@ import java.util.List;
  * @version $Id: EzCoreOrgConfigRepository.java, v 0.1 2024‐08‐29 11:46 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Repository
-public interface EzCoreOrgConfigRepository extends JpaRepository<DAOCoreOrgConfigDO, String> {
+public interface EzCoreOrgConfigRepository extends JpaRepository<CoreOrgConfigDO, String> {
 
-    List<DAOCoreOrgConfigDO> findByOrgId(String orgId);
+    List<CoreOrgConfigDO> findByOrgId(String orgId);
 
-    DAOCoreOrgConfigDO findByOrgIdAndConfigKey(String orgId, String configKey);
+    CoreOrgConfigDO findByOrgIdAndConfigKey(String orgId, String configKey);
 }
