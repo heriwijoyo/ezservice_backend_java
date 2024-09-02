@@ -54,7 +54,7 @@ public class ApiController extends AppController {
         return LoggerFactory.getLogger(CommonLoggerConstant.API_CONTROLLER);
     }
 
-    @PostMapping(value = {"/api/setting.php", "/v2/api/setting.json"})
+    @PostMapping(value = {"/api/setting.php", "/api/v2/setting.json"})
     private ApiResult<AppSetting> getSetting(@RequestBody ApiRequest request) {
         return executeInTemplate(ApiEvent.API_APP_SETTING, request, new RequestHandler<AppSetting>() {
             @Override
@@ -71,7 +71,7 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = {"/api/survey_form.php", "/v2/api/survey/form.json"})
+    @PostMapping(value = {"/api/survey_form.php", "/api/v2/survey/form.json"})
     private ApiResult<BizSurveyForm> getSurveyForm(@RequestBody SurveyFormRequest request) {
         return executeInTemplate(ApiEvent.API_SURVEY_FORM, request, new RequestHandler<BizSurveyForm>() {
             @Override
@@ -89,7 +89,7 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = {"/api/candidate_profile.php", "/v2/api/profile/candidate.json"})
+    @PostMapping(value = {"/api/candidate_profile.php", "/api/v2/profile/candidate.json"})
     private ApiResult<BizCandidateProfile> getCandidateProfile(@RequestBody ApiRequest request) {
         return executeInTemplate(ApiEvent.API_CANDIDATE_PROFILE, request, new RequestHandler<BizCandidateProfile>() {
             @Override
@@ -106,7 +106,7 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = {"/api/profile.php", "/v2/api/profile/member.json"})
+    @PostMapping(value = {"/api/profile.php", "/api/v2/profile/member.json"})
     private ApiResult<MemberProfile> getMemberProfile(@RequestBody ApiRequest request) {
         return executeInTemplate(ApiEvent.API_MEMBER_PROFILE, request, new RequestHandler<MemberProfile>() {
             @Override
@@ -123,7 +123,7 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = {"/api/news.json", "/v2/api/news/summary.json"})
+    @PostMapping(value = {"/api/news.json", "/api/v2/news/summary.json"})
     private ApiPageResult<BizSimpleNews> getNews(@RequestBody ApiPageRequest request) {
         return executePageInTemplate(ApiEvent.API_NEWS, request, new RequestHandler<BizSimpleNews>() {
             @Override
@@ -138,7 +138,7 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = {"/api/newsDetail.json", "/v2/api/news/detail.json"})
+    @PostMapping(value = {"/api/newsDetail.json", "/api/v2/news/detail.json"})
     private ApiResult<BizNewsDetail> getNewsDetail(@RequestBody NewsDetailRequest request) {
         return executeInTemplate(ApiEvent.API_NEWS_DETAIL, request, new RequestHandler<BizNewsDetail>() {
             @Override
@@ -155,7 +155,7 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = {"/api/messageMember.json", "/v2/api/inbox/member/summary.json"})
+    @PostMapping(value = {"/api/messageMember.json", "/api/v2/inbox/member/summary.json"})
     private ApiPageResult<SimpleAppMessage> messageMember(@RequestBody ApiPageRequest request) {
         return executePageInTemplate(ApiEvent.API_MESSAGE_MEMBER, request, new RequestHandler<SimpleAppMessage>() {
             @Override
@@ -170,7 +170,7 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = {"/api/messageMemberDetail.json", "/v2/api/inbox/member/detail.json"})
+    @PostMapping(value = {"/api/messageMemberDetail.json", "/api/v2/inbox/member/detail.json"})
     private ApiResult<AppMessage> messageMemberDetail(@RequestBody ApiDetailRequest request) {
         return executeInTemplate(ApiEvent.API_MESSAGE_MEMBER_DETAIL, request, new RequestHandler<AppMessage>() {
             @Override
@@ -187,7 +187,7 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = {"/api/appEvents.json", "/v2/api/event/summary.json"})
+    @PostMapping(value = {"/api/appEvents.json", "/api/v2/event/summary.json"})
     private ApiResult<AppEventHome> appEvents(@RequestBody ApiRequest request) {
         return executeInTemplate(ApiEvent.API_APP_EVENT, request, new RequestHandler<AppEventHome>() {
             @Override
@@ -204,7 +204,7 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = {"/api/session_check.php", "/v2/api/session/member/validate.json"})
+    @PostMapping(value = {"/api/session_check.php", "/api/v2/session/member/validate.json"})
     private ApiResult<String> sessionCheck(@RequestBody ApiRequest request) {
         return executeInTemplate(ApiEvent.API_SESSION_CHECK, request, new RequestHandler<String>() {
             @Override
@@ -221,7 +221,7 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = {"/api/local_area.php", "/v2/api/area/localArea.json"})
+    @PostMapping(value = {"/api/local_area.php", "/api/v2/area/localArea.json"})
     private ApiResult<List<CoreArea>> getLocalArea(@RequestBody LocalAreaRequest request) {
         return executeInTemplate(ApiEvent.API_GET_LOCAL_AREA, request, new RequestHandler<List<CoreArea>>() {
             @Override
@@ -239,7 +239,7 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = {"/api/subOrganizations.json", "/v2/api/organization/subOrganizations.json"})
+    @PostMapping(value = {"/api/subOrganizations.json", "/api/v2/organization/subOrganizations.json"})
     private ApiResult<List<BizSubOrganization>> subOrganizations(@RequestBody ApiRequest request) {
         return executeInTemplate(ApiEvent.API_GET_SUB_ORGANIZATIONS, request, new RequestHandler<List<BizSubOrganization>>() {
             @Override
@@ -257,7 +257,7 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = {"/api/getSubOrg.json", "/v2/api/organization/pageSubOrganizations.json"})
+    @PostMapping(value = {"/api/getSubOrg.json", "/api/v2/organization/pageSubOrganizations.json"})
     private BizApiPageResult<BizSubOrganization> getSubOrg(@RequestBody ApiPageRequest request) {
         return ApiControllerTemplate.execute(ApiEvent.API_PAGE_SUB_ORGANIZATIONS, request, new ApiControllerTemplate.Handler<BizSubOrganization>() {
             @Override
@@ -272,7 +272,7 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = {"/api/getMembers.json", "/v2/api/member/summary.json"})
+    @PostMapping(value = {"/api/getMembers.json", "/api/v2/member/summary.json"})
     private BizApiPageResult<CoreMember> getMembers(@RequestBody ApiPageRequest request) {
         return ApiControllerTemplate.execute(ApiEvent.API_PAGE_MEMBER, request, new ApiControllerTemplate.Handler<CoreMember>() {
             @Override
@@ -287,7 +287,7 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = {"/api/appDocuments.json", "/v2/api/document/appDocuments.json"})
+    @PostMapping(value = {"/api/appDocuments.json", "/api/v2/document/appDocuments.json"})
     private BizApiPageResult<AppDocument> getAppDocuments(@RequestBody ApiPageRequest request) {
         return ApiControllerTemplate.execute(ApiEvent.API_PAGE_APP_DOCUMENTS, request, new ApiControllerTemplate.Handler<AppDocument>() {
             @Override
@@ -305,7 +305,7 @@ public class ApiController extends AppController {
 
     // ================ TRANSACTIONAL APIs ==================
 
-    @PostMapping(value = {"/api/memberRegister.json", "/v2/api/member/register.json"})
+    @PostMapping(value = {"/api/memberRegister.json", "/api/v2/member/register.json"})
     private ApiResult<BizMemberRegisterResult> memberRegister(@RequestBody MemberRegisterRequest request) {
         return executeInTemplate(ApiEvent.API_MEMBER_REGISTER, request, new RequestHandler<BizMemberRegisterResult>() {
             @Override
@@ -325,7 +325,7 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = {"/api/login.php", "/v2/api/authentication/loginMember.json"})
+    @PostMapping(value = {"/api/login.php", "/api/v2/authentication/loginMember.json"})
     private ApiResult<BizMemberLoginResult> memberLogin(@RequestBody MemberLoginRequest request) {
         return executeInTemplate(ApiEvent.API_MEMBER_LOGIN, request, new RequestHandler<BizMemberLoginResult>() {
             @Override
@@ -342,7 +342,7 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = {"/api/logout.php", "/v2/api/authentication/logoutMember.json"})
+    @PostMapping(value = {"/api/logout.php", "/api/v2/authentication/logoutMember.json"})
     private ApiResult<Void> memberLogout(@RequestBody ApiRequest request) {
         return executeInTemplate(ApiEvent.API_MEMBER_LOGOUT, request, new RequestHandler<Void>() {
             @Override
@@ -359,7 +359,7 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = {"/api/update_password.php", "/v2/api/account/updatePassword.json"})
+    @PostMapping(value = {"/api/update_password.php", "/api/v2/account/updatePassword.json"})
     private ApiResult<String> updatePassword(@RequestBody MemberUpdatePasswordRequest request) {
         return executeInTemplate(ApiEvent.API_MEMBER_UPDATE_PASSWORD, request, new RequestHandler<String>() {
             @Override
@@ -376,7 +376,7 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = {"/api/reset_password.php", "/v2/api/account/resetPassword.json"})
+    @PostMapping(value = {"/api/reset_password.php", "/api/v2/account/resetPassword.json"})
     private ApiResult<BizMemberCommonSession> resetPassword(@RequestBody MemberResetPasswordRequest request) {
         return executeInTemplate(ApiEvent.API_MEMBER_RESET_PASSWORD, request, new RequestHandler<BizMemberCommonSession>() {
             @Override
@@ -393,7 +393,7 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = {"/api/verify_otp.php", "/v2/api/account/verifyOtp.json"})
+    @PostMapping(value = {"/api/verify_otp.php", "/api/v2/account/verifyOtp.json"})
     private ApiResult<String> verifyCommonSession(@RequestBody VerifyCommonSessionRequest request) {
         return executeInTemplate(ApiEvent.API_MEMBER_VERIFY_COMMON_SESSION, request, new RequestHandler<String>() {
             @Override
@@ -410,7 +410,7 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = {"/api/memberUpload.json", "/v2/api/media/upload.json"}, consumes = {MediaType.ALL_VALUE})
+    @PostMapping(value = {"/api/memberUpload.json", "/api/v2/media/upload.json"}, consumes = {MediaType.ALL_VALUE})
     private ApiResult<String> memberUpload(@RequestPart("mediaFile") MultipartFile mediaFile, @RequestPart("postData") String postData) throws Exception {
 
         MemberUploadRequest request = convertPostData(postData);
@@ -430,7 +430,7 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = {"/api/survey_submit.php", "/v2/api/survey/submit.json"})
+    @PostMapping(value = {"/api/survey_submit.php", "/api/v2/survey/submit.json"})
     private ApiResult<String> surveySubmit(@RequestBody SurveySubmitRequest request) {
         return executeInTemplate(ApiEvent.API_SURVEY_SUBMIT, request, new RequestHandler<String>() {
             @Override
@@ -445,7 +445,7 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = {"/api/subOrgCreate.json", "/v2/api/organization/subOrganizationCreate.json"})
+    @PostMapping(value = {"/api/subOrgCreate.json", "/api/v2/organization/subOrganizationCreate.json"})
     private ApiResult<String> subOrgCreate(@RequestBody SubOrgCreateRequest request) {
         return executeInTemplate(ApiEvent.API_SUB_ORG_CREATE, request, new RequestHandler<String>() {
             @Override
@@ -463,7 +463,7 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = {"/api/asyncProcessTrigger.json", "/v2/api/async/processTrigger.json"})
+    @PostMapping(value = {"/api/asyncProcessTrigger.json", "/api/v2/async/processTrigger.json"})
     private ApiResult<String> asyncProcessTrigger(@RequestBody AsyncTriggerRequest request) {
         return executeInTemplate(ApiEvent.API_ASYNC_PROCESS_TRIGGER, request, new RequestHandler<String>() {
             @Override
@@ -481,7 +481,7 @@ public class ApiController extends AppController {
 
     // ================ ADMIN APIs ==================
 
-    @PostMapping(value = {"/api/admin/web_session_create.json", "/v2/api/admin/webSessionCreate.json"})
+    @PostMapping(value = {"/api/admin/web_session_create.json", "/api/v2/admin/webSessionCreate.json"})
     private ApiResult<BizAdminSession> adminCreateWebSession(@RequestBody ApiRequest request) {
         return executeInTemplate(ApiEvent.API_ADMIN_CREATE_WEB_SESSION, request, new RequestHandler<BizAdminSession>() {
             @Override
@@ -496,7 +496,7 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = {"/api/admin/web_session.json", "/v2/api/admin/webSessions.json"})
+    @PostMapping(value = {"/api/admin/web_session.json", "/api/v2/admin/webSessions.json"})
     private ApiResult<ListResult<BizAdminSession>> adminGetWebSession(@RequestBody ApiRequest request) {
         return executeInTemplate(ApiEvent.API_ADMIN_GET_WEB_SESSION, request, new RequestHandler<ListResult<BizAdminSession>>() {
             @Override
@@ -511,7 +511,7 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = {"/api/admin/web_session_logout.json", "/v2/api/admin/webSessionLogout.json"})
+    @PostMapping(value = {"/api/admin/web_session_logout.json", "/api/v2/admin/webSessionLogout.json"})
     private ApiResult<String> adminLogoutWebSession(@RequestBody ApiRequest request) {
         return executeInTemplate(ApiEvent.API_ADMIN_LOGOUT_WEB_SESSION, request, new RequestHandler<String>() {
             @Override
@@ -526,7 +526,7 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = {"/api/admin_upload.php", "/v2/api/admin/upload.json"}, consumes = {MediaType.ALL_VALUE})
+    @PostMapping(value = {"/api/admin_upload.php", "/api/v2/admin/upload.json"}, consumes = {MediaType.ALL_VALUE})
     private ApiResult<String> adminUpload(@RequestPart("mediaFile") MultipartFile mediaFile, @RequestPart("postData") String postData) throws Exception {
 
         AdminUploadRequest request = convertAdminPostData(postData);
@@ -546,7 +546,7 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = {"/api/admin/memberUpdate.json", "/v2/api/admin/memberUpdate.json"})
+    @PostMapping(value = {"/api/admin/memberUpdate.json", "/api/v2/admin/memberUpdate.json"})
     private ApiResult<String> memberUpdate(@RequestBody ApiRequest request) {
         return executeInTemplate(ApiEvent.API_ADMIN_MEMBER_UPDATE, request, new RequestHandler<String>() {
             @Override
