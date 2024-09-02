@@ -14,6 +14,9 @@ import id.ezclouds.core.dal.config.repo.EzCoreOrgConfigRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: EzCoreConfigDAO.java, v 0.1 2024‐08‐29 11:41 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -23,6 +26,16 @@ public class EzCoreConfigDAO implements CoreConfigDAO {
 
     @Autowired
     private EzCoreOrgConfigRepository ezCoreOrgConfigRepository;
+
+    @Override
+    public List<CoreConfig> getAllConfig(String orgId) {
+        EzCoreOrgConfigConverter converter = new EzCoreOrgConfigConverter();
+        return ezCoreOrgConfigRepository
+                .findByOrgId(orgId)
+                .stream()
+                .map(converter::convertQuery)
+                .collect(Collectors.toList());
+    }
 
     @EzDAOLogger
     @Override

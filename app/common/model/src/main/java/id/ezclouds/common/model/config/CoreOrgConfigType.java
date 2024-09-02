@@ -42,4 +42,13 @@ public enum CoreOrgConfigType implements CoreConfigType {
     public boolean isOrgSpecific() {
         return true;
     }
+
+    public static CoreOrgConfigType getByCode(String code) {
+        for (CoreOrgConfigType configType : values()) {
+            if (configType.code.equals(code)) {
+                return configType;
+            }
+        }
+        return null;
+    }
 }

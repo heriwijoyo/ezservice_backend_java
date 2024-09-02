@@ -19,6 +19,8 @@ public interface CoreConfigService {
 
     CoreConfig getOrgConfig(CoreConfigType configType);
 
+    Map<CoreConfigType, CoreConfig> getOrgConfigMap(String orgId);
+
     Map<CoreConfigType, CoreConfig> getOrgConfigMap(String orgId, CoreConfigType... configTypes);
 
     void store(CoreConfig coreConfig);

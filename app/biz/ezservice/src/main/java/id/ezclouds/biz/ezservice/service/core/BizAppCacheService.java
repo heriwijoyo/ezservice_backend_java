@@ -8,7 +8,6 @@ import id.ezclouds.biz.ezservice.service.app.*;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.service.AppSubOrganizationService;
 import id.ezclouds.core.auth.service.CoreAuthService;
 import id.ezclouds.core.shared.service.CoreAdminService;
-import id.ezclouds.core.shared.service.LegacyCoreConfigService;
 import id.ezclouds.core.shared.service.CoreFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
@@ -48,9 +47,6 @@ public class BizAppCacheService {
 
     @Autowired
     private CoreAuthService coreAuthService;
-
-    @Autowired
-    private LegacyCoreConfigService legacyCoreConfigService;
 
     @Autowired
     private AppConfigService appConfigService;
@@ -105,8 +101,6 @@ public class BizAppCacheService {
         appBuildPackageService.getAllAppBuildPackage();
         appImageGalleryService.getImageGalleryAllActive();
         coreAuthService.getActiveAppClients();
-        legacyCoreConfigService.getCoreConfigs();
-        legacyCoreConfigService.getCoreOrgConfigs();
         appConfigService.getAppConfigAllActive();
         appConfigService.getMessageTemplates();
         newsInnerService.getHighlightNewsAllOrg();

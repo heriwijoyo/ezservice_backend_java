@@ -29,4 +29,13 @@ public enum CoreCommonConfigType implements CoreConfigType {
     public boolean isOrgSpecific() {
         return false;
     }
+
+    public static CoreCommonConfigType getByCode(String code) {
+        for (CoreCommonConfigType configType : values()) {
+            if (configType.code.equals(code)) {
+                return configType;
+            }
+        }
+        return null;
+    }
 }

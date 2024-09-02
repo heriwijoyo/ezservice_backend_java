@@ -35,7 +35,9 @@ import id.ezclouds.biz.ezservice.service.app.request.VideoCardCreateRequest;
 import id.ezclouds.biz.ezservice.service.request.web.BizWebUpdateItemRequest;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.service.AppSubOrganizationService;
+import id.ezclouds.common.facade.config.CoreConfigService;
 import id.ezclouds.common.facade.integration.EzConnectService;
+import id.ezclouds.common.model.config.CoreConfig;
 import id.ezclouds.common.model.constant.OrgConstant;
 import id.ezclouds.common.model.integration.WhatsappLog;
 import id.ezclouds.common.model.integration.WhatsappLogRequest;
@@ -73,6 +75,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -109,7 +112,7 @@ public class BizAdminInnerService {
     private AppConfigService appConfigService;
 
     @Autowired
-    private LegacyCoreConfigService legacyCoreConfigService;
+    private CoreConfigService coreConfigService;
 
     @Autowired
     private CoreMemberService coreMemberService;
@@ -402,7 +405,7 @@ public class BizAdminInnerService {
         detail.setBizOrganization(getOrganizationById(orgId));
         detail.setBizApplicationConfig(getAppConfig(orgId));
         detail.setBizAppConfigs(appConfigService.getAppConfigByOrgId(orgId));
-        detail.setCoreOrgConfigMap(legacyCoreConfigService.getOrgConfigByOrgId(orgId));
+        detail.setCoreOrgConfigMap(getCoreOrgConfigMap(orgId));
         detail.setAdminMembers(getOrgAdminMembers(orgId));
         detail.setBizAppBuildPackages(getAppBuildPackages(orgId));
         return detail;
@@ -489,7 +492,11 @@ public class BizAdminInnerService {
 
     public void saveCoreOrgConfig(String orgId, Map<String, String> configMap) {
         for (Map.Entry<String, String> entry : configMap.entrySet()) {
-            legacyCoreConfigService.saveCoreOrgConfig(orgId, entry.getKey(), entry.getValue());
+            CoreConfig coreConfig = new CoreConfig();
+            coreConfig.setOrgId(orgId);
+            coreConfig.setConfigKey(entry.getKey());
+            coreConfig.setConfigValue(entry.getValue());
+            coreConfigService.store(coreConfig);
         }
     }
 
@@ -710,5 +717,13 @@ public class BizAdminInnerService {
         modelSwitch.setItemId(request.getItemId());
         modelSwitch.setValue(request.getValue());
         return modelSwitch;
+    }
+
+    private Map<String, String> getCoreOrgConfigMap(String orgId) {
+        Map<String, String> configMap = new HashMap<>();
+        for (CoreConfig coreConfig : coreConfigService.getOrgConfigMap(orgId).values()) {
+            configMap.put(coreConfig.getConfigKey(), coreConfig.getConfigValue());
+        }
+        return configMap;
     }
 }

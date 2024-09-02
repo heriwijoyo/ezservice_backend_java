@@ -17,6 +17,7 @@ import id.ezclouds.biz.ezservice.service.app.model.BizAppConfig;
 import id.ezclouds.biz.ezservice.service.app.repo.AppCommonMessageTemplateRepository;
 import id.ezclouds.biz.ezservice.service.app.dataobject.AppConfigDO;
 import id.ezclouds.biz.ezservice.service.app.repo.AppConfigRepository;
+import id.ezclouds.common.facade.config.CoreConfigService;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.context.EzAppContextHolder;
@@ -41,6 +42,9 @@ public class AppConfigService {
 
     @Autowired
     private AppConfigRepository appConfigRepository;
+
+    @Autowired
+    private CoreConfigService coreConfigService;
 
     @Autowired
     private AppCommonMessageTemplateRepository appCommonMessageTemplateRepository;

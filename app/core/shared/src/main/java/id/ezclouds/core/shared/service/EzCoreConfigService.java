@@ -6,11 +6,16 @@ package id.ezclouds.core.shared.service;
 
 import id.ezclouds.common.facade.config.CoreConfigService;
 import id.ezclouds.common.facade.dal.config.CoreConfigDAO;
+import id.ezclouds.common.model.config.CoreCommonConfigType;
 import id.ezclouds.common.model.config.CoreConfig;
 import id.ezclouds.common.model.config.CoreConfigType;
+import id.ezclouds.common.model.config.CoreOrgConfigType;
+import id.ezclouds.common.util.HashUtil;
+import id.ezclouds.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,6 +40,15 @@ public class EzCoreConfigService implements CoreConfigService {
     }
 
     @Override
+    public Map<CoreConfigType, CoreConfig> getOrgConfigMap(String orgId) {
+        Map<CoreConfigType, CoreConfig> configMap = new HashMap<>();
+        for (CoreConfig coreConfig : coreConfigDAO.getAllConfig(orgId)) {
+            configMap.put(CoreOrgConfigType.getByCode(coreConfig.getConfigKey()), coreConfig);
+        }
+        return configMap;
+    }
+
+    @Override
     public Map<CoreConfigType, CoreConfig> getOrgConfigMap(String orgId, CoreConfigType... configTypes) {
         Map<CoreConfigType, CoreConfig> configMap = new HashMap<>();
         for (CoreConfigType configType : configTypes) {
@@ -44,7 +58,35 @@ public class EzCoreConfigService implements CoreConfigService {
     }
 
     @Override
-    public void store(CoreConfig coreConfig) {
-        coreConfigDAO.store(coreConfig);
+    @Transactional
+    public void store(CoreConfig reqConfig) {
+        CoreConfig dbCoreConfig = getExistConfig(reqConfig);
+        if (dbCoreConfig == null) {
+            dbCoreConfig = createCopyInstance(reqConfig);
+        }
+        dbCoreConfig.setConfigValue(reqConfig.getConfigValue());
+
+        coreConfigDAO.store(dbCoreConfig);
+    }
+
+    private CoreConfig getExistConfig(CoreConfig reqConfig) {
+        if (StringUtil.isNotBlank(reqConfig.getOrgId())) {
+            return coreConfigDAO.getConfig(reqConfig.getOrgId(), CoreOrgConfigType.getByCode(reqConfig.getConfigKey()));
+        } else {
+            return coreConfigDAO.getConfig(CoreCommonConfigType.getByCode(reqConfig.getConfigKey()));
+        }
+    }
+
+    private CoreConfig createCopyInstance(CoreConfig reqConfig) {
+        CoreConfig coreConfig = new CoreConfig();
+        coreConfig.setConfigKey(reqConfig.getConfigKey());
+
+        if (StringUtil.isNotBlank(reqConfig.getOrgId())) {
+            coreConfig.setOrgId(reqConfig.getOrgId());
+            coreConfig.setConfigId(HashUtil.createHash(reqConfig.getOrgId(), reqConfig.getConfigKey()));
+        } else {
+            coreConfig.setConfigId(HashUtil.createHash(reqConfig.getConfigKey()));
+        }
+        return coreConfig;
     }
 }

@@ -60,7 +60,6 @@ public class CoreAdminConfigService implements AdminConfigService {
     }
 
     @Override
-    @Transactional
     public void updateConfigValue(String orgId, CoreConfigType configType, String configValue) {
         CoreConfig coreConfig = coreConfigService.getOrgConfig(orgId, configType);
         AssertUtil.notNull(coreConfig, EzErrorCode.DATA_NOT_FOUND);
