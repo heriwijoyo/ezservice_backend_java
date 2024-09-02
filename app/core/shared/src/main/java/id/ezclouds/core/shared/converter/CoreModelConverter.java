@@ -45,16 +45,6 @@ public class CoreModelConverter {
         return coreConfig;
     }
 
-    public static CoreOrgConfig convert(EzCoreOrgConfigDO coreConfigDO) {
-        if (coreConfigDO == null) { return null; }
-        CoreOrgConfig coreOrgConfig = new CoreOrgConfig();
-        coreOrgConfig.setConfigId(coreConfigDO.getConfigId());
-        coreOrgConfig.setOrgId(coreConfigDO.getOrgId());
-        coreOrgConfig.setConfigKey(coreConfigDO.getConfigKey());
-        coreOrgConfig.setConfigValue(coreConfigDO.getConfigValue());
-        return coreOrgConfig;
-    }
-
     public static CoreAdminBOMenu convert(EzCoreAdminBOMenuDO menuDO) {
         if (menuDO == null) { return null; }
         CoreAdminBOMenu menu = new CoreAdminBOMenu();
