@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.shared.service;
 
+import id.ezclouds.common.model.config.CoreOrgConfigType;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.shared.constant.CoreConstant;
@@ -18,7 +19,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,20 +36,6 @@ public class LegacyCoreConfigService {
 
     @Autowired
     private CoreOrgConfigRepository coreOrgConfigRepository;
-
-    private static final List<String> CORE_ORG_CONFIG_KEYS;
-
-    static {
-        CORE_ORG_CONFIG_KEYS = Arrays.asList(
-                CoreConstant.ConfigKey.MEMBER_CLIENT_ALLOW_MULTIPLE_SESSION,
-                CoreConstant.ConfigKey.MEMBER_CLIENT_SESSION_EXPIRY_DAYS,
-                CoreConstant.ConfigKey.MEMBER_COMMON_SESSION_EXPIRY_MINS,
-                CoreConstant.ConfigKey.ADMIN_COMMON_SESSION_EXPIRY_MINS,
-                CoreConstant.ConfigKey.WATZAP_SEND_ENABLE,
-                CoreConstant.ConfigKey.WATZAP_API_KEY,
-                CoreConstant.ConfigKey.WATZAP_NUMBER_KEY
-        );
-    }
 
     public String getOrgConfigValue(String configKey, String orgId) {
         return getCoreOrgConfigs()
@@ -69,32 +55,6 @@ public class LegacyCoreConfigService {
                 .findFirst()
                 .orElse(new CoreConfig())
                 .getConfigValue();
-    }
-
-    public boolean isWatzapSendEnable(String orgId) {
-        String configValue = getOrgConfigValue(CoreConstant.ConfigKey.WATZAP_SEND_ENABLE, orgId);
-        return Boolean.parseBoolean(configValue);
-    }
-
-    public String getWatzapApiKey(String orgId) {
-        return getOrgConfigValue(CoreConstant.ConfigKey.WATZAP_API_KEY, orgId);
-    }
-
-    public String getWatzapNumberKey(String orgId) {
-        return getOrgConfigValue(CoreConstant.ConfigKey.WATZAP_NUMBER_KEY, orgId);
-    }
-
-    public String getWatzapApiUri() {
-        return getConfigValue(CoreConstant.ConfigKey.WATZAP_API_URI);
-    }
-
-    public String getCoreAreaLevelRoot(String orgId) {
-        return getOrgConfigValue(CoreConstant.ConfigKey.CORE_AREA_LEVEL_ROOT, orgId);
-    }
-
-    public List<String> getCoreAreaRootIds(String orgId) {
-        String configValue = getOrgConfigValue(CoreConstant.ConfigKey.CORE_AREA_ROOT_IDS, orgId);
-        return Arrays.asList(configValue.split(","));
     }
 
     @Cacheable(CoreConstant.CacheKey.CORE_CONFIG)
@@ -121,14 +81,14 @@ public class LegacyCoreConfigService {
                 .map(CoreModelConverter::convert)
                 .collect(Collectors.toList());
 
-        for (String configKey : CORE_ORG_CONFIG_KEYS) {
+        for (CoreOrgConfigType configType: CoreOrgConfigType.values()) {
             String configValue = StringUtil.EMPTY;
             for (CoreOrgConfig orgConfig : coreOrgConfigs) {
-                if (configKey.equals(orgConfig.getConfigKey())) {
+                if (configType.getCode().equals(orgConfig.getConfigKey())) {
                     configValue = orgConfig.getConfigValue();
                 }
             }
-            orgConfigMap.put(configKey, configValue);
+            orgConfigMap.put(configType.getCode(), configValue);
         }
 
         return orgConfigMap;

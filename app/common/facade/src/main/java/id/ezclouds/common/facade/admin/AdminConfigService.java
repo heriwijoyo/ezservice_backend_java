@@ -6,6 +6,7 @@ package id.ezclouds.common.facade.admin;
 
 import id.ezclouds.common.model.biz.BizCommonTable;
 import id.ezclouds.common.model.config.CoreConfig;
+import id.ezclouds.common.model.config.CoreConfigType;
 import id.ezclouds.common.model.request.WebBizPageRequest;
 import id.ezclouds.common.model.result.PageResult;
 
@@ -23,8 +24,8 @@ public interface AdminConfigService {
 
     BizCommonTable getBizCommonTable(String tableId);
 
-    CoreConfig getCoreConfig(String orgId, String configKey);
+    CoreConfig getCoreConfig(String orgId, CoreConfigType configType);
 
 
-    void updateConfigValue(String orgId, String configKey, String configValue);
+    void updateConfigValue(String orgId, CoreConfigType configType, String configValue);
 }

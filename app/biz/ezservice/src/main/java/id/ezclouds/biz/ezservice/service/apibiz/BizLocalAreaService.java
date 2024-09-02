@@ -5,6 +5,8 @@
 package id.ezclouds.biz.ezservice.service.apibiz;
 
 import id.ezclouds.biz.ezservice.service.request.BizLocalAreaRequest;
+import id.ezclouds.common.facade.config.CoreConfigService;
+import id.ezclouds.common.model.config.CoreOrgConfigType;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.facade.template.BizServiceTemplate;
 import id.ezclouds.common.util.CollectionUtil;
@@ -14,11 +16,11 @@ import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.shared.enums.CoreAreaLevel;
 import id.ezclouds.core.shared.model.CoreArea;
 import id.ezclouds.core.shared.service.CoreAreaService;
-import id.ezclouds.core.shared.service.LegacyCoreConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -29,7 +31,7 @@ import java.util.List;
 public class BizLocalAreaService extends BizBaseService {
 
     @Autowired
-    private LegacyCoreConfigService legacyCoreConfigService;
+    private CoreConfigService coreConfigService;
 
     @Autowired
     private CoreAreaService coreAreaService;
@@ -49,8 +51,15 @@ public class BizLocalAreaService extends BizBaseService {
                 List<String> areaIds = request.getAreaIds();
                 List<String> parentIds = request.getParentIds();
                 if (coreAreaLevel == null) {
-                    coreAreaLevel = CoreAreaLevel.getByCode(legacyCoreConfigService.getCoreAreaLevelRoot(getOrgId()));
-                    areaIds = legacyCoreConfigService.getCoreAreaRootIds(getOrgId());
+                    String areaLevel = coreConfigService
+                            .getOrgConfig(getOrgId(), CoreOrgConfigType.CORE_AREA_ROOT_LEVEL)
+                            .getConfigValue();
+                    coreAreaLevel = CoreAreaLevel.getByCode(areaLevel);
+
+                    String rootIds = coreConfigService
+                            .getOrgConfig(getOrgId(), CoreOrgConfigType.CORE_AREA_ROOT_IDS)
+                            .getConfigValue();
+                    areaIds = Arrays.asList(rootIds.split(","));
                 }
 
                 List<CoreArea> coreAreas = new ArrayList<>();

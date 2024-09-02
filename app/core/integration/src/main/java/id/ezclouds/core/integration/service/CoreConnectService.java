@@ -59,7 +59,7 @@ public class CoreConnectService implements EzConnectService {
             @Override
             public void onProcess() throws Exception {
                 String orgId = request.getOrgId();
-                Map<CoreConfigType, CoreConfig> configMap = coreConfigService.getOrgConfigs(
+                Map<CoreConfigType, CoreConfig> configMap = coreConfigService.getOrgConfigMap(
                         orgId,
                         CoreOrgConfigType.WATZAP_SEND_ENABLE,
                         CoreOrgConfigType.WATZAP_API_KEY,

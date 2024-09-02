@@ -7,6 +7,7 @@ package id.ezclouds.core.dal.config;
 import id.ezclouds.common.facade.dal.config.CoreConfigDAO;
 import id.ezclouds.common.model.annotation.EzDAOLogger;
 import id.ezclouds.common.model.config.CoreConfig;
+import id.ezclouds.common.model.config.CoreConfigType;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.dal.config.converter.EzCoreOrgConfigConverter;
 import id.ezclouds.core.dal.config.repo.EzCoreOrgConfigRepository;
@@ -25,15 +26,21 @@ public class EzCoreConfigDAO implements CoreConfigDAO {
 
     @EzDAOLogger
     @Override
-    public CoreConfig getConfig(String orgId, String configKey) {
+    public CoreConfig getConfig(String orgId, CoreConfigType configType) {
         return new EzCoreOrgConfigConverter().convertQuery(
-                ezCoreOrgConfigRepository.findByOrgIdAndConfigKey(orgId, configKey)
+                ezCoreOrgConfigRepository.findByOrgIdAndConfigKey(orgId, configType.getCode())
         );
     }
 
     @EzDAOLogger
     @Override
-    public void storeConfig(CoreConfig coreConfig) {
+    public CoreConfig getConfig(CoreConfigType configType) {
+        return null;
+    }
+
+    @EzDAOLogger
+    @Override
+    public void store(CoreConfig coreConfig) {
         if (StringUtil.isNotBlank(coreConfig.getOrgId())) {
             ezCoreOrgConfigRepository
                     .saveAndFlush(new EzCoreOrgConfigConverter().convertStore(coreConfig));

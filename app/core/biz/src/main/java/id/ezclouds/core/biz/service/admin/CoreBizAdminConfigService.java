@@ -12,6 +12,7 @@ import id.ezclouds.common.model.auth.AuthAdminSession;
 import id.ezclouds.common.model.auth.AuthRole;
 import id.ezclouds.common.model.biz.BizCommonTable;
 import id.ezclouds.common.model.config.CoreConfig;
+import id.ezclouds.common.model.config.CoreOrgConfigType;
 import id.ezclouds.common.model.message.CommonMessageConstant;
 import id.ezclouds.common.model.request.WebBizPageRequest;
 import id.ezclouds.common.model.request.admin.CommonTableCreateRequest;
@@ -197,7 +198,7 @@ public class CoreBizAdminConfigService implements BizAdminConfigService {
                 authAdminService.authorizeSessionForRole(session, AuthRole.ADMIN_ORG);
 
                 CoreConfig coreConfig = adminConfigService
-                        .getCoreConfig(session.getOrgId(), "WATZAP_NUMBER_KEY");
+                        .getCoreConfig(session.getOrgId(), CoreOrgConfigType.WATZAP_NUMBER_KEY);
 
                 bizResult.setObject(coreConfig.getConfigValue());
                 bizResult.setSuccess(true);
@@ -229,7 +230,7 @@ public class CoreBizAdminConfigService implements BizAdminConfigService {
                 authAdminService.authorizeSessionForRole(session, AuthRole.ADMIN_ORG);
 
                 adminConfigService
-                        .updateConfigValue(session.getOrgId(), "WATZAP_NUMBER_KEY", request.getObject());
+                        .updateConfigValue(session.getOrgId(), CoreOrgConfigType.WATZAP_NUMBER_KEY, request.getObject());
 
                 bizResult.setSuccess(true);
                 bizResult.setObject(CommonMessageConstant.BIZ_OPERATION_SUCCESS);

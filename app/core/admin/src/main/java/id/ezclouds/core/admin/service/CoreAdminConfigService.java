@@ -5,10 +5,11 @@
 package id.ezclouds.core.admin.service;
 
 import id.ezclouds.common.facade.admin.AdminConfigService;
+import id.ezclouds.common.facade.config.CoreConfigService;
 import id.ezclouds.common.facade.dal.admin.BizCommonTableDAO;
-import id.ezclouds.common.facade.dal.config.CoreConfigDAO;
 import id.ezclouds.common.model.biz.BizCommonTable;
 import id.ezclouds.common.model.config.CoreConfig;
+import id.ezclouds.common.model.config.CoreConfigType;
 import id.ezclouds.common.model.request.WebBizPageRequest;
 import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.common.util.assertion.AssertUtil;
@@ -29,7 +30,7 @@ public class CoreAdminConfigService implements AdminConfigService {
     private BizCommonTableDAO bizCommonTableDAO;
 
     @Autowired
-    private CoreConfigDAO coreConfigDAO;
+    private CoreConfigService coreConfigService;
 
     @Override
     public PageResult<BizCommonTable> getBizCommonTables(WebBizPageRequest request) {
@@ -54,17 +55,17 @@ public class CoreAdminConfigService implements AdminConfigService {
     }
 
     @Override
-    public CoreConfig getCoreConfig(String orgId, String configKey) {
-        return coreConfigDAO.getConfig(orgId, configKey);
+    public CoreConfig getCoreConfig(String orgId, CoreConfigType configType) {
+        return coreConfigService.getOrgConfig(orgId, configType);
     }
 
     @Override
     @Transactional
-    public void updateConfigValue(String orgId, String configKey, String configValue) {
-        CoreConfig coreConfig = coreConfigDAO.getConfig(orgId, configKey);
+    public void updateConfigValue(String orgId, CoreConfigType configType, String configValue) {
+        CoreConfig coreConfig = coreConfigService.getOrgConfig(orgId, configType);
         AssertUtil.notNull(coreConfig, EzErrorCode.DATA_NOT_FOUND);
 
         coreConfig.setConfigValue(configValue);
-        coreConfigDAO.storeConfig(coreConfig);
+        coreConfigService.store(coreConfig);
     }
 }

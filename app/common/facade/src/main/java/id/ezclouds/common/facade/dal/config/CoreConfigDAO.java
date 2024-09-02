@@ -5,6 +5,7 @@
 package id.ezclouds.common.facade.dal.config;
 
 import id.ezclouds.common.model.config.CoreConfig;
+import id.ezclouds.common.model.config.CoreConfigType;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -12,7 +13,9 @@ import id.ezclouds.common.model.config.CoreConfig;
  */
 public interface CoreConfigDAO {
 
-    CoreConfig getConfig(String orgId, String configKey);
+    CoreConfig getConfig(String orgId, CoreConfigType configType);
 
-    void storeConfig(CoreConfig coreConfig);
+    CoreConfig getConfig(CoreConfigType configType);
+
+    void store(CoreConfig coreConfig);
 }
