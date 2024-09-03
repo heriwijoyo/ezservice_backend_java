@@ -14,6 +14,12 @@ public class District implements CoreArea {
     private String regencyId;
     private String name;
 
+    public District(String id, String regencyId, String name) {
+        this.id = id;
+        this.regencyId = regencyId;
+        this.name = name;
+    }
+
     @Override
     public CoreAreaLevel getAreaLevel() {
         return CoreAreaLevel.DISTRICT;

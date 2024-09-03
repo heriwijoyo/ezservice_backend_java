@@ -14,6 +14,12 @@ public class Village implements CoreArea {
     private String districtId;
     private String name;
 
+    public Village(String id, String districtId, String name) {
+        this.id = id;
+        this.districtId = districtId;
+        this.name = name;
+    }
+
     @Override
     public CoreAreaLevel getAreaLevel() {
         return CoreAreaLevel.VILLAGE;

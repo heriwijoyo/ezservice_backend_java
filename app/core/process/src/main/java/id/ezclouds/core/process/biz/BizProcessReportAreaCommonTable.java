@@ -7,7 +7,7 @@ package id.ezclouds.core.process.biz;
 import id.ezclouds.common.facade.dal.area.AreaDistrictDAO;
 import id.ezclouds.common.facade.dal.report.BizReportByAreaDAO;
 import id.ezclouds.common.facade.integration.BizObjectMapperService;
-import id.ezclouds.common.model.area.District;
+import id.ezclouds.common.model.area.CoreArea;
 import id.ezclouds.common.model.biz.BizCommonTable;
 import id.ezclouds.common.model.report.BizReportByArea;
 import id.ezclouds.common.util.StringUtil;
@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -54,9 +53,9 @@ public class BizProcessReportAreaCommonTable extends BizAsyncProcessor {
         String pageId = requestParam[3];
         List<BizReportByArea> reportByAreas = bizReportByAreaDAO
                 .getReportDistrictSource(orgId, source);
-        List<District> districts = areaDistrictDAO.getByRegencyId(regencyId);
+        List<CoreArea> districts = areaDistrictDAO.getByRegencyId(regencyId);
 
-        for (District district : districts) {
+        for (CoreArea district : districts) {
             BizCommonTable commonTable = bizInnerProcessCommonTable
                     .getOrCreateCommonTable(orgId, district.getName());
             commonTable.setPageId(pageId);

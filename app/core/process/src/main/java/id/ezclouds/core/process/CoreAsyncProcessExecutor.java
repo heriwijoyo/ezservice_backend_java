@@ -7,6 +7,7 @@ package id.ezclouds.core.process;
 import id.ezclouds.common.facade.process.AsyncProcessExecutor;
 import id.ezclouds.common.model.process.ProcessName;
 import id.ezclouds.common.model.request.process.SurveyResponseParseProcessRequest;
+import id.ezclouds.core.process.biz.BizProcessMasterDataAreaInitialize;
 import id.ezclouds.core.process.biz.BizProcessReportAreaCommonTable;
 import id.ezclouds.core.process.biz.BizProcessorSurveyResponseParse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class CoreAsyncProcessExecutor implements AsyncProcessExecutor {
     @Autowired
     private BizProcessReportAreaCommonTable bizProcessReportAreaCommonTable;
 
+    @Autowired
+    private BizProcessMasterDataAreaInitialize bizProcessMasterDataAreaInitialize;
+
     @Override
     public void execute(ProcessName processName, String param) {
         switch (processName) {
@@ -39,6 +43,9 @@ public class CoreAsyncProcessExecutor implements AsyncProcessExecutor {
                 break;
             case REPORT_AREA_COMMON_TABLE_PARSE:
                 bizProcessReportAreaCommonTable.process(param);
+                break;
+            case MASTER_DATA_AREA_INIT:
+                bizProcessMasterDataAreaInitialize.process(param);
                 break;
             default:
                 break;

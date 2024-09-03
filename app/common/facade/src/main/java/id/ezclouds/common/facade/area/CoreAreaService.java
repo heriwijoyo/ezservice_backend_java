@@ -14,5 +14,5 @@ import java.util.List;
  */
 public interface CoreAreaService {
 
-    List<CoreArea> getByParentId(String parentId);
+    List<CoreArea> getChildArea(CoreArea parentArea);
 }

@@ -31,7 +31,6 @@ public final class BizServiceTemplate {
             EzErrorCode ezErrorCode = getEzErrorCode(exception);
             composeBizResultError(bizResult, exception, handler.getErrorMessage(ezErrorCode));
             EzAppContextHolder.getContext().appendErrorStackTrace(ExceptionUtil.getStackTrace(exception));
-            exception.printStackTrace();
         }
         finally {
             logRequest(request);

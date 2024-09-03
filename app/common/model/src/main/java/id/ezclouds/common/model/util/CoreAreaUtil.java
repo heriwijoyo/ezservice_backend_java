@@ -4,7 +4,7 @@
  */
 package id.ezclouds.common.model.util;
 
-import id.ezclouds.common.model.area.CoreAreaLevel;
+import id.ezclouds.common.model.area.*;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -25,5 +25,19 @@ public class CoreAreaUtil {
             default:
                 return null;
         }
+    }
+
+    public static CoreArea buildCoreArea(CoreAreaLevel level, String areaId, String areaName) {
+        switch (level) {
+            case PROVINCE:
+                return new Province(areaId, areaName);
+            case REGENCY:
+                return new Regency(areaId, null, areaName);
+            case DISTRICT:
+                return new District(areaId, null, areaName);
+            case VILLAGE:
+                return new Village(areaId, null, areaName);
+        }
+        return null;
     }
 }
