@@ -44,7 +44,7 @@ import id.ezclouds.common.model.integration.WhatsappLogRequest;
 import id.ezclouds.common.model.integration.WhatsappResendRequest;
 import id.ezclouds.common.model.integration.EzConnectResult;
 import id.ezclouds.common.util.facade.BeanFacadeUtil;
-import id.ezclouds.core.shared.model.CoreArea;
+import id.ezclouds.core.shared.model.LegacyCoreArea;
 import id.ezclouds.common.model.result.BizPageInfo;
 import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.common.util.DateUtil;
@@ -141,7 +141,7 @@ public class BizAdminInnerService {
     private AppSubOrganizationService appSubOrganizationService;
 
     @Autowired
-    private CoreAreaService coreAreaService;
+    private LegacyCoreAreaService legacyCoreAreaService;
 
     public void createAppBuildPackage(String orgId, String platformId, int versionCode, String versionName) throws EzErrorException {
         BizAppBuildPackage buildPackage = new BizAppBuildPackage();
@@ -547,7 +547,7 @@ public class BizAdminInnerService {
             bizMember.setRegencyId("1802");
             bizMember.setRegencyName("KABUPATEN TANGGAMUS");
 
-            List<CoreArea> district = coreAreaService
+            List<LegacyCoreArea> district = legacyCoreAreaService
                     .getDistrictByIds(
                             Collections.singletonList(bizMember.getDistrictId())
                     );
@@ -555,7 +555,7 @@ public class BizAdminInnerService {
                 bizMember.setDistrictName(district.get(0).getName());
             }
 
-            List<CoreArea> village = coreAreaService
+            List<LegacyCoreArea> village = legacyCoreAreaService
                     .getVillageByIds(
                             Collections.singletonList(bizMember.getVillageId())
                     );

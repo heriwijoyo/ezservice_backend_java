@@ -19,7 +19,7 @@ import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
 import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
-import id.ezclouds.core.shared.model.CoreArea;
+import id.ezclouds.core.shared.model.LegacyCoreArea;
 import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
@@ -604,12 +604,12 @@ public class WebApiSuperAdminController {
     }
 
     @PostMapping(value = "/webapp/api/coreArea.json")
-    private WebApiResult<List<CoreArea>> coreArea(
+    private WebApiResult<List<LegacyCoreArea>> coreArea(
             @RequestParam(name = "sessionId", required = false) String sessionId,
             @RequestParam(name = "level", required = false) String level,
             @RequestParam(name = "parentId", required = false) String parentId) {
-        final WebApiResult<List<CoreArea>> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_CORE_AREA, result, new WebApiControllerTemplate.Handler<List<CoreArea>>() {
+        final WebApiResult<List<LegacyCoreArea>> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_CORE_AREA, result, new WebApiControllerTemplate.Handler<List<LegacyCoreArea>>() {
             @Override
             public BizResult onProcess() throws Exception {
                 return bizSuperAdminService
@@ -617,8 +617,8 @@ public class WebApiSuperAdminController {
             }
 
             @Override
-            public List<CoreArea> convertResult(Object object) {
-                return (List<CoreArea>) object;
+            public List<LegacyCoreArea> convertResult(Object object) {
+                return (List<LegacyCoreArea>) object;
             }
 
             @Override

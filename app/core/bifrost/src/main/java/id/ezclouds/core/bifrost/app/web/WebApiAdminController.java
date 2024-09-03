@@ -40,7 +40,7 @@ import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;
 import id.ezclouds.core.bifrost.app.web.result.WebApiPageResult;
 import id.ezclouds.core.bifrost.app.web.result.WebApiResult;
-import id.ezclouds.core.shared.model.CoreArea;
+import id.ezclouds.core.shared.model.LegacyCoreArea;
 import id.ezclouds.core.shared.util.DigestLogUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -900,20 +900,20 @@ public class WebApiAdminController {
     }
 
     @PostMapping(value = "/webapp/api/adminCoreArea.json")
-    private WebApiResult<List<CoreArea>> coreArea(
+    private WebApiResult<List<LegacyCoreArea>> coreArea(
             @RequestParam(name = "sessionId", required = false) String sessionId,
             @RequestParam(name = "level", required = false) String level,
             @RequestParam(name = "parentId", required = false) String parentId) {
-        final WebApiResult<List<CoreArea>> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_CORE_AREA, result, new WebApiControllerTemplate.Handler<List<CoreArea>>() {
+        final WebApiResult<List<LegacyCoreArea>> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_CORE_AREA, result, new WebApiControllerTemplate.Handler<List<LegacyCoreArea>>() {
             @Override
             public BizResult onProcess() throws Exception {
                 return bizAdminService.getCoreAreas(sessionId, level, parentId);
             }
 
             @Override
-            public List<CoreArea> convertResult(Object object) {
-                return (List<CoreArea>) object;
+            public List<LegacyCoreArea> convertResult(Object object) {
+                return (List<LegacyCoreArea>) object;
             }
 
             @Override

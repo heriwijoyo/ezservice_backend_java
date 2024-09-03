@@ -14,8 +14,8 @@ import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.common.model.area.CoreAreaLevel;
-import id.ezclouds.core.shared.model.CoreArea;
-import id.ezclouds.core.shared.service.CoreAreaService;
+import id.ezclouds.core.shared.model.LegacyCoreArea;
+import id.ezclouds.core.shared.service.LegacyCoreAreaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +34,7 @@ public class BizLocalAreaService extends BizBaseService {
     private CoreConfigService coreConfigService;
 
     @Autowired
-    private CoreAreaService coreAreaService;
+    private LegacyCoreAreaService legacyCoreAreaService;
 
     public BizResult getLocalArea(BizLocalAreaRequest request) {
         final BizResult bizResult = new BizResult();
@@ -62,46 +62,46 @@ public class BizLocalAreaService extends BizBaseService {
                     areaIds = Arrays.asList(rootIds.split(","));
                 }
 
-                List<CoreArea> coreAreas = new ArrayList<>();
+                List<LegacyCoreArea> legacyCoreAreas = new ArrayList<>();
                 switch (coreAreaLevel) {
                     case PROVINCE:
                         if (CollectionUtil.isNotEmpty(areaIds)) {
-                            coreAreas = coreAreaService.getProvinceByIds(areaIds);
+                            legacyCoreAreas = legacyCoreAreaService.getProvinceByIds(areaIds);
                         } else {
-                            coreAreas = coreAreaService.getAllProvince();
+                            legacyCoreAreas = legacyCoreAreaService.getAllProvince();
                         }
                         break;
 
                     case REGENCY:
                         if (CollectionUtil.isNotEmpty(areaIds)) {
-                            coreAreas = coreAreaService.getRegencyByIds(areaIds);
+                            legacyCoreAreas = legacyCoreAreaService.getRegencyByIds(areaIds);
                         }
                         else if (CollectionUtil.isNotEmpty(parentIds)) {
-                            coreAreas = coreAreaService.getRegencyByProvinceIds(parentIds);
+                            legacyCoreAreas = legacyCoreAreaService.getRegencyByProvinceIds(parentIds);
                         }
                         break;
 
                     case DISTRICT:
                         if (CollectionUtil.isNotEmpty(areaIds)) {
-                            coreAreas = coreAreaService.getDistrictByIds(areaIds);
+                            legacyCoreAreas = legacyCoreAreaService.getDistrictByIds(areaIds);
                         }
                         else if (CollectionUtil.isNotEmpty(parentIds)) {
-                            coreAreas = coreAreaService.getDistrictByRegencyIds(parentIds);
+                            legacyCoreAreas = legacyCoreAreaService.getDistrictByRegencyIds(parentIds);
                         }
                         break;
 
                     case VILLAGE:
                         if (CollectionUtil.isNotEmpty(areaIds)) {
-                            coreAreas = coreAreaService.getVillageByIds(areaIds);
+                            legacyCoreAreas = legacyCoreAreaService.getVillageByIds(areaIds);
                         }
                         else if (CollectionUtil.isNotEmpty(parentIds)) {
-                            coreAreas = coreAreaService.getVillageByDistrictIds(parentIds);
+                            legacyCoreAreas = legacyCoreAreaService.getVillageByDistrictIds(parentIds);
                         }
                         break;
                 }
 
                 bizResult.setSuccess(true);
-                bizResult.setObject(coreAreas);
+                bizResult.setObject(legacyCoreAreas);
             }
 
             @Override

@@ -5,7 +5,7 @@
 package id.ezclouds.core.shared.service;
 
 import id.ezclouds.core.shared.converter.CoreModelConverter;
-import id.ezclouds.core.shared.model.CoreArea;
+import id.ezclouds.core.shared.model.LegacyCoreArea;
 import id.ezclouds.core.shared.repo.CoreAppDistrictRepository;
 import id.ezclouds.core.shared.repo.CoreAppProvinceRepository;
 import id.ezclouds.core.shared.repo.CoreAppRegencyRepository;
@@ -18,10 +18,10 @@ import java.util.stream.Collectors;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: CoreAreaService.java, v 0.1 2024‐02‐18 7:06 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: LegacyCoreAreaService.java, v 0.1 2024‐02‐18 7:06 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class CoreAreaService {
+public class LegacyCoreAreaService {
 
     @Autowired
     private CoreAppProvinceRepository coreAppProvinceRepository;
@@ -35,7 +35,7 @@ public class CoreAreaService {
     @Autowired
     private CoreAppVillageRepository coreAppVillageRepository;
 
-    public List<CoreArea> getAllProvince() {
+    public List<LegacyCoreArea> getAllProvince() {
         return coreAppProvinceRepository
                 .findAll()
                 .stream()
@@ -43,7 +43,7 @@ public class CoreAreaService {
                 .collect(Collectors.toList());
     }
 
-    public List<CoreArea> getProvinceByIds(List<String> ids) {
+    public List<LegacyCoreArea> getProvinceByIds(List<String> ids) {
         return coreAppProvinceRepository
                 .findByIdIn(ids)
                 .stream()
@@ -51,7 +51,7 @@ public class CoreAreaService {
                 .collect(Collectors.toList());
     }
 
-    public List<CoreArea> getRegencyByIds(List<String> ids) {
+    public List<LegacyCoreArea> getRegencyByIds(List<String> ids) {
         return coreAppRegencyRepository
                 .findByIdIn(ids)
                 .stream()
@@ -59,7 +59,7 @@ public class CoreAreaService {
                 .collect(Collectors.toList());
     }
 
-    public List<CoreArea> getRegencyByProvinceIds(List<String> provinceIds) {
+    public List<LegacyCoreArea> getRegencyByProvinceIds(List<String> provinceIds) {
         return coreAppRegencyRepository
                 .findByProvinceIdIn(provinceIds)
                 .stream()
@@ -67,7 +67,7 @@ public class CoreAreaService {
                 .collect(Collectors.toList());
     }
 
-    public List<CoreArea> getDistrictByIds(List<String> ids) {
+    public List<LegacyCoreArea> getDistrictByIds(List<String> ids) {
         return coreAppDistrictRepository
                 .findByIdIn(ids)
                 .stream()
@@ -75,7 +75,7 @@ public class CoreAreaService {
                 .collect(Collectors.toList());
     }
 
-    public List<CoreArea> getDistrictByRegencyIds(List<String> regencyIds) {
+    public List<LegacyCoreArea> getDistrictByRegencyIds(List<String> regencyIds) {
         return coreAppDistrictRepository
                 .findByRegencyIdIn(regencyIds)
                 .stream()
@@ -83,7 +83,7 @@ public class CoreAreaService {
                 .collect(Collectors.toList());
     }
 
-    public List<CoreArea> getVillageByIds(List<String> ids) {
+    public List<LegacyCoreArea> getVillageByIds(List<String> ids) {
         return coreAppVillageRepository
                 .findByIdIn(ids)
                 .stream()
@@ -91,7 +91,7 @@ public class CoreAreaService {
                 .collect(Collectors.toList());
     }
 
-    public List<CoreArea> getVillageByDistrictIds(List<String> districtIds) {
+    public List<LegacyCoreArea> getVillageByDistrictIds(List<String> districtIds) {
         return coreAppVillageRepository
                 .findByDistrictIdIn(districtIds)
                 .stream()

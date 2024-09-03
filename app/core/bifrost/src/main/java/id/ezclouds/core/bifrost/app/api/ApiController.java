@@ -31,7 +31,7 @@ import id.ezclouds.core.bifrost.app.api.result.ApiPageResult;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;
 import id.ezclouds.core.bifrost.app.api.result.BizApiPageResult;
 import id.ezclouds.core.member.model.CoreMember;
-import id.ezclouds.core.shared.model.CoreArea;
+import id.ezclouds.core.shared.model.LegacyCoreArea;
 import id.ezclouds.core.shared.result.ListResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -222,18 +222,18 @@ public class ApiController extends AppController {
     }
 
     @PostMapping(value = {"/api/local_area.php", "/api/v2/area/localArea.json"})
-    private ApiResult<List<CoreArea>> getLocalArea(@RequestBody LocalAreaRequest request) {
-        return executeInTemplate(ApiEvent.API_GET_LOCAL_AREA, request, new RequestHandler<List<CoreArea>>() {
+    private ApiResult<List<LegacyCoreArea>> getLocalArea(@RequestBody LocalAreaRequest request) {
+        return executeInTemplate(ApiEvent.API_GET_LOCAL_AREA, request, new RequestHandler<List<LegacyCoreArea>>() {
             @Override
-            public List<CoreArea> convertResult(Object resultObject) {
+            public List<LegacyCoreArea> convertResult(Object resultObject) {
                 if (resultObject instanceof ArrayList) {
-                    return (List<CoreArea>) resultObject;
+                    return (List<LegacyCoreArea>) resultObject;
                 }
                 return null;
             }
 
             @Override
-            public DigestLog composeDigestLog(ApiRequest request, ApiResult<List<CoreArea>> result) {
+            public DigestLog composeDigestLog(ApiRequest request, ApiResult<List<LegacyCoreArea>> result) {
                 return new EmptyDigestLog(result.isSuccess(), result.getResultCode());
             }
         });

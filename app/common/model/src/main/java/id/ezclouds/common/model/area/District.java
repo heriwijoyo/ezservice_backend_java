@@ -8,11 +8,26 @@ package id.ezclouds.common.model.area;
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: District.java, v 0.1 2024‐08‐12 4:47 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class District {
+public class District implements CoreArea {
 
     private String id;
     private String regencyId;
     private String name;
+
+    @Override
+    public CoreAreaLevel getAreaLevel() {
+        return CoreAreaLevel.DISTRICT;
+    }
+
+    @Override
+    public String getAreaId() {
+        return id;
+    }
+
+    @Override
+    public String getParentId() {
+        return regencyId;
+    }
 
     public String getId() {
         return id;

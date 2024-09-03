@@ -5,7 +5,9 @@
 package id.ezclouds.core.process.biz;
 
 import id.ezclouds.common.facade.config.CoreConfigService;
+import id.ezclouds.common.model.area.CoreAreaLevel;
 import id.ezclouds.common.model.config.CoreOrgConfigType;
+import id.ezclouds.common.model.util.CoreAreaUtil;
 import id.ezclouds.core.process.model.BizProcessEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -35,7 +37,7 @@ public class BizProcessMasterDataAreaInitialize extends BizAsyncProcessor {
         String paramRequest = (String) request;
         String orgId = paramRequest.split(",")[0];
         String targetLevel = paramRequest.split(",")[1];
-
+        CoreAreaLevel targetAreaLevel = CoreAreaLevel.getByCode(targetLevel);
 
         String areaRootLevel = coreConfigService
                 .getOrgConfig(orgId, CoreOrgConfigType.CORE_AREA_LEVEL_ROOT)
@@ -48,6 +50,17 @@ public class BizProcessMasterDataAreaInitialize extends BizAsyncProcessor {
 
 
 
+
+
         return false;
+    }
+
+    private void recursiveLoadAndExecute(CoreAreaLevel currentLevel, String currentLevelId, CoreAreaLevel targetLevel) {
+        if (currentLevel == targetLevel) {
+            // execute initiation
+        } else {
+            currentLevel = CoreAreaUtil.getLowerLevel(currentLevel);
+
+        }
     }
 }

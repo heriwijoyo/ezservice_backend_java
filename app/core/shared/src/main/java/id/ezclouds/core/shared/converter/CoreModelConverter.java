@@ -82,39 +82,39 @@ public class CoreModelConverter {
         return dashboard;
     }
 
-    public static CoreArea convert(EzCoreAppProvinceDO provinceDO) {
+    public static LegacyCoreArea convert(EzCoreAppProvinceDO provinceDO) {
         if (provinceDO == null) { return null; }
-        CoreArea coreArea = new CoreArea();
-        coreArea.setId(provinceDO.getId());
-        coreArea.setName(provinceDO.getName());
-        coreArea.setAreaLevel(CoreAreaLevel.PROVINCE);
-        return coreArea;
+        LegacyCoreArea legacyCoreArea = new LegacyCoreArea();
+        legacyCoreArea.setId(provinceDO.getId());
+        legacyCoreArea.setName(provinceDO.getName());
+        legacyCoreArea.setAreaLevel(CoreAreaLevel.PROVINCE);
+        return legacyCoreArea;
     }
 
-    public static CoreArea convert(EzCoreAppRegencyDO regencyDO) {
+    public static LegacyCoreArea convert(EzCoreAppRegencyDO regencyDO) {
         if (regencyDO == null) { return null; }
-        CoreArea coreArea = new CoreArea();
-        coreArea.setId(regencyDO.getId());
-        coreArea.setName(regencyDO.getName());
-        coreArea.setAreaLevel(CoreAreaLevel.REGENCY);
-        return coreArea;
+        LegacyCoreArea legacyCoreArea = new LegacyCoreArea();
+        legacyCoreArea.setId(regencyDO.getId());
+        legacyCoreArea.setName(regencyDO.getName());
+        legacyCoreArea.setAreaLevel(CoreAreaLevel.REGENCY);
+        return legacyCoreArea;
     }
 
-    public static CoreArea convert(EzCoreAppDistrictDO districtDO) {
+    public static LegacyCoreArea convert(EzCoreAppDistrictDO districtDO) {
         if (districtDO == null) { return null; }
-        CoreArea coreArea = new CoreArea();
-        coreArea.setId(districtDO.getId());
-        coreArea.setName(districtDO.getName());
-        coreArea.setAreaLevel(CoreAreaLevel.DISTRICT);
-        return coreArea;
+        LegacyCoreArea legacyCoreArea = new LegacyCoreArea();
+        legacyCoreArea.setId(districtDO.getId());
+        legacyCoreArea.setName(districtDO.getName());
+        legacyCoreArea.setAreaLevel(CoreAreaLevel.DISTRICT);
+        return legacyCoreArea;
     }
 
-    public static CoreArea convert(EzCoreAppVillageDO villageDO) {
+    public static LegacyCoreArea convert(EzCoreAppVillageDO villageDO) {
         if (villageDO == null) { return null; }
-        CoreArea coreArea = new CoreArea();
-        coreArea.setId(villageDO.getId());
-        coreArea.setName(villageDO.getName());
-        coreArea.setAreaLevel(CoreAreaLevel.VILLAGE);
-        return coreArea;
+        LegacyCoreArea legacyCoreArea = new LegacyCoreArea();
+        legacyCoreArea.setId(villageDO.getId());
+        legacyCoreArea.setName(villageDO.getName());
+        legacyCoreArea.setAreaLevel(CoreAreaLevel.VILLAGE);
+        return legacyCoreArea;
     }
 }

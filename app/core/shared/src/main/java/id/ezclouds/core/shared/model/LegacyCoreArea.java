@@ -8,9 +8,9 @@ import id.ezclouds.common.model.area.CoreAreaLevel;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: CoreArea.java, v 0.1 2024‐02‐18 6:57 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: LegacyCoreArea.java, v 0.1 2024‐02‐18 6:57 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class CoreArea {
+public class LegacyCoreArea {
 
     private String id;
     private String name;
