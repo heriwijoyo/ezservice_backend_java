@@ -13,7 +13,7 @@ import id.ezclouds.common.util.CollectionUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
-import id.ezclouds.core.shared.enums.CoreAreaLevel;
+import id.ezclouds.common.model.area.CoreAreaLevel;
 import id.ezclouds.core.shared.model.CoreArea;
 import id.ezclouds.core.shared.service.CoreAreaService;
 import org.springframework.beans.factory.annotation.Autowired;

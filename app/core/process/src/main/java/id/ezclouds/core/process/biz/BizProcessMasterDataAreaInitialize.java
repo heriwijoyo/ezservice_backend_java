@@ -32,9 +32,22 @@ public class BizProcessMasterDataAreaInitialize extends BizAsyncProcessor {
 
     @Override
     protected boolean onProcess(Object request, List<String> logData) {
-        String orgId = (String) request;
+        String paramRequest = (String) request;
+        String orgId = paramRequest.split(",")[0];
+        String targetLevel = paramRequest.split(",")[1];
 
-        coreConfigService.getOrgConfig(orgId, CoreOrgConfigType.CORE_AREA_LEVEL_ROOT);
+
+        String areaRootLevel = coreConfigService
+                .getOrgConfig(orgId, CoreOrgConfigType.CORE_AREA_LEVEL_ROOT)
+                .getConfigValue();
+
+        String areaRootIds = coreConfigService
+                .getOrgConfig(orgId, CoreOrgConfigType.CORE_AREA_ROOT_IDS)
+                .getConfigValue();
+
+
+
+
         return false;
     }
 }

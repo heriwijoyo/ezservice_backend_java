@@ -4,7 +4,7 @@
  */
 package id.ezclouds.core.shared.model;
 
-import id.ezclouds.core.shared.enums.CoreAreaLevel;
+import id.ezclouds.common.model.area.CoreAreaLevel;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)

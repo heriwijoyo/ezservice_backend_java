@@ -5,7 +5,7 @@
 package id.ezclouds.core.shared.converter;
 
 import id.ezclouds.common.util.StringUtil;
-import id.ezclouds.core.shared.enums.CoreAreaLevel;
+import id.ezclouds.common.model.area.CoreAreaLevel;
 import id.ezclouds.core.shared.model.*;
 import id.ezclouds.core.shared.repo.dataobject.*;
 
