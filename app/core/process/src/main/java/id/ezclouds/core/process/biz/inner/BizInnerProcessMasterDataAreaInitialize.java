@@ -1,0 +1,49 @@
+/**
+ * Ezclouds.id
+ * Copyright (c) 2020‐2024 All Rights Reserved.
+ */
+package id.ezclouds.core.process.biz.inner;
+
+import id.ezclouds.common.facade.integration.BizObjectMapperService;
+import id.ezclouds.common.model.area.CoreArea;
+import id.ezclouds.common.model.biz.data.BizMasterData;
+import id.ezclouds.common.model.biz.data.VillageMasterData;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+
+/**
+ * @author Heri Wijoyo (heri.wijoyo@gmail.com)
+ * @version $Id: BizInnerProcessMasterDataAreaInitialize.java, v 0.1 2024‐09‐04 8:07 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ */
+@Service
+public class BizInnerProcessMasterDataAreaInitialize {
+
+    @Autowired
+    private BizObjectMapperService bizObjectMapperService;
+
+    @Transactional
+    public void init(String orgId, String scene, CoreArea coreArea) {
+        BizMasterData bizMasterData = buildMasterData(orgId, scene, coreArea);
+
+        System.out.println(bizMasterData);
+    }
+
+    private BizMasterData buildMasterData(String orgId, String scene, CoreArea coreArea) {
+        BizMasterData masterData = new BizMasterData();
+        masterData.setOrgId(orgId);
+        masterData.setScene(scene);
+
+        switch (coreArea.getAreaLevel()) {
+            case VILLAGE:
+                VillageMasterData villageMasterData = new VillageMasterData();
+                villageMasterData.setVillageId(coreArea.getAreaId());
+                villageMasterData.setVillageName(coreArea.getName());
+                bizObjectMapperService.parseFromSource(masterData, villageMasterData);
+                break;
+        }
+
+        return masterData;
+    }
+}

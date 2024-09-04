@@ -10,6 +10,7 @@ import id.ezclouds.common.model.area.CoreArea;
 import id.ezclouds.common.model.area.CoreAreaLevel;
 import id.ezclouds.common.model.config.CoreOrgConfigType;
 import id.ezclouds.common.model.util.CoreAreaUtil;
+import id.ezclouds.core.process.biz.inner.BizInnerProcessMasterDataAreaInitialize;
 import id.ezclouds.core.process.model.BizProcessEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,9 @@ public class BizProcessMasterDataAreaInitialize extends BizAsyncProcessor {
     @Autowired
     private CoreAreaService coreAreaService;
 
+    @Autowired
+    private BizInnerProcessMasterDataAreaInitialize bizInnerProcessMasterDataAreaInitialize;
+
     @Override
     public BizProcessEvent getProcessEvent() {
         return BizProcessEvent.MASTER_DATA_AREA_INIT;
@@ -43,8 +47,9 @@ public class BizProcessMasterDataAreaInitialize extends BizAsyncProcessor {
     @Override
     protected boolean onProcess(Object request, List<String> logData) {
         String paramRequest = (String) request;
-        String orgId = paramRequest.split(",")[0];
-        String targetLevel = paramRequest.split(",")[1];
+        String scene = paramRequest.split(",")[0];
+        String orgId = paramRequest.split(",")[1];
+        String targetLevel = paramRequest.split(",")[2];
         CoreAreaLevel targetAreaLevel = CoreAreaLevel.getByCode(targetLevel);
 
         String areaRootLevel = coreConfigService
@@ -66,20 +71,19 @@ public class BizProcessMasterDataAreaInitialize extends BizAsyncProcessor {
             CoreArea rootCoreArea = CoreAreaUtil
                     .buildCoreArea(rootLevel, rootIds.get(i), rootNames.get(i));
 
-            recursiveLoadAndExecute(rootCoreArea, targetAreaLevel);
+            recursiveLoadAndExecute(orgId, scene, rootCoreArea, targetAreaLevel);
         }
 
         return true;
     }
 
-    private void recursiveLoadAndExecute(CoreArea currentArea, CoreAreaLevel targetLevel) {
+    private void recursiveLoadAndExecute(String orgId, String scene, CoreArea currentArea, CoreAreaLevel targetLevel) {
         if (currentArea.getAreaLevel() == targetLevel) {
-            // execute initiation
-            System.out.println(currentArea.getAreaLevel().getCode() +"__"+ currentArea.getAreaId() +"__"+ currentArea.getName());
+            bizInnerProcessMasterDataAreaInitialize.init(orgId, scene, currentArea);
         } else {
             List<CoreArea> childs = coreAreaService.getChildArea(currentArea);
             for (CoreArea childArea : childs) {
-                recursiveLoadAndExecute(childArea, targetLevel);
+                recursiveLoadAndExecute(orgId, scene, childArea, targetLevel);
             }
         }
     }

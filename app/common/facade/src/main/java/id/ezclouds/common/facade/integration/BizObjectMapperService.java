@@ -18,5 +18,7 @@ public interface BizObjectMapperService {
 
     <T> T parseJson(String json, Class<T> clazz);
 
+    <O, I> void parseFromSource(O output, I source);
+
     String toJson(Object object);
 }

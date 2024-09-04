@@ -9,8 +9,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.common.facade.integration.BizObjectMapperService;
 import id.ezclouds.common.model.biz.survey.BizSurveyResponseItem;
+import id.ezclouds.common.model.util.ModelReflectionMapper;
+import id.ezclouds.common.util.StringUtil;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,6 +67,41 @@ public class CoreObjectMapperService implements BizObjectMapperService {
             return new ObjectMapper().readValue(json, clazz);
         } catch (Exception ignored) {
             return null;
+        }
+    }
+
+    @Override
+    public <O, I> void parseFromSource(O output, I source) {
+        Map<String, String> parseMap = ModelReflectionMapper.getParserMap(source, output);
+        Map<String, Field> sourceFieldMap = new HashMap<>();
+        for (Field mField : source.getClass().getDeclaredFields()) {
+            sourceFieldMap.put(mField.getName(), mField);
+        }
+
+        for (Field outputField : output.getClass().getDeclaredFields()) {
+            String fieldName = outputField.getName();
+            String valueKey = parseMap.get(fieldName);
+
+            if (StringUtil.isNotBlank(valueKey)) {
+                if (valueKey.startsWith("STATIC_")) {
+                    try {
+                        outputField.setAccessible(true);
+                        outputField.set(output, valueKey.substring("STATIC_".length()));
+                    } catch (Exception ignored) {
+                    }
+                }
+                else {
+                    Field sourceField = sourceFieldMap.get(valueKey);
+                    if (sourceField != null) {
+                        try {
+                            outputField.setAccessible(true);
+                            sourceField.setAccessible(true);
+                            outputField.set(output, sourceField.get(source));
+                        } catch (Exception ignored) {
+                        }
+                    }
+                }
+            }
         }
     }
 
