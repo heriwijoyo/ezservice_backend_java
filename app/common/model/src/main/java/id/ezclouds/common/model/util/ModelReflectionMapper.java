@@ -19,7 +19,6 @@ public class ModelReflectionMapper {
         PARSER_MAP_ALL = new HashMap<>();
 
         Map<String, String> villageMasterDataStoreMap = new HashMap<>();
-        villageMasterDataStoreMap.put("scene", "STATIC_BIZ_VILLAGE_DATA");
         villageMasterDataStoreMap.put("dataId", "villageId");
         villageMasterDataStoreMap.put("dataName", "villageName");
         villageMasterDataStoreMap.put("numberValue1", "voterMale");

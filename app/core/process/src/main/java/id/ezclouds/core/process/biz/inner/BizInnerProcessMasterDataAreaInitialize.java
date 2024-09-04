@@ -4,10 +4,12 @@
  */
 package id.ezclouds.core.process.biz.inner;
 
+import id.ezclouds.common.facade.dal.biz.BizMasterDataDAO;
 import id.ezclouds.common.facade.integration.BizObjectMapperService;
 import id.ezclouds.common.model.area.CoreArea;
 import id.ezclouds.common.model.biz.data.BizMasterData;
 import id.ezclouds.common.model.biz.data.VillageMasterData;
+import id.ezclouds.common.util.HashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,11 +25,15 @@ public class BizInnerProcessMasterDataAreaInitialize {
     @Autowired
     private BizObjectMapperService bizObjectMapperService;
 
+    @Autowired
+    private BizMasterDataDAO bizMasterDataDAO;
+
     @Transactional
     public void init(String orgId, String scene, CoreArea coreArea) {
         BizMasterData bizMasterData = buildMasterData(orgId, scene, coreArea);
+        bizMasterData.setBizMasterId(HashUtil.createHash(bizMasterData.getOrgId(), bizMasterData.getScene(), bizMasterData.getDataId()));
 
-        System.out.println(bizMasterData);
+        bizMasterDataDAO.storeOrUpdate(bizMasterData);
     }
 
     private BizMasterData buildMasterData(String orgId, String scene, CoreArea coreArea) {
