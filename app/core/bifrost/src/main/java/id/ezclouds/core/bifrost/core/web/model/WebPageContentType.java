@@ -11,6 +11,7 @@ package id.ezclouds.core.bifrost.core.web.model;
 public enum  WebPageContentType {
 
     COMMON_TABLES("COMMON_TABLES", "pages/layout/commonTables.htm"),
+    EDITABLE_COMMON_TABLE("EDITABLE_COMMON_TABLE", "pages/layout/editableCommonTable.htm"),
     CUSTOM("CUSTOM", ""),
     ;
 

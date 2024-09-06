@@ -16,7 +16,23 @@ public class BizMasterDataConverter extends CommonDOModelConverter<EzMasterDataD
 
     @Override
     protected BizMasterData safeConvertQuery(EzMasterDataDO dataObject) {
-        return null;
+        BizMasterData masterData = new BizMasterData();
+        masterData.setBizMasterId(dataObject.getBizMasterId());
+        masterData.setOrgId(dataObject.getOrgId());
+        masterData.setScene(dataObject.getScene());
+        masterData.setDataId(dataObject.getDataId());
+        masterData.setDataName(dataObject.getDataName());
+        masterData.setNumberValue1(dataObject.getNumberValue1());
+        masterData.setNumberValue2(dataObject.getNumberValue2());
+        masterData.setNumberValue3(dataObject.getNumberValue3());
+        masterData.setNumberValue4(dataObject.getNumberValue4());
+        masterData.setNumberValue5(dataObject.getNumberValue5());
+        masterData.setCharValue1(dataObject.getCharValue1());
+        masterData.setCharValue2(dataObject.getCharValue2());
+        masterData.setCharValue3(dataObject.getCharValue3());
+        masterData.setCharValue4(dataObject.getCharValue4());
+        masterData.setCharValue5(dataObject.getCharValue5());
+        return masterData;
     }
 
     @Override

@@ -10,12 +10,21 @@ package id.ezclouds.common.model.biz.data;
  */
 public class VillageMasterData {
 
+    private String bizMasterId;
     private String villageId;
     private String villageName;
     private Integer voterMale;
     private Integer voterFemale;
     private Integer voterTotal;
     private Integer pollStationTotal;
+
+    public String getBizMasterId() {
+        return bizMasterId;
+    }
+
+    public void setBizMasterId(String bizMasterId) {
+        this.bizMasterId = bizMasterId;
+    }
 
     public String getVillageId() {
         return villageId;

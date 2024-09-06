@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.bifrost.core.web;
 
+import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.context.EzAppContext;
 import id.ezclouds.common.util.context.EzAppContextHolder;
 import id.ezclouds.common.util.exception.EzErrorCode;
@@ -11,10 +12,8 @@ import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.LogUtil;
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;
-import id.ezclouds.core.bifrost.core.web.model.WebPagePath;
 import id.ezclouds.core.bifrost.core.web.model.WebPageRequest;
 import id.ezclouds.core.bifrost.core.web.model.WebPageResult;
-import id.ezclouds.core.bifrost.core.web.model.WebPageSection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -62,11 +61,9 @@ public final class WebPageControllerTemplate {
 
         } finally {
             EzAppContext context = EzAppContextHolder.getContext();
-            WebPagePath pagePath = WebPagePath.getByCode(request.getPath());
-            String pathLog = pagePath != WebPagePath.UNKNOWN ? pagePath.getCode() : pagePath.getCode() +":"+ request.getPath();
+            String pathLog = StringUtil.isNotBlank(request.getPath()) ? request.getPath() : "PATH_EMPTY";
 
-            WebPageSection pageSection = WebPageSection.getByCode(request.getSection());
-            String sectionLog = pageSection != WebPageSection.UNKNOWN ? pageSection.getCode() : pageSection.getCode() +":"+ request.getSection();
+            String sectionLog = StringUtil.isNotBlank(request.getSection()) ? request.getSection() : "SECTION_EMPTY";
 
             LogUtil.info(
                     LOGGER,
@@ -76,7 +73,7 @@ public final class WebPageControllerTemplate {
                     context.getTimeCost(),
                     pathLog,
                     sectionLog,
-                    request.getPageId() == null ? "PAGE_ID_NULL" : request.getPageId(),
+                    StringUtil.isNotBlank(request.getPageId()) ? request.getPageId() : "PAGE_ID_EMPTY",
                     request.getSessionId()
             );
         }

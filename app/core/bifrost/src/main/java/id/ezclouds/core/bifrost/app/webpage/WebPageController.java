@@ -12,9 +12,7 @@ import id.ezclouds.common.model.biz.BizWebPageConfig;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.core.bifrost.core.web.model.WebPageAuthType;
-import id.ezclouds.core.bifrost.core.web.model.WebPagePath;
 import id.ezclouds.core.bifrost.core.web.model.WebPageRequest;
-import id.ezclouds.core.bifrost.core.web.model.WebPageSection;
 import id.ezclouds.core.bifrost.core.web.processor.WebPageProcessor;
 import id.ezclouds.core.bifrost.core.web.WebPageControllerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,17 +60,16 @@ public class WebPageController {
             public void checkRequest(WebPageRequest request) {
                 AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
                 AssertUtil.notBlank(request.getPageId(), EzErrorCode.ILLEGAL_PARAM);
-
-                WebPagePath pagePath = WebPagePath.getByCode(request.getPath());
-                WebPageSection pageSection = WebPageSection.getByCode(request.getSection());
-                AssertUtil.isNotTrue(pagePath == WebPagePath.UNKNOWN, EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.isNotTrue(pageSection == WebPageSection.UNKNOWN, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getPath(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getSection(), EzErrorCode.ILLEGAL_PARAM);
             }
 
             @Override
             public String processWebContent(WebPageRequest request) throws Exception {
                 BizWebPage bizWebPage = bizWebPageDAO.getWebPage(request.getPageId());
                 AssertUtil.notNull(bizWebPage, EzErrorCode.WEB_BIZ_PAGE_NOT_FOUND);
+                AssertUtil.equals(request.getPath(), bizWebPage.getPath(), EzErrorCode.WEB_BIZ_PAGE_NOT_FOUND);
+                AssertUtil.equals(request.getSection(), bizWebPage.getSection(), EzErrorCode.WEB_BIZ_PAGE_NOT_FOUND);
 
                 BizWebPageConfig pageConfig = bizObjectMapperService
                         .parseJson(bizWebPage.getConfig(), BizWebPageConfig.class);
