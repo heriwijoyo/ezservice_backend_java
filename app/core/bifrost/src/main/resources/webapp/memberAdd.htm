@@ -125,48 +125,28 @@
                             <div class="form-group col-sm-12">
                                 <div class="form-line">
                                     <div class="font-12">Province</div>
-                                    <select class="form-control show-tick" id="provinceId">
+                                    <select class="form-control show-tick" id="PROVINCE">
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group col-sm-12">
                                 <div class="form-line">
                                     <div class="font-12">Regency</div>
-                                    <select class="form-control show-tick" id="regencyId">
+                                    <select class="form-control show-tick" id="REGENCY">
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group col-sm-12">
                                 <div class="form-line">
                                     <div class="font-12">District</div>
-                                    <select class="form-control show-tick" id="districtId">
-                                        <option value="1802010">WONOSOBO</option>
-                                        <option value="1802011">SEMAKA</option>
-                                        <option value="1802012">BANDAR NEGERI SEMUONG</option>
-                                        <option value="1802020">KOTA AGUNG</option>
-                                        <option value="1802021">PEMATANG SAWA</option>
-                                        <option value="1802022">KOTA AGUNG TIMUR</option>
-                                        <option value="1802023">KOTA AGUNG BARAT</option>
-                                        <option value="1802030">PULAU PANGGUNG</option>
-                                        <option value="1802031">ULUBELU</option>
-                                        <option value="1802032">AIR NANINGAN</option>
-                                        <option value="1802040">TALANG PADANG</option>
-                                        <option value="1802041">SUMBEREJO</option>
-                                        <option value="1802042">GISTING</option>
-                                        <option value="1802043">GUNUNG ALIP</option>
-                                        <option value="1802050">PUGUNG</option>
-                                        <option value="1802101">BULOK</option>
-                                        <option value="1802110">CUKUH BALAK</option>
-                                        <option value="1802111">KELUMBAYAN</option>
-                                        <option value="1802112">LIMAU</option>
-                                        <option value="1802113">KELUMBAYAN BARAT</option>
+                                    <select class="form-control show-tick" id="DISTRICT">
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group col-sm-12">
                                 <div class="form-line">
                                     <div class="font-12">Village</div>
-                                    <select class="form-control show-tick" id="villageId">
+                                    <select class="form-control show-tick" id="VILLAGE">
                                     </select>
                                 </div>
                             </div>
@@ -250,7 +230,7 @@
                 EzDashboardBizService.parseData(response.data);
             }
             if (url === EzAdminUrl.GET_CORE_AREA) {
-                EzDashboardBizService.parseVillage(response.data);
+                EzDashboardBizService.parseDynamicOption(response.data);
             }
             if (url === EzAdminUrl.REGISTER_MEMBER) {
                 alert(response.data);
@@ -276,17 +256,48 @@
         },
         parseData: function(data) {
             var subOrgOption = '';
-            for(i = 0; i < data.bizSubOrganizations.length; i++) {
+            for(let i = 0; i < data.bizSubOrganizations.length; i++) {
                 subOrgOption += '<option value="'+ data.bizSubOrganizations[i].subOrgId +'">'+ data.bizSubOrganizations[i].name +'</option>';
             }
             $('#sub_org_id').html(subOrgOption);
+
+            EzDashboardBizService.parseAreaDropDown(data.workingAreaLevel, data.workingArea);
         },
-        parseVillage: function(data) {
-            var villageOption = '';
-            for(i = 0; i < data.length; i++) {
-                villageOption += '<option value="'+ data[i].id +'">'+ data[i].name +'</option>';
+        parseAreaDropDown: function(workingAreaLevel, workingArea) {
+            let areaLevels = ['PROVINCE','REGENCY','DISTRICT','VILLAGE'];
+            var reachRoot = false;
+            for(let i = 0; i <areaLevels.length; i++) {
+                if ( !reachRoot ) {
+                    reachRoot = areaLevels[i] === workingAreaLevel;
+                    let downLevel = (i >= 3) ? '' : areaLevels[i+1];
+                    EzDashboardBizService.parseAreaPerLevel(workingArea, areaLevels[i], downLevel, reachRoot);
+                }
             }
-            $('#villageId').html(villageOption);
+        },
+        parseAreaPerLevel: function(data, level, downLevel, isRoot) {
+            var htmlOption = '';
+            let count = 0;
+            for (let i = 0; i < data.length; i++) {
+                if (data[i].areaLevel === level) {
+                    htmlOption += '<option value="'+ data[i].areaId +'">'+ data[i].name +'</option>';
+                    count++;
+                }
+            }
+            $('#'+level).html(htmlOption);
+            $('#'+level).prop('disabled', count <= 1);
+
+            if (isRoot && count <= 1 && downLevel.length > 0) {
+                EzDashboardBizService.fetchCoreArea(downLevel, data[0].areaId);
+            }
+        },
+        parseDynamicOption: function(data) {
+            var htmlOption = '';
+            let level;
+            for(let i = 0; i < data.length; i++) {
+                htmlOption += '<option value="'+ data[i].id +'">'+ data[i].name +'</option>';
+                level = data[i].areaLevel;
+            }
+            $('#'+ level).html(htmlOption);
         },
         showLoader: function() {
             $('#btnLoader').show();
@@ -320,8 +331,14 @@
         });
         EzWebAppClient.start();
 
-        $('#districtId').change(function(){
-            EzDashboardBizService.fetchCoreArea('VILLAGE', $('#districtId').val());
+        $('#PROVINCE').change(function(){
+            EzDashboardBizService.fetchCoreArea('REGENCY', $('#PROVINCE').val());
+        });
+        $('#REGENCY').change(function(){
+            EzDashboardBizService.fetchCoreArea('DISTRICT', $('#REGENCY').val());
+        });
+        $('#DISTRICT').change(function(){
+            EzDashboardBizService.fetchCoreArea('VILLAGE', $('#DISTRICT').val());
         });
         $('#btnSubmit').click(function(){
             EzDashboardBizService.submitMember();
