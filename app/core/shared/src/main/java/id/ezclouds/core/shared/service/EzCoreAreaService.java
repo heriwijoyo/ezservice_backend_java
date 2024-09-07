@@ -84,8 +84,14 @@ public class EzCoreAreaService implements CoreAreaService {
 
     private CoreArea getAreaByLevelAndId(CoreAreaLevel level, String id) {
         switch (level) {
+            case PROVINCE:
+                return areaProvinceDAO.getById(id);
             case REGENCY:
                 return areaRegencyDAO.getById(id);
+            case DISTRICT:
+                return areaDistrictDAO.getById(id);
+            case VILLAGE:
+                return areaVillageDAO.getById(id);
         }
         return null;
     }

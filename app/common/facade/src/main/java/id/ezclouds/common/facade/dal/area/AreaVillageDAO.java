@@ -18,4 +18,6 @@ public interface AreaVillageDAO {
     List<CoreArea> getByDistrictId(String districtId);
 
     List<CoreArea> getByDistrictIds(List<String> districtIds);
+
+    CoreArea getById(String areaId);
 }

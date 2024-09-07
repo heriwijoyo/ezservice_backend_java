@@ -43,4 +43,12 @@ public class CoreAreaVillageDAO implements AreaVillageDAO {
                 new EzVillageQueryConverter()
         );
     }
+
+    @EzDAOLogger
+    @Override
+    public CoreArea getById(String areaId) {
+        return new EzVillageQueryConverter().convert(
+                ezVillageRepository.findById(areaId).orElse(null)
+        );
+    }
 }
