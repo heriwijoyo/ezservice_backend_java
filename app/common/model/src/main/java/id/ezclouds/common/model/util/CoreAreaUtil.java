@@ -40,4 +40,21 @@ public class CoreAreaUtil {
         }
         return null;
     }
+
+    public static CoreArea copyCoreArea(CoreArea source) {
+        switch (source.getAreaLevel()) {
+            case PROVINCE:
+                return new Province(source.getAreaId(), source.getName());
+
+            case REGENCY:
+                return new Regency(source.getAreaId(), source.getParentId(), source.getName());
+
+            case DISTRICT:
+                return new District(source.getAreaId(), source.getParentId(), source.getName());
+
+            case VILLAGE:
+                return new Village(source.getAreaId(), source.getParentId(), source.getName());
+        }
+        return null;
+    }
 }

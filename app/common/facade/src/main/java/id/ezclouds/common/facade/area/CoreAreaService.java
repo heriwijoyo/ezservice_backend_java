@@ -15,4 +15,6 @@ import java.util.List;
 public interface CoreAreaService {
 
     List<CoreArea> getChildArea(CoreArea parentArea);
+
+    List<CoreArea> getParentAreaRecursive(List<CoreArea> coreAreas);
 }

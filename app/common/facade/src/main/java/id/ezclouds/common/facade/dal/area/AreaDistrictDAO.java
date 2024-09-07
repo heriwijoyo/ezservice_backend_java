@@ -17,4 +17,6 @@ public interface AreaDistrictDAO {
     List<CoreArea> getByRegencyId(String regencyId);
 
     List<CoreArea> getByRegencyIds(List<String> regencyIds);
+
+    CoreArea getById(String areaId);
 }

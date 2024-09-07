@@ -6,8 +6,12 @@ package id.ezclouds.core.shared.service;
 
 import id.ezclouds.common.facade.area.CoreAreaService;
 import id.ezclouds.common.facade.dal.area.AreaDistrictDAO;
+import id.ezclouds.common.facade.dal.area.AreaProvinceDAO;
+import id.ezclouds.common.facade.dal.area.AreaRegencyDAO;
 import id.ezclouds.common.facade.dal.area.AreaVillageDAO;
 import id.ezclouds.common.model.area.CoreArea;
+import id.ezclouds.common.model.area.CoreAreaLevel;
+import id.ezclouds.common.model.util.CoreAreaUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +24,12 @@ import java.util.List;
  */
 @Service
 public class EzCoreAreaService implements CoreAreaService {
+
+    @Autowired
+    private AreaProvinceDAO areaProvinceDAO;
+
+    @Autowired
+    private AreaRegencyDAO areaRegencyDAO;
 
     @Autowired
     private AreaDistrictDAO areaDistrictDAO;
@@ -37,5 +47,46 @@ public class EzCoreAreaService implements CoreAreaService {
 
         }
         return new ArrayList<>();
+    }
+
+    @Override
+    public List<CoreArea> getParentAreaRecursive(List<CoreArea> coreAreas) {
+        List<CoreArea> areas = new ArrayList<>();
+
+        CoreArea coreArea = null;
+        for (CoreArea area : coreAreas) {
+            if (coreArea != null) {
+                areas.add(CoreAreaUtil.copyCoreArea(area));
+            } else {
+                coreArea = getAreaByLevelAndId(area.getAreaLevel(), area.getAreaId());
+            }
+        }
+
+        while (coreArea != null) {
+            areas.add(CoreAreaUtil.copyCoreArea(coreArea));
+            coreArea = getParentArea(coreArea);
+        }
+
+        return areas;
+    }
+
+    private CoreArea getParentArea(CoreArea currentArea) {
+        switch (currentArea.getAreaLevel()) {
+            case VILLAGE:
+                return areaDistrictDAO.getById(currentArea.getParentId());
+            case DISTRICT:
+                return areaRegencyDAO.getById(currentArea.getParentId());
+            case REGENCY:
+                return areaProvinceDAO.getById(currentArea.getParentId());
+        }
+        return null;
+    }
+
+    private CoreArea getAreaByLevelAndId(CoreAreaLevel level, String id) {
+        switch (level) {
+            case REGENCY:
+                return areaRegencyDAO.getById(id);
+        }
+        return null;
     }
 }

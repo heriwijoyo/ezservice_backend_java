@@ -35,14 +35,20 @@ import id.ezclouds.biz.ezservice.service.app.request.VideoCardCreateRequest;
 import id.ezclouds.biz.ezservice.service.request.web.BizWebUpdateItemRequest;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.service.AppSubOrganizationService;
+import id.ezclouds.common.facade.area.CoreAreaService;
 import id.ezclouds.common.facade.config.CoreConfigService;
 import id.ezclouds.common.facade.integration.EzConnectService;
+import id.ezclouds.common.model.area.CoreArea;
+import id.ezclouds.common.model.area.CoreAreaLevel;
 import id.ezclouds.common.model.config.CoreConfig;
+import id.ezclouds.common.model.config.CoreConfigType;
+import id.ezclouds.common.model.config.CoreOrgConfigType;
 import id.ezclouds.common.model.constant.OrgConstant;
 import id.ezclouds.common.model.integration.WhatsappLog;
 import id.ezclouds.common.model.integration.WhatsappLogRequest;
 import id.ezclouds.common.model.integration.WhatsappResendRequest;
 import id.ezclouds.common.model.integration.EzConnectResult;
+import id.ezclouds.common.model.util.CoreAreaUtil;
 import id.ezclouds.common.util.facade.BeanFacadeUtil;
 import id.ezclouds.core.shared.model.LegacyCoreArea;
 import id.ezclouds.common.model.result.BizPageInfo;
@@ -74,9 +80,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -142,6 +146,9 @@ public class BizAdminInnerService {
 
     @Autowired
     private LegacyCoreAreaService legacyCoreAreaService;
+
+    @Autowired
+    private CoreAreaService coreAreaService;
 
     public void createAppBuildPackage(String orgId, String platformId, int versionCode, String versionName) throws EzErrorException {
         BizAppBuildPackage buildPackage = new BizAppBuildPackage();
@@ -417,10 +424,29 @@ public class BizAdminInnerService {
     }
 
     public BizMemberRequiredData getMemberRequiredData(String orgId) {
+        Map<CoreConfigType, CoreConfig> configMap = coreConfigService
+                .getOrgConfigMap(orgId, CoreOrgConfigType.CORE_AREA_ROOT_LEVEL, CoreOrgConfigType.CORE_AREA_ROOT_IDS, CoreOrgConfigType.CORE_AREA_ROOT_NAMES);
+        String areaRootLevel = configMap.get(CoreOrgConfigType.CORE_AREA_ROOT_LEVEL).getConfigValue();
+        String areaRootIds = configMap.get(CoreOrgConfigType.CORE_AREA_ROOT_IDS).getConfigValue();
+        String areaRootNames = configMap.get(CoreOrgConfigType.CORE_AREA_ROOT_NAMES).getConfigValue();
+
+        CoreAreaLevel areaLevel = CoreAreaLevel.getByCode(areaRootLevel);
+        List<String> rootIds = Arrays.asList(areaRootIds.split(","));
+        List<String> rootNames = Arrays.asList(areaRootNames.split(","));
+        List<CoreArea> rootAreas = new ArrayList<>();
+
+        for (int i = 0; i < rootIds.size(); i++) {
+            CoreArea areaRoot = CoreAreaUtil.buildCoreArea(areaLevel, rootIds.get(i), rootNames.get(i));
+            rootAreas.add(areaRoot);
+        }
+
         BizMemberRequiredData data = new BizMemberRequiredData();
-        data.setAdminMembers(getOrgAdminMembers(orgId));
         data.setBizSubOrganizations(
                 appSubOrganizationService.getSubOrganizationByOrgId(orgId)
+        );
+        data.setWorkingAreaLevel(areaRootLevel);
+        data.setWorkingArea(
+                coreAreaService.getParentAreaRecursive(rootAreas)
         );
         return data;
     }

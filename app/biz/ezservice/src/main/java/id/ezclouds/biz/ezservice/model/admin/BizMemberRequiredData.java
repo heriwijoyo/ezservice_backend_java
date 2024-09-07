@@ -4,8 +4,8 @@
  */
 package id.ezclouds.biz.ezservice.model.admin;
 
-import id.ezclouds.biz.ezservice.model.member.BizMember;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
+import id.ezclouds.common.model.area.CoreArea;
 
 import java.util.List;
 
@@ -15,16 +15,11 @@ import java.util.List;
  */
 public class BizMemberRequiredData {
 
-    private List<BizMember> adminMembers;
     private List<BizSubOrganization> bizSubOrganizations;
 
-    public List<BizMember> getAdminMembers() {
-        return adminMembers;
-    }
+    private String workingAreaLevel;
 
-    public void setAdminMembers(List<BizMember> adminMembers) {
-        this.adminMembers = adminMembers;
-    }
+    private List<CoreArea> workingArea;
 
     public List<BizSubOrganization> getBizSubOrganizations() {
         return bizSubOrganizations;
@@ -32,5 +27,21 @@ public class BizMemberRequiredData {
 
     public void setBizSubOrganizations(List<BizSubOrganization> bizSubOrganizations) {
         this.bizSubOrganizations = bizSubOrganizations;
+    }
+
+    public String getWorkingAreaLevel() {
+        return workingAreaLevel;
+    }
+
+    public void setWorkingAreaLevel(String workingAreaLevel) {
+        this.workingAreaLevel = workingAreaLevel;
+    }
+
+    public List<CoreArea> getWorkingArea() {
+        return workingArea;
+    }
+
+    public void setWorkingArea(List<CoreArea> workingArea) {
+        this.workingArea = workingArea;
     }
 }

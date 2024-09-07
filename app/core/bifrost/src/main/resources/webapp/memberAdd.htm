@@ -38,6 +38,10 @@
                                         <input type="checkbox" id="voteGuardian" value="OP_VOTE_GUARDIAN">
                                         <label for="voteGuardian"> JAGA SUARA</label>
                                     </div>
+                                    <div class="roles form-line">
+                                        <input type="checkbox" id="clientAdmin" value="OP_CLIENT_ADMIN">
+                                        <label for="voteGuardian"> ADMIN KLIEN</label>
+                                    </div>
                                 </div>
                             </div>
 
@@ -116,6 +120,20 @@
                                 <div class="form-line">
                                     <div class="font-12">No KTP</div>
                                     <input type="text" class="form-control" id="idCardNumber" placeholder="No KTP">
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Province</div>
+                                    <select class="form-control show-tick" id="provinceId">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Regency</div>
+                                    <select class="form-control show-tick" id="regencyId">
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group col-sm-12">
@@ -209,8 +227,6 @@
             EzDashboardBizService.showLoader();
             let orgId = EzWebAppClient.getUrlParameter('id');
             EzWebAppClient.callApiService(EzAdminUrl.REGISTER_MEMBER, {
-                orgId : orgId,
-                referrerId: $('#referrer_id').val(),
                 subOrgId: $('#sub_org_id').val(),
                 roles: EzDashboardBizService.parseRoles(),
                 name: $('#name').val(),
@@ -259,11 +275,6 @@
             return roles.join(',');
         },
         parseData: function(data) {
-            var memberOption = '';
-            for(i = 0; i < data.adminMembers.length; i++) {
-                memberOption += '<option value="'+ data.adminMembers[i].memberId +'">'+ data.adminMembers[i].name +'</option>';
-            }
-            $('#referrer_id').html(memberOption);
             var subOrgOption = '';
             for(i = 0; i < data.bizSubOrganizations.length; i++) {
                 subOrgOption += '<option value="'+ data.bizSubOrganizations[i].subOrgId +'">'+ data.bizSubOrganizations[i].name +'</option>';
@@ -315,7 +326,6 @@
         $('#btnSubmit').click(function(){
             EzDashboardBizService.submitMember();
         });
-
     });
 
 </script>
