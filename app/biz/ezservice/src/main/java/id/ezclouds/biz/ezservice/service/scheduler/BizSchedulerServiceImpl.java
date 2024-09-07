@@ -100,6 +100,15 @@ public class BizSchedulerServiceImpl implements BizSchedulerService {
                         bizGroupProcessor.processInSequence(ProcessorConstant.ORG_ID_RJL);
                         break;
 
+                    case AI_AUTO_REPORT:
+                        bizGroupProcessor = new BizGroupProcessor();
+                        bizGroupProcessor.addProcessor(bizSyncMemberUnionProcessor);
+                        bizGroupProcessor.addProcessor(bizGenerateAreaReportProcessor);
+                        bizGroupProcessor.addProcessor(bizGenerateSubOrgReportProcessor);
+                        bizGroupProcessor.addProcessor(bizGenerateTimeSeriesReportProcessor);
+                        bizGroupProcessor.processInSequence("AI00");
+                        break;
+
                     case RJL_DAILY_SEND_SUB_ORG_REPORT:
                         bizSubOrgDailyMonitorProcessor.process(ProcessorConstant.ORG_ID_RJL);
                         break;

@@ -244,10 +244,13 @@ public class WebAppController {
                     .adminAuthWebSessionId(sessionId);
             AssertUtil.isTrue(orgCode.equals(session.getOrgCode()), EzErrorCode.SESSION_INVALID);
 
+            String jsReloadScript = "207".equals(orgCode) ? "setTimeout(function(){window.location.reload(1);},10000);" : "";
+
             String htmlLayout = getReportPublicContent(WebAppPage.REPORT_PUBLIC_LIMITED.getAssetFile());
             String htmlContent = htmlLayout
-                    .replace("HTML_TITLE_PAGE", "MSA Report Center")
-                    .replace("INNER_PAGE_TITLE", "MSA Report Center");
+                    .replace("HTML_TITLE_PAGE", "Report Center")
+                    .replace("INNER_PAGE_TITLE", "Report Center")
+                    .replace("JS_RELOAD_SCRIPT", jsReloadScript);
 
             BizMainReport mainReport = BeanFacadeUtil
                     .getBean(BizReportService.class)
