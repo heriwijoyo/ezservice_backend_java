@@ -825,6 +825,8 @@ public class WebApiAdminController {
             @RequestParam(name = "religion", required = false) String religion,
             @RequestParam(name = "ethnic", required = false) String ethnic,
             @RequestParam(name = "idCardNumber", required = false) String idCardNumber,
+            @RequestParam(name = "provinceId", required = false) String provinceId,
+            @RequestParam(name = "regencyId", required = false) String regencyId,
             @RequestParam(name = "districtId", required = false) String districtId,
             @RequestParam(name = "villageId", required = false) String villageId,
             @RequestParam(name = "rukunWarga", required = false) String rukunWarga,
@@ -847,6 +849,8 @@ public class WebApiAdminController {
                 bizMember.setReligion(religion);
                 bizMember.setEthnic(ethnic);
                 bizMember.setIdCardNumber(idCardNumber);
+                bizMember.setProvinceId(provinceId);
+                bizMember.setRegencyId(regencyId);
                 bizMember.setDistrictId(districtId);
                 bizMember.setVillageId(villageId);
                 bizMember.setRukunWarga(rukunWarga);
