@@ -4,12 +4,10 @@
  */
 package id.ezclouds.biz.ezservice.service.app;
 
-import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.shared.model.CoreOrganization;
 import id.ezclouds.core.shared.service.CoreOrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +22,6 @@ public class BizOrganizationService {
     @Autowired
     private CoreOrganizationService coreOrganizationService;
 
-    @Cacheable(BizCacheKey.ORGANIZATION_ALL)
     public List<CoreOrganization> getActiveOrganizations() {
         return coreOrganizationService.getActiveOrganizations();
     }

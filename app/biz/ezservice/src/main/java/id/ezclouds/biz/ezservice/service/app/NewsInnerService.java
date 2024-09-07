@@ -26,7 +26,6 @@ import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.context.EzAppContextHolder;
 import id.ezclouds.core.shared.model.CoreOrganization;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -95,7 +94,6 @@ public class NewsInnerService {
                 .collect(Collectors.toList());
     }
 
-    @Cacheable(BizCacheKey.NEWS_HIGHLIGHT)
     public List<BizSimpleNews> getHighlightNewsAllOrg() {
         List<CoreOrganization> organizations = bizOrganizationService
                 .getActiveOrganizations();

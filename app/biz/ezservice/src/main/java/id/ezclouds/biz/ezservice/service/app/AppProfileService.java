@@ -7,7 +7,6 @@ package id.ezclouds.biz.ezservice.service.app;
 import id.ezclouds.biz.ezservice.service.app.dataobject.AppProfileDO;
 import id.ezclouds.biz.ezservice.service.app.repo.AppProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -36,7 +35,6 @@ public class AppProfileService {
         return appProfile;
     }
 
-    @Cacheable("appProfile")
     public List<AppProfileDO> getAllAppProfile() {
         return appProfileRepository.findAll();
     }

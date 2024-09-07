@@ -35,7 +35,6 @@ import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
 import id.ezclouds.core.auth.result.CoreAuthResult;
 import id.ezclouds.core.auth.service.inner.AuthInnerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -470,7 +469,6 @@ public class CoreAuthService {
         authInnerService.adminLogoutSession(sessionId);
     }
 
-    @Cacheable("coreAuthAppClient")
     public List<CoreAuthAppClient> getActiveAppClients() {
         return ezAuthAppClientRepository
                 .findActiveAppClients()

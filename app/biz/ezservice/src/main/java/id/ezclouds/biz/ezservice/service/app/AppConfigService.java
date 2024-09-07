@@ -10,7 +10,6 @@ import id.ezclouds.biz.ezservice.constant.AppConstant;
 import id.ezclouds.biz.ezservice.constant.BizConstant;
 import id.ezclouds.biz.ezservice.model.AppConfig;
 import id.ezclouds.biz.ezservice.service.app.model.AppBuildType;
-import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.biz.ezservice.service.app.model.AppMessageTemplate;
 import id.ezclouds.biz.ezservice.service.app.model.BizAppBuildPackage;
 import id.ezclouds.biz.ezservice.service.app.model.BizAppConfig;
@@ -23,7 +22,6 @@ import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.context.EzAppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -194,12 +192,10 @@ public class AppConfigService {
         appConfigRepository.saveAndFlush(configDO);
     }
 
-    @Cacheable(value = BizCacheKey.APP_CONFIG_ALL)
     public List<AppConfigDO> getAppConfigAllActive() {
         return appConfigRepository.findAllActive();
     }
 
-    @Cacheable(value = BizCacheKey.APP_MESSAGE_TEMPLATE)
     public List<AppMessageTemplate> getMessageTemplates() {
         return appCommonMessageTemplateRepository
                 .findAll()

@@ -6,13 +6,11 @@ package id.ezclouds.biz.ezservice.service.app;
 
 import id.ezclouds.biz.ezservice.converter.BizModelConverter;
 import id.ezclouds.biz.ezservice.model.profile.CandidateProfileItem;
-import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.biz.ezservice.service.app.dataobject.CandidateProfileItemDO;
 import id.ezclouds.biz.ezservice.service.app.repo.CandidateProfileItemRepository;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -29,7 +27,6 @@ public class CandidateProfileItemService {
     @Autowired
     private CandidateProfileItemRepository candidateProfileItemRepository;
 
-    @Cacheable(value = BizCacheKey.CANDIDATE_PROFILE)
     public List<CandidateProfileItem> getCandidateProfileItems() {
         return candidateProfileItemRepository
                 .findAll()

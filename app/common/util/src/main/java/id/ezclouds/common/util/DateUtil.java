@@ -4,9 +4,6 @@
  */
 package id.ezclouds.common.util;
 
-import org.springframework.cache.annotation.Cacheable;
-
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;

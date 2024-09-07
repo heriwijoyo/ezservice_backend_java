@@ -8,12 +8,10 @@ import id.ezclouds.biz.ezservice.service.app.dataobject.AppBuildPackageDO;
 import id.ezclouds.biz.ezservice.service.app.model.AppBuildType;
 import id.ezclouds.biz.ezservice.service.app.model.BizAppBuildPackage;
 import id.ezclouds.biz.ezservice.service.app.repo.AppBuildPackageRepository;
-import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.core.shared.model.CoreOrganization;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -38,7 +36,6 @@ public class AppBuildPackageService {
     @Autowired
     private AppBuildPackageRepository appBuildPackageRepository;
 
-    @Cacheable(BizCacheKey.APP_BUILD_PACKAGE_ALL)
     public List<BizAppBuildPackage> getAllAppBuildPackage() {
         List<String> platforms = Collections.singletonList(AppBuildType.ANDROID.getCode());
 

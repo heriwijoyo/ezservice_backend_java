@@ -7,7 +7,6 @@ package id.ezclouds.biz.ezservice.subbiz.arahindonesia.service;
 import id.ezclouds.biz.ezservice.converter.BizModelConverter;
 import id.ezclouds.biz.ezservice.service.app.dataobject.BizMemberDO;
 import id.ezclouds.biz.ezservice.service.app.repo.BizMemberRepository;
-import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.biz.ezservice.service.inner.service.BizPageQueryStrategy;
 import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
 import id.ezclouds.common.model.result.BizPageInfo;
@@ -21,7 +20,6 @@ import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.core.shared.service.CoreSequenceService;
 import id.ezclouds.core.shared.util.PageResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -89,7 +87,6 @@ public class AppSubOrganizationService {
         );
     }
 
-    @Cacheable(BizCacheKey.SUB_ORGANIZATION_ALL)
     public List<BizSubOrganization> getAllSubOrganization() {
         return appSubOrganizationRepository
                 .findAll()

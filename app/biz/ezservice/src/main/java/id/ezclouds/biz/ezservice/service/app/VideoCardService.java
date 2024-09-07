@@ -6,7 +6,6 @@ package id.ezclouds.biz.ezservice.service.app;
 
 import id.ezclouds.biz.ezservice.converter.BizModelConverter;
 import id.ezclouds.biz.ezservice.model.VideoCard;
-import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.biz.ezservice.service.app.request.VideoCardCreateRequest;
 import id.ezclouds.biz.ezservice.service.app.dataobject.VideoCardDO;
 import id.ezclouds.biz.ezservice.service.app.repo.VideoCardRepository;
@@ -17,7 +16,6 @@ import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.core.shared.model.CommonModelSwitch;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -36,7 +34,6 @@ public class VideoCardService {
     @Autowired
     private VideoCardRepository videoCardRepository;
 
-    @Cacheable(value = BizCacheKey.VIDEO_CARD_GALLERY_ALL)
     public List<VideoCard> getAllVideoCards() {
         return videoCardRepository
                 .findAllActive()

@@ -24,7 +24,6 @@ import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -164,7 +163,6 @@ public class AppSurveyDataService {
         return getTopSurveyAllOrg().get(surveyId);
     }
 
-    @Cacheable(value = "topBizSurveyData")
     public Map<String, BizSurveyForm> getTopSurveyAllOrg() {
         Map<String, BizSurveyForm> bizSurveyFormMap = new HashMap<>();
 

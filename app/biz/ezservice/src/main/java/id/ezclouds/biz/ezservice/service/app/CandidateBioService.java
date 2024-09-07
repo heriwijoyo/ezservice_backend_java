@@ -7,13 +7,11 @@ package id.ezclouds.biz.ezservice.service.app;
 import id.ezclouds.biz.ezservice.converter.BizModelConverter;
 import id.ezclouds.biz.ezservice.model.profile.CandidateBio;
 import id.ezclouds.biz.ezservice.model.profile.WebCandidateBio;
-import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.biz.ezservice.service.app.dataobject.CandidateBioDO;
 import id.ezclouds.biz.ezservice.service.app.repo.CandidateBioRepository;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -30,7 +28,6 @@ public class CandidateBioService {
     @Autowired
     private CandidateBioRepository candidateBioRepository;
 
-    @Cacheable(value = BizCacheKey.CANDIDATE_BIOGRAPHY)
     public List<CandidateBio> getActiveCandidateBios() {
         return candidateBioRepository
                 .getActiveCandidateBios()

@@ -17,7 +17,6 @@ import id.ezclouds.core.shared.repo.EzCoreAdminDashboardRepository;
 import id.ezclouds.core.shared.repo.dataobject.EzCoreAdminBOMenuDO;
 import id.ezclouds.core.shared.repo.dataobject.EzCoreAdminBOPermissionDO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -65,7 +64,6 @@ public class CoreAdminService {
                 .collect(Collectors.toList());
     }
 
-    @Cacheable(value = "coreAdminBOPermission")
     public List<CoreAdminBOPermission> getAdminBOPermissionAllActive() {
         return ezCoreAdminBOPermissionRepository
                 .findAllActive()
@@ -74,7 +72,6 @@ public class CoreAdminService {
                 .collect(Collectors.toList());
     }
 
-    @Cacheable(value = "coreAdminBOMenu")
     public List<CoreAdminBOMenu> getAdminBoMenuAllActive() {
         return ezCoreAdminBOMenuRepository
                 .findAllActive()

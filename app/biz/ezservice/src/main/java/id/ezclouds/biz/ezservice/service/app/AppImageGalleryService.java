@@ -4,7 +4,6 @@
  */
 package id.ezclouds.biz.ezservice.service.app;
 
-import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.biz.ezservice.service.app.dataobject.AppImageGalleryDO;
 import id.ezclouds.biz.ezservice.service.app.model.AppImageGallery;
 import id.ezclouds.biz.ezservice.service.app.model.WebImageGallery;
@@ -17,7 +16,6 @@ import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -69,7 +67,6 @@ public class AppImageGalleryService {
                 .collect(Collectors.toList());
     }
 
-    @Cacheable(value = BizCacheKey.APP_IMAGE_GALLERY_ALL)
     public List<AppImageGallery> getImageGalleryAllActive() {
         return appImageGalleryRepository
                 .findAllActive()
