@@ -10,6 +10,7 @@ import id.ezclouds.biz.ezservice.service.core.dataobject.BizCustomQueryGroupDO;
 import id.ezclouds.biz.ezservice.service.core.dataobject.BizReportByAreaDO;
 import id.ezclouds.biz.ezservice.service.core.repo.BizMemberUnionRepository;
 import id.ezclouds.biz.ezservice.service.processor.inner.BizAreaReportInnerProcessor;
+import id.ezclouds.common.model.constant.OrgConstant;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
@@ -68,7 +69,9 @@ public class BizGenerateAreaReportProcessor extends BizAsyncProcessor {
 
         int totalTps = 0;
 
-        List<EzCoreAppDistrictDO> districts = coreAppDistrictRepository.findByRegencyId("1802");
+        //TODO: update hardcoded ID
+        String regencyId = OrgConstant.ORG_ID_RJL.equals(orgId) ? "1802" : "3172";
+        List<EzCoreAppDistrictDO> districts = coreAppDistrictRepository.findByRegencyId(regencyId);
         logData.add("DISTRICT_TOTAL="+ districts.size());
         int villageTotal = 0;
         for (EzCoreAppDistrictDO districtDO : districts) {

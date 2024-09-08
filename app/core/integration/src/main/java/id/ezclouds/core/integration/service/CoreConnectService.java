@@ -63,15 +63,19 @@ public class CoreConnectService implements EzConnectService {
                         orgId,
                         CoreOrgConfigType.WATZAP_SEND_ENABLE,
                         CoreOrgConfigType.WATZAP_API_KEY,
-                        CoreOrgConfigType.WATZAP_NUMBER_KEY,
-                        CoreCommonConfigType.WATZAP_API_URI
+                        CoreOrgConfigType.WATZAP_NUMBER_KEY
                 );
+
+                configMap.putAll(
+                        coreConfigService.getOrgConfigMap(CoreCommonConfigType.WATZAP_API_URI)
+                );
+
                 boolean isWatzapEnable = configMap.get(CoreOrgConfigType.WATZAP_SEND_ENABLE).getBoolValue();
 
                 if (isWatzapEnable) {
                     WatzapSendRequest sendRequest = new WatzapSendRequest();
                     sendRequest.setApi_key(configMap.get(CoreOrgConfigType.WATZAP_API_KEY).getConfigValue());
-                    sendRequest.setNumber_key(configMap.get(CoreOrgConfigType.WATZAP_NUMBER_KEY).getConfigKey());
+                    sendRequest.setNumber_key(configMap.get(CoreOrgConfigType.WATZAP_NUMBER_KEY).getConfigValue());
                     sendRequest.setApiUri(configMap.get(CoreCommonConfigType.WATZAP_API_URI).getConfigValue());
                     sendRequest.setPhone_no(request.getPhoneNumber());
                     sendRequest.setMessage(request.getMessage());

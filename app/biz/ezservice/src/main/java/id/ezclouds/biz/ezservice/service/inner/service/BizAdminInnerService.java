@@ -424,8 +424,13 @@ public class BizAdminInnerService {
     }
 
     public BizMemberRequiredData getMemberRequiredData(String orgId) {
-        Map<CoreConfigType, CoreConfig> configMap = coreConfigService
-                .getOrgConfigMap(orgId, CoreOrgConfigType.CORE_AREA_ROOT_LEVEL, CoreOrgConfigType.CORE_AREA_ROOT_IDS, CoreOrgConfigType.CORE_AREA_ROOT_NAMES);
+        Map<CoreConfigType, CoreConfig> configMap = coreConfigService.getOrgConfigMap(
+                orgId,
+                CoreOrgConfigType.CORE_AREA_ROOT_LEVEL,
+                CoreOrgConfigType.CORE_AREA_ROOT_IDS,
+                CoreOrgConfigType.CORE_AREA_ROOT_NAMES
+        );
+
         String areaRootLevel = configMap.get(CoreOrgConfigType.CORE_AREA_ROOT_LEVEL).getConfigValue();
         String areaRootIds = configMap.get(CoreOrgConfigType.CORE_AREA_ROOT_IDS).getConfigValue();
         String areaRootNames = configMap.get(CoreOrgConfigType.CORE_AREA_ROOT_NAMES).getConfigValue();

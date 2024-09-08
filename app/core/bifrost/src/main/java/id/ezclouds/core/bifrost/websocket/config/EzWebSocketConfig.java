@@ -19,6 +19,8 @@ public class EzWebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-
+        registry
+                .addHandler(new EzWebSocketReportHandler(), "/report")
+                .setAllowedOrigins("*");
     }
 }

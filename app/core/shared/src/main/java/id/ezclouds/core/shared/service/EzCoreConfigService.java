@@ -60,6 +60,15 @@ public class EzCoreConfigService implements CoreConfigService {
     }
 
     @Override
+    public Map<CoreConfigType, CoreConfig> getOrgConfigMap(CoreConfigType... configTypes) {
+        Map<CoreConfigType, CoreConfig> configMap = new HashMap<>();
+        for (CoreConfigType configType : configTypes) {
+            configMap.put(configType, coreConfigDAO.getConfig(configType));
+        }
+        return configMap;
+    }
+
+    @Override
     public Map<String, String> getOrgRawConfigMap(String orgId) {
         List<CoreConfig> allConfigs = coreConfigDAO.getAllConfig(orgId);
 

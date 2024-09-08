@@ -9,7 +9,9 @@ import id.ezclouds.common.model.annotation.EzDAOLogger;
 import id.ezclouds.common.model.config.CoreConfig;
 import id.ezclouds.common.model.config.CoreConfigType;
 import id.ezclouds.common.util.StringUtil;
+import id.ezclouds.core.dal.config.converter.EzCoreConfigConverter;
 import id.ezclouds.core.dal.config.converter.EzCoreOrgConfigConverter;
+import id.ezclouds.core.dal.config.repo.EzCoreConfigRepository;
 import id.ezclouds.core.dal.config.repo.EzCoreOrgConfigRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,6 +28,9 @@ public class EzCoreConfigDAO implements CoreConfigDAO {
 
     @Autowired
     private EzCoreOrgConfigRepository ezCoreOrgConfigRepository;
+
+    @Autowired
+    private EzCoreConfigRepository ezCoreConfigRepository;
 
     @Override
     public List<CoreConfig> getAllConfig(String orgId) {
@@ -48,7 +53,10 @@ public class EzCoreConfigDAO implements CoreConfigDAO {
     @EzDAOLogger
     @Override
     public CoreConfig getConfig(CoreConfigType configType) {
-        return null;
+        return new EzCoreConfigConverter().convertQuery(
+                ezCoreConfigRepository
+                        .findByConfigKey(configType.getCode())
+        );
     }
 
     @EzDAOLogger

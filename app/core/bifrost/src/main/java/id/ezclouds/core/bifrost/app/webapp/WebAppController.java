@@ -244,7 +244,7 @@ public class WebAppController {
                     .adminAuthWebSessionId(sessionId);
             AssertUtil.isTrue(orgCode.equals(session.getOrgCode()), EzErrorCode.SESSION_INVALID);
 
-            String jsReloadScript = "207".equals(orgCode) ? "setTimeout(function(){window.location.reload(1);},10000);" : "";
+            String jsReloadScript = "207".equals(orgCode) ? "setTimeout(function(){window.location.reload(1);},60000);" : "";
 
             String htmlLayout = getReportPublicContent(WebAppPage.REPORT_PUBLIC_LIMITED.getAssetFile());
             String htmlContent = htmlLayout
