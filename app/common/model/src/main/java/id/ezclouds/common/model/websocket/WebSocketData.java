@@ -4,6 +4,9 @@
  */
 package id.ezclouds.common.model.websocket;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: WebSocketData.java, v 0.1 2024‐09‐08 9:26 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -11,7 +14,7 @@ package id.ezclouds.common.model.websocket;
 public class WebSocketData {
 
     private String event;
-    private Object data;
+    private Object payload;
 
     public String getEvent() {
         return event;
@@ -21,11 +24,16 @@ public class WebSocketData {
         this.event = event;
     }
 
-    public Object getData() {
-        return data;
+    public Object getPayload() {
+        return payload;
     }
 
-    public void setData(Object data) {
-        this.data = data;
+    public void setPayload(Object payload) {
+        this.payload = payload;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

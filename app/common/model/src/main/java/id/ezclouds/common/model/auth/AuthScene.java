@@ -6,16 +6,16 @@ package id.ezclouds.common.model.auth;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: AuthSessionScene.java, v 0.1 2024‐08‐24 11:48 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: AuthScene.java, v 0.1 2024‐08‐24 11:48 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public enum AuthSessionScene {
+public enum AuthScene {
 
     WEB_PUBLIC_SESSION("WEB_PUBLIC_SESSION"),
 
     ;
     private final String code;
 
-    AuthSessionScene(String code) {
+    AuthScene(String code) {
         this.code = code;
     }
 
@@ -23,8 +23,8 @@ public enum AuthSessionScene {
         return code;
     }
 
-    public static AuthSessionScene getByCode(String code) {
-        for (AuthSessionScene scene : values()) {
+    public static AuthScene getByCode(String code) {
+        for (AuthScene scene : values()) {
             if (scene.code.equals(code)) {
                 return scene;
             }

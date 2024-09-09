@@ -7,10 +7,12 @@ package id.ezclouds.core.auth.service;
 import id.ezclouds.common.facade.auth.AuthAdminService;
 import id.ezclouds.common.model.auth.AuthAdminSession;
 import id.ezclouds.common.model.auth.AuthRole;
-import id.ezclouds.common.model.auth.AuthSessionScene;
+import id.ezclouds.common.model.auth.AuthScene;
+import id.ezclouds.common.model.auth.AuthSession;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
+import id.ezclouds.core.auth.converter.CoreAuthModelConverter;
 import id.ezclouds.core.auth.dataobject.EzAuthAdminCommonSessionDO;
 import id.ezclouds.core.auth.service.inner.AuthInnerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,12 +60,14 @@ public class CoreAuthAdminService implements AuthAdminService {
     }
 
     @Override
-    public void authorizeWebPublicSession(String sessionId) throws EzErrorException {
+    public AuthSession authorizeWebPublicSession(String sessionId) throws EzErrorException {
         AssertUtil.notBlank(sessionId, EzErrorCode.UNAUTHORIZED);
         EzAuthAdminCommonSessionDO sessionDO = authInnerService.authGetAndTouch(sessionId);
         AssertUtil.notNull(sessionDO, EzErrorCode.UNAUTHORIZED);
         AssertUtil.isTrue(sessionDO.getStatus() == 1, EzErrorCode.UNAUTHORIZED);
-        AssertUtil.equals(AuthSessionScene.WEB_PUBLIC_SESSION.getCode(), sessionDO.getScene(), EzErrorCode.UNAUTHORIZED);
+        AssertUtil.equals(AuthScene.WEB_PUBLIC_SESSION.getCode(), sessionDO.getScene(), EzErrorCode.UNAUTHORIZED);
         AssertUtil.equals(AuthRole.PUBLIC_ACCESS.getCode(), sessionDO.getMemberRoles(), EzErrorCode.UNAUTHORIZED);
+
+        return CoreAuthModelConverter.convert(sessionDO);
     }
 }

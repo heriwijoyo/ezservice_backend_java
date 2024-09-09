@@ -4,11 +4,15 @@
  */
 package id.ezclouds.common.model.auth;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: AuthAdminSession.java, v 0.1 2024‐02‐10 4:25 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class AuthAdminSession {
+public class AuthAdminSession implements AuthSession {
 
     private String sessionId;
     private String sessionCode;
@@ -25,8 +29,32 @@ public class AuthAdminSession {
     private String expiryTime;
     private int status;
 
+    @Override
     public String getSessionId() {
         return sessionId;
+    }
+
+    @Override
+    public AuthScene getAuthScene() {
+        return AuthScene.getByCode(scene);
+    }
+
+    @Override
+    public String getOrgId() {
+        return orgId;
+    }
+
+    @Override
+    public String getOrgCode() {
+        return orgCode;
+    }
+
+    @Override
+    public List<AuthRole> getAuthRoles() {
+        return Arrays.asList(memberRoles.split(","))
+                .stream()
+                .map(role -> AuthRole.getByCode(role))
+                .collect(Collectors.toList());
     }
 
     public void setSessionId(String sessionId) {
@@ -57,16 +85,8 @@ public class AuthAdminSession {
         this.loginTime = loginTime;
     }
 
-    public String getOrgId() {
-        return orgId;
-    }
-
     public void setOrgId(String orgId) {
         this.orgId = orgId;
-    }
-
-    public String getOrgCode() {
-        return orgCode;
     }
 
     public void setOrgCode(String orgCode) {

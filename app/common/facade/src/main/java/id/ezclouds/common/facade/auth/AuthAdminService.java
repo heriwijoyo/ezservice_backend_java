@@ -6,6 +6,7 @@ package id.ezclouds.common.facade.auth;
 
 import id.ezclouds.common.model.auth.AuthAdminSession;
 import id.ezclouds.common.model.auth.AuthRole;
+import id.ezclouds.common.model.auth.AuthSession;
 import id.ezclouds.common.util.exception.EzErrorException;
 
 /**
@@ -18,5 +19,5 @@ public interface AuthAdminService {
 
     void authorizeSessionForRole(AuthAdminSession session, AuthRole role) throws EzErrorException;
 
-    void authorizeWebPublicSession(String sessionId) throws EzErrorException;
+    AuthSession authorizeWebPublicSession(String sessionId) throws EzErrorException;
 }
