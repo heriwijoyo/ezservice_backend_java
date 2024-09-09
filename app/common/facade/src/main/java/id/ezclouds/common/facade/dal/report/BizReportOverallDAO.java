@@ -14,9 +14,11 @@ import java.util.List;
  */
 public interface BizReportOverallDAO {
 
-    void store(BizReportOverall bizReportOverall);
     void reStore(BizReportOverall bizReportOverall);
     long deleteAll(String orgId);
 
     List<BizReportOverall> getAllReport(String orgId);
+
+    BizReportOverall getAndLock(String orgId, String reportKey);
+    void updateValue(String reportId, int count, String updatedTime);
 }

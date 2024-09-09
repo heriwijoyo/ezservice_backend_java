@@ -10,6 +10,7 @@ import id.ezclouds.common.model.report.BizReportOverall;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.core.dal.report.converter.BizReportConverter;
+import id.ezclouds.core.dal.report.converter.CoreReportOverallConverter;
 import id.ezclouds.core.dal.report.dataobject.CoreReportOverallDO;
 import id.ezclouds.core.dal.report.repo.CoreReportOverallRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,15 +31,8 @@ public class CoreReportOverallDAO implements BizReportOverallDAO {
 
     @EzDAOLogger
     @Override
-    public void store(BizReportOverall bizReportOverall) {
-        CoreReportOverallDO coreReportOverallDO = BizReportConverter.convert(bizReportOverall);
-        coreReportOverallRepository.saveAndFlush(coreReportOverallDO);
-    }
-
-    @EzDAOLogger
-    @Override
     public void reStore(BizReportOverall bizReportOverall) {
-        String currentTime = DateUtil.getCurrentFormattedDate();
+        String currentTime = DateUtil.getCurrentFormattedDateMillis();
         CoreReportOverallDO reportOverallDO = coreReportOverallRepository
                 .findByOrgIdAndKeyId(bizReportOverall.getOrgId(), bizReportOverall.getKeyId());
         if (reportOverallDO == null) {
@@ -46,8 +40,7 @@ public class CoreReportOverallDAO implements BizReportOverallDAO {
             reportOverallDO.setId(
                     HashUtil.createHash(
                             bizReportOverall.getOrgId(),
-                            bizReportOverall.getKeyId(),
-                            currentTime
+                            bizReportOverall.getKeyId()
                     )
             );
             reportOverallDO.setOrgId(bizReportOverall.getOrgId());
@@ -55,7 +48,7 @@ public class CoreReportOverallDAO implements BizReportOverallDAO {
         }
 
         reportOverallDO.setCount(bizReportOverall.getCount());
-        reportOverallDO.setCreatedTime(currentTime);
+        reportOverallDO.setUpdatedTime(currentTime);
         coreReportOverallRepository.saveAndFlush(reportOverallDO);
     }
 
@@ -73,5 +66,21 @@ public class CoreReportOverallDAO implements BizReportOverallDAO {
                 .stream()
                 .map(BizReportConverter::convert)
                 .collect(Collectors.toList());
+    }
+
+    @EzDAOLogger
+    @Override
+    public BizReportOverall getAndLock(String orgId, String reportKey) {
+        String reportId = HashUtil.createHash(orgId, reportKey);
+        return new CoreReportOverallConverter().convertQuery(
+                coreReportOverallRepository
+                        .findAndLockById(reportId)
+        );
+    }
+
+    @EzDAOLogger
+    @Override
+    public void updateValue(String reportId, int count, String updatedTime) {
+
     }
 }
