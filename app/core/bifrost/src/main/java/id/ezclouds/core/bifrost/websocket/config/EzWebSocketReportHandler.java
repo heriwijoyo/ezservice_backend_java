@@ -6,10 +6,14 @@ package id.ezclouds.core.bifrost.websocket.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.common.facade.auth.AuthAdminService;
+import id.ezclouds.common.facade.broker.BrokerDataEvent;
+import id.ezclouds.common.facade.broker.BrokerDataExchangeService;
 import id.ezclouds.common.model.auth.AuthSession;
+import id.ezclouds.common.model.broker.BrokerDataTopic;
 import id.ezclouds.common.model.websocket.WebSocketData;
 import id.ezclouds.common.model.websocket.WebSocketEvent;
 import id.ezclouds.common.util.StringUtil;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
@@ -25,15 +29,32 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version $Id: EzWebSocketReportHandler.java, v 0.1 2024‐08‐31 10:27 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class EzWebSocketReportHandler extends TextWebSocketHandler {
+public class EzWebSocketReportHandler extends TextWebSocketHandler implements InitializingBean, BrokerDataEvent {
 
     @Autowired
     private AuthAdminService authAdminService;
+
+    @Autowired
+    private BrokerDataExchangeService brokerDataExchangeService;
 
     private Map<String, WebSocketSession> sessionMap = new ConcurrentHashMap<>();
     private Map<String, SessionIdentity> identityMap = new ConcurrentHashMap<>();
 
     private ObjectMapper objectMapper = new ObjectMapper();
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        brokerDataExchangeService.subscribe(BrokerDataTopic.BIZ_REPORT_OVERALL, this);
+    }
+
+    @Override
+    public void onDataEvent(BrokerDataTopic topic, Object payload) {
+        if (topic == BrokerDataTopic.BIZ_REPORT_OVERALL) {
+            for (WebSocketSession session : sessionMap.values()) {
+                sessionSendMessage(session, WebSocketEvent.DATA_RESULT, payload);
+            }
+        }
+    }
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {

@@ -22,6 +22,8 @@ public enum BizProcessEvent implements EzAppEvent {
 
     MASTER_DATA_AREA_INIT("MASTER_DATA_AREA_INIT"),
 
+    BIZ_DEBUGGER("BIZ_DEBUGGER"),
+
     UNKNOWN("UNKNOWN"),
     ;
     private final String code;
