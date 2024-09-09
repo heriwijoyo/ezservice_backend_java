@@ -10,6 +10,7 @@ import id.ezclouds.common.model.auth.AuthSession;
 import id.ezclouds.common.model.websocket.WebSocketData;
 import id.ezclouds.common.model.websocket.WebSocketEvent;
 import id.ezclouds.common.util.StringUtil;
+import id.ezclouds.common.util.facade.BeanFacadeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -24,9 +25,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version $Id: EzWebSocketReportHandler.java, v 0.1 2024‐08‐31 10:27 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 public class EzWebSocketReportHandler extends TextWebSocketHandler {
-
-    @Autowired
-    private AuthAdminService authAdminService;
 
     private Map<String, WebSocketSession> sessionMap = new ConcurrentHashMap<>();
     private Map<String, SessionIdentity> identityMap = new ConcurrentHashMap<>();
@@ -78,7 +76,10 @@ public class EzWebSocketReportHandler extends TextWebSocketHandler {
         if (payload instanceof String) {
             String sessionId = (String) payload;
             try {
-                AuthSession authSession = authAdminService.authorizeWebPublicSession(sessionId);
+                AuthSession authSession = BeanFacadeUtil
+                        .getBean(AuthAdminService.class)
+                        .authorizeWebPublicSession(sessionId);
+
                 SessionIdentity identity = new SessionIdentity();
                 identity.setOrgId(authSession.getOrgId());
                 identity.setOrgCode(authSession.getOrgCode());
@@ -88,6 +89,7 @@ public class EzWebSocketReportHandler extends TextWebSocketHandler {
                 sessionSendMessage(session, WebSocketEvent.SESSION_AUTH_RESULT, "SUCCESS");
 
             } catch (Exception ignored) {
+                ignored.printStackTrace();
                 sessionSendMessage(session, WebSocketEvent.SESSION_AUTH_RESULT, "FAILED");
                 sessionClose(session);
             }

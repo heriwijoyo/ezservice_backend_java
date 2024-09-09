@@ -44,20 +44,14 @@ public final class WebPageControllerTemplate {
 
         } catch (Exception e) {
             if (e instanceof IOException) {
-                handler.getServletResponse().setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
                 result.setErrorCode(EzErrorCode.WEB_PAGE_ERROR);
             } else if (e instanceof EzErrorException) {
                 EzErrorException ezErrorException = (EzErrorException) e;
-                if (ezErrorException.getEzErrorCode() == EzErrorCode.WEB_BIZ_PAGE_UNAUTHORIZED) {
-                    handler.getServletResponse().setStatus(HttpStatus.UNAUTHORIZED.value());
-                } else {
-                    handler.getServletResponse().setStatus(HttpStatus.BAD_REQUEST.value());
-                }
                 result.setErrorCode(ezErrorException.getEzErrorCode());
             } else {
                 result.setErrorCode(EzErrorCode.SYSTEM_ERROR);
-                handler.getServletResponse().setStatus(HttpStatus.NOT_FOUND.value());
             }
+            handler.getServletResponse().setStatus(HttpStatus.NOT_FOUND.value());
 
         } finally {
             EzAppContext context = EzAppContextHolder.getContext();
