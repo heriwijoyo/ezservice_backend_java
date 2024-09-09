@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.bifrost.websocket.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
@@ -17,10 +18,13 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @EnableWebSocket
 public class EzWebSocketConfig implements WebSocketConfigurer {
 
+    @Autowired
+    private EzWebSocketReportHandler reportHandler;
+
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry
-                .addHandler(new EzWebSocketReportHandler(), "/report")
+                .addHandler(reportHandler, "/report")
                 .setAllowedOrigins("*");
     }
 }
