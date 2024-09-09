@@ -33,6 +33,8 @@ public class WebViewHTMLContentComposer {
                 return composeCommonTablesContent(orgId, pageId);
             case EDITABLE_COMMON_TABLE:
                 return composeEditableCommonTablesContent(orgId, contentParam);
+            case REPORT_REALTIME:
+                return contentParam;
             default:
                 return "";
         }

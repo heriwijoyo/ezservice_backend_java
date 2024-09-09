@@ -12,6 +12,7 @@ public enum  WebPageContentType {
 
     COMMON_TABLES("COMMON_TABLES", "pages/layout/commonTables.htm"),
     EDITABLE_COMMON_TABLE("EDITABLE_COMMON_TABLE", "pages/layout/editableCommonTable.htm"),
+    REPORT_REALTIME("REPORT_REALTIME", "pages/layout/reportRealtime.htm"),
     CUSTOM("CUSTOM", ""),
     ;
 

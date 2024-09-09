@@ -21,14 +21,15 @@ public class WebPageProcessor {
     @Autowired
     private WebViewHTMLContentComposer webViewHTMLContentComposer;
 
-    public String process(String orgId, String pageId, BizWebPageConfig pageConfig, String content) throws Exception {
+    public String process(String sessionId, String orgId, String pageId, BizWebPageConfig pageConfig, String content) throws Exception {
         WebPageContentType contentType = WebPageContentType.getByCode(pageConfig.getContentType());
         String htmlLayout = AssetUtil.parseAssetContent(contentType.getPageLayout());
         String htmlContent = webViewHTMLContentComposer.composeHTMLContent(orgId, pageId, contentType, content);
 
         String pageHTML = htmlLayout
                 .replace("PAGE_TITLE", pageConfig.getPageTitle())
-                .replace("PAGE_CONTENT", htmlContent);
+                .replace("PAGE_CONTENT", htmlContent)
+                .replace("PAGE_SESSION_ID", sessionId);
 
         return pageHTML;
     }
