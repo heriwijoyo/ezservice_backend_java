@@ -4,18 +4,14 @@
  */
 package id.ezclouds.core.process.debug;
 
-import id.ezclouds.common.facade.broker.BrokerDataExchangeService;
-import id.ezclouds.common.facade.integration.BizObjectMapperService;
-import id.ezclouds.common.model.broker.BrokerDataTopic;
-import id.ezclouds.common.model.report.BizReportOverallKey;
+import id.ezclouds.common.facade.biz.BizReportRealtimeService;
+import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.core.process.biz.BizAsyncProcessor;
 import id.ezclouds.core.process.model.BizProcessEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -25,10 +21,7 @@ import java.util.Map;
 public class BizProcessDebugger extends BizAsyncProcessor {
 
     @Autowired
-    private BrokerDataExchangeService brokerDataExchangeService;
-
-    @Autowired
-    private BizObjectMapperService bizObjectMapperService;
+    private BizReportRealtimeService bizReportRealtimeService;
 
     @Override
     protected int maxProcessTime() {
@@ -37,11 +30,17 @@ public class BizProcessDebugger extends BizAsyncProcessor {
 
     @Override
     protected boolean onProcess(Object request, List<String> logData) {
-        Map<String, String> data = new HashMap<>();
-        data.put(BizReportOverallKey.BG_REGENCY.getCode(), "74");
-        data.put(BizReportOverallKey.BG_DISTRICT.getCode(), "403");
 
-        brokerDataExchangeService.emitEvent(BrokerDataTopic.BIZ_REPORT_OVERALL, data);
+        System.out.println(DateUtil.getCurrentFormattedDateMillis());
+
+        for (int i = 0; i < 1; i++) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    bizReportRealtimeService.accumulateValue("RJL0", "DEBUG", 1);
+                }
+            }).start();
+        }
         return false;
     }
 

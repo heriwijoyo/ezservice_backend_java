@@ -27,6 +27,7 @@ public class CoreReportRealtimeService implements BizReportRealtimeService {
     @Transactional
     public void accumulateValue(String orgId, String reportKey, int value) {
         BizReportOverall report = bizReportOverallDAO.getAndLock(orgId, reportKey);
+
         int newValue = report.getCount() + value;
         bizReportOverallDAO.updateValue(report.getId(), newValue, DateUtil.getCurrentFormattedDateMillis());
     }

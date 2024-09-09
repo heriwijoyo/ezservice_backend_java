@@ -81,6 +81,7 @@ public class CoreReportOverallDAO implements BizReportOverallDAO {
     @EzDAOLogger
     @Override
     public void updateValue(String reportId, int count, String updatedTime) {
-
+        coreReportOverallRepository
+                .updateValue(reportId, count, updatedTime);
     }
 }
