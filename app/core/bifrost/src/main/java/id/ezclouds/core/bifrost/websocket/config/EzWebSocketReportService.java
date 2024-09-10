@@ -6,6 +6,7 @@ package id.ezclouds.core.bifrost.websocket.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.common.facade.auth.AuthAdminService;
+import id.ezclouds.common.facade.biz.BizReportRealtimeService;
 import id.ezclouds.common.facade.broker.BrokerDataEvent;
 import id.ezclouds.common.facade.broker.BrokerDataExchangeService;
 import id.ezclouds.common.model.auth.AuthSession;
@@ -26,10 +27,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: EzWebSocketReportHandler.java, v 0.1 2024‐08‐31 10:27 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: EzWebSocketReportService.java, v 0.1 2024‐08‐31 10:27 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class EzWebSocketReportHandler extends TextWebSocketHandler implements InitializingBean, BrokerDataEvent {
+public class EzWebSocketReportService extends TextWebSocketHandler implements InitializingBean, BrokerDataEvent {
 
     @Autowired
     private AuthAdminService authAdminService;
@@ -37,8 +38,13 @@ public class EzWebSocketReportHandler extends TextWebSocketHandler implements In
     @Autowired
     private BrokerDataExchangeService brokerDataExchangeService;
 
+    @Autowired
+    private BizReportRealtimeService bizReportRealtimeService;
+
+
     private Map<String, WebSocketSession> sessionMap = new ConcurrentHashMap<>();
     private Map<String, SessionIdentity> identityMap = new ConcurrentHashMap<>();
+    private Map<String, Map<String, Integer>> overallDataMap = new ConcurrentHashMap<>();
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -92,8 +98,17 @@ public class EzWebSocketReportHandler extends TextWebSocketHandler implements In
 
     private void performDataRequest(WebSocketSession session, Object payload) {
         SessionIdentity identity = identityMap.get(session.getId());
+
         if (sessionMap.get(session.getId()) != null && identity != null) {
-            sessionSendMessage(session, WebSocketEvent.DATA_RESULT, "");
+            String orgId = identity.getOrgId();
+
+            if (overallDataMap.get(orgId) == null || overallDataMap.get(orgId).isEmpty()) {
+                Map<String, Integer> reportAllValue = bizReportRealtimeService
+                        .getAllValues(identity.getOrgId());
+                overallDataMap.put(orgId, reportAllValue);
+            }
+
+            sessionSendMessage(session, WebSocketEvent.DATA_RESULT, overallDataMap.get(orgId));
         }
     }
 

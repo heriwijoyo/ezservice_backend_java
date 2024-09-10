@@ -31,7 +31,7 @@ public class EzDAOLogHandler {
         if (EzAppContextHolder.getContext() != null) {
             traceId = EzAppContextHolder.getContext().getTraceId();
         }
-        EzDAOProfiler.start(traceId, "RJL0", getInvokeTarget(joinPoint));
+        EzDAOProfiler.start(traceId, "ORG_ID", getInvokeTarget(joinPoint));
     }
 
     @AfterReturning(value = "@annotation(id.ezclouds.common.model.annotation.EzDAOLogger)", returning = "retValue")

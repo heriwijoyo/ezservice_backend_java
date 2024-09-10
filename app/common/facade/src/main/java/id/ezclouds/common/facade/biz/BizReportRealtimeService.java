@@ -4,6 +4,8 @@
  */
 package id.ezclouds.common.facade.biz;
 
+import java.util.Map;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizReportRealtimeService.java, v 0.1 2024‐09‐09 9:45 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -11,4 +13,6 @@ package id.ezclouds.common.facade.biz;
 public interface BizReportRealtimeService {
 
     void accumulateValue(String orgId, String reportKey, int addValue);
+
+    Map<String, Integer> getAllValues(String orgId);
 }

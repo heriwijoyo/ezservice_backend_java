@@ -54,12 +54,6 @@ public class CoreReportOverallDAO implements BizReportOverallDAO {
 
     @EzDAOLogger
     @Override
-    public long deleteAll(String orgId) {
-        return coreReportOverallRepository.deleteByOrgId(orgId);
-    }
-
-    @EzDAOLogger
-    @Override
     public List<BizReportOverall> getAllReport(String orgId) {
         return coreReportOverallRepository
                 .findByOrgId(orgId)

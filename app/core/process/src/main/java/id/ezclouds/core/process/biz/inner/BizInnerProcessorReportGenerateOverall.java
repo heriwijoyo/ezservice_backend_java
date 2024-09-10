@@ -6,8 +6,6 @@ package id.ezclouds.core.process.biz.inner;
 
 import id.ezclouds.common.facade.dal.report.BizReportOverallDAO;
 import id.ezclouds.common.model.report.BizReportOverall;
-import id.ezclouds.common.util.DateUtil;
-import id.ezclouds.common.util.HashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +20,6 @@ public class BizInnerProcessorReportGenerateOverall {
 
     @Autowired
     private BizReportOverallDAO bizReportOverallDAO;
-
-    @Transactional
-    public long deleteAllReport(String orgId) {
-        return bizReportOverallDAO.deleteAll(orgId);
-    }
 
     @Transactional
     public void storeReport(String orgId, String keyId, int count) {

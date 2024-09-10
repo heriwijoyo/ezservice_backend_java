@@ -31,7 +31,6 @@ public class BizInnerProcessMasterDataAreaInitialize {
     @Transactional
     public void init(String orgId, String scene, CoreArea coreArea) {
         BizMasterData bizMasterData = buildMasterData(orgId, scene, coreArea);
-        bizMasterData.setBizMasterId(HashUtil.createHash(bizMasterData.getOrgId(), bizMasterData.getScene(), bizMasterData.getDataId()));
 
         bizMasterDataDAO.storeOrUpdate(bizMasterData);
     }

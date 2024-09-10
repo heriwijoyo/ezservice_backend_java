@@ -40,6 +40,8 @@ public class EzCoreAreaService implements CoreAreaService {
     @Override
     public List<CoreArea> getChildArea(CoreArea parentArea) {
         switch (parentArea.getAreaLevel()) {
+            case PROVINCE:
+                return areaRegencyDAO.getByProvinceId(parentArea.getAreaId());
             case REGENCY:
                 return areaDistrictDAO.getByRegencyId(parentArea.getAreaId());
             case DISTRICT:

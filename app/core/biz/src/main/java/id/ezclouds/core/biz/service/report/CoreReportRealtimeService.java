@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -30,5 +32,14 @@ public class CoreReportRealtimeService implements BizReportRealtimeService {
 
         int newValue = report.getCount() + value;
         bizReportOverallDAO.updateValue(report.getId(), newValue, DateUtil.getCurrentFormattedDateMillis());
+    }
+
+    @Override
+    public Map<String, Integer> getAllValues(String orgId) {
+        Map<String, Integer> allValuesMap = new HashMap<>();
+        for (BizReportOverall reportOverall : bizReportOverallDAO.getAllReport(orgId)) {
+            allValuesMap.put(reportOverall.getKeyId(), reportOverall.getCount());
+        }
+        return allValuesMap;
     }
 }

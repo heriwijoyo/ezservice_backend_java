@@ -19,12 +19,12 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 public class EzWebSocketConfig implements WebSocketConfigurer {
 
     @Autowired
-    private EzWebSocketReportHandler reportHandler;
+    private EzWebSocketReportService reportService;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry
-                .addHandler(reportHandler, "/report")
+                .addHandler(reportService, "/report")
                 .setAllowedOrigins("*");
     }
 }

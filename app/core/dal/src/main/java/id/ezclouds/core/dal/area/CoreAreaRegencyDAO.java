@@ -12,6 +12,9 @@ import id.ezclouds.core.dal.area.repo.EzRegencyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: CoreAreaRegencyDAO.java, v 0.1 2024‐09‐07 1:54 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -30,5 +33,16 @@ public class CoreAreaRegencyDAO implements AreaRegencyDAO {
                         .findById(areaId)
                         .orElse(null)
         );
+    }
+
+    @EzDAOLogger
+    @Override
+    public List<CoreArea> getByProvinceId(String provinceId) {
+        EzRegencyQueryConverter converter = new EzRegencyQueryConverter();
+        return ezRegencyRepository
+                .findByProvinceId(provinceId)
+                .stream()
+                .map(converter::convert)
+                .collect(Collectors.toList());
     }
 }

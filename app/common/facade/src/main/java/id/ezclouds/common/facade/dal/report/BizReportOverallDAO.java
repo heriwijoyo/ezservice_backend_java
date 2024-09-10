@@ -15,7 +15,6 @@ import java.util.List;
 public interface BizReportOverallDAO {
 
     void reStore(BizReportOverall bizReportOverall);
-    long deleteAll(String orgId);
 
     List<BizReportOverall> getAllReport(String orgId);
 
