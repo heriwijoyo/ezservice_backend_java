@@ -10,11 +10,67 @@ package id.ezclouds.common.model.biz.data;
  */
 public class DistrictMasterData {
 
-    private String villageId;
-    private String villageName;
+    private String bizMasterId;
+    private String districtId;
+    private String districtName;
     private Integer voterMale;
     private Integer voterFemale;
     private Integer voterTotal;
     private Integer pollStationTotal;
 
+    public String getBizMasterId() {
+        return bizMasterId;
+    }
+
+    public void setBizMasterId(String bizMasterId) {
+        this.bizMasterId = bizMasterId;
+    }
+
+    public String getDistrictId() {
+        return districtId;
+    }
+
+    public void setDistrictId(String districtId) {
+        this.districtId = districtId;
+    }
+
+    public String getDistrictName() {
+        return districtName;
+    }
+
+    public void setDistrictName(String districtName) {
+        this.districtName = districtName;
+    }
+
+    public Integer getVoterMale() {
+        return voterMale;
+    }
+
+    public void setVoterMale(Integer voterMale) {
+        this.voterMale = voterMale;
+    }
+
+    public Integer getVoterFemale() {
+        return voterFemale;
+    }
+
+    public void setVoterFemale(Integer voterFemale) {
+        this.voterFemale = voterFemale;
+    }
+
+    public Integer getVoterTotal() {
+        return voterTotal;
+    }
+
+    public void setVoterTotal(Integer voterTotal) {
+        this.voterTotal = voterTotal;
+    }
+
+    public Integer getPollStationTotal() {
+        return pollStationTotal;
+    }
+
+    public void setPollStationTotal(Integer pollStationTotal) {
+        this.pollStationTotal = pollStationTotal;
+    }
 }
