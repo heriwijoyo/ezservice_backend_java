@@ -13,8 +13,9 @@ import java.util.List;
 public class BizSmartTable {
 
     private String title;
-    private List<BizSmartTableColumn> columns;
-    private String data;
+    private TableConfig config;
+    private List<TableColumn> columns;
+    private List<List<String>> rowData;
     private String updatedTime;
 
     public String getTitle() {
@@ -25,20 +26,28 @@ public class BizSmartTable {
         this.title = title;
     }
 
-    public List<BizSmartTableColumn> getColumns() {
+    public TableConfig getConfig() {
+        return config;
+    }
+
+    public void setConfig(TableConfig config) {
+        this.config = config;
+    }
+
+    public List<TableColumn> getColumns() {
         return columns;
     }
 
-    public void setColumns(List<BizSmartTableColumn> columns) {
+    public void setColumns(List<TableColumn> columns) {
         this.columns = columns;
     }
 
-    public String getData() {
-        return data;
+    public List<List<String>> getRowData() {
+        return rowData;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setRowData(List<List<String>> rowData) {
+        this.rowData = rowData;
     }
 
     public String getUpdatedTime() {

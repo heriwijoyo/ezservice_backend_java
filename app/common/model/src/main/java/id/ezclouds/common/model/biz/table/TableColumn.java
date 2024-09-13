@@ -6,9 +6,9 @@ package id.ezclouds.common.model.biz.table;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: BizSmartTableColumn.java, v 0.1 2024‐09‐11 11:15 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: TableColumn.java, v 0.1 2024‐09‐11 11:15 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class BizSmartTableColumn {
+public class TableColumn {
 
     private String title;
     private int width;
