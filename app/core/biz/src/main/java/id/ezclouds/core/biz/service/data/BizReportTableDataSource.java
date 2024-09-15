@@ -21,6 +21,8 @@ public class BizReportTableDataSource implements BizSmartTableDataSource {
 
     @Override
     public BizSmartTable fetchColumnAndData(Map<String, String> conditions) {
-        return null;
+        BizSmartTable table = new BizSmartTable();
+        table.setTitle("I am dummy title");
+        return table;
     }
 }
