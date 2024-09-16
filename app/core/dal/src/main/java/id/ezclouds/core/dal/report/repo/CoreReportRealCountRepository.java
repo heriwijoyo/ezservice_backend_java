@@ -28,12 +28,12 @@ public interface CoreReportRealCountRepository extends JpaRepository<CoreReportR
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @QueryHints({@QueryHint(name = "jakarta.persistence.lock.timeout", value = "3000")})
-    @Query("SELECT crrc FROM CoreReportRealCountDO crrc WHERE crrc.org_id = ?1 AND crrc.scene = ?2 AND crrc.scene_id = ?3")
+    @Query("SELECT crrc FROM CoreReportRealCountDO crrc WHERE crrc.orgId = ?1 AND crrc.scene = ?2 AND crrc.sceneId = ?3")
     CoreReportRealCountDO findAndLock(String orgId, String scene, String sceneId);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @QueryHints({@QueryHint(name = "jakarta.persistence.lock.timeout", value = "3000")})
-    @Query("SELECT crrc FROM CoreReportRealCountDO crrc WHERE crrc.org_id = ?1 AND crrc.scene = ?2 AND crrc.scene_id = ?3 AND crrc.scene_parent = ?4")
+    @Query("SELECT crrc FROM CoreReportRealCountDO crrc WHERE crrc.orgId = ?1 AND crrc.scene = ?2 AND crrc.sceneId = ?3 AND crrc.sceneParent = ?4")
     CoreReportRealCountDO findAndLock(String orgId, String scene, String sceneId, String sceneParent);
 
 

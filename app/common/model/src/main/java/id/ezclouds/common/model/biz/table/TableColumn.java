@@ -11,9 +11,14 @@ package id.ezclouds.common.model.biz.table;
 public class TableColumn {
 
     private String title;
-    private int width;
-    private String align;
+    private int width = 30;
+    private String align = "left";
     private boolean readOnly = false;
+
+    public TableColumn(String title, int width) {
+        this.title = title;
+        this.width = width;
+    }
 
     public String getTitle() {
         return title;

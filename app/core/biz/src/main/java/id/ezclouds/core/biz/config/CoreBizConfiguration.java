@@ -25,10 +25,15 @@ public class CoreBizConfiguration {
     @Qualifier(value = "bizTableReport")
     private BizSmartTableDataSource reportTableDataSource;
 
+    @Autowired
+    @Qualifier(value = "bizReportRealCount")
+    private BizSmartTableDataSource realCountTableDataSource;
+
     @Bean
     Map<TableSource, BizSmartTableDataSource> tableDataSourceMap() {
         Map<TableSource, BizSmartTableDataSource> sourceMap = new HashMap<>();
         sourceMap.put(TableSource.BIZ_TABLE_REPORT, reportTableDataSource);
+        sourceMap.put(TableSource.BIZ_REPORT_REAL_COUNT, realCountTableDataSource);
         return sourceMap;
     }
 }

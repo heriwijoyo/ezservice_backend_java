@@ -4,9 +4,7 @@
  */
 package id.ezclouds.common.model.biz.table;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,9 +15,8 @@ public class BizSmartTable {
 
     private String title;
     private TableConfig config;
-    private List<TableColumn> columns;
-    private List<List<String>> rowData;
-    private String updatedTime;
+    private List<TableColumn> columns = new ArrayList<>();
+    private List<List<String>> rowData = new ArrayList<>();
 
     public String getTitle() {
         return title;
@@ -51,18 +48,5 @@ public class BizSmartTable {
 
     public void setRowData(List<List<String>> rowData) {
         this.rowData = rowData;
-    }
-
-    public String getUpdatedTime() {
-        return updatedTime;
-    }
-
-    public void setUpdatedTime(String updatedTime) {
-        this.updatedTime = updatedTime;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

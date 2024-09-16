@@ -10,7 +10,8 @@ package id.ezclouds.common.model.biz.table;
  */
 public enum TableSource {
 
-    BIZ_TABLE_REPORT("bizTableReport")
+    BIZ_TABLE_REPORT("bizTableReport"),
+    BIZ_REPORT_REAL_COUNT("bizReportRealCount"),
 
     ;
 

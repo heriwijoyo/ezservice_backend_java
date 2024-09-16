@@ -9,6 +9,7 @@ import id.ezclouds.common.model.process.ProcessName;
 import id.ezclouds.common.model.request.process.SurveyResponseParseProcessRequest;
 import id.ezclouds.core.process.biz.BizProcessMasterDataAreaInitialize;
 import id.ezclouds.core.process.biz.BizProcessReportAreaCommonTable;
+import id.ezclouds.core.process.biz.BizProcessReportRealCountAreaInitialize;
 import id.ezclouds.core.process.biz.BizProcessorSurveyResponseParse;
 import id.ezclouds.core.process.debug.BizProcessDebugger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public class CoreAsyncProcessExecutor implements AsyncProcessExecutor {
     private BizProcessMasterDataAreaInitialize bizProcessMasterDataAreaInitialize;
 
     @Autowired
+    private BizProcessReportRealCountAreaInitialize bizProcessReportRealCountAreaInitialize;
+
+    @Autowired
     private BizProcessDebugger bizProcessDebugger;
 
     @Override
@@ -50,6 +54,9 @@ public class CoreAsyncProcessExecutor implements AsyncProcessExecutor {
                 break;
             case MASTER_DATA_AREA_INIT:
                 bizProcessMasterDataAreaInitialize.process(param);
+                break;
+            case REPORT_REAL_COUNT_AREA_INIT:
+                bizProcessReportRealCountAreaInitialize.process(param);
                 break;
 
             case DEBUG:
