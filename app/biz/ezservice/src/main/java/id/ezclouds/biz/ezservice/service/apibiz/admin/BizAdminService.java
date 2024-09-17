@@ -310,6 +310,12 @@ public class BizAdminService extends BizBaseService {
                 dataUploadMenu.setMenuIcon("upload_file");
                 specialMenu.add(dataUploadMenu);
 
+                CoreAdminBOMenu masterDataMenu = new CoreAdminBOMenu();
+                dataUploadMenu.setMenuName("Master Data");
+                dataUploadMenu.setMenuUrl("masterData.htm");
+                dataUploadMenu.setMenuIcon("storage");
+                specialMenu.add(masterDataMenu);
+
                 if (isMemberHasAdminRole(adminSession.getMemberRoles())) {
                     adminAppData.setSpecialMenu(specialMenu);
                 }

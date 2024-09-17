@@ -148,6 +148,11 @@ public class WebAppController {
         renderCachedWebApp(getDataUploadContent(), servletResponse);
     }
 
+    @GetMapping(value = "/webapp/masterData.htm")
+    private void masterData(HttpServletResponse servletResponse) {
+        renderCachedWebApp(getMasterDataContent(), servletResponse);
+    }
+
     @GetMapping(value = "/webapp/organization.htm")
     private void webAppOrganization(HttpServletResponse servletResponse) {
         renderCachedWebApp(getOrganizationContent(), servletResponse);
@@ -442,6 +447,11 @@ public class WebAppController {
     @Cacheable(value = BizCacheKey.WEBAPP_DATA_UPLOAD)
     public String getDataUploadContent() {
         return getWebAppContent(WebAppPage.DATA_UPLOAD);
+    }
+
+    @Cacheable(value = BizCacheKey.WEBAPP_MASTER_DATA)
+    public String getMasterDataContent() {
+        return getWebAppContent(WebAppPage.MASTER_DATA);
     }
 
     @Cacheable(value = BizCacheKey.WEBAPP_ORGANIZATION)
