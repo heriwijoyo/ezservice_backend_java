@@ -29,6 +29,7 @@ public enum WebAppPage {
     MEMBER_DETAIL("webapp/memberDetail.htm"),
     DATA_UPLOAD("webapp/dataUpload.htm"),
     MASTER_DATA("webapp/masterData.htm"),
+    MASTER_DATA_OVERALL("webapp/masterDataOverall.htm"),
 
     ORGANIZATION("webapp/organization.htm"),
     ORGANIZATION_ADD("webapp/organizationAdd.htm"),
