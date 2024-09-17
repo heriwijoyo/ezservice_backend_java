@@ -20,7 +20,7 @@ import java.util.Optional;
  */
 @Repository
 public interface CoreReportOverallRepository extends JpaRepository<CoreReportOverallDO, String> {
-    long deleteByOrgId(String orgId);
+
     CoreReportOverallDO findByOrgIdAndKeyId(String orgId, String keyId);
     List<CoreReportOverallDO> findByOrgId(String orgId);
 

@@ -14,10 +14,10 @@ import java.util.List;
  */
 public interface BizReportOverallDAO {
 
-    void reStore(BizReportOverall bizReportOverall);
+    void create(String orgId, String keyId);
 
     List<BizReportOverall> getAllReport(String orgId);
-
     BizReportOverall getAndLock(String orgId, String reportKey);
+
     void updateValue(String reportId, int count, String updatedTime);
 }

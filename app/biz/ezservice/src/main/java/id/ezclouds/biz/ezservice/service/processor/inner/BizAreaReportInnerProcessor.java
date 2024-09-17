@@ -9,6 +9,7 @@ import id.ezclouds.biz.ezservice.service.core.repo.BizReportByAreaRepository;
 import id.ezclouds.common.facade.dal.report.BizReportOverallDAO;
 import id.ezclouds.common.model.report.BizReportOverall;
 import id.ezclouds.common.model.report.BizReportOverallKey;
+import id.ezclouds.common.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,10 +40,10 @@ public class BizAreaReportInnerProcessor {
 
     @Transactional
     public void storeTpsCoverage(String orgId, int totalTps) {
-        BizReportOverall reportOverall = new BizReportOverall();
-        reportOverall.setOrgId(orgId);
-        reportOverall.setKeyId(BizReportOverallKey.TOTAL_TPS.getCode());
-        reportOverall.setCount(totalTps);
-        bizReportOverallDAO.reStore(reportOverall);
+        BizReportOverall reportOverall = bizReportOverallDAO
+                .getAndLock(orgId, BizReportOverallKey.TOTAL_TPS.getCode());
+
+        bizReportOverallDAO
+                .updateValue(reportOverall.getId(), totalTps, DateUtil.getCurrentFormattedDateMillis());
     }
 }

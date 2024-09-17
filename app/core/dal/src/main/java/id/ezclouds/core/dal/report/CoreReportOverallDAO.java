@@ -31,25 +31,19 @@ public class CoreReportOverallDAO implements BizReportOverallDAO {
 
     @EzDAOLogger
     @Override
-    public void reStore(BizReportOverall bizReportOverall) {
-        String currentTime = DateUtil.getCurrentFormattedDateMillis();
+    public void create(String orgId, String keyId) {
         CoreReportOverallDO reportOverallDO = coreReportOverallRepository
-                .findByOrgIdAndKeyId(bizReportOverall.getOrgId(), bizReportOverall.getKeyId());
+                .findByOrgIdAndKeyId(orgId, keyId);
         if (reportOverallDO == null) {
             reportOverallDO = new CoreReportOverallDO();
-            reportOverallDO.setId(
-                    HashUtil.createHash(
-                            bizReportOverall.getOrgId(),
-                            bizReportOverall.getKeyId()
-                    )
-            );
-            reportOverallDO.setOrgId(bizReportOverall.getOrgId());
-            reportOverallDO.setKeyId(bizReportOverall.getKeyId());
+            reportOverallDO.setId(HashUtil.createHash(orgId, keyId));
+            reportOverallDO.setOrgId(orgId);
+            reportOverallDO.setKeyId(keyId);
+            reportOverallDO.setCount(0);
+            reportOverallDO.setUpdatedTime(DateUtil.getCurrentFormattedDateMillis());
+            coreReportOverallRepository
+                    .saveAndFlush(reportOverallDO);
         }
-
-        reportOverallDO.setCount(bizReportOverall.getCount());
-        reportOverallDO.setUpdatedTime(currentTime);
-        coreReportOverallRepository.saveAndFlush(reportOverallDO);
     }
 
     @EzDAOLogger
