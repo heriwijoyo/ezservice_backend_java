@@ -23,6 +23,7 @@ public class CoreReportRealCountConverter extends CommonDOModelConverter<CoreRep
         realCount.setSceneId(dataObject.getSceneId());
         realCount.setSceneParent(dataObject.getSceneParent());
         realCount.setUpdatedTime(dataObject.getUpdatedTime());
+        realCount.setSort(dataObject.getSort());
         realCount.setCountA(dataObject.getCountA());
         realCount.setCountB(dataObject.getCountB());
         realCount.setCountC(dataObject.getCountC());
@@ -45,6 +46,7 @@ public class CoreReportRealCountConverter extends CommonDOModelConverter<CoreRep
         realCountDO.setSceneId(model.getSceneId());
         realCountDO.setSceneParent(model.getSceneParent());
         realCountDO.setUpdatedTime(model.getUpdatedTime());
+        realCountDO.setSort(model.getSort());
         realCountDO.setCountA(model.getCountA());
         realCountDO.setCountB(model.getCountB());
         realCountDO.setCountC(model.getCountC());

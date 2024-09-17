@@ -4,7 +4,6 @@
  */
 package id.ezclouds.core.process.biz;
 
-import id.ezclouds.common.facade.dal.report.BizReportRealCountDAO;
 import id.ezclouds.core.process.biz.inner.BizInnerProcessAreaInitialize;
 import id.ezclouds.core.process.biz.inner.BizInnerProcessRealCountInitialize;
 import id.ezclouds.core.process.model.AreaInitConfig;
@@ -20,9 +19,6 @@ import java.util.List;
  */
 @Service
 public class BizProcessReportRealCountAreaInitialize extends BizAsyncProcessor {
-
-    @Autowired
-    private BizReportRealCountDAO bizReportRealCountDAO;
 
     @Autowired
     private BizInnerProcessAreaInitialize bizInnerProcessAreaInitialize;
@@ -49,7 +45,7 @@ public class BizProcessReportRealCountAreaInitialize extends BizAsyncProcessor {
 
         bizInnerProcessAreaInitialize.setAreaOnTargetCallback(currentArea -> {
             bizInnerProcessRealCountInitialize
-                    .init(orgId, targetLevel, currentArea.getName(), currentArea.getParentId());
+                    .init(orgId, targetLevel, currentArea.getName(), currentArea.getParentId(), 0);
         });
 
         AreaInitConfig areaInitConfig = bizInnerProcessAreaInitialize

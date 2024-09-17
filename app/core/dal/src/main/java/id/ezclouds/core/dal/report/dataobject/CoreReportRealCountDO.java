@@ -36,6 +36,9 @@ public class CoreReportRealCountDO {
     @Column(name = "updated_time")
     private String updatedTime;
 
+    @Column(name = "sort")
+    private int sort;
+
     @Column(name = "count_a")
     private int countA;
 
@@ -112,6 +115,14 @@ public class CoreReportRealCountDO {
 
     public void setUpdatedTime(String updatedTime) {
         this.updatedTime = updatedTime;
+    }
+
+    public int getSort() {
+        return sort;
+    }
+
+    public void setSort(int sort) {
+        this.sort = sort;
     }
 
     public int getCountA() {

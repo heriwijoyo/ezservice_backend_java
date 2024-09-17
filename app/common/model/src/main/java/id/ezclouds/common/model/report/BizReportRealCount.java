@@ -16,6 +16,7 @@ public class BizReportRealCount {
     private String sceneId;
     private String sceneParent;
     private String updatedTime;
+    private int sort;
     private int countA;
     private int countB;
     private int countC;
@@ -73,6 +74,14 @@ public class BizReportRealCount {
 
     public void setUpdatedTime(String updatedTime) {
         this.updatedTime = updatedTime;
+    }
+
+    public int getSort() {
+        return sort;
+    }
+
+    public void setSort(int sort) {
+        this.sort = sort;
     }
 
     public int getCountA() {

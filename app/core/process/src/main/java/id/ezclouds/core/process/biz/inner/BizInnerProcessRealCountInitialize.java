@@ -24,14 +24,19 @@ public class BizInnerProcessRealCountInitialize {
     private BizReportRealCountDAO bizReportRealCountDAO;
 
     @Transactional
-    public void init(String orgId, String scene, String sceneId, String sceneParent) {
-        BizReportRealCount realCount = new BizReportRealCount();
-        realCount.setId(HashUtil.createHash(orgId, scene, sceneId, sceneParent));
-        realCount.setOrgId(orgId);
-        realCount.setScene(scene);
-        realCount.setSceneId(sceneId);
-        realCount.setSceneParent(sceneParent);
+    public void init(String orgId, String scene, String sceneId, String sceneParent, int sort) {
+        BizReportRealCount realCount = bizReportRealCountDAO
+                .getAndLock(orgId, scene, sceneId, sceneParent);
+        if (realCount == null) {
+            realCount = new BizReportRealCount();
+            realCount.setId(HashUtil.createHash(orgId, scene, sceneId, sceneParent));
+            realCount.setOrgId(orgId);
+            realCount.setScene(scene);
+            realCount.setSceneId(sceneId);
+            realCount.setSceneParent(sceneParent);
+        }
         realCount.setUpdatedTime(DateUtil.getCurrentFormattedDateMillis());
+        realCount.setSort(sort);
 
         bizReportRealCountDAO
                 .store(realCount);
