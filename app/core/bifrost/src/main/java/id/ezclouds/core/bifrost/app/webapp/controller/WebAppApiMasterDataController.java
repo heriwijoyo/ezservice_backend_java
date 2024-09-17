@@ -5,7 +5,9 @@
 package id.ezclouds.core.bifrost.app.webapp.controller;
 
 import id.ezclouds.common.facade.biz.admin.BizAdminMasterDataService;
+import id.ezclouds.common.model.report.BizReportOverall;
 import id.ezclouds.common.model.request.WebBizPageRequest;
+import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
@@ -35,9 +37,9 @@ public class WebAppApiMasterDataController {
     private BizAdminMasterDataService bizAdminMasterDataService;
 
     @PostMapping(value = "/webapp/api/reportOverall.json")
-    private WebApiResult<List<List<String>>> getMasterData(@RequestParam(name = "sessionId", required = false) String sessionId) {
+    private WebApiResult<List<List<String>>> reportOverall(@RequestParam(name = "sessionId", required = false) String sessionId) {
         final WebApiResult<List<List<String>>> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_MASTER_DATA, result, new WebApiControllerTemplate.Handler<List<List<String>>>() {
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_REPORT_OVERALL_GET, result, new WebApiControllerTemplate.Handler<List<List<String>>>() {
             @Override
             public BizResult onProcess() throws Exception {
                 WebBizPageRequest request = new WebBizPageRequest();
@@ -48,6 +50,37 @@ public class WebAppApiMasterDataController {
             @Override
             public List<List<String>> convertResult(Object object) {
                 return (List) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/reportOverallUpdate.json")
+    private WebApiResult<String> reportOverallUpdate(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "overallKey", required = false) String overallKey,
+            @RequestParam(name = "overallValue", required = false) String overallValue) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_REPORT_OVERALL_UPDATE, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizReportOverall reportOverall = new BizReportOverall();
+                reportOverall.setKeyId(overallKey);
+                reportOverall.setCount(Integer.parseInt(overallValue));
+                WebBizUpdateRequest<BizReportOverall> request = new WebBizUpdateRequest<>();
+                request.setObject(reportOverall);
+                request.setSessionId(sessionId);
+                return bizAdminMasterDataService.reportOverallUpdate(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                return (String) object;
             }
 
             @Override

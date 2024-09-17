@@ -21,24 +21,30 @@
 
 <script type="text/javascript">
     var EzAdminUrl = {
-        GET_REPORT_OVERALL: 'api/reportOverall.json'
+        REPORT_OVERALL_GET: 'api/reportOverall.json',
+        REPORT_OVERALL_UPDATE: 'api/reportOverallUpdate.json'
     };
     var EzAppService = {
         start: function() {
-            EzWebAppClient.callApiService(EzAdminUrl.GET_REPORT_OVERALL, {});
+            EzWebAppClient.callApiService(EzAdminUrl.REPORT_OVERALL_GET, {});
         },
         onApiBizSuccess: function(url, response) {
-            EzAppService.render(response.data);
+            if (url === EzAdminUrl.REPORT_OVERALL_GET) {
+                EzAppService.render(response.data);
+            }
         },
         onChange: function(instance, cell, x, y, value) {
-            var keyValue = EzAppService.jsp.getValueFromCoords(0,y);
-            console.log(keyValue);
-            console.log(value);
+            var overallKey = EzAppService.jsp.getValueFromCoords(0,y);
+            EzWebAppClient.callApiService(EzAdminUrl.REPORT_OVERALL_UPDATE, {
+                overallKey: overallKey,
+                overallValue: value
+            });
         },
         render: function(data) {
             EzAppService.jsp = jspreadsheet(document.getElementById('masterDataOverall'), {
                 columns: [
                     {width:300, align:'left', title:'Master Data Key', readOnly:true},
+                    {width:300, align:'left', title:'Description', readOnly:true},
                     {width:100, title:'Value'}
                 ],
                 data: data,

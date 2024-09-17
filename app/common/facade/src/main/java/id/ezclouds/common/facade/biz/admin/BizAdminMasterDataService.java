@@ -4,7 +4,9 @@
  */
 package id.ezclouds.common.facade.biz.admin;
 
+import id.ezclouds.common.model.report.BizReportOverall;
 import id.ezclouds.common.model.request.WebBizPageRequest;
+import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
 import id.ezclouds.common.model.result.BizResult;
 
 /**
@@ -14,4 +16,6 @@ import id.ezclouds.common.model.result.BizResult;
 public interface BizAdminMasterDataService {
 
     BizResult getReportOverall(WebBizPageRequest request);
+
+    BizResult reportOverallUpdate(WebBizUpdateRequest<BizReportOverall> request);
 }

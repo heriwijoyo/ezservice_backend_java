@@ -10,35 +10,50 @@ package id.ezclouds.common.model.report;
  */
 public enum BizReportOverallKey {
 
-    TOTAL_MEMBER_UNION("TOTAL_MEMBER_UNION"),
-    TOTAL_SUB_ORGANIZATION("TOTAL_SUB_ORGANIZATION"),
-    TOTAL_TPS("TOTAL_TPS"),
-    MEMBER_TODAY("MEMBER_TODAY"),
-    MEMBER_YESTERDAY("MEMBER_YESTERDAY"),
+    TOTAL_MEMBER_UNION("TOTAL_MEMBER_UNION", ""),
+    TOTAL_SUB_ORGANIZATION("TOTAL_SUB_ORGANIZATION", ""),
+    TOTAL_TPS("TOTAL_TPS", ""),
+    MEMBER_TODAY("MEMBER_TODAY", ""),
+    MEMBER_YESTERDAY("MEMBER_YESTERDAY", ""),
 
-    WORKSPACE_REGENCY("WORKSPACE_REGENCY"),
-    WORKSPACE_DISTRICT("WORKSPACE_DISTRICT"),
-    WORKSPACE_VILLAGE("WORKSPACE_VILLAGE"),
-    WORKSPACE_VOTE_STATION("WORKSPACE_VOTE_STATION"),
+    WORKSPACE_REGENCY_COUNT("WORKSPACE_REGENCY_COUNT", "Total Kabupaten"),
+    WORKSPACE_DISTRICT_COUNT("WORKSPACE_DISTRICT_COUNT", "Total Kecamatan"),
+    WORKSPACE_VILLAGE_COUNT("WORKSPACE_VILLAGE_COUNT", "Total Kelurahan"),
+    WORKSPACE_VOTE_STATION_COUNT("WORKSPACE_VOTE_STATION_COUNT", "Total TPS"),
 
-    VOTER_BASE_CLUSTER("VOTER_BASE_CLUSTER"),
-    VOTER_BASE_MEMBER("VOTER_BASE_MEMBER"),
-    VOTER_BASE_VOTER("VOTER_BASE_VOTER"),
-    VOTER_BASE_VOTE_STATION("VOTER_BASE_VOTE_STATION"),
+    VOTER_BASE_CLUSTER_COUNT("VOTER_BASE_CLUSTER_COUNT", ""),
+    VOTER_BASE_MEMBER_COUNT("VOTER_BASE_MEMBER_COUNT", ""),
+    VOTER_BASE_VOTER_COUNT("VOTER_BASE_VOTER_COUNT", ""),
+    VOTER_BASE_VOTE_STATION_COUNT("VOTER_BASE_VOTE_STATION_COUNT", ""),
 
-    REAL_COUNT_VOTE_STATION("REAL_COUNT_VOTE_STATION"),
-    REAL_COUNT_FIXED_VOTER("REAL_COUNT_FIXED_VOTER"),
-    REAL_COUNT_VOTER_ALL("REAL_COUNT_VOTER_ALL"),
-    REAL_COUNT_VOTER_VERIFIED("REAL_COUNT_VOTER_VERIFIED"),
+    REAL_COUNT_VOTE_STATION_COUNT("REAL_COUNT_VOTE_STATION_COUNT", "Total TPS Tercover"),
+    REAL_COUNT_FIXED_VOTER_COUNT("REAL_COUNT_FIXED_VOTER_COUNT", "Total DPT"),
+    REAL_COUNT_VOTER_ALL_COUNT("REAL_COUNT_VOTER_ALL_COUNT", ""),
+    REAL_COUNT_VOTER_VERIFIED_COUNT("REAL_COUNT_VOTER_VERIFIED_COUNT", ""),
 
     ;
     private final String code;
+    private final String description;
 
-    BizReportOverallKey(String code) {
+    BizReportOverallKey(String code, String description) {
         this.code = code;
+        this.description = description;
     }
 
     public String getCode() {
         return code;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public static BizReportOverallKey getByCode(String code) {
+        for (BizReportOverallKey overallKey : values()) {
+            if (overallKey.code.equals(code)) {
+                return overallKey;
+            }
+        }
+        return null;
     }
 }
