@@ -22,10 +22,10 @@ import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: BizProcessMasterDataAreaInitialize.java, v 0.1 2024‐09‐01 9:12 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: BizProcessInitMasterDataArea.java, v 0.1 2024‐09‐01 9:12 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class BizProcessMasterDataAreaInitialize extends BizAsyncProcessor {
+public class BizProcessInitMasterDataArea extends BizAsyncProcessor {
 
     @Autowired
     private CoreConfigService coreConfigService;
@@ -38,7 +38,7 @@ public class BizProcessMasterDataAreaInitialize extends BizAsyncProcessor {
 
     @Override
     public BizProcessEvent getProcessEvent() {
-        return BizProcessEvent.MASTER_DATA_AREA_INIT;
+        return BizProcessEvent.MASTER_DATA_INIT_AREA;
     }
 
     @Override

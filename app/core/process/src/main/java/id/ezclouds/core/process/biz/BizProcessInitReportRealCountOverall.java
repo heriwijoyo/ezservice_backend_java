@@ -13,10 +13,10 @@ import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: BizProcessReportRealCountOverallInitialize.java, v 0.1 2024‐09‐17 3:06 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: BizProcessInitReportRealCountOverall.java, v 0.1 2024‐09‐17 3:06 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class BizProcessReportRealCountOverallInitialize extends BizAsyncProcessor {
+public class BizProcessInitReportRealCountOverall extends BizAsyncProcessor {
 
     @Autowired
     private BizInnerProcessRealCountInitialize bizInnerProcessRealCountInitialize;

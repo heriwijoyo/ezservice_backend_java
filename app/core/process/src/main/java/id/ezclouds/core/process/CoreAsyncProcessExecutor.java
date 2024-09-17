@@ -28,13 +28,13 @@ public class CoreAsyncProcessExecutor implements AsyncProcessExecutor {
     private BizProcessReportAreaCommonTable bizProcessReportAreaCommonTable;
 
     @Autowired
-    private BizProcessMasterDataAreaInitialize bizProcessMasterDataAreaInitialize;
+    private BizProcessInitMasterDataArea bizProcessInitMasterDataArea;
 
     @Autowired
-    private BizProcessReportRealCountOverallInitialize bizProcessReportRealCountOverallInitialize;
+    private BizProcessInitReportRealCountOverall bizProcessInitReportRealCountOverall;
 
     @Autowired
-    private BizProcessReportRealCountAreaInitialize bizProcessReportRealCountAreaInitialize;
+    private BizProcessInitReportRealCountArea bizProcessInitReportRealCountArea;
 
     @Autowired
     private BizProcessDebugger bizProcessDebugger;
@@ -53,13 +53,13 @@ public class CoreAsyncProcessExecutor implements AsyncProcessExecutor {
                 bizProcessReportAreaCommonTable.process(param);
                 break;
             case MASTER_DATA_AREA_INIT:
-                bizProcessMasterDataAreaInitialize.process(param);
+                bizProcessInitMasterDataArea.process(param);
                 break;
             case REPORT_REAL_COUNT_OVERALL_INIT:
-                bizProcessReportRealCountOverallInitialize.process(param);
+                bizProcessInitReportRealCountOverall.process(param);
                 break;
             case REPORT_REAL_COUNT_AREA_INIT:
-                bizProcessReportRealCountAreaInitialize.process(param);
+                bizProcessInitReportRealCountArea.process(param);
                 break;
 
             case DEBUG:
