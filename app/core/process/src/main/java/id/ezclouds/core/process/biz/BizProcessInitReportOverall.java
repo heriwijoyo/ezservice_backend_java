@@ -4,7 +4,10 @@
  */
 package id.ezclouds.core.process.biz;
 
+import id.ezclouds.common.model.report.BizReportOverallKey;
+import id.ezclouds.core.process.biz.inner.BizInnerProcessReportOverall;
 import id.ezclouds.core.process.model.BizProcessEvent;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +18,9 @@ import java.util.List;
  */
 @Service
 public class BizProcessInitReportOverall extends BizAsyncProcessor {
+
+    @Autowired
+    private BizInnerProcessReportOverall bizInnerProcessReportOverall;
 
     @Override
     public BizProcessEvent getProcessEvent() {
@@ -30,7 +36,9 @@ public class BizProcessInitReportOverall extends BizAsyncProcessor {
     protected boolean onProcess(Object request, List<String> logData) {
         String orgId = (String) request;
 
-
+        for (BizReportOverallKey overallKey : BizReportOverallKey.values()) {
+            bizInnerProcessReportOverall.init(orgId, overallKey.getCode());
+        }
 
         return true;
     }

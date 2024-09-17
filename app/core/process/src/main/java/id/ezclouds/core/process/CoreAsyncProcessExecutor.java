@@ -31,6 +31,9 @@ public class CoreAsyncProcessExecutor implements AsyncProcessExecutor {
     private BizProcessInitMasterDataArea bizProcessInitMasterDataArea;
 
     @Autowired
+    private BizProcessInitReportOverall bizProcessInitReportOverall;
+
+    @Autowired
     private BizProcessInitReportRealCountOverall bizProcessInitReportRealCountOverall;
 
     @Autowired
@@ -52,8 +55,12 @@ public class CoreAsyncProcessExecutor implements AsyncProcessExecutor {
             case REPORT_AREA_COMMON_TABLE_PARSE:
                 bizProcessReportAreaCommonTable.process(param);
                 break;
+
             case MASTER_DATA_AREA_INIT:
                 bizProcessInitMasterDataArea.process(param);
+                break;
+            case REPORT_OVERALL_INIT:
+                bizProcessInitReportOverall.process(param);
                 break;
             case REPORT_REAL_COUNT_OVERALL_INIT:
                 bizProcessInitReportRealCountOverall.process(param);
