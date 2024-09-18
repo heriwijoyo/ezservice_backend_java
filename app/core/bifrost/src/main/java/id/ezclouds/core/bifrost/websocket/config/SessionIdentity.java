@@ -10,22 +10,25 @@ package id.ezclouds.core.bifrost.websocket.config;
  */
 public class SessionIdentity {
 
+    private String sessionId;
     private String orgId;
     private String orgCode;
+
+    public SessionIdentity(String sessionId, String orgId, String orgCode) {
+        this.sessionId = sessionId;
+        this.orgId = orgId;
+        this.orgCode = orgCode;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
 
     public String getOrgId() {
         return orgId;
     }
 
-    public void setOrgId(String orgId) {
-        this.orgId = orgId;
-    }
-
     public String getOrgCode() {
         return orgCode;
-    }
-
-    public void setOrgCode(String orgCode) {
-        this.orgCode = orgCode;
     }
 }

@@ -7,22 +7,28 @@ package id.ezclouds.core.bifrost.websocket.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.common.facade.auth.AuthAdminService;
 import id.ezclouds.common.facade.biz.BizReportRealtimeService;
+import id.ezclouds.common.facade.biz.report.BizReportOverallService;
 import id.ezclouds.common.facade.broker.BrokerDataEvent;
 import id.ezclouds.common.facade.broker.BrokerDataExchangeService;
 import id.ezclouds.common.model.auth.AuthSession;
 import id.ezclouds.common.model.broker.BrokerDataTopic;
+import id.ezclouds.common.model.broker.event.EzCommonEvent;
+import id.ezclouds.common.model.broker.event.EzCommonEventData;
+import id.ezclouds.common.model.report.BizReportOverall;
 import id.ezclouds.common.model.websocket.WebSocketData;
 import id.ezclouds.common.model.websocket.WebSocketEvent;
 import id.ezclouds.common.util.StringUtil;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -30,7 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version $Id: EzWebSocketReportService.java, v 0.1 2024‐08‐31 10:27 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class EzWebSocketReportService extends TextWebSocketHandler implements InitializingBean, BrokerDataEvent {
+public class EzWebSocketReportService extends TextWebSocketHandler {
 
     @Autowired
     private AuthAdminService authAdminService;
@@ -41,24 +47,48 @@ public class EzWebSocketReportService extends TextWebSocketHandler implements In
     @Autowired
     private BizReportRealtimeService bizReportRealtimeService;
 
+    @Autowired
+    private BizReportOverallService bizReportOverallService;
+
+    private static final List<EzCommonEvent> listenEvents = Arrays.asList(
+            EzCommonEvent.REPORT_OVERALL_CHANGE
+    );
+
 
     private Map<String, WebSocketSession> sessionMap = new ConcurrentHashMap<>();
     private Map<String, SessionIdentity> identityMap = new ConcurrentHashMap<>();
-    private Map<String, Map<String, Integer>> overallDataMap = new ConcurrentHashMap<>();
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        brokerDataExchangeService.subscribe(BrokerDataTopic.BIZ_REPORT_OVERALL, this);
-    }
+    @Async
+    @EventListener
+    public void handleEzCommonEventData(EzCommonEventData eventData) {
+        if (!listenEvents.contains(eventData.getEvent())) {
+            return;
+        }
+        if (identityMap.isEmpty()) {
+            return;
+        }
 
-    @Override
-    public void onDataEvent(BrokerDataTopic topic, Object payload) {
-        if (topic == BrokerDataTopic.BIZ_REPORT_OVERALL) {
-            for (WebSocketSession session : sessionMap.values()) {
-                sessionSendMessage(session, WebSocketEvent.DATA_RESULT, payload);
+        List<String> availSessionIds = new ArrayList<>();
+        for (Map.Entry<String, SessionIdentity> identityEntry : identityMap.entrySet()) {
+            if (StringUtil.equals(identityEntry.getValue().getOrgId(), eventData.getOrgId())) {
+                availSessionIds.add(identityEntry.getKey());
             }
+        }
+        if (availSessionIds.isEmpty()) {
+            return;
+        }
+
+        switch (eventData.getEvent()) {
+            case REPORT_OVERALL_CHANGE:
+                List<BizReportOverall> reportOverall = bizReportOverallService.getReportOverall(eventData.getOrgId());
+                for (String sessionId : availSessionIds) {
+                    if (sessionMap.get(sessionId) != null) {
+                        sessionSendMessage(sessionMap.get(sessionId), WebSocketEvent.DATA_RESULT, reportOverallToMap(reportOverall));
+                    }
+                }
+                break;
         }
     }
 
@@ -72,6 +102,7 @@ public class EzWebSocketReportService extends TextWebSocketHandler implements In
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         super.afterConnectionClosed(session, status);
         sessionMap.remove(session.getId());
+        identityMap.remove(session.getId());
     }
 
     @Override
@@ -101,14 +132,8 @@ public class EzWebSocketReportService extends TextWebSocketHandler implements In
 
         if (sessionMap.get(session.getId()) != null && identity != null) {
             String orgId = identity.getOrgId();
-
-            if (overallDataMap.get(orgId) == null || overallDataMap.get(orgId).isEmpty()) {
-                Map<String, Integer> reportAllValue = bizReportRealtimeService
-                        .getAllValues(identity.getOrgId());
-                overallDataMap.put(orgId, reportAllValue);
-            }
-
-            sessionSendMessage(session, WebSocketEvent.DATA_RESULT, overallDataMap.get(orgId));
+            List<BizReportOverall> reportOverall = bizReportOverallService.getReportOverall(orgId);
+            sessionSendMessage(session, WebSocketEvent.DATA_RESULT, reportOverallToMap(reportOverall));
         }
     }
 
@@ -118,9 +143,7 @@ public class EzWebSocketReportService extends TextWebSocketHandler implements In
             try {
                 AuthSession authSession = authAdminService.authorizeWebPublicSession(sessionId);
 
-                SessionIdentity identity = new SessionIdentity();
-                identity.setOrgId(authSession.getOrgId());
-                identity.setOrgCode(authSession.getOrgCode());
+                SessionIdentity identity = new SessionIdentity(session.getId(), authSession.getOrgId(), authSession.getOrgCode());
 
                 sessionMap.put(session.getId(), session);
                 identityMap.put(session.getId(), identity);
@@ -158,5 +181,13 @@ public class EzWebSocketReportService extends TextWebSocketHandler implements In
         } catch (Exception ignored) {}
 
         return new TextMessage(strData);
+    }
+
+    private Map<String, Integer> reportOverallToMap(List<BizReportOverall> reportOveralls) {
+        Map<String, Integer> reportMap = new HashMap<>();
+        for (BizReportOverall reportOverall : reportOveralls) {
+            reportMap.put(reportOverall.getKeyId(), reportOverall.getCount());
+        }
+        return reportMap;
     }
 }
