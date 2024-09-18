@@ -64,9 +64,6 @@ public class WebAppController {
     @Autowired
     private BizReportService bizReportService;
 
-    @Autowired
-    private EzWebAppContentDAO ezWebAppContentDAO;
-
     @GetMapping(value = "/webapp/home.htm")
     private void webAppHome(HttpServletResponse servletResponse) {
         renderCachedWebApp(getHomeContent(), servletResponse);
@@ -528,6 +525,7 @@ public class WebAppController {
             String headerContent = readHtmlContent(ASSET_INCLUDE_HEADER);
             String navigationContent = readHtmlContent(ASSET_INCLUDE_NAVIGATION);
             String pageContent = loadHtmlContent(webAppPage);
+
             String searchComponent = WebComponentRenderer.getListSearchComponent(webAppPage);
             if (StringUtil.isNotBlank(searchComponent)) {
                 pageContent = pageContent.replace("INCLUDE_SEARCH_COMPONENT", searchComponent);
@@ -581,7 +579,9 @@ public class WebAppController {
 
     private String loadHtmlContent(WebAppPage webAppPage) throws IOException {
         if (webAppPage.isLoadFromDatabase()) {
-            return ezWebAppContentDAO.getContentByAssetFileId(webAppPage.getAssetFile());
+            return BeanFacadeUtil
+                    .getBean(EzWebAppContentDAO.class)
+                    .getContentByAssetFileId(webAppPage.getAssetFile());
         }
         return readHtmlContent(webAppPage.getAssetFile());
     }

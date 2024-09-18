@@ -27,13 +27,14 @@ public class CoreMasterDataDAO implements BizMasterDataDAO {
     @EzDAOLogger
     @Override
     public void storeOrUpdate(BizMasterData masterData) {
-        String bisMasterId = HashUtil.createHash(masterData.getOrgId(), masterData.getScene(), masterData.getDataId());
+        String bizMasterId = HashUtil.createHash(masterData.getOrgId(), masterData.getScene(), masterData.getDataId());
         EzMasterDataDO dataDO = ezMasterDataRepository
-                .findById(bisMasterId)
+                .findById(bizMasterId)
                 .orElse(null);
 
         if (dataDO == null) {
             dataDO = new BizMasterDataConverter().convertStore(masterData);
+            dataDO.setBizMasterId(bizMasterId);
         }
         ezMasterDataRepository
                 .saveAndFlush(dataDO);

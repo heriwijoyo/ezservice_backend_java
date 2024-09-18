@@ -26,6 +26,7 @@ public class CoreWebAppContentDAO implements EzWebAppContentDAO {
         EzCoreWebAppContentDO appContentDO = ezCoreWebAppContentRepository
                 .findById(assetFileId)
                 .orElse(null);
+
         return appContentDO != null ? appContentDO.getContent() : StringUtil.EMPTY;
     }
 }

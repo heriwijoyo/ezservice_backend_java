@@ -22,6 +22,8 @@ public class BizMasterDataConverter extends CommonDOModelConverter<EzMasterDataD
         masterData.setScene(dataObject.getScene());
         masterData.setDataId(dataObject.getDataId());
         masterData.setDataName(dataObject.getDataName());
+        masterData.setRegencyId(dataObject.getRegencyId());
+        masterData.setDistrictId(dataObject.getDistrictId());
         masterData.setNumberValue1(dataObject.getNumberValue1());
         masterData.setNumberValue2(dataObject.getNumberValue2());
         masterData.setNumberValue3(dataObject.getNumberValue3());
@@ -38,11 +40,12 @@ public class BizMasterDataConverter extends CommonDOModelConverter<EzMasterDataD
     @Override
     protected EzMasterDataDO safeConvertStore(BizMasterData model) {
         EzMasterDataDO dataDO = new EzMasterDataDO();
-        dataDO.setBizMasterId(model.getBizMasterId());
         dataDO.setOrgId(model.getOrgId());
         dataDO.setScene(model.getScene());
         dataDO.setDataId(model.getDataId());
         dataDO.setDataName(model.getDataName());
+        dataDO.setRegencyId(model.getRegencyId());
+        dataDO.setDistrictId(model.getDistrictId());
         dataDO.setNumberValue1(model.getNumberValue1());
         dataDO.setNumberValue2(model.getNumberValue2());
         dataDO.setNumberValue3(model.getNumberValue3());

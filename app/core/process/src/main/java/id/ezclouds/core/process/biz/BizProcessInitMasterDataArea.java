@@ -12,7 +12,9 @@ import id.ezclouds.common.model.config.CoreOrgConfigType;
 import id.ezclouds.common.model.util.CoreAreaUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
+import id.ezclouds.core.process.biz.inner.BizInnerProcessAreaInitialize;
 import id.ezclouds.core.process.biz.inner.BizInnerProcessMasterDataAreaInitialize;
+import id.ezclouds.core.process.model.AreaInitConfig;
 import id.ezclouds.core.process.model.BizProcessEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,9 @@ public class BizProcessInitMasterDataArea extends BizAsyncProcessor {
 
     @Autowired
     private CoreAreaService coreAreaService;
+
+    @Autowired
+    private BizInnerProcessAreaInitialize bizInnerProcessAreaInitialize;
 
     @Autowired
     private BizInnerProcessMasterDataAreaInitialize bizInnerProcessMasterDataAreaInitialize;
@@ -58,43 +63,16 @@ public class BizProcessInitMasterDataArea extends BizAsyncProcessor {
         String targetLevel = paramRequest.split(",")[2];
         logData.add("ORG_ID="+ orgId +",SCENE="+ scene + ",TARGET_LEVEL="+ targetLevel);
 
-        CoreAreaLevel targetAreaLevel = CoreAreaLevel.getByCode(targetLevel);
-        String areaRootLevel = coreConfigService
-                .getOrgConfig(orgId, CoreOrgConfigType.CORE_AREA_ROOT_LEVEL)
-                .getConfigValue();
-        CoreAreaLevel rootLevel = CoreAreaLevel.getByCode(areaRootLevel);
-        logData.add("ROOT_LEVEL="+ areaRootLevel);
+        bizInnerProcessAreaInitialize.setAreaOnTargetCallback(currentArea -> {
+            bizInnerProcessMasterDataAreaInitialize.init(orgId, scene, currentArea);
+        });
 
-        String areaRootIds = coreConfigService
-                .getOrgConfig(orgId, CoreOrgConfigType.CORE_AREA_ROOT_IDS)
-                .getConfigValue();
-        List<String> rootIds = Arrays.asList(areaRootIds.split(","));
-        logData.add("ROOT_IDS="+ areaRootIds);
+        AreaInitConfig areaInitConfig = bizInnerProcessAreaInitialize
+                .getAreaInitConfig(orgId, targetLevel);
 
-        String areaRootNames = coreConfigService
-                .getOrgConfig(orgId, CoreOrgConfigType.CORE_AREA_ROOT_NAMES)
-                .getConfigValue();
-        List<String> rootNames = Arrays.asList(areaRootNames.split(","));
-        logData.add("ROOT_NAMES="+ areaRootNames);
-
-        for (int i = 0; i < rootIds.size(); i++) {
-            CoreArea rootCoreArea = CoreAreaUtil
-                    .buildCoreArea(rootLevel, rootIds.get(i), rootNames.get(i));
-
-            recursiveLoadAndExecute(orgId, scene, rootCoreArea, targetAreaLevel);
-        }
+        bizInnerProcessAreaInitialize
+                .startInitArea(areaInitConfig);
 
         return true;
-    }
-
-    private void recursiveLoadAndExecute(String orgId, String scene, CoreArea currentArea, CoreAreaLevel targetLevel) {
-        if (currentArea.getAreaLevel() == targetLevel) {
-            bizInnerProcessMasterDataAreaInitialize.init(orgId, scene, currentArea);
-        } else {
-            List<CoreArea> childs = coreAreaService.getChildArea(currentArea);
-            for (CoreArea childArea : childs) {
-                recursiveLoadAndExecute(orgId, scene, childArea, targetLevel);
-            }
-        }
     }
 }

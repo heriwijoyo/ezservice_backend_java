@@ -45,6 +45,7 @@ public class BizInnerProcessMasterDataAreaInitialize {
                 VillageMasterData villageMasterData = new VillageMasterData();
                 villageMasterData.setVillageId(coreArea.getAreaId());
                 villageMasterData.setVillageName(coreArea.getName());
+                villageMasterData.setDistrictId(coreArea.getParentId());
                 bizObjectMapperService.parseFromSource(masterData, villageMasterData);
                 break;
         }

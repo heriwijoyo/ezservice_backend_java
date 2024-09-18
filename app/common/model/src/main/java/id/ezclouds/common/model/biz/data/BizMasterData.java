@@ -15,6 +15,8 @@ public class BizMasterData {
     private String scene;
     private String dataId;
     private String dataName;
+    private String regencyId;
+    private String districtId;
 
     private Integer numberValue1;
     private Integer numberValue2;
@@ -66,6 +68,22 @@ public class BizMasterData {
 
     public void setDataName(String dataName) {
         this.dataName = dataName;
+    }
+
+    public String getRegencyId() {
+        return regencyId;
+    }
+
+    public void setRegencyId(String regencyId) {
+        this.regencyId = regencyId;
+    }
+
+    public String getDistrictId() {
+        return districtId;
+    }
+
+    public void setDistrictId(String districtId) {
+        this.districtId = districtId;
     }
 
     public Integer getNumberValue1() {
