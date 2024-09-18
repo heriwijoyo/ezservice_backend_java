@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.ezservice.service.apibiz.OldBizMemberService;
 import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
 import id.ezclouds.common.facade.biz.BizReportService;
+import id.ezclouds.common.facade.dal.web.EzWebAppContentDAO;
 import id.ezclouds.common.model.report.BizMainReport;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
@@ -62,6 +63,9 @@ public class WebAppController {
 
     @Autowired
     private BizReportService bizReportService;
+
+    @Autowired
+    private EzWebAppContentDAO ezWebAppContentDAO;
 
     @GetMapping(value = "/webapp/home.htm")
     private void webAppHome(HttpServletResponse servletResponse) {
@@ -156,6 +160,11 @@ public class WebAppController {
     @GetMapping(value = "/webapp/masterDataOverall.htm")
     private void masterDataOverall(HttpServletResponse servletResponse) {
         renderCachedWebApp(getMasterDataOverallContent(), servletResponse);
+    }
+
+    @GetMapping(value = "/webapp/masterDataRealCount.htm")
+    private void masterDataRealCount(HttpServletResponse servletResponse) {
+        renderCachedWebApp(getWebAppContent(WebAppPage.MASTER_DATA_REAL_COUNT), servletResponse);
     }
 
     @GetMapping(value = "/webapp/organization.htm")
@@ -518,7 +527,7 @@ public class WebAppController {
             String layoutContent = readHtmlContent(ASSET_INCLUDE_LAYOUT);
             String headerContent = readHtmlContent(ASSET_INCLUDE_HEADER);
             String navigationContent = readHtmlContent(ASSET_INCLUDE_NAVIGATION);
-            String pageContent = readHtmlContent(webAppPage.getAssetFile());
+            String pageContent = loadHtmlContent(webAppPage);
             String searchComponent = WebComponentRenderer.getListSearchComponent(webAppPage);
             if (StringUtil.isNotBlank(searchComponent)) {
                 pageContent = pageContent.replace("INCLUDE_SEARCH_COMPONENT", searchComponent);
@@ -568,6 +577,13 @@ public class WebAppController {
             success = false;
         }
         return success;
+    }
+
+    private String loadHtmlContent(WebAppPage webAppPage) throws IOException {
+        if (webAppPage.isLoadFromDatabase()) {
+            return ezWebAppContentDAO.getContentByAssetFileId(webAppPage.getAssetFile());
+        }
+        return readHtmlContent(webAppPage.getAssetFile());
     }
 
     private String readHtmlContent(String assetFile) throws IOException {
