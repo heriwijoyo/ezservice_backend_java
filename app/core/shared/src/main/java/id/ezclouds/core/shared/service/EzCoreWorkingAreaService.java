@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.core.process.biz.inner;
+package id.ezclouds.core.shared.service;
 
 import id.ezclouds.common.facade.area.CoreAreaService;
 import id.ezclouds.common.facade.area.CoreWorkingAreaService;
@@ -22,11 +22,11 @@ import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: BizInnerProcessAreaInitialize.java, v 0.1 2024‐09‐16 7:50 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: EzCoreWorkingAreaService.java, v 0.1 2024‐09‐16 7:50 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
 @Scope(value = "prototype")
-public class BizInnerProcessAreaInitialize implements CoreWorkingAreaService {
+public class EzCoreWorkingAreaService implements CoreWorkingAreaService {
 
     @Autowired
     private CoreConfigService coreConfigService;
