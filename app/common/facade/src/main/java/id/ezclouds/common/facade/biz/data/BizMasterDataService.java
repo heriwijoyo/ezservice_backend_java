@@ -4,9 +4,16 @@
  */
 package id.ezclouds.common.facade.biz.data;
 
+import id.ezclouds.common.model.biz.data.BizMasterDataScene;
+import id.ezclouds.common.model.biz.data.VillageMasterData;
+
+import java.util.List;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizMasterDataService.java, v 0.1 2024‐09‐19 3:19 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 public interface BizMasterDataService {
+
+    List<VillageMasterData> getVillageMasterData(BizMasterDataScene scene, String orgId, String districtId);
 }

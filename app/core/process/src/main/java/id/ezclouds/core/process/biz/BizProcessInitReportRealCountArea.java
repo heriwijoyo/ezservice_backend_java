@@ -6,7 +6,7 @@ package id.ezclouds.core.process.biz;
 
 import id.ezclouds.core.process.biz.inner.BizInnerProcessAreaInitialize;
 import id.ezclouds.core.process.biz.inner.BizInnerProcessRealCountInitialize;
-import id.ezclouds.core.process.model.AreaInitConfig;
+import id.ezclouds.common.model.area.AreaInitConfig;
 import id.ezclouds.core.process.model.BizProcessEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,7 +43,7 @@ public class BizProcessInitReportRealCountArea extends BizAsyncProcessor {
         String targetLevel = param.split(",")[1];
         logData.add("ORG_ID="+ orgId +",TARGET_LEVEL="+ targetLevel);
 
-        bizInnerProcessAreaInitialize.setAreaOnTargetCallback(currentArea -> {
+        bizInnerProcessAreaInitialize.setCoreAreaScanListener(currentArea -> {
             bizInnerProcessRealCountInitialize
                     .init(orgId, targetLevel, currentArea.getName(), currentArea.getParentId(), 0);
         });

@@ -10,8 +10,8 @@ import id.ezclouds.common.model.area.CoreArea;
 import id.ezclouds.common.model.area.CoreAreaLevel;
 import id.ezclouds.common.model.config.CoreOrgConfigType;
 import id.ezclouds.common.model.util.CoreAreaUtil;
-import id.ezclouds.core.process.biz.callback.AreaOnTargetCallback;
-import id.ezclouds.core.process.model.AreaInitConfig;
+import id.ezclouds.common.facade.area.CoreAreaScanListener;
+import id.ezclouds.common.model.area.AreaInitConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ public class BizInnerProcessAreaInitialize {
     @Autowired
     private CoreAreaService coreAreaService;
 
-    private AreaOnTargetCallback areaOnTargetCallback;
+    private CoreAreaScanListener coreAreaScanListener;
 
     public AreaInitConfig getAreaInitConfig(String orgId, String targetLevel) {
         CoreAreaLevel targetAreaLevel = CoreAreaLevel.getByCode(targetLevel);
@@ -65,8 +65,8 @@ public class BizInnerProcessAreaInitialize {
         return initConfig;
     }
 
-    public void setAreaOnTargetCallback(AreaOnTargetCallback areaOnTargetCallback) {
-        this.areaOnTargetCallback = areaOnTargetCallback;
+    public void setCoreAreaScanListener(CoreAreaScanListener coreAreaScanListener) {
+        this.coreAreaScanListener = coreAreaScanListener;
     }
 
     public void startInitArea(AreaInitConfig initConfig) {
@@ -77,8 +77,8 @@ public class BizInnerProcessAreaInitialize {
 
     public void recursiveLoadAndExecute(CoreArea currentArea, CoreAreaLevel targetLevel) {
         if (currentArea.getAreaLevel() == targetLevel) {
-            if (areaOnTargetCallback != null) {
-                areaOnTargetCallback.onTarget(currentArea);
+            if (coreAreaScanListener != null) {
+                coreAreaScanListener.areaOnTargetLevel(currentArea);
             }
         } else {
             List<CoreArea> childs = coreAreaService.getChildArea(currentArea);

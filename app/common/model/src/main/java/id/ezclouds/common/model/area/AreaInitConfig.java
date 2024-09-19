@@ -2,10 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.core.process.model;
-
-import id.ezclouds.common.model.area.CoreArea;
-import id.ezclouds.common.model.area.CoreAreaLevel;
+package id.ezclouds.common.model.area;
 
 import java.util.ArrayList;
 import java.util.List;
