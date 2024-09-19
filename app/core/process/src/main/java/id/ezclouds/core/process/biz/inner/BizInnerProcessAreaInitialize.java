@@ -5,6 +5,7 @@
 package id.ezclouds.core.process.biz.inner;
 
 import id.ezclouds.common.facade.area.CoreAreaService;
+import id.ezclouds.common.facade.area.CoreWorkingAreaService;
 import id.ezclouds.common.facade.config.CoreConfigService;
 import id.ezclouds.common.model.area.CoreArea;
 import id.ezclouds.common.model.area.CoreAreaLevel;
@@ -25,7 +26,7 @@ import java.util.List;
  */
 @Service
 @Scope(value = "prototype")
-public class BizInnerProcessAreaInitialize {
+public class BizInnerProcessAreaInitialize implements CoreWorkingAreaService {
 
     @Autowired
     private CoreConfigService coreConfigService;
@@ -35,8 +36,16 @@ public class BizInnerProcessAreaInitialize {
 
     private CoreAreaScanListener coreAreaScanListener;
 
-    public AreaInitConfig getAreaInitConfig(String orgId, String targetLevel) {
-        CoreAreaLevel targetAreaLevel = CoreAreaLevel.getByCode(targetLevel);
+    @Override
+    public void scanWorkingAreaRecursive(String orgId, CoreAreaLevel targetLevel, CoreAreaScanListener listener) {
+        coreAreaScanListener = listener;
+        AreaInitConfig areaInitConfig = getAreaInitConfig(orgId, targetLevel);
+        for (CoreArea rootArea : areaInitConfig.getRootAreas()) {
+            recursiveLoadAndExecute(rootArea, areaInitConfig.getTargetLevel());
+        }
+    }
+
+    private AreaInitConfig getAreaInitConfig(String orgId, CoreAreaLevel targetLevel) {
         String areaRootLevel = coreConfigService
                 .getOrgConfig(orgId, CoreOrgConfigType.CORE_AREA_ROOT_LEVEL)
                 .getConfigValue();
@@ -53,7 +62,7 @@ public class BizInnerProcessAreaInitialize {
         List<String> rootNames = Arrays.asList(areaRootNames.split(","));
 
         AreaInitConfig initConfig = new AreaInitConfig();
-        initConfig.setTargetLevel(targetAreaLevel);
+        initConfig.setTargetLevel(targetLevel);
 
         for (int i = 0; i < rootIds.size(); i++) {
             CoreArea rootArea = CoreAreaUtil
@@ -65,17 +74,7 @@ public class BizInnerProcessAreaInitialize {
         return initConfig;
     }
 
-    public void setCoreAreaScanListener(CoreAreaScanListener coreAreaScanListener) {
-        this.coreAreaScanListener = coreAreaScanListener;
-    }
-
-    public void startInitArea(AreaInitConfig initConfig) {
-        for (CoreArea rootArea : initConfig.getRootAreas()) {
-            recursiveLoadAndExecute(rootArea, initConfig.getTargetLevel());
-        }
-    }
-
-    public void recursiveLoadAndExecute(CoreArea currentArea, CoreAreaLevel targetLevel) {
+    private void recursiveLoadAndExecute(CoreArea currentArea, CoreAreaLevel targetLevel) {
         if (currentArea.getAreaLevel() == targetLevel) {
             if (coreAreaScanListener != null) {
                 coreAreaScanListener.areaOnTargetLevel(currentArea);

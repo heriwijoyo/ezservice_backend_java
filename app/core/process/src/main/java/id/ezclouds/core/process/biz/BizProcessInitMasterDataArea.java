@@ -4,13 +4,15 @@
  */
 package id.ezclouds.core.process.biz;
 
+import id.ezclouds.common.facade.area.CoreAreaScanListener;
 import id.ezclouds.common.facade.area.CoreAreaService;
+import id.ezclouds.common.facade.area.CoreWorkingAreaService;
 import id.ezclouds.common.facade.config.CoreConfigService;
+import id.ezclouds.common.model.area.CoreArea;
+import id.ezclouds.common.model.area.CoreAreaLevel;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
-import id.ezclouds.core.process.biz.inner.BizInnerProcessAreaInitialize;
 import id.ezclouds.core.process.biz.inner.BizInnerProcessMasterDataAreaInitialize;
-import id.ezclouds.common.model.area.AreaInitConfig;
 import id.ezclouds.core.process.model.BizProcessEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +33,7 @@ public class BizProcessInitMasterDataArea extends BizAsyncProcessor {
     private CoreAreaService coreAreaService;
 
     @Autowired
-    private BizInnerProcessAreaInitialize bizInnerProcessAreaInitialize;
+    private CoreWorkingAreaService coreWorkingAreaService;
 
     @Autowired
     private BizInnerProcessMasterDataAreaInitialize bizInnerProcessMasterDataAreaInitialize;
@@ -58,15 +60,16 @@ public class BizProcessInitMasterDataArea extends BizAsyncProcessor {
         String targetLevel = paramRequest.split(",")[2];
         logData.add("ORG_ID="+ orgId +",SCENE="+ scene + ",TARGET_LEVEL="+ targetLevel);
 
-        bizInnerProcessAreaInitialize.setCoreAreaScanListener(currentArea -> {
-            bizInnerProcessMasterDataAreaInitialize.init(orgId, scene, currentArea);
-        });
+        CoreAreaLevel targetAreaLevel = CoreAreaLevel.getByCode(targetLevel);
+        AssertUtil.notNull(targetAreaLevel, EzErrorCode.ILLEGAL_PARAM);
 
-        AreaInitConfig areaInitConfig = bizInnerProcessAreaInitialize
-                .getAreaInitConfig(orgId, targetLevel);
-
-        bizInnerProcessAreaInitialize
-                .startInitArea(areaInitConfig);
+        coreWorkingAreaService
+                .scanWorkingAreaRecursive(orgId, targetAreaLevel, new CoreAreaScanListener() {
+                    @Override
+                    public void areaOnTargetLevel(CoreArea currentArea) {
+                        bizInnerProcessMasterDataAreaInitialize.init(orgId, scene, currentArea);
+                    }
+                });
 
         return true;
     }

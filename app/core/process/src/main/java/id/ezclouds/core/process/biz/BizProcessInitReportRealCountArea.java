@@ -4,9 +4,13 @@
  */
 package id.ezclouds.core.process.biz;
 
-import id.ezclouds.core.process.biz.inner.BizInnerProcessAreaInitialize;
+import id.ezclouds.common.facade.area.CoreAreaScanListener;
+import id.ezclouds.common.facade.area.CoreWorkingAreaService;
+import id.ezclouds.common.model.area.CoreArea;
+import id.ezclouds.common.model.area.CoreAreaLevel;
+import id.ezclouds.common.util.assertion.AssertUtil;
+import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.core.process.biz.inner.BizInnerProcessRealCountInitialize;
-import id.ezclouds.common.model.area.AreaInitConfig;
 import id.ezclouds.core.process.model.BizProcessEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +25,7 @@ import java.util.List;
 public class BizProcessInitReportRealCountArea extends BizAsyncProcessor {
 
     @Autowired
-    private BizInnerProcessAreaInitialize bizInnerProcessAreaInitialize;
+    private CoreWorkingAreaService coreWorkingAreaService;
 
     @Autowired
     private BizInnerProcessRealCountInitialize bizInnerProcessRealCountInitialize;
@@ -43,16 +47,17 @@ public class BizProcessInitReportRealCountArea extends BizAsyncProcessor {
         String targetLevel = param.split(",")[1];
         logData.add("ORG_ID="+ orgId +",TARGET_LEVEL="+ targetLevel);
 
-        bizInnerProcessAreaInitialize.setCoreAreaScanListener(currentArea -> {
-            bizInnerProcessRealCountInitialize
-                    .init(orgId, targetLevel, currentArea.getName(), currentArea.getParentId(), 0);
-        });
+        CoreAreaLevel targetAreaLevel = CoreAreaLevel.getByCode(targetLevel);
+        AssertUtil.notNull(targetAreaLevel, EzErrorCode.ILLEGAL_PARAM);
 
-        AreaInitConfig areaInitConfig = bizInnerProcessAreaInitialize
-                .getAreaInitConfig(orgId, targetLevel);
-
-        bizInnerProcessAreaInitialize
-                .startInitArea(areaInitConfig);
+        coreWorkingAreaService
+                .scanWorkingAreaRecursive(orgId, targetAreaLevel, new CoreAreaScanListener() {
+                    @Override
+                    public void areaOnTargetLevel(CoreArea currentArea) {
+                        bizInnerProcessRealCountInitialize
+                                .init(orgId, targetLevel, currentArea.getName(), currentArea.getParentId(), 0);
+                    }
+                });
 
         return true;
     }
