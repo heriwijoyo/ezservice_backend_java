@@ -45,6 +45,10 @@ public class BizInnerProcessMasterDataAreaInitialize {
                 villageMasterData.setVillageId(coreArea.getAreaId());
                 villageMasterData.setVillageName(coreArea.getName());
                 villageMasterData.setDistrictId(coreArea.getParentId());
+                villageMasterData.setVoterTotal(0);
+                villageMasterData.setVoterMale(0);
+                villageMasterData.setVoterFemale(0);
+                villageMasterData.setPollStationTotal(0);
                 bizObjectMapperService.parseFromSource(masterData, villageMasterData);
                 break;
         }

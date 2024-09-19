@@ -4,7 +4,6 @@
  */
 package id.ezclouds.common.facade.biz.data;
 
-import id.ezclouds.common.model.biz.data.BizMasterDataScene;
 import id.ezclouds.common.model.biz.data.VillageMasterData;
 
 import java.util.List;
@@ -15,5 +14,5 @@ import java.util.List;
  */
 public interface BizMasterDataService {
 
-    List<VillageMasterData> getVillageMasterData(BizMasterDataScene scene, String orgId, String districtId);
+    List<VillageMasterData> getVillageMasterData(String orgId, String districtId);
 }

@@ -6,6 +6,7 @@ package id.ezclouds.core.admin.service;
 
 import id.ezclouds.common.facade.auth.AuthAdminService;
 import id.ezclouds.common.facade.biz.admin.BizAdminMasterDataService;
+import id.ezclouds.common.facade.biz.data.BizMasterDataService;
 import id.ezclouds.common.facade.biz.report.BizReportOverallService;
 import id.ezclouds.common.facade.broker.EzEventPublisherService;
 import id.ezclouds.common.facade.template.BizServiceTemplate;
@@ -17,6 +18,7 @@ import id.ezclouds.common.model.message.CommonMessageConstant;
 import id.ezclouds.common.model.report.BizReportOverall;
 import id.ezclouds.common.model.report.BizReportOverallKey;
 import id.ezclouds.common.model.request.WebBizPageRequest;
+import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
 import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.util.assertion.AssertUtil;
@@ -42,6 +44,9 @@ public class CoreAdminMasterDataService implements BizAdminMasterDataService {
 
     @Autowired
     private BizReportOverallService bizReportOverallService;
+
+    @Autowired
+    private BizMasterDataService bizMasterDataService;
 
     @Autowired
     private EzEventPublisherService ezEventPublisherService;
@@ -131,6 +136,35 @@ public class CoreAdminMasterDataService implements BizAdminMasterDataService {
 
                 result.setSuccess(true);
                 result.setObject(CommonMessageConstant.BIZ_OPERATION_SUCCESS);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return BizErrorMessageHelper.getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public BizResult getMasterDataAreaVillage(WebBizDetailRequest<String> request) {
+        final BizResult result = new BizResult();
+        BizServiceTemplate.execute(null, result, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getObject(), EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                AuthAdminSession session = authAdminService
+                        .authenticateAdminSession(request.getSessionId());
+                authAdminService.authorizeSessionForRole(session, AuthRole.ADMIN_ORG);
+
+                result.setObject(bizMasterDataService.getVillageMasterData(session.getOrgId(), request.getObject()));
+                result.setSuccess(true);
             }
 
             @Override

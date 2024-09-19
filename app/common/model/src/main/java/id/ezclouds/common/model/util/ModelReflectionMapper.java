@@ -26,9 +26,18 @@ public class ModelReflectionMapper {
         villageMasterDataStoreMap.put("numberValue2", "voterFemale");
         villageMasterDataStoreMap.put("numberValue3", "voterTotal");
         villageMasterDataStoreMap.put("numberValue4", "pollStationTotal");
+        villageMasterDataStoreMap.put("numberValue5", "INT_0");
         PARSER_MAP_ALL.put("BizMasterData_FROM_VillageMasterData", villageMasterDataStoreMap);
 
-
+        Map<String, String> villageMasterDataQueryMap = new HashMap<>();
+        villageMasterDataQueryMap.put("villageId", "dataId");
+        villageMasterDataQueryMap.put("villageName", "dataName");
+        villageMasterDataQueryMap.put("districtId", "districtId");
+        villageMasterDataQueryMap.put("voterMale", "numberValue1");
+        villageMasterDataQueryMap.put("voterFemale", "numberValue2");
+        villageMasterDataQueryMap.put("voterTotal", "numberValue3");
+        villageMasterDataQueryMap.put("pollStationTotal", "numberValue4");
+        PARSER_MAP_ALL.put("VillageMasterData_FROM_BizMasterData", villageMasterDataQueryMap);
     }
 
     public static Map<String, String> getParserMap(Object source, Object output) {

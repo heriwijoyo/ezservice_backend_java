@@ -7,12 +7,17 @@ package id.ezclouds.core.dal.biz;
 import id.ezclouds.common.facade.dal.biz.BizMasterDataDAO;
 import id.ezclouds.common.model.annotation.EzDAOLogger;
 import id.ezclouds.common.model.biz.data.BizMasterData;
+import id.ezclouds.common.model.biz.data.BizMasterDataQueryParam;
+import id.ezclouds.common.model.biz.data.BizMasterDataScene;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.core.dal.biz.converter.BizMasterDataConverter;
 import id.ezclouds.core.dal.biz.dataobject.EzMasterDataDO;
 import id.ezclouds.core.dal.biz.repo.EzMasterDataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -38,5 +43,20 @@ public class CoreMasterDataDAO implements BizMasterDataDAO {
         }
         ezMasterDataRepository
                 .saveAndFlush(dataDO);
+    }
+
+    @EzDAOLogger
+    @Override
+    public List<BizMasterData> getBizMasterData(BizMasterDataQueryParam param) {
+        BizMasterDataConverter converter = new BizMasterDataConverter();
+        switch (param.getScene()) {
+            case AREA_VILLAGE_STATIC:
+                return ezMasterDataRepository
+                        .findByOrgIdAndSceneAndDistrictId(param.getOrgId(), param.getScene().getCode(), param.getDistrictId())
+                        .stream()
+                        .map(converter::convertQuery)
+                        .collect(Collectors.toList());
+        }
+        return null;
     }
 }

@@ -37,7 +37,7 @@ public class WebAppApiCoreAreaController {
     @PostMapping(value = "/webapp/api/workingAreaDistricts.json")
     private WebApiResult<List<CoreArea>> getAreaDistricts(@RequestParam(name = "sessionId", required = false) String sessionId) {
         final WebApiResult<List<CoreArea>> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebAppApiEvent.WEB_APP_API_AREA_DISTRICTS, result, new WebApiControllerTemplate.Handler<List<CoreArea>>() {
+        WebApiControllerTemplate.execute(WebAppApiEvent.WEBAPP_API_AREA_DISTRICTS, result, new WebApiControllerTemplate.Handler<List<CoreArea>>() {
             @Override
             public BizResult onProcess() throws Exception {
                 return bizAdminCoreAreaService.getWorkingAreaDistricts(sessionId);

@@ -83,10 +83,17 @@ public class CoreObjectMapperService implements BizObjectMapperService {
             String valueKey = parseMap.get(fieldName);
 
             if (StringUtil.isNotBlank(valueKey)) {
-                if (valueKey.startsWith("STATIC_")) {
+                if (valueKey.startsWith("INT_")) {
                     try {
                         outputField.setAccessible(true);
-                        outputField.set(output, valueKey.substring("STATIC_".length()));
+                        outputField.set(output, Integer.parseInt(valueKey.substring("INT_".length())));
+                    } catch (Exception ignored) {
+                    }
+                }
+                else if (valueKey.startsWith("STR_")) {
+                    try {
+                        outputField.setAccessible(true);
+                        outputField.set(output, valueKey.substring("STR_".length()));
                     } catch (Exception ignored) {
                     }
                 }

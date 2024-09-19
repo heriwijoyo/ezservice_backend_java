@@ -5,10 +5,16 @@
 package id.ezclouds.core.biz.service.data;
 
 import id.ezclouds.common.facade.biz.data.BizMasterDataService;
+import id.ezclouds.common.facade.dal.biz.BizMasterDataDAO;
+import id.ezclouds.common.facade.integration.BizObjectMapperService;
+import id.ezclouds.common.model.biz.data.BizMasterData;
+import id.ezclouds.common.model.biz.data.BizMasterDataQueryParam;
 import id.ezclouds.common.model.biz.data.BizMasterDataScene;
 import id.ezclouds.common.model.biz.data.VillageMasterData;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,8 +24,30 @@ import java.util.List;
 @Service
 public class CoreBizMasterDataService implements BizMasterDataService {
 
+    @Autowired
+    private BizMasterDataDAO bizMasterDataDAO;
+
+    @Autowired
+    private BizObjectMapperService bizObjectMapperService;
+
     @Override
-    public List<VillageMasterData> getVillageMasterData(BizMasterDataScene scene, String orgId, String districtId) {
-        return null;
+    public List<VillageMasterData> getVillageMasterData(String orgId, String districtId) {
+        List<VillageMasterData> villageMasterData = new ArrayList<>();
+
+        BizMasterDataQueryParam queryParam = new BizMasterDataQueryParam();
+        queryParam.setOrgId(orgId);
+        queryParam.setDistrictId(districtId);
+        queryParam.setScene(BizMasterDataScene.AREA_VILLAGE_STATIC);
+
+        List<BizMasterData> masterDataList = bizMasterDataDAO.getBizMasterData(queryParam);
+        for (BizMasterData masterData : masterDataList) {
+            VillageMasterData vMasterData = new VillageMasterData();
+            vMasterData.setBizMasterId(masterData.getBizMasterId());
+            bizObjectMapperService.parseFromSource(vMasterData, masterData);
+
+            villageMasterData.add(vMasterData);
+        }
+
+        return villageMasterData;
     }
 }

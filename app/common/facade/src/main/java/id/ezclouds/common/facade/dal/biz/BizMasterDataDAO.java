@@ -5,6 +5,9 @@
 package id.ezclouds.common.facade.dal.biz;
 
 import id.ezclouds.common.model.biz.data.BizMasterData;
+import id.ezclouds.common.model.biz.data.BizMasterDataQueryParam;
+
+import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -13,4 +16,6 @@ import id.ezclouds.common.model.biz.data.BizMasterData;
 public interface BizMasterDataDAO {
 
     void storeOrUpdate(BizMasterData masterData);
+
+    List<BizMasterData> getBizMasterData(BizMasterDataQueryParam param);
 }
