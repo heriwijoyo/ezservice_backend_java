@@ -21,6 +21,7 @@ public class ModelReflectionMapper {
         Map<String, String> villageMasterDataStoreMap = new HashMap<>();
         villageMasterDataStoreMap.put("dataId", "villageId");
         villageMasterDataStoreMap.put("dataName", "villageName");
+        villageMasterDataStoreMap.put("districtId", "districtId");
         villageMasterDataStoreMap.put("numberValue1", "voterMale");
         villageMasterDataStoreMap.put("numberValue2", "voterFemale");
         villageMasterDataStoreMap.put("numberValue3", "voterTotal");
