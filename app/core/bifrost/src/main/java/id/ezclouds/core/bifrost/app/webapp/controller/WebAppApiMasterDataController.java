@@ -5,6 +5,7 @@
 package id.ezclouds.core.bifrost.app.webapp.controller;
 
 import id.ezclouds.common.facade.biz.admin.BizAdminMasterDataService;
+import id.ezclouds.common.model.biz.data.BizMasterDataUpdateNumber;
 import id.ezclouds.common.model.biz.data.VillageMasterData;
 import id.ezclouds.common.model.report.BizReportOverall;
 import id.ezclouds.common.model.request.WebBizPageRequest;
@@ -121,4 +122,36 @@ public class WebAppApiMasterDataController {
         return result;
     }
 
+    @PostMapping(value = "/webapp/api/masterDataAreaVillageUpdate.json")
+    private WebApiResult<String> masterDataAreaVillageUpdate(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "bizMasterId", required = false) String bizMasterId,
+            @RequestParam(name = "column", required = false) String column,
+            @RequestParam(name = "value", required = false) Integer value) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebAppApiEvent.WEBAPP_API_MASTER_DATA_VILLAGE, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizMasterDataUpdateNumber dataUpdate = new BizMasterDataUpdateNumber(
+                        bizMasterId, column, value
+                );
+                WebBizUpdateRequest<BizMasterDataUpdateNumber> request = new WebBizUpdateRequest<>();
+                request.setSessionId(sessionId);
+                request.setObject(dataUpdate);
+
+                return bizAdminMasterDataService.updateMasterDataAreaVillage(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
 }

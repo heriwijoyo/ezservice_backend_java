@@ -40,6 +40,11 @@ public class CoreMasterDataDAO implements BizMasterDataDAO {
         if (dataDO == null) {
             dataDO = new BizMasterDataConverter().convertStore(masterData);
             dataDO.setBizMasterId(bizMasterId);
+            dataDO.setNumberValue1(0);
+            dataDO.setNumberValue2(0);
+            dataDO.setNumberValue3(0);
+            dataDO.setNumberValue4(0);
+            dataDO.setNumberValue5(0);
         }
         ezMasterDataRepository
                 .saveAndFlush(dataDO);

@@ -12,6 +12,7 @@ import id.ezclouds.common.facade.broker.EzEventPublisherService;
 import id.ezclouds.common.facade.template.BizServiceTemplate;
 import id.ezclouds.common.model.auth.AuthAdminSession;
 import id.ezclouds.common.model.auth.AuthRole;
+import id.ezclouds.common.model.biz.data.BizMasterDataUpdateNumber;
 import id.ezclouds.common.model.broker.event.EzCommonEvent;
 import id.ezclouds.common.model.broker.event.EzCommonEventData;
 import id.ezclouds.common.model.message.CommonMessageConstant;
@@ -165,6 +166,38 @@ public class CoreAdminMasterDataService implements BizAdminMasterDataService {
 
                 result.setObject(bizMasterDataService.getVillageMasterData(session.getOrgId(), request.getObject()));
                 result.setSuccess(true);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return BizErrorMessageHelper.getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public BizResult updateMasterDataAreaVillage(WebBizUpdateRequest<BizMasterDataUpdateNumber> request) {
+        final BizResult result = new BizResult();
+        BizServiceTemplate.execute(request, result, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notNull(request.getObject(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getObject().getBizMasterId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getObject().getColumn(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notNull(request.getObject().getValue(), EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                AuthAdminSession session = authAdminService
+                        .authenticateAdminSession(request.getSessionId());
+                authAdminService.authorizeSessionForRole(session, AuthRole.ADMIN_ORG);
+
+                result.setSuccess(true);
+                result.setObject(CommonMessageConstant.BIZ_OPERATION_SUCCESS);
             }
 
             @Override
