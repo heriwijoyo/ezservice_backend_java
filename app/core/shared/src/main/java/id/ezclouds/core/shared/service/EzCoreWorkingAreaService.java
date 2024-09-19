@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -43,6 +44,13 @@ public class EzCoreWorkingAreaService implements CoreWorkingAreaService {
         for (CoreArea rootArea : areaInitConfig.getRootAreas()) {
             recursiveLoadAndExecute(rootArea, areaInitConfig.getTargetLevel());
         }
+    }
+
+    @Override
+    public List<CoreArea> fetchCoreAreas(String orgId, CoreAreaLevel targetLevel) {
+        final List<CoreArea> coreAreas = new ArrayList<>();
+        scanWorkingAreaRecursive(orgId, targetLevel, coreAreas::add);
+        return coreAreas;
     }
 
     private AreaInitConfig getAreaInitConfig(String orgId, CoreAreaLevel targetLevel) {

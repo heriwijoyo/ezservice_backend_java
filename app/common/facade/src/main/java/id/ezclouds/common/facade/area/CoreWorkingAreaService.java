@@ -4,7 +4,10 @@
  */
 package id.ezclouds.common.facade.area;
 
+import id.ezclouds.common.model.area.CoreArea;
 import id.ezclouds.common.model.area.CoreAreaLevel;
+
+import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -13,4 +16,6 @@ import id.ezclouds.common.model.area.CoreAreaLevel;
 public interface CoreWorkingAreaService {
 
     void scanWorkingAreaRecursive(String orgId, CoreAreaLevel targetLevel, CoreAreaScanListener listener);
+
+    List<CoreArea> fetchCoreAreas(String orgId, CoreAreaLevel targetLevel);
 }

@@ -6,11 +6,11 @@ package id.ezclouds.core.bifrost.app.web;
 
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.model.result.PageResult;
+import id.ezclouds.common.util.context.EzAppEvent;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.core.bifrost.app.api.digestlog.EmptyDigestLog;
-import id.ezclouds.core.bifrost.app.web.event.WebEvent;
 import id.ezclouds.core.bifrost.app.web.result.WebApiPageResult;
 import id.ezclouds.core.bifrost.app.web.result.WebApiResult;
 import id.ezclouds.common.util.context.EzAppContextHolder;
@@ -21,7 +21,7 @@ import id.ezclouds.common.util.context.EzAppContextHolder;
  */
 public class WebApiControllerTemplate {
 
-    public static <T> void execute(WebEvent webEvent, WebApiPageResult<T> apiResult, PageHandler<T> handler) {
+    public static <T> void execute(EzAppEvent webEvent, WebApiPageResult<T> apiResult, PageHandler<T> handler) {
         EzAppContextHolder.init(webEvent);
         BizResult bizResult = new BizResult();
         try {
@@ -50,7 +50,7 @@ public class WebApiControllerTemplate {
         }
     }
 
-    public static <T> void execute(WebEvent webEvent, WebApiResult<T> apiResult, Handler<T> handler) {
+    public static <T> void execute(EzAppEvent webEvent, WebApiResult<T> apiResult, Handler<T> handler) {
 
         EzAppContextHolder.init(webEvent);
         BizResult bizResult = new BizResult();
