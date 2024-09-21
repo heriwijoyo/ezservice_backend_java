@@ -6,9 +6,9 @@ package id.ezclouds.biz.ezservice.service.core;
 
 import id.ezclouds.biz.ezservice.service.app.*;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.service.AppSubOrganizationService;
+import id.ezclouds.common.facade.file.CoreFileService;
 import id.ezclouds.core.auth.service.CoreAuthService;
 import id.ezclouds.core.shared.service.CoreAdminService;
-import id.ezclouds.core.shared.service.CoreFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;

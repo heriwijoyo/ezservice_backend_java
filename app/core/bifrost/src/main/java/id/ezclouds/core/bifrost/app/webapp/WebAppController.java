@@ -22,6 +22,8 @@ import id.ezclouds.core.bifrost.app.api.digestlog.EmptyDigestLog;
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;
 import id.ezclouds.core.bifrost.core.SpringContextConfig;
 import id.ezclouds.common.util.context.EzAppContextHolder;
+import id.ezclouds.core.bifrost.core.config.WebAppConfig;
+import id.ezclouds.core.bifrost.core.constant.WebConstant;
 import id.ezclouds.core.bifrost.core.web.component.WebAppForm;
 import id.ezclouds.core.bifrost.core.web.component.render.WebAppFormRenderer;
 import id.ezclouds.core.bifrost.core.web.component.render.WebComponentRenderer;
@@ -42,6 +44,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -537,6 +542,7 @@ public class WebAppController {
                     .replace("INCLUDE_PAGE_CONTENT", pageContent);
             return htmlContent;
         } catch (IOException e) {
+            e.printStackTrace();
             return StringUtil.EMPTY;
         }
     }
@@ -578,6 +584,12 @@ public class WebAppController {
     }
 
     private String loadHtmlContent(WebAppPage webAppPage) throws IOException {
+        WebAppConfig webConfig = BeanFacadeUtil.getBean(WebAppConfig.class);
+
+        if (WebConstant.DEV.equals(webConfig.getWebReleaseMode()) && StringUtil.isNotBlank(webConfig.getWebResourceDir())) {
+            Path webAppSourcePath = Paths.get(webConfig.getWebResourceDir(), webAppPage.getAssetFile());
+            return Files.readString(webAppSourcePath);
+        }
         if (webAppPage.isLoadFromDatabase()) {
             return BeanFacadeUtil
                     .getBean(EzWebAppContentDAO.class)

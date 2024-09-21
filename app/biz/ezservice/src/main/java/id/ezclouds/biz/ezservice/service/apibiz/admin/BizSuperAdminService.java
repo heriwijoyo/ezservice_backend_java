@@ -28,6 +28,7 @@ import id.ezclouds.biz.ezservice.service.request.BizDataImportRequest;
 import id.ezclouds.biz.ezservice.service.request.BizLocalAreaRequest;
 import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.web.*;
+import id.ezclouds.common.facade.file.CoreFileService;
 import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
 import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
 import id.ezclouds.common.model.result.BizResult;
@@ -46,8 +47,7 @@ import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.common.model.auth.AuthAdminSession;
 import id.ezclouds.core.auth.request.CoreAdminCommonSessionCreateRequest;
 import id.ezclouds.core.shared.constant.CoreConstant;
-import id.ezclouds.core.shared.file.PublicFileResolver;
-import id.ezclouds.core.shared.service.CoreFileService;
+import id.ezclouds.common.model.file.PublicFileResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

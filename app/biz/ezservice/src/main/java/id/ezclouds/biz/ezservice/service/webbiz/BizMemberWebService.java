@@ -8,15 +8,15 @@ import id.ezclouds.biz.ezservice.enums.ImageRestriction;
 import id.ezclouds.biz.ezservice.enums.WebLoadImageScene;
 import id.ezclouds.biz.ezservice.service.app.BizOrganizationService;
 import id.ezclouds.biz.ezservice.service.request.BizImageLoadRequest;
+import id.ezclouds.common.facade.file.CoreFileService;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.facade.template.BizServiceTemplate;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.common.model.file.PrivateFileResolver;
-import id.ezclouds.core.shared.file.PublicFileResolver;
+import id.ezclouds.common.model.file.PublicFileResolver;
 import id.ezclouds.core.shared.model.CoreOrganization;
-import id.ezclouds.core.shared.service.CoreFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

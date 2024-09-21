@@ -21,6 +21,7 @@ import id.ezclouds.biz.ezservice.service.app.AppProfileService;
 import id.ezclouds.biz.ezservice.service.request.BizMemberRegisterRequest;
 import id.ezclouds.biz.ezservice.service.request.BizMemberUploadRequest;
 import id.ezclouds.biz.ezservice.service.request.BizPageRequest;
+import id.ezclouds.common.facade.file.CoreFileService;
 import id.ezclouds.common.model.request.BizRequest;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.biz.ezservice.subbiz.arahindonesia.service.AppSubOrganizationService;
@@ -39,8 +40,7 @@ import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
 import id.ezclouds.core.member.service.CoreMemberService;
 import id.ezclouds.common.model.file.PrivateFileResolver;
-import id.ezclouds.core.shared.file.PublicFileResolver;
-import id.ezclouds.core.shared.service.CoreFileService;
+import id.ezclouds.common.model.file.PublicFileResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

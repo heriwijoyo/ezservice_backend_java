@@ -30,7 +30,7 @@ public enum WebAppPage {
     DATA_UPLOAD("webapp/dataUpload.htm"),
     MASTER_DATA("webapp/masterData.htm"),
     MASTER_DATA_OVERALL("webapp/masterDataOverall.htm"),
-    MASTER_DATA_REAL_COUNT("masterDataRealCount.htm"),
+    MASTER_DATA_REAL_COUNT("webapp/masterDataRealCount.htm"),
 
     ORGANIZATION("webapp/organization.htm"),
     ORGANIZATION_ADD("webapp/organizationAdd.htm"),

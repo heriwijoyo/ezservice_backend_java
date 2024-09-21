@@ -4,7 +4,9 @@
  */
 package id.ezclouds.core.shared.service;
 
+import id.ezclouds.common.facade.file.CoreFileService;
 import id.ezclouds.common.model.file.PrivateFileResolver;
+import id.ezclouds.common.model.file.PublicFileResolver;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.shared.file.*;
@@ -19,14 +21,15 @@ import java.nio.file.StandardCopyOption;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: CoreFileService.java, v 0.1 2024‐02‐08 3:13 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: EzCoreFileService.java, v 0.1 2024‐02‐08 3:13 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class CoreFileService {
+public class EzCoreFileService implements CoreFileService {
 
     @Value("${ezserviceapp.dir.upload.root}")
     private String uploadRootDir;
 
+    @Override
     public PrivateFileResolver resolveMemberFileInfo(String orgId, String memberId) throws EzErrorException {
         PrivateFileResolverImpl privateFileResolver = new PrivateFileResolverImpl(uploadRootDir, orgId, memberId);
 
@@ -41,10 +44,12 @@ public class CoreFileService {
         return privateFileResolver;
     }
 
+    @Override
     public PublicFileResolver resolvePublicFileInfo(String orgId) {
         return new PublicFileResolverImpl(uploadRootDir, orgId);
     }
 
+    @Override
     public void storeFile(InputStream inputStream, Path targetPath) throws EzErrorException {
         try {
             Files.copy(inputStream, targetPath, StandardCopyOption.REPLACE_EXISTING);
@@ -53,6 +58,7 @@ public class CoreFileService {
         }
     }
 
+    @Override
     public void initPublicFileDirectory(String orgId) {
         PublicFileInitializer fileInitializer = new PublicFileInitializer(uploadRootDir, orgId);
         fileInitializer.initPublicPaths();

@@ -5,8 +5,8 @@
 package id.ezclouds.biz.ezservice.service.core;
 
 import id.ezclouds.biz.ezservice.service.app.BizOrganizationService;
+import id.ezclouds.common.facade.file.CoreFileService;
 import id.ezclouds.core.shared.constant.CoreConstant;
-import id.ezclouds.core.shared.service.CoreFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
