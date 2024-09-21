@@ -12,12 +12,10 @@ import id.ezclouds.common.facade.broker.EzEventPublisherService;
 import id.ezclouds.common.facade.template.BizServiceTemplate;
 import id.ezclouds.common.model.auth.AuthAdminSession;
 import id.ezclouds.common.model.auth.AuthRole;
-import id.ezclouds.common.model.biz.data.BizMasterDataUpdateNumber;
-import id.ezclouds.common.model.broker.event.EzCommonEvent;
-import id.ezclouds.common.model.broker.event.EzCommonEventData;
+import id.ezclouds.common.model.biz.data.BizMasterDataUpdate;
+import id.ezclouds.common.model.biz.data.OverallMasterData;
+import id.ezclouds.common.model.biz.data.VillageMasterData;
 import id.ezclouds.common.model.message.CommonMessageConstant;
-import id.ezclouds.common.model.report.BizReportOverall;
-import id.ezclouds.common.model.report.BizReportOverallKey;
 import id.ezclouds.common.model.request.WebBizPageRequest;
 import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
 import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
@@ -29,9 +27,8 @@ import id.ezclouds.common.util.exception.EzErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -80,7 +77,7 @@ public class CoreAdminMasterDataService implements BizAdminMasterDataService {
     }
 
     @Override
-    public BizResult reportOverallUpdate(WebBizUpdateRequest<BizReportOverall> request) {
+    public BizResult updateMasterDataOverall(WebBizUpdateRequest<BizMasterDataUpdate> request) {
         final BizResult result = new BizResult();
         BizServiceTemplate.execute(null, result, new BizServiceTemplate.Handler() {
             @Override
@@ -88,7 +85,8 @@ public class CoreAdminMasterDataService implements BizAdminMasterDataService {
                 AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
                 AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
                 AssertUtil.notNull(request.getObject(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(request.getObject().getKeyId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getObject().getBizMasterId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.isTrue(request.getObject().isValidNumber(), EzErrorCode.DATA_INVALID);
             }
 
             @Override
@@ -97,10 +95,10 @@ public class CoreAdminMasterDataService implements BizAdminMasterDataService {
                         .authenticateAdminSession(request.getSessionId());
                 authAdminService.authorizeSessionForRole(session, AuthRole.ADMIN_ORG);
 
-                BizReportOverall report = request.getObject();
-                bizReportOverallService.updateReportOverall(session.getOrgId(), report.getKeyId(), report.getCount());
-
-                ezEventPublisherService.publish(new EzCommonEventData(session.getOrgId(), EzCommonEvent.REPORT_OVERALL_CHANGE, null));
+                OverallMasterData masterData = new OverallMasterData();
+                masterData.setBizMasterId(request.getObject().getBizMasterId());
+                masterData.setValueCount(request.getObject().getIntValue());
+                bizMasterDataService.updateOverallMasterData(masterData);
 
                 result.setSuccess(true);
                 result.setObject(CommonMessageConstant.BIZ_OPERATION_SUCCESS);
@@ -144,26 +142,36 @@ public class CoreAdminMasterDataService implements BizAdminMasterDataService {
     }
 
     @Override
-    public BizResult updateMasterDataAreaVillage(WebBizUpdateRequest<BizMasterDataUpdateNumber> request) {
+    public BizResult updateMasterDataAreaVillage(String sessionId, String bizMasterId, String values) {
         final BizResult result = new BizResult();
-        BizServiceTemplate.execute(request, result, new BizServiceTemplate.Handler() {
+        BizServiceTemplate.execute(null, result, new BizServiceTemplate.Handler() {
             @Override
             public void onRequestCheck() throws EzErrorException {
-                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notNull(request.getObject(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(request.getObject().getBizMasterId(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notBlank(request.getObject().getColumn(), EzErrorCode.ILLEGAL_PARAM);
-                AssertUtil.notNull(request.getObject().getValue(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(sessionId, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(bizMasterId, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(values, EzErrorCode.ILLEGAL_PARAM);
             }
 
             @Override
             public void onBizProcess() throws Exception {
+                List<String> valueList = Arrays.asList(values.split(","));
+                AssertUtil.isTrue(valueList.size() >= 4, EzErrorCode.ILLEGAL_PARAM);
+                for (String eachValue : valueList) {
+                    AssertUtil.isNumber(eachValue, EzErrorCode.INVALID_NUMBER_FORMAT);
+                }
+
                 AuthAdminSession session = authAdminService
-                        .authenticateAdminSession(request.getSessionId());
+                        .authenticateAdminSession(sessionId);
                 authAdminService.authorizeSessionForRole(session, AuthRole.ADMIN_ORG);
 
-                bizMasterDataService.updateVillageMasterData(null);
+                VillageMasterData masterData = new VillageMasterData();
+                masterData.setBizMasterId(bizMasterId);
+                masterData.setVoterTotal(Integer.parseInt(valueList.get(0)));
+                masterData.setVoterMale(Integer.parseInt(valueList.get(1)));
+                masterData.setVoterFemale(Integer.parseInt(valueList.get(2)));
+                masterData.setPollStationTotal(Integer.parseInt(valueList.get(3)));
+
+                bizMasterDataService.updateVillageMasterData(masterData);
 
                 result.setSuccess(true);
                 result.setObject(CommonMessageConstant.BIZ_OPERATION_SUCCESS);

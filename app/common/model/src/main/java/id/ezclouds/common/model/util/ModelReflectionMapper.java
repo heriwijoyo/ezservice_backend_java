@@ -34,9 +34,9 @@ public class ModelReflectionMapper {
         villageMasterDataStoreMap.put("dataId", "villageId");
         villageMasterDataStoreMap.put("dataName", "villageName");
         villageMasterDataStoreMap.put("districtId", "districtId");
-        villageMasterDataStoreMap.put("numberValue1", "voterMale");
-        villageMasterDataStoreMap.put("numberValue2", "voterFemale");
-        villageMasterDataStoreMap.put("numberValue3", "voterTotal");
+        villageMasterDataStoreMap.put("numberValue1", "voterTotal");
+        villageMasterDataStoreMap.put("numberValue2", "voterMale");
+        villageMasterDataStoreMap.put("numberValue3", "voterFemale");
         villageMasterDataStoreMap.put("numberValue4", "pollStationTotal");
         villageMasterDataStoreMap.put("numberValue5", "INT_0");
         PARSER_MAP_ALL.put("BizMasterData_FROM_VillageMasterData", villageMasterDataStoreMap);
@@ -45,9 +45,9 @@ public class ModelReflectionMapper {
         villageMasterDataQueryMap.put("villageId", "dataId");
         villageMasterDataQueryMap.put("villageName", "dataName");
         villageMasterDataQueryMap.put("districtId", "districtId");
-        villageMasterDataQueryMap.put("voterMale", "numberValue1");
-        villageMasterDataQueryMap.put("voterFemale", "numberValue2");
-        villageMasterDataQueryMap.put("voterTotal", "numberValue3");
+        villageMasterDataQueryMap.put("voterTotal", "numberValue1");
+        villageMasterDataQueryMap.put("voterMale", "numberValue2");
+        villageMasterDataQueryMap.put("voterFemale", "numberValue3");
         villageMasterDataQueryMap.put("pollStationTotal", "numberValue4");
         PARSER_MAP_ALL.put("VillageMasterData_FROM_BizMasterData", villageMasterDataQueryMap);
     }

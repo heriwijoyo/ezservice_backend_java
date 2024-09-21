@@ -41,6 +41,8 @@ public enum EzErrorCode {
 
     ACTION_NOT_ALLOWED("ACTION_NOT_ALLOWED", "Action Not Allowed"),
     BIZ_UNIQUE_FAILED("BIZ_UNIQUE_FAILED", "Biz Unique Failed"),
+    DATA_INVALID("DATA_INVALID", "Data Invalid"),
+    INVALID_NUMBER_FORMAT("INVALID_NUMBER_FORMAT", "Invalid Number Format"),
 
     SYSTEM_STORE_FILE_FAILED("SYSTEM_STORE_FILE_FAILED", "System Store File Failed"),
     SYSTEM_FILE_ERROR("SYSTEM_FILE_ERROR", "System File Error"),

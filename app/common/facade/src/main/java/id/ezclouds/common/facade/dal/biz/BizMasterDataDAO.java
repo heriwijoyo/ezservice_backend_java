@@ -6,6 +6,8 @@ package id.ezclouds.common.facade.dal.biz;
 
 import id.ezclouds.common.model.biz.data.BizMasterData;
 import id.ezclouds.common.model.biz.data.BizMasterDataQueryParam;
+import id.ezclouds.common.model.biz.data.OverallMasterData;
+import id.ezclouds.common.model.biz.data.VillageMasterData;
 
 import java.util.List;
 
@@ -18,4 +20,8 @@ public interface BizMasterDataDAO {
     void storeOrUpdate(BizMasterData masterData);
 
     List<BizMasterData> getBizMasterData(BizMasterDataQueryParam param);
+
+    void updateData(OverallMasterData overallMasterData);
+
+    void updateData(VillageMasterData villageMasterData);
 }

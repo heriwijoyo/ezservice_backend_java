@@ -11,6 +11,7 @@ import id.ezclouds.common.model.biz.data.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +69,14 @@ public class CoreBizMasterDataService implements BizMasterDataService {
     }
 
     @Override
-    public void updateVillageMasterData(VillageMasterData masterData) {
+    @Transactional
+    public void updateOverallMasterData(OverallMasterData masterData) {
+        bizMasterDataDAO.updateData(masterData);
+    }
 
+    @Override
+    @Transactional
+    public void updateVillageMasterData(VillageMasterData masterData) {
+        bizMasterDataDAO.updateData(masterData);
     }
 }

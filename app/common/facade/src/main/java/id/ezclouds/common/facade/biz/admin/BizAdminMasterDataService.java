@@ -4,8 +4,7 @@
  */
 package id.ezclouds.common.facade.biz.admin;
 
-import id.ezclouds.common.model.biz.data.BizMasterDataUpdateNumber;
-import id.ezclouds.common.model.report.BizReportOverall;
+import id.ezclouds.common.model.biz.data.BizMasterDataUpdate;
 import id.ezclouds.common.model.request.WebBizPageRequest;
 import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
 import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
@@ -19,9 +18,9 @@ public interface BizAdminMasterDataService {
 
     BizResult getMasterDataOverall(WebBizPageRequest request);
 
-    BizResult reportOverallUpdate(WebBizUpdateRequest<BizReportOverall> request);
+    BizResult updateMasterDataOverall(WebBizUpdateRequest<BizMasterDataUpdate> request);
 
     BizResult getMasterDataAreaVillage(WebBizDetailRequest<String> request);
 
-    BizResult updateMasterDataAreaVillage(WebBizUpdateRequest<BizMasterDataUpdateNumber> request);
+    BizResult updateMasterDataAreaVillage(String sessionId, String bizMasterId, String values);
 }

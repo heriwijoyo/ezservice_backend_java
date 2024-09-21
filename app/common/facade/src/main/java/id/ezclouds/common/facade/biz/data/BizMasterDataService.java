@@ -19,5 +19,7 @@ public interface BizMasterDataService {
 
     List<VillageMasterData> getVillageMasterData(String orgId, String districtId);
 
+    void updateOverallMasterData(OverallMasterData masterData);
+
     void updateVillageMasterData(VillageMasterData masterData);
 }

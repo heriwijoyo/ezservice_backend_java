@@ -39,4 +39,12 @@ public class AssertUtil {
     public static void equals(String str1, String str2, EzErrorCode ezErrorCode) throws EzErrorException {
         isTrue(StringUtil.equalsNotNull(str1, str2), ezErrorCode);
     }
+
+    public static void isNumber(String value, EzErrorCode ezErrorCode) throws EzErrorException {
+        try {
+            Integer.parseInt(value);
+        } catch (Exception ignored) {
+            throw new EzErrorException(ezErrorCode);
+        }
+    }
 }

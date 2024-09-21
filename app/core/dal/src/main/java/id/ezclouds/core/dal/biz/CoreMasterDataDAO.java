@@ -8,6 +8,8 @@ import id.ezclouds.common.facade.dal.biz.BizMasterDataDAO;
 import id.ezclouds.common.model.annotation.EzDAOLogger;
 import id.ezclouds.common.model.biz.data.BizMasterData;
 import id.ezclouds.common.model.biz.data.BizMasterDataQueryParam;
+import id.ezclouds.common.model.biz.data.OverallMasterData;
+import id.ezclouds.common.model.biz.data.VillageMasterData;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.core.dal.biz.converter.BizMasterDataConverter;
 import id.ezclouds.core.dal.biz.dataobject.EzMasterDataDO;
@@ -70,5 +72,36 @@ public class CoreMasterDataDAO implements BizMasterDataDAO {
                         .collect(Collectors.toList());
         }
         return new ArrayList<>();
+    }
+
+    @EzDAOLogger
+    @Override
+    public void updateData(OverallMasterData overallMasterData) {
+        EzMasterDataDO masterDataDO = ezMasterDataRepository
+                .findAndLockById(overallMasterData.getBizMasterId());
+        masterDataDO.setNumberValue1(overallMasterData.getValueCount());
+        ezMasterDataRepository.saveAndFlush(masterDataDO);
+    }
+
+    @EzDAOLogger
+    @Override
+    public void updateData(VillageMasterData villageMasterData) {
+        EzMasterDataDO masterDataDO = ezMasterDataRepository
+                .findAndLockById(villageMasterData.getBizMasterId());
+
+        if (villageMasterData.getVoterTotal() != null) {
+            masterDataDO.setNumberValue1(villageMasterData.getVoterTotal());
+        }
+        if (villageMasterData.getVoterMale() != null) {
+            masterDataDO.setNumberValue2(villageMasterData.getVoterMale());
+        }
+        if (villageMasterData.getVoterFemale() != null) {
+            masterDataDO.setNumberValue3(villageMasterData.getVoterFemale());
+        }
+        if (villageMasterData.getPollStationTotal() != null) {
+            masterDataDO.setNumberValue4(villageMasterData.getPollStationTotal());
+        }
+
+        ezMasterDataRepository.saveAndFlush(masterDataDO);
     }
 }

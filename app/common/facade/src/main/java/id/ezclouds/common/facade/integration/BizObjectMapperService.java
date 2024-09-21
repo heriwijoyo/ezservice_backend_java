@@ -20,5 +20,7 @@ public interface BizObjectMapperService {
 
     <O, I> void parseFromSource(O output, I source);
 
+    <O, I> void parseFromSource(O output, I source, Map<String, String> parseMap);
+
     String toJson(Object object);
 }

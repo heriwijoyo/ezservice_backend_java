@@ -6,9 +6,8 @@ package id.ezclouds.core.bifrost.app.webapp.api;
 
 import id.ezclouds.common.facade.biz.admin.BizAdminMasterDataService;
 import id.ezclouds.common.model.biz.data.BizMasterDataOverall;
-import id.ezclouds.common.model.biz.data.BizMasterDataUpdateNumber;
+import id.ezclouds.common.model.biz.data.BizMasterDataUpdate;
 import id.ezclouds.common.model.biz.data.VillageMasterData;
-import id.ezclouds.common.model.report.BizReportOverall;
 import id.ezclouds.common.model.request.WebBizPageRequest;
 import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
 import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
@@ -95,12 +94,15 @@ public class WebAppApiMasterDataController {
     private WebApiResult<String> masterDataOverallUpdate(
             @RequestParam(name = "sessionId", required = false) String sessionId,
             @RequestParam(name = "bizMasterId", required = false) String bizMasterId,
-            @RequestParam(name = "value", required = false) Integer value) {
+            @RequestParam(name = "value", required = false) String value) {
         final WebApiResult<String> result = new WebApiResult<>();
         WebApiControllerTemplate.execute(WebAppApiEvent.WEBAPP_API_MASTER_DATA_OVERALL_UPDATE, result, new WebApiControllerTemplate.Handler<String>() {
             @Override
             public BizResult onProcess() throws Exception {
-                return null;
+                WebBizUpdateRequest<BizMasterDataUpdate> request = new WebBizUpdateRequest<>();
+                request.setSessionId(sessionId);
+                request.setObject(new BizMasterDataUpdate(bizMasterId, value));
+                return bizAdminMasterDataService.updateMasterDataOverall(request);
             }
 
             @Override
@@ -120,20 +122,13 @@ public class WebAppApiMasterDataController {
     private WebApiResult<String> masterDataAreaVillageUpdate(
             @RequestParam(name = "sessionId", required = false) String sessionId,
             @RequestParam(name = "bizMasterId", required = false) String bizMasterId,
-            @RequestParam(name = "column", required = false) String column,
-            @RequestParam(name = "value", required = false) Integer value) {
+            @RequestParam(name = "values", required = false) String values) {
         final WebApiResult<String> result = new WebApiResult<>();
         WebApiControllerTemplate.execute(WebAppApiEvent.WEBAPP_API_MASTER_DATA_VILLAGE_UPDATE, result, new WebApiControllerTemplate.Handler<String>() {
             @Override
             public BizResult onProcess() throws Exception {
-                BizMasterDataUpdateNumber dataUpdate = new BizMasterDataUpdateNumber(
-                        bizMasterId, column, value
-                );
-                WebBizUpdateRequest<BizMasterDataUpdateNumber> request = new WebBizUpdateRequest<>();
-                request.setSessionId(sessionId);
-                request.setObject(dataUpdate);
-
-                return bizAdminMasterDataService.updateMasterDataAreaVillage(request);
+                return bizAdminMasterDataService
+                        .updateMasterDataAreaVillage(sessionId, bizMasterId, values);
             }
 
             @Override

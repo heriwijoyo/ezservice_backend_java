@@ -73,6 +73,11 @@ public class CoreObjectMapperService implements BizObjectMapperService {
     @Override
     public <O, I> void parseFromSource(O output, I source) {
         Map<String, String> parseMap = ModelReflectionMapper.getParserMap(source, output);
+        parseFromSource(output, source, parseMap);
+    }
+
+    @Override
+    public <O, I> void parseFromSource(O output, I source, Map<String, String> parseMap) {
         Map<String, Field> sourceFieldMap = new HashMap<>();
         for (Field mField : source.getClass().getDeclaredFields()) {
             sourceFieldMap.put(mField.getName(), mField);

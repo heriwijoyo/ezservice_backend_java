@@ -6,8 +6,13 @@ package id.ezclouds.core.dal.biz.repo;
 
 import id.ezclouds.core.dal.biz.dataobject.EzMasterDataDO;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.LockModeType;
+import javax.persistence.QueryHint;
 import java.util.List;
 
 /**
@@ -20,4 +25,9 @@ public interface EzMasterDataRepository extends JpaRepository<EzMasterDataDO, St
     List<EzMasterDataDO> findByOrgIdAndScene(String orgId, String scene);
 
     List<EzMasterDataDO> findByOrgIdAndSceneAndDistrictId(String orgId, String scene, String districtId);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @QueryHints({@QueryHint(name = "jakarta.persistence.lock.timeout", value = "3000")})
+    @Query("SELECT emd FROM EzMasterDataDO emd WHERE emd.bizMasterId = ?1")
+    EzMasterDataDO findAndLockById(String bizMasterId);
 }
