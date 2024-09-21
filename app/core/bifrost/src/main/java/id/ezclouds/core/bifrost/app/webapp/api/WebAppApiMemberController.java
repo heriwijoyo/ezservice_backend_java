@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.core.bifrost.app.webapp.controller;
+package id.ezclouds.core.bifrost.app.webapp.api;
 
 import id.ezclouds.common.facade.biz.admin.BizAdminMemberUpdateService;
 import id.ezclouds.common.model.constant.MapKey;
