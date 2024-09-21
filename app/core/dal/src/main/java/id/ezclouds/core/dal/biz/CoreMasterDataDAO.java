@@ -8,7 +8,6 @@ import id.ezclouds.common.facade.dal.biz.BizMasterDataDAO;
 import id.ezclouds.common.model.annotation.EzDAOLogger;
 import id.ezclouds.common.model.biz.data.BizMasterData;
 import id.ezclouds.common.model.biz.data.BizMasterDataQueryParam;
-import id.ezclouds.common.model.biz.data.BizMasterDataScene;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.core.dal.biz.converter.BizMasterDataConverter;
 import id.ezclouds.core.dal.biz.dataobject.EzMasterDataDO;
@@ -16,6 +15,7 @@ import id.ezclouds.core.dal.biz.repo.EzMasterDataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,7 +61,14 @@ public class CoreMasterDataDAO implements BizMasterDataDAO {
                         .stream()
                         .map(converter::convertQuery)
                         .collect(Collectors.toList());
+
+            case OVERALL_STATIC:
+                return ezMasterDataRepository
+                        .findByOrgIdAndScene(param.getOrgId(), param.getScene().getCode())
+                        .stream()
+                        .map(converter::convertQuery)
+                        .collect(Collectors.toList());
         }
-        return null;
+        return new ArrayList<>();
     }
 }

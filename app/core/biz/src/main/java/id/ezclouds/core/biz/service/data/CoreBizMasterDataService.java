@@ -38,6 +38,7 @@ public class CoreBizMasterDataService implements BizMasterDataService {
         List<BizMasterData> masterDataList = bizMasterDataDAO.getBizMasterData(queryParam);
         for (BizMasterData masterData : masterDataList) {
             OverallMasterData oMasterData = new OverallMasterData();
+            oMasterData.setBizMasterId(masterData.getBizMasterId());
             bizObjectMapperService.parseFromSource(oMasterData, masterData);
             overallMasterData.add(oMasterData);
         }

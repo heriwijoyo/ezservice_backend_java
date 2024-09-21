@@ -17,5 +17,7 @@ import java.util.List;
 @Repository
 public interface EzMasterDataRepository extends JpaRepository<EzMasterDataDO, String> {
 
+    List<EzMasterDataDO> findByOrgIdAndScene(String orgId, String scene);
+
     List<EzMasterDataDO> findByOrgIdAndSceneAndDistrictId(String orgId, String scene, String districtId);
 }

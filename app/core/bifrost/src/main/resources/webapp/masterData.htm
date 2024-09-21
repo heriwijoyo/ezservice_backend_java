@@ -14,25 +14,51 @@
             </div>
         </div>
     </div>
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card corner-radius">
+                    <div class="header" style="border-bottom:none;">
+                        <h2>MASTER DATA OVERALL</h2>
+                    </div>
+                    <div class="body" style="padding-top:0px">
+                        <div id="masterDataOverall" class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
+
 
 <script type="text/javascript">
     var EzAdminUrl = {
+        MASTER_DATA_OVERALL: 'api/masterDataOverall.json',
         WORKING_AREA_DISTRICTS: 'api/workingAreaDistricts.json',
         MASTER_DATA_AREA_VILLAGE: 'api/masterDataAreaVillage.json',
         MASTER_DATA_AREA_VILLAGE_UPDATE: 'api/masterDataAreaVillageUpdate.json'
     };
     var EzAppService = {
         start: function() {
-            EzWebAppClient.callApiService(EzAdminUrl.WORKING_AREA_DISTRICTS, {});
+            EzWebAppClient.callApiService(EzAdminUrl.MASTER_DATA_OVERALL, {});
         },
         onApiBizSuccess: function(url, response) {
+            if (url === EzAdminUrl.MASTER_DATA_OVERALL) {
+                EzAppService.renderOverAll(response.data);
+            }
             if (url === EzAdminUrl.WORKING_AREA_DISTRICTS) {
                 EzAppService.renderList(response.data);
             }
             if (url === EzAdminUrl.MASTER_DATA_AREA_VILLAGE) {
                 EzAppService.handleMasterData(response.data);
             }
+        },
+        onOverallChange: function(instance, cell, x, y, value) {
+            var bizMasterId = EzAppService.jsp['masterDataOverall'].getValueFromCoords(0,y);
+            EzWebAppClient.callApiService(EzAdminUrl.MASTER_DATA_AREA_VILLAGE_UPDATE, {
+                bizMasterId: bizMasterId,
+                value: value
+            });
         },
         onChange: function(instance, cell, x, y, value) {
             let districtId = $(instance).data('district-id');
@@ -51,6 +77,20 @@
                 column: columnMap[x],
                 value: value
             });
+        },
+        renderOverAll: function(data) {
+            EzAppService.jsp['masterDataOverall'] = jspreadsheet(document.getElementById('masterDataOverall'), {
+                columns: [
+                    {width:300, align:'left', title:'Master Data ID', readOnly:true},
+                    {width:300, align:'left', title:'Data Name', readOnly:true},
+                    {width:100, title:'Total'}
+                ],
+                data: EzAppService.parseOverallData(data),
+                tableOverflow: false,
+                contextMenu: function(obj, x, y, e) {},
+                onchange: EzAppService.onOverallChange
+            });
+            EzWebAppClient.callApiService(EzAdminUrl.WORKING_AREA_DISTRICTS, {});
         },
         renderList: function(data) {
             for (var i=0; i<data.length; i++) {
@@ -102,6 +142,18 @@
                 contextMenu: function(obj, x, y, e) {},
                 onchange: EzAppService.onChange
             });
+        },
+        parseOverallData: function(data) {
+            let arrData = [];
+            for (var i=0; i<data.length; i++) {
+                let rowData = [
+                    data[i].bizMasterId,
+                    data[i].overallName,
+                    data[i].valueCount
+                ];
+                arrData.push(rowData);
+            }
+            return arrData;
         },
         parseTableData: function(data) {
             let arrData = [];

@@ -5,6 +5,7 @@
 package id.ezclouds.core.bifrost.app.webapp.api;
 
 import id.ezclouds.common.facade.biz.admin.BizAdminMasterDataService;
+import id.ezclouds.common.model.biz.data.BizMasterDataOverall;
 import id.ezclouds.common.model.biz.data.BizMasterDataUpdateNumber;
 import id.ezclouds.common.model.biz.data.VillageMasterData;
 import id.ezclouds.common.model.report.BizReportOverall;
@@ -39,51 +40,20 @@ public class WebAppApiMasterDataController {
     @Autowired
     private BizAdminMasterDataService bizAdminMasterDataService;
 
-    @PostMapping(value = "/webapp/api/reportOverall.json")
-    private WebApiResult<List<List<String>>> reportOverall(@RequestParam(name = "sessionId", required = false) String sessionId) {
-        final WebApiResult<List<List<String>>> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebAppApiEvent.WEBAPP_API_REPORT_OVERALL_GET, result, new WebApiControllerTemplate.Handler<List<List<String>>>() {
+    @PostMapping(value = "/webapp/api/masterDataOverall.json")
+    private WebApiResult<List<BizMasterDataOverall>> masterDataOverall(@RequestParam(name = "sessionId", required = false) String sessionId) {
+        final WebApiResult<List<BizMasterDataOverall>> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebAppApiEvent.WEBAPP_API_MASTER_DATA_OVERALL, result, new WebApiControllerTemplate.Handler<List<BizMasterDataOverall>>() {
             @Override
             public BizResult onProcess() throws Exception {
                 WebBizPageRequest request = new WebBizPageRequest();
                 request.setSessionId(sessionId);
-                return bizAdminMasterDataService.getReportOverall(request);
+                return bizAdminMasterDataService.getMasterDataOverall(request);
             }
 
             @Override
-            public List<List<String>> convertResult(Object object) {
+            public List<BizMasterDataOverall> convertResult(Object object) {
                 return (List) object;
-            }
-
-            @Override
-            public void onDigestLog(DigestLog digestLog) {
-                DigestLogUtil.logWebDigest(LOGGER, digestLog);
-            }
-        });
-        return result;
-    }
-
-    @PostMapping(value = "/webapp/api/reportOverallUpdate.json")
-    private WebApiResult<String> reportOverallUpdate(
-            @RequestParam(name = "sessionId", required = false) String sessionId,
-            @RequestParam(name = "overallKey", required = false) String overallKey,
-            @RequestParam(name = "overallValue", required = false) String overallValue) {
-        final WebApiResult<String> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebAppApiEvent.WEBAPP_API_REPORT_OVERALL_UPDATE, result, new WebApiControllerTemplate.Handler<String>() {
-            @Override
-            public BizResult onProcess() throws Exception {
-                BizReportOverall reportOverall = new BizReportOverall();
-                reportOverall.setKeyId(overallKey);
-                reportOverall.setCount(Integer.parseInt(overallValue));
-                WebBizUpdateRequest<BizReportOverall> request = new WebBizUpdateRequest<>();
-                request.setObject(reportOverall);
-                request.setSessionId(sessionId);
-                return bizAdminMasterDataService.reportOverallUpdate(request);
-            }
-
-            @Override
-            public String convertResult(Object object) {
-                return (String) object;
             }
 
             @Override
@@ -121,6 +91,31 @@ public class WebAppApiMasterDataController {
         return result;
     }
 
+    @PostMapping(value = "/webapp/api/masterDataOverallUpdate.json")
+    private WebApiResult<String> masterDataOverallUpdate(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "bizMasterId", required = false) String bizMasterId,
+            @RequestParam(name = "value", required = false) Integer value) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebAppApiEvent.WEBAPP_API_MASTER_DATA_OVERALL_UPDATE, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                return null;
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
     @PostMapping(value = "/webapp/api/masterDataAreaVillageUpdate.json")
     private WebApiResult<String> masterDataAreaVillageUpdate(
             @RequestParam(name = "sessionId", required = false) String sessionId,
@@ -128,7 +123,7 @@ public class WebAppApiMasterDataController {
             @RequestParam(name = "column", required = false) String column,
             @RequestParam(name = "value", required = false) Integer value) {
         final WebApiResult<String> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebAppApiEvent.WEBAPP_API_MASTER_DATA_VILLAGE, result, new WebApiControllerTemplate.Handler<String>() {
+        WebApiControllerTemplate.execute(WebAppApiEvent.WEBAPP_API_MASTER_DATA_VILLAGE_UPDATE, result, new WebApiControllerTemplate.Handler<String>() {
             @Override
             public BizResult onProcess() throws Exception {
                 BizMasterDataUpdateNumber dataUpdate = new BizMasterDataUpdateNumber(

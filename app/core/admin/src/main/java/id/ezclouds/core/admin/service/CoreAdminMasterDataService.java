@@ -53,7 +53,7 @@ public class CoreAdminMasterDataService implements BizAdminMasterDataService {
     private EzEventPublisherService ezEventPublisherService;
 
     @Override
-    public BizResult getReportOverall(WebBizPageRequest request) {
+    public BizResult getMasterDataOverall(WebBizPageRequest request) {
         final BizResult result = new BizResult();
         BizServiceTemplate.execute(null, result, new BizServiceTemplate.Handler() {
             @Override
@@ -67,40 +67,7 @@ public class CoreAdminMasterDataService implements BizAdminMasterDataService {
                 AuthAdminSession session = authAdminService
                         .authenticateAdminSession(request.getSessionId());
                 authAdminService.authorizeSessionForRole(session, AuthRole.ADMIN_ORG);
-
-                List<List<String>> data = new ArrayList<>();
-
-                List<String> excludeKeys = new ArrayList<>();
-                excludeKeys.add(BizReportOverallKey.TOTAL_SUB_ORGANIZATION.getCode());
-                excludeKeys.add(BizReportOverallKey.TOTAL_MEMBER_UNION.getCode());
-                excludeKeys.add(BizReportOverallKey.TOTAL_TPS.getCode());
-                excludeKeys.add(BizReportOverallKey.MEMBER_TODAY.getCode());
-                excludeKeys.add(BizReportOverallKey.MEMBER_YESTERDAY.getCode());
-                excludeKeys.add(BizReportOverallKey.REAL_COUNT_VOTER_ALL_COUNT.getCode());
-                excludeKeys.add(BizReportOverallKey.REAL_COUNT_VOTER_VERIFIED_COUNT.getCode());
-                excludeKeys.add(BizReportOverallKey.VOTER_BASE_CLUSTER_COUNT.getCode());
-                excludeKeys.add(BizReportOverallKey.VOTER_BASE_MEMBER_COUNT.getCode());
-                excludeKeys.add(BizReportOverallKey.VOTER_BASE_VOTER_COUNT.getCode());
-                excludeKeys.add(BizReportOverallKey.VOTER_BASE_VOTE_STATION_COUNT.getCode());
-                List<BizReportOverall> overalls = bizReportOverallService
-                        .getReportOverall(session.getOrgId())
-                        .stream()
-                        .filter(report -> !excludeKeys.contains(report.getKeyId()))
-                        .collect(Collectors.toList());
-
-                for (BizReportOverall reportOverall : overalls) {
-                    BizReportOverallKey overallKey = BizReportOverallKey
-                            .getByCode(reportOverall.getKeyId());
-
-                    if (overallKey != null) {
-                        List<String> row = new ArrayList<>();
-                        row.add(reportOverall.getKeyId());
-                        row.add(overallKey.getDescription());
-                        row.add(String.valueOf(reportOverall.getCount()));
-                        data.add(row);
-                    }
-                }
-                result.setObject(data);
+                result.setObject(bizMasterDataService.getOverallMasterData(session.getOrgId()));
                 result.setSuccess(true);
             }
 

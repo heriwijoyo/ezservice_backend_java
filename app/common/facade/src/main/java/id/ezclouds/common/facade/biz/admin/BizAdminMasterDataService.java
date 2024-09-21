@@ -17,7 +17,7 @@ import id.ezclouds.common.model.result.BizResult;
  */
 public interface BizAdminMasterDataService {
 
-    BizResult getReportOverall(WebBizPageRequest request);
+    BizResult getMasterDataOverall(WebBizPageRequest request);
 
     BizResult reportOverallUpdate(WebBizUpdateRequest<BizReportOverall> request);
 
