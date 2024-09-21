@@ -70,8 +70,13 @@ public class CoreBizMasterDataService implements BizMasterDataService {
 
     @Override
     @Transactional
-    public void updateOverallMasterData(OverallMasterData masterData) {
-        bizMasterDataDAO.updateData(masterData);
+    public OverallMasterData updateOverallMasterData(OverallMasterData masterData) {
+        BizMasterData bizMasterData = bizMasterDataDAO.updateData(masterData);
+        OverallMasterData overallMasterData = new OverallMasterData();
+        overallMasterData.setBizMasterId(bizMasterData.getBizMasterId());
+        bizObjectMapperService.parseFromSource(overallMasterData, bizMasterData);
+
+        return overallMasterData;
     }
 
     @Override

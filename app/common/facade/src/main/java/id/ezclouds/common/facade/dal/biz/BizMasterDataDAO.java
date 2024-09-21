@@ -21,7 +21,7 @@ public interface BizMasterDataDAO {
 
     List<BizMasterData> getBizMasterData(BizMasterDataQueryParam param);
 
-    void updateData(OverallMasterData overallMasterData);
+    BizMasterData updateData(OverallMasterData overallMasterData);
 
     void updateData(VillageMasterData villageMasterData);
 }

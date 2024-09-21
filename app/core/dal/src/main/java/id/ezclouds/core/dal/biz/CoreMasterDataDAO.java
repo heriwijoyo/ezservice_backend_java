@@ -76,11 +76,12 @@ public class CoreMasterDataDAO implements BizMasterDataDAO {
 
     @EzDAOLogger
     @Override
-    public void updateData(OverallMasterData overallMasterData) {
+    public BizMasterData updateData(OverallMasterData overallMasterData) {
         EzMasterDataDO masterDataDO = ezMasterDataRepository
                 .findAndLockById(overallMasterData.getBizMasterId());
         masterDataDO.setNumberValue1(overallMasterData.getValueCount());
         ezMasterDataRepository.saveAndFlush(masterDataDO);
+        return new BizMasterDataConverter().convertQuery(masterDataDO);
     }
 
     @EzDAOLogger

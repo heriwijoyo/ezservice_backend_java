@@ -8,7 +8,6 @@ import id.ezclouds.common.facade.auth.AuthAdminService;
 import id.ezclouds.common.facade.biz.admin.BizAdminMasterDataService;
 import id.ezclouds.common.facade.biz.data.BizMasterDataService;
 import id.ezclouds.common.facade.biz.report.BizReportOverallService;
-import id.ezclouds.common.facade.broker.EzEventPublisherService;
 import id.ezclouds.common.facade.template.BizServiceTemplate;
 import id.ezclouds.common.model.auth.AuthAdminSession;
 import id.ezclouds.common.model.auth.AuthRole;
@@ -45,9 +44,6 @@ public class CoreAdminMasterDataService implements BizAdminMasterDataService {
 
     @Autowired
     private BizMasterDataService bizMasterDataService;
-
-    @Autowired
-    private EzEventPublisherService ezEventPublisherService;
 
     @Override
     public BizResult getMasterDataOverall(WebBizPageRequest request) {
@@ -98,7 +94,14 @@ public class CoreAdminMasterDataService implements BizAdminMasterDataService {
                 OverallMasterData masterData = new OverallMasterData();
                 masterData.setBizMasterId(request.getObject().getBizMasterId());
                 masterData.setValueCount(request.getObject().getIntValue());
-                bizMasterDataService.updateOverallMasterData(masterData);
+                OverallMasterData overallMasterData = bizMasterDataService
+                        .updateOverallMasterData(masterData);
+
+                bizReportOverallService.updateReportOverall(
+                        session.getOrgId(),
+                        overallMasterData.getOverallKey(),
+                        overallMasterData.getValueCount()
+                );
 
                 result.setSuccess(true);
                 result.setObject(CommonMessageConstant.BIZ_OPERATION_SUCCESS);
