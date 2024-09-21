@@ -7,8 +7,7 @@ package id.ezclouds.core.process.biz.inner;
 import id.ezclouds.common.facade.dal.biz.BizMasterDataDAO;
 import id.ezclouds.common.facade.integration.BizObjectMapperService;
 import id.ezclouds.common.model.area.CoreArea;
-import id.ezclouds.common.model.biz.data.BizMasterData;
-import id.ezclouds.common.model.biz.data.VillageMasterData;
+import id.ezclouds.common.model.biz.data.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +25,23 @@ public class BizInnerProcessMasterDataAreaInitialize {
 
     @Autowired
     private BizMasterDataDAO bizMasterDataDAO;
+
+    @Transactional
+    public void initOverall(String orgId) {
+        for (BizMasterDataOverall masterOverall : BizMasterDataOverall.values()) {
+            OverallMasterData overallMasterData = new OverallMasterData();
+            overallMasterData.setOverallKey(masterOverall.getCode());
+            overallMasterData.setOverallName(masterOverall.getDescription());
+            overallMasterData.setValueCount(0);
+
+            BizMasterData masterData = new BizMasterData();
+            masterData.setOrgId(orgId);
+            masterData.setScene(BizMasterDataScene.OVERALL_STATIC.getCode());
+            bizObjectMapperService.parseFromSource(masterData, overallMasterData);
+
+            bizMasterDataDAO.storeOrUpdate(masterData);
+        }
+    }
 
     @Transactional
     public void init(String orgId, String scene, CoreArea coreArea) {

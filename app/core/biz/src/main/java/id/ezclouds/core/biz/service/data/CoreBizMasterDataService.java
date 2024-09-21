@@ -7,10 +7,7 @@ package id.ezclouds.core.biz.service.data;
 import id.ezclouds.common.facade.biz.data.BizMasterDataService;
 import id.ezclouds.common.facade.dal.biz.BizMasterDataDAO;
 import id.ezclouds.common.facade.integration.BizObjectMapperService;
-import id.ezclouds.common.model.biz.data.BizMasterData;
-import id.ezclouds.common.model.biz.data.BizMasterDataQueryParam;
-import id.ezclouds.common.model.biz.data.BizMasterDataScene;
-import id.ezclouds.common.model.biz.data.VillageMasterData;
+import id.ezclouds.common.model.biz.data.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +26,24 @@ public class CoreBizMasterDataService implements BizMasterDataService {
 
     @Autowired
     private BizObjectMapperService bizObjectMapperService;
+
+    @Override
+    public List<OverallMasterData> getOverallMasterData(String orgId) {
+        List<OverallMasterData> overallMasterData = new ArrayList<>();
+
+        BizMasterDataQueryParam queryParam = new BizMasterDataQueryParam();
+        queryParam.setOrgId(orgId);
+        queryParam.setScene(BizMasterDataScene.OVERALL_STATIC);
+
+        List<BizMasterData> masterDataList = bizMasterDataDAO.getBizMasterData(queryParam);
+        for (BizMasterData masterData : masterDataList) {
+            OverallMasterData oMasterData = new OverallMasterData();
+            bizObjectMapperService.parseFromSource(oMasterData, masterData);
+            overallMasterData.add(oMasterData);
+        }
+
+        return overallMasterData;
+    }
 
     @Override
     public List<VillageMasterData> getVillageMasterData(String orgId, String districtId) {

@@ -10,6 +10,7 @@ package id.ezclouds.common.model.biz.data;
  */
 public enum BizMasterDataScene {
 
+    OVERALL_STATIC("OVERALL_STATIC"),
     AREA_VILLAGE_STATIC("AREA_VILLAGE_STATIC"),
 
     ;

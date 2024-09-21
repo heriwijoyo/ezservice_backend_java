@@ -18,6 +18,18 @@ public class ModelReflectionMapper {
     static {
         PARSER_MAP_ALL = new HashMap<>();
 
+        Map<String, String> overallMasterDataStoreMap = new HashMap<>();
+        overallMasterDataStoreMap.put("dataId", "overallKey");
+        overallMasterDataStoreMap.put("dataName", "overallName");
+        overallMasterDataStoreMap.put("numberValue1", "valueCount");
+        PARSER_MAP_ALL.put("BizMasterData_FROM_OverallMasterData", overallMasterDataStoreMap);
+
+        Map<String, String> overallMasterDataQueryMap = new HashMap<>();
+        overallMasterDataQueryMap.put("overallKey", "dataId");
+        overallMasterDataQueryMap.put("overallName", "dataName");
+        overallMasterDataQueryMap.put("valueCount", "numberValue1");
+        PARSER_MAP_ALL.put("OverallMasterData_FROM_BizMasterData", overallMasterDataQueryMap);
+
         Map<String, String> villageMasterDataStoreMap = new HashMap<>();
         villageMasterDataStoreMap.put("dataId", "villageId");
         villageMasterDataStoreMap.put("dataName", "villageName");

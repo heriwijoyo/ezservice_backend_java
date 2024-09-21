@@ -196,6 +196,8 @@ public class CoreAdminMasterDataService implements BizAdminMasterDataService {
                         .authenticateAdminSession(request.getSessionId());
                 authAdminService.authorizeSessionForRole(session, AuthRole.ADMIN_ORG);
 
+                bizMasterDataService.updateVillageMasterData(null);
+
                 result.setSuccess(true);
                 result.setObject(CommonMessageConstant.BIZ_OPERATION_SUCCESS);
             }

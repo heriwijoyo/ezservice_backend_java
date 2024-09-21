@@ -465,7 +465,6 @@ public class WebAppController {
         return getWebAppContent(WebAppPage.DATA_UPLOAD);
     }
 
-    @Cacheable(value = BizCacheKey.WEBAPP_MASTER_DATA)
     public String getMasterDataContent() {
         return getWebAppContent(WebAppPage.MASTER_DATA);
     }
