@@ -50,4 +50,9 @@ public class CoreBizMasterDataService implements BizMasterDataService {
 
         return villageMasterData;
     }
+
+    @Override
+    public void updateVillageMasterData(VillageMasterData masterData) {
+
+    }
 }

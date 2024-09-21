@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.shared.service;
 
+import id.ezclouds.common.model.file.PrivateFileResolver;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.shared.file.*;

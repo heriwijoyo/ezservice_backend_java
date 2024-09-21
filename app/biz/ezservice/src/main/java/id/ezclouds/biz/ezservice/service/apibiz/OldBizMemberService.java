@@ -38,7 +38,7 @@ import id.ezclouds.core.member.constant.CoreMemberField;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
 import id.ezclouds.core.member.service.CoreMemberService;
-import id.ezclouds.core.shared.file.PrivateFileResolver;
+import id.ezclouds.common.model.file.PrivateFileResolver;
 import id.ezclouds.core.shared.file.PublicFileResolver;
 import id.ezclouds.core.shared.service.CoreFileService;
 import org.springframework.beans.factory.annotation.Autowired;

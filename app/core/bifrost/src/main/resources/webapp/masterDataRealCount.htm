@@ -1,0 +1,148 @@
+<link rel="stylesheet" type="text/css" href="../../../../assets/css/tables/a11y-light.css"/>
+<link rel="stylesheet" type="text/css" href="../../../../assets/css/tables/jspreadsheet.min.css"/>
+<script type="text/javascript" src="../../../../assets/js/tables/jsuites.min.js"></script>
+<script type="text/javascript" src="../../../../assets/js/tables/index.min.js"></script>
+<style type="text/css">
+    .jexcel>tbody>tr>td.readonly{color:rgba(0,0,0,.8)}
+</style>
+
+<section class="content" id="root-content">
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h4>Update Master Data</h4>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    var EzAdminUrl = {
+        WORKING_AREA_DISTRICTS: 'api/workingAreaDistricts.json',
+        MASTER_DATA_AREA_VILLAGE: 'api/masterDataAreaVillage.json',
+        MASTER_DATA_AREA_VILLAGE_UPDATE: 'api/masterDataAreaVillageUpdate.json'
+    };
+    var EzAppService = {
+        start: function() {
+            EzWebAppClient.callApiService(EzAdminUrl.WORKING_AREA_DISTRICTS, {});
+        },
+        onApiBizSuccess: function(url, response) {
+            if (url === EzAdminUrl.WORKING_AREA_DISTRICTS) {
+                EzAppService.renderList(response.data);
+            }
+            if (url === EzAdminUrl.MASTER_DATA_AREA_VILLAGE) {
+                EzAppService.handleMasterData(response.data);
+            }
+        },
+        onChange: function(instance, cell, x, y, value) {
+            let districtId = $(instance).data('district-id');
+            var bizMasterId = EzAppService.jsp[districtId].getValueFromCoords(0,y);
+
+            let columnMap = [
+                '','',
+                'voterTotal',
+                'voterMale',
+                'voterFemale',
+                'pollStationTotal'
+            ];
+
+            EzWebAppClient.callApiService(EzAdminUrl.MASTER_DATA_AREA_VILLAGE_UPDATE, {
+                bizMasterId: bizMasterId,
+                column: columnMap[x],
+                value: value
+            });
+        },
+        renderList: function(data) {
+            for (var i=0; i<data.length; i++) {
+                let htmlCard = ''+
+                '<div class="container-fluid">'+
+                    '<div class="row clearfix">'+
+                        '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">'+
+                            '<div class="card corner-radius">'+
+                                '<div class="header" style="border-bottom:none;">'+
+                                    '<h2>KECAMATAN: '+ data[i].name +'</h2>'+
+                                '</div>'+
+                                '<div class="body" style="padding-top:0px">'+
+                                    '<div class="clearfix masterDataSmartTable" data-district-id="'+ data[i].id +'">'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>';
+
+                $('#root-content').append(htmlCard);
+            }
+
+            $('.masterDataSmartTable').each(function(i, obj) {
+                let districtId = $(obj).data('district-id');
+                EzWebAppClient.callApiService(EzAdminUrl.MASTER_DATA_AREA_VILLAGE, {
+                    districtId: districtId
+                });
+            });
+        },
+        handleMasterData: function(data) {
+            if (data.length > 0) {
+                let districtId = data[0].districtId;
+                EzAppService.renderTable(districtId, data);
+            }
+        },
+        renderTable: function(districtId, data) {
+            EzAppService.jsp[districtId] = jspreadsheet(document.querySelectorAll("[data-district-id='"+ districtId +"']")[0], {
+                columns: [
+                    {width:300, align:'left', title:'Master Data ID', readOnly:true},
+                    {width:300, align:'left', title:'Nama Kelurahan', readOnly:true},
+                    {width:100, title:'Total DPT'},
+                    {width:100, title:'Laki-Laki'},
+                    {width:100, title:'Perempuan'},
+                    {width:100, title:'Total TPS'}
+                ],
+                data: EzAppService.parseTableData(data),
+                tableOverflow: false,
+                contextMenu: function(obj, x, y, e) {},
+                onchange: EzAppService.onChange
+            });
+        },
+        parseTableData: function(data) {
+            let arrData = [];
+            for (var i=0; i<data.length; i++) {
+                let rowData = [
+                    data[i].bizMasterId,
+                    data[i].villageName,
+                    data[i].voterTotal,
+                    data[i].voterMale,
+                    data[i].voterFemale,
+                    data[i].pollStationTotal
+                ];
+                arrData.push(rowData);
+            }
+
+            return arrData;
+        },
+        jsp: {}
+    };
+
+    $(document).ready(function(){
+        EzWebAppClient.onApiBizSuccess(function(url, response){
+            EzAppService.onApiBizSuccess(url, response);
+        });
+        EzWebAppClient.onApiBizFailed(function(url, message){
+            EzWebAppViewHelper.showModalAlert(
+                'API Biz Failed',
+                message,
+                function(){}
+            );
+        });
+        EzWebAppClient.onApiCallError(function(xhr){
+            EzWebAppViewHelper.showModalAlert(
+                'Application Error',
+                xhr.responseText,
+                function(){}
+            );
+        });
+        EzWebAppClient.onReady(function(){
+            EzAppService.start();
+        });
+        EzWebAppClient.start();
+    });
+</script>

@@ -4,6 +4,8 @@
  */
 package id.ezclouds.core.shared.file;
 
+import id.ezclouds.common.model.file.PrivateFileResolver;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 

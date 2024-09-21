@@ -15,4 +15,6 @@ import java.util.List;
 public interface BizMasterDataService {
 
     List<VillageMasterData> getVillageMasterData(String orgId, String districtId);
+
+    void updateVillageMasterData(VillageMasterData masterData);
 }
