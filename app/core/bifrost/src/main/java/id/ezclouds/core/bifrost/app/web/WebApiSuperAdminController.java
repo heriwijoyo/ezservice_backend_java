@@ -550,7 +550,7 @@ public class WebApiSuperAdminController {
     @PostMapping(value = "/webapp/api/reloadReport.json")
     private WebApiResult<String> reloadReport(@RequestParam(name = "sessionId", required = false) String sessionId) {
         final WebApiResult<String> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_RELOAD_REPORT, result, new WebApiControllerTemplate.Handler<String>() {
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_RELOAD_REPORT, result, new WebApiControllerTemplate.Handler<>() {
             @Override
             public BizResult onProcess() throws Exception {
                 return bizSuperAdminService.reloadReport(sessionId);
@@ -575,7 +575,7 @@ public class WebApiSuperAdminController {
             @RequestParam(name = "level", required = false) String level,
             @RequestParam(name = "parentId", required = false) String parentId) {
         final WebApiResult<List<LegacyCoreArea>> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_CORE_AREA, result, new WebApiControllerTemplate.Handler<List<LegacyCoreArea>>() {
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_CORE_AREA, result, new WebApiControllerTemplate.Handler<>() {
             @Override
             public BizResult onProcess() throws Exception {
                 return bizSuperAdminService

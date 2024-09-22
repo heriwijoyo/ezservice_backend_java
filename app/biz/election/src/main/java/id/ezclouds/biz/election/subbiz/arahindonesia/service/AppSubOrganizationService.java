@@ -7,17 +7,17 @@ package id.ezclouds.biz.election.subbiz.arahindonesia.service;
 import id.ezclouds.biz.election.subbiz.arahindonesia.dataobject.BizSubOrganizationDO;
 import id.ezclouds.biz.election.subbiz.arahindonesia.repo.AppSubOrganizationRepository;
 import id.ezclouds.biz.election.converter.BizModelConverter;
-import id.ezclouds.biz.election.service.app.dataobject.BizMemberDO;
 import id.ezclouds.biz.election.service.app.repo.BizMemberRepository;
 import id.ezclouds.biz.election.service.inner.service.BizPageQueryStrategy;
 import id.ezclouds.biz.election.service.request.BizPageRequest;
+import id.ezclouds.common.facade.core.CoreSequenceService;
+import id.ezclouds.common.model.core.BizSeqScene;
+import id.ezclouds.common.model.core.Organization;
 import id.ezclouds.common.model.result.BizPageInfo;
 import id.ezclouds.biz.election.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.StringUtil;
-import id.ezclouds.core.shared.enums.CoreSequenceScene;
 import id.ezclouds.common.model.result.PageResult;
-import id.ezclouds.core.shared.service.CoreSequenceService;
 import id.ezclouds.core.shared.util.PageResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -54,18 +54,10 @@ public class AppSubOrganizationService {
                 .orElse(null);
     }
 
-    public BizSubOrganization getSubOrganization(String orgId, String memberId) {
-        BizMemberDO bizMemberDO = bizMemberRepository
-                .findByMemberIdAndOrgId(memberId, orgId);
-        if (bizMemberDO == null || StringUtil.isBlank(bizMemberDO.getSubOrgId())) {
-            return null;
-        }
-        return getSubOrganizationById(bizMemberDO.getSubOrgId());
-    }
-
     @Transactional
     public void create(String name, String address, String orgId, String orgCode) {
-        String subOrgId = coreSequenceService.generateSequence(orgId, orgCode, CoreSequenceScene.BIZ_SUB_ORG.getCode());
+        String subOrgId = coreSequenceService
+                .generateSequence(new Organization(orgId, orgCode), BizSeqScene.BIZ_SUB_ORG);
         BizSubOrganizationDO bizSubOrganizationDO = new BizSubOrganizationDO();
         bizSubOrganizationDO.setName(name);
         bizSubOrganizationDO.setOrgId(orgId);

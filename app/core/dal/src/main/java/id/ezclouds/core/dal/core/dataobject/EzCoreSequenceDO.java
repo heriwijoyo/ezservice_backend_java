@@ -1,47 +1,56 @@
 /**
  * Ezclouds.id
- * Copyright (c) 2020‐2024 All Rights Reserved.
+ * Copyright (c) 2020‐2023 All Rights Reserved.
  */
-package id.ezclouds.core.shared.model;
+package id.ezclouds.core.dal.core.dataobject;
 
-import id.ezclouds.core.shared.repo.dataobject.EzCoreSequenceDO;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: CoreSequenceConfig.java, v 0.1 2024‐03‐29 4:02 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: EzCoreSequenceDO.java, v 0.1 2023‐12‐30 3:51 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class CoreSequenceConfig {
+@Entity
+@Table(name = "ez_core_sequence")
+public class EzCoreSequenceDO {
 
-    private String seqId;
+    @Id
+    @Column(name = "sequence_id")
+    private String sequenceId;
+
+    @Column(name = "org_id")
     private String orgId;
+
+    @Column(name = "scene")
     private String scene;
+
+    @Column(name = "scene_code")
     private String sceneCode;
+
+    @Column(name = "step_min")
     private int stepMin;
+
+    @Column(name = "step_max")
     private int stepMax;
+
+    @Column(name = "step_value")
     private int stepValue;
+
+    @Column(name = "sequence_length")
     private int seqLength;
+
+    @Column(name = "sequence")
     private int sequence;
 
-    public EzCoreSequenceDO toSequenceDO() {
-        EzCoreSequenceDO sequenceDO = new EzCoreSequenceDO();
-        sequenceDO.setSequenceId(seqId);
-        sequenceDO.setOrgId(orgId);
-        sequenceDO.setScene(scene);
-        sequenceDO.setSceneCode(sceneCode);
-        sequenceDO.setStepMin(stepMin);
-        sequenceDO.setStepMax(stepMax);
-        sequenceDO.setStepValue(stepValue);
-        sequenceDO.setSequenceLength(seqLength);
-        sequenceDO.setSequence(sequence);
-        return sequenceDO;
+    public String getSequenceId() {
+        return sequenceId;
     }
 
-    public String getSeqId() {
-        return seqId;
-    }
-
-    public void setSeqId(String seqId) {
-        this.seqId = seqId;
+    public void setSequenceId(String sequenceId) {
+        this.sequenceId = sequenceId;
     }
 
     public String getOrgId() {

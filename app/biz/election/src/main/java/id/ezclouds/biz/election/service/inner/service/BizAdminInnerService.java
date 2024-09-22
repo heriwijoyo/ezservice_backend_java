@@ -37,6 +37,7 @@ import id.ezclouds.biz.election.service.app.model.AppDocument;
 import id.ezclouds.biz.election.service.app.request.VideoCardCreateRequest;
 import id.ezclouds.common.facade.area.CoreAreaService;
 import id.ezclouds.common.facade.config.CoreConfigService;
+import id.ezclouds.common.facade.core.CoreSequenceService;
 import id.ezclouds.common.facade.file.CoreFileService;
 import id.ezclouds.common.facade.integration.EzConnectService;
 import id.ezclouds.common.model.area.CoreArea;
@@ -69,7 +70,6 @@ import id.ezclouds.core.member.service.CoreMemberService;
 import id.ezclouds.core.shared.constant.CoreConstant;
 import id.ezclouds.core.shared.enums.CoreSequenceScene;
 import id.ezclouds.core.shared.model.CommonModelSwitch;
-import id.ezclouds.core.shared.model.CoreSequenceConfig;
 import id.ezclouds.core.shared.repo.dataobject.EzCoreOrganizationDO;
 import id.ezclouds.core.shared.service.*;
 import id.ezclouds.core.shared.util.PageResultUtil;
@@ -654,34 +654,7 @@ public class BizAdminInnerService {
     }
 
     private void initiateOrgConfig(EzCoreOrganizationDO organizationDO) {
-        String scene = CoreSequenceScene.CORE_MEMBER_ID.getCode();
-        String sceneCode = CoreSequenceScene.CORE_MEMBER_ID.getSceneCode();
-        CoreSequenceConfig memberSeqConfig = new CoreSequenceConfig();
-        memberSeqConfig.setSeqId(organizationDO.getOrgId() +"_"+ scene);
-        memberSeqConfig.setOrgId(organizationDO.getOrgId());
-        memberSeqConfig.setScene(scene);
-        memberSeqConfig.setSceneCode(sceneCode);
-        memberSeqConfig.setStepMin(100);
-        memberSeqConfig.setStepMax(199);
-        memberSeqConfig.setStepValue(100);
-        memberSeqConfig.setSeqLength(9);
-        memberSeqConfig.setSequence(0);
-        coreSequenceService.createSequenceConfig(memberSeqConfig);
-
-        String subOrgscene = CoreSequenceScene.BIZ_SUB_ORG.getCode();
-        String subOrgsceneCode = CoreSequenceScene.BIZ_SUB_ORG.getSceneCode();
-        CoreSequenceConfig subOrgSeqConfig = new CoreSequenceConfig();
-        subOrgSeqConfig.setSeqId(organizationDO.getOrgId() +"_"+ subOrgscene);
-        subOrgSeqConfig.setOrgId(organizationDO.getOrgId());
-        subOrgSeqConfig.setScene(subOrgscene);
-        subOrgSeqConfig.setSceneCode(subOrgsceneCode);
-        subOrgSeqConfig.setStepMin(100);
-        subOrgSeqConfig.setStepMax(100);
-        subOrgSeqConfig.setStepValue(100);
-        subOrgSeqConfig.setSeqLength(3);
-        subOrgSeqConfig.setSequence(0);
-        coreSequenceService.createSequenceConfig(subOrgSeqConfig);
-
+        coreSequenceService.initSequenceConfig(organizationDO.getOrgId());
         coreAdminService.initiateBOMenuAndPermission(organizationDO.getOrgId());
     }
 

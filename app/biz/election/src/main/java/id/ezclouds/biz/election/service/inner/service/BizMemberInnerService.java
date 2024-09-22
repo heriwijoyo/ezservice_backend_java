@@ -17,6 +17,9 @@ import id.ezclouds.biz.election.converter.BizMemberClientConverter;
 import id.ezclouds.biz.election.model.BizStatus;
 import id.ezclouds.biz.election.model.member.BizMemberClient;
 import id.ezclouds.biz.election.model.member.BizMemberInfo;
+import id.ezclouds.common.facade.core.CoreSequenceService;
+import id.ezclouds.common.model.core.BizSeqScene;
+import id.ezclouds.common.model.core.Organization;
 import id.ezclouds.common.util.RandomUtil;
 import id.ezclouds.common.model.result.BizPageInfo;
 import id.ezclouds.common.util.ShardUtil;
@@ -27,9 +30,7 @@ import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
 import id.ezclouds.core.member.service.CoreMemberService;
 import id.ezclouds.common.util.context.EzAppContextHolder;
-import id.ezclouds.core.shared.enums.CoreSequenceScene;
 import id.ezclouds.core.shared.model.CorePageInfo;
-import id.ezclouds.core.shared.service.CoreSequenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -67,7 +68,8 @@ public class BizMemberInnerService {
         String orgCode = EzAppContextHolder.getContext().getOrgCode();
         String appId = EzAppContextHolder.getContext().getAppId();
 
-        String memberId = coreSequenceService.generateSequence(orgId, orgCode, CoreSequenceScene.CORE_MEMBER_ID.getCode());
+        String memberId = coreSequenceService
+                .generateSequence(new Organization(orgId, orgCode), BizSeqScene.CORE_MEMBER_ID);
         String shard = ShardUtil.getShardId(memberId);
 
         CoreMember coreMember = BizMemberRequestConverter.getCoreMember(request);
@@ -131,7 +133,8 @@ public class BizMemberInnerService {
 
     @Transactional
     public BizMemberInfo adminOrgCreateMember(String orgId, String orgCode, String appId, CoreMember coreMember) throws Exception {
-        String memberId = coreSequenceService.generateSequence(orgId, orgCode, CoreSequenceScene.CORE_MEMBER_ID.getCode());
+        String memberId = coreSequenceService
+                .generateSequence(new Organization(orgId, orgCode), BizSeqScene.CORE_MEMBER_ID);
         String shard = ShardUtil.getShardId(memberId);
 
         coreMember.setMemberId(memberId);
@@ -163,7 +166,8 @@ public class BizMemberInnerService {
 
     @Transactional
     public BizMemberInfo createCoreMember(String orgId, String orgCode, String appId, BizMember bizMember) {
-        String memberId = coreSequenceService.generateSequence(orgId, orgCode, CoreSequenceScene.CORE_MEMBER_ID.getCode());
+        String memberId = coreSequenceService
+                .generateSequence(new Organization(orgId, orgCode), BizSeqScene.CORE_MEMBER_ID);
         String shard = ShardUtil.getShardId(memberId);
 
         CoreMember coreMember = BizMemberConverter.convert(bizMember);

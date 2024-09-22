@@ -4,15 +4,13 @@
  */
 package id.ezclouds.core.member.service;
 
+import id.ezclouds.common.facade.core.CoreSequenceService;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
-import id.ezclouds.common.util.ShardUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
-import id.ezclouds.core.auth.constant.CoreAuthConstant;
-import id.ezclouds.core.auth.model.CoreAuthMemberClient;
 import id.ezclouds.core.auth.service.CoreAuthService;
 import id.ezclouds.core.member.constant.CoreMemberField;
 import id.ezclouds.core.member.dataobject.CoreGroupCountDO;
@@ -24,10 +22,8 @@ import id.ezclouds.core.member.model.MemberStatus;
 import id.ezclouds.core.member.repo.CoreMemberExtensionRepository;
 import id.ezclouds.core.member.repo.CoreMemberRepository;
 import id.ezclouds.core.member.util.CoreMemberConverter;
-import id.ezclouds.core.shared.enums.CoreSequenceScene;
 import id.ezclouds.core.shared.model.CorePageInfo;
 import id.ezclouds.common.model.result.PageResult;
-import id.ezclouds.core.shared.service.CoreSequenceService;
 import id.ezclouds.core.shared.util.PageResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -59,26 +55,6 @@ public class CoreMemberService {
 
     @Autowired
     private CoreAuthService coreAuthService;
-
-    public void createOrgAdminMember(String orgId, String orgCode, String appId, CoreMember coreMember) {
-        String memberId = coreSequenceService
-                .generateSequence(orgId, orgCode, CoreSequenceScene.CORE_MEMBER_ID.getCode());
-        String shard = ShardUtil.getShardId(memberId);
-
-        coreMember.setMemberId(memberId);
-        coreMember.setShard(shard);
-        store(coreMember);
-
-        CoreAuthMemberClient memberClient = new CoreAuthMemberClient();
-        memberClient.setOrgId(orgId);
-        memberClient.setShard(shard);
-        memberClient.setAppId(appId);
-        memberClient.setMemberId(memberId);
-        memberClient.setLoginType(CoreAuthConstant.DEFAULT_LOGIN_TYPE);
-        memberClient.setLoginId(coreMember.getPhone());
-        memberClient.setStatus(CoreAuthConstant.Status.ACTIVE);
-        coreAuthService.createMemberClient(memberClient);
-    }
 
     public void store(CoreMember coreMember) {
         CoreMemberDO coreMemberDO = CoreMemberConverter.convert(coreMember);
