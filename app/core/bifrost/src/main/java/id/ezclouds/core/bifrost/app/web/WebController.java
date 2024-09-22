@@ -25,7 +25,7 @@ import id.ezclouds.core.bifrost.app.web.request.WebLoadImageRequest;
 import id.ezclouds.core.bifrost.core.util.ErrorResultUtil;
 import id.ezclouds.common.util.context.EzAppContextHolder;
 import id.ezclouds.common.model.file.PublicFileResolver;
-import id.ezclouds.core.shared.model.CoreOrganization;
+import id.ezclouds.common.model.core.CoreOrganization;
 import id.ezclouds.core.shared.util.DigestLogUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

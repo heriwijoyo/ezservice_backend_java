@@ -10,7 +10,7 @@ import id.ezclouds.biz.election.service.app.repo.AppBuildPackageRepository;
 import id.ezclouds.biz.election.service.app.model.AppBuildType;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
-import id.ezclouds.core.shared.model.CoreOrganization;
+import id.ezclouds.common.model.core.CoreOrganization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

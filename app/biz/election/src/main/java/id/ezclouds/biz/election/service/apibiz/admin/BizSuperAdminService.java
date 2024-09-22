@@ -6,7 +6,7 @@ package id.ezclouds.biz.election.service.apibiz.admin;
 
 import id.ezclouds.biz.election.model.admin.BizApplicationConfig;
 import id.ezclouds.biz.election.model.admin.BizMemberRequiredData;
-import id.ezclouds.biz.election.model.admin.BizOrganization;
+import id.ezclouds.common.model.core.BizOrganization;
 import id.ezclouds.biz.election.service.request.web.BizWebCommonRequest;
 import id.ezclouds.biz.election.service.request.web.BizWebCreateRequest;
 import id.ezclouds.biz.election.constant.BizConstant;
@@ -17,7 +17,6 @@ import id.ezclouds.biz.election.model.member.BizMember;
 import id.ezclouds.biz.election.service.apibiz.BizBaseService;
 import id.ezclouds.biz.election.service.apibiz.BizLocalAreaService;
 import id.ezclouds.biz.election.service.async.processor.BizOldCommonReportProcessor;
-import id.ezclouds.biz.election.service.processor.BizSyncMemberUnionProcessor;
 import id.ezclouds.biz.election.service.core.BizCacheEnum;
 import id.ezclouds.biz.election.service.inner.service.BizConnectInnerService;
 import id.ezclouds.biz.election.service.core.BizAppCacheService;
@@ -76,9 +75,6 @@ public class BizSuperAdminService extends BizBaseService {
 
     @Autowired
     private BizOldCommonReportProcessor bizCommonReportProcessor;
-
-    @Autowired
-    private BizSyncMemberUnionProcessor bizSyncMemberUnionProcessor;
 
     public BizResult createSuperAdminSession(boolean shouldScrambleCode) {
         final BizResult bizResult = new BizResult();
@@ -593,32 +589,6 @@ public class BizSuperAdminService extends BizBaseService {
             public void onBizProcess() throws Exception {
                 authorizeSuperUserMember(sessionId);
                 bizAdminInnerService.refreshAllMenus();
-                bizResult.setSuccess(true);
-                bizResult.setObject(BizConstant.Message.SUCCESS_COMMON);
-            }
-
-            @Override
-            public String getErrorMessage(EzErrorCode ezErrorCode) {
-                return getBizErrorMessage(ezErrorCode);
-            }
-        });
-
-        return bizResult;
-    }
-
-    public BizResult reloadReport(String sessionId) {
-        BizResult bizResult = new BizResult();
-
-        BizServiceTemplate.execute(null, bizResult, new BizServiceTemplate.Handler() {
-            @Override
-            public void onRequestCheck() throws EzErrorException {
-                AssertUtil.notBlank(sessionId, EzErrorCode.SESSION_INVALID);
-            }
-
-            @Override
-            public void onBizProcess() throws Exception {
-                authorizeSuperUserMember(sessionId);
-                bizSyncMemberUnionProcessor.process("RJL0");
                 bizResult.setSuccess(true);
                 bizResult.setObject(BizConstant.Message.SUCCESS_COMMON);
             }

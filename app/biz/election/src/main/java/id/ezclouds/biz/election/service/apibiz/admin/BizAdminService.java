@@ -77,7 +77,7 @@ import id.ezclouds.core.member.service.CoreMemberService;
 import id.ezclouds.core.shared.constant.CoreConstant;
 import id.ezclouds.common.model.file.PublicFileResolver;
 import id.ezclouds.core.shared.model.CoreAdminDashboard;
-import id.ezclouds.core.shared.model.CoreOrganization;
+import id.ezclouds.common.model.core.CoreOrganization;
 import id.ezclouds.core.shared.result.ListResult;
 import id.ezclouds.core.shared.service.CoreAdminService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2023 All Rights Reserved.
  */
-package id.ezclouds.core.shared.model;
+package id.ezclouds.common.model.core;
 
 import java.util.HashMap;
 import java.util.Map;

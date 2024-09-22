@@ -2,10 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.biz.election.model.admin;
-
-import java.util.HashMap;
-import java.util.Map;
+package id.ezclouds.common.model.core;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)

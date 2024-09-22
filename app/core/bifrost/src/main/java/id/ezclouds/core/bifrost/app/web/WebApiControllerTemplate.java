@@ -95,7 +95,7 @@ public class WebApiControllerTemplate {
         void onDigestLog(DigestLog digestLog);
     }
 
-    interface PageHandler<T> {
+    public interface PageHandler<T> {
         BizResult onProcess() throws Exception;
         PageResult<T> convertResult(Object object);
         void onDigestLog(DigestLog digestLog);

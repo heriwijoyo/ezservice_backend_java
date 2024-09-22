@@ -2,13 +2,13 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.core.bifrost.app.web;
+package id.ezclouds.core.bifrost.app.webapp.api;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.election.model.admin.BizApplicationConfig;
 import id.ezclouds.biz.election.model.admin.BizMemberRequiredData;
-import id.ezclouds.biz.election.model.admin.BizOrganization;
+import id.ezclouds.common.model.core.BizOrganization;
 import id.ezclouds.biz.election.model.admin.BizOrganizationDetail;
 import id.ezclouds.biz.election.service.request.web.BizWebCommonRequest;
 import id.ezclouds.biz.election.service.request.web.BizWebCreateRequest;
@@ -21,6 +21,7 @@ import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
 import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.biz.election.subbiz.arahindonesia.model.BizSubOrganization;
+import id.ezclouds.core.bifrost.app.web.WebApiControllerTemplate;
 import id.ezclouds.core.shared.model.LegacyCoreArea;
 import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
@@ -44,7 +45,7 @@ import java.util.Map;
  * @version $Id: WebApiAdminController.java, v 0.1 2024‐02‐11 11:00 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @RestController
-public class WebApiSuperAdminController {
+public class WebAppApiSuperAdminController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CommonLoggerConstant.WEB_API_CONTROLLER);
 
@@ -58,7 +59,7 @@ public class WebApiSuperAdminController {
             @RequestParam(name = "pageSize", required = false) int pageSize
     ) {
         final WebApiPageResult<BizOrganization> result = new WebApiPageResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_ORGANIZATION, result, new WebApiControllerTemplate.PageHandler<BizOrganization>() {
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_ORGANIZATION, result, new WebApiControllerTemplate.PageHandler<>() {
             @Override
             public BizResult onProcess() throws Exception {
                 BizWebPageRequest request = new BizWebPageRequest();
@@ -532,28 +533,6 @@ public class WebApiSuperAdminController {
             @Override
             public BizResult onProcess() throws Exception {
                 return bizSuperAdminService.refreshAllMenus(sessionId);
-            }
-
-            @Override
-            public String convertResult(Object object) {
-                return (String) object;
-            }
-
-            @Override
-            public void onDigestLog(DigestLog digestLog) {
-                DigestLogUtil.logWebDigest(LOGGER, digestLog);
-            }
-        });
-        return result;
-    }
-
-    @PostMapping(value = "/webapp/api/reloadReport.json")
-    private WebApiResult<String> reloadReport(@RequestParam(name = "sessionId", required = false) String sessionId) {
-        final WebApiResult<String> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_RELOAD_REPORT, result, new WebApiControllerTemplate.Handler<>() {
-            @Override
-            public BizResult onProcess() throws Exception {
-                return bizSuperAdminService.reloadReport(sessionId);
             }
 
             @Override

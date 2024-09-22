@@ -5,8 +5,8 @@
 package id.ezclouds.biz.election.service.app;
 
 import id.ezclouds.common.util.StringUtil;
-import id.ezclouds.core.shared.model.CoreOrganization;
-import id.ezclouds.core.shared.service.CoreOrganizationService;
+import id.ezclouds.common.model.core.CoreOrganization;
+import id.ezclouds.core.shared.service.EzOrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,10 +20,10 @@ import java.util.List;
 public class BizOrganizationService {
 
     @Autowired
-    private CoreOrganizationService coreOrganizationService;
+    private EzOrganizationService ezOrganizationService;
 
     public List<CoreOrganization> getActiveOrganizations() {
-        return coreOrganizationService.getActiveOrganizations();
+        return ezOrganizationService.getActiveOrganizations();
     }
 
     public CoreOrganization getOrganizationById(String orgId) {

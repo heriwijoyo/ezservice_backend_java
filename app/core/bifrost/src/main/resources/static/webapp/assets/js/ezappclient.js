@@ -71,13 +71,6 @@ var EzWebAppBizService = {
             $(menu).find('#left-menu-icon').html(response.data.menu[i].menuIcon);
             $('#left-menu-container').append(menu);
         }
-        for (let i = 0; i < response.data.specialMenu.length; i++) {
-            let menu = $.parseHTML(EzWebAppHTMLTemplate.leftMenu);
-            $(menu).find('#left-menu-url').attr('href', response.data.specialMenu[i].menuUrl);
-            $(menu).find('#left-menu-name').html(response.data.specialMenu[i].menuName);
-            $(menu).find('#left-menu-icon').html(response.data.specialMenu[i].menuIcon);
-            $('#left-menu-container').append(menu);
-        }
         if (EzWebAppClient.onReadyHandler!==undefined) {
             EzWebAppClient.onReadyHandler();
         }

@@ -8,7 +8,7 @@ import id.ezclouds.biz.election.converter.BizModelConverter;
 import id.ezclouds.biz.election.model.VideoCard;
 import id.ezclouds.biz.election.model.admin.BizApplicationConfig;
 import id.ezclouds.biz.election.model.admin.BizMemberRequiredData;
-import id.ezclouds.biz.election.model.admin.BizOrganization;
+import id.ezclouds.common.model.core.BizOrganization;
 import id.ezclouds.biz.election.model.event.AppEvent;
 import id.ezclouds.biz.election.model.news.BizWebDetailNews;
 import id.ezclouds.biz.election.model.news.BizWebSimpleNews;
@@ -68,7 +68,6 @@ import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.MemberStatus;
 import id.ezclouds.core.member.service.CoreMemberService;
 import id.ezclouds.core.shared.constant.CoreConstant;
-import id.ezclouds.core.shared.enums.CoreSequenceScene;
 import id.ezclouds.core.shared.model.CommonModelSwitch;
 import id.ezclouds.core.shared.repo.dataobject.EzCoreOrganizationDO;
 import id.ezclouds.core.shared.service.*;
@@ -101,7 +100,7 @@ public class BizAdminInnerService {
     private VideoCardService videoCardService;
 
     @Autowired
-    private CoreOrganizationService coreOrganizationService;
+    private EzOrganizationService ezOrganizationService;
 
     @Autowired
     private CoreSequenceService coreSequenceService;
@@ -393,7 +392,7 @@ public class BizAdminInnerService {
 
     public PageResult<BizOrganization> getOrganizationAll(int pageNumber, int pageSize, String sortBy, String sort) {
         PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortBy, sort);
-        Page<EzCoreOrganizationDO> findResult = coreOrganizationService.getOrganizationAll(pageRequest);
+        Page<EzCoreOrganizationDO> findResult = ezOrganizationService.getOrganizationAll(pageRequest);
         List<BizOrganization> resultData = findResult
                 .getContent()
                 .stream()
@@ -419,7 +418,7 @@ public class BizAdminInnerService {
     }
 
     public BizOrganization getOrganizationById(String orgId) {
-        EzCoreOrganizationDO organizationDO = coreOrganizationService.getOrganizationById(orgId);
+        EzCoreOrganizationDO organizationDO = ezOrganizationService.getOrganizationById(orgId);
         AssertUtil.notNull(organizationDO, EzErrorCode.DATA_NOT_FOUND);
         return convert(organizationDO);
     }
@@ -461,7 +460,7 @@ public class BizAdminInnerService {
     public void updateOrganization(BizOrganization organization) {
         EzCoreOrganizationDO organizationDO = convert(organization);
         organizationDO.setModifiedTime(DateUtil.getCurrentFormattedDate());
-        coreOrganizationService.saveOrganization(organizationDO);
+        ezOrganizationService.saveOrganization(organizationDO);
     }
 
     @Transactional
@@ -477,7 +476,7 @@ public class BizAdminInnerService {
         modelDO.setCreatedTime(DateUtil.getCurrentFormattedDate());
         modelDO.setModifiedTime(DateUtil.getCurrentFormattedDate());
         modelDO.setStatus(1);
-        coreOrganizationService.saveOrganization(modelDO);
+        ezOrganizationService.saveOrganization(modelDO);
 
         initiateOrgConfig(modelDO);
         return modelDO.getOrgId();
@@ -621,7 +620,7 @@ public class BizAdminInnerService {
     }
 
     public void refreshAllDirectories() {
-        coreOrganizationService
+        ezOrganizationService
                 .getActiveOrganizations()
                 .forEach(org -> {
                     if (!CoreConstant.SU_ORG_ID.equals(org.getOrgId())) {
@@ -631,7 +630,7 @@ public class BizAdminInnerService {
     }
 
     public void refreshAllMenus() {
-        coreOrganizationService
+        ezOrganizationService
                 .getActiveOrganizations()
                 .forEach(org -> {
                     if (!CoreConstant.SU_ORG_ID.equals(org.getOrgId())) {
