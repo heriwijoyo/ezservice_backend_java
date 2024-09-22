@@ -96,7 +96,7 @@ public class WebAppApiMasterDataController {
             @RequestParam(name = "bizMasterId", required = false) String bizMasterId,
             @RequestParam(name = "value", required = false) String value) {
         final WebApiResult<String> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebAppApiEvent.WEBAPP_API_MASTER_DATA_OVERALL_UPDATE, result, new WebApiControllerTemplate.Handler<String>() {
+        WebApiControllerTemplate.execute(WebAppApiEvent.WEBAPP_API_MASTER_DATA_OVERALL_UPDATE, result, new WebApiControllerTemplate.Handler<>() {
             @Override
             public BizResult onProcess() throws Exception {
                 WebBizUpdateRequest<BizMasterDataUpdate> request = new WebBizUpdateRequest<>();

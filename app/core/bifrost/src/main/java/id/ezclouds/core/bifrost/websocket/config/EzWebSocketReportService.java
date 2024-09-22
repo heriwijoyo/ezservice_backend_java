@@ -8,17 +8,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.common.facade.auth.AuthAdminService;
 import id.ezclouds.common.facade.biz.BizReportRealtimeService;
 import id.ezclouds.common.facade.biz.report.BizReportOverallService;
-import id.ezclouds.common.facade.broker.BrokerDataEvent;
 import id.ezclouds.common.facade.broker.BrokerDataExchangeService;
 import id.ezclouds.common.model.auth.AuthSession;
-import id.ezclouds.common.model.broker.BrokerDataTopic;
-import id.ezclouds.common.model.broker.event.EzCommonEvent;
-import id.ezclouds.common.model.broker.event.EzCommonEventData;
+import id.ezclouds.common.model.broker.event.OverallReportChangeEvent;
 import id.ezclouds.common.model.report.BizReportOverall;
 import id.ezclouds.common.model.websocket.WebSocketData;
 import id.ezclouds.common.model.websocket.WebSocketEvent;
 import id.ezclouds.common.util.StringUtil;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -50,10 +46,6 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
     @Autowired
     private BizReportOverallService bizReportOverallService;
 
-    private static final List<EzCommonEvent> listenEvents = Arrays.asList(
-            EzCommonEvent.REPORT_OVERALL_CHANGE
-    );
-
 
     private Map<String, WebSocketSession> sessionMap = new ConcurrentHashMap<>();
     private Map<String, SessionIdentity> identityMap = new ConcurrentHashMap<>();
@@ -62,17 +54,14 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
 
     @Async
     @EventListener
-    public void handleEzCommonEventData(EzCommonEventData eventData) {
-        if (!listenEvents.contains(eventData.getEvent())) {
-            return;
-        }
+    public void handleEzCommonEventData(OverallReportChangeEvent event) {
         if (identityMap.isEmpty()) {
             return;
         }
 
         List<String> availSessionIds = new ArrayList<>();
         for (Map.Entry<String, SessionIdentity> identityEntry : identityMap.entrySet()) {
-            if (StringUtil.equals(identityEntry.getValue().getOrgId(), eventData.getOrgId())) {
+            if (StringUtil.equals(identityEntry.getValue().getOrgId(), event.getOrgId())) {
                 availSessionIds.add(identityEntry.getKey());
             }
         }
@@ -80,15 +69,11 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
             return;
         }
 
-        switch (eventData.getEvent()) {
-            case REPORT_OVERALL_CHANGE:
-                List<BizReportOverall> reportOverall = bizReportOverallService.getReportOverall(eventData.getOrgId());
-                for (String sessionId : availSessionIds) {
-                    if (sessionMap.get(sessionId) != null) {
-                        sessionSendMessage(sessionMap.get(sessionId), WebSocketEvent.DATA_RESULT, reportOverallToMap(reportOverall));
-                    }
-                }
-                break;
+        List<BizReportOverall> reportOverall = bizReportOverallService.getReportOverall(event.getOrgId());
+        for (String sessionId : availSessionIds) {
+            if (sessionMap.get(sessionId) != null) {
+                sessionSendMessage(sessionMap.get(sessionId), WebSocketEvent.DATA_RESULT, reportOverallToMap(reportOverall));
+            }
         }
     }
 
