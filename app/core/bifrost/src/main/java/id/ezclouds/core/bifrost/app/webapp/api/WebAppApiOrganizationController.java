@@ -56,4 +56,28 @@ public class WebAppApiOrganizationController {
         });
         return result;
     }
+
+    @PostMapping(value = "/webapp/api/orgInitSystemSequence.json")
+    private WebApiResult<String> orgInitSystemSequence(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "orgId", required = false) String orgId) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebAppApiEvent.WEBAPP_API_INIT_SYSTEM_SEQUENCE, result, new WebApiControllerTemplate.Handler<>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                return bizAdminOrganizationService.initSystemSequence(sessionId, orgId);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
 }

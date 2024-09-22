@@ -13,4 +13,6 @@ import id.ezclouds.common.model.result.BizResult;
 public interface BizAdminOrganizationService {
 
     BizResult getOrganizations(String sessionId);
+
+    BizResult initSystemSequence(String sessionId, String orgId);
 }

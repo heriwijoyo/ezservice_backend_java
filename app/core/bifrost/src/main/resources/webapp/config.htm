@@ -15,7 +15,7 @@
                             <div class="form-group col-sm-12">
                                 <div class="form-line">
                                     <div class="font-12">Organization</div>
-                                    <select class="form-control show-tick" id="organizations">
+                                    <select class="form-control show-tick" id="initSeqOrgId">
                                     </select>
                                 </div>
                             </div>
@@ -84,11 +84,18 @@
         GET_ORGANIZATIONS: 'api/organizations.json',
         GET_REFRESH_ALL_CACHES: 'api/refreshAllCaches.json',
         GET_REFRESH_ALL_DIRECTORIES: 'api/refreshAllDirectories.json',
-        GET_REFRESH_ALL_MENUS: 'api/refreshAllMenus.json'
+        GET_REFRESH_ALL_MENUS: 'api/refreshAllMenus.json',
+
+        INIT_SYSTEM_SEQUENCE: 'api/orgInitSystemSequence.json'
     };
 
     var EzSystemConfigService = {
         start: function() {
+            $('#btnInitSequence').click(function(){
+                EzWebAppClient.callApiService(EzConfigApiUrl.INIT_SYSTEM_SEQUENCE, {
+                    orgId: $('#initSeqOrgId').val()
+                });
+            });
             $('#refresh-all-caches-btn').click(function(){
                 EzSystemConfigService.refreshAllCaches();
             });
@@ -126,6 +133,9 @@
                     function(){}
                 );
             }
+            if (url === EzConfigApiUrl.INIT_SYSTEM_SEQUENCE) {
+                alert(response.data);
+            }
             if (url === EzConfigApiUrl.GET_REFRESH_ALL_DIRECTORIES) {
                 alert(response.data);
             }
@@ -136,7 +146,7 @@
         renderOrgOptions: function() {
             let orgs = EzSystemConfigService.data.organizations;
             for(var i=0; i<orgs.length; i++) {
-                $('#organizations').append('<option value="'+ orgs[i].orgId +'">['+ orgs[i].orgId +'] '+ orgs[i].orgName +'</option>');
+                $('#initSeqOrgId').append('<option value="'+ orgs[i].orgId +'">['+ orgs[i].orgId +'] '+ orgs[i].orgName +'</option>');
             }
         },
         data: {
