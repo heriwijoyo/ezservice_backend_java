@@ -4,12 +4,12 @@
  */
 package id.ezclouds.core.shared.service;
 
+import id.ezclouds.common.model.admin.CoreAdminMenu;
+import id.ezclouds.common.model.admin.CoreMenuComparator;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.shared.converter.CoreModelConverter;
-import id.ezclouds.core.shared.model.BoMenuComparator;
-import id.ezclouds.core.shared.model.CoreAdminBOMenu;
-import id.ezclouds.core.shared.model.CoreAdminBOPermission;
+import id.ezclouds.common.model.admin.CoreAdminBOPermission;
 import id.ezclouds.core.shared.model.CoreAdminDashboard;
 import id.ezclouds.core.shared.repo.EzCoreAdminBOMenuRepository;
 import id.ezclouds.core.shared.repo.EzCoreAdminBOPermissionRepository;
@@ -52,28 +52,8 @@ public class CoreAdminService {
                 .collect(Collectors.toList());
     }
 
-    public List<CoreAdminBOMenu> getBOMenuByPermission(String orgId, List<String> permissions) {
-        if (StringUtil.isBlank(orgId) || permissions == null || permissions.isEmpty()) {
-            return new ArrayList<>();
-        }
-
-        return getAdminBoMenuAllActive()
-                .stream()
-                .filter(menu -> orgId.equals(menu.getOrgId()) && permissions.contains(menu.getPermissionMain()))
-                .sorted(new BoMenuComparator())
-                .collect(Collectors.toList());
-    }
-
     public List<CoreAdminBOPermission> getAdminBOPermissionAllActive() {
         return ezCoreAdminBOPermissionRepository
-                .findAllActive()
-                .stream()
-                .map(CoreModelConverter::convert)
-                .collect(Collectors.toList());
-    }
-
-    public List<CoreAdminBOMenu> getAdminBoMenuAllActive() {
-        return ezCoreAdminBOMenuRepository
                 .findAllActive()
                 .stream()
                 .map(CoreModelConverter::convert)

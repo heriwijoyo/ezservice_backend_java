@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.shared.converter;
 
+import id.ezclouds.common.model.admin.CoreAdminBOPermission;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.model.area.CoreAreaLevel;
 import id.ezclouds.core.shared.model.*;
@@ -43,18 +44,6 @@ public class CoreModelConverter {
         coreConfig.setConfigKey(configDO.getConfigKey());
         coreConfig.setConfigValue(configDO.getConfigValue());
         return coreConfig;
-    }
-
-    public static CoreAdminBOMenu convert(EzCoreAdminBOMenuDO menuDO) {
-        if (menuDO == null) { return null; }
-        CoreAdminBOMenu menu = new CoreAdminBOMenu();
-        menu.setOrgId(menuDO.getOrgId());
-        menu.setPermissionMain(menuDO.getPermissionMain());
-        menu.setMenuName(menuDO.getMenuName());
-        menu.setMenuUrl(menuDO.getMenuUrl());
-        menu.setMenuIcon(menuDO.getMenuIcon());
-        menu.setSorting(menuDO.getSorting());
-        return menu;
     }
 
     public static CoreAdminBOPermission convert(EzCoreAdminBOPermissionDO permissionDO) {

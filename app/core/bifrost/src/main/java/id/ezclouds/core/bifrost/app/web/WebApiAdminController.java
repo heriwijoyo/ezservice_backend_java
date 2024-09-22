@@ -10,7 +10,7 @@ import id.ezclouds.biz.election.enums.BizProfileSection;
 import id.ezclouds.biz.election.enums.BizSwitchFlagObject;
 import id.ezclouds.biz.election.model.BizWhatsappLog;
 import id.ezclouds.biz.election.model.VideoCard;
-import id.ezclouds.biz.election.model.admin.BizAdminAppData;
+import id.ezclouds.common.model.admin.BizAdminAppData;
 import id.ezclouds.biz.election.model.admin.BizDashboardData;
 import id.ezclouds.biz.election.model.admin.BizMemberRequiredData;
 import id.ezclouds.biz.election.service.request.web.BizWebCommonRequest;
@@ -80,7 +80,7 @@ public class WebApiAdminController {
     private WebApiResult<BizAdminAppData> getAppData(
             @RequestParam(name = "sessionId", required = false) String sessionId) {
         final WebApiResult<BizAdminAppData> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_APP_DATA, result, new WebApiControllerTemplate.Handler<BizAdminAppData>() {
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_APP_DATA, result, new WebApiControllerTemplate.Handler<>() {
             @Override
             public BizResult onProcess() throws Exception {
                 return bizAdminService.getAppData(sessionId);

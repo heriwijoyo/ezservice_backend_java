@@ -12,7 +12,8 @@ import id.ezclouds.biz.election.enums.BizMemberRole;
 import id.ezclouds.biz.election.enums.BizSwitchFlagObject;
 import id.ezclouds.biz.election.model.BizWhatsappLog;
 import id.ezclouds.biz.election.model.VideoCard;
-import id.ezclouds.biz.election.model.admin.BizAdminAppData;
+import id.ezclouds.common.model.admin.AdminMenuView;
+import id.ezclouds.common.model.admin.CoreMenuComparator;
 import id.ezclouds.biz.election.model.admin.BizAdminSession;
 import id.ezclouds.biz.election.model.admin.BizDashboardData;
 import id.ezclouds.biz.election.model.admin.BizMemberRequiredData;
@@ -40,6 +41,9 @@ import id.ezclouds.biz.election.subbiz.arahindonesia.service.AppSubOrganizationS
 import id.ezclouds.biz.election.enums.BizUploadScene;
 import id.ezclouds.biz.election.model.member.BizMember;
 import id.ezclouds.common.facade.file.CoreFileService;
+import id.ezclouds.common.model.admin.BizAdminAppData;
+import id.ezclouds.common.model.admin.CoreAdminMenu;
+import id.ezclouds.common.model.admin.CoreMenuLevel;
 import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
 import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
 import id.ezclouds.common.model.result.BizResult;
@@ -72,8 +76,6 @@ import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.service.CoreMemberService;
 import id.ezclouds.core.shared.constant.CoreConstant;
 import id.ezclouds.common.model.file.PublicFileResolver;
-import id.ezclouds.core.shared.model.CoreAdminBOMenu;
-import id.ezclouds.core.shared.model.CoreAdminBOPermission;
 import id.ezclouds.core.shared.model.CoreAdminDashboard;
 import id.ezclouds.core.shared.model.CoreOrganization;
 import id.ezclouds.core.shared.result.ListResult;
@@ -260,30 +262,17 @@ public class BizAdminService extends BizBaseService {
                 CoreOrganization organization = bizOrganizationService.getOrganizationById(adminSession.getOrgId());
 
                 String memberName, memberPhone;
+                CoreMenuLevel menuLevel;
                 if (StringUtil.equals(organization.getOrgId(), CoreConstant.SU_ORG_ID)) {
                     memberName = BizMemberRole.SUPERUSER.getCode();
                     memberPhone = "-";
+                    menuLevel = CoreMenuLevel.SUPERADMIN;
                 } else {
                     CoreMember coreMember = coreMemberService.getOptimisticCoreMember(adminSession.getMemberId());
                     memberName = coreMember.getName();
                     memberPhone = coreMember.getPhone();
+                    menuLevel = CoreMenuLevel.ADMIN_ORGANIZATION;
                 }
-
-                List<String> memberRoles;
-                if (StringUtil.isBlank(adminSession.getMemberRoles())) {
-                    memberRoles = new ArrayList<>();
-                } else {
-                    memberRoles = Arrays.asList(adminSession.getMemberRoles().split(","));
-                }
-
-                List<CoreAdminBOPermission> permission = coreAdminService
-                        .getPermissionByRoles(organization.getOrgId(), memberRoles);
-                List<String> permissionMain = permission
-                        .stream()
-                        .map(CoreAdminBOPermission::getPermissionMain)
-                        .collect(Collectors.toList());
-                List<CoreAdminBOMenu> menu = coreAdminService
-                        .getBOMenuByPermission(organization.getOrgId(), permissionMain);
 
                 BizAdminAppData adminAppData = new BizAdminAppData();
                 adminAppData.setOrgCode(adminSession.getOrgCode());
@@ -291,51 +280,13 @@ public class BizAdminService extends BizBaseService {
                 adminAppData.setMemberId(adminSession.getMemberId());
                 adminAppData.setMemberName(memberName);
                 adminAppData.setMemberPhone(memberPhone);
-                adminAppData.setPermission(permission);
+
+                List<AdminMenuView> menu = Arrays.stream(CoreAdminMenu.values())
+                        .filter(adminMenu -> adminMenu.getMenuLevel() == menuLevel)
+                        .sorted(new CoreMenuComparator())
+                        .map(adminMenu -> new AdminMenuView(adminMenu.getMenuName(), adminMenu.getMenuIcon(), adminMenu.getMenuUrl()))
+                        .collect(Collectors.toList());
                 adminAppData.setMenu(menu);
-
-                List<CoreAdminBOMenu> specialMenu = new ArrayList<>();
-                String hasSubOrg = organization.getExtendInfo().get("HAS_SUB_ORG");
-                if (Boolean.parseBoolean(hasSubOrg)) {
-                    CoreAdminBOMenu subOrgMenu = new CoreAdminBOMenu();
-                    subOrgMenu.setMenuName("Communities");
-                    subOrgMenu.setMenuUrl("subOrganizations.htm");
-                    subOrgMenu.setMenuIcon("groups");
-
-                    specialMenu.add(subOrgMenu);
-                }
-                CoreAdminBOMenu memberMenu = new CoreAdminBOMenu();
-                memberMenu.setMenuName("Members");
-                memberMenu.setMenuUrl("members.htm");
-                memberMenu.setMenuIcon("group");
-                specialMenu.add(memberMenu);
-
-                CoreAdminBOMenu dataUploadMenu = new CoreAdminBOMenu();
-                dataUploadMenu.setMenuName("Data Upload");
-                dataUploadMenu.setMenuUrl("dataUpload.htm");
-                dataUploadMenu.setMenuIcon("upload_file");
-                specialMenu.add(dataUploadMenu);
-
-                CoreAdminBOMenu masterDataMenu = new CoreAdminBOMenu();
-                dataUploadMenu.setMenuName("Master Data");
-                dataUploadMenu.setMenuUrl("masterData.htm");
-                dataUploadMenu.setMenuIcon("storage");
-                specialMenu.add(masterDataMenu);
-
-                if (isMemberHasAdminRole(adminSession.getMemberRoles())) {
-                    adminAppData.setSpecialMenu(specialMenu);
-                }
-
-                if (isSuperUserMember(adminSession.getMemberRoles())) {
-                    adminAppData.setSpecialMenu(new ArrayList<>());
-
-                    CoreAdminBOMenu menuTable = new CoreAdminBOMenu();
-                    menuTable.setMenuName("Common Tables");
-                    menuTable.setMenuUrl("commonTables.htm");
-                    menuTable.setMenuIcon("table_view");
-
-                    adminAppData.getSpecialMenu().add(menuTable);
-                }
 
                 bizResult.setSuccess(true);
                 bizResult.setObject(adminAppData);
@@ -1459,13 +1410,5 @@ public class BizAdminService extends BizBaseService {
         }
         List<String> roles = Arrays.asList(role.split(","));
         return roles.contains(BizMemberRole.ADMIN_ORG.getCode());
-    }
-
-    private boolean isSuperUserMember(String role) {
-        if (StringUtil.isBlank(role)) {
-            return false;
-        }
-        List<String> roles = Arrays.asList(role.split(","));
-        return roles.contains(BizMemberRole.SUPERUSER.getCode());
     }
 }

@@ -2,10 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.biz.election.model.admin;
-
-import id.ezclouds.core.shared.model.CoreAdminBOMenu;
-import id.ezclouds.core.shared.model.CoreAdminBOPermission;
+package id.ezclouds.common.model.admin;
 
 import java.util.List;
 
@@ -20,9 +17,7 @@ public class BizAdminAppData {
     private String memberId;
     private String memberName;
     private String memberPhone;
-    private List<CoreAdminBOPermission> permission;
-    private List<CoreAdminBOMenu> menu;
-    private List<CoreAdminBOMenu> specialMenu;
+    private List<AdminMenuView> menu;
 
     public String getOrgName() {
         return orgName;
@@ -64,27 +59,11 @@ public class BizAdminAppData {
         this.memberPhone = memberPhone;
     }
 
-    public List<CoreAdminBOPermission> getPermission() {
-        return permission;
-    }
-
-    public void setPermission(List<CoreAdminBOPermission> permission) {
-        this.permission = permission;
-    }
-
-    public List<CoreAdminBOMenu> getMenu() {
+    public List<AdminMenuView> getMenu() {
         return menu;
     }
 
-    public void setMenu(List<CoreAdminBOMenu> menu) {
+    public void setMenu(List<AdminMenuView> menu) {
         this.menu = menu;
-    }
-
-    public List<CoreAdminBOMenu> getSpecialMenu() {
-        return specialMenu;
-    }
-
-    public void setSpecialMenu(List<CoreAdminBOMenu> specialMenu) {
-        this.specialMenu = specialMenu;
     }
 }

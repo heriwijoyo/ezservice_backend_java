@@ -109,7 +109,6 @@ public class BizAppCacheService {
         videoCardService.getAllVideoCards();
         appProfileService.getAllAppProfile();
         coreAdminService.getAdminBOPermissionAllActive();
-        coreAdminService.getAdminBoMenuAllActive();
         appSurveyDataService.getTopSurveyAllOrg();
 
         cacheManager
