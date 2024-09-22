@@ -5,20 +5,22 @@
 package id.ezclouds.core.bifrost.app.web;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import id.ezclouds.biz.ezservice.enums.BizImportScene;
-import id.ezclouds.biz.ezservice.model.admin.*;
-import id.ezclouds.biz.ezservice.model.member.BizGender;
-import id.ezclouds.biz.ezservice.model.member.BizMember;
-import id.ezclouds.biz.ezservice.service.apibiz.admin.BizSuperAdminService;
-import id.ezclouds.biz.ezservice.service.app.model.BizAppConfig;
-import id.ezclouds.biz.ezservice.service.request.BizDataImportRequest;
-import id.ezclouds.biz.ezservice.service.request.web.*;
+import id.ezclouds.biz.election.model.admin.BizApplicationConfig;
+import id.ezclouds.biz.election.model.admin.BizMemberRequiredData;
+import id.ezclouds.biz.election.model.admin.BizOrganization;
+import id.ezclouds.biz.election.model.admin.BizOrganizationDetail;
+import id.ezclouds.biz.election.service.request.web.BizWebCommonRequest;
+import id.ezclouds.biz.election.service.request.web.BizWebCreateRequest;
+import id.ezclouds.biz.election.service.request.web.BizWebPageRequest;
+import id.ezclouds.biz.election.model.member.BizGender;
+import id.ezclouds.biz.election.model.member.BizMember;
+import id.ezclouds.biz.election.service.apibiz.admin.BizSuperAdminService;
+import id.ezclouds.biz.election.service.app.model.BizAppConfig;
 import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
 import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
 import id.ezclouds.common.model.result.BizResult;
-import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
+import id.ezclouds.biz.election.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.core.shared.model.LegacyCoreArea;
 import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
@@ -32,9 +34,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -532,40 +532,6 @@ public class WebApiSuperAdminController {
             @Override
             public BizResult onProcess() throws Exception {
                 return bizSuperAdminService.refreshAllMenus(sessionId);
-            }
-
-            @Override
-            public String convertResult(Object object) {
-                return (String) object;
-            }
-
-            @Override
-            public void onDigestLog(DigestLog digestLog) {
-                DigestLogUtil.logWebDigest(LOGGER, digestLog);
-            }
-        });
-        return result;
-    }
-
-    @PostMapping(value = "/webapp/api/commonImport.json")
-    private WebApiResult<String> commonImport(@RequestPart("importFile") MultipartFile multipartFile, @RequestPart("postData") String postData) {
-        final WebApiResult<String> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_COMMON_IMPORT, result, new WebApiControllerTemplate.Handler<String>() {
-            @Override
-            public BizResult onProcess() throws Exception {
-                BizDataImportRequest request = new BizDataImportRequest();
-                try {
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    JsonNode postDataNode = objectMapper.readTree(postData);
-                    request.setSessionId(postDataNode.get("sessionId").asText());
-                    request.setImportScene(BizImportScene.getByCode(postDataNode.get("scene").asText()));
-                    request.setOrgId(postDataNode.get("orgId").asText());
-                    request.setSubOrgId(postDataNode.get("subOrgId").asText());
-                    request.setFileId(postDataNode.get("fileId").asText());
-                    request.setMultipartFile(multipartFile);
-                } catch (Exception e) {}
-
-                return bizSuperAdminService.commonImport(request);
             }
 
             @Override

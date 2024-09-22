@@ -4,7 +4,7 @@
  */
 package id.ezclouds.core.bifrost.app.api.digestlog;
 
-import id.ezclouds.biz.ezservice.model.member.BizMemberRegisterResult;
+import id.ezclouds.biz.election.model.member.BizMemberRegisterResult;
 import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
 import id.ezclouds.core.bifrost.app.api.request.MemberRegisterRequest;
 import id.ezclouds.core.bifrost.app.api.result.ApiResult;

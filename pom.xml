@@ -5,7 +5,7 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>app/bootstrap</module>
-		<module>app/biz/ezservice</module>
+		<module>app/biz/election</module>
 
 		<module>app/common/facade</module>
 		<module>app/common/model</module>

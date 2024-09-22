@@ -4,9 +4,9 @@
  */
 package id.ezclouds.core.bifrost.app.web.innerprocess;
 
-import id.ezclouds.biz.ezservice.service.request.BizImageLoadRequest;
+import id.ezclouds.biz.election.service.request.BizImageLoadRequest;
 import id.ezclouds.common.model.result.BizResult;
-import id.ezclouds.biz.ezservice.service.webbiz.BizMemberWebService;
+import id.ezclouds.biz.election.service.webbiz.BizMemberWebService;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;

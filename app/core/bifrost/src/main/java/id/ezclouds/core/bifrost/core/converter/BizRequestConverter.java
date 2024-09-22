@@ -4,10 +4,10 @@
  */
 package id.ezclouds.core.bifrost.core.converter;
 
-import id.ezclouds.biz.ezservice.enums.BizUploadScene;
-import id.ezclouds.biz.ezservice.model.member.BizGender;
-import id.ezclouds.biz.ezservice.service.app.request.BizSubOrgCreateRequest;
-import id.ezclouds.biz.ezservice.service.request.*;
+import id.ezclouds.biz.election.enums.BizUploadScene;
+import id.ezclouds.biz.election.model.member.BizGender;
+import id.ezclouds.biz.election.service.app.request.BizSubOrgCreateRequest;
+import id.ezclouds.biz.election.service.request.*;
 import id.ezclouds.common.model.request.BizRequest;
 import id.ezclouds.core.bifrost.app.api.request.*;
 
@@ -112,7 +112,7 @@ public class BizRequestConverter<T extends BizRequest> {
         return null;
     };
 
-    public static Handler<BizSurveySubmitRequest> SURVEY_SUBMIT =  apiRequest -> {
+    public static Handler<BizSurveySubmitRequest> SURVEY_SUBMIT = apiRequest -> {
         if (apiRequest instanceof SurveySubmitRequest) {
             SurveySubmitRequest request = (SurveySubmitRequest) apiRequest;
             BizSurveySubmitRequest bizRequest = new BizSurveySubmitRequest();

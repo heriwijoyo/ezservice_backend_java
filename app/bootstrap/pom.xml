@@ -18,7 +18,7 @@
         <!-- start ez modules -->
         <dependency>
             <groupId>id.ezclouds.biz</groupId>
-            <artifactId>ezclouds-biz-app</artifactId>
+            <artifactId>ezclouds-biz-election</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>

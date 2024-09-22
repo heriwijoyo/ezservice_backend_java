@@ -4,13 +4,13 @@
  */
 package id.ezclouds.core.bifrost.app.web;
 
-import id.ezclouds.biz.ezservice.enums.WebLoadImageScene;
-import id.ezclouds.biz.ezservice.model.AppConfig;
-import id.ezclouds.biz.ezservice.service.app.AppBuildPackageService;
-import id.ezclouds.biz.ezservice.service.app.AppConfigService;
-import id.ezclouds.biz.ezservice.service.app.BizOrganizationService;
-import id.ezclouds.biz.ezservice.service.app.model.AppBuildType;
-import id.ezclouds.biz.ezservice.service.app.model.BizAppBuildPackage;
+import id.ezclouds.biz.election.enums.WebLoadImageScene;
+import id.ezclouds.biz.election.model.AppConfig;
+import id.ezclouds.biz.election.service.app.AppBuildPackageService;
+import id.ezclouds.biz.election.service.app.AppConfigService;
+import id.ezclouds.biz.election.service.app.BizOrganizationService;
+import id.ezclouds.biz.election.service.app.model.AppBuildType;
+import id.ezclouds.biz.election.service.app.model.BizAppBuildPackage;
 import id.ezclouds.common.facade.file.CoreFileService;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;

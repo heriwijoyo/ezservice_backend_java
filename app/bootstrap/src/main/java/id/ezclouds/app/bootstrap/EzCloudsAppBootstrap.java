@@ -19,7 +19,7 @@ import java.util.TimeZone;
  * @version $Id: EzCloudsAppBootstrap.java, v 0.1 2024‐08‐21 6:57 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @SpringBootApplication(scanBasePackages = {
-        "id.ezclouds.biz.ezservice",
+        "id.ezclouds.biz.election",
         "id.ezclouds.common.util",
         "id.ezclouds.core.admin",
         "id.ezclouds.core.auth",
@@ -40,7 +40,7 @@ import java.util.TimeZone;
         "id.ezclouds.core.member",
         "id.ezclouds.core.auth",
         "id.ezclouds.core.integration.dataservice.repo",
-        "id.ezclouds.biz.ezservice"
+        "id.ezclouds.biz.election"
 })
 @EntityScan(basePackages = {
         "id.ezclouds.core.dal",
@@ -48,7 +48,7 @@ import java.util.TimeZone;
         "id.ezclouds.core.member",
         "id.ezclouds.core.auth",
         "id.ezclouds.core.integration.dataservice.dataobject",
-        "id.ezclouds.biz.ezservice"
+        "id.ezclouds.biz.election"
 })
 @EnableCaching(proxyTargetClass = true)
 @EnableAsync(proxyTargetClass = true)

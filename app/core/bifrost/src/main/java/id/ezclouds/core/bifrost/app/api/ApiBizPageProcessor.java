@@ -4,9 +4,9 @@
  */
 package id.ezclouds.core.bifrost.app.api;
 
-import id.ezclouds.biz.ezservice.service.apibiz.BizAppDocumentService;
-import id.ezclouds.biz.ezservice.service.apibiz.OldBizMemberService;
-import id.ezclouds.biz.ezservice.service.apibiz.BizSubOrganizationService;
+import id.ezclouds.biz.election.service.apibiz.BizAppDocumentService;
+import id.ezclouds.biz.election.service.apibiz.OldBizMemberService;
+import id.ezclouds.biz.election.service.apibiz.BizSubOrganizationService;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiPageRequest;

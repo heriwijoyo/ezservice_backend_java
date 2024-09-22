@@ -5,8 +5,8 @@
 package id.ezclouds.core.bifrost.app.webapp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import id.ezclouds.biz.ezservice.service.apibiz.OldBizMemberService;
-import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
+import id.ezclouds.biz.election.service.apibiz.OldBizMemberService;
+import id.ezclouds.biz.election.service.core.BizCacheKey;
 import id.ezclouds.common.facade.biz.BizReportService;
 import id.ezclouds.common.facade.dal.web.EzWebAppContentDAO;
 import id.ezclouds.common.model.report.BizMainReport;

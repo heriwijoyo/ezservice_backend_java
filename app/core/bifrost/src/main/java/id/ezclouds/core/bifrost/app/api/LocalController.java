@@ -4,7 +4,7 @@
  */
 package id.ezclouds.core.bifrost.app.api;
 
-import id.ezclouds.biz.ezservice.service.apibiz.admin.BizSuperAdminService;
+import id.ezclouds.biz.election.service.apibiz.admin.BizSuperAdminService;
 import id.ezclouds.common.facade.process.AsyncProcessExecutor;
 import id.ezclouds.common.facade.process.SyncProcessExecutor;
 import id.ezclouds.common.model.process.ProcessMode;
