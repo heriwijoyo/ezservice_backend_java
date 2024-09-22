@@ -18,9 +18,15 @@
         <!-- start ez modules -->
         <dependency>
             <groupId>id.ezclouds.biz</groupId>
+            <artifactId>ezclouds-biz-commerce</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>id.ezclouds.biz</groupId>
             <artifactId>ezclouds-biz-election</artifactId>
             <version>1.0.0</version>
         </dependency>
+
         <dependency>
             <groupId>id.ezclouds.common</groupId>
             <artifactId>ezclouds-common-facade</artifactId>

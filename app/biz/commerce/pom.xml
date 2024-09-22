@@ -4,14 +4,22 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>ezclouds-parent</artifactId>
-        <groupId>id.ezclouds.core</groupId>
+        <groupId>id.ezclouds</groupId>
         <version>1.0.0</version>
         <relativePath>../../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>id.ezclouds.biz</groupId>
-    <artifactId>biz-tanahlado</artifactId>
+    <artifactId>ezclouds-biz-commerce</artifactId>
+    <version>1.0.0</version>
 
+    <dependencies>
+        <dependency>
+            <groupId>id.ezclouds.common</groupId>
+            <artifactId>ezclouds-common-facade</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
 
 </project>

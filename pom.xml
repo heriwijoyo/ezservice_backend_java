@@ -6,6 +6,7 @@
 	<modules>
 		<module>app/bootstrap</module>
 		<module>app/biz/election</module>
+		<module>app/biz/commerce</module>
 
 		<module>app/common/facade</module>
 		<module>app/common/model</module>
