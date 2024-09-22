@@ -42,7 +42,7 @@ public class WebAppApiMasterDataController {
     @PostMapping(value = "/webapp/api/masterDataOverall.json")
     private WebApiResult<List<BizMasterDataOverall>> masterDataOverall(@RequestParam(name = "sessionId", required = false) String sessionId) {
         final WebApiResult<List<BizMasterDataOverall>> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebAppApiEvent.WEBAPP_API_MASTER_DATA_OVERALL, result, new WebApiControllerTemplate.Handler<List<BizMasterDataOverall>>() {
+        WebApiControllerTemplate.execute(WebAppApiEvent.WEBAPP_API_MASTER_DATA_OVERALL, result, new WebApiControllerTemplate.Handler<>() {
             @Override
             public BizResult onProcess() throws Exception {
                 WebBizPageRequest request = new WebBizPageRequest();
@@ -68,7 +68,7 @@ public class WebAppApiMasterDataController {
             @RequestParam(name = "sessionId", required = false) String sessionId,
             @RequestParam(name = "districtId", required = false) String districtId) {
         final WebApiResult<List<VillageMasterData>> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebAppApiEvent.WEBAPP_API_MASTER_DATA_VILLAGE, result, new WebApiControllerTemplate.Handler<List<VillageMasterData>>() {
+        WebApiControllerTemplate.execute(WebAppApiEvent.WEBAPP_API_MASTER_DATA_VILLAGE, result, new WebApiControllerTemplate.Handler<>() {
             @Override
             public BizResult onProcess() throws Exception {
                 WebBizDetailRequest<String> request = new WebBizDetailRequest<>();
@@ -124,7 +124,7 @@ public class WebAppApiMasterDataController {
             @RequestParam(name = "bizMasterId", required = false) String bizMasterId,
             @RequestParam(name = "values", required = false) String values) {
         final WebApiResult<String> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebAppApiEvent.WEBAPP_API_MASTER_DATA_VILLAGE_UPDATE, result, new WebApiControllerTemplate.Handler<String>() {
+        WebApiControllerTemplate.execute(WebAppApiEvent.WEBAPP_API_MASTER_DATA_VILLAGE_UPDATE, result, new WebApiControllerTemplate.Handler<>() {
             @Override
             public BizResult onProcess() throws Exception {
                 return bizAdminMasterDataService
