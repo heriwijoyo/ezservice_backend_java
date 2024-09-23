@@ -13,6 +13,7 @@ public enum BizSeqScene implements CoreSeqScene {
     CORE_MEMBER_ID("CORE_MEMBER_ID", "10"),
     BIZ_SUB_ORG("BIZ_SUB_ORG", "11"),
     BIZ_VOTER_ID("BIZ_VOTER_ID", "12"),
+    BIZ_VOTER_CANVASS("BIZ_VOTER_CANVASS", "13"),
 
     ;
 
