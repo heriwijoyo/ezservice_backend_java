@@ -14,5 +14,7 @@ import java.util.List;
  */
 public interface CoreOrganizationDAO {
 
+    Organization getById(String orgId);
+
     List<Organization> getOrganizations();
 }

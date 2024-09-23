@@ -23,6 +23,11 @@ public class NewCoreOrganizationService implements CoreOrganizationService {
     private CoreOrganizationDAO coreOrganizationDAO;
 
     @Override
+    public Organization getById(String orgId) {
+        return coreOrganizationDAO.getById(orgId);
+    }
+
+    @Override
     public List<Organization> getOrganizations() {
         return coreOrganizationDAO.getOrganizations();
     }

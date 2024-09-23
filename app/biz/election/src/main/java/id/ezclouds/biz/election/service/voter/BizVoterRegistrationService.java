@@ -5,7 +5,13 @@
 package id.ezclouds.biz.election.service.voter;
 
 import id.ezclouds.common.facade.biz.election.VoterRegistrationService;
+import id.ezclouds.common.facade.core.CoreOrganizationService;
+import id.ezclouds.common.facade.core.CoreSequenceService;
+import id.ezclouds.common.facade.dal.biz.election.BizVoterDAO;
 import id.ezclouds.common.model.biz.election.BizVoter;
+import id.ezclouds.common.model.core.BizSeqScene;
+import id.ezclouds.common.model.core.Organization;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,8 +21,23 @@ import org.springframework.stereotype.Service;
 @Service
 public class BizVoterRegistrationService implements VoterRegistrationService {
 
-    @Override
-    public void registerVoter(BizVoter bizVoter) {
+    @Autowired
+    private CoreOrganizationService coreOrganizationService;
 
+    @Autowired
+    private CoreSequenceService coreSequenceService;
+
+    @Autowired
+    private BizVoterDAO bizVoterDAO;
+
+    @Override
+    public String registerVoter(BizVoter bizVoter) {
+        Organization organization = coreOrganizationService.getById(bizVoter.getOrgId());
+        String voterId = coreSequenceService.generateSequence(organization, BizSeqScene.BIZ_VOTER_ID);
+
+        bizVoter.setVoterId(voterId);
+        bizVoterDAO.store(bizVoter);
+
+        return voterId;
     }
 }

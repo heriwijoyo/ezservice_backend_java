@@ -12,5 +12,5 @@ import id.ezclouds.common.model.biz.election.BizVoter;
  */
 public interface VoterRegistrationService {
 
-    void registerVoter(BizVoter bizVoter);
+    String registerVoter(BizVoter bizVoter);
 }

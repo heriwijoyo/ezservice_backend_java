@@ -27,6 +27,16 @@ public class EzCoreOrganizationDAO implements CoreOrganizationDAO {
 
     @Override
     @EzDAOLogger
+    public Organization getById(String orgId) {
+        return new CoreOrganizationConverter().convertQuery(
+                ezCoreOrganizationRepository
+                        .findById(orgId)
+                        .orElse(null)
+        );
+    }
+
+    @Override
+    @EzDAOLogger
     public List<Organization> getOrganizations() {
         CoreOrganizationConverter converter = new CoreOrganizationConverter();
         return ezCoreOrganizationRepository
