@@ -16,10 +16,10 @@ import org.springframework.stereotype.Service;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: BizVoterRegistrationService.java, v 0.1 2024‐09‐23 10:39 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: EzVoterRegistrationService.java, v 0.1 2024‐09‐23 10:39 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class BizVoterRegistrationService implements VoterRegistrationService {
+public class EzVoterRegistrationService implements VoterRegistrationService {
 
     @Autowired
     private CoreOrganizationService coreOrganizationService;

@@ -16,9 +16,9 @@ public class BizVoter {
     private String shard;
     private String sourceId;
     private String referrerId;
-    private int familySize;
-    private int familySizeMale;
-    private int familySizeFemale;
+    private Integer familySize;
+    private Integer familySizeMale;
+    private Integer familySizeFemale;
     private String name;
     private String gender;
     private String dateOfBirth;
@@ -93,27 +93,27 @@ public class BizVoter {
         this.referrerId = referrerId;
     }
 
-    public int getFamilySize() {
+    public Integer getFamilySize() {
         return familySize;
     }
 
-    public void setFamilySize(int familySize) {
+    public void setFamilySize(Integer familySize) {
         this.familySize = familySize;
     }
 
-    public int getFamilySizeMale() {
+    public Integer getFamilySizeMale() {
         return familySizeMale;
     }
 
-    public void setFamilySizeMale(int familySizeMale) {
+    public void setFamilySizeMale(Integer familySizeMale) {
         this.familySizeMale = familySizeMale;
     }
 
-    public int getFamilySizeFemale() {
+    public Integer getFamilySizeFemale() {
         return familySizeFemale;
     }
 
-    public void setFamilySizeFemale(int familySizeFemale) {
+    public void setFamilySizeFemale(Integer familySizeFemale) {
         this.familySizeFemale = familySizeFemale;
     }
 
