@@ -36,7 +36,7 @@ public class EzCoreCacheService implements CoreCacheService {
         }
 
         for (String cachedKey : cacheManager.getCacheNames()) {
-            System.out.println("init cache: "+ cachedKey);
+            System.out.println("INIT_CACHE: "+ cachedKey);
         }
     }
 

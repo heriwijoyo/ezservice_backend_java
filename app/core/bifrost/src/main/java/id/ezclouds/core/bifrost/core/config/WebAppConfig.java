@@ -14,10 +14,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class WebAppConfig {
 
-    @Value("${ezserviceapp.web.config.release.mode}")
+    @Value("${ezserviceapp.web.config.release.mode:}")
     private String webReleaseMode;
 
-    @Value("${ezserviceapp.web.config.resource.dir}")
+    @Value("${ezserviceapp.web.config.resource.dir:}")
     private String webResourceDir;
 
     public String getWebReleaseMode() {

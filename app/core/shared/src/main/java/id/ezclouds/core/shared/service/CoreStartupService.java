@@ -7,6 +7,7 @@ package id.ezclouds.core.shared.service;
 import id.ezclouds.common.facade.core.CoreCacheService;
 import id.ezclouds.common.facade.core.CoreOrganizationService;
 import id.ezclouds.common.facade.file.CoreFileService;
+import id.ezclouds.common.model.constant.OrgConstant;
 import id.ezclouds.common.model.core.Organization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -37,7 +38,9 @@ public class CoreStartupService {
 
         // then init all organization public directory
         for (Organization organization : coreOrganizationService.getOrganizations()) {
-            coreFileService.initPublicFileDirectory(organization.getOrgId());
+            if (!OrgConstant.ORG_ID_SU.equals(organization.getOrgId())) {
+                coreFileService.initPublicFileDirectory(organization.getOrgId());
+            }
         }
     }
 
