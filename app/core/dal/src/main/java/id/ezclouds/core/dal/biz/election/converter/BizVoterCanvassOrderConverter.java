@@ -16,11 +16,41 @@ public class BizVoterCanvassOrderConverter extends CommonDOModelConverter<BizVot
 
     @Override
     protected BizCanvassOrder safeConvertQuery(BizVoterCanvassOrderDO dataObject) {
-        return null;
+        BizCanvassOrder canvassOrder = new BizCanvassOrder();
+        canvassOrder.setCanvassOrderId(dataObject.getCanvassOrderId());
+        canvassOrder.setOrgId(dataObject.getOrgId());
+        canvassOrder.setSequenceCode(dataObject.getSequenceCode());
+        canvassOrder.setShard(dataObject.getShard());
+        canvassOrder.setVoterId(dataObject.getVoterId());
+        canvassOrder.setReferrerId(dataObject.getReferrerId());
+        canvassOrder.setFirstVisitDate(dataObject.getFirstVisitDate());
+        canvassOrder.setFirstVisitAssessment(dataObject.getFirstVisitAssessment());
+        canvassOrder.setSecondVisitDate(dataObject.getSecondVisitDate());
+        canvassOrder.setSecondVisitAssessment(dataObject.getSecondVisitAssessment());
+        canvassOrder.setThirdVisitDate(dataObject.getThirdVisitDate());
+        canvassOrder.setThirdVisitAssessment(dataObject.getThirdVisitAssessment());
+        canvassOrder.setCreatedTime(dataObject.getCreatedTime());
+        canvassOrder.setModifiedTime(dataObject.getModifiedTime());
+        return canvassOrder;
     }
 
     @Override
     protected BizVoterCanvassOrderDO safeConvertStore(BizCanvassOrder model) {
-        return null;
+        BizVoterCanvassOrderDO canvassOrder = new BizVoterCanvassOrderDO();
+        canvassOrder.setCanvassOrderId(model.getCanvassOrderId());
+        canvassOrder.setOrgId(model.getOrgId());
+        canvassOrder.setSequenceCode(model.getSequenceCode());
+        canvassOrder.setShard(model.getShard());
+        canvassOrder.setVoterId(model.getVoterId());
+        canvassOrder.setReferrerId(model.getReferrerId());
+        canvassOrder.setFirstVisitDate(model.getFirstVisitDate());
+        canvassOrder.setFirstVisitAssessment(model.getFirstVisitAssessment());
+        canvassOrder.setSecondVisitDate(model.getSecondVisitDate());
+        canvassOrder.setSecondVisitAssessment(model.getSecondVisitAssessment());
+        canvassOrder.setThirdVisitDate(model.getThirdVisitDate());
+        canvassOrder.setThirdVisitAssessment(model.getThirdVisitAssessment());
+        canvassOrder.setCreatedTime(model.getCreatedTime());
+        canvassOrder.setModifiedTime(model.getModifiedTime());
+        return canvassOrder;
     }
 }
