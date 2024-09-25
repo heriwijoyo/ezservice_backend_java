@@ -4,7 +4,7 @@
  */
 package id.ezclouds.core.dal.biz.election.repo;
 
-import id.ezclouds.core.dal.biz.election.dataobject.BizElectionVoterDO;
+import id.ezclouds.core.dal.biz.election.dataobject.BizVoterDO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,5 +13,5 @@ import org.springframework.stereotype.Repository;
  * @version $Id: BizElectionVoterRepository.java, v 0.1 2024‐09‐23 11:58 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Repository
-public interface BizElectionVoterRepository extends JpaRepository<BizElectionVoterDO, String> {
+public interface BizElectionVoterRepository extends JpaRepository<BizVoterDO, String> {
 }

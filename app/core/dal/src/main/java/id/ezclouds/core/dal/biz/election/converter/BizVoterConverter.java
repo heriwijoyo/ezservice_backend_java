@@ -6,16 +6,16 @@ package id.ezclouds.core.dal.biz.election.converter;
 
 import id.ezclouds.common.model.biz.election.BizVoter;
 import id.ezclouds.common.model.converter.CommonDOModelConverter;
-import id.ezclouds.core.dal.biz.election.dataobject.BizElectionVoterDO;
+import id.ezclouds.core.dal.biz.election.dataobject.BizVoterDO;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizVoterConverter.java, v 0.1 2024‐09‐23 11:43 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class BizVoterConverter extends CommonDOModelConverter<BizElectionVoterDO, BizVoter> {
+public class BizVoterConverter extends CommonDOModelConverter<BizVoterDO, BizVoter> {
 
     @Override
-    protected BizVoter safeConvertQuery(BizElectionVoterDO dataObject) {
+    protected BizVoter safeConvertQuery(BizVoterDO dataObject) {
         BizVoter bizVoter = new BizVoter();
         bizVoter.setVoterId(dataObject.getVoterId());
         bizVoter.setOrgId(dataObject.getOrgId());
@@ -55,8 +55,8 @@ public class BizVoterConverter extends CommonDOModelConverter<BizElectionVoterDO
     }
 
     @Override
-    protected BizElectionVoterDO safeConvertStore(BizVoter model) {
-        BizElectionVoterDO voterDO = new BizElectionVoterDO();
+    protected BizVoterDO safeConvertStore(BizVoter model) {
+        BizVoterDO voterDO = new BizVoterDO();
         voterDO.setVoterId(model.getVoterId());
         voterDO.setOrgId(model.getOrgId());
         voterDO.setSubOrgId(model.getSubOrgId());
