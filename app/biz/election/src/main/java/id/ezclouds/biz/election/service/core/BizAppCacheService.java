@@ -11,7 +11,6 @@ import id.ezclouds.core.auth.service.CoreAuthService;
 import id.ezclouds.core.shared.service.CoreAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +20,6 @@ import java.util.List;
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizAppCacheService.java, v 0.1 2023‐12‐07 2:14 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-@Service
 public class BizAppCacheService {
 
     private static List<String> notReloadableCaches;

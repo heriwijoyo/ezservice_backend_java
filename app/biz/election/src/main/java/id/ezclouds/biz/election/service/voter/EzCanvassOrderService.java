@@ -5,8 +5,16 @@
 package id.ezclouds.biz.election.service.voter;
 
 import id.ezclouds.common.facade.biz.election.CanvassOrderService;
+import id.ezclouds.common.facade.core.CoreOrganizationService;
+import id.ezclouds.common.facade.core.CoreSequenceService;
+import id.ezclouds.common.facade.dal.biz.election.BizVoterCanvassOrderDAO;
 import id.ezclouds.common.model.biz.election.BizCanvassOrder;
 import id.ezclouds.common.model.biz.election.BizVoter;
+import id.ezclouds.common.model.core.BizSeqScene;
+import id.ezclouds.common.model.core.Organization;
+import id.ezclouds.common.util.DateUtil;
+import id.ezclouds.common.util.ShardUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,8 +24,34 @@ import org.springframework.stereotype.Service;
 @Service
 public class EzCanvassOrderService implements CanvassOrderService {
 
+    @Autowired
+    private CoreOrganizationService coreOrganizationService;
+
+    @Autowired
+    private CoreSequenceService coreSequenceService;
+
+    @Autowired
+    private BizVoterCanvassOrderDAO bizVoterCanvassOrderDAO;
+
     @Override
     public BizCanvassOrder createCanvassOrder(BizVoter bizVoter) {
-        return null;
+
+        Organization organization = coreOrganizationService
+                .getById(bizVoter.getOrgId());
+
+        String canvassOrderId = coreSequenceService
+                .generateSequence(organization, BizSeqScene.BIZ_VOTER_CANVASS);
+
+        BizCanvassOrder canvassOrder = new BizCanvassOrder();
+        canvassOrder.setCanvassOrderId(canvassOrderId);
+        canvassOrder.setOrgId(bizVoter.getOrgId());
+        canvassOrder.setShard(ShardUtil.getShardId(bizVoter.getVoterId()));
+        canvassOrder.setVoterId(bizVoter.getVoterId());
+        canvassOrder.setReferrerId(bizVoter.getReferrerId());
+        canvassOrder.setCreatedTime(DateUtil.getCurrentFormattedDate());
+        canvassOrder.setModifiedTime(DateUtil.getCurrentFormattedDate());
+        bizVoterCanvassOrderDAO.store(canvassOrder);
+
+        return canvassOrder;
     }
 }
