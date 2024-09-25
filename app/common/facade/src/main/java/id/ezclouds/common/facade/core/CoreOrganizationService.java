@@ -16,7 +16,5 @@ public interface CoreOrganizationService {
 
     Organization getById(String orgId);
 
-    Organization getById(String orgId, boolean forceReload);
-
     List<Organization> getOrganizations();
 }
