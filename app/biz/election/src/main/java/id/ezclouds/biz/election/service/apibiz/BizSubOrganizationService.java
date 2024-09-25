@@ -8,8 +8,6 @@ import id.ezclouds.biz.election.service.app.request.BizSubOrgCreateRequest;
 import id.ezclouds.biz.election.service.request.BizPageRequest;
 import id.ezclouds.biz.election.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.biz.election.subbiz.arahindonesia.service.AppSubOrganizationService;
-import id.ezclouds.biz.election.service.core.BizAppCacheService;
-import id.ezclouds.biz.election.service.core.BizCacheEnum;
 import id.ezclouds.common.model.result.BizPageInfo;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.facade.template.BizServiceTemplate;
@@ -32,9 +30,6 @@ public class BizSubOrganizationService extends BizBaseService {
     @Autowired
     private AppSubOrganizationService appSubOrganizationService;
 
-    @Autowired
-    private BizAppCacheService bizAppCacheService;
-
     public BizResult create(BizSubOrgCreateRequest request) {
         final BizResult bizResult = new BizResult();
         BizServiceTemplate.execute(request, bizResult, new BizServiceTemplate.Handler() {
@@ -49,7 +44,6 @@ public class BizSubOrganizationService extends BizBaseService {
                 CoreAuthMemberSessionInfo session = authAppMemberSession();
                 authorizeAdminMember(session.getMemberRoles());
                 appSubOrganizationService.create(request.getName(), request.getAddress(), getOrgId(), getOrgCode());
-                bizAppCacheService.reloadCacheItem(BizCacheEnum.SUB_ORGANIZATION_ALL);
 
                 bizResult.setSuccess(true);
                 bizResult.setObject("SubOrganization Created");

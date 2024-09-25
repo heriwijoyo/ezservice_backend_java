@@ -27,7 +27,6 @@ import id.ezclouds.biz.election.service.apibiz.BizLocalAreaService;
 import id.ezclouds.biz.election.service.app.BizOrganizationService;
 import id.ezclouds.biz.election.service.app.model.AppDocument;
 import id.ezclouds.biz.election.service.app.model.WebImageGallery;
-import id.ezclouds.biz.election.service.core.BizAppCacheService;
 import id.ezclouds.biz.election.service.core.BizCacheEnum;
 import id.ezclouds.biz.election.service.inner.service.BizAdminInnerService;
 import id.ezclouds.biz.election.service.request.BizLocalAreaRequest;
@@ -115,9 +114,6 @@ public class BizAdminService extends BizBaseService {
 
     @Autowired
     private BizAdminInnerService bizAdminInnerService;
-
-    @Autowired
-    private BizAppCacheService bizAppCacheService;
 
     public BizResult createWebSession() {
         final BizResult bizResult = new BizResult();
@@ -413,7 +409,6 @@ public class BizAdminService extends BizBaseService {
 
                 bizResult.setSuccess(true);
                 bizResult.setObject(result);
-                bizAppCacheService.reloadCacheItem(BizCacheEnum.APP_IMAGE_GALLERY_ALL);
             }
 
             @Override
@@ -508,7 +503,6 @@ public class BizAdminService extends BizBaseService {
                         request.getSection(),
                         Integer.parseInt(request.getValue())
                 );
-                bizAppCacheService.reloadCacheItem(BizCacheEnum.NEWS_HIGHLIGHT);
                 bizResult.setSuccess(true);
                 bizResult.setObject(WebAdminConstant.OPERATION_SUCCESS);
             }
@@ -815,7 +809,6 @@ public class BizAdminService extends BizBaseService {
                         filePath = fileInfo.getAppGalleryPath(fileName);
                         coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
                         bizAdminInnerService.createAppImageGallery(session.getOrgId(), fileName, request.getExtendInfo());
-                        bizAppCacheService.reloadCacheItem(BizCacheEnum.APP_IMAGE_GALLERY_ALL);
                         break;
 
                     case ADMIN_NEWS_GALLERY:
@@ -823,7 +816,6 @@ public class BizAdminService extends BizBaseService {
                         filePath = fileInfo.getNewsGalleryPath(fileName);
                         coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
                         bizAdminInnerService.createNews(session.getOrgId(), fileName, request.getExtendInfo());
-                        bizAppCacheService.reloadCacheItem(BizCacheEnum.NEWS_HIGHLIGHT);
                         break;
 
                     case ADMIN_NEWS_GALLERY_UPDATE:
@@ -835,7 +827,6 @@ public class BizAdminService extends BizBaseService {
                             fileName = null;
                         }
                         bizAdminInnerService.updateNews(session.getOrgId(), fileName, request.getExtendInfo());
-                        bizAppCacheService.reloadCacheItem(BizCacheEnum.NEWS_HIGHLIGHT);
                         break;
 
                     case ADMIN_EVENT_GALLERY:
@@ -861,7 +852,6 @@ public class BizAdminService extends BizBaseService {
                         filePath = fileInfo.getVideoCardGalleryPath(fileName);
                         coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
                         bizAdminInnerService.createVideoCard(session.getOrgId(), fileName, request.getExtendInfo());
-                        bizAppCacheService.reloadCacheItem(BizCacheEnum.APP_IMAGE_GALLERY_ALL);
                         break;
 
                     case ADMIN_DOCS_GALLERY:
@@ -960,8 +950,6 @@ public class BizAdminService extends BizBaseService {
                 bizAdminInnerService.profileBioUpdate(session.getOrgId(), request.getData());
                 bizResult.setSuccess(true);
                 bizResult.setObject(BizConstant.Message.SUCCESS_COMMON);
-                bizAppCacheService.reloadCacheItem(BizCacheEnum.CANDIDATE_PROFILE);
-                bizAppCacheService.reloadCacheItem(BizCacheEnum.CANDIDATE_BIOGRAPHY);
             }
 
             @Override
@@ -988,8 +976,6 @@ public class BizAdminService extends BizBaseService {
                 bizAdminInnerService.profileUpdate(session.getOrgId(), request.getExtendInfo());
                 bizResult.setSuccess(true);
                 bizResult.setObject(BizConstant.Message.SUCCESS_COMMON);
-                bizAppCacheService.reloadCacheItem(BizCacheEnum.CANDIDATE_PROFILE);
-                bizAppCacheService.reloadCacheItem(BizCacheEnum.CANDIDATE_BIOGRAPHY);
             }
 
             @Override

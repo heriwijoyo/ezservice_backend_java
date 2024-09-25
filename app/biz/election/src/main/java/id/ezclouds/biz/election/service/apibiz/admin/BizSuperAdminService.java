@@ -17,9 +17,7 @@ import id.ezclouds.biz.election.model.member.BizMember;
 import id.ezclouds.biz.election.service.apibiz.BizBaseService;
 import id.ezclouds.biz.election.service.apibiz.BizLocalAreaService;
 import id.ezclouds.biz.election.service.async.processor.BizOldCommonReportProcessor;
-import id.ezclouds.biz.election.service.core.BizCacheEnum;
 import id.ezclouds.biz.election.service.inner.service.BizConnectInnerService;
-import id.ezclouds.biz.election.service.core.BizAppCacheService;
 import id.ezclouds.biz.election.service.app.model.BizAppConfig;
 import id.ezclouds.biz.election.service.inner.service.BizAdminInnerService;
 import id.ezclouds.biz.election.service.request.BizLocalAreaRequest;
@@ -66,9 +64,6 @@ public class BizSuperAdminService extends BizBaseService {
 
     @Autowired
     private CoreFileService coreFileService;
-
-    @Autowired
-    private BizAppCacheService bizAppCacheService;
 
     @Autowired
     private BizConnectInnerService bizConnectInnerService;
@@ -538,7 +533,7 @@ public class BizSuperAdminService extends BizBaseService {
                 authorizeSuperUserMember(sessionId);
 
                 bizResult.setSuccess(true);
-                bizResult.setObject(bizAppCacheService.refreshAllCaches());
+                bizResult.setObject(Arrays.asList("TEMPORARY UNAVAILABLE"));
             }
 
             @Override
@@ -652,7 +647,6 @@ public class BizSuperAdminService extends BizBaseService {
                 filePath = fileInfo.getAppBuildPackagePath(fileName);
                 coreFileService.storeFile(request.getMultipartFile().getInputStream(), filePath);
                 bizAdminInnerService.createAppBuildPackage(extOrgId, platform, Integer.parseInt(versionCode), versionName);
-                bizAppCacheService.reloadCacheItem(BizCacheEnum.APP_BUILD_PACKAGE_ALL);
                 break;
 
             case ADMIN_APP_ICON:
