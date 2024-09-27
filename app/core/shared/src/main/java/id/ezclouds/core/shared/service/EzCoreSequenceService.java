@@ -12,6 +12,7 @@ import id.ezclouds.common.model.core.CoreSequence;
 import id.ezclouds.common.model.core.Organization;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
+import id.ezclouds.core.shared.util.CoreSeqUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,17 +59,8 @@ public class EzCoreSequenceService implements CoreSequenceService {
 
         String shard = String.valueOf(nextStep).substring(1);
         String sceneCode = sequence.getSeqScene().getSceneCode();
-        String seqStr = composeSequence(nextSequence, sequence.getSeqLength());
+        String seqStr = CoreSeqUtil.composeSeqCode(nextSequence, sequence.getSeqLength());
 
         return organization.getOrgCode() + shard + sceneCode + seqStr;
-    }
-
-    private String composeSequence(int sequence, int sequenceLength) {
-        String seqStr = String.valueOf(sequence);
-        while (seqStr.length() < sequenceLength) {
-            seqStr = "0" + seqStr;
-        }
-
-        return seqStr;
     }
 }
