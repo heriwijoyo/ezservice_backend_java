@@ -4,13 +4,13 @@
  */
 package id.ezclouds.biz.election.service.voter;
 
-import id.ezclouds.common.facade.biz.election.BizCanvassOrderService;
-import id.ezclouds.common.facade.biz.election.CanvassOrderService;
+import id.ezclouds.common.facade.biz.election.BizCanvassRecordService;
+import id.ezclouds.common.facade.biz.election.CanvassRecordService;
 import id.ezclouds.common.facade.biz.election.VoterRegistrationService;
 import id.ezclouds.common.facade.template.BizServiceTemplate;
-import id.ezclouds.common.model.biz.election.BizCanvassOrder;
+import id.ezclouds.common.model.biz.election.BizCanvassRecord;
 import id.ezclouds.common.model.biz.election.BizVoter;
-import id.ezclouds.common.model.request.biz.election.BizCanvasOrderCreateRequest;
+import id.ezclouds.common.model.request.biz.election.BizCanvasRecordCreateRequest;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.BizErrorMessageHelper;
@@ -24,22 +24,22 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: EzBizCanvassOrderService.java, v 0.1 2024‐09‐23 10:40 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: EzBizCanvassRecordService.java, v 0.1 2024‐09‐23 10:40 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class EzBizCanvassOrderService implements BizCanvassOrderService {
+public class EzBizCanvassRecordService implements BizCanvassRecordService {
 
     @Autowired
     private VoterRegistrationService voterRegistrationService;
 
     @Autowired
-    private CanvassOrderService canvassOrderService;
+    private CanvassRecordService canvassRecordService;
 
     @Autowired
     private TransactionTemplate transactionTemplate;
 
     @Override
-    public BizResult canvassOrderCreate(BizCanvasOrderCreateRequest request) {
+    public BizResult canvassOrderCreate(BizCanvasRecordCreateRequest request) {
         final BizResult result = new BizResult();
         BizServiceTemplate.execute(request, result, new BizServiceTemplate.Handler() {
             @Override
@@ -58,7 +58,7 @@ public class EzBizCanvassOrderService implements BizCanvassOrderService {
                         String bizVoterId = voterRegistrationService.registerVoter(bizVoter);
                         bizVoter.setVoterId(bizVoterId);
 
-                        BizCanvassOrder canvassOrder = canvassOrderService.createCanvassOrder(bizVoter);
+                        BizCanvassRecord canvassOrder = canvassRecordService.createCanvassOrder(bizVoter);
                         result.setObject(canvassOrder);
                     }
                 });

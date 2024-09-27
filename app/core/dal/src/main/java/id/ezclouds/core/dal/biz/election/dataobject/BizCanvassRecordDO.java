@@ -2,27 +2,47 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.common.model.biz.election;
+package id.ezclouds.core.dal.biz.election.dataobject;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: BizCanvassOrder.java, v 0.1 2024‐09‐23 10:41 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: BizCanvassRecordDO.java, v 0.1 2024‐09‐26 12:31 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class BizCanvassOrder {
+@Entity
+@Table(name = "biz_election_canvass_record")
+public class BizCanvassRecordDO {
 
+    @Id
+    @Column(name = "canvass_order_id")
     private String canvassOrderId;
+    @Column(name = "org_id")
     private String orgId;
-    private String sequenceCode;
-    private String shard;
+    @Column(name = "biz_seq_code")
+    private String bizSeqCode;
+    @Column(name = "voter_id")
     private String voterId;
+    @Column(name = "referrer_id")
     private String referrerId;
+    @Column(name = "first_visit_date")
     private String firstVisitDate;
+    @Column(name = "first_visit_assessment")
     private String firstVisitAssessment;
+    @Column(name = "second_visit_date")
     private String secondVisitDate;
+    @Column(name = "second_visit_assessment")
     private String secondVisitAssessment;
+    @Column(name = "third_visit_date")
     private String thirdVisitDate;
+    @Column(name = "third_visit_assessment")
     private String thirdVisitAssessment;
+    @Column(name = "created_time")
     private String createdTime;
+    @Column(name = "modified_time")
     private String modifiedTime;
 
     public String getCanvassOrderId() {
@@ -41,20 +61,12 @@ public class BizCanvassOrder {
         this.orgId = orgId;
     }
 
-    public String getSequenceCode() {
-        return sequenceCode;
+    public String getBizSeqCode() {
+        return bizSeqCode;
     }
 
-    public void setSequenceCode(String sequenceCode) {
-        this.sequenceCode = sequenceCode;
-    }
-
-    public String getShard() {
-        return shard;
-    }
-
-    public void setShard(String shard) {
-        this.shard = shard;
+    public void setBizSeqCode(String bizSeqCode) {
+        this.bizSeqCode = bizSeqCode;
     }
 
     public String getVoterId() {

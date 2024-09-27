@@ -9,12 +9,21 @@ import id.ezclouds.common.model.request.BizRequest;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: BizCanvasOrderCreateRequest.java, v 0.1 2024‐09‐23 11:04 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: BizCanvasRecordCreateRequest.java, v 0.1 2024‐09‐23 11:04 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class BizCanvasOrderCreateRequest extends BizRequest {
+public class BizCanvasRecordCreateRequest extends BizRequest {
 
+    private String orgId;
     private String referrerMemberId;
     private final BizVoter bizVoter = new BizVoter();
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
 
     public String getReferrerMemberId() {
         return referrerMemberId;

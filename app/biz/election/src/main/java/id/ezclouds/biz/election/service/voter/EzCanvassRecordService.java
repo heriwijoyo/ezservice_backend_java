@@ -4,25 +4,24 @@
  */
 package id.ezclouds.biz.election.service.voter;
 
-import id.ezclouds.common.facade.biz.election.CanvassOrderService;
+import id.ezclouds.common.facade.biz.election.CanvassRecordService;
 import id.ezclouds.common.facade.core.CoreOrganizationService;
 import id.ezclouds.common.facade.core.CoreSequenceService;
-import id.ezclouds.common.facade.dal.biz.election.BizVoterCanvassOrderDAO;
-import id.ezclouds.common.model.biz.election.BizCanvassOrder;
+import id.ezclouds.common.facade.dal.biz.election.BizCanvassRecordDAO;
+import id.ezclouds.common.model.biz.election.BizCanvassRecord;
 import id.ezclouds.common.model.biz.election.BizVoter;
 import id.ezclouds.common.model.core.BizSeqScene;
 import id.ezclouds.common.model.core.Organization;
 import id.ezclouds.common.util.DateUtil;
-import id.ezclouds.common.util.ShardUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: EzCanvassOrderService.java, v 0.1 2024‐09‐24 12:30 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: EzCanvassRecordService.java, v 0.1 2024‐09‐24 12:30 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class EzCanvassOrderService implements CanvassOrderService {
+public class EzCanvassRecordService implements CanvassRecordService {
 
     @Autowired
     private CoreOrganizationService coreOrganizationService;
@@ -31,10 +30,10 @@ public class EzCanvassOrderService implements CanvassOrderService {
     private CoreSequenceService coreSequenceService;
 
     @Autowired
-    private BizVoterCanvassOrderDAO bizVoterCanvassOrderDAO;
+    private BizCanvassRecordDAO bizCanvassRecordDAO;
 
     @Override
-    public BizCanvassOrder createCanvassOrder(BizVoter bizVoter) {
+    public BizCanvassRecord createCanvassOrder(BizVoter bizVoter) {
 
         Organization organization = coreOrganizationService
                 .getById(bizVoter.getOrgId());
@@ -42,15 +41,14 @@ public class EzCanvassOrderService implements CanvassOrderService {
         String canvassOrderId = coreSequenceService
                 .generateSequence(organization, BizSeqScene.BIZ_VOTER_CANVASS);
 
-        BizCanvassOrder canvassOrder = new BizCanvassOrder();
+        BizCanvassRecord canvassOrder = new BizCanvassRecord();
         canvassOrder.setCanvassOrderId(canvassOrderId);
         canvassOrder.setOrgId(bizVoter.getOrgId());
-        canvassOrder.setShard(ShardUtil.getShardId(bizVoter.getVoterId()));
         canvassOrder.setVoterId(bizVoter.getVoterId());
         canvassOrder.setReferrerId(bizVoter.getReferrerId());
         canvassOrder.setCreatedTime(DateUtil.getCurrentFormattedDate());
         canvassOrder.setModifiedTime(DateUtil.getCurrentFormattedDate());
-        bizVoterCanvassOrderDAO.store(canvassOrder);
+        bizCanvassRecordDAO.store(canvassOrder);
 
         return canvassOrder;
     }

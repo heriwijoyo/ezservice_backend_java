@@ -4,23 +4,22 @@
  */
 package id.ezclouds.core.dal.biz.election.converter;
 
-import id.ezclouds.common.model.biz.election.BizCanvassOrder;
+import id.ezclouds.common.model.biz.election.BizCanvassRecord;
 import id.ezclouds.common.model.converter.CommonDOModelConverter;
-import id.ezclouds.core.dal.biz.election.dataobject.BizVoterCanvassOrderDO;
+import id.ezclouds.core.dal.biz.election.dataobject.BizCanvassRecordDO;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: BizVoterCanvassOrderConverter.java, v 0.1 2024‐09‐26 12:41 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: BizCanvassRecordConverter.java, v 0.1 2024‐09‐26 12:41 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class BizVoterCanvassOrderConverter extends CommonDOModelConverter<BizVoterCanvassOrderDO, BizCanvassOrder> {
+public class BizCanvassRecordConverter extends CommonDOModelConverter<BizCanvassRecordDO, BizCanvassRecord> {
 
     @Override
-    protected BizCanvassOrder safeConvertQuery(BizVoterCanvassOrderDO dataObject) {
-        BizCanvassOrder canvassOrder = new BizCanvassOrder();
+    protected BizCanvassRecord safeConvertQuery(BizCanvassRecordDO dataObject) {
+        BizCanvassRecord canvassOrder = new BizCanvassRecord();
         canvassOrder.setCanvassOrderId(dataObject.getCanvassOrderId());
         canvassOrder.setOrgId(dataObject.getOrgId());
-        canvassOrder.setSequenceCode(dataObject.getSequenceCode());
-        canvassOrder.setShard(dataObject.getShard());
+        canvassOrder.setBizSeqCode(dataObject.getBizSeqCode());
         canvassOrder.setVoterId(dataObject.getVoterId());
         canvassOrder.setReferrerId(dataObject.getReferrerId());
         canvassOrder.setFirstVisitDate(dataObject.getFirstVisitDate());
@@ -35,12 +34,11 @@ public class BizVoterCanvassOrderConverter extends CommonDOModelConverter<BizVot
     }
 
     @Override
-    protected BizVoterCanvassOrderDO safeConvertStore(BizCanvassOrder model) {
-        BizVoterCanvassOrderDO canvassOrder = new BizVoterCanvassOrderDO();
+    protected BizCanvassRecordDO safeConvertStore(BizCanvassRecord model) {
+        BizCanvassRecordDO canvassOrder = new BizCanvassRecordDO();
         canvassOrder.setCanvassOrderId(model.getCanvassOrderId());
         canvassOrder.setOrgId(model.getOrgId());
-        canvassOrder.setSequenceCode(model.getSequenceCode());
-        canvassOrder.setShard(model.getShard());
+        canvassOrder.setBizSeqCode(model.getBizSeqCode());
         canvassOrder.setVoterId(model.getVoterId());
         canvassOrder.setReferrerId(model.getReferrerId());
         canvassOrder.setFirstVisitDate(model.getFirstVisitDate());
