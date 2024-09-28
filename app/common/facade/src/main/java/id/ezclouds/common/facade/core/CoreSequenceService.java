@@ -4,7 +4,7 @@
  */
 package id.ezclouds.common.facade.core;
 
-import id.ezclouds.common.model.core.BizSeqScene;
+import id.ezclouds.common.model.core.CoreSeqSceneEnum;
 import id.ezclouds.common.model.core.Organization;
 
 /**
@@ -15,5 +15,5 @@ public interface CoreSequenceService {
 
     void initSequenceConfig(String orgId);
 
-    String generateSequence(Organization organization, BizSeqScene seqScene);
+    String generateSequence(Organization organization, CoreSeqSceneEnum seqScene);
 }

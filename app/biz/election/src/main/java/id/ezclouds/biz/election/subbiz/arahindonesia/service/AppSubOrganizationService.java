@@ -11,7 +11,7 @@ import id.ezclouds.biz.election.service.app.repo.BizMemberRepository;
 import id.ezclouds.biz.election.service.inner.service.BizPageQueryStrategy;
 import id.ezclouds.biz.election.service.request.BizPageRequest;
 import id.ezclouds.common.facade.core.CoreSequenceService;
-import id.ezclouds.common.model.core.BizSeqScene;
+import id.ezclouds.common.model.core.CoreSeqSceneEnum;
 import id.ezclouds.common.model.core.Organization;
 import id.ezclouds.common.model.result.BizPageInfo;
 import id.ezclouds.biz.election.subbiz.arahindonesia.model.BizSubOrganization;
@@ -57,7 +57,7 @@ public class AppSubOrganizationService {
     @Transactional
     public void create(String name, String address, String orgId, String orgCode) {
         String subOrgId = coreSequenceService
-                .generateSequence(new Organization(orgId, orgCode), BizSeqScene.BIZ_SUB_ORG);
+                .generateSequence(new Organization(orgId, orgCode), CoreSeqSceneEnum.BIZ_SUB_ORG);
         BizSubOrganizationDO bizSubOrganizationDO = new BizSubOrganizationDO();
         bizSubOrganizationDO.setName(name);
         bizSubOrganizationDO.setOrgId(orgId);

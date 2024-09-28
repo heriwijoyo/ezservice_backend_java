@@ -5,7 +5,7 @@
 package id.ezclouds.core.dal.core.converter;
 
 import id.ezclouds.common.model.converter.CommonDOModelConverter;
-import id.ezclouds.common.model.core.BizSeqScene;
+import id.ezclouds.common.model.core.CoreSeqSceneEnum;
 import id.ezclouds.common.model.core.CoreSequence;
 import id.ezclouds.core.dal.core.dataobject.EzCoreSequenceDO;
 
@@ -20,7 +20,7 @@ public class CoreSequenceConverter extends CommonDOModelConverter<EzCoreSequence
         CoreSequence sequence = new CoreSequence();
         sequence.setSequenceId(dataObject.getSequenceId());
         sequence.setOrgId(dataObject.getOrgId());
-        sequence.setSeqScene(BizSeqScene.getByScene(dataObject.getScene()));
+        sequence.setSeqScene(CoreSeqSceneEnum.getByScene(dataObject.getScene()));
         sequence.setStepMin(dataObject.getStepMin());
         sequence.setStepMax(dataObject.getStepMax());
         sequence.setStepValue(dataObject.getStepValue());

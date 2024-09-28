@@ -9,7 +9,6 @@ import id.ezclouds.common.facade.dal.core.CoreBizSequenceDAO;
 import id.ezclouds.common.model.core.CoreBizSeqScene;
 import id.ezclouds.common.model.core.CoreBizSequence;
 import id.ezclouds.common.util.DateUtil;
-import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.core.shared.util.CoreSeqUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,14 +24,22 @@ public class EzCoreBizSequenceService implements CoreBizSequenceService {
     private CoreBizSequenceDAO coreBizSequenceDAO;
 
     @Override
-    public String generateSequence(String orgId, CoreBizSeqScene bizSeqScene) {
+    public String generateSequence(CoreBizSeqScene bizSeqScene) {
         CoreBizSequence bizSequence = coreBizSequenceDAO
-                .lockBizSequence(orgId, bizSeqScene);
+                .lockBizSequence(bizSeqScene.getOrgId(), bizSeqScene.getCode(), bizSeqScene.getSceneId());
+
         if (bizSequence == null) {
+            String bizSeqId = CoreSeqUtil.composeBizSeqId(
+                    bizSequence.getOrgId(),
+                    bizSeqScene.getCode(),
+                    bizSeqScene.getSceneId()
+            );
+
             bizSequence = new CoreBizSequence();
-            bizSequence.setSeqBizKey(HashUtil.createHash(orgId, bizSeqScene.getCode()));
-            bizSequence.setOrgId(orgId);
-            bizSequence.setSeqBizKey(bizSeqScene.getCode());
+            bizSequence.setBizSeqId(bizSeqId);
+            bizSequence.setOrgId(bizSeqScene.getOrgId());
+            bizSequence.setSeqScene(bizSeqScene.getCode());
+            bizSequence.setSeqSceneId(bizSeqScene.getSceneId());
             bizSequence.setSequence(0);
         }
 

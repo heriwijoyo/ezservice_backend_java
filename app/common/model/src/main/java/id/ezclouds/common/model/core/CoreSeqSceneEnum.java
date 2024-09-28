@@ -6,9 +6,9 @@ package id.ezclouds.common.model.core;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: BizSeqScene.java, v 0.1 2024‐09‐22 5:49 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: CoreSeqSceneEnum.java, v 0.1 2024‐09‐22 5:49 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public enum BizSeqScene implements CoreSeqScene {
+public enum CoreSeqSceneEnum implements CoreSeqScene {
 
     CORE_MEMBER_ID("CORE_MEMBER_ID", "10"),
     BIZ_SUB_ORG("BIZ_SUB_ORG", "11"),
@@ -20,7 +20,7 @@ public enum BizSeqScene implements CoreSeqScene {
     private final String scene;
     private final String sceneCode;
 
-    BizSeqScene(String scene, String sceneCode) {
+    CoreSeqSceneEnum(String scene, String sceneCode) {
         this.scene = scene;
         this.sceneCode = sceneCode;
     }
@@ -35,8 +35,8 @@ public enum BizSeqScene implements CoreSeqScene {
         return sceneCode;
     }
 
-    public static BizSeqScene getByScene(String scene) {
-        for (BizSeqScene seqScene : values()) {
+    public static CoreSeqSceneEnum getByScene(String scene) {
+        for (CoreSeqSceneEnum seqScene : values()) {
             if (seqScene.scene.equals(scene)) {
                 return seqScene;
             }

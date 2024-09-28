@@ -70,9 +70,6 @@ public final class BizServiceTemplate {
         if (exception instanceof EzErrorException) {
             bizResult.setErrorCode(((EzErrorException)exception).getEzErrorCode());
         }
-        if (exception instanceof DataIntegrityViolationException) {
-            bizResult.setErrorCode(EzErrorCode.IDEMPOTENT_ERROR);
-        }
     }
 
     private static void logRequest(BizRequest request) {

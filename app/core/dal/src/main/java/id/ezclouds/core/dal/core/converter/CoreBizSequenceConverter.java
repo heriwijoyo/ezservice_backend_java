@@ -19,7 +19,8 @@ public class CoreBizSequenceConverter extends CommonDOModelConverter<EzCoreBizSe
         CoreBizSequence bizSequence = new CoreBizSequence();
         bizSequence.setBizSeqId(dataObject.getBizSeqId());
         bizSequence.setOrgId(dataObject.getOrgId());
-        bizSequence.setSeqBizKey(dataObject.getSeqBizKey());
+        bizSequence.setSeqScene(dataObject.getSeqScene());
+        bizSequence.setSeqSceneId(dataObject.getSeqSceneId());
         bizSequence.setSequence(dataObject.getSequence());
         bizSequence.setModifiedTime(dataObject.getModifiedTime());
         return bizSequence;
@@ -30,7 +31,8 @@ public class CoreBizSequenceConverter extends CommonDOModelConverter<EzCoreBizSe
         EzCoreBizSequenceDO bizSequenceDO = new EzCoreBizSequenceDO();
         bizSequenceDO.setBizSeqId(model.getBizSeqId());
         bizSequenceDO.setOrgId(model.getOrgId());
-        bizSequenceDO.setSeqBizKey(model.getSeqBizKey());
+        bizSequenceDO.setSeqScene(model.getSeqScene());
+        bizSequenceDO.setSeqSceneId(model.getSeqSceneId());
         bizSequenceDO.setSequence(model.getSequence());
         bizSequenceDO.setModifiedTime(model.getModifiedTime());
         return bizSequenceDO;

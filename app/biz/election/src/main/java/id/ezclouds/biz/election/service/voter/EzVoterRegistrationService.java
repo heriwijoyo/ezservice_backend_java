@@ -9,8 +9,10 @@ import id.ezclouds.common.facade.core.CoreOrganizationService;
 import id.ezclouds.common.facade.core.CoreSequenceService;
 import id.ezclouds.common.facade.dal.biz.election.BizVoterDAO;
 import id.ezclouds.common.model.biz.election.BizVoter;
-import id.ezclouds.common.model.core.BizSeqScene;
+import id.ezclouds.common.model.core.CoreSeqSceneEnum;
 import id.ezclouds.common.model.core.Organization;
+import id.ezclouds.common.util.assertion.AssertUtil;
+import id.ezclouds.common.util.exception.EzErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,8 +34,11 @@ public class EzVoterRegistrationService implements VoterRegistrationService {
 
     @Override
     public String registerVoter(BizVoter bizVoter) {
+        BizVoter existBizVoter = bizVoterDAO.getByIdCardNumber(bizVoter.getOrgId(), bizVoter.getIdCardNumber());
+        AssertUtil.isNull(existBizVoter, EzErrorCode.IDEMPOTENT_ERROR);
+
         Organization organization = coreOrganizationService.getById(bizVoter.getOrgId());
-        String voterId = coreSequenceService.generateSequence(organization, BizSeqScene.BIZ_VOTER_ID);
+        String voterId = coreSequenceService.generateSequence(organization, CoreSeqSceneEnum.BIZ_VOTER_ID);
 
         bizVoter.setVoterId(voterId);
         bizVoterDAO.store(bizVoter);

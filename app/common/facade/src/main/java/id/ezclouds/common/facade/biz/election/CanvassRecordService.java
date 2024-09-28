@@ -5,7 +5,7 @@
 package id.ezclouds.common.facade.biz.election;
 
 import id.ezclouds.common.model.biz.election.BizCanvassRecord;
-import id.ezclouds.common.model.biz.election.BizVoter;
+import id.ezclouds.common.model.request.biz.election.CanvassRecordCreateRequest;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -13,5 +13,5 @@ import id.ezclouds.common.model.biz.election.BizVoter;
  */
 public interface CanvassRecordService {
 
-    BizCanvassRecord createCanvassOrder(BizVoter bizVoter);
+    BizCanvassRecord createCanvassRecord(CanvassRecordCreateRequest request);
 }

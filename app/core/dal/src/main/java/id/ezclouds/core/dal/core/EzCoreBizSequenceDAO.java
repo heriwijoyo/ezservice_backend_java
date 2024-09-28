@@ -5,7 +5,6 @@
 package id.ezclouds.core.dal.core;
 
 import id.ezclouds.common.facade.dal.core.CoreBizSequenceDAO;
-import id.ezclouds.common.model.core.CoreBizSeqScene;
 import id.ezclouds.common.model.core.CoreBizSequence;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.core.dal.core.converter.CoreBizSequenceConverter;
@@ -24,8 +23,8 @@ public class EzCoreBizSequenceDAO implements CoreBizSequenceDAO {
     private EzCoreBizSequenceRepository ezCoreBizSequenceRepository;
 
     @Override
-    public CoreBizSequence lockBizSequence(String orgId, CoreBizSeqScene bizSeqScene) {
-        String bizSeqId = HashUtil.createHash(orgId, bizSeqScene.getCode());
+    public CoreBizSequence lockBizSequence(String orgId, String scene, String sceneId) {
+        String bizSeqId = HashUtil.createHash(orgId, scene, sceneId);
         return new CoreBizSequenceConverter()
                 .convertQuery(
                         ezCoreBizSequenceRepository

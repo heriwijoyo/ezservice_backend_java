@@ -4,7 +4,6 @@
  */
 package id.ezclouds.common.facade.dal.core;
 
-import id.ezclouds.common.model.core.CoreBizSeqScene;
 import id.ezclouds.common.model.core.CoreBizSequence;
 
 /**
@@ -13,7 +12,7 @@ import id.ezclouds.common.model.core.CoreBizSequence;
  */
 public interface CoreBizSequenceDAO {
 
-    CoreBizSequence lockBizSequence(String orgId, CoreBizSeqScene bizSeqScene);
+    CoreBizSequence lockBizSequence(String orgId, String scene, String sceneId);
 
     void store(CoreBizSequence bizSequence);
 }

@@ -18,7 +18,7 @@ import id.ezclouds.biz.election.model.BizStatus;
 import id.ezclouds.biz.election.model.member.BizMemberClient;
 import id.ezclouds.biz.election.model.member.BizMemberInfo;
 import id.ezclouds.common.facade.core.CoreSequenceService;
-import id.ezclouds.common.model.core.BizSeqScene;
+import id.ezclouds.common.model.core.CoreSeqSceneEnum;
 import id.ezclouds.common.model.core.Organization;
 import id.ezclouds.common.util.RandomUtil;
 import id.ezclouds.common.model.result.BizPageInfo;
@@ -69,7 +69,7 @@ public class BizMemberInnerService {
         String appId = EzAppContextHolder.getContext().getAppId();
 
         String memberId = coreSequenceService
-                .generateSequence(new Organization(orgId, orgCode), BizSeqScene.CORE_MEMBER_ID);
+                .generateSequence(new Organization(orgId, orgCode), CoreSeqSceneEnum.CORE_MEMBER_ID);
         String shard = ShardUtil.getShardId(memberId);
 
         CoreMember coreMember = BizMemberRequestConverter.getCoreMember(request);
@@ -134,7 +134,7 @@ public class BizMemberInnerService {
     @Transactional
     public BizMemberInfo adminOrgCreateMember(String orgId, String orgCode, String appId, CoreMember coreMember) throws Exception {
         String memberId = coreSequenceService
-                .generateSequence(new Organization(orgId, orgCode), BizSeqScene.CORE_MEMBER_ID);
+                .generateSequence(new Organization(orgId, orgCode), CoreSeqSceneEnum.CORE_MEMBER_ID);
         String shard = ShardUtil.getShardId(memberId);
 
         coreMember.setMemberId(memberId);
@@ -167,7 +167,7 @@ public class BizMemberInnerService {
     @Transactional
     public BizMemberInfo createCoreMember(String orgId, String orgCode, String appId, BizMember bizMember) {
         String memberId = coreSequenceService
-                .generateSequence(new Organization(orgId, orgCode), BizSeqScene.CORE_MEMBER_ID);
+                .generateSequence(new Organization(orgId, orgCode), CoreSeqSceneEnum.CORE_MEMBER_ID);
         String shard = ShardUtil.getShardId(memberId);
 
         CoreMember coreMember = BizMemberConverter.convert(bizMember);

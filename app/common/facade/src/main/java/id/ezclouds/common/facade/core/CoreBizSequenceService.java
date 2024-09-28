@@ -12,5 +12,5 @@ import id.ezclouds.common.model.core.CoreBizSeqScene;
  */
 public interface CoreBizSequenceService {
 
-    String generateSequence(String orgId, CoreBizSeqScene bizSeqScene);
+    String generateSequence(CoreBizSeqScene bizSeqScene);
 }

@@ -11,4 +11,7 @@ package id.ezclouds.common.model.core;
 public interface CoreBizSeqScene {
     String getCode();
     int seqLength();
+
+    String getOrgId();
+    String getSceneId();
 }

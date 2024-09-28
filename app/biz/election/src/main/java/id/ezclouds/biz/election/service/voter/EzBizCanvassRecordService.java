@@ -53,13 +53,9 @@ public class EzBizCanvassRecordService implements BizCanvassRecordService {
                 transactionTemplate.execute(new TransactionCallbackWithoutResult() {
                     @Override
                     protected void doInTransactionWithoutResult(TransactionStatus status) {
-                        BizVoter bizVoter = request.getBizVoter();
+                        String bizVoterId = voterRegistrationService.registerVoter(request.getBizVoter());
+                        request.getBizVoter().setVoterId(bizVoterId);
 
-                        String bizVoterId = voterRegistrationService.registerVoter(bizVoter);
-                        bizVoter.setVoterId(bizVoterId);
-
-                        BizCanvassRecord canvassOrder = canvassRecordService.createCanvassOrder(bizVoter);
-                        result.setObject(canvassOrder);
                     }
                 });
 

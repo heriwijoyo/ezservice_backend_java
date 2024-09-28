@@ -5,6 +5,7 @@
 package id.ezclouds.common.model.request.biz.election;
 
 import id.ezclouds.common.model.biz.election.BizVoter;
+import id.ezclouds.common.model.core.CoreBizSeqScene;
 import id.ezclouds.common.model.request.BizRequest;
 
 /**
@@ -15,6 +16,7 @@ public class BizCanvasRecordCreateRequest extends BizRequest {
 
     private String orgId;
     private String referrerMemberId;
+    private CoreBizSeqScene bizSeqScene;
     private final BizVoter bizVoter = new BizVoter();
 
     public String getOrgId() {
@@ -31,6 +33,14 @@ public class BizCanvasRecordCreateRequest extends BizRequest {
 
     public void setReferrerMemberId(String referrerMemberId) {
         this.referrerMemberId = referrerMemberId;
+    }
+
+    public CoreBizSeqScene getBizSeqScene() {
+        return bizSeqScene;
+    }
+
+    public void setBizSeqScene(CoreBizSeqScene bizSeqScene) {
+        this.bizSeqScene = bizSeqScene;
     }
 
     public BizVoter getBizVoter() {

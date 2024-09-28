@@ -12,7 +12,8 @@ public class CoreBizSequence {
 
     private String bizSeqId;
     private String orgId;
-    private String seqBizKey;
+    private String seqScene;
+    private String seqSceneId;
     private Integer sequence;
     private String modifiedTime;
 
@@ -32,12 +33,20 @@ public class CoreBizSequence {
         this.orgId = orgId;
     }
 
-    public String getSeqBizKey() {
-        return seqBizKey;
+    public String getSeqScene() {
+        return seqScene;
     }
 
-    public void setSeqBizKey(String seqBizKey) {
-        this.seqBizKey = seqBizKey;
+    public void setSeqScene(String seqScene) {
+        this.seqScene = seqScene;
+    }
+
+    public String getSeqSceneId() {
+        return seqSceneId;
+    }
+
+    public void setSeqSceneId(String seqSceneId) {
+        this.seqSceneId = seqSceneId;
     }
 
     public Integer getSequence() {

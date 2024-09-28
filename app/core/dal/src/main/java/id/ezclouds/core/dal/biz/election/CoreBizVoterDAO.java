@@ -24,6 +24,15 @@ public class CoreBizVoterDAO implements BizVoterDAO {
 
     @Override
     @EzDAOLogger
+    public BizVoter getByIdCardNumber(String orgId, String idCardNumber) {
+        return new BizVoterConverter().convertQuery(
+                bizElectionVoterRepository
+                        .findByOrgIdAndIdCardNumber(orgId, idCardNumber)
+        );
+    }
+
+    @Override
+    @EzDAOLogger
     public BizVoter getVoterById(String voterId) {
         return new BizVoterConverter().convertQuery(
                 bizElectionVoterRepository

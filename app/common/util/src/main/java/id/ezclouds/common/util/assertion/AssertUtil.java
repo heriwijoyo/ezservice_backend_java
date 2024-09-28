@@ -14,6 +14,12 @@ import id.ezclouds.common.util.exception.EzErrorException;
  */
 public class AssertUtil {
 
+    public static void isNull(Object object, EzErrorCode ezErrorCode, String... message) throws EzErrorException {
+        if (object != null) {
+            throw new EzErrorException(ezErrorCode, StringUtil.concateStrings(message));
+        }
+    }
+
     public static void notNull(Object object, EzErrorCode ezErrorCode, String... message) throws EzErrorException {
         if (object == null) {
             throw new EzErrorException(ezErrorCode, StringUtil.concateStrings(message));

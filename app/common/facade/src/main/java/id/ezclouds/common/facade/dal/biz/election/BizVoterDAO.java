@@ -12,6 +12,8 @@ import id.ezclouds.common.model.biz.election.BizVoter;
  */
 public interface BizVoterDAO {
 
+    BizVoter getByIdCardNumber(String orgId, String idCardNumber);
+
     BizVoter getVoterById(String voterId);
 
     void store(BizVoter voter);

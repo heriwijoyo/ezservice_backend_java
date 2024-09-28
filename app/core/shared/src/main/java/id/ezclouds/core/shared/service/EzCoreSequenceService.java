@@ -7,7 +7,7 @@ package id.ezclouds.core.shared.service;
 import id.ezclouds.common.facade.core.CoreSequenceService;
 import id.ezclouds.common.facade.dal.core.CoreSequenceDAO;
 import id.ezclouds.common.model.core.BizSeqInitConfig;
-import id.ezclouds.common.model.core.BizSeqScene;
+import id.ezclouds.common.model.core.CoreSeqSceneEnum;
 import id.ezclouds.common.model.core.CoreSequence;
 import id.ezclouds.common.model.core.Organization;
 import id.ezclouds.common.util.assertion.AssertUtil;
@@ -41,7 +41,7 @@ public class EzCoreSequenceService implements CoreSequenceService {
     }
 
     @Override
-    public String generateSequence(Organization organization, BizSeqScene seqScene) {
+    public String generateSequence(Organization organization, CoreSeqSceneEnum seqScene) {
         CoreSequence sequence = coreSequenceDAO.lockSequence(organization.getOrgId(), seqScene);
         AssertUtil.notNull(sequence, EzErrorCode.CORE_SEQUENCE_ERROR);
         int nextStep;

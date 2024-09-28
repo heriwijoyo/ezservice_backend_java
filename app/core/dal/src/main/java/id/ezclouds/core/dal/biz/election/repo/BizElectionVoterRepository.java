@@ -14,4 +14,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface BizElectionVoterRepository extends JpaRepository<BizVoterDO, String> {
+
+    BizVoterDO findByOrgIdAndIdCardNumber(String orgId, String idCardNumber);
 }

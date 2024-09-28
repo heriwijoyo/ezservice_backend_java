@@ -5,14 +5,14 @@
 package id.ezclouds.biz.election.service.voter;
 
 import id.ezclouds.common.facade.biz.election.CanvassRecordService;
+import id.ezclouds.common.facade.core.CoreBizSequenceService;
 import id.ezclouds.common.facade.core.CoreOrganizationService;
 import id.ezclouds.common.facade.core.CoreSequenceService;
 import id.ezclouds.common.facade.dal.biz.election.BizCanvassRecordDAO;
 import id.ezclouds.common.model.biz.election.BizCanvassRecord;
-import id.ezclouds.common.model.biz.election.BizVoter;
-import id.ezclouds.common.model.core.BizSeqScene;
+import id.ezclouds.common.model.core.CoreSeqSceneEnum;
 import id.ezclouds.common.model.core.Organization;
-import id.ezclouds.common.util.DateUtil;
+import id.ezclouds.common.model.request.biz.election.CanvassRecordCreateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,26 +30,21 @@ public class EzCanvassRecordService implements CanvassRecordService {
     private CoreSequenceService coreSequenceService;
 
     @Autowired
+    private CoreBizSequenceService coreBizSequenceService;
+
+    @Autowired
     private BizCanvassRecordDAO bizCanvassRecordDAO;
 
     @Override
-    public BizCanvassRecord createCanvassOrder(BizVoter bizVoter) {
+    public BizCanvassRecord createCanvassRecord(CanvassRecordCreateRequest request) {
 
         Organization organization = coreOrganizationService
-                .getById(bizVoter.getOrgId());
+                .getById(request.getOrgId());
 
         String canvassOrderId = coreSequenceService
-                .generateSequence(organization, BizSeqScene.BIZ_VOTER_CANVASS);
+                .generateSequence(organization, CoreSeqSceneEnum.BIZ_VOTER_CANVASS);
 
-        BizCanvassRecord canvassOrder = new BizCanvassRecord();
-        canvassOrder.setCanvassOrderId(canvassOrderId);
-        canvassOrder.setOrgId(bizVoter.getOrgId());
-        canvassOrder.setVoterId(bizVoter.getVoterId());
-        canvassOrder.setReferrerId(bizVoter.getReferrerId());
-        canvassOrder.setCreatedTime(DateUtil.getCurrentFormattedDate());
-        canvassOrder.setModifiedTime(DateUtil.getCurrentFormattedDate());
-        bizCanvassRecordDAO.store(canvassOrder);
 
-        return canvassOrder;
+        return null;
     }
 }

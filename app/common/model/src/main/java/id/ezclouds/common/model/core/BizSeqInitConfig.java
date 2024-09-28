@@ -12,10 +12,10 @@ import id.ezclouds.common.util.HashUtil;
  */
 public enum BizSeqInitConfig {
 
-    CORE_MEMBER_ID(BizSeqScene.CORE_MEMBER_ID, 100, 199, 100, 9),
-    BIZ_SUB_ORG(BizSeqScene.BIZ_SUB_ORG, 100, 100, 100, 3),
-    BIZ_VOTER_ID(BizSeqScene.BIZ_VOTER_ID, 100, 99, 100, 9),
-    BIZ_VOTER_CANVASS(BizSeqScene.BIZ_VOTER_CANVASS, 100, 100, 100, 3),
+    CORE_MEMBER_ID(CoreSeqSceneEnum.CORE_MEMBER_ID, 100, 199, 100, 9),
+    BIZ_SUB_ORG(CoreSeqSceneEnum.BIZ_SUB_ORG, 100, 100, 100, 3),
+    BIZ_VOTER_ID(CoreSeqSceneEnum.BIZ_VOTER_ID, 100, 99, 100, 9),
+    BIZ_VOTER_CANVASS(CoreSeqSceneEnum.BIZ_VOTER_CANVASS, 100, 100, 100, 3),
 
     ;
 

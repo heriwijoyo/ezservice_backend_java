@@ -22,8 +22,10 @@ public class EzCoreBizSequenceDO {
     private String bizSeqId;
     @Column(name = "org_id")
     private String orgId;
-    @Column(name = "seq_biz_key")
-    private String seqBizKey;
+    @Column(name = "seq_scene")
+    private String seqScene;
+    @Column(name = "seq_scene_id")
+    private String seqSceneId;
     @Column(name = "sequence")
     private Integer sequence;
     @Column(name = "modified_time")
@@ -45,12 +47,20 @@ public class EzCoreBizSequenceDO {
         this.orgId = orgId;
     }
 
-    public String getSeqBizKey() {
-        return seqBizKey;
+    public String getSeqScene() {
+        return seqScene;
     }
 
-    public void setSeqBizKey(String seqBizKey) {
-        this.seqBizKey = seqBizKey;
+    public void setSeqScene(String seqScene) {
+        this.seqScene = seqScene;
+    }
+
+    public String getSeqSceneId() {
+        return seqSceneId;
+    }
+
+    public void setSeqSceneId(String seqSceneId) {
+        this.seqSceneId = seqSceneId;
     }
 
     public Integer getSequence() {
