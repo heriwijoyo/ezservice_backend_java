@@ -12,6 +12,7 @@ public enum CoreCacheKeyEnum {
 
     ORGANIZATIONS(CoreCacheKey.ORGANIZATIONS),
     AUTH_APP_CLIENTS(CoreCacheKey.AUTH_APP_CLIENTS),
+    CORE_CONFIGS(CoreCacheKey.CORE_CONFIGS),
 
     ;
     private final String code;

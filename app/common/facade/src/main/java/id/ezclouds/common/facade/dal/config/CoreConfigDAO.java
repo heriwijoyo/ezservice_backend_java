@@ -15,6 +15,8 @@ import java.util.List;
  */
 public interface CoreConfigDAO {
 
+    List<CoreConfig> getAllActive();
+
     List<CoreConfig> getAllConfig(String orgId);
 
     CoreConfig getConfig(String orgId, CoreConfigType configType);

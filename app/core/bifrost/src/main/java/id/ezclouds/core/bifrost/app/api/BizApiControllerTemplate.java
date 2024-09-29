@@ -58,6 +58,8 @@ public final class BizApiControllerTemplate {
                     .authorizeAppClient(authAppClient);
             AssertUtil.isTrue(appClientAuthorized, EzErrorCode.UNAUTHORIZED);
             EzAppContextHolder.getContext().setOrgId(authAppClient.getOrgId());
+            EzAppContextHolder.getContext().setAppId(authAppClient.getAppId());
+            EzAppContextHolder.getContext().setClientId(authAppClient.getClientId());
             if (request.getAppSession() != null) {
                 EzAppContextHolder.getContext().setMemberSessionId(request.getAppSession().getMemberSessionId());
                 EzAppContextHolder.getContext().setDeviceId(request.getAppSession().getDeviceId());

@@ -6,17 +6,21 @@ package id.ezclouds.common.model.auth;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: AuthMemberSession.java, v 0.1 2024‐09‐29 10:55 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: AuthMemberClientSession.java, v 0.1 2024‐09‐29 10:55 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class AuthMemberSession {
+public class AuthMemberClientSession {
 
     private String sessionId;
     private String orgId;
+    private String shard;
     private String appId;
     private String clientId;
     private String memberId;
     private String memberRoles;
     private String deviceId;
+    private String createdTime;
+    private String expiryTime;
+    private Integer status;
 
     public String getSessionId() {
         return sessionId;
@@ -32,6 +36,14 @@ public class AuthMemberSession {
 
     public void setOrgId(String orgId) {
         this.orgId = orgId;
+    }
+
+    public String getShard() {
+        return shard;
+    }
+
+    public void setShard(String shard) {
+        this.shard = shard;
     }
 
     public String getAppId() {
@@ -72,5 +84,29 @@ public class AuthMemberSession {
 
     public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getExpiryTime() {
+        return expiryTime;
+    }
+
+    public void setExpiryTime(String expiryTime) {
+        this.expiryTime = expiryTime;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

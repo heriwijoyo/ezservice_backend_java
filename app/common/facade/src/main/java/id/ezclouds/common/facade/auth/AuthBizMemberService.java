@@ -5,7 +5,7 @@
 package id.ezclouds.common.facade.auth;
 
 import id.ezclouds.common.model.auth.AuthMemberClient;
-import id.ezclouds.common.model.auth.AuthMemberSession;
+import id.ezclouds.common.model.auth.AuthRole;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -17,7 +17,7 @@ public interface AuthBizMemberService {
 
     String resetLoginPassword(String clientId);
 
-    AuthMemberSession authMemberSession(String sessionId);
+    void authMemberAppSession(String sessionId, AuthRole authRole);
 
     void invalidateMemberSession(String orgId, String client);
 }

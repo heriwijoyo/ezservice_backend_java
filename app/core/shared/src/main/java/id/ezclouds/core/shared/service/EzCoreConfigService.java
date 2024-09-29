@@ -10,9 +10,11 @@ import id.ezclouds.common.model.config.CoreCommonConfigType;
 import id.ezclouds.common.model.config.CoreConfig;
 import id.ezclouds.common.model.config.CoreConfigType;
 import id.ezclouds.common.model.config.CoreOrgConfigType;
+import id.ezclouds.common.model.core.CoreCacheKey;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -32,29 +34,21 @@ public class EzCoreConfigService implements CoreConfigService {
     private CoreConfigDAO coreConfigDAO;
 
     @Override
+    @Cacheable(CoreCacheKey.CORE_CONFIGS)
+    public List<CoreConfig> getAllConfigs() {
+        return coreConfigDAO.getAllActive();
+    }
+
+    @Override
     public CoreConfig getOrgConfig(String orgId, CoreConfigType configType) {
-        return coreConfigDAO.getConfig(orgId, configType);
-    }
-
-    @Override
-    public CoreConfig getOrgConfig(CoreConfigType configType) {
-        return coreConfigDAO.getConfig(configType);
-    }
-
-    @Override
-    public Map<CoreConfigType, CoreConfig> getOrgConfigMap(String orgId) {
-        Map<CoreConfigType, CoreConfig> configMap = new HashMap<>();
-        for (CoreConfig coreConfig : coreConfigDAO.getAllConfig(orgId)) {
-            configMap.put(CoreOrgConfigType.getByCode(coreConfig.getConfigKey()), coreConfig);
-        }
-        return configMap;
+        return getOrgCoreConfig(orgId, configType);
     }
 
     @Override
     public Map<CoreConfigType, CoreConfig> getOrgConfigMap(String orgId, CoreConfigType... configTypes) {
         Map<CoreConfigType, CoreConfig> configMap = new HashMap<>();
         for (CoreConfigType configType : configTypes) {
-            configMap.put(configType, coreConfigDAO.getConfig(orgId, configType));
+            configMap.put(configType, getOrgCoreConfig(orgId, configType));
         }
         return configMap;
     }
@@ -63,7 +57,7 @@ public class EzCoreConfigService implements CoreConfigService {
     public Map<CoreConfigType, CoreConfig> getOrgConfigMap(CoreConfigType... configTypes) {
         Map<CoreConfigType, CoreConfig> configMap = new HashMap<>();
         for (CoreConfigType configType : configTypes) {
-            configMap.put(configType, coreConfigDAO.getConfig(configType));
+            configMap.put(configType, getCoreConfig(configType));
         }
         return configMap;
     }
@@ -89,6 +83,24 @@ public class EzCoreConfigService implements CoreConfigService {
         dbCoreConfig.setConfigValue(reqConfig.getConfigValue());
 
         coreConfigDAO.store(dbCoreConfig);
+    }
+
+    private CoreConfig getOrgCoreConfig(String orgId, CoreConfigType configType) {
+        for (CoreConfig coreConfig : getAllConfigs()) {
+            if (StringUtil.equals(coreConfig.getOrgId(), orgId) && StringUtil.equals(coreConfig.getConfigKey(), configType.getCode())) {
+                return coreConfig;
+            }
+        }
+        return null;
+    }
+
+    private CoreConfig getCoreConfig(CoreConfigType configType) {
+        for (CoreConfig coreConfig : getAllConfigs()) {
+            if (StringUtil.equals(coreConfig.getConfigKey(), configType.getCode())) {
+                return coreConfig;
+            }
+        }
+        return null;
     }
 
     private String getOrgConfigValue(List<CoreConfig> configs, CoreConfigType configType) {

@@ -7,6 +7,7 @@ package id.ezclouds.common.facade.config;
 import id.ezclouds.common.model.config.CoreConfig;
 import id.ezclouds.common.model.config.CoreConfigType;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,11 +16,9 @@ import java.util.Map;
  */
 public interface CoreConfigService {
 
+    List<CoreConfig> getAllConfigs();
+
     CoreConfig getOrgConfig(String orgId, CoreConfigType configType);
-
-    CoreConfig getOrgConfig(CoreConfigType configType);
-
-    Map<CoreConfigType, CoreConfig> getOrgConfigMap(String orgId);
 
     Map<CoreConfigType, CoreConfig> getOrgConfigMap(String orgId, CoreConfigType... configTypes);
 
@@ -28,5 +27,4 @@ public interface CoreConfigService {
     Map<String, String> getOrgRawConfigMap(String orgId);
 
     void store(CoreConfig coreConfig);
-
 }

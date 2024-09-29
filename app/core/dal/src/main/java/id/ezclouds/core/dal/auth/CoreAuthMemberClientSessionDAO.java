@@ -6,7 +6,10 @@ package id.ezclouds.core.dal.auth;
 
 import id.ezclouds.common.facade.dal.auth.AuthMemberClientSessionDAO;
 import id.ezclouds.common.model.annotation.EzDAOLogger;
-import id.ezclouds.common.model.auth.AuthMemberSession;
+import id.ezclouds.common.model.auth.AuthMemberClientSession;
+import id.ezclouds.core.dal.auth.converter.AuthMemberClientSessionConverter;
+import id.ezclouds.core.dal.auth.repo.AuthMemberClientSessionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,9 +19,27 @@ import org.springframework.stereotype.Component;
 @Component
 public class CoreAuthMemberClientSessionDAO implements AuthMemberClientSessionDAO {
 
+    @Autowired
+    private AuthMemberClientSessionRepository authMemberClientSessionRepository;
+
     @Override
     @EzDAOLogger
-    public AuthMemberSession authMemberSessionId(String sessionId) {
-        return null;
+    public AuthMemberClientSession findSessionById(String sessionId) {
+        return new AuthMemberClientSessionConverter()
+                .convertQuery(
+                        authMemberClientSessionRepository
+                                .findById(sessionId)
+                                .orElse(null)
+                );
+    }
+
+    @Override
+    @EzDAOLogger
+    public void store(AuthMemberClientSession session) {
+        authMemberClientSessionRepository
+                .saveAndFlush(
+                        new AuthMemberClientSessionConverter()
+                                .convertStore(session)
+                );
     }
 }

@@ -33,6 +33,26 @@ public class EzCoreConfigDAO implements CoreConfigDAO {
     private EzCoreConfigRepository ezCoreConfigRepository;
 
     @Override
+    public List<CoreConfig> getAllActive() {
+        EzCoreConfigConverter converter = new EzCoreConfigConverter();
+        List<CoreConfig> allConfigs = ezCoreConfigRepository
+                .findAll()
+                .stream()
+                .map(converter::convertQuery)
+                .collect(Collectors.toList());
+
+        EzCoreOrgConfigConverter orgConverter = new EzCoreOrgConfigConverter();
+        List<CoreConfig> allOrgConfigs = ezCoreOrgConfigRepository
+                .findAll()
+                .stream()
+                .map(orgConverter::convertQuery)
+                .collect(Collectors.toList());
+
+        allConfigs.addAll(allOrgConfigs);
+        return allConfigs;
+    }
+
+    @Override
     public List<CoreConfig> getAllConfig(String orgId) {
         EzCoreOrgConfigConverter converter = new EzCoreOrgConfigConverter();
         return ezCoreOrgConfigRepository

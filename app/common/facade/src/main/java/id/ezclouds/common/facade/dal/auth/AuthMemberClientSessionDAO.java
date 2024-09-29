@@ -4,7 +4,7 @@
  */
 package id.ezclouds.common.facade.dal.auth;
 
-import id.ezclouds.common.model.auth.AuthMemberSession;
+import id.ezclouds.common.model.auth.AuthMemberClientSession;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -12,5 +12,7 @@ import id.ezclouds.common.model.auth.AuthMemberSession;
  */
 public interface AuthMemberClientSessionDAO {
 
-    AuthMemberSession authMemberSessionId(String sessionId);
+    AuthMemberClientSession findSessionById(String sessionId);
+
+    void store(AuthMemberClientSession session);
 }

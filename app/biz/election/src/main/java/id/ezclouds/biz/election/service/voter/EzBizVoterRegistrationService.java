@@ -4,12 +4,17 @@
  */
 package id.ezclouds.biz.election.service.voter;
 
+import id.ezclouds.common.facade.auth.AuthBizMemberService;
 import id.ezclouds.common.facade.biz.election.BizVoterRegistrationService;
 import id.ezclouds.common.facade.biz.election.VoterRegistrationService;
+import id.ezclouds.common.facade.biz.util.BizContextUtil;
 import id.ezclouds.common.facade.template.BizServiceTemplate;
+import id.ezclouds.common.model.auth.AuthMemberClientSession;
+import id.ezclouds.common.model.auth.AuthRole;
 import id.ezclouds.common.model.biz.election.BizVoter;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.util.assertion.AssertUtil;
+import id.ezclouds.common.util.context.EzAppContextHolder;
 import id.ezclouds.common.util.exception.BizErrorMessageHelper;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
@@ -30,6 +35,9 @@ public class EzBizVoterRegistrationService implements BizVoterRegistrationServic
     private VoterRegistrationService voterRegistrationService;
 
     @Autowired
+    private AuthBizMemberService authBizMemberService;
+
+    @Autowired
     private TransactionTemplate transactionTemplate;
 
     @Override
@@ -43,6 +51,11 @@ public class EzBizVoterRegistrationService implements BizVoterRegistrationServic
 
             @Override
             public void onBizProcess() throws Exception {
+
+                String memberSessionId = BizContextUtil.getMemberSessionId();
+                AssertUtil.notBlank(memberSessionId, EzErrorCode.UNAUTHORIZED);
+
+                authBizMemberService.authMemberAppSession(memberSessionId, AuthRole.ADMIN_ORG);
 
                 transactionTemplate.execute(new TransactionCallbackWithoutResult() {
                     @Override

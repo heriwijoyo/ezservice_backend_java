@@ -39,6 +39,8 @@ public class EzCoreCacheService implements CoreCacheService {
                 case ORGANIZATIONS:
                     coreOrganizationService.getOrganizations();
                     break;
+                case CORE_CONFIGS:
+                    break;
             }
         }
 
