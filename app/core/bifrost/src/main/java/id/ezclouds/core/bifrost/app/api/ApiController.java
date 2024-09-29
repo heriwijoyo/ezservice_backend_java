@@ -26,7 +26,7 @@ import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.core.bifrost.app.AppController;
 import id.ezclouds.core.bifrost.app.api.digestlog.*;
-import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
+import id.ezclouds.common.model.request.api.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.*;
 import id.ezclouds.common.model.result.api.ApiPageResult;
 import id.ezclouds.common.model.result.api.ApiResult;

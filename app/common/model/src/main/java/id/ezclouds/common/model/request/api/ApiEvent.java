@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2023 All Rights Reserved.
  */
-package id.ezclouds.core.bifrost.app.api.event;
+package id.ezclouds.common.model.request.api;
 
 import id.ezclouds.common.util.context.EzAppEvent;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;

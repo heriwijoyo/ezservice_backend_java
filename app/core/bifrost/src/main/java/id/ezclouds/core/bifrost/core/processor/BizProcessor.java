@@ -6,7 +6,7 @@ package id.ezclouds.core.bifrost.core.processor;
 
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.util.exception.EzErrorException;
-import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
+import id.ezclouds.common.model.request.api.ApiEvent;
 import id.ezclouds.common.model.request.api.ApiRequest;
 import org.springframework.web.multipart.MultipartFile;
 

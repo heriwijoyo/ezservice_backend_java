@@ -11,7 +11,7 @@ import id.ezclouds.common.util.exception.ExceptionUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
-import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
+import id.ezclouds.common.model.request.api.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiPageRequest;
 import id.ezclouds.common.model.result.api.BizApiPageResult;
 import id.ezclouds.core.bifrost.core.SpringContextConfig;

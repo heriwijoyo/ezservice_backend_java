@@ -8,7 +8,7 @@ import id.ezclouds.biz.election.service.apibiz.BizAppDocumentService;
 import id.ezclouds.biz.election.service.apibiz.OldBizMemberService;
 import id.ezclouds.biz.election.service.apibiz.BizSubOrganizationService;
 import id.ezclouds.common.model.result.BizResult;
-import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
+import id.ezclouds.common.model.request.api.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiPageRequest;
 import id.ezclouds.core.bifrost.core.converter.BizRequestConverter;
 import org.springframework.beans.factory.annotation.Autowired;

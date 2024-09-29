@@ -9,7 +9,7 @@ import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.auth.result.CoreAuthResult;
-import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
+import id.ezclouds.common.model.request.api.ApiEvent;
 import id.ezclouds.common.model.request.api.ApiRequest;
 import id.ezclouds.common.model.request.api.RequestAppClient;
 import id.ezclouds.common.util.context.EzAppContextHolder;
