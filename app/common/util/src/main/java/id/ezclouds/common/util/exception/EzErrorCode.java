@@ -11,6 +11,7 @@ package id.ezclouds.common.util.exception;
 public enum EzErrorCode {
 
     SYSTEM_ERROR("SYSTEM_ERROR", "Unknown System Error"),
+    UNSUPPORTED_DATA_ERROR("UNSUPPORTED_DATA_ERROR", "Unsupported Data Response"),
     ILLEGAL_ACTION("ILLEGAL_ACTION", "Illegal Action"),
     ILLEGAL_PARAM("ILLEGAL_PARAM", "Illegal Parameter"),
     UNAUTHORIZED("UNAUTHORIZED", "Unauthorized"),

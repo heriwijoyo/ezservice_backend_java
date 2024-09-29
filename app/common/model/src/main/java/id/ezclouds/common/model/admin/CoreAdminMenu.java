@@ -10,12 +10,7 @@ package id.ezclouds.common.model.admin;
  */
 public enum CoreAdminMenu {
 
-    APP_IMAGE_GALLERY(CoreMenuLevel.ADMIN_ORGANIZATION, "Manage Gallery", "appgallery.htm", "image", 10),
-    APP_NEWS(CoreMenuLevel.ADMIN_ORGANIZATION, "Manage News", "news.htm", "library_books", 20),
-    APP_EVENTS(CoreMenuLevel.ADMIN_ORGANIZATION, "Manage Events", "events.htm", "calendar_month", 30),
-    APP_VIDEO_CARD(CoreMenuLevel.ADMIN_ORGANIZATION, "Manage Video Card", "videocard.htm", "smart_display", 40),
-    APP_PROFILE(CoreMenuLevel.ADMIN_ORGANIZATION, "Candidate Profile", "profile.htm", "assignment_ind", 50),
-    APP_DOCUMENTS(CoreMenuLevel.ADMIN_ORGANIZATION, "Documents", "documents.htm", "picture_as_pdf", 60),
+    APP_CONTENT(CoreMenuLevel.ADMIN_ORGANIZATION, "Manage App Content", "home.htm", "phone_iphone", 10),
     WHATSAPP_LOG(CoreMenuLevel.ADMIN_ORGANIZATION, "Whatsapp Logs", "whatsapp.htm", "sms", 70),
     COMMUNITIES(CoreMenuLevel.ADMIN_ORGANIZATION, "Communities", "subOrganizations.htm", "groups", 80),
     MEMBERS(CoreMenuLevel.ADMIN_ORGANIZATION, "Members", "members.htm", "group", 90),

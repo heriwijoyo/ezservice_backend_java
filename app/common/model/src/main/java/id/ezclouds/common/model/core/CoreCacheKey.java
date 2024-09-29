@@ -10,5 +10,6 @@ package id.ezclouds.common.model.core;
  */
 public final class CoreCacheKey {
 
-    public static final String ORGANIZATIONS = "coreCacheKey.ORGANIZATIONS";
+    public static final String ORGANIZATIONS        = "coreCacheKey.ORGANIZATIONS";
+    public static final String AUTH_APP_CLIENTS     = "coreCacheKey.AUTH_APP_CLIENTS";
 }

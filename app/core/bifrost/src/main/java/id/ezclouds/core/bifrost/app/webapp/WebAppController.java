@@ -370,7 +370,6 @@ public class WebAppController {
         DigestLogUtil.logWebDigest(LOGGER, getDigestLog(success));
     }
 
-    @Cacheable(value = BizCacheKey.WEBAPP_HOME)
     public String getHomeContent() {
         return getWebAppContent(WebAppPage.HOME);
     }

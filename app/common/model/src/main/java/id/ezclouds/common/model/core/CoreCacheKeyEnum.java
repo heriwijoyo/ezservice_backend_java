@@ -11,6 +11,7 @@ package id.ezclouds.common.model.core;
 public enum CoreCacheKeyEnum {
 
     ORGANIZATIONS(CoreCacheKey.ORGANIZATIONS),
+    AUTH_APP_CLIENTS(CoreCacheKey.AUTH_APP_CLIENTS),
 
     ;
     private final String code;
