@@ -5,7 +5,7 @@
 package id.ezclouds.core.bifrost.app.api.handler;
 
 import id.ezclouds.common.util.logger.DigestLog;
-import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
+import id.ezclouds.common.model.request.api.ApiRequest;
 import id.ezclouds.common.model.result.api.ApiResult;
 
 /**

@@ -9,6 +9,7 @@ import id.ezclouds.biz.election.model.member.BizGender;
 import id.ezclouds.biz.election.service.app.request.BizSubOrgCreateRequest;
 import id.ezclouds.biz.election.service.request.*;
 import id.ezclouds.common.model.request.BizRequest;
+import id.ezclouds.common.model.request.api.ApiRequest;
 import id.ezclouds.core.bifrost.app.api.request.*;
 
 /**

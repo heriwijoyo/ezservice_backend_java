@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2023 All Rights Reserved.
  */
-package id.ezclouds.core.bifrost.app.api.request;
+package id.ezclouds.common.model.request.api;
 
 import java.util.HashMap;
 import java.util.Map;

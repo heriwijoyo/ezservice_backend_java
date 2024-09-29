@@ -13,7 +13,7 @@ import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.core.bifrost.app.api.ApiBizProcessor;
 import id.ezclouds.core.bifrost.app.api.digestlog.CommonWebDigestLog;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
-import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
+import id.ezclouds.common.model.request.api.ApiRequest;
 import id.ezclouds.common.model.result.api.ApiPageResult;
 import id.ezclouds.common.model.result.api.ApiResult;
 import id.ezclouds.common.model.result.api.ErrorResult;

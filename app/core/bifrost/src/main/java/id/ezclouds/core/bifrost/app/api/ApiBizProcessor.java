@@ -13,7 +13,7 @@ import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
-import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
+import id.ezclouds.common.model.request.api.ApiRequest;
 import id.ezclouds.core.bifrost.app.api.request.NewsDetailRequest;
 import id.ezclouds.core.bifrost.app.api.request.SurveyFormRequest;
 import id.ezclouds.core.bifrost.core.converter.BizRequestConverter;

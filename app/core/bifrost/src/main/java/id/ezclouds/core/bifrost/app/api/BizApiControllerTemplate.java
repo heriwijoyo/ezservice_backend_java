@@ -13,7 +13,7 @@ import id.ezclouds.common.util.facade.BeanFacadeUtil;
 import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.handler.BizApiTemplateHandler;
-import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
+import id.ezclouds.common.model.request.api.ApiRequest;
 import id.ezclouds.common.model.result.api.ApiResult;
 import id.ezclouds.core.shared.util.DigestLogUtil;
 import org.slf4j.Logger;

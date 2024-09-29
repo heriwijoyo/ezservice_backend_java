@@ -6,7 +6,7 @@ package id.ezclouds.core.bifrost.app.api.processor;
 
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
-import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
+import id.ezclouds.common.model.request.api.ApiRequest;
 import org.springframework.stereotype.Service;
 
 /**

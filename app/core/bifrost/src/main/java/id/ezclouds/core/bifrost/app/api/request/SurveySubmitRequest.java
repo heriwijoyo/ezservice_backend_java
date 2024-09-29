@@ -7,6 +7,7 @@ package id.ezclouds.core.bifrost.app.api.request;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.election.model.survey.QuestionnaireData;
+import id.ezclouds.common.model.request.api.ApiRequest;
 
 import java.util.List;
 import java.util.Map;

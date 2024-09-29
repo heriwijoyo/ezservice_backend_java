@@ -20,6 +20,7 @@ import id.ezclouds.biz.election.model.survey.BizSurveyForm;
 import id.ezclouds.biz.election.service.app.model.AppDocument;
 import id.ezclouds.biz.election.service.result.BizMemberLoginResult;
 import id.ezclouds.biz.election.subbiz.arahindonesia.model.BizSubOrganization;
+import id.ezclouds.common.model.request.api.ApiRequest;
 import id.ezclouds.common.util.exception.ExceptionUtil;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
