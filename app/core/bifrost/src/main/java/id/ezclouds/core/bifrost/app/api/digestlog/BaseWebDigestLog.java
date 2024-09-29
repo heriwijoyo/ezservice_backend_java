@@ -24,7 +24,7 @@ public abstract class BaseWebDigestLog extends DigestLog {
         if (errorResult == null) {
             errorContext = "NULL";
         } else {
-            errorContext = errorResult.getErrorContext();
+            errorContext = errorResult.getErrorMessage();
         }
         setErrorMessage(errorContext);
     }

@@ -5,6 +5,7 @@
 package id.ezclouds.core.shared.service;
 
 import id.ezclouds.common.facade.auth.AuthAppClientService;
+import id.ezclouds.common.facade.config.CoreConfigService;
 import id.ezclouds.common.facade.core.CoreCacheService;
 import id.ezclouds.common.facade.core.CoreOrganizationService;
 import id.ezclouds.common.model.core.CoreCacheKeyEnum;
@@ -29,6 +30,9 @@ public class EzCoreCacheService implements CoreCacheService {
     @Autowired
     private CoreOrganizationService coreOrganizationService;
 
+    @Autowired
+    private CoreConfigService coreConfigService;
+
     @Override
     public void initCaches() {
         for (CoreCacheKeyEnum cacheKeyEnum : CoreCacheKeyEnum.values()) {
@@ -40,6 +44,7 @@ public class EzCoreCacheService implements CoreCacheService {
                     coreOrganizationService.getOrganizations();
                     break;
                 case CORE_CONFIGS:
+                    coreConfigService.getAllConfigs();
                     break;
             }
         }

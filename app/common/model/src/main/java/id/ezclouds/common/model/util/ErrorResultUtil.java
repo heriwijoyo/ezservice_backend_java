@@ -19,12 +19,6 @@ public class ErrorResultUtil {
     public static ErrorResult composeErrorResult(BizResult bizResult) {
         ErrorResult errorResult = new ErrorResult();
         errorResult.setErrorCode(bizResult.getErrorCode().getCode());
-        errorResult.setErrorContext(
-                StringUtil.concateStrings(
-                        bizResult.getErrorCode().getCode(),
-                        "@",
-                        bizResult.getErrorLocation())
-        );
         errorResult.setErrorMessage(bizResult.getErrorMessage());
         return errorResult;
     }
@@ -39,7 +33,6 @@ public class ErrorResultUtil {
     private static ErrorResult getErrorResult(EzErrorException ezErrorException) {
         ErrorResult errorResult = new ErrorResult();
         errorResult.setErrorCode(ezErrorException.getEzErrorCode().getCode());
-        errorResult.setErrorContext(ezErrorException.getEzErrorCode().getDescription());
         errorResult.setErrorMessage(ezErrorException.getErrorMessage() != null ? ezErrorException.getErrorMessage() : ezErrorException.getEzErrorCode().getDescription());
         return errorResult;
     }

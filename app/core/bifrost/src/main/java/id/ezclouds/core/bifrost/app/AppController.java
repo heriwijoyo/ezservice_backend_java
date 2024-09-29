@@ -96,10 +96,6 @@ public abstract class AppController {
             DigestLogUtil.logDigest(getLogger(), digestLog);
         }
 
-        if (apiResult.getErrorResult() != null) {
-            apiResult.getErrorResult().setErrorContext(null);
-            apiPageResult.getErrorResult().setErrorContext(null);
-        }
         apiResult.setTimestamp(DateUtil.getCurrentFormattedDate());
         apiPageResult.setTimestamp(DateUtil.getCurrentFormattedDate());
 

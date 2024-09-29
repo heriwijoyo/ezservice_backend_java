@@ -11,7 +11,6 @@ package id.ezclouds.common.model.result.api;
 public class ErrorResult {
 
     private String errorCode;
-    private String errorContext;
     private String errorMessage;
 
     public String getErrorCode() {
@@ -20,14 +19,6 @@ public class ErrorResult {
 
     public void setErrorCode(String errorCode) {
         this.errorCode = errorCode;
-    }
-
-    public String getErrorContext() {
-        return errorContext;
-    }
-
-    public void setErrorContext(String errorContext) {
-        this.errorContext = errorContext;
     }
 
     public String getErrorMessage() {
