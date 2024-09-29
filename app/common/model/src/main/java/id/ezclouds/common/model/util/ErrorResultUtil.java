@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.core.bifrost.core.util;
+package id.ezclouds.common.model.util;
 
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.util.StringUtil;

@@ -15,6 +15,7 @@ public enum EzErrorCode {
     ILLEGAL_ACTION("ILLEGAL_ACTION", "Illegal Action"),
     ILLEGAL_PARAM("ILLEGAL_PARAM", "Illegal Parameter"),
     UNAUTHORIZED("UNAUTHORIZED", "Unauthorized"),
+    BIZ_PROCESS_ERROR("BIZ_PROCESS_ERROR", "Unknown Biz Process Error"),
 
     MEMBER_LOGIN_FAILED("MEMBER_LOGIN_FAILED", "Member Login Failed"),
     MEMBER_NOT_FOUND("MEMBER_NOT_FOUND", "Member Not Found"),

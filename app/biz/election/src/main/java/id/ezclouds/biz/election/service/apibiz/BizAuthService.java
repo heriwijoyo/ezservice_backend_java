@@ -83,7 +83,7 @@ public class BizAuthService extends BizBaseService {
         request.setClientId(clientId);
         request.setClientSecret(clientSecret);
 
-        CoreAuthResult<Void> clientAuthResult = coreAuthService.authAppClient(request);
+        CoreAuthResult<Void> clientAuthResult = legacyCoreAuthService.authAppClient(request);
         if (!clientAuthResult.isSuccess()) {
             return bizAuthResult;
         }
@@ -120,7 +120,7 @@ public class BizAuthService extends BizBaseService {
                 authRequest.setLoginPass(request.getLoginPassword());
                 authRequest.setDeviceId(deviceId);
 
-                CoreAuthMemberSessionInfo sessionInfo = coreAuthService.authMemberClient(authRequest);
+                CoreAuthMemberSessionInfo sessionInfo = legacyCoreAuthService.authMemberClient(authRequest);
 
                 BizMemberLoginResult loginResult = new BizMemberLoginResult();
                 loginResult.setMemberSessionId(sessionInfo.getSessionId());
@@ -131,7 +131,7 @@ public class BizAuthService extends BizBaseService {
                 CoreMemberExtension coreMemberExtension = coreMemberService.getPessimisticCoreMemberExtension(sessionInfo.getMemberId());
 
                 //assign session with roles
-                coreAuthService.updateMemberSessionRoles(sessionInfo.getSessionId(), coreMember.getRoles());
+                legacyCoreAuthService.updateMemberSessionRoles(sessionInfo.getSessionId(), coreMember.getRoles());
 
                 BizMember bizMember = BizMemberConverter.convert(coreMember, coreMemberExtension);
                 BizPublicUrlResolver publicUrlResolver = getPublicOrgUrlResolver(getOrgCode(), coreMember.getMemberId());
@@ -188,7 +188,7 @@ public class BizAuthService extends BizBaseService {
                 authRequest.setScene(BizConstant.Auth.COMMON_SESSION_SCENE_RESET_MEMBER_PASSWORD);
                 authRequest.setVerifyStrategy(BizConstant.Auth.COMMON_SESSION_VERIFY_STRATEGY_WHATSAPP);
 
-                CoreCommonSession sessionInfo = coreAuthService.createMemberCommonSession(authRequest);
+                CoreCommonSession sessionInfo = legacyCoreAuthService.createMemberCommonSession(authRequest);
                 BizMemberCommonSession commonSession = new BizMemberCommonSession();
                 commonSession.setSessionId(sessionInfo.getSessionId());
                 commonSession.setScene(sessionInfo.getScene());
@@ -230,8 +230,8 @@ public class BizAuthService extends BizBaseService {
                 commonSession.setScene(request.getScene());
                 commonSession.setVerifyStrategy(request.getVerifyStrategy());
                 commonSession.setVerifyCode(request.getVerifyCode());
-                CoreAuthMemberSessionInfo sessionInfo = coreAuthService.verifyCommonSession(commonSession);
-                coreAuthService.invalidateCommonSession(commonSession);
+                CoreAuthMemberSessionInfo sessionInfo = legacyCoreAuthService.verifyCommonSession(commonSession);
+                legacyCoreAuthService.invalidateCommonSession(commonSession);
 
                 boolean isResetPassScene = request.getScene().equals(BizConstant.Auth.COMMON_SESSION_SCENE_RESET_MEMBER_PASSWORD);
                 boolean isVerifyPhoneScene = request.getScene().equals(BizConstant.Auth.COMMON_SESSION_SCENE_VERIFY_PHONE);
@@ -262,7 +262,7 @@ public class BizAuthService extends BizBaseService {
             @Override
             public void onBizProcess() throws EzErrorException {
                 String sessionId = EzAppContextHolder.getContext().getMemberSessionId();
-                CoreAuthResult<Void> authResult = coreAuthService.invalidateMemberSession(sessionId);
+                CoreAuthResult<Void> authResult = legacyCoreAuthService.invalidateMemberSession(sessionId);
 
                 bizResult.setSuccess(authResult.isSuccess());
             }
@@ -289,7 +289,7 @@ public class BizAuthService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                CoreAuthMemberSessionInfo sessionInfo = coreAuthService.authMemberSession(sessionId);
+                CoreAuthMemberSessionInfo sessionInfo = legacyCoreAuthService.authMemberSession(sessionId);
 
                 bizResult.setSuccess(true);
                 bizResult.setObject(sessionInfo.getMemberId());
@@ -324,14 +324,14 @@ public class BizAuthService extends BizBaseService {
                 CoreAuthMemberSessionInfo sessionInfo = null;
                 if (BizConstant.ExtKey.UPDATE_PASSWORD_MODE_MEMBER_SESSION.equals(request.getMode())) {
                     String memberSessionId = EzAppContextHolder.getContext().getMemberSessionId();
-                    sessionInfo = coreAuthService.authMemberSession(memberSessionId);
+                    sessionInfo = legacyCoreAuthService.authMemberSession(memberSessionId);
                 }
                 if (BizConstant.ExtKey.UPDATE_PASSWORD_MODE_RESET_SESSION.equals(request.getMode())) {
                     String sesionId = request.getExtendInfo().get(BizConstant.ExtKey.COMMON_SESSION_ID);
-                    sessionInfo = coreAuthService.authCommonSession(sesionId);
+                    sessionInfo = legacyCoreAuthService.authCommonSession(sesionId);
                 }
 
-                coreAuthService.updateMemberClientPassword(sessionInfo.getClientId(), request.getNewPassword());
+                legacyCoreAuthService.updateMemberClientPassword(sessionInfo.getClientId(), request.getNewPassword());
 
                 String extForceUpdate = request.getExtendInfo().get(BizConstant.ExtKey.FORCED_UPDATE_PASSWORD);
                 if (Boolean.parseBoolean(extForceUpdate)) {

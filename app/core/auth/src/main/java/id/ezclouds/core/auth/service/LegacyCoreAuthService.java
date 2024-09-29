@@ -47,10 +47,10 @@ import java.util.stream.Collectors;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: CoreAuthService.java, v 0.1 2024‐01‐07 9:28 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: LegacyCoreAuthService.java, v 0.1 2024‐01‐07 9:28 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class CoreAuthService {
+public class LegacyCoreAuthService {
 
     @Autowired
     private EzAuthAppClientRepository ezAuthAppClientRepository;

@@ -13,7 +13,7 @@ import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.auth.result.CoreAuthMemberSessionInfo;
-import id.ezclouds.core.auth.service.CoreAuthService;
+import id.ezclouds.core.auth.service.LegacyCoreAuthService;
 import id.ezclouds.common.util.context.EzAppContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +28,7 @@ import java.util.List;
 public class BizBaseService {
 
     @Autowired
-    protected CoreAuthService coreAuthService;
+    protected LegacyCoreAuthService legacyCoreAuthService;
 
     @Value("${ezserviceapp.url.public.root}")
     protected String appRootPublicUrl;
@@ -56,7 +56,7 @@ public class BizBaseService {
     protected CoreAuthMemberSessionInfo authAppMemberSession() throws Exception {
         String sessionId = EzAppContextHolder.getContext().getMemberSessionId();
         AssertUtil.notBlank(sessionId, EzErrorCode.SESSION_INVALID);
-        return coreAuthService.authMemberSession(sessionId);
+        return legacyCoreAuthService.authMemberSession(sessionId);
     }
 
     protected String getBizErrorMessage(EzErrorCode ezErrorCode) {

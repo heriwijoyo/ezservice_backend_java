@@ -20,6 +20,6 @@ public class VoterRegisterDigestLog extends BaseDigestLog<BizVoter> {
 
     @Override
     public void composeDigest(ApiRequest request, ApiResult<BizVoter> result) {
-
+        //TODO: add compose digest log
     }
 }

@@ -6,6 +6,8 @@ package id.ezclouds.common.model.request.api.election;
 
 import id.ezclouds.common.model.biz.election.BizVoter;
 import id.ezclouds.common.model.request.api.ApiRequest;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -21,5 +23,10 @@ public class VoterRegisterRequest extends ApiRequest {
 
     public void setBizVoter(BizVoter bizVoter) {
         this.bizVoter = bizVoter;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

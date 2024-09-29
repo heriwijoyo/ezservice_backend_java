@@ -15,6 +15,9 @@ import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -25,6 +28,9 @@ public class EzBizVoterRegistrationService implements BizVoterRegistrationServic
 
     @Autowired
     private VoterRegistrationService voterRegistrationService;
+
+    @Autowired
+    private TransactionTemplate transactionTemplate;
 
     @Override
     public BizResult registerVoter(BizVoter bizVoter) {
@@ -37,8 +43,14 @@ public class EzBizVoterRegistrationService implements BizVoterRegistrationServic
 
             @Override
             public void onBizProcess() throws Exception {
-                String voterId = voterRegistrationService.registerVoter(bizVoter);
-                bizVoter.setVoterId(voterId);
+
+                transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+                    @Override
+                    protected void doInTransactionWithoutResult(TransactionStatus status) {
+                        String voterId = voterRegistrationService.registerVoter(bizVoter);
+                        bizVoter.setVoterId(voterId);
+                    }
+                });
 
                 result.setObject(bizVoter);
                 result.setSuccess(true);

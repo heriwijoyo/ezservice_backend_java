@@ -5,6 +5,7 @@
 package id.ezclouds.core.bifrost.app.api.processor;
 
 import id.ezclouds.common.facade.biz.election.BizVoterRegistrationService;
+import id.ezclouds.common.model.app.AppSystemSource;
 import id.ezclouds.common.model.request.api.election.VoterRegisterRequest;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.model.request.api.ApiEvent;
@@ -26,6 +27,7 @@ public class ApiProcessor {
         switch (apiEvent) {
             case API_VOTER_REGISTER:
                 VoterRegisterRequest voterRegisterRequest = (VoterRegisterRequest) request;
+                voterRegisterRequest.getBizVoter().setSourceId(AppSystemSource.APP.getCode());
                 return bizVoterRegistrationService.registerVoter(voterRegisterRequest.getBizVoter());
         }
 

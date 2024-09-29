@@ -22,7 +22,7 @@ import id.ezclouds.core.bifrost.app.api.digestlog.CommonWebDigestLog;
 import id.ezclouds.common.model.result.api.ErrorResult;
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;
 import id.ezclouds.core.bifrost.app.web.request.WebLoadImageRequest;
-import id.ezclouds.core.bifrost.core.util.ErrorResultUtil;
+import id.ezclouds.common.model.util.ErrorResultUtil;
 import id.ezclouds.common.util.context.EzAppContextHolder;
 import id.ezclouds.common.model.file.PublicFileResolver;
 import id.ezclouds.common.model.core.CoreOrganization;

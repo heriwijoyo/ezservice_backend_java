@@ -23,7 +23,7 @@ import id.ezclouds.core.bifrost.core.SpringContextConfig;
 import id.ezclouds.core.bifrost.core.processor.BizProcessor;
 import id.ezclouds.core.bifrost.core.processor.PreBizProcessor;
 import id.ezclouds.core.bifrost.core.processor.WebProcessor;
-import id.ezclouds.core.bifrost.core.util.ErrorResultUtil;
+import id.ezclouds.common.model.util.ErrorResultUtil;
 import id.ezclouds.common.util.context.EzAppContextHolder;
 import id.ezclouds.core.shared.util.DigestLogUtil;
 import org.slf4j.Logger;

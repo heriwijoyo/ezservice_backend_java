@@ -71,8 +71,6 @@ public class EzCoreFileService implements CoreFileService {
                 } catch (IOException exception) {
                     System.out.println("Directory Created Failed: " + publicPath.toString());
                 }
-            } else {
-                System.out.println("Directory Exist: " + publicPath.toString());
             }
         }
     }

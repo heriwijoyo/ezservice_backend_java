@@ -7,7 +7,7 @@ package id.ezclouds.biz.election.service.core;
 import id.ezclouds.biz.election.service.app.*;
 import id.ezclouds.biz.election.subbiz.arahindonesia.service.AppSubOrganizationService;
 import id.ezclouds.common.facade.file.CoreFileService;
-import id.ezclouds.core.auth.service.CoreAuthService;
+import id.ezclouds.core.auth.service.LegacyCoreAuthService;
 import id.ezclouds.core.shared.service.CoreAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
@@ -44,7 +44,7 @@ public class BizAppCacheService {
     private AppBuildPackageService appBuildPackageService;
 
     @Autowired
-    private CoreAuthService coreAuthService;
+    private LegacyCoreAuthService legacyCoreAuthService;
 
     @Autowired
     private AppConfigService appConfigService;
@@ -98,7 +98,7 @@ public class BizAppCacheService {
         appSubOrganizationService.getAllSubOrganization();
         appBuildPackageService.getAllAppBuildPackage();
         appImageGalleryService.getImageGalleryAllActive();
-        coreAuthService.getActiveAppClients();
+        legacyCoreAuthService.getActiveAppClients();
         appConfigService.getAppConfigAllActive();
         appConfigService.getMessageTemplates();
         newsInnerService.getHighlightNewsAllOrg();

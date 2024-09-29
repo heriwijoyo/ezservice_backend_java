@@ -17,7 +17,7 @@ import id.ezclouds.common.util.facade.BeanFacadeUtil;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.common.model.auth.AuthAdminSession;
-import id.ezclouds.core.auth.service.CoreAuthService;
+import id.ezclouds.core.auth.service.LegacyCoreAuthService;
 import id.ezclouds.core.bifrost.app.api.digestlog.EmptyDigestLog;
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;
 import id.ezclouds.core.bifrost.core.SpringContextConfig;
@@ -64,7 +64,7 @@ public class WebAppController {
     private static final String ASSET_INCLUDE_NAVIGATION = "webapp/include/navigation.incl";
 
     @Autowired
-    private CoreAuthService coreAuthService;
+    private LegacyCoreAuthService legacyCoreAuthService;
 
     @Autowired
     private BizReportService bizReportService;
@@ -222,7 +222,7 @@ public class WebAppController {
             AssertUtil.notBlank(sessionId, EzErrorCode.ILLEGAL_PARAM);
 
             AuthAdminSession session = SpringContextConfig
-                    .getBean(CoreAuthService.class)
+                    .getBean(LegacyCoreAuthService.class)
                     .adminAuthWebSessionId(sessionId);
             AssertUtil.isTrue(orgCode.equals(session.getOrgCode()), EzErrorCode.SESSION_INVALID);
 
@@ -251,7 +251,7 @@ public class WebAppController {
             AssertUtil.notBlank(sessionId, EzErrorCode.ILLEGAL_PARAM);
 
             AuthAdminSession session = SpringContextConfig
-                    .getBean(CoreAuthService.class)
+                    .getBean(LegacyCoreAuthService.class)
                     .adminAuthWebSessionId(sessionId);
             AssertUtil.isTrue(orgCode.equals(session.getOrgCode()), EzErrorCode.SESSION_INVALID);
 
@@ -293,7 +293,7 @@ public class WebAppController {
             AssertUtil.notBlank(sessionId, EzErrorCode.ILLEGAL_PARAM);
 
             AuthAdminSession session = SpringContextConfig
-                    .getBean(CoreAuthService.class)
+                    .getBean(LegacyCoreAuthService.class)
                     .adminAuthWebSessionId(sessionId);
             AssertUtil.isTrue(orgCode.equals(session.getOrgCode()), EzErrorCode.SESSION_INVALID);
 
@@ -324,7 +324,7 @@ public class WebAppController {
             AssertUtil.notBlank(sessionId, EzErrorCode.ILLEGAL_PARAM);
 
             AuthAdminSession session = SpringContextConfig
-                    .getBean(CoreAuthService.class)
+                    .getBean(LegacyCoreAuthService.class)
                     .adminAuthWebSessionId(sessionId);
             AssertUtil.isTrue(orgCode.equals(session.getOrgCode()), EzErrorCode.SESSION_INVALID);
 
@@ -354,7 +354,7 @@ public class WebAppController {
             AssertUtil.notBlank(sessionId, EzErrorCode.ILLEGAL_PARAM);
 
             AuthAdminSession session = SpringContextConfig
-                    .getBean(CoreAuthService.class)
+                    .getBean(LegacyCoreAuthService.class)
                     .adminAuthWebSessionId(sessionId);
             AssertUtil.isTrue(orgCode.equals(session.getOrgCode()), EzErrorCode.SESSION_INVALID);
 

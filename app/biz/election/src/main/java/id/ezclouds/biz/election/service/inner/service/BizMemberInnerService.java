@@ -25,7 +25,7 @@ import id.ezclouds.common.model.result.BizPageInfo;
 import id.ezclouds.common.util.ShardUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.auth.model.CoreAuthMemberClient;
-import id.ezclouds.core.auth.service.CoreAuthService;
+import id.ezclouds.core.auth.service.LegacyCoreAuthService;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
 import id.ezclouds.core.member.service.CoreMemberService;
@@ -54,7 +54,7 @@ public class BizMemberInnerService {
     private CoreMemberService coreMemberService;
 
     @Autowired
-    private CoreAuthService coreAuthService;
+    private LegacyCoreAuthService legacyCoreAuthService;
 
     @Autowired
     private AppConfigService appConfigService;
@@ -102,9 +102,9 @@ public class BizMemberInnerService {
             memberClient.setLoginType(DEFAULT_LOGIN_TYPE);
             memberClient.setLoginId(request.getPhone());
             memberClient.setStatus(BizStatus.ACTIVE.getCode());
-            coreAuthService.createMemberClient(memberClient);
+            legacyCoreAuthService.createMemberClient(memberClient);
 
-            CoreAuthMemberClient storedMemberClient = coreAuthService.getOptimisticMemberClient(DEFAULT_LOGIN_TYPE, memberId);
+            CoreAuthMemberClient storedMemberClient = legacyCoreAuthService.getOptimisticMemberClient(DEFAULT_LOGIN_TYPE, memberId);
             BizMemberClient bizMemberClient = BizMemberClientConverter.convert(storedMemberClient);
 
             bizMemberInfo.setBizMemberClient(bizMemberClient);
@@ -118,7 +118,7 @@ public class BizMemberInnerService {
     private void sendPasswordIfNecessary(String orgId, String clientId, String phone) {
         try {
             String newPassword = RandomUtil.generateNumberCode(6);
-            coreAuthService.updateMemberClientPassword(clientId, newPassword);
+            legacyCoreAuthService.updateMemberClientPassword(clientId, newPassword);
 
             AppConfig appConfig = appConfigService.getAppConfig(orgId);
             bizConnectInnerService.memberSendPassword(
@@ -150,10 +150,10 @@ public class BizMemberInnerService {
         memberClient.setLoginType(DEFAULT_LOGIN_TYPE);
         memberClient.setLoginId(coreMember.getPhone());
         memberClient.setStatus(BizStatus.ACTIVE.getCode());
-        coreAuthService.createMemberClient(memberClient);
+        legacyCoreAuthService.createMemberClient(memberClient);
 
         CoreMember storedMember = coreMemberService.getOptimisticCoreMember(memberId);
-        CoreAuthMemberClient storedMemberClient = coreAuthService.getOptimisticMemberClient(DEFAULT_LOGIN_TYPE, memberId);
+        CoreAuthMemberClient storedMemberClient = legacyCoreAuthService.getOptimisticMemberClient(DEFAULT_LOGIN_TYPE, memberId);
 
         BizMember bizMember = BizMemberConverter.convert(storedMember, null);
         BizMemberClient bizMemberClient = BizMemberClientConverter.convert(storedMemberClient);
@@ -191,10 +191,10 @@ public class BizMemberInnerService {
         memberClient.setLoginType(DEFAULT_LOGIN_TYPE);
         memberClient.setLoginId(coreMember.getPhone());
         memberClient.setStatus(BizStatus.ACTIVE.getCode());
-        coreAuthService.createMemberClient(memberClient);
+        legacyCoreAuthService.createMemberClient(memberClient);
 
         CoreMember storedMember = coreMemberService.getOptimisticCoreMember(memberId);
-        CoreAuthMemberClient storedMemberClient = coreAuthService.getOptimisticMemberClient(DEFAULT_LOGIN_TYPE, memberId);
+        CoreAuthMemberClient storedMemberClient = legacyCoreAuthService.getOptimisticMemberClient(DEFAULT_LOGIN_TYPE, memberId);
 
         BizMember storedBizMember = BizMemberConverter.convert(storedMember, null);
         BizMemberClient bizMemberClient = BizMemberClientConverter.convert(storedMemberClient);

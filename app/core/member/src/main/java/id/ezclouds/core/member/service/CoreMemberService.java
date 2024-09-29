@@ -11,7 +11,7 @@ import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
-import id.ezclouds.core.auth.service.CoreAuthService;
+import id.ezclouds.core.auth.service.LegacyCoreAuthService;
 import id.ezclouds.core.member.constant.CoreMemberField;
 import id.ezclouds.core.member.dataobject.CoreGroupCountDO;
 import id.ezclouds.core.member.dataobject.CoreMemberDO;
@@ -54,7 +54,7 @@ public class CoreMemberService {
     private CoreSequenceService coreSequenceService;
 
     @Autowired
-    private CoreAuthService coreAuthService;
+    private LegacyCoreAuthService legacyCoreAuthService;
 
     public void store(CoreMember coreMember) {
         CoreMemberDO coreMemberDO = CoreMemberConverter.convert(coreMember);

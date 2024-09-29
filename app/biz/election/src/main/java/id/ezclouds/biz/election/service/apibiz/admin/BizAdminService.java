@@ -27,7 +27,6 @@ import id.ezclouds.biz.election.service.apibiz.BizLocalAreaService;
 import id.ezclouds.biz.election.service.app.BizOrganizationService;
 import id.ezclouds.biz.election.service.app.model.AppDocument;
 import id.ezclouds.biz.election.service.app.model.WebImageGallery;
-import id.ezclouds.biz.election.service.core.BizCacheEnum;
 import id.ezclouds.biz.election.service.inner.service.BizAdminInnerService;
 import id.ezclouds.biz.election.service.request.BizLocalAreaRequest;
 import id.ezclouds.biz.election.service.request.admin.BizAdminUploadRequest;
@@ -138,7 +137,7 @@ public class BizAdminService extends BizBaseService {
                 createRequest.setMemberId(sessionInfo.getMemberId());
                 createRequest.setMemberRoles(sessionInfo.getMemberRoles());
 
-                AuthAdminSession adminSession = coreAuthService.adminCreateSession(createRequest);
+                AuthAdminSession adminSession = legacyCoreAuthService.adminCreateSession(createRequest);
                 BizAdminSession bizAdminSession = BizAdminConverter.convert(adminSession);
 
                 bizResult.setObject(bizAdminSession);
@@ -166,7 +165,7 @@ public class BizAdminService extends BizBaseService {
                 CoreAuthMemberSessionInfo sessionInfo = authAppMemberSession();
                 authorizeAdminMember(sessionInfo.getMemberRoles());
 
-                List<BizAdminSession> adminSessions = coreAuthService
+                List<BizAdminSession> adminSessions = legacyCoreAuthService
                         .adminGetSession(getOrgId(), sessionInfo.getMemberId())
                         .stream()
                         .map(BizAdminConverter::convert)
@@ -204,7 +203,7 @@ public class BizAdminService extends BizBaseService {
                 CoreAuthMemberSessionInfo sessionInfo = authAppMemberSession();
                 authorizeAdminMember(sessionInfo.getMemberRoles());
 
-                coreAuthService.adminLogoutSession(webSessionId);
+                legacyCoreAuthService.adminLogoutSession(webSessionId);
                 bizResult.setSuccess(true);
                 bizResult.setObject(BizConstant.Message.SUCCESS_LOGOUT);
             }
@@ -228,7 +227,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                String sessionId = coreAuthService.adminLoginBySessionCode(sessionCode);
+                String sessionId = legacyCoreAuthService.adminLoginBySessionCode(sessionCode);
                 bizResult.setSuccess(true);
                 bizResult.setObject(sessionId);
             }
@@ -253,7 +252,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                AuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(sessionId);
+                AuthAdminSession adminSession = legacyCoreAuthService.adminAuthWebSessionId(sessionId);
                 authorizeSuperUserOrAdminMember(adminSession.getMemberRoles());
                 CoreOrganization organization = bizOrganizationService.getOrganizationById(adminSession.getOrgId());
 
@@ -350,7 +349,7 @@ public class BizAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                AuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(request.getSessionId());
+                AuthAdminSession adminSession = legacyCoreAuthService.adminAuthWebSessionId(request.getSessionId());
                 authorizeAdminMember(adminSession.getMemberRoles());
 
                 if (StringUtil.isBlank(request.getSortBy())) {
@@ -798,7 +797,7 @@ public class BizAdminService extends BizBaseService {
                     return;
                 }
 
-                AuthAdminSession session = coreAuthService.adminAuthWebSessionId(request.getSessionId());
+                AuthAdminSession session = legacyCoreAuthService.adminAuthWebSessionId(request.getSessionId());
                 PublicFileResolver fileInfo = coreFileService.resolvePublicFileInfo(session.getOrgId());
 
                 String fileName = DateUtil.getTimeNowToString() + "." + request.getFileExtension();
@@ -1368,7 +1367,7 @@ public class BizAdminService extends BizBaseService {
     }
 
     private AuthAdminSession authorizedAdminSession(String sessionId) throws Exception {
-        AuthAdminSession session = coreAuthService.adminAuthWebSessionId(sessionId);
+        AuthAdminSession session = legacyCoreAuthService.adminAuthWebSessionId(sessionId);
         AssertUtil.notNull(session, EzErrorCode.SESSION_INVALID);
         AssertUtil.isTrue(isMemberHasAdminRole(session.getMemberRoles()), EzErrorCode.MEMBER_UNAUTHORIZED);
         return session;

@@ -63,7 +63,7 @@ import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.auth.model.CoreAuthAppClient;
-import id.ezclouds.core.auth.service.CoreAuthService;
+import id.ezclouds.core.auth.service.LegacyCoreAuthService;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.MemberStatus;
 import id.ezclouds.core.member.service.CoreMemberService;
@@ -106,7 +106,7 @@ public class BizAdminInnerService {
     private CoreSequenceService coreSequenceService;
 
     @Autowired
-    private CoreAuthService coreAuthService;
+    private LegacyCoreAuthService legacyCoreAuthService;
 
     @Autowired
     private AppBuildPackageService appBuildPackageService;
@@ -485,7 +485,7 @@ public class BizAdminInnerService {
     private BizApplicationConfig getAppConfig(String orgId) {
         BizApplicationConfig bizApplicationConfig = new BizApplicationConfig();
 
-        CoreAuthAppClient appClient = coreAuthService.getAppClientByOrgId(orgId);
+        CoreAuthAppClient appClient = legacyCoreAuthService.getAppClientByOrgId(orgId);
         if (appClient == null) {
             return bizApplicationConfig;
         }
@@ -511,7 +511,7 @@ public class BizAdminInnerService {
         coreAuthAppClient.setCreatedTime(applicationConfig.getCreatedTime());
         coreAuthAppClient.setModifiedTime(DateUtil.getCurrentFormattedDate());
         coreAuthAppClient.setStatus(applicationConfig.getStatus());
-        coreAuthService.saveAuthAppClient(coreAuthAppClient);
+        legacyCoreAuthService.saveAuthAppClient(coreAuthAppClient);
     }
 
     public void saveBizAppConfigs(String orgId, List<BizAppConfig> bizAppConfigs) {
@@ -552,7 +552,7 @@ public class BizAdminInnerService {
 
         //generate member password
         String newPassword = RandomUtil.generateNumberCode(6);
-        coreAuthService.updateMemberClientPassword(bizMemberInfo.getBizMemberClient().getClientId(), newPassword);
+        legacyCoreAuthService.updateMemberClientPassword(bizMemberInfo.getBizMemberClient().getClientId(), newPassword);
 
         memberSendPassword(orgId, bizMemberInfo.getBizMember().getPhone(), newPassword);
     }
@@ -603,7 +603,7 @@ public class BizAdminInnerService {
         }
         //generate member password
         String newPassword = RandomUtil.generateNumberCode(6);
-        coreAuthService.updateMemberClientPassword(bizMemberInfo.getBizMemberClient().getClientId(), newPassword);
+        legacyCoreAuthService.updateMemberClientPassword(bizMemberInfo.getBizMemberClient().getClientId(), newPassword);
 
         memberSendPassword(orgId, bizMemberInfo.getBizMember().getPhone(), newPassword);
     }

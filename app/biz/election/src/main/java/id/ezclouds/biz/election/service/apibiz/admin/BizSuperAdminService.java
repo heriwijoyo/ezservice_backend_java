@@ -79,10 +79,10 @@ public class BizSuperAdminService extends BizBaseService {
 
             @Override
             public void onBizProcess() throws Exception {
-                List<AuthAdminSession> currentSessions = coreAuthService
+                List<AuthAdminSession> currentSessions = legacyCoreAuthService
                         .adminGetSession(CoreConstant.SU_ORG_ID, CoreConstant.SU_ORG_ID);
                 for (AuthAdminSession session : currentSessions) {
-                    coreAuthService.adminLogoutSession(session.getSessionId());
+                    legacyCoreAuthService.adminLogoutSession(session.getSessionId());
                 }
 
                 CoreAdminCommonSessionCreateRequest createRequest = new CoreAdminCommonSessionCreateRequest();
@@ -94,7 +94,7 @@ public class BizSuperAdminService extends BizBaseService {
                 createRequest.setMemberId(CoreConstant.SU_ORG_ID);
                 createRequest.setMemberRoles("SUPERUSER");
 
-                AuthAdminSession session = coreAuthService.adminCreateSession(createRequest);
+                AuthAdminSession session = legacyCoreAuthService.adminCreateSession(createRequest);
                 String sessionCode = session.getSessionCode();
 
                 if (shouldScrambleCode) {
@@ -148,7 +148,7 @@ public class BizSuperAdminService extends BizBaseService {
                 createRequest.setMemberId(CoreConstant.SU_ORG_ID);
                 createRequest.setMemberRoles("PUBLIC_ACCESS");
 
-                AuthAdminSession session = coreAuthService.adminCreateSession(createRequest);
+                AuthAdminSession session = legacyCoreAuthService.adminCreateSession(createRequest);
 
                 bizResult.setObject("SUCCESS :: "+ session.getSessionId());
                 bizResult.setSuccess(true);
@@ -658,7 +658,7 @@ public class BizSuperAdminService extends BizBaseService {
     }
 
     private void authorizeSuperUserMember(String sessionId) throws Exception {
-        AuthAdminSession adminSession = coreAuthService.adminAuthWebSessionId(sessionId);
+        AuthAdminSession adminSession = legacyCoreAuthService.adminAuthWebSessionId(sessionId);
         AssertUtil.notBlank(adminSession.getMemberRoles(), EzErrorCode.MEMBER_UNAUTHORIZED);
         List<String> roles = Arrays.asList(adminSession.getMemberRoles().split(","));
         AssertUtil.isTrue(roles.contains(BizMemberRole.SUPERUSER.getCode()), EzErrorCode.MEMBER_UNAUTHORIZED);

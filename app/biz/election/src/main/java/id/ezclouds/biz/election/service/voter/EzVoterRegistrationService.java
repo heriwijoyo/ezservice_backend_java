@@ -11,6 +11,8 @@ import id.ezclouds.common.facade.dal.biz.election.BizVoterDAO;
 import id.ezclouds.common.model.biz.election.BizVoter;
 import id.ezclouds.common.model.core.CoreSeqSceneEnum;
 import id.ezclouds.common.model.core.Organization;
+import id.ezclouds.common.util.DateUtil;
+import id.ezclouds.common.util.ShardUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,9 @@ public class EzVoterRegistrationService implements VoterRegistrationService {
         String voterId = coreSequenceService.generateSequence(organization, CoreSeqSceneEnum.BIZ_VOTER_ID);
 
         bizVoter.setVoterId(voterId);
+        bizVoter.setShard(ShardUtil.getShardId(voterId));
+        bizVoter.setCreatedTime(DateUtil.getCurrentFormattedDate());
+        bizVoter.setModifiedTime(DateUtil.getCurrentFormattedDate());
         bizVoterDAO.store(bizVoter);
 
         return voterId;

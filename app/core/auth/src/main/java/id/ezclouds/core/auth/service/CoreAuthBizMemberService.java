@@ -9,6 +9,7 @@ import id.ezclouds.common.facade.dal.auth.AuthAppClientDAO;
 import id.ezclouds.common.facade.dal.auth.AuthMemberClientDAO;
 import id.ezclouds.common.model.auth.AuthAppClient;
 import id.ezclouds.common.model.auth.AuthMemberClient;
+import id.ezclouds.common.model.auth.AuthMemberSession;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.RandomUtil;
@@ -74,6 +75,11 @@ public class CoreAuthBizMemberService implements AuthBizMemberService {
 
         authMemberClientDAO.updateLoginPassword(clientId, encryptPassword);
         return newPassword;
+    }
+
+    @Override
+    public AuthMemberSession authMemberSession(String sessionId) {
+        return null;
     }
 
     @Override
