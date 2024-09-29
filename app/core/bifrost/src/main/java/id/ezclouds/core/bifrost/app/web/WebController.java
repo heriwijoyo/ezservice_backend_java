@@ -19,7 +19,7 @@ import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.core.bifrost.app.AppController;
 import id.ezclouds.core.bifrost.app.api.digestlog.CommonWebDigestLog;
-import id.ezclouds.core.bifrost.app.api.result.ErrorResult;
+import id.ezclouds.common.model.result.api.ErrorResult;
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;
 import id.ezclouds.core.bifrost.app.web.request.WebLoadImageRequest;
 import id.ezclouds.core.bifrost.core.util.ErrorResultUtil;

@@ -13,7 +13,7 @@ import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
 import id.ezclouds.core.bifrost.app.api.request.ApiPageRequest;
-import id.ezclouds.core.bifrost.app.api.result.BizApiPageResult;
+import id.ezclouds.common.model.result.api.BizApiPageResult;
 import id.ezclouds.core.bifrost.core.SpringContextConfig;
 import id.ezclouds.core.bifrost.core.processor.PreBizProcessor;
 import id.ezclouds.core.bifrost.core.util.ErrorResultUtil;

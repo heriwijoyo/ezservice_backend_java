@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.shared.service;
 
+import id.ezclouds.common.facade.auth.AuthAppClientService;
 import id.ezclouds.common.facade.core.CoreCacheService;
 import id.ezclouds.common.facade.core.CoreOrganizationService;
 import id.ezclouds.common.model.core.CoreCacheKeyEnum;
@@ -20,6 +21,9 @@ import org.springframework.stereotype.Service;
 public class EzCoreCacheService implements CoreCacheService {
 
     @Autowired
+    private AuthAppClientService authAppClientService;
+
+    @Autowired
     private CacheManager cacheManager;
 
     @Autowired
@@ -29,6 +33,9 @@ public class EzCoreCacheService implements CoreCacheService {
     public void initCaches() {
         for (CoreCacheKeyEnum cacheKeyEnum : CoreCacheKeyEnum.values()) {
             switch (cacheKeyEnum) {
+                case AUTH_APP_CLIENTS:
+                    authAppClientService.getAllActiveAppClients();
+                    break;
                 case ORGANIZATIONS:
                     coreOrganizationService.getOrganizations();
                     break;
