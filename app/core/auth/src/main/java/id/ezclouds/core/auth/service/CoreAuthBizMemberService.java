@@ -10,10 +10,7 @@ import id.ezclouds.common.facade.config.CoreConfigService;
 import id.ezclouds.common.facade.dal.auth.AuthAppClientDAO;
 import id.ezclouds.common.facade.dal.auth.AuthMemberClientDAO;
 import id.ezclouds.common.facade.dal.auth.AuthMemberClientSessionDAO;
-import id.ezclouds.common.model.auth.AuthAppClient;
-import id.ezclouds.common.model.auth.AuthMemberClient;
-import id.ezclouds.common.model.auth.AuthMemberClientSession;
-import id.ezclouds.common.model.auth.AuthRole;
+import id.ezclouds.common.model.auth.*;
 import id.ezclouds.common.model.config.CoreOrgConfigType;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
@@ -29,7 +26,10 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -98,15 +98,16 @@ public class CoreAuthBizMemberService implements AuthBizMemberService {
     }
 
     @Override
-    public void authMemberAppSession(String sessionId, AuthRole authRole) {
+    public MemberAppSession authMemberAppSession(String sessionId, AuthRole authRole) {
 
         String orgId = BizContextUtil.getOrgId();
         String appId = BizContextUtil.getAppId();
-        String clientId = BizContextUtil.getClientId();
 
         int expiryExtendDays = coreConfigService
                 .getOrgConfig(orgId, CoreOrgConfigType.MEMBER_CLIENT_SESSION_EXPIRY_DAYS)
                 .getIntValue();
+
+        final MemberAppSession memberAppSession = new MemberAppSession();
 
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
@@ -116,14 +117,27 @@ public class CoreAuthBizMemberService implements AuthBizMemberService {
                 AssertUtil.notNull(session, EzErrorCode.UNAUTHORIZED);
                 AssertUtil.equals(orgId, session.getOrgId(), EzErrorCode.UNAUTHORIZED);
                 AssertUtil.equals(appId, session.getAppId(), EzErrorCode.UNAUTHORIZED);
-                AssertUtil.equals(clientId, session.getClientId(), EzErrorCode.UNAUTHORIZED);
+                AssertUtil.notBlank(session.getMemberRoles(), EzErrorCode.UNAUTHORIZED);
+
+                List<String> authRoleList = Arrays.asList(session.getMemberRoles().split(","));
+                boolean authorized = authRoleList.contains(authRole.getCode());
+                AssertUtil.isTrue(authorized, EzErrorCode.UNAUTHORIZED);
 
                 Date updateExpiryDate = DateUtil.getDateAfterDays(new Date(), expiryExtendDays);
                 session.setExpiryTime(DateUtil.getFormattedDate(updateExpiryDate));
                 authMemberClientSessionDAO.store(session);
+
+                List<AuthRole> authRoles = new ArrayList<>();
+                for (String role : authRoleList) {
+                    authRoles.add(AuthRole.getByCode(role));
+                }
+
+                memberAppSession.setAuthRoles(authRoles);
+                memberAppSession.setMemberId(session.getMemberId());
             }
         });
 
+        return memberAppSession;
     }
 
     @Override

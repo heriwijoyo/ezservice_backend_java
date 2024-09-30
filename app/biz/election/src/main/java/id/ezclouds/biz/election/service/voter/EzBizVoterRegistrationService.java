@@ -11,6 +11,7 @@ import id.ezclouds.common.facade.biz.util.BizContextUtil;
 import id.ezclouds.common.facade.template.BizServiceTemplate;
 import id.ezclouds.common.model.auth.AuthMemberClientSession;
 import id.ezclouds.common.model.auth.AuthRole;
+import id.ezclouds.common.model.auth.MemberAppSession;
 import id.ezclouds.common.model.biz.election.BizVoter;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.util.assertion.AssertUtil;
@@ -55,7 +56,10 @@ public class EzBizVoterRegistrationService implements BizVoterRegistrationServic
                 String memberSessionId = BizContextUtil.getMemberSessionId();
                 AssertUtil.notBlank(memberSessionId, EzErrorCode.UNAUTHORIZED);
 
-                authBizMemberService.authMemberAppSession(memberSessionId, AuthRole.ADMIN_ORG);
+                MemberAppSession memberAppSession = authBizMemberService
+                        .authMemberAppSession(memberSessionId, AuthRole.OP_RECRUITER);
+
+                bizVoter.setReferrerId(memberAppSession.getMemberId());
 
                 transactionTemplate.execute(new TransactionCallbackWithoutResult() {
                     @Override

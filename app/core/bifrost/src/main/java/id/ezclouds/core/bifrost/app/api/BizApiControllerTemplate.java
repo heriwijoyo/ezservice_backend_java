@@ -70,7 +70,6 @@ public final class BizApiControllerTemplate {
                     .getBean(ApiProcessor.class)
                     .process(apiEvent, request);
             AssertUtil.notNull(bizResult, EzErrorCode.BIZ_PROCESS_ERROR);
-            System.out.println(bizResult);
 
             result.setSuccess(bizResult.isSuccess());
             if (bizResult.isSuccess()) {
