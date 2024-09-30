@@ -43,6 +43,7 @@ public enum EzErrorCode {
 
     ACTION_NOT_ALLOWED("ACTION_NOT_ALLOWED", "Action Not Allowed"),
     BIZ_UNIQUE_FAILED("BIZ_UNIQUE_FAILED", "Biz Unique Failed"),
+    BIZ_VALIDATION_FAILED("BIZ_VALIDATION_FAILED", "Biz Validation Failed"),
     DATA_INVALID("DATA_INVALID", "Data Invalid"),
     INVALID_NUMBER_FORMAT("INVALID_NUMBER_FORMAT", "Invalid Number Format"),
 

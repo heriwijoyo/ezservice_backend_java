@@ -19,4 +19,17 @@ public enum BizValidationScene {
     BizValidationScene(String code) {
         this.code = code;
     }
+
+    public String getCode() {
+        return code;
+    }
+
+    public static BizValidationScene getByCode(String code) {
+        for (BizValidationScene scene : values()) {
+            if (scene.code.equals(code)) {
+                return scene;
+            }
+        }
+        return null;
+    }
 }
