@@ -5,10 +5,12 @@
 package id.ezclouds.biz.election.service.voter;
 
 import id.ezclouds.common.facade.biz.election.VoterRegistrationService;
+import id.ezclouds.common.facade.core.CoreBizValidationService;
 import id.ezclouds.common.facade.core.CoreOrganizationService;
 import id.ezclouds.common.facade.core.CoreSequenceService;
 import id.ezclouds.common.facade.dal.biz.election.BizVoterDAO;
 import id.ezclouds.common.model.biz.election.BizVoter;
+import id.ezclouds.common.model.core.BizValidationScene;
 import id.ezclouds.common.model.core.CoreSeqSceneEnum;
 import id.ezclouds.common.model.core.Organization;
 import id.ezclouds.common.util.DateUtil;
@@ -26,6 +28,9 @@ import org.springframework.stereotype.Service;
 public class EzVoterRegistrationService implements VoterRegistrationService {
 
     @Autowired
+    private CoreBizValidationService coreBizValidationService;
+
+    @Autowired
     private CoreOrganizationService coreOrganizationService;
 
     @Autowired
@@ -36,6 +41,8 @@ public class EzVoterRegistrationService implements VoterRegistrationService {
 
     @Override
     public String registerVoter(BizVoter bizVoter) {
+        coreBizValidationService.validate(bizVoter.getOrgId(), BizValidationScene.BIZ_VOTER_REGISTER, bizVoter);
+
         BizVoter existBizVoter = bizVoterDAO.getByIdCardNumber(bizVoter.getOrgId(), bizVoter.getIdCardNumber());
         AssertUtil.isNull(existBizVoter, EzErrorCode.IDEMPOTENT_ERROR);
 

@@ -48,6 +48,8 @@ public class EzBizVoterRegistrationService implements BizVoterRegistrationServic
             @Override
             public void onRequestCheck() throws EzErrorException {
                 AssertUtil.notNull(bizVoter, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(bizVoter.getOrgId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.equals(bizVoter.getOrgId(), BizContextUtil.getOrgId(), EzErrorCode.ILLEGAL_PARAM);
             }
 
             @Override
