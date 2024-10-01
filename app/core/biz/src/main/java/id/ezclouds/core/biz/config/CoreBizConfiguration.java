@@ -6,6 +6,8 @@ package id.ezclouds.core.biz.config;
 
 import id.ezclouds.common.facade.biz.data.BizSmartTableDataSource;
 import id.ezclouds.common.model.biz.table.TableSource;
+import id.ezclouds.common.model.broker.topic.EzCoreTopic;
+import id.ezclouds.core.biz.service.report.accumulate.ReportAccumulateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -29,11 +31,22 @@ public class CoreBizConfiguration {
     @Qualifier(value = "bizReportRealCount")
     private BizSmartTableDataSource realCountTableDataSource;
 
+    @Autowired
+    @Qualifier(value = "bizReportAccumulateVoterRegister")
+    private ReportAccumulateProcessor bizReportAccumulateVoterRegister;
+
     @Bean
     Map<TableSource, BizSmartTableDataSource> tableDataSourceMap() {
         Map<TableSource, BizSmartTableDataSource> sourceMap = new HashMap<>();
         sourceMap.put(TableSource.BIZ_TABLE_REPORT, reportTableDataSource);
         sourceMap.put(TableSource.BIZ_REPORT_REAL_COUNT, realCountTableDataSource);
         return sourceMap;
+    }
+
+    @Bean
+    public Map<EzCoreTopic, ReportAccumulateProcessor> reportAccumulateProcessorMap() {
+        Map<EzCoreTopic, ReportAccumulateProcessor> processorMap = new HashMap<>();
+        processorMap.put(EzCoreTopic.ELECTION_VOTER_REGISTER, bizReportAccumulateVoterRegister);
+        return processorMap;
     }
 }
