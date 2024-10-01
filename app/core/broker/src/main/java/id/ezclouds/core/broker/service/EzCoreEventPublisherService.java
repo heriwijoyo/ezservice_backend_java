@@ -5,6 +5,7 @@
 package id.ezclouds.core.broker.service;
 
 import id.ezclouds.common.facade.broker.CoreEventPublisherService;
+import id.ezclouds.common.model.broker.event.EzCommonEvent;
 import id.ezclouds.common.model.broker.event.OverallReportChangeEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -25,5 +26,10 @@ public class EzCoreEventPublisherService implements CoreEventPublisherService {
     @Override
     public void publish(OverallReportChangeEvent event) {
         eventPublisher.publishEvent(event);
+    }
+
+    @Override
+    public void publish(EzCommonEvent ezCommonEvent) {
+        eventPublisher.publishEvent(ezCommonEvent);
     }
 }

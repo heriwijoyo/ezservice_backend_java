@@ -4,6 +4,7 @@
  */
 package id.ezclouds.common.facade.broker;
 
+import id.ezclouds.common.model.broker.event.EzCommonEvent;
 import id.ezclouds.common.model.broker.event.OverallReportChangeEvent;
 
 /**
@@ -13,4 +14,6 @@ import id.ezclouds.common.model.broker.event.OverallReportChangeEvent;
 public interface CoreEventPublisherService {
 
     void publish(OverallReportChangeEvent event);
+
+    void publish(EzCommonEvent ezCommonEvent);
 }
