@@ -31,4 +31,13 @@ public enum EzCoreTopic {
     public String getCode() {
         return code;
     }
+
+    public static EzCoreTopic getByCode(String code) {
+        for (EzCoreTopic coreTopic : values()) {
+            if (coreTopic.code.equals(code)) {
+                return coreTopic;
+            }
+        }
+        return null;
+    }
 }

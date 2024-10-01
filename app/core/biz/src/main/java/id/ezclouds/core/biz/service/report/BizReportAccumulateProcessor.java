@@ -15,10 +15,10 @@ import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: BizReportAccumulateProcess.java, v 0.1 2024‐10‐02 1:29 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: BizReportAccumulateProcessor.java, v 0.1 2024‐10‐02 1:29 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
-public class BizReportAccumulateProcess {
+public class BizReportAccumulateProcessor {
 
     private static List<EzCoreTopic> allowedTopics = Arrays.asList(
             EzCoreTopic.ELECTION_CANVASS_RECORD_ADD,
