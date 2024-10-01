@@ -30,9 +30,6 @@ public class CoreBizValidationDO {
     @Column(name = "validation_rules")
     private String validationRules;
 
-    @Column(name = "form_config")
-    private String formConfig;
-
     @Column(name = "status")
     private Integer status;
 
@@ -66,14 +63,6 @@ public class CoreBizValidationDO {
 
     public void setValidationRules(String validationRules) {
         this.validationRules = validationRules;
-    }
-
-    public String getFormConfig() {
-        return formConfig;
-    }
-
-    public void setFormConfig(String formConfig) {
-        this.formConfig = formConfig;
     }
 
     public Integer getStatus() {

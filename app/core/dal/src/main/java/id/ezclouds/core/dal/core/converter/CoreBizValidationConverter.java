@@ -27,7 +27,6 @@ public class CoreBizValidationConverter extends CommonDOModelConverter<CoreBizVa
         bizValidation.setOrgId(dataObject.getOrgId());
         bizValidation.setValidationScene(BizValidationScene.getByCode(dataObject.getValidationScene()));
         bizValidation.setValidationRules(parseRules(dataObject.getValidationRules()));
-        bizValidation.setFormConfig(dataObject.getFormConfig());
         bizValidation.setStatus(dataObject.getStatus());
         return bizValidation;
     }

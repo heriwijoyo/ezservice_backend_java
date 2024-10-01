@@ -18,7 +18,6 @@ public class CoreBizValidation {
     private String orgId;
     private BizValidationScene validationScene;
     private List<BizValidationRule> validationRules;
-    private String formConfig;
     private int status;
 
     public String getBizValidationId() {
@@ -51,14 +50,6 @@ public class CoreBizValidation {
 
     public void setValidationRules(List<BizValidationRule> validationRules) {
         this.validationRules = validationRules;
-    }
-
-    public String getFormConfig() {
-        return formConfig;
-    }
-
-    public void setFormConfig(String formConfig) {
-        this.formConfig = formConfig;
     }
 
     public int getStatus() {
