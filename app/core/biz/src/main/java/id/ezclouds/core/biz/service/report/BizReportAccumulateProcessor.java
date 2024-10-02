@@ -12,8 +12,13 @@ import id.ezclouds.common.model.broker.topic.EzCoreTopic;
 import id.ezclouds.common.model.process.ProcessStatus;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
+import id.ezclouds.common.util.exception.ExceptionUtil;
+import id.ezclouds.common.util.logger.CommonLoggerConstant;
+import id.ezclouds.common.util.logger.LogUtil;
 import id.ezclouds.core.biz.service.report.accumulate.ReportAccumulateProcessHandler;
 import id.ezclouds.core.biz.service.report.accumulate.ReportAccumulateProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -32,6 +37,8 @@ import java.util.Map;
  */
 @Service
 public class BizReportAccumulateProcessor {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommonLoggerConstant.ASYNC_PROCESS);
 
     private static List<EzCoreTopic> allowedTopics = Arrays.asList(
             EzCoreTopic.ELECTION_CANVASS_RECORD_ADD,
@@ -85,6 +92,7 @@ public class BizReportAccumulateProcessor {
             });
         } catch (Exception e) {
             //TODO: add logger if the init process failed
+            LogUtil.info(LOGGER, "REPORT_ACCUMULATE_PROCESS_FAILED,ORG_ID=", orgId, ",TOPIC=", topic, ",exception:", ExceptionUtil.getStackTrace(e));
             return;
         }
 

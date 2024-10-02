@@ -36,7 +36,7 @@ public class CoreBizConfiguration {
     private ReportAccumulateProcessor bizReportAccumulateVoterRegister;
 
     @Bean
-    Map<TableSource, BizSmartTableDataSource> tableDataSourceMap() {
+    public Map<TableSource, BizSmartTableDataSource> tableDataSourceMap() {
         Map<TableSource, BizSmartTableDataSource> sourceMap = new HashMap<>();
         sourceMap.put(TableSource.BIZ_TABLE_REPORT, reportTableDataSource);
         sourceMap.put(TableSource.BIZ_REPORT_REAL_COUNT, realCountTableDataSource);
