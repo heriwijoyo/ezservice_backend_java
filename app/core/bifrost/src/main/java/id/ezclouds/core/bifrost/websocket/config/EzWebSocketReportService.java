@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.common.facade.auth.AuthAdminService;
 import id.ezclouds.common.facade.biz.BizReportRealtimeService;
 import id.ezclouds.common.facade.biz.report.BizReportOverallService;
-import id.ezclouds.common.facade.broker.BrokerDataExchangeService;
 import id.ezclouds.common.model.auth.AuthSession;
 import id.ezclouds.common.model.broker.event.OverallReportChangeEvent;
 import id.ezclouds.common.model.report.BizReportOverall;
@@ -36,9 +35,6 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
 
     @Autowired
     private AuthAdminService authAdminService;
-
-    @Autowired
-    private BrokerDataExchangeService brokerDataExchangeService;
 
     @Autowired
     private BizReportRealtimeService bizReportRealtimeService;

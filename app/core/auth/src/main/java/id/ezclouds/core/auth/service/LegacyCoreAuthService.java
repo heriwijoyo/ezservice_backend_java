@@ -4,7 +4,6 @@
  */
 package id.ezclouds.core.auth.service;
 
-import id.ezclouds.common.facade.broker.BrokerMessageSendService;
 import id.ezclouds.common.facade.config.CoreConfigService;
 import id.ezclouds.common.model.broker.BrokerMessage;
 import id.ezclouds.common.model.broker.authorization.MemberAppClientAuthData;
@@ -70,9 +69,6 @@ public class LegacyCoreAuthService {
     @Autowired
     private AuthInnerService authInnerService;
 
-    @Autowired
-    private BrokerMessageSendService brokerMessageSendService;
-
     public CoreAuthResult<Void> authAppClient(CoreAppClientAuthRequest request) {
         CoreAuthResult<Void> authResult = new CoreAuthResult<>();
 
@@ -122,8 +118,6 @@ public class LegacyCoreAuthService {
         message.setTopic("CORE_AUTHORIZATION");
         message.setEvent("MEMBER_CLIENT_APP_LOGIN");
         message.setPayload(authData);
-
-        brokerMessageSendService.send(message);
 
         return sessionInfo;
     }
