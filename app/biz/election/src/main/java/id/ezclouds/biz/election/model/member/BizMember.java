@@ -5,7 +5,7 @@
 package id.ezclouds.biz.election.model.member;
 
 import id.ezclouds.biz.election.constant.AppConstant;
-import id.ezclouds.biz.election.model.annotation.PublicImageUrl;
+import id.ezclouds.common.model.annotation.PublicImageUrl;
 import id.ezclouds.biz.election.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.biz.election.model.BizStatus;
 

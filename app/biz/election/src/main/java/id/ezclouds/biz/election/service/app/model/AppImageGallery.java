@@ -6,7 +6,7 @@ package id.ezclouds.biz.election.service.app.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import id.ezclouds.biz.election.constant.AppConstant;
-import id.ezclouds.biz.election.model.annotation.PublicImageUrl;
+import id.ezclouds.common.model.annotation.PublicImageUrl;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

@@ -5,7 +5,7 @@
 package id.ezclouds.biz.election.model.news;
 
 import id.ezclouds.biz.election.constant.AppConstant;
-import id.ezclouds.biz.election.model.annotation.PublicImageUrl;
+import id.ezclouds.common.model.annotation.PublicImageUrl;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)

@@ -6,6 +6,7 @@ package id.ezclouds.biz.election.model.annotation;
 
 import id.ezclouds.biz.election.config.BizPublicUrlResolver;
 import id.ezclouds.biz.election.constant.AppConstant;
+import id.ezclouds.common.model.annotation.PublicImageUrl;
 import id.ezclouds.common.util.StringUtil;
 
 import java.lang.reflect.Field;

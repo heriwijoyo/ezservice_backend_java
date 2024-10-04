@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.biz.election.model.annotation;
+package id.ezclouds.common.model.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
