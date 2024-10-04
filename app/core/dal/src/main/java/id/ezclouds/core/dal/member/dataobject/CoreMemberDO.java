@@ -56,12 +56,14 @@ public class CoreMemberDO extends CoreAuditableDO {
     private String email;
     @Column(name = "address")
     private String address;
+    @Column(name = "avatar_url")
+    private String avatarUrl;
     @Column(name = "phone_verified")
-    private boolean phoneVerified;
+    private int phoneVerified;
     @Column(name = "email_verified")
-    private boolean emailVerified;
+    private int emailVerified;
     @Column(name = "address_verified")
-    private boolean addressVerified;
+    private int addressVerified;
     @Column(name = "status")
     private int status;
 
@@ -209,28 +211,36 @@ public class CoreMemberDO extends CoreAuditableDO {
         this.address = address;
     }
 
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
     public boolean isPhoneVerified() {
-        return phoneVerified;
+        return phoneVerified == 1;
     }
 
     public void setPhoneVerified(boolean phoneVerified) {
-        this.phoneVerified = phoneVerified;
+        this.phoneVerified = phoneVerified ? 1 : 0;
     }
 
     public boolean isEmailVerified() {
-        return emailVerified;
+        return emailVerified == 1;
     }
 
     public void setEmailVerified(boolean emailVerified) {
-        this.emailVerified = emailVerified;
+        this.emailVerified = emailVerified ? 1 : 0;
     }
 
     public boolean isAddressVerified() {
-        return addressVerified;
+        return addressVerified == 1;
     }
 
     public void setAddressVerified(boolean addressVerified) {
-        this.addressVerified = addressVerified;
+        this.addressVerified = addressVerified ? 1 : 0;
     }
 
     public int getStatus() {

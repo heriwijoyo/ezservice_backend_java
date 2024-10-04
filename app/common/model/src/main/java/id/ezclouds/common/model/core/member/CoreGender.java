@@ -21,6 +21,10 @@ public enum CoreGender {
         this.code = code;
     }
 
+    public String getCode() {
+        return code;
+    }
+
     public static CoreGender getByCode(String code) {
         for (CoreGender coreGender : values()) {
             if (coreGender.code.equals(code)) {

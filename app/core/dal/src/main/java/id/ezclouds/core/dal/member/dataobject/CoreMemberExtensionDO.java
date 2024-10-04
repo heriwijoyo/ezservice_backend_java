@@ -53,11 +53,11 @@ public class CoreMemberExtensionDO extends CoreAuditableDO {
     @Column(name = "village_name")
     private String villageName;
     @Column(name = "rukun_warga")
-    private String neighbourhood;
+    private String rukunWarga;
     @Column(name = "rukun_tetangga")
-    private String subNeighbourhood;
-    @Column(name = "tps_number")
-    private String voteStation;
+    private String rukunTetangga;
+    //@Column(name = "tps_number")
+    private String tpsNumber;
 
     public String getMemberExtensionId() {
         return memberExtensionId;
@@ -187,27 +187,27 @@ public class CoreMemberExtensionDO extends CoreAuditableDO {
         this.villageName = villageName;
     }
 
-    public String getNeighbourhood() {
-        return neighbourhood;
+    public String getRukunWarga() {
+        return rukunWarga;
     }
 
-    public void setNeighbourhood(String neighbourhood) {
-        this.neighbourhood = neighbourhood;
+    public void setRukunWarga(String rukunWarga) {
+        this.rukunWarga = rukunWarga;
     }
 
-    public String getSubNeighbourhood() {
-        return subNeighbourhood;
+    public String getRukunTetangga() {
+        return rukunTetangga;
     }
 
-    public void setSubNeighbourhood(String subNeighbourhood) {
-        this.subNeighbourhood = subNeighbourhood;
+    public void setRukunTetangga(String rukunTetangga) {
+        this.rukunTetangga = rukunTetangga;
     }
 
-    public String getVoteStation() {
-        return voteStation;
+    public String getTpsNumber() {
+        return tpsNumber;
     }
 
-    public void setVoteStation(String voteStation) {
-        this.voteStation = voteStation;
+    public void setTpsNumber(String tpsNumber) {
+        this.tpsNumber = tpsNumber;
     }
 }
