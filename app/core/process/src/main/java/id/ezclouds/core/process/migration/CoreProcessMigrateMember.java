@@ -35,20 +35,27 @@ public class CoreProcessMigrateMember extends BizAsyncProcessor {
     @Override
     protected boolean onProcess(Object request, List<String> logData) {
         String orgId = (String) request;
-        logData.add("IRG_ID="+ orgId);
-        int processedMember = 0;
+        logData.add("ORG_ID="+ orgId);
+        int processedCount = 0;
+        int exceptionCount = 0;
 
         List<CoreMember> coreMembers = innerProcessMigrateMember.getMigrationMembers(orgId);
         while (coreMembers.size() > 0) {
             for (CoreMember coreMember : coreMembers) {
-                innerProcessMigrateMember.migrateMember(coreMember);
+                try {
+                    innerProcessMigrateMember.migrateMember(coreMember);
+                    processedCount++;
+                } catch (Exception exception) {
+                    exceptionCount++;
+                }
             }
 
             coreMembers.clear();
             //coreMembers = coreMemberDAO.getMigrationMembers(orgId, SortBy.OLDEST, 1000);
         }
 
-
+        logData.add("PROCESSED_COUNT="+ processedCount);
+        logData.add("EXCEPTION_COUNT="+ exceptionCount);
         return true;
     }
 }

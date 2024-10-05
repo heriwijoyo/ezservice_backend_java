@@ -38,13 +38,18 @@ public class InnerProcessMigrateMember {
 
     public void migrateMember(CoreMember coreMember) {
         String memberRoles = coreMember.getRoles();
-        if (StringUtil.isBlank(memberRoles) && Arrays.asList(memberRoles.split(",")).contains(AuthRole.ADMIN_ORG.getCode())) {
+
+        boolean isOrgAdmin = StringUtil.isNotBlank(memberRoles) && Arrays.asList(memberRoles.split(",")).contains(AuthRole.ADMIN_ORG.getCode());
+        if (isOrgAdmin) {
             transactionTemplate.execute(new TransactionCallbackWithoutResult() {
                 @Override
                 protected void doInTransactionWithoutResult(TransactionStatus status) {
                     migrateOrgAdmin(coreMember.getMemberId());
                 }
             });
+        }
+        else {
+
         }
     }
 
