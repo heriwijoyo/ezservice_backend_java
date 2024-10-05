@@ -50,6 +50,10 @@ public class CoreProcessMigrateMember extends BizAsyncProcessor {
                 }
             }
 
+            try {
+                Thread.sleep(2000);
+            } catch (Exception ignored) {}
+
             coreMembers.clear();
             //coreMembers = coreMemberDAO.getMigrationMembers(orgId, SortBy.OLDEST, 1000);
         }

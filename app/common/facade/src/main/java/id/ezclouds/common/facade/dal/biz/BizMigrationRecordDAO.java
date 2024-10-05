@@ -13,4 +13,6 @@ import id.ezclouds.common.model.biz.migration.BizMigrationRecord;
 public interface BizMigrationRecordDAO {
 
     void store(BizMigrationRecord migrationRecord);
+
+    BizMigrationRecord getAndLock(String recordId);
 }
