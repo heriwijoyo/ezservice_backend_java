@@ -66,6 +66,8 @@ public class CoreMemberDO extends CoreAuditableDO {
     private int addressVerified;
     @Column(name = "status")
     private int status;
+    @Column(name = "migration_id")
+    private String migrationId;
 
     public String getMemberId() {
         return memberId;
