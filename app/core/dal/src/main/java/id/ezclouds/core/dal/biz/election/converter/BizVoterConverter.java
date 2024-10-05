@@ -22,6 +22,7 @@ public class BizVoterConverter extends CommonDOModelConverter<BizVoterDO, BizVot
         bizVoter.setSubOrgId(dataObject.getSubOrgId());
         bizVoter.setShard(dataObject.getShard());
         bizVoter.setSourceId(dataObject.getSourceId());
+        bizVoter.setMemberId(dataObject.getMemberId());
         bizVoter.setReferrerId(dataObject.getReferrerId());
         bizVoter.setFamilySize(dataObject.getFamilySize());
         bizVoter.setFamilySizeMale(dataObject.getFamilySizeMale());
@@ -62,6 +63,7 @@ public class BizVoterConverter extends CommonDOModelConverter<BizVoterDO, BizVot
         voterDO.setSubOrgId(model.getSubOrgId());
         voterDO.setShard(model.getShard());
         voterDO.setSourceId(model.getSourceId());
+        voterDO.setMemberId(model.getMemberId());
         voterDO.setReferrerId(model.getReferrerId());
         voterDO.setFamilySize(model.getFamilySize());
         voterDO.setFamilySizeMale(model.getFamilySizeMale());

@@ -28,6 +28,8 @@ public class BizVoterDO {
     private String shard;
     @Column(name = "source_id")
     private String sourceId;
+    @Column(name = "member_id")
+    private String memberId;
     @Column(name = "referrer_id")
     private String referrerId;
     @Column(name = "family_size")
@@ -125,6 +127,14 @@ public class BizVoterDO {
 
     public void setSourceId(String sourceId) {
         this.sourceId = sourceId;
+    }
+
+    public String getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
     }
 
     public String getReferrerId() {

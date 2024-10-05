@@ -13,6 +13,7 @@ import id.ezclouds.common.model.biz.election.BizVoter;
 import id.ezclouds.common.model.biz.migration.BizMigrationRecord;
 import id.ezclouds.common.model.biz.migration.MigrationScene;
 import id.ezclouds.common.model.core.member.CoreMember;
+import id.ezclouds.common.model.core.member.CoreMemberExtension;
 import id.ezclouds.common.model.pagination.SortBy;
 import id.ezclouds.common.model.process.ProcessStatus;
 import id.ezclouds.common.util.DateUtil;
@@ -130,6 +131,44 @@ public class InnerProcessMigrateMember {
     }
 
     private BizVoter composeBizVoter(CoreMember coreMember) {
-        return new BizVoter();
+        BizVoter bizVoter = new BizVoter();
+        bizVoter.setOrgId(coreMember.getOrgId());
+        bizVoter.setSubOrgId(coreMember.getSubOrgId());
+        bizVoter.setSourceId(coreMember.getSourceId());
+        bizVoter.setReferrerId(coreMember.getReferrerId());
+        bizVoter.setName(StringUtil.toTitleCase(coreMember.getName()));
+        bizVoter.setGender(coreMember.getGender().getCode());
+        bizVoter.setDateOfBirth(coreMember.getDateOfBirth());
+        bizVoter.setPhone(coreMember.getPhone());
+        bizVoter.setEducation(coreMember.getEducation());
+        bizVoter.setOccupation(coreMember.getOccupation());
+        bizVoter.setReligion(coreMember.getReligion());
+        bizVoter.setEthnic(coreMember.getEthnic());
+        bizVoter.setEmail(coreMember.getEmail());
+        bizVoter.setStatus(0);
+
+        if (coreMember.getMemberExtension() != null) {
+            CoreMemberExtension extension = coreMember.getMemberExtension();
+
+            bizVoter.setIdCardNumber(extension.getIdCardNumber());
+            bizVoter.setFamilyCardNumber(extension.getFamilyCardNumber());
+            bizVoter.setProvinceId(extension.getProvinceId());
+            bizVoter.setProvinceName(extension.getProvinceName());
+            bizVoter.setRegencyId(extension.getRegencyId());
+            bizVoter.setRegencyName(extension.getRegencyName());
+            bizVoter.setDistrictId(extension.getDistrictId());
+            bizVoter.setDistrictName(extension.getDistrictName());
+            bizVoter.setVillageId(extension.getVillageId());
+            bizVoter.setVillageName(extension.getVillageName());
+            bizVoter.setNeighbourhood(extension.getNeighbourhood());
+            bizVoter.setSubNeighbourhood(extension.getSubNeighbourhood());
+            bizVoter.setPollStationId(extension.getPollStationId());
+        }
+
+        if (StringUtil.isNotBlank(coreMember.getRoles())) {
+            bizVoter.setMemberId(coreMember.getMemberId());
+        }
+
+        return bizVoter;
     }
 }

@@ -15,6 +15,7 @@ public class BizVoter {
     private String subOrgId;
     private String shard;
     private String sourceId;
+    private String memberId;
     private String referrerId;
     private Integer familySize;
     private Integer familySizeMale;
@@ -83,6 +84,14 @@ public class BizVoter {
 
     public void setSourceId(String sourceId) {
         this.sourceId = sourceId;
+    }
+
+    public String getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
     }
 
     public String getReferrerId() {
