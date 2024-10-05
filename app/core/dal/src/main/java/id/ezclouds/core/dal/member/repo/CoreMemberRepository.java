@@ -18,5 +18,5 @@ import java.util.List;
 @Repository
 public interface CoreMemberRepository extends JpaRepository<CoreMemberDO, String> {
 
-    List<CoreMemberDO> findByMigrationIdIsNull(Pageable pageable);
+    List<CoreMemberDO> findByOrgIdAndMigrationIdIsNull(String orgId, Pageable pageable);
 }

@@ -9,6 +9,7 @@ import id.ezclouds.common.model.process.ProcessName;
 import id.ezclouds.common.model.request.process.SurveyResponseParseProcessRequest;
 import id.ezclouds.core.process.biz.*;
 import id.ezclouds.core.process.debug.BizProcessDebugger;
+import id.ezclouds.core.process.migration.CoreProcessMigrateMember;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Async;
@@ -42,6 +43,9 @@ public class CoreAsyncProcessExecutor implements AsyncProcessExecutor {
     private BizProcessInitReportRealCountArea bizProcessInitReportRealCountArea;
 
     @Autowired
+    private CoreProcessMigrateMember coreProcessMigrateMember;
+
+    @Autowired
     private BizProcessDebugger bizProcessDebugger;
 
     @Override
@@ -71,6 +75,9 @@ public class CoreAsyncProcessExecutor implements AsyncProcessExecutor {
                 bizProcessInitReportRealCountArea.process(param);
                 break;
 
+            case ORG_INIT_MIGRATE_MEMBER:
+                coreProcessMigrateMember.process(param);
+                break;
             case DEBUG:
                 bizProcessDebugger.process(null);
                 break;

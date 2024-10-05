@@ -58,12 +58,12 @@ public class CoreMemberDO extends CoreAuditableDO {
     private String address;
     @Column(name = "avatar_url")
     private String avatarUrl;
-    @Column(name = "phone_verified")
-    private int phoneVerified;
-    @Column(name = "email_verified")
-    private int emailVerified;
-    @Column(name = "address_verified")
-    private int addressVerified;
+    @Column(name = "is_phone_verified")
+    private int isPhoneVerified;
+    @Column(name = "is_email_verified")
+    private int isEmailVerified;
+    @Column(name = "is_address_verified")
+    private int isAddressVerified;
     @Column(name = "status")
     private int status;
     @Column(name = "migration_id")
@@ -221,28 +221,28 @@ public class CoreMemberDO extends CoreAuditableDO {
         this.avatarUrl = avatarUrl;
     }
 
-    public boolean isPhoneVerified() {
-        return phoneVerified == 1;
+    public int getIsPhoneVerified() {
+        return isPhoneVerified;
     }
 
-    public void setPhoneVerified(boolean phoneVerified) {
-        this.phoneVerified = phoneVerified ? 1 : 0;
+    public void setIsPhoneVerified(int isPhoneVerified) {
+        this.isPhoneVerified = isPhoneVerified;
     }
 
-    public boolean isEmailVerified() {
-        return emailVerified == 1;
+    public int getIsEmailVerified() {
+        return isEmailVerified;
     }
 
-    public void setEmailVerified(boolean emailVerified) {
-        this.emailVerified = emailVerified ? 1 : 0;
+    public void setIsEmailVerified(int isEmailVerified) {
+        this.isEmailVerified = isEmailVerified;
     }
 
-    public boolean isAddressVerified() {
-        return addressVerified == 1;
+    public int getIsAddressVerified() {
+        return isAddressVerified;
     }
 
-    public void setAddressVerified(boolean addressVerified) {
-        this.addressVerified = addressVerified ? 1 : 0;
+    public void setIsAddressVerified(int isAddressVerified) {
+        this.isAddressVerified = isAddressVerified;
     }
 
     public int getStatus() {
@@ -251,5 +251,13 @@ public class CoreMemberDO extends CoreAuditableDO {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getMigrationId() {
+        return migrationId;
+    }
+
+    public void setMigrationId(String migrationId) {
+        this.migrationId = migrationId;
     }
 }

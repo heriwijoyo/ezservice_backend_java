@@ -38,12 +38,13 @@ public class CoreMemberConverter extends CommonDOModelConverter<CoreMemberDO, Co
         coreMember.setEmail(dataObject.getEmail());
         coreMember.setAddress(dataObject.getAddress());
         coreMember.setAvatarUrl(dataObject.getAvatarUrl());
-        coreMember.setPhoneVerified(dataObject.isPhoneVerified());
-        coreMember.setEmailVerified(dataObject.isEmailVerified());
-        coreMember.setAddressVerified(dataObject.isAddressVerified());
+        coreMember.setPhoneVerified(dataObject.getIsPhoneVerified() == 1);
+        coreMember.setEmailVerified(dataObject.getIsEmailVerified() == 1);
+        coreMember.setAddressVerified(dataObject.getIsAddressVerified() == 1);
         coreMember.setCreatedTime(dataObject.getCreatedTime());
         coreMember.setModifiedTime(dataObject.getModifiedTime());
         coreMember.setStatus(CoreStatus.getByStatus(dataObject.getStatus()));
+        coreMember.setMigrationId(dataObject.getMigrationId());
         return coreMember;
     }
 
@@ -69,12 +70,13 @@ public class CoreMemberConverter extends CommonDOModelConverter<CoreMemberDO, Co
         memberDO.setEmail(model.getEmail());
         memberDO.setAddress(model.getAddress());
         memberDO.setAvatarUrl(model.getAvatarUrl());
-        memberDO.setPhoneVerified(model.isPhoneVerified());
-        memberDO.setEmailVerified(model.isEmailVerified());
-        memberDO.setAddressVerified(model.isAddressVerified());
+        memberDO.setIsPhoneVerified(model.isPhoneVerified() ? 1 : 0);
+        memberDO.setIsEmailVerified(model.isEmailVerified() ? 1 : 0);
+        memberDO.setIsAddressVerified(model.isAddressVerified() ? 1 : 0);
         memberDO.setCreatedTime(model.getCreatedTime());
         memberDO.setModifiedTime(model.getModifiedTime());
         memberDO.setStatus(model.getStatus().getCode());
+        memberDO.setMigrationId(model.getMigrationId());
         return memberDO;
     }
 }

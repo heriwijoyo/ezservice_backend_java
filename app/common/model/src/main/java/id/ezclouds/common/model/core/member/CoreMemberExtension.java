@@ -6,6 +6,8 @@ package id.ezclouds.common.model.core.member;
 
 import id.ezclouds.common.model.annotation.AnnotationConstant;
 import id.ezclouds.common.model.annotation.PublicImageUrl;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -185,5 +187,10 @@ public class CoreMemberExtension {
 
     public void setPollStationId(String pollStationId) {
         this.pollStationId = pollStationId;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

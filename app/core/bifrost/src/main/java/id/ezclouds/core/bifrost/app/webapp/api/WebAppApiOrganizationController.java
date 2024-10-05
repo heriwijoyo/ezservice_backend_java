@@ -80,4 +80,28 @@ public class WebAppApiOrganizationController {
         });
         return result;
     }
+
+    @PostMapping(value = "/webapp/api/orgInitMigrateMember.json")
+    private WebApiResult<String> orgInitMigrateMember(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "orgId", required = false) String orgId) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebAppApiEvent.WEBAPP_API_INIT_MIGRATE_MEMBER, result, new WebApiControllerTemplate.Handler<>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                return bizAdminOrganizationService.initMigrateMember(sessionId, orgId);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
 }

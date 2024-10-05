@@ -7,6 +7,8 @@ package id.ezclouds.common.model.core.member;
 import id.ezclouds.common.model.annotation.AnnotationConstant;
 import id.ezclouds.common.model.annotation.PublicImageUrl;
 import id.ezclouds.common.model.core.CoreStatus;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -40,6 +42,7 @@ public class CoreMember {
     private String createdTime;
     private String modifiedTime;
     private CoreStatus status;
+    private String migrationId;
     private CoreMemberExtension memberExtension;
 
     public void initMemberExtension() {
@@ -238,6 +241,14 @@ public class CoreMember {
         this.status = status;
     }
 
+    public String getMigrationId() {
+        return migrationId;
+    }
+
+    public void setMigrationId(String migrationId) {
+        this.migrationId = migrationId;
+    }
+
     public String getAvatarUrl() {
         return avatarUrl;
     }
@@ -252,5 +263,10 @@ public class CoreMember {
 
     public void setMemberExtension(CoreMemberExtension memberExtension) {
         this.memberExtension = memberExtension;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

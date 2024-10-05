@@ -12,25 +12,28 @@ import id.ezclouds.common.util.context.EzAppEvent;
  */
 public enum BizProcessEvent implements EzAppEvent {
 
-    MEMBER_IMPORT_CSV("MEMBER_IMPORT_CSV"),
+    MEMBER_IMPORT_CSV("MEMBER_IMPORT_CSV", OverlapMode.SERIAL),
 
-    GENERATE_REPORT_OVERALL("GENERATE_REPORT_OVERALL"),
-    GENERATE_REPORT_MEMBER_TODAY("GENERATE_REPORT_MEMBER_TODAY"),
+    GENERATE_REPORT_OVERALL("GENERATE_REPORT_OVERALL", OverlapMode.SERIAL),
+    GENERATE_REPORT_MEMBER_TODAY("GENERATE_REPORT_MEMBER_TODAY", OverlapMode.SERIAL),
 
-    SURVEY_RESPONSE_PARSE("SURVEY_RESPONSE_PARSE"),
-    REPORT_AREA_COMMON_TABLE_PARSE("REPORT_AREA_COMMON_TABLE_PARSE"),
+    SURVEY_RESPONSE_PARSE("SURVEY_RESPONSE_PARSE", OverlapMode.SERIAL),
+    REPORT_AREA_COMMON_TABLE_PARSE("REPORT_AREA_COMMON_TABLE_PARSE", OverlapMode.SERIAL),
 
-    MASTER_DATA_INIT_AREA("MASTER_DATA_INIT_AREA"),
-    REPORT_DATA_INIT("REPORT_DATA_INIT"),
+    MASTER_DATA_INIT_AREA("MASTER_DATA_INIT_AREA", OverlapMode.SERIAL),
+    REPORT_DATA_INIT("REPORT_DATA_INIT", OverlapMode.SERIAL),
 
-    BIZ_DEBUGGER("BIZ_DEBUGGER"),
+    ORG_INIT_MIGRATE_MEMBER("ORG_INIT_MIGRATE_MEMBER", OverlapMode.ONLY_SINGLE),
+    BIZ_DEBUGGER("BIZ_DEBUGGER", OverlapMode.SERIAL),
 
-    UNKNOWN("UNKNOWN"),
+    UNKNOWN("UNKNOWN", OverlapMode.SERIAL),
     ;
     private final String code;
+    private final OverlapMode overlapMode;
 
-    BizProcessEvent(String code) {
+    BizProcessEvent(String code, OverlapMode overlapMode) {
         this.code = code;
+        this.overlapMode = overlapMode;
     }
 
     @Override

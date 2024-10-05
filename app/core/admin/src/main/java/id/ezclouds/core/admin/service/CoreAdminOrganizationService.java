@@ -8,10 +8,12 @@ import id.ezclouds.common.facade.auth.AuthAdminService;
 import id.ezclouds.common.facade.biz.admin.BizAdminOrganizationService;
 import id.ezclouds.common.facade.core.CoreOrganizationService;
 import id.ezclouds.common.facade.core.CoreSequenceService;
+import id.ezclouds.common.facade.process.AsyncProcessExecutor;
 import id.ezclouds.common.facade.template.BizServiceTemplate;
 import id.ezclouds.common.model.auth.AuthAdminSession;
 import id.ezclouds.common.model.auth.AuthRole;
 import id.ezclouds.common.model.message.CommonMessageConstant;
+import id.ezclouds.common.model.process.ProcessName;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.BizErrorMessageHelper;
@@ -35,6 +37,9 @@ public class CoreAdminOrganizationService implements BizAdminOrganizationService
 
     @Autowired
     private CoreSequenceService coreSequenceService;
+
+    @Autowired
+    private AsyncProcessExecutor asyncProcessExecutor;
 
     @Override
     public BizResult getOrganizations(String sessionId) {
@@ -80,6 +85,36 @@ public class CoreAdminOrganizationService implements BizAdminOrganizationService
                 authAdminService.authorizeSessionForRole(session, AuthRole.SUPERUSER);
 
                 coreSequenceService.initSequenceConfig(orgId);
+
+                result.setSuccess(true);
+                result.setObject(CommonMessageConstant.BIZ_OPERATION_SUCCESS);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return BizErrorMessageHelper.getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public BizResult initMigrateMember(String sessionId, String orgId) {
+        final BizResult result = new BizResult();
+        BizServiceTemplate.execute(null, result, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notBlank(sessionId, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(orgId, EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                AuthAdminSession session = authAdminService
+                        .authenticateAdminSession(sessionId);
+                authAdminService.authorizeSessionForRole(session, AuthRole.SUPERUSER);
+
+                asyncProcessExecutor.execute(ProcessName.ORG_INIT_MIGRATE_MEMBER, orgId);
 
                 result.setSuccess(true);
                 result.setObject(CommonMessageConstant.BIZ_OPERATION_SUCCESS);

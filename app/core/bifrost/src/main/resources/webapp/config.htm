@@ -15,7 +15,7 @@
                             <div class="form-group col-sm-12">
                                 <div class="form-line">
                                     <div class="font-12">Organization</div>
-                                    <select class="form-control show-tick" id="initSeqOrgId">
+                                    <select class="orgOptions form-control show-tick" id="initSeqOrgId">
                                     </select>
                                 </div>
                             </div>
@@ -27,54 +27,28 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="container-fluid" id="fade-in">
-        <div id="dashboard-container" class="row">
-            <a id="refresh-all-caches-btn" href="#">
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <br>
-                        <div class="color-name uppercase"></div>
-                        <div class="color-name"><i class="material-icons">cached</i></div>
-                        <div class="color-class-name">Refresh All Caches</div>
-                        <br>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="card corner-radius">
+                    <div class="header" style="border-bottom:none;">
+                        <h2>Trigger Migrate Member</h2>
+                    </div>
+                    <div class="body" style="padding-top:0px">
+                        <div class="clearfix">
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Organization</div>
+                                    <select class="orgOptions form-control show-tick" id="migrateMemberOrgId">
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <button id="btnMigrateMember" class="button button-rounded waves-effect waves-float pull-right" type="submit">SUBMIT</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </a>
-            <a id="refresh-all-dir-btn" href="#">
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <br>
-                        <div class="color-name uppercase"></div>
-                        <div class="color-name"><i class="material-icons">folder_open</i></div>
-                        <div class="color-class-name">Refresh All Directory</div>
-                        <br>
-                    </div>
-                </div>
-            </a>
-            <a id="refresh-all-menu-btn" href="#">
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <br>
-                        <div class="color-name uppercase"></div>
-                        <div class="color-name"><i class="material-icons">menu_book</i></div>
-                        <div class="color-class-name">Refresh All BO Menu</div>
-                        <br>
-                    </div>
-                </div>
-            </a>
-            <a id="trigger-async-process" href="specialProcess.htm">
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <br>
-                        <div class="color-name uppercase"></div>
-                        <div class="color-name"><i class="material-icons">rocket_launch</i></div>
-                        <div class="color-class-name">Special Process</div>
-                        <br>
-                    </div>
-                </div>
-            </a>
+            </div>
         </div>
     </div>
 </section>
@@ -86,7 +60,8 @@
         GET_REFRESH_ALL_DIRECTORIES: 'api/refreshAllDirectories.json',
         GET_REFRESH_ALL_MENUS: 'api/refreshAllMenus.json',
 
-        INIT_SYSTEM_SEQUENCE: 'api/orgInitSystemSequence.json'
+        INIT_SYSTEM_SEQUENCE: 'api/orgInitSystemSequence.json',
+        INIT_MIGRATE_MEMBER: 'api/orgInitMigrateMember.json'
     };
 
     var EzSystemConfigService = {
@@ -96,14 +71,10 @@
                     orgId: $('#initSeqOrgId').val()
                 });
             });
-            $('#refresh-all-caches-btn').click(function(){
-                EzSystemConfigService.refreshAllCaches();
-            });
-            $('#refresh-all-dir-btn').click(function(){
-                EzSystemConfigService.refreshAllDirectories();
-            });
-            $('#refresh-all-menu-btn').click(function(){
-                EzSystemConfigService.refreshAllMenus();
+            $('#btnMigrateMember').click(function(){
+                EzWebAppClient.callApiService(EzConfigApiUrl.INIT_MIGRATE_MEMBER, {
+                    orgId: $('#migrateMemberOrgId').val()
+                });
             });
             EzWebAppClient.callApiService(EzConfigApiUrl.GET_ORGANIZATIONS, {});
         },
@@ -133,7 +104,7 @@
                     function(){}
                 );
             }
-            if (url === EzConfigApiUrl.INIT_SYSTEM_SEQUENCE) {
+            if (url === EzConfigApiUrl.INIT_SYSTEM_SEQUENCE || url === EzConfigApiUrl.MIGRATE_MEMBER) {
                 alert(response.data);
             }
             if (url === EzConfigApiUrl.GET_REFRESH_ALL_DIRECTORIES) {
@@ -146,7 +117,7 @@
         renderOrgOptions: function() {
             let orgs = EzSystemConfigService.data.organizations;
             for(var i=0; i<orgs.length; i++) {
-                $('#initSeqOrgId').append('<option value="'+ orgs[i].orgId +'">['+ orgs[i].orgId +'] '+ orgs[i].orgName +'</option>');
+                $('.orgOptions').append('<option value="'+ orgs[i].orgId +'">['+ orgs[i].orgId +'] '+ orgs[i].orgName +'</option>');
             }
         },
         data: {
