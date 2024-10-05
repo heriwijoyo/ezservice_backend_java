@@ -33,7 +33,7 @@ public class CoreMemberExtension {
     private String villageName;
     private String neighbourhood;
     private String subNeighbourhood;
-    private String voteStation;
+    private String pollStationId;
 
     public String getMemberExtensionId() {
         return memberExtensionId;
@@ -179,11 +179,11 @@ public class CoreMemberExtension {
         this.subNeighbourhood = subNeighbourhood;
     }
 
-    public String getVoteStation() {
-        return voteStation;
+    public String getPollStationId() {
+        return pollStationId;
     }
 
-    public void setVoteStation(String voteStation) {
-        this.voteStation = voteStation;
+    public void setPollStationId(String pollStationId) {
+        this.pollStationId = pollStationId;
     }
 }

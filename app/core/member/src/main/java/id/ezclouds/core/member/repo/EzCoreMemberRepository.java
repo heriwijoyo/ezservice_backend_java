@@ -16,10 +16,10 @@ import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: CoreMemberRepository.java, v 0.1 2023‐12‐31 9:14 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: EzCoreMemberRepository.java, v 0.1 2023‐12‐31 9:14 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Repository
-public interface CoreMemberRepository  extends JpaRepository<EzCoreMemberDO, String> {
+public interface EzCoreMemberRepository extends JpaRepository<EzCoreMemberDO, String> {
 
     List<EzCoreMemberDO> findByMemberIdIn(List<String> memberIds);
 

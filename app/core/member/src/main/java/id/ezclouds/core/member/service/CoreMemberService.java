@@ -19,8 +19,8 @@ import id.ezclouds.core.member.dataobject.EzCoreMemberExtensionDO;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
 import id.ezclouds.core.member.model.MemberStatus;
-import id.ezclouds.core.member.repo.CoreMemberExtensionRepository;
-import id.ezclouds.core.member.repo.CoreMemberRepository;
+import id.ezclouds.core.member.repo.EzCoreMemberExtensionRepository;
+import id.ezclouds.core.member.repo.EzCoreMemberRepository;
 import id.ezclouds.core.member.util.CoreMemberConverter;
 import id.ezclouds.core.shared.model.CorePageInfo;
 import id.ezclouds.common.model.result.PageResult;
@@ -45,10 +45,10 @@ import java.util.stream.Collectors;
 public class CoreMemberService {
 
     @Autowired
-    private CoreMemberRepository coreMemberRepository;
+    private EzCoreMemberRepository ezCoreMemberRepository;
 
     @Autowired
-    private CoreMemberExtensionRepository coreMemberExtensionRepository;
+    private EzCoreMemberExtensionRepository ezCoreMemberExtensionRepository;
 
     @Autowired
     private CoreSequenceService coreSequenceService;
@@ -58,7 +58,7 @@ public class CoreMemberService {
 
     public void store(CoreMember coreMember) {
         EzCoreMemberDO ezCoreMemberDO = CoreMemberConverter.convert(coreMember);
-        coreMemberRepository.save(ezCoreMemberDO);
+        ezCoreMemberRepository.save(ezCoreMemberDO);
     }
 
     public void store(CoreMemberExtension coreMemberExtension) {
@@ -68,35 +68,35 @@ public class CoreMemberService {
         String currentDate = DateUtil.getCurrentFormattedDate();
         extensionDO.setCreatedTime(currentDate);
         extensionDO.setModifiedTime(currentDate);
-        coreMemberExtensionRepository.save(extensionDO);
+        ezCoreMemberExtensionRepository.save(extensionDO);
     }
 
     public CoreMember getOptimisticCoreMember(String memberId) throws EzErrorException {
-        EzCoreMemberDO ezCoreMemberDO = coreMemberRepository.findById(memberId).orElse(null);
+        EzCoreMemberDO ezCoreMemberDO = ezCoreMemberRepository.findById(memberId).orElse(null);
         AssertUtil.notNull(ezCoreMemberDO, EzErrorCode.MEMBER_NOT_FOUND, "Member not found");
         return CoreMemberConverter.convert(ezCoreMemberDO);
     }
 
     public CoreMemberExtension getOptimisticCoreMemberExtension(String memberId) {
-        EzCoreMemberExtensionDO ezCoreMemberExtensionDO = coreMemberExtensionRepository.findByMemberId(memberId);
+        EzCoreMemberExtensionDO ezCoreMemberExtensionDO = ezCoreMemberExtensionRepository.findByMemberId(memberId);
         AssertUtil.notNull(ezCoreMemberExtensionDO, EzErrorCode.MEMBER_NOT_FOUND, "Member not found");
         return CoreMemberConverter.convert(ezCoreMemberExtensionDO);
     }
 
     public CoreMemberExtension getPessimisticCoreMemberExtension(String memberId) {
-        EzCoreMemberExtensionDO memberExtensionDO = coreMemberExtensionRepository.findByMemberId(memberId);
+        EzCoreMemberExtensionDO memberExtensionDO = ezCoreMemberExtensionRepository.findByMemberId(memberId);
         return CoreMemberConverter.convert(memberExtensionDO);
     }
 
     @Transactional
     public void verifyPhone(String memberId) {
-        EzCoreMemberDO ezCoreMemberDO = coreMemberRepository
+        EzCoreMemberDO ezCoreMemberDO = ezCoreMemberRepository
                 .findById(memberId)
                 .orElse(null);
 
         if (ezCoreMemberDO != null) {
             ezCoreMemberDO.setPhoneVerified(MemberStatus.ACTIVE.getCode());
-            coreMemberRepository.saveAndFlush(ezCoreMemberDO);
+            ezCoreMemberRepository.saveAndFlush(ezCoreMemberDO);
         }
     }
 
@@ -105,32 +105,32 @@ public class CoreMemberService {
         if (StringUtil.isBlank(memberId) || fieldMap == null || fieldMap.isEmpty()) {
             return;
         }
-        EzCoreMemberDO ezCoreMemberDO = coreMemberRepository
+        EzCoreMemberDO ezCoreMemberDO = ezCoreMemberRepository
                 .findById(memberId)
                 .orElse(null);
 
-        EzCoreMemberExtensionDO ezCoreMemberExtensionDO = coreMemberExtensionRepository
+        EzCoreMemberExtensionDO ezCoreMemberExtensionDO = ezCoreMemberExtensionRepository
                 .findByMemberId(memberId);
 
         updateMemberDO(ezCoreMemberDO, ezCoreMemberExtensionDO, fieldMap);
 
         if (ezCoreMemberDO != null) {
-            coreMemberRepository.saveAndFlush(ezCoreMemberDO);
+            ezCoreMemberRepository.saveAndFlush(ezCoreMemberDO);
         }
         if (ezCoreMemberExtensionDO != null) {
-            coreMemberExtensionRepository.saveAndFlush(ezCoreMemberExtensionDO);
+            ezCoreMemberExtensionRepository.saveAndFlush(ezCoreMemberExtensionDO);
         }
     }
 
     public List<CoreMember> getMemberByOrgIdAndRoles(String orgId, String roles) {
-        return coreMemberRepository.findByOrgIdAndRolesContains(orgId, roles)
+        return ezCoreMemberRepository.findByOrgIdAndRolesContains(orgId, roles)
                 .stream()
                 .map(CoreMemberConverter::convert)
                 .collect(Collectors.toList());
     }
 
     public List<CoreMember> getUniqueMember(String orgId, String phone) {
-        return coreMemberRepository
+        return ezCoreMemberRepository
                 .findByOrgIdAndPhone(orgId, phone)
                 .stream()
                 .map(CoreMemberConverter::convert)
@@ -138,7 +138,7 @@ public class CoreMemberService {
     }
 
     public List<String> getAllMemberIds(String orgId) {
-        return coreMemberRepository
+        return ezCoreMemberRepository
                 .findByOrgId(orgId)
                 .stream()
                 .map(EzCoreMemberDO::getMemberId)
@@ -146,7 +146,7 @@ public class CoreMemberService {
     }
 
     public List<CoreMember> getAllMembers(String orgId) {
-        return coreMemberRepository
+        return ezCoreMemberRepository
                 .findByOrgId(orgId)
                 .stream()
                 .map(CoreMemberConverter::convert)
@@ -155,7 +155,7 @@ public class CoreMemberService {
 
     public Map<String, String> getMemberNamesMap(List<String> memberIds) {
         Map<String, String> memberNamesMap = new HashMap<>();
-        List<EzCoreMemberDO> coreMembers = coreMemberRepository
+        List<EzCoreMemberDO> coreMembers = ezCoreMemberRepository
                 .findByMemberIdIn(memberIds);
         for (EzCoreMemberDO ezCoreMemberDO : coreMembers) {
             memberNamesMap.put(ezCoreMemberDO.getMemberId(), ezCoreMemberDO.getName());
@@ -164,7 +164,7 @@ public class CoreMemberService {
     }
 
     public List<CoreMemberExtension> getAllMemberExtensions(String orgId) {
-        return coreMemberExtensionRepository
+        return ezCoreMemberExtensionRepository
                 .findByOrgId(orgId)
                 .stream()
                 .map(CoreMemberConverter::convert)
@@ -209,12 +209,12 @@ public class CoreMemberService {
     }
 
     public CorePageInfo<CoreMember> getMemberByOrg(String orgId, PageRequest pageRequest) {
-        Page<EzCoreMemberDO> pageResult = coreMemberRepository.findByOrgId(orgId, pageRequest);
+        Page<EzCoreMemberDO> pageResult = ezCoreMemberRepository.findByOrgId(orgId, pageRequest);
         return composePageInfo(pageResult);
     }
 
     public CorePageInfo<CoreMember> getMemberByOrgAndSubOrg(String orgId, String subOrgId, PageRequest pageRequest) {
-        Page<EzCoreMemberDO> pageResult = coreMemberRepository.findByOrgIdAndSubOrgId(orgId, subOrgId, pageRequest);
+        Page<EzCoreMemberDO> pageResult = ezCoreMemberRepository.findByOrgIdAndSubOrgId(orgId, subOrgId, pageRequest);
         return composePageInfo(pageResult);
     }
 
@@ -238,7 +238,7 @@ public class CoreMemberService {
     public Map<String, Long> getGroupCountBySubOrg(String orgId, String startTime, String endTime) {
         Map<String, Long> result = new HashMap<>();
 
-        List<CoreGroupCountDO> coreGroupCount = coreMemberRepository
+        List<CoreGroupCountDO> coreGroupCount = ezCoreMemberRepository
                 .fetchGroupCountBySubOrg(orgId, startTime, endTime);
         for (CoreGroupCountDO groupCountDO : coreGroupCount) {
             if (StringUtil.isNotBlank(groupCountDO.getGroupValue())) {
@@ -254,7 +254,7 @@ public class CoreMemberService {
     public Map<String, Long> getEmptyGroupCountByReferrerId(String orgId, String startTime) {
         Map<String, Long> result = new HashMap<>();
 
-        List<CoreGroupCountDO> coreGroupCount = coreMemberRepository
+        List<CoreGroupCountDO> coreGroupCount = ezCoreMemberRepository
                 .fetchEmptyGroupCountByReferrerId(orgId, startTime);
         for (CoreGroupCountDO groupCountDO : coreGroupCount) {
             if (StringUtil.isNotBlank(groupCountDO.getGroupValue())) {
@@ -268,7 +268,7 @@ public class CoreMemberService {
     }
 
     public PageResult<CoreMember> getCoreMembers(String orgId, PageRequest pageRequest) {
-        Page<EzCoreMemberDO> findResult = coreMemberRepository
+        Page<EzCoreMemberDO> findResult = ezCoreMemberRepository
                 .findByOrgId(orgId, pageRequest);
         return PageResultUtil.convertFindResult(findResult, input -> input
                     .stream()
