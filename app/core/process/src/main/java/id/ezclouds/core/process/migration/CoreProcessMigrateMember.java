@@ -4,9 +4,7 @@
  */
 package id.ezclouds.core.process.migration;
 
-import id.ezclouds.common.facade.dal.member.CoreMemberDAO;
 import id.ezclouds.common.model.core.member.CoreMember;
-import id.ezclouds.common.model.pagination.SortBy;
 import id.ezclouds.core.process.biz.BizAsyncProcessor;
 import id.ezclouds.core.process.model.BizProcessEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +20,7 @@ import java.util.List;
 public class CoreProcessMigrateMember extends BizAsyncProcessor {
 
     @Autowired
-    private CoreMemberDAO coreMemberDAO;
+    private InnerProcessMigrateMember innerProcessMigrateMember;
 
     @Override
     public BizProcessEvent getProcessEvent() {
@@ -40,12 +38,13 @@ public class CoreProcessMigrateMember extends BizAsyncProcessor {
         logData.add("IRG_ID="+ orgId);
         int processedMember = 0;
 
-        List<CoreMember> coreMembers = coreMemberDAO.getMigrationMembers(orgId, SortBy.OLDEST, 1000);
+        List<CoreMember> coreMembers = innerProcessMigrateMember.getMigrationMembers(orgId);
         while (coreMembers.size() > 0) {
             for (CoreMember coreMember : coreMembers) {
-
+                innerProcessMigrateMember.migrateMember(coreMember);
             }
 
+            coreMembers.clear();
             //coreMembers = coreMemberDAO.getMigrationMembers(orgId, SortBy.OLDEST, 1000);
         }
 

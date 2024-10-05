@@ -9,8 +9,11 @@ import id.ezclouds.common.model.annotation.EzDAOLogger;
 import id.ezclouds.common.model.core.member.CoreMember;
 import id.ezclouds.common.model.core.member.CoreMemberExtension;
 import id.ezclouds.common.model.pagination.SortBy;
+import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.dal.member.converter.CoreMemberConverter;
 import id.ezclouds.core.dal.member.converter.CoreMemberExtensionConverter;
+import id.ezclouds.core.dal.member.dataobject.CoreMemberDO;
+import id.ezclouds.core.dal.member.dataobject.CoreMemberExtensionDO;
 import id.ezclouds.core.dal.member.repo.CoreMemberExtensionRepository;
 import id.ezclouds.core.dal.member.repo.CoreMemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,12 +68,24 @@ public class EzCoreMemberDAO implements CoreMemberDAO {
 
     @Override
     public CoreMember getAndLock(String memberId) {
-        return null;
+        return new CoreMemberConverter()
+                .convertQuery(
+                        coreMemberRepository
+                                .findAndLockById(memberId)
+                );
     }
 
     @Override
     public void store(CoreMember coreMember) {
+        CoreMemberDO coreMemberDO = new CoreMemberConverter().convertStore(coreMember);
+        coreMemberRepository
+                .saveAndFlush(coreMemberDO);
 
+        if (coreMember.getMemberExtension() != null && StringUtil.isNotBlank(coreMember.getMemberExtension().getMemberExtensionId())) {
+            CoreMemberExtensionDO extensionDO = new CoreMemberExtensionConverter().convertStore(coreMember.getMemberExtension());
+            coreMemberExtensionRepository
+                    .saveAndFlush(extensionDO);
+        }
     }
 
     private void blendMemberExt(List<CoreMember> coreMembers, List<CoreMemberExtension> memberExtensions) {

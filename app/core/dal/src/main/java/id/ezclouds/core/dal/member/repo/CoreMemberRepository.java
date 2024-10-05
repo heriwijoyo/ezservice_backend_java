@@ -7,8 +7,13 @@ package id.ezclouds.core.dal.member.repo;
 import id.ezclouds.core.dal.member.dataobject.CoreMemberDO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.LockModeType;
+import javax.persistence.QueryHint;
 import java.util.List;
 
 /**
@@ -19,4 +24,9 @@ import java.util.List;
 public interface CoreMemberRepository extends JpaRepository<CoreMemberDO, String> {
 
     List<CoreMemberDO> findByOrgIdAndMigrationIdIsNull(String orgId, Pageable pageable);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @QueryHints({@QueryHint(name = "jakarta.persistence.lock.timeout", value = "3000")})
+    @Query("SELECT cm FROM CoreMemberDO cm WHERE cm.memberId = ?1")
+    CoreMemberDO findAndLockById(String memberId);
 }
