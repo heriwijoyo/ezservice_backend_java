@@ -47,15 +47,16 @@ public class CoreProcessMigrateMember extends BizAsyncProcessor {
                     processedCount++;
                 } catch (Exception exception) {
                     exceptionCount++;
+                    exception.printStackTrace();
                 }
             }
 
             try {
-                Thread.sleep(2000);
+                Thread.sleep(1000);
             } catch (Exception ignored) {}
 
             coreMembers.clear();
-            //coreMembers = coreMemberDAO.getMigrationMembers(orgId, SortBy.OLDEST, 1000);
+            coreMembers = innerProcessMigrateMember.getMigrationMembers(orgId);
         }
 
         logData.add("PROCESSED_COUNT="+ processedCount);

@@ -14,5 +14,7 @@ public interface BizMigrationRecordDAO {
 
     void store(BizMigrationRecord migrationRecord);
 
+    BizMigrationRecord getById(String recordId);
+
     BizMigrationRecord getAndLock(String recordId);
 }

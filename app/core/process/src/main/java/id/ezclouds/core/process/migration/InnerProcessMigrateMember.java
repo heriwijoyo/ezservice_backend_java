@@ -25,7 +25,6 @@ import id.ezclouds.common.util.exception.EzErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -55,7 +54,7 @@ public class InnerProcessMigrateMember {
     private TransactionTemplate transactionTemplate;
 
     public List<CoreMember> getMigrationMembers(String orgId) {
-        return coreMemberDAO.getMigrationMembers(orgId, SortBy.OLDEST, 100);
+        return coreMemberDAO.getMigrationMembers(orgId, SortBy.OLDEST, 2);
     }
 
     public void migrateMember(CoreMember coreMember) {
@@ -93,6 +92,7 @@ public class InnerProcessMigrateMember {
             voterId = voterRegistrationService.registerVoter(bizVoter);
             processStatus = ProcessStatus.SUCCESS;
         } catch (Exception exception) {
+            exception.printStackTrace();
             if (exception instanceof EzErrorException) {
                 if (((EzErrorException)exception).getEzErrorCode() == EzErrorCode.IDEMPOTENT_ERROR) {
                     errorMessage = EzErrorCode.IDEMPOTENT_ERROR.getCode();
@@ -109,6 +109,10 @@ public class InnerProcessMigrateMember {
         migrationRecord.setErrorMessage(errorMessage);
         migrationRecord.setTimestamp(DateUtil.getCurrentFormattedDateMillis());
         bizMigrationRecordDAO.store(migrationRecord);
+
+        CoreMember dbCoreMember = coreMemberDAO.getAndLock(coreMember.getMemberId());
+        dbCoreMember.setMigrationId(recordId);
+        coreMemberDAO.store(dbCoreMember);
     }
 
     private String initMigrationRecord(CoreMember coreMember, ProcessStatus processStatus) {
@@ -117,15 +121,18 @@ public class InnerProcessMigrateMember {
         String sourceId = coreMember.getMemberId();
         String recordId = HashUtil.createHash(orgId, scene.getCode(), sourceId);
 
-        BizMigrationRecord migrationRecord = new BizMigrationRecord();
-        migrationRecord.setRecordId(recordId);
-        migrationRecord.setOrgId(coreMember.getOrgId());
-        migrationRecord.setScene(scene);
-        migrationRecord.setSourceId(sourceId);
-        migrationRecord.setPayload(bizObjectMapperService.toJson(coreMember));
-        migrationRecord.setTimestamp(DateUtil.getCurrentFormattedDateMillis());
-        migrationRecord.setStatus(processStatus.getCode());
-        bizMigrationRecordDAO.store(migrationRecord);
+        BizMigrationRecord migrationRecord = bizMigrationRecordDAO.getById(recordId);
+        if (migrationRecord == null) {
+            migrationRecord = new BizMigrationRecord();
+            migrationRecord.setRecordId(recordId);
+            migrationRecord.setOrgId(coreMember.getOrgId());
+            migrationRecord.setScene(scene);
+            migrationRecord.setSourceId(sourceId);
+            migrationRecord.setPayload(bizObjectMapperService.toJson(coreMember));
+            migrationRecord.setTimestamp(DateUtil.getCurrentFormattedDateMillis());
+            migrationRecord.setStatus(processStatus.getCode());
+            bizMigrationRecordDAO.store(migrationRecord);
+        }
 
         return recordId;
     }

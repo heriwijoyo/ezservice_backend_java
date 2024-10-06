@@ -34,6 +34,17 @@ public class CoreBizMigrationRecordDAO implements BizMigrationRecordDAO {
 
     @Override
     @EzDAOLogger
+    public BizMigrationRecord getById(String recordId) {
+        return new BizMigrationRecordConverter()
+                .convertQuery(
+                        bizMigrationRecordRepository
+                                .findById(recordId)
+                                .orElse(null)
+                );
+    }
+
+    @Override
+    @EzDAOLogger
     public BizMigrationRecord getAndLock(String recordId) {
         return new BizMigrationRecordConverter()
                 .convertQuery(
