@@ -23,7 +23,7 @@ import java.util.List;
 @Repository
 public interface CoreMemberRepository extends JpaRepository<CoreMemberDO, String> {
 
-    List<CoreMemberDO> findByOrgIdAndMigrationIdIsNull(String orgId, Pageable pageable);
+    List<CoreMemberDO> findByOrgIdAndCreatedTimeBetweenAndMigrationIdIsNull(String orgId, String startDate, String endDate, Pageable pageable);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @QueryHints({@QueryHint(name = "jakarta.persistence.lock.timeout", value = "3000")})

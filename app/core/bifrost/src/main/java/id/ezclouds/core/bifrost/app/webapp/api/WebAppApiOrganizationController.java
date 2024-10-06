@@ -84,12 +84,13 @@ public class WebAppApiOrganizationController {
     @PostMapping(value = "/webapp/api/orgInitMigrateMember.json")
     private WebApiResult<String> orgInitMigrateMember(
             @RequestParam(name = "sessionId", required = false) String sessionId,
-            @RequestParam(name = "orgId", required = false) String orgId) {
+            @RequestParam(name = "orgId", required = false) String orgId,
+            @RequestParam(name = "date", required = false) String date) {
         final WebApiResult<String> result = new WebApiResult<>();
         WebApiControllerTemplate.execute(WebAppApiEvent.WEBAPP_API_INIT_MIGRATE_MEMBER, result, new WebApiControllerTemplate.Handler<>() {
             @Override
             public BizResult onProcess() throws Exception {
-                return bizAdminOrganizationService.initMigrateMember(sessionId, orgId);
+                return bizAdminOrganizationService.initMigrateMember(sessionId, orgId, date);
             }
 
             @Override

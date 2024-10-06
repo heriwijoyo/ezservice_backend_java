@@ -15,7 +15,7 @@ import java.util.List;
  */
 public interface CoreMemberDAO {
 
-    List<CoreMember> getMigrationMembers(String orgId, SortBy sortBy, int limit);
+    List<CoreMember> getMigrationMembers(String orgId, String startDate, String endDate, SortBy sortBy, int limit);
 
     CoreMember getAndLock(String memberId);
 

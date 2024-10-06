@@ -40,6 +40,10 @@
                                     <select class="orgOptions form-control show-tick" id="migrateMemberOrgId">
                                     </select>
                                 </div>
+                                <div class="form-line">
+                                    <div class="font-12">Date</div>
+                                    <input type="text" class="form-control" id="formDate" placeholder="Date">
+                                </div>
                             </div>
 
                             <div class="col-sm-12">
@@ -73,7 +77,8 @@
             });
             $('#btnMigrateMember').click(function(){
                 EzWebAppClient.callApiService(EzConfigApiUrl.INIT_MIGRATE_MEMBER, {
-                    orgId: $('#migrateMemberOrgId').val()
+                    orgId: $('#migrateMemberOrgId').val(),
+                    date: $('#formDate').val()
                 });
             });
             EzWebAppClient.callApiService(EzConfigApiUrl.GET_ORGANIZATIONS, {});

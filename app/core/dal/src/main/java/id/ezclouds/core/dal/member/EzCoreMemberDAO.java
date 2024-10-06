@@ -40,11 +40,11 @@ public class EzCoreMemberDAO implements CoreMemberDAO {
 
     @Override
     @EzDAOLogger
-    public List<CoreMember> getMigrationMembers(String orgId, SortBy sortBy, int limit) {
+    public List<CoreMember> getMigrationMembers(String orgId, String startDate, String endDate, SortBy sortBy, int limit) {
         CoreMemberConverter memberConverter = new CoreMemberConverter();
         Pageable pageable = PageRequest.of(0, limit, convertSortBy(sortBy));
         List<CoreMember> coreMembers = coreMemberRepository
-                .findByOrgIdAndMigrationIdIsNull(orgId, pageable)
+                .findByOrgIdAndCreatedTimeBetweenAndMigrationIdIsNull(orgId, startDate, endDate, pageable)
                 .stream()
                 .map(memberConverter::convertQuery)
                 .collect(Collectors.toList());

@@ -34,12 +34,15 @@ public class CoreProcessMigrateMember extends BizAsyncProcessor {
 
     @Override
     protected boolean onProcess(Object request, List<String> logData) {
-        String orgId = (String) request;
-        logData.add("ORG_ID="+ orgId);
+        String param = (String) request;
+        String orgId = param.split(",")[0];
+        String date = param.split(",")[1];
+        logData.add("ORG_ID="+ orgId + ",DATE="+ date);
+
         int processedCount = 0;
         int exceptionCount = 0;
 
-        List<CoreMember> coreMembers = innerProcessMigrateMember.getMigrationMembers(orgId);
+        List<CoreMember> coreMembers = innerProcessMigrateMember.getMigrationMembers(orgId, date);
         while (coreMembers.size() > 0) {
             for (CoreMember coreMember : coreMembers) {
                 try {
@@ -56,7 +59,7 @@ public class CoreProcessMigrateMember extends BizAsyncProcessor {
             } catch (Exception ignored) {}
 
             coreMembers.clear();
-            coreMembers = innerProcessMigrateMember.getMigrationMembers(orgId);
+            coreMembers = innerProcessMigrateMember.getMigrationMembers(orgId, date);
         }
 
         logData.add("PROCESSED_COUNT="+ processedCount);

@@ -16,5 +16,5 @@ public interface BizAdminOrganizationService {
 
     BizResult initSystemSequence(String sessionId, String orgId);
 
-    BizResult initMigrateMember(String sessionId, String orgId);
+    BizResult initMigrateMember(String sessionId, String orgId, String date);
 }

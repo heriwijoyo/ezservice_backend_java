@@ -99,7 +99,7 @@ public class CoreAdminOrganizationService implements BizAdminOrganizationService
     }
 
     @Override
-    public BizResult initMigrateMember(String sessionId, String orgId) {
+    public BizResult initMigrateMember(String sessionId, String orgId, String date) {
         final BizResult result = new BizResult();
         BizServiceTemplate.execute(null, result, new BizServiceTemplate.Handler() {
             @Override
@@ -114,7 +114,7 @@ public class CoreAdminOrganizationService implements BizAdminOrganizationService
                         .authenticateAdminSession(sessionId);
                 authAdminService.authorizeSessionForRole(session, AuthRole.SUPERUSER);
 
-                asyncProcessExecutor.execute(ProcessName.ORG_INIT_MIGRATE_MEMBER, orgId);
+                asyncProcessExecutor.execute(ProcessName.ORG_INIT_MIGRATE_MEMBER, orgId +","+ date);
 
                 result.setSuccess(true);
                 result.setObject(CommonMessageConstant.BIZ_OPERATION_SUCCESS);
