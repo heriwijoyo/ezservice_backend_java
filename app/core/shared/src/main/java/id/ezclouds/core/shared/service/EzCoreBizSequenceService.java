@@ -13,6 +13,8 @@ import id.ezclouds.core.shared.util.CoreSeqUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: EzCoreBizSequenceService.java, v 0.1 2024‐09‐28 1:29 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -24,6 +26,7 @@ public class EzCoreBizSequenceService implements CoreBizSequenceService {
     private CoreBizSequenceDAO coreBizSequenceDAO;
 
     @Override
+    @Transactional
     public String generateSequence(CoreBizSeqScene bizSeqScene) {
         CoreBizSequence bizSequence = coreBizSequenceDAO
                 .lockBizSequence(bizSeqScene.getOrgId(), bizSeqScene.getCode(), bizSeqScene.getSceneId());

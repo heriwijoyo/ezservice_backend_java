@@ -26,11 +26,14 @@ public class NewCoreOrganizationService implements CoreOrganizationService {
 
     @Override
     public Organization getById(String orgId) {
+        /*
         return getOrganizations()
                 .stream()
                 .filter(organization -> organization.getOrgId().equals(orgId))
                 .findFirst()
                 .orElse(null);
+         */
+        return coreOrganizationDAO.getById(orgId);
     }
 
     @Override

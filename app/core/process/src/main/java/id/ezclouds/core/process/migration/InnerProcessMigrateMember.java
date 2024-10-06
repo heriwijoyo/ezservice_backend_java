@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.process.migration;
 
+import id.ezclouds.common.facade.biz.election.VoterInvalidRegistrationService;
 import id.ezclouds.common.facade.biz.election.VoterRegistrationService;
 import id.ezclouds.common.facade.dal.biz.BizMigrationRecordDAO;
 import id.ezclouds.common.facade.dal.member.CoreMemberDAO;
@@ -23,7 +24,9 @@ import id.ezclouds.common.util.exception.ExceptionUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -36,6 +39,7 @@ import java.util.List;
  * @version $Id: InnerProcessMigrateMember.java, v 0.1 2024‐10‐05 5:02 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 @Service
+@Scope("prototype")
 public class InnerProcessMigrateMember {
 
     @Autowired
@@ -51,13 +55,17 @@ public class InnerProcessMigrateMember {
     private VoterRegistrationService voterRegistrationService;
 
     @Autowired
+    private VoterInvalidRegistrationService voterInvalidRegistrationService;
+
+    @Autowired
     private TransactionTemplate transactionTemplate;
 
     public List<CoreMember> getMigrationMembers(String orgId) {
-        return coreMemberDAO.getMigrationMembers(orgId, SortBy.OLDEST, 2);
+        return coreMemberDAO.getMigrationMembers(orgId, SortBy.OLDEST, 1);
     }
 
-    public void migrateMember(CoreMember coreMember) {
+    public boolean migrateMember(CoreMember coreMember) {
+        transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
         String memberRoles = coreMember.getRoles();
 
         boolean isOrgAdmin = StringUtil.isNotBlank(memberRoles) && Arrays.asList(memberRoles.split(",")).contains(AuthRole.ADMIN_ORG.getCode());
@@ -79,6 +87,8 @@ public class InnerProcessMigrateMember {
                 }
             });
         }
+
+        return true;
     }
 
     private void migrateMemberToVoter(CoreMember coreMember) {
@@ -91,16 +101,33 @@ public class InnerProcessMigrateMember {
         try {
             voterId = voterRegistrationService.registerVoter(bizVoter);
             processStatus = ProcessStatus.SUCCESS;
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            if (exception instanceof EzErrorException) {
-                if (((EzErrorException)exception).getEzErrorCode() == EzErrorCode.IDEMPOTENT_ERROR) {
-                    errorMessage = EzErrorCode.IDEMPOTENT_ERROR.getCode();
-                }
-            } else {
-                errorMessage = ExceptionUtil.getErrorContext(exception);
+        } catch (EzErrorException ezException) {
+            if (ezException.getEzErrorCode() == EzErrorCode.IDEMPOTENT_ERROR) {
+                errorMessage = "Data Duplikat";
+            }
+            else if (ezException.getEzErrorCode() == EzErrorCode.BIZ_VALIDATION_FAILED) {
+                errorMessage = "Tidak Lolos Validasi";
+            }
+            else {
+                errorMessage = ezException.getEzErrorCode().getCode() + ExceptionUtil.getErrorContext(ezException);
             }
             processStatus = ProcessStatus.EXCEPTION;
+
+        } catch (Exception exception) {
+            errorMessage = ExceptionUtil.getErrorContext(exception);
+            processStatus = ProcessStatus.EXCEPTION;
+        }
+
+        if (processStatus == ProcessStatus.EXCEPTION) {
+            try {
+                bizVoter.setVoterId(null);
+                voterId = voterInvalidRegistrationService
+                        .registerVoterInvalid(bizVoter, processStatus.getCode(), errorMessage);
+            } catch (Exception e) {
+                e.printStackTrace();
+                errorMessage += " : voterInvalidRegister.Error";
+                recordId = "STUCK_ERROR";
+            }
         }
 
         BizMigrationRecord migrationRecord = bizMigrationRecordDAO.getAndLock(recordId);
@@ -143,6 +170,9 @@ public class InnerProcessMigrateMember {
         bizVoter.setSubOrgId(coreMember.getSubOrgId());
         bizVoter.setSourceId(coreMember.getSourceId());
         bizVoter.setReferrerId(coreMember.getReferrerId());
+        bizVoter.setFamilySize(0);
+        bizVoter.setFamilySizeMale(0);
+        bizVoter.setFamilySizeFemale(0);
         bizVoter.setName(StringUtil.toTitleCase(coreMember.getName()));
         bizVoter.setGender(coreMember.getGender().getCode());
         bizVoter.setDateOfBirth(coreMember.getDateOfBirth());
