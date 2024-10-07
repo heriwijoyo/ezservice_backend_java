@@ -36,10 +36,14 @@ public class CoreMasterDataDAO implements BizMasterDataDAO {
     public void storeOrUpdate(BizMasterData masterData) {
         String bizMasterId = HashUtil.createHash(masterData.getOrgId(), masterData.getScene(), masterData.getDataId());
         EzMasterDataDO dataDO = ezMasterDataRepository
-                .findById(bizMasterId)
-                .orElse(null);
+                .findAndLockById(bizMasterId);
 
-        if (dataDO == null) {
+        if (dataDO != null) {
+            dataDO.setProvinceId(masterData.getProvinceId());
+            dataDO.setRegencyId(masterData.getRegencyId());
+            dataDO.setDistrictId(masterData.getDistrictId());
+        }
+        else {
             dataDO = new BizMasterDataConverter().convertStore(masterData);
             dataDO.setBizMasterId(bizMasterId);
             dataDO.setNumberValue1(0);

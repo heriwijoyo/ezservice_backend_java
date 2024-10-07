@@ -33,6 +33,9 @@ public class EzMasterDataDO {
     @Column(name = "data_name")
     private String dataName;
 
+    @Column(name = "province_id")
+    private String provinceId;
+
     @Column(name = "regency_id")
     private String regencyId;
 
@@ -107,6 +110,14 @@ public class EzMasterDataDO {
 
     public void setDataName(String dataName) {
         this.dataName = dataName;
+    }
+
+    public String getProvinceId() {
+        return provinceId;
+    }
+
+    public void setProvinceId(String provinceId) {
+        this.provinceId = provinceId;
     }
 
     public String getRegencyId() {

@@ -10,6 +10,7 @@ import id.ezclouds.common.facade.area.CoreWorkingAreaService;
 import id.ezclouds.common.facade.config.CoreConfigService;
 import id.ezclouds.common.model.area.CoreArea;
 import id.ezclouds.common.model.area.CoreAreaLevel;
+import id.ezclouds.common.model.area.CoreAreaRecursive;
 import id.ezclouds.common.model.biz.election.BizVoter;
 import id.ezclouds.common.model.config.CoreOrgConfigType;
 import id.ezclouds.common.model.process.ProcessStatus;
@@ -49,8 +50,8 @@ public class BizReportAccumulateVoterRegister implements ReportAccumulateProcess
 
                 coreWorkingAreaService.scanWorkingAreaRecursive(orgId, CoreAreaLevel.VILLAGE, new CoreAreaScanListener() {
                     @Override
-                    public void areaOnTargetLevel(CoreArea currentArea) {
-                        processOnAreaLevel(currentArea, orgId, bizVoter);
+                    public void areaOnTargetLevel(CoreAreaRecursive areaRecursive) {
+                        processOnAreaLevel(areaRecursive, orgId, bizVoter);
                     }
                 });
 
@@ -60,7 +61,7 @@ public class BizReportAccumulateVoterRegister implements ReportAccumulateProcess
         handler.onFinished(ProcessStatus.EXCEPTION);
     }
 
-    private void processOnAreaLevel(CoreArea coreArea, String orgId, BizVoter bizVoter) {
+    private void processOnAreaLevel(CoreAreaRecursive areaRecursive, String orgId, BizVoter bizVoter) {
 
     }
 }

@@ -4,6 +4,9 @@
  */
 package id.ezclouds.common.model.biz.data;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizMasterData.java, v 0.1 2024‐09‐04 6:01 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -15,6 +18,7 @@ public class BizMasterData {
     private String scene;
     private String dataId;
     private String dataName;
+    private String provinceId;
     private String regencyId;
     private String districtId;
 
@@ -68,6 +72,14 @@ public class BizMasterData {
 
     public void setDataName(String dataName) {
         this.dataName = dataName;
+    }
+
+    public String getProvinceId() {
+        return provinceId;
+    }
+
+    public void setProvinceId(String provinceId) {
+        this.provinceId = provinceId;
     }
 
     public String getRegencyId() {
@@ -164,5 +176,10 @@ public class BizMasterData {
 
     public void setCharValue5(String charValue5) {
         this.charValue5 = charValue5;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

@@ -17,6 +17,8 @@ public class VillageMasterData {
     private String villageId;
     private String villageName;
     private String districtId;
+    private String regencyId;
+    private String provinceId;
     private Integer voterMale;
     private Integer voterFemale;
     private Integer voterTotal;
@@ -52,6 +54,22 @@ public class VillageMasterData {
 
     public void setDistrictId(String districtId) {
         this.districtId = districtId;
+    }
+
+    public String getRegencyId() {
+        return regencyId;
+    }
+
+    public void setRegencyId(String regencyId) {
+        this.regencyId = regencyId;
+    }
+
+    public String getProvinceId() {
+        return provinceId;
+    }
+
+    public void setProvinceId(String provinceId) {
+        this.provinceId = provinceId;
     }
 
     public Integer getVoterMale() {

@@ -9,17 +9,17 @@ import id.ezclouds.common.facade.area.CoreWorkingAreaService;
 import id.ezclouds.common.facade.config.CoreConfigService;
 import id.ezclouds.common.model.area.CoreArea;
 import id.ezclouds.common.model.area.CoreAreaLevel;
+import id.ezclouds.common.model.area.CoreAreaRecursive;
 import id.ezclouds.common.model.config.CoreOrgConfigType;
 import id.ezclouds.common.model.util.CoreAreaUtil;
 import id.ezclouds.common.facade.area.CoreAreaScanListener;
 import id.ezclouds.common.model.area.AreaInitConfig;
+import id.ezclouds.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -37,6 +37,8 @@ public class EzCoreWorkingAreaService implements CoreWorkingAreaService {
 
     private CoreAreaScanListener coreAreaScanListener;
 
+    private Map<String, CoreArea> parentsMap = new HashMap<>();
+
     @Override
     public void scanWorkingAreaRecursive(String orgId, CoreAreaLevel targetLevel, CoreAreaScanListener listener) {
         coreAreaScanListener = listener;
@@ -49,8 +51,13 @@ public class EzCoreWorkingAreaService implements CoreWorkingAreaService {
     @Override
     public List<CoreArea> fetchCoreAreas(String orgId, CoreAreaLevel targetLevel) {
         final List<CoreArea> coreAreas = new ArrayList<>();
-        scanWorkingAreaRecursive(orgId, targetLevel, coreAreas::add);
+        scanWorkingAreaRecursive(orgId, targetLevel, areaRecursive -> coreAreas.add(areaRecursive.getCurrentArea()));
         return coreAreas;
+    }
+
+    @Override
+    public Map<String, CoreArea> allParentMap() {
+        return parentsMap;
     }
 
     private AreaInitConfig getAreaInitConfig(String orgId, CoreAreaLevel targetLevel) {
@@ -85,13 +92,35 @@ public class EzCoreWorkingAreaService implements CoreWorkingAreaService {
     private void recursiveLoadAndExecute(CoreArea currentArea, CoreAreaLevel targetLevel) {
         if (currentArea.getAreaLevel() == targetLevel) {
             if (coreAreaScanListener != null) {
-                coreAreaScanListener.areaOnTargetLevel(currentArea);
+                CoreAreaRecursive recursiveCurrent = new CoreAreaRecursive(currentArea);
+                recursiveLoadParents(recursiveCurrent);
+
+                coreAreaScanListener.areaOnTargetLevel(recursiveCurrent);
             }
         } else {
+            parentsMap.putIfAbsent(currentArea.getAreaId(), currentArea);
+
             List<CoreArea> childs = coreAreaService.getChildArea(currentArea);
             for (CoreArea childArea : childs) {
                 recursiveLoadAndExecute(childArea, targetLevel);
             }
         }
+    }
+
+    private void recursiveLoadParents(CoreAreaRecursive recursiveCurrent) {
+        CoreArea parentArea = fetchParentArea(recursiveCurrent.getCurrentArea().getParentId());
+        if (parentArea != null) {
+            CoreAreaRecursive recursiveParent = new CoreAreaRecursive(parentArea);
+            recursiveCurrent.setParentAreaRecursive(recursiveParent);
+
+            recursiveLoadParents(recursiveParent);
+        }
+    }
+
+    private CoreArea fetchParentArea(String coreAreaId) {
+        if (StringUtil.isBlank(coreAreaId)) {
+            return null;
+        }
+        return parentsMap.get(coreAreaId);
     }
 }

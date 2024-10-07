@@ -34,6 +34,8 @@ public class ModelReflectionMapper {
         villageMasterDataStoreMap.put("dataId", "villageId");
         villageMasterDataStoreMap.put("dataName", "villageName");
         villageMasterDataStoreMap.put("districtId", "districtId");
+        villageMasterDataStoreMap.put("regencyId", "regencyId");
+        villageMasterDataStoreMap.put("provinceId", "provinceId");
         villageMasterDataStoreMap.put("numberValue1", "voterTotal");
         villageMasterDataStoreMap.put("numberValue2", "voterMale");
         villageMasterDataStoreMap.put("numberValue3", "voterFemale");

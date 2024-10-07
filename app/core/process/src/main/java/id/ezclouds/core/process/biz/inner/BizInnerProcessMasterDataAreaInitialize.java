@@ -7,6 +7,7 @@ package id.ezclouds.core.process.biz.inner;
 import id.ezclouds.common.facade.dal.biz.BizMasterDataDAO;
 import id.ezclouds.common.facade.integration.BizObjectMapperService;
 import id.ezclouds.common.model.area.CoreArea;
+import id.ezclouds.common.model.area.CoreAreaRecursive;
 import id.ezclouds.common.model.biz.data.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,27 +45,49 @@ public class BizInnerProcessMasterDataAreaInitialize {
     }
 
     @Transactional
-    public void init(String orgId, String scene, CoreArea coreArea) {
-        BizMasterData bizMasterData = buildMasterData(orgId, scene, coreArea);
-
+    public void init(String orgId, String scene, CoreAreaRecursive areaRecursive) {
+        BizMasterData bizMasterData = buildMasterData(orgId, scene, areaRecursive);
         bizMasterDataDAO.storeOrUpdate(bizMasterData);
     }
 
-    private BizMasterData buildMasterData(String orgId, String scene, CoreArea coreArea) {
+    private BizMasterData buildMasterData(String orgId, String scene, CoreAreaRecursive recursiveCurrent) {
         BizMasterData masterData = new BizMasterData();
         masterData.setOrgId(orgId);
         masterData.setScene(scene);
 
-        switch (coreArea.getAreaLevel()) {
+        switch (recursiveCurrent.getCurrentArea().getAreaLevel()) {
             case VILLAGE:
                 VillageMasterData villageMasterData = new VillageMasterData();
-                villageMasterData.setVillageId(coreArea.getAreaId());
-                villageMasterData.setVillageName(coreArea.getName());
-                villageMasterData.setDistrictId(coreArea.getParentId());
+                recursiveUpdateVillage(villageMasterData, recursiveCurrent);
                 bizObjectMapperService.parseFromSource(masterData, villageMasterData);
                 break;
         }
 
         return masterData;
+    }
+
+    private void recursiveUpdateVillage(VillageMasterData villageMasterData, CoreAreaRecursive areaRecursive) {
+        CoreArea currentArea = areaRecursive.getCurrentArea();
+        String areaId = currentArea.getAreaId();
+        switch (currentArea.getAreaLevel()) {
+            case VILLAGE:
+                villageMasterData.setVillageId(areaId);
+                villageMasterData.setVillageName(currentArea.getName());
+                break;
+            case DISTRICT:
+                villageMasterData.setDistrictId(areaId);
+                break;
+            case REGENCY:
+                villageMasterData.setRegencyId(areaId);
+                break;
+            case PROVINCE:
+                villageMasterData.setProvinceId(areaId);
+                break;
+        }
+
+        CoreAreaRecursive recursiveParent = areaRecursive.getParentAreaRecursive();
+        if (recursiveParent != null) {
+            recursiveUpdateVillage(villageMasterData, recursiveParent);
+        }
     }
 }

@@ -4,7 +4,7 @@
  */
 package id.ezclouds.common.facade.area;
 
-import id.ezclouds.common.model.area.CoreArea;
+import id.ezclouds.common.model.area.CoreAreaRecursive;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -12,5 +12,5 @@ import id.ezclouds.common.model.area.CoreArea;
  */
 public interface CoreAreaScanListener {
 
-    void areaOnTargetLevel(CoreArea currentArea);
+    void areaOnTargetLevel(CoreAreaRecursive areaRecursive);
 }

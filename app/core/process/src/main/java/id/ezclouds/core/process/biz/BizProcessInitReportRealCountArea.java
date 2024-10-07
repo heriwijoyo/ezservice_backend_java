@@ -6,8 +6,8 @@ package id.ezclouds.core.process.biz;
 
 import id.ezclouds.common.facade.area.CoreAreaScanListener;
 import id.ezclouds.common.facade.area.CoreWorkingAreaService;
-import id.ezclouds.common.model.area.CoreArea;
 import id.ezclouds.common.model.area.CoreAreaLevel;
+import id.ezclouds.common.model.area.CoreAreaRecursive;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.core.process.biz.inner.BizInnerProcessRealCountInitialize;
@@ -53,9 +53,9 @@ public class BizProcessInitReportRealCountArea extends BizAsyncProcessor {
         coreWorkingAreaService
                 .scanWorkingAreaRecursive(orgId, targetAreaLevel, new CoreAreaScanListener() {
                     @Override
-                    public void areaOnTargetLevel(CoreArea currentArea) {
+                    public void areaOnTargetLevel(CoreAreaRecursive areaRecursive) {
                         bizInnerProcessRealCountInitialize
-                                .init(orgId, targetLevel, currentArea.getName(), currentArea.getParentId(), 0);
+                                .init(orgId, targetLevel, areaRecursive.getCurrentArea().getName(), areaRecursive.getCurrentArea().getParentId(), 0);
                     }
                 });
 

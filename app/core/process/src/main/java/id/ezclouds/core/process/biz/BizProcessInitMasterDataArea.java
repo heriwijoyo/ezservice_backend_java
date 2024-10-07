@@ -8,9 +8,8 @@ import id.ezclouds.common.facade.area.CoreAreaScanListener;
 import id.ezclouds.common.facade.area.CoreAreaService;
 import id.ezclouds.common.facade.area.CoreWorkingAreaService;
 import id.ezclouds.common.facade.config.CoreConfigService;
-import id.ezclouds.common.model.area.CoreArea;
 import id.ezclouds.common.model.area.CoreAreaLevel;
-import id.ezclouds.common.model.biz.data.BizMasterDataOverall;
+import id.ezclouds.common.model.area.CoreAreaRecursive;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.core.process.biz.inner.BizInnerProcessMasterDataAreaInitialize;
@@ -69,8 +68,8 @@ public class BizProcessInitMasterDataArea extends BizAsyncProcessor {
         coreWorkingAreaService
                 .scanWorkingAreaRecursive(orgId, targetAreaLevel, new CoreAreaScanListener() {
                     @Override
-                    public void areaOnTargetLevel(CoreArea currentArea) {
-                        bizInnerProcessMasterDataAreaInitialize.init(orgId, scene, currentArea);
+                    public void areaOnTargetLevel(CoreAreaRecursive areaRecursive) {
+                        bizInnerProcessMasterDataAreaInitialize.init(orgId, scene, areaRecursive);
                     }
                 });
 
