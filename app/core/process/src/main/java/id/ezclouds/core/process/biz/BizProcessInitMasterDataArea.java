@@ -40,7 +40,7 @@ public class BizProcessInitMasterDataArea extends BizAsyncProcessor {
 
     @Override
     public BizProcessEvent getProcessEvent() {
-        return BizProcessEvent.MASTER_DATA_INIT_AREA;
+        return BizProcessEvent.INIT_MASTER_DATA_AREA;
     }
 
     @Override

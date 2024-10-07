@@ -15,6 +15,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: CoreAsyncProcessExecutor.java, v 0.1 2024‐08‐19 8:17 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -25,31 +27,15 @@ import org.springframework.stereotype.Service;
 public class CoreAsyncProcessExecutor implements AsyncProcessExecutor {
 
     @Autowired
-    private BizProcessorSurveyResponseParse bizProcessorSurveyResponseParse;
-
-    @Autowired
-    private BizProcessReportAreaCommonTable bizProcessReportAreaCommonTable;
-
-    @Autowired
-    private BizProcessInitMasterDataArea bizProcessInitMasterDataArea;
-
-    @Autowired
-    private BizProcessInitReportOverall bizProcessInitReportOverall;
-
-    @Autowired
-    private BizProcessInitReportRealCountOverall bizProcessInitReportRealCountOverall;
-
-    @Autowired
-    private BizProcessInitReportRealCountArea bizProcessInitReportRealCountArea;
-
-    @Autowired
-    private CoreProcessMigrateMember coreProcessMigrateMember;
-
-    @Autowired
-    private BizProcessDebugger bizProcessDebugger;
+    private Map<ProcessName, BizAsyncProcessor> bizAsyncProcessorMap;
 
     @Override
     public void execute(ProcessName processName, String param) {
+        bizAsyncProcessorMap
+                .get(processName)
+                .process(param);
+
+        /*
         switch (processName) {
             case SURVEY_RESPONSE_PARSE:
                 String[] params = param.split(",");
@@ -83,6 +69,6 @@ public class CoreAsyncProcessExecutor implements AsyncProcessExecutor {
                 break;
             default:
                 break;
-        }
+        } */
     }
 }

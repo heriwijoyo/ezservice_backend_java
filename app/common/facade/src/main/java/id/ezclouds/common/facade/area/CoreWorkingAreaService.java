@@ -8,7 +8,6 @@ import id.ezclouds.common.model.area.CoreArea;
 import id.ezclouds.common.model.area.CoreAreaLevel;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -18,7 +17,8 @@ public interface CoreWorkingAreaService {
 
     void scanWorkingAreaRecursive(String orgId, CoreAreaLevel targetLevel, CoreAreaScanListener listener);
 
+    List<CoreArea> fetchAllCoreAreas(String orgId);
+
     List<CoreArea> fetchCoreAreas(String orgId, CoreAreaLevel targetLevel);
 
-    Map<String, CoreArea> allParentMap();
 }

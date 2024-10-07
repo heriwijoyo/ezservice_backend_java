@@ -49,18 +49,30 @@ public class EzCoreWorkingAreaService implements CoreWorkingAreaService {
     }
 
     @Override
+    public List<CoreArea> fetchAllCoreAreas(String orgId) {
+        final List<CoreArea> allCoreArea = new ArrayList<>();
+
+        AreaInitConfig initConfig = getAreaInitConfig(orgId);
+        for (CoreArea rootArea : initConfig.getRootAreas()) {
+            recursiveLoadCoreArea(allCoreArea, rootArea);
+        }
+        return allCoreArea;
+    }
+
+    @Override
     public List<CoreArea> fetchCoreAreas(String orgId, CoreAreaLevel targetLevel) {
         final List<CoreArea> coreAreas = new ArrayList<>();
         scanWorkingAreaRecursive(orgId, targetLevel, areaRecursive -> coreAreas.add(areaRecursive.getCurrentArea()));
         return coreAreas;
     }
 
-    @Override
-    public Map<String, CoreArea> allParentMap() {
-        return parentsMap;
+    private AreaInitConfig getAreaInitConfig(String orgId, CoreAreaLevel targetLevel) {
+        AreaInitConfig initConfig = getAreaInitConfig(orgId);
+        initConfig.setTargetLevel(targetLevel);
+        return initConfig;
     }
 
-    private AreaInitConfig getAreaInitConfig(String orgId, CoreAreaLevel targetLevel) {
+    private AreaInitConfig getAreaInitConfig(String orgId) {
         String areaRootLevel = coreConfigService
                 .getOrgConfig(orgId, CoreOrgConfigType.CORE_AREA_ROOT_LEVEL)
                 .getConfigValue();
@@ -77,7 +89,6 @@ public class EzCoreWorkingAreaService implements CoreWorkingAreaService {
         List<String> rootNames = Arrays.asList(areaRootNames.split(","));
 
         AreaInitConfig initConfig = new AreaInitConfig();
-        initConfig.setTargetLevel(targetLevel);
 
         for (int i = 0; i < rootIds.size(); i++) {
             CoreArea rootArea = CoreAreaUtil
@@ -103,6 +114,16 @@ public class EzCoreWorkingAreaService implements CoreWorkingAreaService {
             List<CoreArea> childs = coreAreaService.getChildArea(currentArea);
             for (CoreArea childArea : childs) {
                 recursiveLoadAndExecute(childArea, targetLevel);
+            }
+        }
+    }
+
+    private void recursiveLoadCoreArea(List<CoreArea> allCoreArea, CoreArea currentArea) {
+        allCoreArea.add(currentArea);
+        if (currentArea.getAreaLevel() != CoreAreaLevel.VILLAGE) {
+            List<CoreArea> children = coreAreaService.getChildArea(currentArea);
+            for (CoreArea childArea : children) {
+                recursiveLoadCoreArea(allCoreArea, childArea);
             }
         }
     }

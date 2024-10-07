@@ -29,6 +29,7 @@ public class BizReportAccumulateAreaConverter extends CommonDOModelConverter<Biz
         accumulateArea.setDistrictName(dataObject.getDistrictName());
         accumulateArea.setVillageId(dataObject.getVillageId());
         accumulateArea.setVillageName(dataObject.getVillageName());
+        accumulateArea.setVoterCount(dataObject.getVoterCount());
         accumulateArea.setVoterMaleCount(dataObject.getVoterMaleCount());
         accumulateArea.setVoterFemaleCount(dataObject.getVoterFemaleCount());
         accumulateArea.setVoterExtraCount(dataObject.getVoterExtraCount());
@@ -50,6 +51,7 @@ public class BizReportAccumulateAreaConverter extends CommonDOModelConverter<Biz
         accumulateAreaDO.setDistrictName(model.getDistrictName());
         accumulateAreaDO.setVillageId(model.getVillageId());
         accumulateAreaDO.setVillageName(model.getVillageName());
+        accumulateAreaDO.setVoterCount(model.getVoterCount());
         accumulateAreaDO.setVoterMaleCount(model.getVoterMaleCount());
         accumulateAreaDO.setVoterFemaleCount(model.getVoterFemaleCount());
         accumulateAreaDO.setVoterExtraCount(model.getVoterExtraCount());

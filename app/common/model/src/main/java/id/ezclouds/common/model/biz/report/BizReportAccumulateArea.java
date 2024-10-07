@@ -4,6 +4,7 @@
  */
 package id.ezclouds.common.model.biz.report;
 
+import id.ezclouds.common.model.area.CoreArea;
 import id.ezclouds.common.model.area.CoreAreaLevel;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
@@ -25,10 +26,43 @@ public class BizReportAccumulateArea {
     private String districtName;
     private String villageId;
     private String villageName;
+    private int voterCount;
     private int voterMaleCount;
     private int voterFemaleCount;
     private int voterExtraCount;
     private String modifiedTime;
+
+    public BizReportAccumulateArea() {
+    }
+
+    public BizReportAccumulateArea(CoreArea coreArea) {
+        setAreaLevel(coreArea.getAreaLevel());
+
+        String areaId = coreArea.getAreaId();
+        String areaName = coreArea.getName();
+        switch (coreArea.getAreaLevel()) {
+            case PROVINCE:
+                setProvinceId(areaId);
+                setProvinceName(areaName);
+                break;
+            case REGENCY:
+                setRegencyId(areaId);
+                setRegencyName(areaName);
+                break;
+            case DISTRICT:
+                setDistrictId(areaId);
+                setDistrictName(areaName);
+                break;
+            case VILLAGE:
+                setVillageId(areaId);
+                setVillageName(areaName);
+                break;
+        }
+        setVoterCount(0);
+        setVoterMaleCount(0);
+        setVoterFemaleCount(0);
+        setVoterExtraCount(0);
+    }
 
     public void generateId() {
         String genId = HashUtil.createHash(orgId, areaLevel.getCode(), getLevelId());
@@ -135,6 +169,14 @@ public class BizReportAccumulateArea {
 
     public void setVillageName(String villageName) {
         this.villageName = villageName;
+    }
+
+    public int getVoterCount() {
+        return voterCount;
+    }
+
+    public void setVoterCount(int voterCount) {
+        this.voterCount = voterCount;
     }
 
     public int getVoterMaleCount() {

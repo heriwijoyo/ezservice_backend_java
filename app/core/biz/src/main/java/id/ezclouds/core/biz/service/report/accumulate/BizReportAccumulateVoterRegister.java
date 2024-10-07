@@ -4,15 +4,14 @@
  */
 package id.ezclouds.core.biz.service.report.accumulate;
 
-import id.ezclouds.common.facade.area.CoreAreaScanListener;
 import id.ezclouds.common.facade.area.CoreAreaService;
 import id.ezclouds.common.facade.area.CoreWorkingAreaService;
 import id.ezclouds.common.facade.config.CoreConfigService;
-import id.ezclouds.common.model.area.CoreArea;
+import id.ezclouds.common.facade.dal.biz.report.BizReportAccumulateAreaDAO;
 import id.ezclouds.common.model.area.CoreAreaLevel;
 import id.ezclouds.common.model.area.CoreAreaRecursive;
 import id.ezclouds.common.model.biz.election.BizVoter;
-import id.ezclouds.common.model.config.CoreOrgConfigType;
+import id.ezclouds.common.model.biz.report.BizReportAccumulateArea;
 import id.ezclouds.common.model.process.ProcessStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -34,34 +33,35 @@ public class BizReportAccumulateVoterRegister implements ReportAccumulateProcess
     @Autowired
     private TransactionTemplate transactionTemplate;
 
-    private CoreConfigService coreConfigService;
-
-    private CoreAreaService coreAreaService;
-
-    private CoreWorkingAreaService coreWorkingAreaService;
+    @Autowired
+    private BizReportAccumulateAreaDAO bizReportAccumulateAreaDAO;
 
     @Override
     public void process(String orgId, Object payload, ReportAccumulateProcessHandler handler) {
         BizVoter bizVoter = (BizVoter) payload;
 
-        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-            @Override
-            protected void doInTransactionWithoutResult(TransactionStatus status) {
+        try {
 
-                coreWorkingAreaService.scanWorkingAreaRecursive(orgId, CoreAreaLevel.VILLAGE, new CoreAreaScanListener() {
-                    @Override
-                    public void areaOnTargetLevel(CoreAreaRecursive areaRecursive) {
-                        processOnAreaLevel(areaRecursive, orgId, bizVoter);
-                    }
-                });
+            transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+                @Override
+                protected void doInTransactionWithoutResult(TransactionStatus status) {
 
-            }
-        });
+                    //TODO: process accumulate after init accumulate area
+
+                }
+            });
+            handler.onFinished(ProcessStatus.SUCCESS);
+
+        } catch (Exception e) {
+            handler.onFinished(ProcessStatus.EXCEPTION);
+        }
 
         handler.onFinished(ProcessStatus.EXCEPTION);
     }
 
-    private void processOnAreaLevel(CoreAreaRecursive areaRecursive, String orgId, BizVoter bizVoter) {
+    private void accumulateVillage(BizVoter bizVoter) {
+        BizReportAccumulateArea accumulateArea = bizReportAccumulateAreaDAO
+                .getAndLock(bizVoter.getOrgId(), CoreAreaLevel.VILLAGE, bizVoter.getVillageId());
 
     }
 }

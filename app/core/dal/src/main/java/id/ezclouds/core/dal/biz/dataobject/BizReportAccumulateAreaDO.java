@@ -51,6 +51,9 @@ public class BizReportAccumulateAreaDO {
     @Column(name = "village_name")
     private String villageName;
 
+    @Column(name = "voter_count")
+    private int voterCount;
+
     @Column(name = "voter_male_count")
     private int voterMaleCount;
 
@@ -149,6 +152,14 @@ public class BizReportAccumulateAreaDO {
 
     public void setVillageName(String villageName) {
         this.villageName = villageName;
+    }
+
+    public int getVoterCount() {
+        return voterCount;
+    }
+
+    public void setVoterCount(int voterCount) {
+        this.voterCount = voterCount;
     }
 
     public int getVoterMaleCount() {
