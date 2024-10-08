@@ -12,6 +12,7 @@ import id.ezclouds.biz.election.enums.BizMemberRole;
 import id.ezclouds.biz.election.enums.BizSwitchFlagObject;
 import id.ezclouds.biz.election.model.BizWhatsappLog;
 import id.ezclouds.biz.election.model.VideoCard;
+import id.ezclouds.common.facade.broker.CoreEventPublisherService;
 import id.ezclouds.common.model.admin.AdminMenuView;
 import id.ezclouds.common.model.admin.CoreMenuComparator;
 import id.ezclouds.biz.election.model.admin.BizAdminSession;
@@ -42,6 +43,7 @@ import id.ezclouds.common.facade.file.CoreFileService;
 import id.ezclouds.common.model.admin.BizAdminAppData;
 import id.ezclouds.common.model.admin.CoreAdminMenu;
 import id.ezclouds.common.model.admin.CoreMenuLevel;
+import id.ezclouds.common.model.broker.event.OverallReportChangeEvent;
 import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
 import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
 import id.ezclouds.common.model.result.BizResult;
@@ -113,6 +115,9 @@ public class BizAdminService extends BizBaseService {
 
     @Autowired
     private BizAdminInnerService bizAdminInnerService;
+
+    @Autowired
+    private CoreEventPublisherService coreEventPublisherService;
 
     public BizResult createWebSession() {
         final BizResult bizResult = new BizResult();
@@ -1063,6 +1068,8 @@ public class BizAdminService extends BizBaseService {
 
                 appSubOrganizationService.createSubOrganization(request.getData());
 
+                coreEventPublisherService.publish(new OverallReportChangeEvent(session.getOrgId()));
+
                 bizResult.setSuccess(true);
                 bizResult.setObject(WebAdminConstant.OPERATION_SUCCESS);
             }
@@ -1190,6 +1197,9 @@ public class BizAdminService extends BizBaseService {
                 }
                 bizAdminInnerService
                         .createMember(request.getOrgId(), request.getData());
+
+                coreEventPublisherService.publish(new OverallReportChangeEvent(session.getOrgId()));
+
                 bizResult.setSuccess(true);
                 bizResult.setObject("OPERATION SUCCESS");
             }

@@ -9,6 +9,7 @@ import id.ezclouds.common.facade.dal.biz.report.BizReportAccumulateProcessDAO;
 import id.ezclouds.common.facade.integration.BizObjectMapperService;
 import id.ezclouds.common.model.biz.report.BizReportAccumulateProcess;
 import id.ezclouds.common.model.broker.event.EzCommonEvent;
+import id.ezclouds.common.model.broker.event.OverallReportChangeEvent;
 import id.ezclouds.common.model.broker.topic.EzCoreTopic;
 import id.ezclouds.common.model.process.ProcessStatus;
 import id.ezclouds.common.util.DateUtil;
@@ -105,12 +106,12 @@ public class BizReportAccumulateProcessor {
                 .process(orgId, ezCommonEvent.getPayload(), new ReportAccumulateProcessHandler() {
                     @Override
                     public void onFinished(ProcessStatus status) {
-                        finishProcess(processId, status);
+                        finishProcess(orgId, processId, status);
                     }
                 });
     }
 
-    private void finishProcess(String processId, ProcessStatus processStatus) {
+    private void finishProcess(String orgId, String processId, ProcessStatus processStatus) {
         finishProcessTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
@@ -124,5 +125,7 @@ public class BizReportAccumulateProcessor {
 
             }
         });
+
+        coreEventPublisherService.publish(new OverallReportChangeEvent(orgId));
     }
 }

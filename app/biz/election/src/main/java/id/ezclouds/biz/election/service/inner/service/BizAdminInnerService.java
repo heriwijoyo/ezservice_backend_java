@@ -8,6 +8,7 @@ import id.ezclouds.biz.election.converter.BizModelConverter;
 import id.ezclouds.biz.election.model.VideoCard;
 import id.ezclouds.biz.election.model.admin.BizApplicationConfig;
 import id.ezclouds.biz.election.model.admin.BizMemberRequiredData;
+import id.ezclouds.common.facade.dal.report.BizReportOverallDAO;
 import id.ezclouds.common.model.core.BizOrganization;
 import id.ezclouds.biz.election.model.event.AppEvent;
 import id.ezclouds.biz.election.model.news.BizWebDetailNews;
@@ -50,6 +51,8 @@ import id.ezclouds.common.model.integration.WhatsappLog;
 import id.ezclouds.common.model.integration.WhatsappLogRequest;
 import id.ezclouds.common.model.integration.WhatsappResendRequest;
 import id.ezclouds.common.model.integration.EzConnectResult;
+import id.ezclouds.common.model.report.BizReportOverall;
+import id.ezclouds.common.model.report.BizReportOverallKey;
 import id.ezclouds.common.model.util.CoreAreaUtil;
 import id.ezclouds.common.util.facade.BeanFacadeUtil;
 import id.ezclouds.core.shared.model.LegacyCoreArea;
@@ -149,6 +152,9 @@ public class BizAdminInnerService {
 
     @Autowired
     private CoreAreaService coreAreaService;
+
+    @Autowired
+    private BizReportOverallDAO bizReportOverallDAO;
 
     public void createAppBuildPackage(String orgId, String platformId, int versionCode, String versionName) throws EzErrorException {
         BizAppBuildPackage buildPackage = new BizAppBuildPackage();
@@ -561,6 +567,7 @@ public class BizAdminInnerService {
         return coreMemberService.getUniqueMember(orgId, phone);
     }
 
+    @Transactional
     public void createMember(String orgId, BizMember bizMember) throws Exception {
         BizApplicationConfig bizApplicationConfig = getAppConfig(orgId);
         String orgCode = getOrganizationById(orgId).getCode();
@@ -601,6 +608,12 @@ public class BizAdminInnerService {
         if (StringUtil.isBlank(bizMember.getRoles())) {
             return;
         }
+
+        BizReportOverall reportOverall = bizReportOverallDAO.getAndLock(orgId, BizReportOverallKey.VOTER_BASE_MEMBER_COUNT.getCode());
+        int increasedCount = reportOverall.getCount() + 1;
+        reportOverall.setCount(increasedCount);
+        bizReportOverallDAO.store(reportOverall);
+
         //generate member password
         String newPassword = RandomUtil.generateNumberCode(6);
         legacyCoreAuthService.updateMemberClientPassword(bizMemberInfo.getBizMemberClient().getClientId(), newPassword);

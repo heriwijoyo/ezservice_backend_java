@@ -11,8 +11,11 @@ import id.ezclouds.biz.election.service.app.repo.BizMemberRepository;
 import id.ezclouds.biz.election.service.inner.service.BizPageQueryStrategy;
 import id.ezclouds.biz.election.service.request.BizPageRequest;
 import id.ezclouds.common.facade.core.CoreSequenceService;
+import id.ezclouds.common.facade.dal.report.BizReportOverallDAO;
 import id.ezclouds.common.model.core.CoreSeqSceneEnum;
 import id.ezclouds.common.model.core.Organization;
+import id.ezclouds.common.model.report.BizReportOverall;
+import id.ezclouds.common.model.report.BizReportOverallKey;
 import id.ezclouds.common.model.result.BizPageInfo;
 import id.ezclouds.biz.election.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.common.util.DateUtil;
@@ -46,6 +49,9 @@ public class AppSubOrganizationService {
     @Autowired
     private CoreSequenceService coreSequenceService;
 
+    @Autowired
+    private BizReportOverallDAO bizReportOverallDAO;
+
     public BizSubOrganization getSubOrganizationById(String subOrgId) {
         return getAllSubOrganization()
                 .stream()
@@ -77,6 +83,12 @@ public class AppSubOrganizationService {
                 subOrganization.getOrgId(),
                 subOrganization.getOrgCode()
         );
+
+        BizReportOverall reportOverall = bizReportOverallDAO
+                .getAndLock(subOrganization.getOrgId(), BizReportOverallKey.VOTER_BASE_CLUSTER_COUNT.getCode());
+        int increasedCount = reportOverall.getCount() + 1;
+        reportOverall.setCount(increasedCount);
+        bizReportOverallDAO.store(reportOverall);
     }
 
     public List<BizSubOrganization> getAllSubOrganization() {

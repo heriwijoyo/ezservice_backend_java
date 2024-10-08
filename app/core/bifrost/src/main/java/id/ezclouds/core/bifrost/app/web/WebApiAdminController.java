@@ -727,7 +727,7 @@ public class WebApiAdminController {
             @RequestParam(name = "address", required = false) String address
     ) {
         final WebApiResult<String> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_CREATE_SUB_ORGANIZATION, result, new WebApiControllerTemplate.Handler<String>() {
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_CREATE_SUB_ORGANIZATION, result, new WebApiControllerTemplate.Handler<>() {
             @Override
             public BizResult onProcess() throws Exception {
                 BizSubOrganization subOrganization = new BizSubOrganization();
@@ -839,7 +839,7 @@ public class WebApiAdminController {
             @RequestParam(name = "tpsNo", required = false) String tpsNo
     ) {
         final WebApiResult<String> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_CREATE_MEMBER, result, new WebApiControllerTemplate.Handler<String>() {
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_CREATE_MEMBER, result, new WebApiControllerTemplate.Handler<>() {
             @Override
             public BizResult onProcess() throws Exception {
                 BizMember bizMember = new BizMember();
