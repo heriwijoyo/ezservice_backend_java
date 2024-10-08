@@ -683,6 +683,9 @@ public class BizSuperAdminService extends BizBaseService {
                 ProcessName processName = ProcessName.getByCode(processNameStr);
                 AssertUtil.notNull(processName, EzErrorCode.ILLEGAL_PARAM);
                 asyncProcessExecutor.execute(processName, param);
+
+                result.setObject(WebAdminConstant.OPERATION_SUCCESS);
+                result.setSuccess(true);
             }
 
             @Override

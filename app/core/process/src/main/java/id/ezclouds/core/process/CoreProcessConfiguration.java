@@ -8,6 +8,7 @@ import id.ezclouds.common.model.process.ProcessName;
 import id.ezclouds.core.process.biz.*;
 import id.ezclouds.core.process.debug.BizProcessDebugger;
 import id.ezclouds.core.process.init.BizProcessInitReportAccumulateArea;
+import id.ezclouds.core.process.init.CoreProcessInitSequenceConfig;
 import id.ezclouds.core.process.migration.CoreProcessMigrateMember;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +23,9 @@ import java.util.Map;
  */
 @Configuration
 public class CoreProcessConfiguration {
+
+    @Autowired
+    private CoreProcessInitSequenceConfig coreProcessInitSequenceConfig;
 
     @Autowired
     private BizProcessorSurveyResponseParse bizProcessorSurveyResponseParse;
@@ -45,14 +49,12 @@ public class CoreProcessConfiguration {
     private CoreProcessMigrateMember coreProcessMigrateMember;
 
     @Autowired
-    private BizProcessDebugger bizProcessDebugger;
-
-    @Autowired
     private BizProcessInitReportAccumulateArea bizProcessInitReportAccumulateArea;
 
     @Bean
     public Map<ProcessName, BizAsyncProcessor> bizAsyncProcessorMap() {
         Map<ProcessName, BizAsyncProcessor> processorMap = new HashMap<>();
+        processorMap.put(ProcessName.INIT_SEQUENCE_CONFIG, coreProcessInitSequenceConfig);
         processorMap.put(ProcessName.INIT_MASTER_DATA_AREA, bizProcessInitMasterDataArea);
         processorMap.put(ProcessName.INIT_REPORT_ACCUMULATE_AREA, bizProcessInitReportAccumulateArea);
         processorMap.put(ProcessName.INIT_REPORT_OVERALL, bizProcessInitReportOverall);
