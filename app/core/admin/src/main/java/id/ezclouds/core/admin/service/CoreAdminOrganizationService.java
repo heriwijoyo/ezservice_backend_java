@@ -114,7 +114,7 @@ public class CoreAdminOrganizationService implements BizAdminOrganizationService
                         .authenticateAdminSession(sessionId);
                 authAdminService.authorizeSessionForRole(session, AuthRole.SUPERUSER);
 
-                asyncProcessExecutor.execute(ProcessName.ORG_INIT_MIGRATE_MEMBER, orgId +","+ date);
+                asyncProcessExecutor.execute(ProcessName.INIT_MIGRATE_MEMBER, orgId +","+ date);
 
                 result.setSuccess(true);
                 result.setObject(CommonMessageConstant.BIZ_OPERATION_SUCCESS);

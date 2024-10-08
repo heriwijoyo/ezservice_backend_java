@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.election.model.admin.BizApplicationConfig;
 import id.ezclouds.biz.election.model.admin.BizMemberRequiredData;
+import id.ezclouds.common.model.admin.AdminParamConfig;
 import id.ezclouds.common.model.core.BizOrganization;
 import id.ezclouds.biz.election.model.admin.BizOrganizationDetail;
 import id.ezclouds.biz.election.service.request.web.BizWebCommonRequest;
@@ -22,6 +23,7 @@ import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.biz.election.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.core.bifrost.app.web.WebApiControllerTemplate;
+import id.ezclouds.core.bifrost.app.webapp.event.WebAppApiEvent;
 import id.ezclouds.core.shared.model.LegacyCoreArea;
 import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
@@ -564,6 +566,56 @@ public class WebAppApiSuperAdminController {
             @Override
             public List<LegacyCoreArea> convertResult(Object object) {
                 return (List<LegacyCoreArea>) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/adminParamConfig.json")
+    private WebApiResult<AdminParamConfig> adminParamConfig(
+            @RequestParam(name = "sessionId", required = false) String sessionId) {
+        final WebApiResult<AdminParamConfig> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebAppApiEvent.WEBAPP_API_ADMIN_PARAM_CONFIG, result, new WebApiControllerTemplate.Handler<>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                return bizSuperAdminService
+                        .getAdminParamConfig(sessionId);
+            }
+
+            @Override
+            public AdminParamConfig convertResult(Object object) {
+                return (AdminParamConfig) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/triggerAsyncProcess.json")
+    private WebApiResult<String> triggerAsyncProcess(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "processName", required = false) String processName,
+            @RequestParam(name = "param", required = false) String param) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebAppApiEvent.WEBAPP_API_TRIGGER_ASYNC_PROCESS, result, new WebApiControllerTemplate.Handler<>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                return bizSuperAdminService
+                        .triggerAsyncProcess(sessionId, processName, param);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                return (String) object;
             }
 
             @Override

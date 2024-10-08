@@ -6,6 +6,8 @@ package id.ezclouds.biz.election.service.apibiz.admin;
 
 import id.ezclouds.biz.election.model.admin.BizApplicationConfig;
 import id.ezclouds.biz.election.model.admin.BizMemberRequiredData;
+import id.ezclouds.common.facade.process.AsyncProcessExecutor;
+import id.ezclouds.common.model.admin.AdminParamConfig;
 import id.ezclouds.common.model.core.BizOrganization;
 import id.ezclouds.biz.election.service.request.web.BizWebCommonRequest;
 import id.ezclouds.biz.election.service.request.web.BizWebCreateRequest;
@@ -24,9 +26,11 @@ import id.ezclouds.biz.election.service.request.BizLocalAreaRequest;
 import id.ezclouds.biz.election.service.request.admin.BizAdminUploadRequest;
 import id.ezclouds.biz.election.service.request.web.BizWebPageRequest;
 import id.ezclouds.common.facade.file.CoreFileService;
+import id.ezclouds.common.model.process.ProcessName;
 import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
 import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
 import id.ezclouds.common.model.result.BizResult;
+import id.ezclouds.common.util.exception.BizErrorMessageHelper;
 import id.ezclouds.common.util.facade.BeanFacadeUtil;
 import id.ezclouds.core.auth.model.CoreAuthAdminScene;
 import id.ezclouds.core.member.model.CoreMember;
@@ -51,6 +55,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -70,6 +75,9 @@ public class BizSuperAdminService extends BizBaseService {
 
     @Autowired
     private BizOldCommonReportProcessor bizCommonReportProcessor;
+
+    @Autowired
+    private AsyncProcessExecutor asyncProcessExecutor;
 
     public BizResult createSuperAdminSession(boolean shouldScrambleCode) {
         final BizResult bizResult = new BizResult();
@@ -626,6 +634,63 @@ public class BizSuperAdminService extends BizBaseService {
             }
         });
         return bizResult;
+    }
+
+    public BizResult getAdminParamConfig(String sessionId) {
+        final BizResult result = new BizResult();
+        BizServiceTemplate.execute(null, result, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notBlank(sessionId, EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                authorizeSuperUserMember(sessionId);
+                AdminParamConfig adminParamConfig = new AdminParamConfig();
+                adminParamConfig.setAsyncProcessNames(
+                        Arrays.stream(ProcessName.values())
+                                .map(ProcessName::getCode)
+                                .collect(Collectors.toList())
+                );
+
+                result.setObject(adminParamConfig);
+                result.setSuccess(true);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return BizErrorMessageHelper.getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return result;
+    }
+
+    public BizResult triggerAsyncProcess(String sessionId, String processNameStr, String param) {
+        final BizResult result = new BizResult();
+        BizServiceTemplate.execute(null, result, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notBlank(sessionId, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(processNameStr, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(param, EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                authorizeSuperUserMember(sessionId);
+
+                ProcessName processName = ProcessName.getByCode(processNameStr);
+                AssertUtil.notNull(processName, EzErrorCode.ILLEGAL_PARAM);
+                asyncProcessExecutor.execute(processName, param);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return BizErrorMessageHelper.getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return result;
     }
 
     public boolean adminCommonPostWithFileUpload(BizAdminUploadRequest request) throws Exception {

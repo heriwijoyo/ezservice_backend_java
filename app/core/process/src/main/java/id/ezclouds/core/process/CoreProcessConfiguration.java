@@ -57,7 +57,7 @@ public class CoreProcessConfiguration {
         processorMap.put(ProcessName.INIT_REPORT_ACCUMULATE_AREA, bizProcessInitReportAccumulateArea);
         processorMap.put(ProcessName.INIT_REPORT_OVERALL, bizProcessInitReportOverall);
 
-        processorMap.put(ProcessName.ORG_INIT_MIGRATE_MEMBER, coreProcessMigrateMember);
+        processorMap.put(ProcessName.INIT_MIGRATE_MEMBER, coreProcessMigrateMember);
 
         return processorMap;
     }
