@@ -33,6 +33,8 @@ public class BizReportAccumulateAreaConverter extends CommonDOModelConverter<Biz
         accumulateArea.setVoterMaleCount(dataObject.getVoterMaleCount());
         accumulateArea.setVoterFemaleCount(dataObject.getVoterFemaleCount());
         accumulateArea.setVoterExtraCount(dataObject.getVoterExtraCount());
+        accumulateArea.setVoterExtraMaleCount(dataObject.getVoterExtraMaleCount());
+        accumulateArea.setVoterExtraFemaleCount(dataObject.getVoterExtraFemaleCount());
         accumulateArea.setModifiedTime(dataObject.getModifiedTime());
         return accumulateArea;
     }
@@ -55,6 +57,8 @@ public class BizReportAccumulateAreaConverter extends CommonDOModelConverter<Biz
         accumulateAreaDO.setVoterMaleCount(model.getVoterMaleCount());
         accumulateAreaDO.setVoterFemaleCount(model.getVoterFemaleCount());
         accumulateAreaDO.setVoterExtraCount(model.getVoterExtraCount());
+        accumulateAreaDO.setVoterExtraMaleCount(model.getVoterExtraMaleCount());
+        accumulateAreaDO.setVoterExtraFemaleCount(model.getVoterExtraFemaleCount());
         accumulateAreaDO.setModifiedTime(model.getModifiedTime());
         return accumulateAreaDO;
     }

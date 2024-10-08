@@ -10,9 +10,9 @@ import id.ezclouds.core.dal.report.dataobject.CoreReportOverallDO;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
- * @version $Id: CoreReportOverallConverter.java, v 0.1 2024‐09‐09 11:19 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ * @version $Id: BizReportOverallConverter.java, v 0.1 2024‐09‐09 11:19 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
-public class CoreReportOverallConverter extends CommonDOModelConverter<CoreReportOverallDO, BizReportOverall> {
+public class BizReportOverallConverter extends CommonDOModelConverter<CoreReportOverallDO, BizReportOverall> {
 
     @Override
     protected BizReportOverall safeConvertQuery(CoreReportOverallDO dataObject) {

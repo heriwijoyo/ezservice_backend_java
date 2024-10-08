@@ -30,6 +30,8 @@ public class BizReportAccumulateArea {
     private int voterMaleCount;
     private int voterFemaleCount;
     private int voterExtraCount;
+    private int voterExtraMaleCount;
+    private int voterExtraFemaleCount;
     private String modifiedTime;
 
     public BizReportAccumulateArea() {
@@ -201,6 +203,22 @@ public class BizReportAccumulateArea {
 
     public void setVoterExtraCount(int voterExtraCount) {
         this.voterExtraCount = voterExtraCount;
+    }
+
+    public int getVoterExtraMaleCount() {
+        return voterExtraMaleCount;
+    }
+
+    public void setVoterExtraMaleCount(int voterExtraMaleCount) {
+        this.voterExtraMaleCount = voterExtraMaleCount;
+    }
+
+    public int getVoterExtraFemaleCount() {
+        return voterExtraFemaleCount;
+    }
+
+    public void setVoterExtraFemaleCount(int voterExtraFemaleCount) {
+        this.voterExtraFemaleCount = voterExtraFemaleCount;
     }
 
     public String getModifiedTime() {

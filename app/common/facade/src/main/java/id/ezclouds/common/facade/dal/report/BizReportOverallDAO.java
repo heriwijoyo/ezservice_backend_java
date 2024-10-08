@@ -18,6 +18,7 @@ public interface BizReportOverallDAO {
 
     List<BizReportOverall> getAllReport(String orgId);
     BizReportOverall getAndLock(String orgId, String reportKey);
+    void store(BizReportOverall reportOverall);
 
     void updateValue(String reportId, int count, String updatedTime);
 }

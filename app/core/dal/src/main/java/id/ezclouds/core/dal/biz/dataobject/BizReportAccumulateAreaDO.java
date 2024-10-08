@@ -63,6 +63,12 @@ public class BizReportAccumulateAreaDO {
     @Column(name = "voter_extra_count")
     private int voterExtraCount;
 
+    @Column(name = "voter_extra_male_count")
+    private int voterExtraMaleCount;
+
+    @Column(name = "voter_extra_female_count")
+    private int voterExtraFemaleCount;
+
     @Column(name = "modified_time")
     private String modifiedTime;
 
@@ -184,6 +190,22 @@ public class BizReportAccumulateAreaDO {
 
     public void setVoterExtraCount(int voterExtraCount) {
         this.voterExtraCount = voterExtraCount;
+    }
+
+    public int getVoterExtraMaleCount() {
+        return voterExtraMaleCount;
+    }
+
+    public void setVoterExtraMaleCount(int voterExtraMaleCount) {
+        this.voterExtraMaleCount = voterExtraMaleCount;
+    }
+
+    public int getVoterExtraFemaleCount() {
+        return voterExtraFemaleCount;
+    }
+
+    public void setVoterExtraFemaleCount(int voterExtraFemaleCount) {
+        this.voterExtraFemaleCount = voterExtraFemaleCount;
     }
 
     public String getModifiedTime() {
