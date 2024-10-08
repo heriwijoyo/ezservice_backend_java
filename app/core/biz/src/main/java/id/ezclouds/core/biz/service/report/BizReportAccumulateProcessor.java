@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.biz.service.report;
 
+import id.ezclouds.common.facade.broker.CoreEventPublisherService;
 import id.ezclouds.common.facade.dal.biz.report.BizReportAccumulateProcessDAO;
 import id.ezclouds.common.facade.integration.BizObjectMapperService;
 import id.ezclouds.common.model.biz.report.BizReportAccumulateProcess;
@@ -61,6 +62,9 @@ public class BizReportAccumulateProcessor {
 
     @Autowired
     private Map<EzCoreTopic, ReportAccumulateProcessor> reportAccumulateProcessorMap;
+
+    @Autowired
+    private CoreEventPublisherService coreEventPublisherService;
 
     @Async
     @EventListener

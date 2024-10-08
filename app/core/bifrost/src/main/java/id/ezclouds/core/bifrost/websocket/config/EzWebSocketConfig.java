@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.bifrost.websocket.config;
 
+import id.ezclouds.core.bifrost.websocket.service.EzWebSocketReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;

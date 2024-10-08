@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.core.bifrost.websocket.config;
+package id.ezclouds.core.bifrost.websocket.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.common.facade.auth.AuthAdminService;
@@ -14,6 +14,7 @@ import id.ezclouds.common.model.report.BizReportOverall;
 import id.ezclouds.common.model.websocket.WebSocketData;
 import id.ezclouds.common.model.websocket.WebSocketEvent;
 import id.ezclouds.common.util.StringUtil;
+import id.ezclouds.core.bifrost.websocket.model.SessionIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
