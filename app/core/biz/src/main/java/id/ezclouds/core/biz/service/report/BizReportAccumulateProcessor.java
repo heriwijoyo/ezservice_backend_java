@@ -45,6 +45,7 @@ public class BizReportAccumulateProcessor {
     private static List<EzCoreTopic> allowedTopics = Arrays.asList(
             EzCoreTopic.ELECTION_CANVASS_RECORD_ADD,
             EzCoreTopic.ELECTION_VOTER_REGISTER,
+            EzCoreTopic.ELECTION_VOTER_REGISTER_INVALID,
             EzCoreTopic.ELECTION_QUICK_COUNT_SUBMIT,
             EzCoreTopic.ELECTION_QUICK_COUNT_VERIFY
     );

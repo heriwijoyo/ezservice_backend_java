@@ -5,11 +5,14 @@
 package id.ezclouds.biz.election.service.voter;
 
 import id.ezclouds.common.facade.biz.election.VoterInvalidRegistrationService;
+import id.ezclouds.common.facade.broker.CoreEventPublisherService;
 import id.ezclouds.common.facade.core.CoreOrganizationService;
 import id.ezclouds.common.facade.core.CoreSequenceService;
 import id.ezclouds.common.facade.dal.biz.election.BizVoterInvalidDAO;
 import id.ezclouds.common.model.biz.election.BizVoter;
 import id.ezclouds.common.model.biz.election.BizVoterInvalid;
+import id.ezclouds.common.model.broker.event.EzCommonEvent;
+import id.ezclouds.common.model.broker.topic.EzCoreTopic;
 import id.ezclouds.common.model.core.CoreSeqSceneEnum;
 import id.ezclouds.common.model.core.Organization;
 import id.ezclouds.common.util.DateUtil;
@@ -34,6 +37,9 @@ public class EzVoterInvalidRegistrationService implements VoterInvalidRegistrati
     @Autowired
     private BizVoterInvalidDAO bizVoterInvalidDAO;
 
+    @Autowired
+    private CoreEventPublisherService coreEventPublisherService;
+
     @Override
     public String registerVoterInvalid(BizVoter bizVoter, String invalidCode, String invalidMessage) {
         Organization organization = coreOrganizationService.getById(bizVoter.getOrgId());
@@ -51,6 +57,8 @@ public class EzVoterInvalidRegistrationService implements VoterInvalidRegistrati
         bizVoterInvalid.setCreatedTime(DateUtil.getCurrentFormattedDate());
         bizVoterInvalid.setModifiedTime(DateUtil.getCurrentFormattedDate());
         bizVoterInvalidDAO.store(bizVoterInvalid);
+
+        coreEventPublisherService.publish(new EzCommonEvent(EzCoreTopic.ELECTION_VOTER_REGISTER_INVALID, bizVoter.getOrgId(), bizVoterInvalid));
 
         return voterId;
     }
