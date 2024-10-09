@@ -4,16 +4,20 @@
  */
 package id.ezclouds.core.biz.service.report.accumulate;
 
+import id.ezclouds.common.facade.dal.biz.report.BizAccumulateAreaExtDAO;
 import id.ezclouds.common.facade.dal.biz.report.BizReportAccumulateAreaDAO;
 import id.ezclouds.common.facade.dal.report.BizReportOverallDAO;
 import id.ezclouds.common.model.area.CoreAreaLevel;
 import id.ezclouds.common.model.biz.election.BizVoter;
+import id.ezclouds.common.model.biz.report.BizAccumulateAreaExt;
+import id.ezclouds.common.model.biz.report.BizAccumulateKey;
 import id.ezclouds.common.model.biz.report.BizReportAccumulateArea;
 import id.ezclouds.common.model.core.member.CoreGender;
 import id.ezclouds.common.model.process.ProcessStatus;
 import id.ezclouds.common.model.report.BizReportOverall;
 import id.ezclouds.common.model.report.BizReportOverallKey;
 import id.ezclouds.common.util.DateUtil;
+import id.ezclouds.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
@@ -40,6 +44,9 @@ public class BizReportAccumulateVoterRegister implements ReportAccumulateProcess
     @Autowired
     private BizReportAccumulateAreaDAO bizReportAccumulateAreaDAO;
 
+    @Autowired
+    private BizAccumulateAreaExtDAO bizAccumulateAreaExtDAO;
+
     @Override
     public void process(String orgId, Object payload, ReportAccumulateProcessHandler handler) {
         BizVoter bizVoter = (BizVoter) payload;
@@ -61,6 +68,7 @@ public class BizReportAccumulateVoterRegister implements ReportAccumulateProcess
             handler.onFinished(ProcessStatus.SUCCESS);
 
         } catch (Exception e) {
+            e.printStackTrace();
             handler.onFinished(ProcessStatus.EXCEPTION);
         }
     }
@@ -128,9 +136,63 @@ public class BizReportAccumulateVoterRegister implements ReportAccumulateProcess
             accumulateArea.setVoterExtraCount(voterExtraCount);
             accumulateArea.setVoterExtraMaleCount(voterExtraMaleCount);
             accumulateArea.setVoterExtraFemaleCount(voterExtraFemaleCount);
-            accumulateArea.setModifiedTime(DateUtil.getCurrentFormattedDateMillis());
+
+            String currentTime = DateUtil.getCurrentFormattedDateMillis();
+            accumulateArea.setModifiedTime(currentTime);
 
             bizReportAccumulateAreaDAO.store(accumulateArea);
+
+            accumulateAreaExt(areaLevel, accumulateArea.getAccumulateAreaId(), bizVoter, currentTime);
         }
+    }
+
+    private void accumulateAreaExt(CoreAreaLevel areaLevel, String accumulateAreaId, BizVoter bizVoter, String currentTime) {
+        for (BizAccumulateKey accumulateKey : BizAccumulateKey.values()) {
+            String accumulateVariable = getAccumulateVariable(accumulateKey, bizVoter);
+
+            if (StringUtil.isNotBlank(accumulateVariable)) {
+                BizAccumulateAreaExt accumulateAreaExt = bizAccumulateAreaExtDAO.getAndLock(
+                        accumulateAreaId,
+                        bizVoter.getOrgId(),
+                        accumulateKey.getCode(),
+                        accumulateVariable
+                );
+                if (accumulateAreaExt == null) {
+                    accumulateAreaExt = new BizAccumulateAreaExt();
+                    accumulateAreaExt.setAccumulateAreaId(accumulateAreaId);
+                    accumulateAreaExt.setOrgId(bizVoter.getOrgId());
+                    accumulateAreaExt.setAreaLevel(areaLevel);
+                    accumulateAreaExt.setAccumulateKey(accumulateKey);
+                    accumulateAreaExt.setAccumulateVariable(accumulateVariable);
+                    accumulateAreaExt.setAccumulateCount(0);
+                }
+
+                int increasedCount = accumulateAreaExt.getAccumulateCount() + 1;
+                accumulateAreaExt.setAccumulateCount(increasedCount);
+                accumulateAreaExt.setModifiedTime(currentTime);
+
+                bizAccumulateAreaExtDAO.store(accumulateAreaExt);
+            }
+        }
+    }
+
+    private String getAccumulateVariable(BizAccumulateKey accumulateKey, BizVoter bizVoter) {
+        switch (accumulateKey) {
+            case RELIGION:
+                return bizVoter.getReligion();
+            case EDUCATION:
+                return bizVoter.getEducation();
+            case OCCUPATION:
+                return bizVoter.getOccupation();
+            case ETHNIC:
+                return bizVoter.getEthnic();
+            case POLL_STATION_ID:
+                return bizVoter.getPollStationId();
+            case NEIGHBOURHOOD:
+                return bizVoter.getNeighbourhood();
+            case SUB_NEIGHBOURHOOD:
+                return bizVoter.getSubNeighbourhood();
+        }
+        return null;
     }
 }

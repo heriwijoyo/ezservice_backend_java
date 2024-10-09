@@ -8,6 +8,7 @@ import id.ezclouds.common.facade.dal.biz.report.BizAccumulateAreaExtDAO;
 import id.ezclouds.common.model.annotation.EzDAOLogger;
 import id.ezclouds.common.model.biz.report.BizAccumulateAreaExt;
 import id.ezclouds.common.util.HashUtil;
+import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.dal.biz.converter.BizAccumulateAreaExtConverter;
 import id.ezclouds.core.dal.biz.repo.BizAccumulateAreaExtRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,15 @@ public class CoreBizAccumulateAreaExtDAO implements BizAccumulateAreaExtDAO {
     @Override
     @EzDAOLogger
     public void store(BizAccumulateAreaExt accumulateAreaExt) {
+        if (StringUtil.isBlank(accumulateAreaExt.getAccumulateAreaExtId())) {
+            String extId = HashUtil.createHash(
+                    accumulateAreaExt.getAccumulateAreaId(),
+                    accumulateAreaExt.getOrgId(),
+                    accumulateAreaExt.getAccumulateKey().getCode(),
+                    accumulateAreaExt.getAccumulateVariable()
+            );
+            accumulateAreaExt.setAccumulateAreaExtId(extId);
+        }
         bizAccumulateAreaExtRepository
                 .saveAndFlush(
                         new BizAccumulateAreaExtConverter()
