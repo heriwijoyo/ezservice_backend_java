@@ -218,6 +218,7 @@ public class BizReportAccumulateVoterRegister implements ReportAccumulateProcess
             accumulateMember.setAccumulateMemberId(accumulateId);
             accumulateMember.setOrgId(bizVoter.getOrgId());
             accumulateMember.setMemberId(bizVoter.getReferrerId());
+            accumulateMember.setAccumulateKey(BizAccumulateMemberKey.VOTER_SUCCESS);
             accumulateMember.setAccumulateVariable("DEFAULT");
             accumulateMember.setAccumulateCount(0);
         }
