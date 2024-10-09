@@ -28,13 +28,7 @@ public class CoreBizAccumulateAreaExtDAO implements BizAccumulateAreaExtDAO {
     @EzDAOLogger
     public void store(BizAccumulateAreaExt accumulateAreaExt) {
         if (StringUtil.isBlank(accumulateAreaExt.getAccumulateAreaExtId())) {
-            String extId = HashUtil.createHash(
-                    accumulateAreaExt.getAccumulateAreaId(),
-                    accumulateAreaExt.getOrgId(),
-                    accumulateAreaExt.getAccumulateKey().getCode(),
-                    accumulateAreaExt.getAccumulateVariable()
-            );
-            accumulateAreaExt.setAccumulateAreaExtId(extId);
+            accumulateAreaExt.generateId();
         }
         bizAccumulateAreaExtRepository
                 .saveAndFlush(
