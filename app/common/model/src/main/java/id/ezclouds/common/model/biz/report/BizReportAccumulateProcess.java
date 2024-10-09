@@ -20,6 +20,7 @@ public class BizReportAccumulateProcess {
     private ProcessStatus status;
     private String createdTime;
     private String finishedTime;
+    private String exceptionStack;
 
     public String getProcessId() {
         return processId;
@@ -75,5 +76,13 @@ public class BizReportAccumulateProcess {
 
     public void setFinishedTime(String finishedTime) {
         this.finishedTime = finishedTime;
+    }
+
+    public String getExceptionStack() {
+        return exceptionStack;
+    }
+
+    public void setExceptionStack(String exceptionStack) {
+        this.exceptionStack = exceptionStack;
     }
 }

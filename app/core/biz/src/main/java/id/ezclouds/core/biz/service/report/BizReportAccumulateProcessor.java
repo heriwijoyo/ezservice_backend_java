@@ -105,13 +105,13 @@ public class BizReportAccumulateProcessor {
                 .get(ezCommonEvent.getCoreTopic())
                 .process(orgId, ezCommonEvent.getPayload(), new ReportAccumulateProcessHandler() {
                     @Override
-                    public void onFinished(ProcessStatus status) {
-                        finishProcess(orgId, processId, status);
+                    public void onFinished(ProcessStatus status, String exceptionStack) {
+                        finishProcess(orgId, processId, status, exceptionStack);
                     }
                 });
     }
 
-    private void finishProcess(String orgId, String processId, ProcessStatus processStatus) {
+    private void finishProcess(String orgId, String processId, ProcessStatus processStatus, String exceptionStack) {
         finishProcessTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
@@ -121,6 +121,7 @@ public class BizReportAccumulateProcessor {
 
                 accumulateProcess.setStatus(processStatus);
                 accumulateProcess.setFinishedTime(DateUtil.getCurrentFormattedDateMillis());
+                accumulateProcess.setExceptionStack(exceptionStack);
                 bizReportAccumulateProcessDAO.store(accumulateProcess);
 
             }

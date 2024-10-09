@@ -12,5 +12,5 @@ import id.ezclouds.common.model.process.ProcessStatus;
  */
 public interface ReportAccumulateProcessHandler {
 
-    void onFinished(ProcessStatus status);
+    void onFinished(ProcessStatus status, String exceptionStack);
 }

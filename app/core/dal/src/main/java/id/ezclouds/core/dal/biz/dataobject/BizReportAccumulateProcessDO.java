@@ -32,6 +32,8 @@ public class BizReportAccumulateProcessDO {
     private String createdTime;
     @Column(name = "finished_time")
     private String finishedTime;
+    @Column(name = "exception_stack")
+    private String exceptionStack;
 
     public String getProcessId() {
         return processId;
@@ -87,5 +89,13 @@ public class BizReportAccumulateProcessDO {
 
     public void setFinishedTime(String finishedTime) {
         this.finishedTime = finishedTime;
+    }
+
+    public String getExceptionStack() {
+        return exceptionStack;
+    }
+
+    public void setExceptionStack(String exceptionStack) {
+        this.exceptionStack = exceptionStack;
     }
 }

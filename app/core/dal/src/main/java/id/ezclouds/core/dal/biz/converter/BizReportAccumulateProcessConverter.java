@@ -26,6 +26,7 @@ public class BizReportAccumulateProcessConverter extends CommonDOModelConverter<
         accumulateProcess.setStatus(ProcessStatus.getByCode(dataObject.getStatus()));
         accumulateProcess.setCreatedTime(dataObject.getCreatedTime());
         accumulateProcess.setFinishedTime(dataObject.getFinishedTime());
+        accumulateProcess.setExceptionStack(dataObject.getExceptionStack());
         return accumulateProcess;
     }
 
@@ -39,6 +40,7 @@ public class BizReportAccumulateProcessConverter extends CommonDOModelConverter<
         processDO.setStatus(model.getStatus().getCode());
         processDO.setCreatedTime(model.getCreatedTime());
         processDO.setFinishedTime(model.getFinishedTime());
+        processDO.setExceptionStack(model.getExceptionStack());
         return processDO;
     }
 }

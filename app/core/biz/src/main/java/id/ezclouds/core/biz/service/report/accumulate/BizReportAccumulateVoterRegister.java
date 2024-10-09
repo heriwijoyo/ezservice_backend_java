@@ -6,18 +6,19 @@ package id.ezclouds.core.biz.service.report.accumulate;
 
 import id.ezclouds.common.facade.dal.biz.report.BizAccumulateAreaExtDAO;
 import id.ezclouds.common.facade.dal.biz.report.BizReportAccumulateAreaDAO;
+import id.ezclouds.common.facade.dal.biz.report.BizReportAccumulateMemberDAO;
 import id.ezclouds.common.facade.dal.report.BizReportOverallDAO;
 import id.ezclouds.common.model.area.CoreAreaLevel;
 import id.ezclouds.common.model.biz.election.BizVoter;
-import id.ezclouds.common.model.biz.report.BizAccumulateAreaExt;
-import id.ezclouds.common.model.biz.report.BizAccumulateKey;
-import id.ezclouds.common.model.biz.report.BizReportAccumulateArea;
+import id.ezclouds.common.model.biz.report.*;
 import id.ezclouds.common.model.core.member.CoreGender;
 import id.ezclouds.common.model.process.ProcessStatus;
 import id.ezclouds.common.model.report.BizReportOverall;
 import id.ezclouds.common.model.report.BizReportOverallKey;
 import id.ezclouds.common.util.DateUtil;
+import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
+import id.ezclouds.common.util.exception.ExceptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
@@ -47,6 +48,9 @@ public class BizReportAccumulateVoterRegister implements ReportAccumulateProcess
     @Autowired
     private BizAccumulateAreaExtDAO bizAccumulateAreaExtDAO;
 
+    @Autowired
+    private BizReportAccumulateMemberDAO bizReportAccumulateMemberDAO;
+
     @Override
     public void process(String orgId, Object payload, ReportAccumulateProcessHandler handler) {
         BizVoter bizVoter = (BizVoter) payload;
@@ -63,13 +67,16 @@ public class BizReportAccumulateVoterRegister implements ReportAccumulateProcess
                     accumulateVoterOnAreaLevel(CoreAreaLevel.REGENCY, bizVoter);
                     accumulateVoterOnAreaLevel(CoreAreaLevel.PROVINCE, bizVoter);
 
+                    if (StringUtil.isNotBlank(bizVoter.getReferrerId())) {
+                        processAccumulateMember(bizVoter);
+                    }
+
                 }
             });
-            handler.onFinished(ProcessStatus.SUCCESS);
+            handler.onFinished(ProcessStatus.SUCCESS, null);
 
         } catch (Exception e) {
-            e.printStackTrace();
-            handler.onFinished(ProcessStatus.EXCEPTION);
+            handler.onFinished(ProcessStatus.EXCEPTION, ExceptionUtil.getStackTrace(e));
         }
     }
 
@@ -194,5 +201,31 @@ public class BizReportAccumulateVoterRegister implements ReportAccumulateProcess
                 return bizVoter.getSubNeighbourhood();
         }
         return null;
+    }
+
+    private void processAccumulateMember(BizVoter bizVoter) {
+        String accumulateId = HashUtil.createHash(
+                bizVoter.getOrgId(),
+                bizVoter.getReferrerId(),
+                BizAccumulateMemberKey.VOTER_SUCCESS.getKey(),
+                "DEFAULT"
+        );
+
+        BizReportAccumulateMember accumulateMember = bizReportAccumulateMemberDAO
+                .getAndLock(accumulateId);
+        if (accumulateMember == null) {
+            accumulateMember = new BizReportAccumulateMember();
+            accumulateMember.setAccumulateMemberId(accumulateId);
+            accumulateMember.setOrgId(bizVoter.getOrgId());
+            accumulateMember.setMemberId(bizVoter.getReferrerId());
+            accumulateMember.setAccumulateVariable("DEFAULT");
+            accumulateMember.setAccumulateCount(0);
+        }
+
+        int increasedCount = accumulateMember.getAccumulateCount() + 1;
+        accumulateMember.setAccumulateCount(increasedCount);
+        accumulateMember.setModifiedTime(DateUtil.getCurrentFormattedDateMillis());
+
+        bizReportAccumulateMemberDAO.store(accumulateMember);
     }
 }
