@@ -10,6 +10,7 @@ package id.ezclouds.common.model.auth;
  */
 public enum AuthScene {
 
+    WEB_LOGIN_SESSION("WEB_LOGIN_SESSION"),
     WEB_PUBLIC_SESSION("WEB_PUBLIC_SESSION"),
 
     ;

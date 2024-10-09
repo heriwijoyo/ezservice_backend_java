@@ -7,6 +7,7 @@ package id.ezclouds.core.process;
 import id.ezclouds.common.model.process.ProcessName;
 import id.ezclouds.core.process.biz.*;
 import id.ezclouds.core.process.debug.BizProcessDebugger;
+import id.ezclouds.core.process.init.BizProcessGeneratePublicSession;
 import id.ezclouds.core.process.init.BizProcessInitReportAccumulateArea;
 import id.ezclouds.core.process.init.CoreProcessInitSequenceConfig;
 import id.ezclouds.core.process.migration.CoreProcessMigrateMember;
@@ -51,6 +52,9 @@ public class CoreProcessConfiguration {
     @Autowired
     private BizProcessInitReportAccumulateArea bizProcessInitReportAccumulateArea;
 
+    @Autowired
+    private BizProcessGeneratePublicSession bizProcessGeneratePublicSession;
+
     @Bean
     public Map<ProcessName, BizAsyncProcessor> bizAsyncProcessorMap() {
         Map<ProcessName, BizAsyncProcessor> processorMap = new HashMap<>();
@@ -60,6 +64,7 @@ public class CoreProcessConfiguration {
         processorMap.put(ProcessName.INIT_REPORT_OVERALL, bizProcessInitReportOverall);
 
         processorMap.put(ProcessName.INIT_MIGRATE_MEMBER, coreProcessMigrateMember);
+        processorMap.put(ProcessName.GENERATE_PUBLIC_SESSION, bizProcessGeneratePublicSession);
 
         return processorMap;
     }
