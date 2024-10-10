@@ -14,6 +14,7 @@ import id.ezclouds.common.model.report.BizReportOverall;
 import id.ezclouds.common.model.websocket.WebSocketData;
 import id.ezclouds.common.model.websocket.WebSocketEvent;
 import id.ezclouds.common.util.StringUtil;
+import id.ezclouds.common.util.exception.ExceptionUtil;
 import id.ezclouds.core.bifrost.websocket.model.SessionIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
@@ -131,9 +132,8 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
                 identityMap.put(session.getId(), identity);
                 sessionSendMessage(session, WebSocketEvent.SESSION_AUTH_RESULT, "SUCCESS");
 
-            } catch (Exception ignored) {
-                ignored.printStackTrace();
-                sessionSendMessage(session, WebSocketEvent.SESSION_AUTH_RESULT, "FAILED");
+            } catch (Exception exception) {
+                sessionSendMessage(session, WebSocketEvent.SESSION_AUTH_RESULT, "FAILED:"+ ExceptionUtil.getStackTrace(exception));
                 sessionClose(session);
             }
         }
