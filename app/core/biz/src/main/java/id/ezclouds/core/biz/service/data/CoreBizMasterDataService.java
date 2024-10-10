@@ -69,6 +69,18 @@ public class CoreBizMasterDataService implements BizMasterDataService {
     }
 
     @Override
+    public VillageMasterData getVillageMasterDataById(String orgId, String villageId) {
+        BizMasterData bizMasterData = bizMasterDataDAO.getBizMasterData(orgId, BizMasterDataScene.AREA_VILLAGE_STATIC, villageId);
+        if (bizMasterData != null) {
+            VillageMasterData villageMasterData = new VillageMasterData();
+            villageMasterData.setBizMasterId(bizMasterData.getBizMasterId());
+            bizObjectMapperService.parseFromSource(villageMasterData, bizMasterData);
+            return villageMasterData;
+        }
+        return null;
+    }
+
+    @Override
     @Transactional
     public OverallMasterData updateOverallMasterData(OverallMasterData masterData) {
         BizMasterData bizMasterData = bizMasterDataDAO.updateData(masterData);

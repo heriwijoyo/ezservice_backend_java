@@ -29,6 +29,8 @@ public enum CoreOrgConfigType implements CoreConfigType {
     WATZAP_NUMBER_KEY("WATZAP_NUMBER_KEY"),
     WATZAP_SEND_ENABLE("WATZAP_SEND_ENABLE"),
 
+    BIZ_VALIDATION_CONFIG("BIZ_VALIDATION_CONFIG"),
+
     ;
 
     private final String code;

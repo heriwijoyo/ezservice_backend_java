@@ -6,10 +6,7 @@ package id.ezclouds.core.dal.biz;
 
 import id.ezclouds.common.facade.dal.biz.BizMasterDataDAO;
 import id.ezclouds.common.model.annotation.EzDAOLogger;
-import id.ezclouds.common.model.biz.data.BizMasterData;
-import id.ezclouds.common.model.biz.data.BizMasterDataQueryParam;
-import id.ezclouds.common.model.biz.data.OverallMasterData;
-import id.ezclouds.common.model.biz.data.VillageMasterData;
+import id.ezclouds.common.model.biz.data.*;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.core.dal.biz.converter.BizMasterDataConverter;
 import id.ezclouds.core.dal.biz.dataobject.EzMasterDataDO;
@@ -31,8 +28,8 @@ public class CoreMasterDataDAO implements BizMasterDataDAO {
     @Autowired
     private EzMasterDataRepository ezMasterDataRepository;
 
-    @EzDAOLogger
     @Override
+    @EzDAOLogger
     public void storeOrUpdate(BizMasterData masterData) {
         String bizMasterId = HashUtil.createHash(masterData.getOrgId(), masterData.getScene(), masterData.getDataId());
         EzMasterDataDO dataDO = ezMasterDataRepository
@@ -56,8 +53,8 @@ public class CoreMasterDataDAO implements BizMasterDataDAO {
                 .saveAndFlush(dataDO);
     }
 
-    @EzDAOLogger
     @Override
+    @EzDAOLogger
     public List<BizMasterData> getBizMasterData(BizMasterDataQueryParam param) {
         BizMasterDataConverter converter = new BizMasterDataConverter();
         switch (param.getScene()) {
@@ -78,8 +75,20 @@ public class CoreMasterDataDAO implements BizMasterDataDAO {
         return new ArrayList<>();
     }
 
-    @EzDAOLogger
     @Override
+    @EzDAOLogger
+    public BizMasterData getBizMasterData(String orgId, BizMasterDataScene scene, String dataId) {
+        String bizMasterId = HashUtil.createHash(orgId, scene.getCode(), dataId);
+        return new BizMasterDataConverter()
+                .convertQuery(
+                        ezMasterDataRepository
+                                .findById(bizMasterId)
+                                .orElse(null)
+                );
+    }
+
+    @Override
+    @EzDAOLogger
     public BizMasterData updateData(OverallMasterData overallMasterData) {
         EzMasterDataDO masterDataDO = ezMasterDataRepository
                 .findAndLockById(overallMasterData.getBizMasterId());
@@ -88,8 +97,8 @@ public class CoreMasterDataDAO implements BizMasterDataDAO {
         return new BizMasterDataConverter().convertQuery(masterDataDO);
     }
 
-    @EzDAOLogger
     @Override
+    @EzDAOLogger
     public void updateData(VillageMasterData villageMasterData) {
         EzMasterDataDO masterDataDO = ezMasterDataRepository
                 .findAndLockById(villageMasterData.getBizMasterId());

@@ -57,6 +57,9 @@ public enum EzErrorCode {
 
     SCHEDULER_PRIORITY_OVERLAP("SCHEDULER_PRIORITY_OVERLAP", "Scheduler Overlap"),
 
+    /* Biz Validation */
+    BIZ_POLL_STATION_INVALID("BIZ_POLL_STATION_INVALID", "Invalid Poll Station"),
+
     ;
 
     private String code;
