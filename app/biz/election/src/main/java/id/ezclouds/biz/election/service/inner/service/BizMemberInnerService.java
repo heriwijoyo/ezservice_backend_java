@@ -7,9 +7,7 @@ package id.ezclouds.biz.election.service.inner.service;
 import id.ezclouds.biz.election.converter.BizMemberConverter;
 import id.ezclouds.biz.election.model.AppConfig;
 import id.ezclouds.biz.election.model.member.BizMember;
-import id.ezclouds.biz.election.model.member.BizMemberRegisterMode;
 import id.ezclouds.biz.election.service.app.AppConfigService;
-import id.ezclouds.biz.election.service.inner.converter.BizMemberRequestConverter;
 import id.ezclouds.biz.election.service.request.BizMemberRegisterRequest;
 import id.ezclouds.biz.election.service.request.BizPageRequest;
 import id.ezclouds.biz.election.util.PageRequestUtil;
@@ -17,7 +15,9 @@ import id.ezclouds.biz.election.converter.BizMemberClientConverter;
 import id.ezclouds.biz.election.model.BizStatus;
 import id.ezclouds.biz.election.model.member.BizMemberClient;
 import id.ezclouds.biz.election.model.member.BizMemberInfo;
+import id.ezclouds.common.facade.biz.election.VoterRegistrationService;
 import id.ezclouds.common.facade.core.CoreSequenceService;
+import id.ezclouds.common.model.biz.election.BizVoter;
 import id.ezclouds.common.model.core.CoreSeqSceneEnum;
 import id.ezclouds.common.model.core.Organization;
 import id.ezclouds.common.util.RandomUtil;
@@ -62,12 +62,27 @@ public class BizMemberInnerService {
     @Autowired
     private BizConnectInnerService bizConnectInnerService;
 
+    @Autowired
+    private VoterRegistrationService voterRegistrationService;
+
     @Transactional
     public BizMemberInfo processRegisterMember(BizMemberRegisterRequest request) throws Exception {
-        String orgId = EzAppContextHolder.getContext().getOrgId();
-        String orgCode = EzAppContextHolder.getContext().getOrgCode();
-        String appId = EzAppContextHolder.getContext().getAppId();
+        BizMemberInfo bizMemberInfo = new BizMemberInfo();
 
+        String orgId = EzAppContextHolder.getContext().getOrgId();
+        //String orgCode = EzAppContextHolder.getContext().getOrgCode();
+        //String appId = EzAppContextHolder.getContext().getAppId();
+
+        BizVoter bizVoter = composeBizVoter(request);
+        bizVoter.setOrgId(orgId);
+        bizVoter.setSourceId("API");
+
+        String voterId = voterRegistrationService.registerVoter(bizVoter);
+        BizMember bizMember = new BizMember();
+        bizMember.setMemberId(voterId);
+        bizMemberInfo.setBizMember(bizMember);
+
+        /*
         String memberId = coreSequenceService
                 .generateSequence(new Organization(orgId, orgCode), CoreSeqSceneEnum.CORE_MEMBER_ID);
         String shard = ShardUtil.getShardId(memberId);
@@ -110,7 +125,7 @@ public class BizMemberInnerService {
             bizMemberInfo.setBizMemberClient(bizMemberClient);
 
             sendPasswordIfNecessary(orgId, bizMemberInfo.getBizMemberClient().getClientId(), bizMember.getPhone());
-        }
+        }*/
 
         return bizMemberInfo;
     }
@@ -240,5 +255,37 @@ public class BizMemberInnerService {
         String memberId = extendInfo.get("MEMBER_ID");
         CoreMember coreMember = coreMemberService.getOptimisticCoreMember(memberId);
         coreMemberService.updateMemberField(coreMember.getMemberId(), extendInfo);
+    }
+
+    private BizVoter composeBizVoter(BizMemberRegisterRequest request) {
+        BizVoter voter = new BizVoter();
+        voter.setSubOrgId(request.getSubOrgId());
+        voter.setReferrerId(request.getReferrerId());
+        voter.setFamilySize(0);
+        voter.setFamilySizeMale(0);
+        voter.setFamilySizeFemale(0);
+        voter.setName(request.getName());
+        voter.setGender(request.getBizGender().getCode());
+        voter.setDateOfBirth(request.getDateOfBirth());
+        voter.setPhone(request.getPhone());
+        voter.setEducation(request.getEducation());
+        voter.setOccupation(request.getOccupation());
+        voter.setReligion(request.getReligion());
+        voter.setEthnic(request.getEthnic());
+        voter.setEmail(request.getEmail());
+        voter.setIdCardNumber(request.getIdCardNumber());
+        voter.setFamilyCardNumber(request.getFamilyCardNumber());
+        voter.setProvinceId(request.getProvinceId());
+        voter.setProvinceName(request.getProvinceName());
+        voter.setRegencyId(request.getRegencyId());
+        voter.setRegencyName(request.getRegencyName());
+        voter.setDistrictId(request.getDistrictId());
+        voter.setDistrictName(request.getDistrictName());
+        voter.setVillageId(request.getVillageId());
+        voter.setVillageName(request.getVillageName());
+        voter.setNeighbourhood(request.getRukunWarga());
+        voter.setSubNeighbourhood(request.getRukunTetangga());
+        voter.setPollStationId(request.getTpsNumber());
+        return voter;
     }
 }
