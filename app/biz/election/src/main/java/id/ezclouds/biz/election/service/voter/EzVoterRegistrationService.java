@@ -87,6 +87,7 @@ public class EzVoterRegistrationService implements VoterRegistrationService {
         bizVoter.setShard(ShardUtil.getShardId(voterId));
         bizVoter.setCreatedTime(DateUtil.getCurrentFormattedDate());
         bizVoter.setModifiedTime(DateUtil.getCurrentFormattedDate());
+        bizVoter.setName(StringUtil.toTitleCase(bizVoter.getName()));
         bizVoterDAO.store(bizVoter);
 
         publishVoterCreated(bizVoter);

@@ -97,6 +97,7 @@ public class InnerProcessMigrateMember {
 
     private void migrateMemberToVoter(CoreMember coreMember) {
         ProcessStatus processStatus = ProcessStatus.INIT;
+        EzErrorCode ezErrorCode = null;
         String recordId = initMigrationRecord(coreMember, processStatus);
         String voterId = null;
         String errorMessage = null;
@@ -116,17 +117,19 @@ public class InnerProcessMigrateMember {
                 errorMessage = ezException.getEzErrorCode().getCode() + ExceptionUtil.getErrorContext(ezException);
             }
             processStatus = ProcessStatus.EXCEPTION;
+            ezErrorCode = ezException.getEzErrorCode();
 
         } catch (Exception exception) {
             errorMessage = ExceptionUtil.getErrorContext(exception);
             processStatus = ProcessStatus.EXCEPTION;
+            ezErrorCode = EzErrorCode.BIZ_VALIDATION_FAILED;
         }
 
         if (processStatus == ProcessStatus.EXCEPTION) {
             try {
                 bizVoter.setVoterId(null);
                 voterId = voterInvalidRegistrationService
-                        .registerVoterInvalid(bizVoter, processStatus.getCode(), errorMessage);
+                        .registerVoterInvalid(bizVoter, ezErrorCode.getCode(), errorMessage);
             } catch (Exception e) {
                 e.printStackTrace();
                 errorMessage += " : voterInvalidRegister.Error";

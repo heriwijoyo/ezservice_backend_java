@@ -18,7 +18,9 @@ import id.ezclouds.common.model.report.BizReportOverallKey;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
+import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.ExceptionUtil;
+import id.ezclouds.common.util.exception.EzErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
@@ -109,48 +111,48 @@ public class BizReportAccumulateVoterRegister implements ReportAccumulateProcess
         BizReportAccumulateArea accumulateArea = bizReportAccumulateAreaDAO
                 .getAndLock(bizVoter.getOrgId(), areaLevel, areaLevelId);
 
-        if (accumulateArea != null) {
-            int voterCount = accumulateArea.getVoterCount();
-            int voterMaleCount = accumulateArea.getVoterMaleCount();
-            int voterFemaleCount = accumulateArea.getVoterFemaleCount();
-            int voterExtraCount = accumulateArea.getVoterExtraCount();
-            int voterExtraMaleCount = accumulateArea.getVoterExtraMaleCount();
-            int voterExtraFemaleCount = accumulateArea.getVoterExtraFemaleCount();
+        AssertUtil.notNull(accumulateArea, EzErrorCode.BIZ_PROCESS_ERROR);
 
-            voterCount += 1;
-            CoreGender coreGender = CoreGender.getByCode(bizVoter.getGender());
-            if (coreGender == CoreGender.MALE) {
-                voterMaleCount += 1;
-            } else {
-                voterFemaleCount += 1;
-            }
+        int voterCount = accumulateArea.getVoterCount();
+        int voterMaleCount = accumulateArea.getVoterMaleCount();
+        int voterFemaleCount = accumulateArea.getVoterFemaleCount();
+        int voterExtraCount = accumulateArea.getVoterExtraCount();
+        int voterExtraMaleCount = accumulateArea.getVoterExtraMaleCount();
+        int voterExtraFemaleCount = accumulateArea.getVoterExtraFemaleCount();
 
-            if (bizVoter.getFamilySize() > 0) {
-                // voter extra = family size - main voter
-                voterExtraCount = bizVoter.getFamilySize() - 1;
-
-                if (bizVoter.getFamilySizeMale() > 0) {
-                    voterExtraMaleCount = (coreGender == CoreGender.MALE) ? bizVoter.getFamilySizeMale() - 1 : bizVoter.getFamilySizeMale();
-                }
-                if (bizVoter.getFamilySizeFemale() > 0) {
-                    voterExtraFemaleCount = (coreGender == CoreGender.FEMALE) ? bizVoter.getFamilySizeFemale() - 1 : bizVoter.getFamilySizeFemale();
-                }
-            }
-
-            accumulateArea.setVoterCount(voterCount);
-            accumulateArea.setVoterMaleCount(voterMaleCount);
-            accumulateArea.setVoterFemaleCount(voterFemaleCount);
-            accumulateArea.setVoterExtraCount(voterExtraCount);
-            accumulateArea.setVoterExtraMaleCount(voterExtraMaleCount);
-            accumulateArea.setVoterExtraFemaleCount(voterExtraFemaleCount);
-
-            String currentTime = DateUtil.getCurrentFormattedDateMillis();
-            accumulateArea.setModifiedTime(currentTime);
-
-            bizReportAccumulateAreaDAO.store(accumulateArea);
-
-            accumulateAreaExt(areaLevel, accumulateArea.getAccumulateAreaId(), bizVoter, currentTime);
+        voterCount += 1;
+        CoreGender coreGender = CoreGender.getByCode(bizVoter.getGender());
+        if (coreGender == CoreGender.MALE) {
+            voterMaleCount += 1;
+        } else {
+            voterFemaleCount += 1;
         }
+
+        if (bizVoter.getFamilySize() > 0) {
+            // voter extra = family size - main voter
+            voterExtraCount = bizVoter.getFamilySize() - 1;
+
+            if (bizVoter.getFamilySizeMale() > 0) {
+                voterExtraMaleCount = (coreGender == CoreGender.MALE) ? bizVoter.getFamilySizeMale() - 1 : bizVoter.getFamilySizeMale();
+            }
+            if (bizVoter.getFamilySizeFemale() > 0) {
+                voterExtraFemaleCount = (coreGender == CoreGender.FEMALE) ? bizVoter.getFamilySizeFemale() - 1 : bizVoter.getFamilySizeFemale();
+            }
+        }
+
+        accumulateArea.setVoterCount(voterCount);
+        accumulateArea.setVoterMaleCount(voterMaleCount);
+        accumulateArea.setVoterFemaleCount(voterFemaleCount);
+        accumulateArea.setVoterExtraCount(voterExtraCount);
+        accumulateArea.setVoterExtraMaleCount(voterExtraMaleCount);
+        accumulateArea.setVoterExtraFemaleCount(voterExtraFemaleCount);
+
+        String currentTime = DateUtil.getCurrentFormattedDateMillis();
+        accumulateArea.setModifiedTime(currentTime);
+
+        bizReportAccumulateAreaDAO.store(accumulateArea);
+
+        accumulateAreaExt(areaLevel, accumulateArea.getAccumulateAreaId(), bizVoter, currentTime);
     }
 
     private void accumulateAreaExt(CoreAreaLevel areaLevel, String accumulateAreaId, BizVoter bizVoter, String currentTime) {
