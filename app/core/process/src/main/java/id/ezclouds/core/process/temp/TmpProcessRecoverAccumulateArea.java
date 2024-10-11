@@ -35,7 +35,6 @@ public class TmpProcessRecoverAccumulateArea extends BizAsyncProcessor {
     @Autowired
     private CoreEventPublisherService coreEventPublisherService;
 
-
     @Override
     public BizProcessEvent getProcessEvent() {
         return BizProcessEvent.TMP_RECOVER_ACCUMULATE_AREA;
