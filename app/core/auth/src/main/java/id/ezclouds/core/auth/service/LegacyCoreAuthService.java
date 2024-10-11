@@ -5,8 +5,6 @@
 package id.ezclouds.core.auth.service;
 
 import id.ezclouds.common.facade.config.CoreConfigService;
-import id.ezclouds.common.model.broker.BrokerMessage;
-import id.ezclouds.common.model.broker.authorization.MemberAppClientAuthData;
 import id.ezclouds.common.model.config.CoreOrgConfigType;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
@@ -109,15 +107,6 @@ public class LegacyCoreAuthService {
         sessionInfo.setSessionId(sessionDO.getSessionId());
         sessionInfo.setMemberId(memberClientDO.getMemberId());
         sessionInfo.setClientId(memberClientDO.getClientId());
-
-        MemberAppClientAuthData authData = new MemberAppClientAuthData();
-        authData.setMemberId(sessionInfo.getMemberId());
-        BrokerMessage message = new BrokerMessage();
-        message.setOrgId(request.getOrgId());
-        message.setSource("CORE_AUTH_SERVICE");
-        message.setTopic("CORE_AUTHORIZATION");
-        message.setEvent("MEMBER_CLIENT_APP_LOGIN");
-        message.setPayload(authData);
 
         return sessionInfo;
     }

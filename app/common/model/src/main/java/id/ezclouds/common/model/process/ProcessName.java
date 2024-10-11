@@ -21,6 +21,8 @@ public enum ProcessName {
 
     GENERATE_PUBLIC_SESSION("GENERATE_PUBLIC_SESSION"),
 
+    TMP_RECOVER_ACCUMULATE_AREA("TMP_RECOVER_ACCUMULATE_AREA"),
+
     ;
     private final String code;
 

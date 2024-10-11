@@ -7,10 +7,16 @@ package id.ezclouds.core.dal.biz;
 import id.ezclouds.common.facade.dal.biz.report.BizReportAccumulateProcessDAO;
 import id.ezclouds.common.model.annotation.EzDAOLogger;
 import id.ezclouds.common.model.biz.report.BizReportAccumulateProcess;
+import id.ezclouds.common.model.process.ProcessStatus;
 import id.ezclouds.core.dal.biz.converter.BizReportAccumulateProcessConverter;
 import id.ezclouds.core.dal.biz.repo.BizReportAccumulateProcessRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -40,5 +46,16 @@ public class CoreReportAccumulateProcessDAO implements BizReportAccumulateProces
                         bizReportAccumulateProcessRepository
                                 .findAndLockById(processId)
                 );
+    }
+
+    @Override
+    @EzDAOLogger
+    public List<BizReportAccumulateProcess> getFailedProcess(String orgId, int size) {
+        BizReportAccumulateProcessConverter converter = new BizReportAccumulateProcessConverter();
+        return bizReportAccumulateProcessRepository
+                .findByOrgIdAndStatus(orgId, ProcessStatus.EXCEPTION.getCode(), PageRequest.of(0, size))
+                .stream()
+                .map(converter::convertQuery)
+                .collect(Collectors.toList());
     }
 }
