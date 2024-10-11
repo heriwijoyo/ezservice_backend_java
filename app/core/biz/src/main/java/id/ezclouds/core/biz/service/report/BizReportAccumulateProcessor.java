@@ -8,6 +8,7 @@ import id.ezclouds.common.facade.broker.CoreEventPublisherService;
 import id.ezclouds.common.facade.dal.biz.report.BizReportAccumulateProcessDAO;
 import id.ezclouds.common.facade.integration.BizObjectMapperService;
 import id.ezclouds.common.model.biz.report.BizReportAccumulateProcess;
+import id.ezclouds.common.model.biz.report.RecoverBizVoterAccumulateArea;
 import id.ezclouds.common.model.broker.event.EzCommonEvent;
 import id.ezclouds.common.model.broker.event.OverallReportChangeEvent;
 import id.ezclouds.common.model.broker.topic.EzCoreTopic;
@@ -47,7 +48,8 @@ public class BizReportAccumulateProcessor {
             EzCoreTopic.ELECTION_VOTER_REGISTER,
             EzCoreTopic.ELECTION_VOTER_REGISTER_INVALID,
             EzCoreTopic.ELECTION_QUICK_COUNT_SUBMIT,
-            EzCoreTopic.ELECTION_QUICK_COUNT_VERIFY
+            EzCoreTopic.ELECTION_QUICK_COUNT_VERIFY,
+            EzCoreTopic.BIZ_REPORT_RECOVER_ACCUMULATE_VOTER
     );
 
     @Autowired
@@ -77,33 +79,41 @@ public class BizReportAccumulateProcessor {
         }
 
         String orgId = ezCommonEvent.getOrgId();
-        String topic = ezCommonEvent.getCoreTopic().getCode();
-        String currentTime = DateUtil.getCurrentFormattedDateMillis();
-        String processId = HashUtil.createHash(orgId, topic, currentTime);
+        EzCoreTopic ezCoreTopic = ezCommonEvent.getCoreTopic();
 
-        try {
-            initProcessTemplate.execute(new TransactionCallbackWithoutResult() {
-                @Override
-                protected void doInTransactionWithoutResult(TransactionStatus status) {
-                    BizReportAccumulateProcess accumulateProcess = new BizReportAccumulateProcess();
-                    accumulateProcess.setProcessId(processId);
-                    accumulateProcess.setOrgId(orgId);
-                    accumulateProcess.setTopic(ezCommonEvent.getCoreTopic());
-                    accumulateProcess.setPayload(bizObjectMapperService.toJson(ezCommonEvent.getPayload()));
-                    accumulateProcess.setStatus(ProcessStatus.INIT);
-                    accumulateProcess.setCreatedTime(currentTime);
+        String processId;
+        if (ezCommonEvent.getCoreTopic() == EzCoreTopic.BIZ_REPORT_RECOVER_ACCUMULATE_VOTER) {
+            RecoverBizVoterAccumulateArea recoverData = (RecoverBizVoterAccumulateArea) ezCommonEvent.getPayload();
+            processId = recoverData.getProcessId();
+            ezCoreTopic = recoverData.getEzCoreTopic();
+        }
+        else {
+            String currentTime = DateUtil.getCurrentFormattedDateMillis();
+            processId = HashUtil.createHash(orgId, ezCoreTopic.getCode(), currentTime);
 
-                    bizReportAccumulateProcessDAO.store(accumulateProcess);
-                }
-            });
-        } catch (Exception e) {
-            //TODO: add logger if the init process failed
-            LogUtil.info(LOGGER, "REPORT_ACCUMULATE_PROCESS_FAILED,ORG_ID=", orgId, ",TOPIC=", topic, ",exception:", ExceptionUtil.getStackTrace(e));
-            return;
+            try {
+                initProcessTemplate.execute(new TransactionCallbackWithoutResult() {
+                    @Override
+                    protected void doInTransactionWithoutResult(TransactionStatus status) {
+                        BizReportAccumulateProcess accumulateProcess = new BizReportAccumulateProcess();
+                        accumulateProcess.setProcessId(processId);
+                        accumulateProcess.setOrgId(orgId);
+                        accumulateProcess.setTopic(ezCommonEvent.getCoreTopic());
+                        accumulateProcess.setPayload(bizObjectMapperService.toJson(ezCommonEvent.getPayload()));
+                        accumulateProcess.setStatus(ProcessStatus.INIT);
+                        accumulateProcess.setCreatedTime(currentTime);
+                        bizReportAccumulateProcessDAO.store(accumulateProcess);
+                    }
+                });
+            } catch (Exception e) {
+                //TODO: add logger if the init process failed
+                LogUtil.info(LOGGER, "REPORT_ACCUMULATE_PROCESS_FAILED,ORG_ID=", orgId, ",TOPIC=", ezCoreTopic.getCode(), ",exception:", ExceptionUtil.getStackTrace(e));
+                return;
+            }
         }
 
         reportAccumulateProcessorMap
-                .get(ezCommonEvent.getCoreTopic())
+                .get(ezCoreTopic)
                 .process(orgId, ezCommonEvent.getPayload(), new ReportAccumulateProcessHandler() {
                     @Override
                     public void onFinished(ProcessStatus status, String exceptionStack) {

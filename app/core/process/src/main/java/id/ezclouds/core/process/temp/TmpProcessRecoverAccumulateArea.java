@@ -58,9 +58,9 @@ public class TmpProcessRecoverAccumulateArea extends BizAsyncProcessor {
 
         for (BizReportAccumulateProcess accumulateProcess : accumulateProcesses) {
             BizVoter bizVoter = bizObjectMapperService.parseJson(accumulateProcess.getPayload(), BizVoter.class);
-            RecoverBizVoterAccumulateArea recoverData = new RecoverBizVoterAccumulateArea(accumulateProcess.getProcessId(), bizVoter);
+            RecoverBizVoterAccumulateArea recoverData = new RecoverBizVoterAccumulateArea(accumulateProcess.getProcessId(), accumulateProcess.getTopic(), bizVoter);
 
-            coreEventPublisherService.publish(new EzCommonEvent(EzCoreTopic.BIZ_REPORT_RECOVER_REGISTER_VOTER, orgId, recoverData));
+            coreEventPublisherService.publish(new EzCommonEvent(EzCoreTopic.BIZ_REPORT_RECOVER_ACCUMULATE_VOTER, orgId, recoverData));
 
             try {
                 Thread.sleep(200);

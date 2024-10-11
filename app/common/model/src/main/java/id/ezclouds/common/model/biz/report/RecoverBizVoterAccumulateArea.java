@@ -5,6 +5,7 @@
 package id.ezclouds.common.model.biz.report;
 
 import id.ezclouds.common.model.biz.election.BizVoter;
+import id.ezclouds.common.model.broker.topic.EzCoreTopic;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -13,15 +14,21 @@ import id.ezclouds.common.model.biz.election.BizVoter;
 public class RecoverBizVoterAccumulateArea {
 
     private String processId;
+    private EzCoreTopic ezCoreTopic;
     private BizVoter bizVoter;
 
-    public RecoverBizVoterAccumulateArea(String processId, BizVoter bizVoter) {
+    public RecoverBizVoterAccumulateArea(String processId, EzCoreTopic ezCoreTopic, BizVoter bizVoter) {
         this.processId = processId;
+        this.ezCoreTopic = ezCoreTopic;
         this.bizVoter = bizVoter;
     }
 
     public String getProcessId() {
         return processId;
+    }
+
+    public EzCoreTopic getEzCoreTopic() {
+        return ezCoreTopic;
     }
 
     public BizVoter getBizVoter() {
