@@ -29,6 +29,9 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizReportAccumulateVoterRegister.java, v 0.1 2024‐10‐02 3:13 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -156,7 +159,18 @@ public class BizReportAccumulateVoterRegister implements ReportAccumulateProcess
     }
 
     private void accumulateAreaExt(CoreAreaLevel areaLevel, String accumulateAreaId, BizVoter bizVoter, String currentTime) {
+        List<BizAccumulateKey> onlyVillageLevelKeys = new ArrayList<>();
+        onlyVillageLevelKeys.add(BizAccumulateKey.POLL_STATION_ID);
+        onlyVillageLevelKeys.add(BizAccumulateKey.NEIGHBOURHOOD);
+        onlyVillageLevelKeys.add(BizAccumulateKey.SUB_NEIGHBOURHOOD);
+
         for (BizAccumulateKey accumulateKey : BizAccumulateKey.values()) {
+            if (areaLevel != CoreAreaLevel.VILLAGE) {
+                if (onlyVillageLevelKeys.contains(accumulateKey)) {
+                    continue;
+                }
+            }
+
             String accumulateVariable = getAccumulateVariable(accumulateKey, bizVoter);
 
             if (StringUtil.isNotBlank(accumulateVariable)) {

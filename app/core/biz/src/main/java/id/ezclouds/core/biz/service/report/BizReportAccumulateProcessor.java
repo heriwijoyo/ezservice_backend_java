@@ -80,12 +80,14 @@ public class BizReportAccumulateProcessor {
 
         String orgId = ezCommonEvent.getOrgId();
         EzCoreTopic ezCoreTopic = ezCommonEvent.getCoreTopic();
+        Object eventPayload = ezCommonEvent.getPayload();
 
         String processId;
         if (ezCommonEvent.getCoreTopic() == EzCoreTopic.BIZ_REPORT_RECOVER_ACCUMULATE_VOTER) {
             RecoverBizVoterAccumulateArea recoverData = (RecoverBizVoterAccumulateArea) ezCommonEvent.getPayload();
             processId = recoverData.getProcessId();
             ezCoreTopic = recoverData.getEzCoreTopic();
+            eventPayload = recoverData.getBizVoter();
         }
         else {
             String currentTime = DateUtil.getCurrentFormattedDateMillis();
@@ -114,7 +116,7 @@ public class BizReportAccumulateProcessor {
 
         reportAccumulateProcessorMap
                 .get(ezCoreTopic)
-                .process(orgId, ezCommonEvent.getPayload(), new ReportAccumulateProcessHandler() {
+                .process(orgId, eventPayload, new ReportAccumulateProcessHandler() {
                     @Override
                     public void onFinished(ProcessStatus status, String exceptionStack) {
                         finishProcess(orgId, processId, status, exceptionStack);
