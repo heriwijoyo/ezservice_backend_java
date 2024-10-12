@@ -72,13 +72,13 @@ public class BizReportAccumulateVoterRegister implements ReportAccumulateProcess
                 @Override
                 protected void doInTransactionWithoutResult(TransactionStatus status) {
 
-                    //accumulateOverall(bizVoter.getOrgId());
+                    accumulateOverall(bizVoter.getOrgId());
                     for (CoreAreaLevel areaLevel : workingAreaLevels) {
                         accumulateVoterOnAreaLevel(areaLevel, bizVoter);
                     }
 
                     if (StringUtil.isNotBlank(bizVoter.getReferrerId())) {
-                        //processAccumulateMember(bizVoter);
+                        processAccumulateMember(bizVoter);
                     }
 
                 }
