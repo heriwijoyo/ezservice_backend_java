@@ -55,7 +55,7 @@ public class CoreProcessMigrateMember extends BizAsyncProcessor {
             }
 
             try {
-                Thread.sleep(500);
+                Thread.sleep(100);
             } catch (Exception ignored) {}
 
             coreMembers.clear();
