@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.biz.service.report.accumulate;
 
+import id.ezclouds.common.facade.area.CoreWorkingAreaService;
 import id.ezclouds.common.facade.dal.biz.report.BizAccumulateAreaExtDAO;
 import id.ezclouds.common.facade.dal.biz.report.BizReportAccumulateAreaDAO;
 import id.ezclouds.common.facade.dal.biz.report.BizReportAccumulateMemberDAO;
@@ -56,9 +57,14 @@ public class BizReportAccumulateVoterRegister implements ReportAccumulateProcess
     @Autowired
     private BizReportAccumulateMemberDAO bizReportAccumulateMemberDAO;
 
+    @Autowired
+    private CoreWorkingAreaService coreWorkingAreaService;
+
     @Override
     public void process(String orgId, Object payload, ReportAccumulateProcessHandler handler) {
         BizVoter bizVoter = (BizVoter) payload;
+
+        List<CoreAreaLevel> workingAreaLevels = coreWorkingAreaService.fetchAvailAreaLevel(orgId);
 
         try {
 
@@ -67,10 +73,9 @@ public class BizReportAccumulateVoterRegister implements ReportAccumulateProcess
                 protected void doInTransactionWithoutResult(TransactionStatus status) {
 
                     //accumulateOverall(bizVoter.getOrgId());
-                    accumulateVoterOnAreaLevel(CoreAreaLevel.VILLAGE, bizVoter);
-                    accumulateVoterOnAreaLevel(CoreAreaLevel.DISTRICT, bizVoter);
-                    accumulateVoterOnAreaLevel(CoreAreaLevel.REGENCY, bizVoter);
-                    accumulateVoterOnAreaLevel(CoreAreaLevel.PROVINCE, bizVoter);
+                    for (CoreAreaLevel areaLevel : workingAreaLevels) {
+                        accumulateVoterOnAreaLevel(areaLevel, bizVoter);
+                    }
 
                     if (StringUtil.isNotBlank(bizVoter.getReferrerId())) {
                         //processAccumulateMember(bizVoter);

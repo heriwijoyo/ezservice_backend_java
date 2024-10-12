@@ -66,6 +66,19 @@ public class EzCoreWorkingAreaService implements CoreWorkingAreaService {
         return coreAreas;
     }
 
+    @Override
+    public List<CoreAreaLevel> fetchAvailAreaLevel(String orgId) {
+        List<CoreAreaLevel> availLevels = new ArrayList<>();
+        AreaInitConfig areaInitConfig = getAreaInitConfig(orgId, CoreAreaLevel.VILLAGE);
+
+        CoreAreaLevel currentLevel = areaInitConfig.getRootAreas().get(0).getAreaLevel();
+        while (currentLevel != null) {
+            availLevels.add(currentLevel);
+            currentLevel = getChildAreaLevel(currentLevel);
+        }
+        return availLevels;
+    }
+
     private AreaInitConfig getAreaInitConfig(String orgId, CoreAreaLevel targetLevel) {
         AreaInitConfig initConfig = getAreaInitConfig(orgId);
         initConfig.setTargetLevel(targetLevel);
@@ -143,5 +156,17 @@ public class EzCoreWorkingAreaService implements CoreWorkingAreaService {
             return null;
         }
         return parentsMap.get(coreAreaId);
+    }
+
+    private CoreAreaLevel getChildAreaLevel(CoreAreaLevel currentLevel) {
+        switch (currentLevel) {
+            case PROVINCE:
+                return CoreAreaLevel.REGENCY;
+            case REGENCY:
+                return CoreAreaLevel.DISTRICT;
+            case DISTRICT:
+                return CoreAreaLevel.VILLAGE;
+        }
+        return null;
     }
 }

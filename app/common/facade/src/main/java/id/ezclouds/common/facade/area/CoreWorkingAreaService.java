@@ -21,4 +21,6 @@ public interface CoreWorkingAreaService {
 
     List<CoreArea> fetchCoreAreas(String orgId, CoreAreaLevel targetLevel);
 
+    List<CoreAreaLevel> fetchAvailAreaLevel(String orgId);
+
 }
