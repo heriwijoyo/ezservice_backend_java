@@ -42,7 +42,7 @@ public class CoreProcessMigrateMember extends BizAsyncProcessor {
         int processedCount = 0;
         int exceptionCount = 0;
 
-        List<CoreMember> coreMembers = innerProcessMigrateMember.getMigrationMembers(orgId, date);
+        List<CoreMember> coreMembers = innerProcessMigrateMember.getMigrationMembers(orgId);
         while (coreMembers.size() > 0) {
             for (CoreMember coreMember : coreMembers) {
                 try {
@@ -59,7 +59,7 @@ public class CoreProcessMigrateMember extends BizAsyncProcessor {
             } catch (Exception ignored) {}
 
             coreMembers.clear();
-            coreMembers = innerProcessMigrateMember.getMigrationMembers(orgId, date);
+            coreMembers = innerProcessMigrateMember.getMigrationMembers(orgId);
         }
 
         logData.add("PROCESSED_COUNT="+ processedCount);

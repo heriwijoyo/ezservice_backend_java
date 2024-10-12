@@ -61,11 +61,8 @@ public class InnerProcessMigrateMember {
     @Autowired
     private TransactionTemplate transactionTemplate;
 
-    public List<CoreMember> getMigrationMembers(String orgId, String date) {
-        Date today = DateUtil.parseFormattedDate(date, DateUtil.FORMAT_DATE);
-        String startDate = DateUtil.getFormattedDayStart(today);
-        String endDate = DateUtil.getFormattedDayEnd(today);
-        return coreMemberDAO.getMigrationMembers(orgId, startDate, endDate, SortBy.OLDEST, 1);
+    public List<CoreMember> getMigrationMembers(String orgId) {
+        return coreMemberDAO.getMigrationMembers(orgId, SortBy.OLDEST, 1);
     }
 
     public boolean migrateMember(CoreMember coreMember) {

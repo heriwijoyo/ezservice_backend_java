@@ -67,6 +67,33 @@ public class EzCoreMemberDAO implements CoreMemberDAO {
     }
 
     @Override
+    public List<CoreMember> getMigrationMembers(String orgId, SortBy sortBy, int limit) {
+        CoreMemberConverter memberConverter = new CoreMemberConverter();
+        Pageable pageable = PageRequest.of(0, limit, convertSortBy(sortBy));
+        List<CoreMember> coreMembers = coreMemberRepository
+                .findByOrgIdAndMigrationIdIsNull(orgId, pageable)
+                .stream()
+                .map(memberConverter::convertQuery)
+                .collect(Collectors.toList());
+
+        List<String> memberIds = coreMembers
+                .stream()
+                .map(CoreMember::getMemberId)
+                .collect(Collectors.toList());
+
+        CoreMemberExtensionConverter memberExtensionConverter = new CoreMemberExtensionConverter();
+        List<CoreMemberExtension> memberExtensions = coreMemberExtensionRepository
+                .findByMemberIdIn(memberIds)
+                .stream()
+                .map(memberExtensionConverter::convertQuery)
+                .collect(Collectors.toList());
+
+        blendMemberExt(coreMembers, memberExtensions);
+
+        return coreMembers;
+    }
+
+    @Override
     public CoreMember getAndLock(String memberId) {
         return new CoreMemberConverter()
                 .convertQuery(

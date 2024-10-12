@@ -25,6 +25,8 @@ public interface CoreMemberRepository extends JpaRepository<CoreMemberDO, String
 
     List<CoreMemberDO> findByOrgIdAndCreatedTimeBetweenAndMigrationIdIsNull(String orgId, String startDate, String endDate, Pageable pageable);
 
+    List<CoreMemberDO> findByOrgIdAndMigrationIdIsNull(String orgId, Pageable pageable);
+
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @QueryHints({@QueryHint(name = "jakarta.persistence.lock.timeout", value = "3000")})
     @Query("SELECT cm FROM CoreMemberDO cm WHERE cm.memberId = ?1")
