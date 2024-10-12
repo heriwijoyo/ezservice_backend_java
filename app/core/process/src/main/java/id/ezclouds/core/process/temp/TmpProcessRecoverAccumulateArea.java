@@ -8,6 +8,7 @@ import id.ezclouds.common.facade.broker.CoreEventPublisherService;
 import id.ezclouds.common.facade.dal.biz.report.BizReportAccumulateProcessDAO;
 import id.ezclouds.common.facade.integration.BizObjectMapperService;
 import id.ezclouds.common.model.biz.election.BizVoter;
+import id.ezclouds.common.model.biz.election.BizVoterInvalid;
 import id.ezclouds.common.model.biz.report.BizReportAccumulateProcess;
 import id.ezclouds.common.model.biz.report.RecoverBizVoterAccumulateArea;
 import id.ezclouds.common.model.broker.event.EzCommonEvent;
@@ -56,8 +57,14 @@ public class TmpProcessRecoverAccumulateArea extends BizAsyncProcessor {
                 .getFailedProcess(orgId, Integer.parseInt(size));
 
         for (BizReportAccumulateProcess accumulateProcess : accumulateProcesses) {
-            BizVoter bizVoter = bizObjectMapperService.parseJson(accumulateProcess.getPayload(), BizVoter.class);
-            RecoverBizVoterAccumulateArea recoverData = new RecoverBizVoterAccumulateArea(accumulateProcess.getProcessId(), accumulateProcess.getTopic(), bizVoter);
+            RecoverBizVoterAccumulateArea recoverData = new RecoverBizVoterAccumulateArea(accumulateProcess.getProcessId(), accumulateProcess.getTopic());
+            if (accumulateProcess.getTopic() == EzCoreTopic.ELECTION_VOTER_REGISTER) {
+                BizVoter bizVoter = bizObjectMapperService.parseJson(accumulateProcess.getPayload(), BizVoter.class);
+                recoverData.setBizVoter(bizVoter);
+            } else {
+                BizVoterInvalid bizVoterInvalid = bizObjectMapperService.parseJson(accumulateProcess.getPayload(), BizVoterInvalid.class);
+                recoverData.setBizVoterInvalid(bizVoterInvalid);
+            }
 
             coreEventPublisherService.publish(new EzCommonEvent(EzCoreTopic.BIZ_REPORT_RECOVER_ACCUMULATE_VOTER, orgId, recoverData));
 

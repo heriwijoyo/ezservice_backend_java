@@ -87,7 +87,7 @@ public class BizReportAccumulateProcessor {
             RecoverBizVoterAccumulateArea recoverData = (RecoverBizVoterAccumulateArea) ezCommonEvent.getPayload();
             processId = recoverData.getProcessId();
             ezCoreTopic = recoverData.getEzCoreTopic();
-            eventPayload = recoverData.getBizVoter();
+            eventPayload = ezCoreTopic == EzCoreTopic.ELECTION_VOTER_REGISTER ? recoverData.getBizVoter() : recoverData.getBizVoterInvalid();
         }
         else {
             String currentTime = DateUtil.getCurrentFormattedDateMillis();

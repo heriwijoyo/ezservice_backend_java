@@ -5,6 +5,7 @@
 package id.ezclouds.common.model.biz.report;
 
 import id.ezclouds.common.model.biz.election.BizVoter;
+import id.ezclouds.common.model.biz.election.BizVoterInvalid;
 import id.ezclouds.common.model.broker.topic.EzCoreTopic;
 
 /**
@@ -16,11 +17,23 @@ public class RecoverBizVoterAccumulateArea {
     private String processId;
     private EzCoreTopic ezCoreTopic;
     private BizVoter bizVoter;
+    private BizVoterInvalid bizVoterInvalid;
 
-    public RecoverBizVoterAccumulateArea(String processId, EzCoreTopic ezCoreTopic, BizVoter bizVoter) {
+    public RecoverBizVoterAccumulateArea(String processId, EzCoreTopic ezCoreTopic) {
         this.processId = processId;
         this.ezCoreTopic = ezCoreTopic;
+    }
+
+    public void setBizVoter(BizVoter bizVoter) {
         this.bizVoter = bizVoter;
+    }
+
+    public BizVoterInvalid getBizVoterInvalid() {
+        return bizVoterInvalid;
+    }
+
+    public void setBizVoterInvalid(BizVoterInvalid bizVoterInvalid) {
+        this.bizVoterInvalid = bizVoterInvalid;
     }
 
     public String getProcessId() {
