@@ -24,8 +24,6 @@ import id.ezclouds.common.util.RandomUtil;
 import id.ezclouds.common.model.result.BizPageInfo;
 import id.ezclouds.common.util.ShardUtil;
 import id.ezclouds.common.util.StringUtil;
-import id.ezclouds.common.util.assertion.AssertUtil;
-import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.core.auth.model.CoreAuthMemberClient;
 import id.ezclouds.core.auth.service.LegacyCoreAuthService;
 import id.ezclouds.core.member.model.CoreMember;
@@ -69,7 +67,6 @@ public class BizMemberInnerService {
 
     @Transactional
     public BizMemberInfo processRegisterMember(BizMemberRegisterRequest request) throws Exception {
-        AssertUtil.isTrue(false, EzErrorCode.ACTION_NOT_ALLOWED);
         BizMemberInfo bizMemberInfo = new BizMemberInfo();
 
         String orgId = EzAppContextHolder.getContext().getOrgId();

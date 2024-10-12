@@ -24,7 +24,9 @@ import id.ezclouds.biz.election.service.core.dataobject.BizMemberImportDO;
 import id.ezclouds.biz.election.service.core.repo.BizMemberImportRepository;
 import id.ezclouds.biz.election.service.inner.service.BizMemberInnerService;
 import id.ezclouds.biz.election.service.request.BizMemberUploadRequest;
+import id.ezclouds.common.facade.core.CoreFeatureConfigService;
 import id.ezclouds.common.facade.file.CoreFileService;
+import id.ezclouds.common.model.biz.election.BizElectionFeature;
 import id.ezclouds.common.model.request.BizRequest;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.model.result.BizPageInfo;
@@ -76,6 +78,9 @@ public class OldBizMemberService extends BizBaseService {
 
     @Autowired
     private BizMemberImportRepository bizMemberImportRepository;
+
+    @Autowired
+    private CoreFeatureConfigService coreFeatureConfigService;
 
     public BizResult getMemberProfile() {
         final BizResult bizResult = new BizResult();
@@ -130,6 +135,10 @@ public class OldBizMemberService extends BizBaseService {
                 AssertUtil.notBlank(sessionInfo.getMemberRoles(), EzErrorCode.UNAUTHORIZED);
                 List<String> memberRoles = Arrays.asList(sessionInfo.getMemberRoles().split(","));
                 AssertUtil.isTrue(memberRoles.size() > 0, EzErrorCode.UNAUTHORIZED);
+
+                boolean isFeatureOpen = coreFeatureConfigService
+                        .isFeatureOpen(getOrgId(), BizElectionFeature.VOTER_REGISTER, sessionInfo.getMemberId());
+                AssertUtil.isTrue(isFeatureOpen, EzErrorCode.ACTION_NOT_ALLOWED);
 
                 BizMemberRegisterMode bizRegisterMode = request.getRegisterMode();
                 request.setRoles("");
