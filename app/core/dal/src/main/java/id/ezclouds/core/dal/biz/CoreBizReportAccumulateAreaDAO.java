@@ -62,6 +62,12 @@ public class CoreBizReportAccumulateAreaDAO implements BizReportAccumulateAreaDA
                         .collect(Collectors.toList());
 
             case DISTRICT:
+                return bizReportAccumulateAreaRepository
+                        .findByOrgIdAndAreaLevelAndRegencyId(orgId, areaLevel.getCode(), areaParentId)
+                        .stream()
+                        .map(converter::convertQuery)
+                        .collect(Collectors.toList());
+
             case REGENCY:
             case PROVINCE:
                 return new ArrayList<>();

@@ -44,7 +44,6 @@ public class CoreReportAccumulateAreaService implements BizReportAccumulateAreaS
     @Override
     public BizReportArea getReportArea(String orgId) {
         AreaInitConfig areaInitConfig = coreWorkingAreaService.getAreaInitConfig(orgId);
-        System.out.println(areaInitConfig);
         return getReportArea(orgId, areaInitConfig.getRootAreas().get(0));
     }
 
@@ -57,7 +56,6 @@ public class CoreReportAccumulateAreaService implements BizReportAccumulateAreaS
 
         List<BizReportAccumulateArea> accumulateAreas = bizReportAccumulateAreaDAO
                 .getByParentId(orgId, childLevel, coreArea.getAreaId());
-        System.out.println(accumulateAreas);
 
         return composeBizReportArea(accumulateAreas, childLevel);
     }

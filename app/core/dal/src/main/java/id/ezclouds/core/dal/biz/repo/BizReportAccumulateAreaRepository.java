@@ -27,5 +27,7 @@ public interface BizReportAccumulateAreaRepository extends JpaRepository<BizRepo
     @Query("SELECT raa FROM BizReportAccumulateAreaDO raa WHERE raa.accumulateAreaId = ?1")
     BizReportAccumulateAreaDO findAndLockById(String accumulateAreaId);
 
+    List<BizReportAccumulateAreaDO> findByOrgIdAndAreaLevelAndRegencyId(String orgId, String areaLevel, String regencyId);
+
     List<BizReportAccumulateAreaDO> findByOrgIdAndAreaLevelAndDistrictId(String orgId, String areaLevel, String districtId);
 }
