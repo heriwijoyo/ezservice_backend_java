@@ -14,8 +14,10 @@ public class BizReportPage {
     private String orgId;
     private BizReportSection section;
     private String code;
-    private String title;
+    private String pageTitle;
+    private String contentTitle;
     private String authType;
+    private String layoutCode;
     private String content;
 
     public String getReportPageId() {
@@ -50,12 +52,20 @@ public class BizReportPage {
         this.code = code;
     }
 
-    public String getTitle() {
-        return title;
+    public String getPageTitle() {
+        return pageTitle;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setPageTitle(String pageTitle) {
+        this.pageTitle = pageTitle;
+    }
+
+    public String getContentTitle() {
+        return contentTitle;
+    }
+
+    public void setContentTitle(String contentTitle) {
+        this.contentTitle = contentTitle;
     }
 
     public String getAuthType() {
@@ -64,6 +74,14 @@ public class BizReportPage {
 
     public void setAuthType(String authType) {
         this.authType = authType;
+    }
+
+    public String getLayoutCode() {
+        return layoutCode;
+    }
+
+    public void setLayoutCode(String layoutCode) {
+        this.layoutCode = layoutCode;
     }
 
     public String getContent() {

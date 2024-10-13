@@ -26,12 +26,16 @@ public class BizReportPageDO {
     private String section;
     @Column(name = "code")
     private String code;
-    @Column(name = "title")
-    private String title;
+    @Column(name = "page_title")
+    private String pageTitle;
+    @Column(name = "content_title")
+    private String contentTitle;
     @Column(name = "auth_type")
     private String authType;
     @Column(name = "status")
     private int status;
+    @Column(name = "layout_code")
+    private String layoutCode;
     @Column(name = "content")
     private String content;
 
@@ -67,12 +71,20 @@ public class BizReportPageDO {
         this.code = code;
     }
 
-    public String getTitle() {
-        return title;
+    public String getPageTitle() {
+        return pageTitle;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setPageTitle(String pageTitle) {
+        this.pageTitle = pageTitle;
+    }
+
+    public String getContentTitle() {
+        return contentTitle;
+    }
+
+    public void setContentTitle(String contentTitle) {
+        this.contentTitle = contentTitle;
     }
 
     public String getAuthType() {
@@ -89,6 +101,14 @@ public class BizReportPageDO {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getLayoutCode() {
+        return layoutCode;
+    }
+
+    public void setLayoutCode(String layoutCode) {
+        this.layoutCode = layoutCode;
     }
 
     public String getContent() {

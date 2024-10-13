@@ -133,6 +133,7 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
                 sessionSendMessage(session, WebSocketEvent.SESSION_AUTH_RESULT, "SUCCESS");
 
             } catch (Exception exception) {
+                exception.printStackTrace();
                 sessionSendMessage(session, WebSocketEvent.SESSION_AUTH_RESULT, "FAILED:"+ ExceptionUtil.getStackTrace(exception));
                 sessionClose(session);
             }

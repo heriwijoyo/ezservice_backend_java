@@ -11,7 +11,6 @@ package id.ezclouds.core.bifrost.core.web.model;
 public enum WebPageAuthType {
 
     PUBLIC_SESSION("PUBLIC_SESSION"),
-    UNKNOWN("UNKNOWN"),
     ;
 
     private final String code;
@@ -30,6 +29,6 @@ public enum WebPageAuthType {
                 return authType;
             }
         }
-        return UNKNOWN;
+        return null;
     }
 }

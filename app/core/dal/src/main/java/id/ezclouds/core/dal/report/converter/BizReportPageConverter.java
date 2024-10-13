@@ -22,8 +22,10 @@ public class BizReportPageConverter extends CommonDOModelConverter<BizReportPage
         bizReportPage.setOrgId(dataObject.getOrgId());
         bizReportPage.setSection(BizReportSection.getByCode(dataObject.getSection()));
         bizReportPage.setCode(dataObject.getCode());
-        bizReportPage.setTitle(dataObject.getTitle());
+        bizReportPage.setPageTitle(dataObject.getPageTitle());
+        bizReportPage.setContentTitle(dataObject.getContentTitle());
         bizReportPage.setAuthType(dataObject.getAuthType());
+        bizReportPage.setLayoutCode(dataObject.getLayoutCode());
         bizReportPage.setContent(dataObject.getContent());
         return bizReportPage;
     }
