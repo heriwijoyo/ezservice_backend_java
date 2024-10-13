@@ -4,8 +4,10 @@
  */
 package id.ezclouds.common.facade.biz.report;
 
+import id.ezclouds.common.model.area.CoreArea;
 import id.ezclouds.common.model.area.CoreAreaLevel;
 import id.ezclouds.common.model.biz.report.BizReportAccumulateArea;
+import id.ezclouds.common.model.biz.report.BizReportArea;
 
 import java.util.List;
 
@@ -16,4 +18,12 @@ import java.util.List;
 public interface BizReportAccumulateAreaService {
 
     List<BizReportAccumulateArea> getAccumulateAreaByParentId(String orgId, CoreAreaLevel areaLevel, String parentId);
+
+
+    /**
+     * temp quick solution for RJL report
+     */
+
+    BizReportArea getReportArea(String orgId);
+    BizReportArea getReportArea(String orgId, CoreArea coreArea);
 }

@@ -7,8 +7,11 @@ package id.ezclouds.core.bifrost.websocket.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.common.facade.auth.AuthAdminService;
 import id.ezclouds.common.facade.biz.BizReportRealtimeService;
+import id.ezclouds.common.facade.biz.report.BizReportAccumulateAreaService;
 import id.ezclouds.common.facade.biz.report.BizReportOverallService;
+import id.ezclouds.common.facade.integration.BizObjectMapperService;
 import id.ezclouds.common.model.auth.AuthSession;
+import id.ezclouds.common.model.biz.report.BizReportArea;
 import id.ezclouds.common.model.broker.event.OverallReportChangeEvent;
 import id.ezclouds.common.model.report.BizReportOverall;
 import id.ezclouds.common.model.websocket.WebSocketData;
@@ -44,6 +47,12 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
 
     @Autowired
     private BizReportOverallService bizReportOverallService;
+
+    @Autowired
+    private BizReportAccumulateAreaService bizReportAccumulateAreaService;
+
+    @Autowired
+    private BizObjectMapperService bizObjectMapperService;
 
 
     private Map<String, WebSocketSession> sessionMap = new ConcurrentHashMap<>();
@@ -124,14 +133,15 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
                 identity.getTopics().add(topic);
             }
 
+            String orgId = identity.getOrgId();
             DataTopic dataTopic = DataTopic.getByCode(topic);
             if (dataTopic == DataTopic.OVERALL) {
-                String orgId = identity.getOrgId();
                 List<BizReportOverall> reportOverall = bizReportOverallService.getReportOverall(orgId);
                 sessionSendMessage(session, WebSocketEvent.DATA_RESULT, DataTopic.OVERALL, reportOverallToMap(reportOverall));
             }
-            if (dataTopic == DataTopic.DEMOGRAPHIC) {
-
+            if (dataTopic == DataTopic.VOTER_BASE_AREA) {
+                BizReportArea reportArea = bizReportAccumulateAreaService.getReportArea(orgId);
+                sessionSendMessage(session, WebSocketEvent.DATA_RESULT, DataTopic.VOTER_BASE_AREA, bizObjectMapperService.toJson(reportArea));
             }
         }
     }

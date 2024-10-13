@@ -4,6 +4,7 @@
  */
 package id.ezclouds.common.facade.area;
 
+import id.ezclouds.common.model.area.AreaInitConfig;
 import id.ezclouds.common.model.area.CoreArea;
 import id.ezclouds.common.model.area.CoreAreaLevel;
 
@@ -23,4 +24,5 @@ public interface CoreWorkingAreaService {
 
     List<CoreAreaLevel> fetchAvailAreaLevel(String orgId);
 
+    AreaInitConfig getAreaInitConfig(String orgId);
 }

@@ -85,7 +85,8 @@ public class EzCoreWorkingAreaService implements CoreWorkingAreaService {
         return initConfig;
     }
 
-    private AreaInitConfig getAreaInitConfig(String orgId) {
+    @Override
+    public AreaInitConfig getAreaInitConfig(String orgId) {
         String areaRootLevel = coreConfigService
                 .getOrgConfig(orgId, CoreOrgConfigType.CORE_AREA_ROOT_LEVEL)
                 .getConfigValue();
