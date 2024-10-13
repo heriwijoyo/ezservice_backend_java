@@ -53,4 +53,11 @@ public class AssertUtil {
             throw new EzErrorException(ezErrorCode);
         }
     }
+
+    public static void lengthMin(String value, int minLength, EzErrorCode ezErrorCode, String... message) throws EzErrorException {
+        notBlank(value, ezErrorCode);
+        if (value.length() < minLength) {
+            throw new EzErrorException(ezErrorCode, StringUtil.concateStrings(message));
+        }
+    }
 }

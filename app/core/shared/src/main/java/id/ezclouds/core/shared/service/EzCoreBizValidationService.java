@@ -42,10 +42,13 @@ public class EzCoreBizValidationService implements CoreBizValidationService {
     }
 
     private void validateByRule(BizValidationRule validationRule, Object request) {
+        Object fieldValue = getFieldValue(request, validationRule.getField());
         switch (validationRule) {
             case NOT_BLANK:
-                String fieldValue = (String) getFieldValue(request, validationRule.getField());
-                AssertUtil.notBlank(fieldValue, EzErrorCode.BIZ_VALIDATION_FAILED);
+                AssertUtil.notBlank((String)fieldValue, EzErrorCode.BIZ_VALIDATION_FAILED, validationRule.getInvalidMessage());
+                break;
+            case LENGTH_MIN:
+                AssertUtil.lengthMin((String)fieldValue, validationRule.getParamInt(), EzErrorCode.BIZ_VALIDATION_FAILED, validationRule.getInvalidMessage());
                 break;
         }
     }

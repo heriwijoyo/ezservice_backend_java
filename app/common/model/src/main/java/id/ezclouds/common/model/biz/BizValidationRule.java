@@ -22,6 +22,7 @@ public enum BizValidationRule {
     private final String code;
     private String field;
     private Object param;
+    private String invalidMessage;
 
     BizValidationRule(String code) {
         this.code = code;
@@ -45,6 +46,26 @@ public enum BizValidationRule {
 
     public void setParam(Object param) {
         this.param = param;
+    }
+
+    public int getParamInt() {
+        if (param == null) {
+            return 0;
+        }
+        String paramStr = (String) param;
+        try {
+            return Integer.parseInt(paramStr);
+        } catch (Exception ignored) {
+            return 0;
+        }
+    }
+
+    public String getInvalidMessage() {
+        return invalidMessage;
+    }
+
+    public void setInvalidMessage(String invalidMessage) {
+        this.invalidMessage = invalidMessage;
     }
 
     public static BizValidationRule getByCode(String code) {

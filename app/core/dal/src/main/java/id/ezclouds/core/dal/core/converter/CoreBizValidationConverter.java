@@ -49,7 +49,11 @@ public class CoreBizValidationConverter extends CommonDOModelConverter<CoreBizVa
                 validationRule.setField(ruleComponents[0]);
 
                 if (ruleComponents.length > 2) {
-                    validationRule.setParam(ruleComponents[2]);
+                    validationRule.setInvalidMessage(ruleComponents[2]);
+                }
+
+                if (ruleComponents.length > 3) {
+                    validationRule.setParam(ruleComponents[3]);
                 }
 
                 bizRules.add(validationRule);
