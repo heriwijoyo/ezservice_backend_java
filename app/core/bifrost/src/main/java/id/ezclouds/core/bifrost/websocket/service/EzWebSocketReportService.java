@@ -9,7 +9,6 @@ import id.ezclouds.common.facade.auth.AuthAdminService;
 import id.ezclouds.common.facade.biz.BizReportRealtimeService;
 import id.ezclouds.common.facade.biz.report.BizReportAccumulateAreaService;
 import id.ezclouds.common.facade.biz.report.BizReportOverallService;
-import id.ezclouds.common.facade.integration.BizObjectMapperService;
 import id.ezclouds.common.model.auth.AuthSession;
 import id.ezclouds.common.model.biz.report.BizReportArea;
 import id.ezclouds.common.model.broker.event.OverallReportChangeEvent;
@@ -51,10 +50,6 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
     @Autowired
     private BizReportAccumulateAreaService bizReportAccumulateAreaService;
 
-    @Autowired
-    private BizObjectMapperService bizObjectMapperService;
-
-
     private Map<String, WebSocketSession> sessionMap = new ConcurrentHashMap<>();
     private Map<String, SessionIdentity> identityMap = new ConcurrentHashMap<>();
 
@@ -92,7 +87,7 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         super.afterConnectionEstablished(session);
-        sessionSendMessage(session, WebSocketEvent.SESSION_AUTH_REQUIRED, DataTopic.NON_DATA_TOPIC, "");
+        sessionSendMessage(session, WebSocketEvent.SESSION_AUTH_REQUIRED, DataTopic.NON_DATA, "");
     }
 
     @Override
@@ -116,7 +111,7 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
                     break;
 
                 case DATA_REQUEST:
-                    performDataRequest(session, data.getPayload());
+                    performDataRequest(session, data.getTopic(), data.getPayload());
                     break;
             }
         } catch (Exception e) {
@@ -124,11 +119,10 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
         }
     }
 
-    private void performDataRequest(WebSocketSession session, Object payload) {
+    private void performDataRequest(WebSocketSession session, String topic, Object payload) {
         SessionIdentity identity = identityMap.get(session.getId());
 
         if (sessionMap.get(session.getId()) != null && identity != null) {
-            String topic = (String) payload;
             if (!identity.getTopics().contains(topic)) {
                 identity.getTopics().add(topic);
             }
@@ -141,7 +135,7 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
             }
             if (dataTopic == DataTopic.VOTER_BASE_AREA) {
                 BizReportArea reportArea = bizReportAccumulateAreaService.getReportArea(orgId);
-                sessionSendMessage(session, WebSocketEvent.DATA_RESULT, DataTopic.VOTER_BASE_AREA, bizObjectMapperService.toJson(reportArea));
+                sessionSendMessage(session, WebSocketEvent.DATA_RESULT, DataTopic.VOTER_BASE_AREA, reportArea);
             }
         }
     }
@@ -156,11 +150,11 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
 
                 sessionMap.put(session.getId(), session);
                 identityMap.put(session.getId(), identity);
-                sessionSendMessage(session, WebSocketEvent.SESSION_AUTH_RESULT, DataTopic.NON_DATA_TOPIC, "SUCCESS");
+                sessionSendMessage(session, WebSocketEvent.SESSION_AUTH_RESULT, DataTopic.NON_DATA, "SUCCESS");
 
             } catch (Exception exception) {
                 exception.printStackTrace();
-                sessionSendMessage(session, WebSocketEvent.SESSION_AUTH_RESULT, DataTopic.NON_DATA_TOPIC, "FAILED:"+ ExceptionUtil.getStackTrace(exception));
+                sessionSendMessage(session, WebSocketEvent.SESSION_AUTH_RESULT, DataTopic.NON_DATA, "FAILED:"+ ExceptionUtil.getStackTrace(exception));
                 sessionClose(session);
             }
         }

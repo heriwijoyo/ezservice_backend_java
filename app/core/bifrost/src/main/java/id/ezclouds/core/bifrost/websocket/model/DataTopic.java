@@ -14,7 +14,7 @@ public enum DataTopic {
     DEMOGRAPHIC("DEMOGRAPHIC"),
     VOTER_BASE_AREA("VOTER_BASE_AREA"),
 
-    NON_DATA_TOPIC("NON_DATA_TOPIC"),
+    NON_DATA("NON_DATA"),
 
     ;
 
