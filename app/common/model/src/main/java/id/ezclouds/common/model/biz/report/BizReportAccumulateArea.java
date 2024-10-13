@@ -42,6 +42,7 @@ public class BizReportAccumulateArea {
 
         String areaId = coreArea.getAreaId();
         String areaName = coreArea.getName();
+        String areaParentId = coreArea.getParentId();
         switch (coreArea.getAreaLevel()) {
             case PROVINCE:
                 setProvinceId(areaId);
@@ -50,25 +51,26 @@ public class BizReportAccumulateArea {
             case REGENCY:
                 setRegencyId(areaId);
                 setRegencyName(areaName);
+                setProvinceId(areaParentId);
                 break;
             case DISTRICT:
                 setDistrictId(areaId);
                 setDistrictName(areaName);
+                setRegencyId(areaParentId);
                 break;
             case VILLAGE:
                 setVillageId(areaId);
                 setVillageName(areaName);
+                setDistrictId(areaParentId);
                 break;
         }
         setVoterCount(0);
         setVoterMaleCount(0);
         setVoterFemaleCount(0);
         setVoterExtraCount(0);
-    }
 
-    public void generateId() {
-        String genId = HashUtil.createHash(orgId, areaLevel.getCode(), getLevelId());
-        setAccumulateAreaId(genId);
+        String accumulateId = HashUtil.createHash(orgId, areaLevel.getCode(), getLevelId());
+        setAccumulateAreaId(accumulateId);
     }
 
     public String getAccumulateAreaId() {

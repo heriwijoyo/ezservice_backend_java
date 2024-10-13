@@ -59,10 +59,28 @@ public class BizProcessInitReportAccumulateArea extends BizAsyncProcessor {
             protected void doInTransactionWithoutResult(TransactionStatus status) {
 
                 for (CoreArea coreArea : allCoreAreas) {
-                    BizReportAccumulateArea accumulateArea = new BizReportAccumulateArea(coreArea);
-                    accumulateArea.setOrgId(orgId);
+                    BizReportAccumulateArea accumulateArea = bizReportAccumulateAreaDAO
+                            .getAndLock(orgId, coreArea.getAreaLevel(), coreArea.getAreaId());
+
+                    if (accumulateArea == null) {
+                        accumulateArea = new BizReportAccumulateArea(coreArea);
+                        accumulateArea.setOrgId(orgId);
+                    }
+                    else {
+                        switch (coreArea.getAreaLevel()) {
+                            case VILLAGE:
+                                accumulateArea.setDistrictId(coreArea.getParentId());
+                                break;
+                            case DISTRICT:
+                                accumulateArea.setRegencyId(coreArea.getParentId());
+                                break;
+                            case REGENCY:
+                                accumulateArea.setProvinceId(coreArea.getParentId());
+                                break;
+                        }
+                    }
+
                     accumulateArea.setModifiedTime(currentTime);
-                    accumulateArea.generateId();
 
                     bizReportAccumulateAreaDAO.store(accumulateArea);
                 }
