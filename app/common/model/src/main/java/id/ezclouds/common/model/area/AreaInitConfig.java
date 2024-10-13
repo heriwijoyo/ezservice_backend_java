@@ -4,6 +4,9 @@
  */
 package id.ezclouds.common.model.area;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,5 +29,10 @@ public class AreaInitConfig {
 
     public List<CoreArea> getRootAreas() {
         return rootAreas;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

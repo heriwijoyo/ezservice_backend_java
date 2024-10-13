@@ -8,6 +8,8 @@ import id.ezclouds.common.model.area.CoreArea;
 import id.ezclouds.common.model.area.CoreAreaLevel;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -229,5 +231,10 @@ public class BizReportAccumulateArea {
 
     public void setModifiedTime(String modifiedTime) {
         this.modifiedTime = modifiedTime;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

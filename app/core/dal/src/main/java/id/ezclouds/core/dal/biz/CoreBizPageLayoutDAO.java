@@ -5,7 +5,6 @@
 package id.ezclouds.core.dal.biz;
 
 import id.ezclouds.common.facade.dal.biz.BizPageLayoutDAO;
-import id.ezclouds.common.model.annotation.EzDAOLogger;
 import id.ezclouds.core.dal.biz.dataobject.BizPageLayoutDO;
 import id.ezclouds.core.dal.biz.repo.BizPageLayoutRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,6 @@ public class CoreBizPageLayoutDAO implements BizPageLayoutDAO {
     private BizPageLayoutRepository bizPageLayoutRepository;
 
     @Override
-    @EzDAOLogger
     public String getContent(String layoutCode) {
         return bizPageLayoutRepository
                 .findById(layoutCode)

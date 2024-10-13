@@ -5,7 +5,6 @@
 package id.ezclouds.core.dal.report;
 
 import id.ezclouds.common.facade.dal.biz.report.BizReportPageDAO;
-import id.ezclouds.common.model.annotation.EzDAOLogger;
 import id.ezclouds.common.model.biz.report.BizReportPage;
 import id.ezclouds.core.dal.report.converter.BizReportPageConverter;
 import id.ezclouds.core.dal.report.repo.BizReportPageRepository;
@@ -23,7 +22,6 @@ public class CoreReportPageDAO implements BizReportPageDAO {
     private BizReportPageRepository bizReportPageRepository;
 
     @Override
-    @EzDAOLogger
     public BizReportPage getReportPage(String section, String code) {
         return new BizReportPageConverter()
                 .convertQuery(
