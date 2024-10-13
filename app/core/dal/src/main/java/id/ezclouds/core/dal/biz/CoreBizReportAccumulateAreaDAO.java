@@ -14,6 +14,10 @@ import id.ezclouds.core.dal.biz.repo.BizReportAccumulateAreaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: CoreBizReportAccumulateAreaDAO.java, v 0.1 2024‐10‐03 1:28 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -43,5 +47,25 @@ public class CoreBizReportAccumulateAreaDAO implements BizReportAccumulateAreaDA
                         bizReportAccumulateAreaRepository
                                 .findAndLockById(accumulateAreaId)
                 );
+    }
+
+    @Override
+    @EzDAOLogger
+    public List<BizReportAccumulateArea> getByParentId(String orgId, CoreAreaLevel areaLevel, String areaParentId) {
+        BizReportAccumulateAreaConverter converter = new BizReportAccumulateAreaConverter();
+        switch (areaLevel) {
+            case VILLAGE:
+                return bizReportAccumulateAreaRepository
+                        .findByOrgIdAndAreaLevelAndDistrictId(orgId, areaLevel.getCode(), areaParentId)
+                        .stream()
+                        .map(converter::convertQuery)
+                        .collect(Collectors.toList());
+
+            case DISTRICT:
+            case REGENCY:
+            case PROVINCE:
+                return new ArrayList<>();
+        }
+        return new ArrayList<>();
     }
 }

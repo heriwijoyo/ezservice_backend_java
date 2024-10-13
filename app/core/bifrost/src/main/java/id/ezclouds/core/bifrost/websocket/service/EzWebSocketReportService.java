@@ -15,6 +15,7 @@ import id.ezclouds.common.model.websocket.WebSocketData;
 import id.ezclouds.common.model.websocket.WebSocketEvent;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.exception.ExceptionUtil;
+import id.ezclouds.core.bifrost.websocket.model.DataChannel;
 import id.ezclouds.core.bifrost.websocket.model.SessionIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
@@ -70,7 +71,12 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
         List<BizReportOverall> reportOverall = bizReportOverallService.getReportOverall(event.getOrgId());
         for (String sessionId : availSessionIds) {
             if (sessionMap.get(sessionId) != null) {
-                sessionSendMessage(sessionMap.get(sessionId), WebSocketEvent.DATA_RESULT, reportOverallToMap(reportOverall));
+                SessionIdentity identity = identityMap.get(sessionId);
+                DataChannel dataChannel = DataChannel.getByCode(identity.getDataChannel());
+
+                if (dataChannel == DataChannel.OVERALL) {
+                    sessionSendMessage(sessionMap.get(sessionId), WebSocketEvent.DATA_RESULT, reportOverallToMap(reportOverall));
+                }
             }
         }
     }
@@ -114,9 +120,18 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
         SessionIdentity identity = identityMap.get(session.getId());
 
         if (sessionMap.get(session.getId()) != null && identity != null) {
-            String orgId = identity.getOrgId();
-            List<BizReportOverall> reportOverall = bizReportOverallService.getReportOverall(orgId);
-            sessionSendMessage(session, WebSocketEvent.DATA_RESULT, reportOverallToMap(reportOverall));
+            String channel = (String) payload;
+            identity.setDataChannel(channel);
+
+            DataChannel dataChannel = DataChannel.getByCode(channel);
+            if (dataChannel == DataChannel.OVERALL) {
+                String orgId = identity.getOrgId();
+                List<BizReportOverall> reportOverall = bizReportOverallService.getReportOverall(orgId);
+                sessionSendMessage(session, WebSocketEvent.DATA_RESULT, reportOverallToMap(reportOverall));
+            }
+            if (dataChannel == DataChannel.VOTER_BASE_AREA) {
+
+            }
         }
     }
 

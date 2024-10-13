@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.LockModeType;
 import javax.persistence.QueryHint;
+import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -25,4 +26,6 @@ public interface BizReportAccumulateAreaRepository extends JpaRepository<BizRepo
     @QueryHints({@QueryHint(name = "jakarta.persistence.lock.timeout", value = "3000")})
     @Query("SELECT raa FROM BizReportAccumulateAreaDO raa WHERE raa.accumulateAreaId = ?1")
     BizReportAccumulateAreaDO findAndLockById(String accumulateAreaId);
+
+    List<BizReportAccumulateAreaDO> findByOrgIdAndAreaLevelAndDistrictId(String orgId, String areaLevel, String districtId);
 }

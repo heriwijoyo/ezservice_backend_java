@@ -13,6 +13,7 @@ public class SessionIdentity {
     private String sessionId;
     private String orgId;
     private String orgCode;
+    private String dataChannel;
 
     public SessionIdentity(String sessionId, String orgId, String orgCode) {
         this.sessionId = sessionId;
@@ -30,5 +31,13 @@ public class SessionIdentity {
 
     public String getOrgCode() {
         return orgCode;
+    }
+
+    public String getDataChannel() {
+        return dataChannel;
+    }
+
+    public void setDataChannel(String dataChannel) {
+        this.dataChannel = dataChannel;
     }
 }
