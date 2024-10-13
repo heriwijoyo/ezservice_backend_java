@@ -15,4 +15,6 @@ public interface BizAccumulateAreaExtDAO {
     void store(BizAccumulateAreaExt accumulateAreaExt);
 
     BizAccumulateAreaExt getAndLock(String accumulateAreaId, String orgId, String accumulateKey, String accumulateVariable);
+
+    int getCountPollStation(String orgId);
 }

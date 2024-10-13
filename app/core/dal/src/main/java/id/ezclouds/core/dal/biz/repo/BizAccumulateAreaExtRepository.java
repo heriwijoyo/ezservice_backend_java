@@ -25,4 +25,6 @@ public interface BizAccumulateAreaExtRepository extends JpaRepository<BizAccumul
     @QueryHints({@QueryHint(name = "jakarta.persistence.lock.timeout", value = "3000")})
     @Query("SELECT aae FROM BizAccumulateAreaExtDO aae WHERE aae.accumulateAreaExtId = ?1")
     BizAccumulateAreaExtDO findAndLockById(String accumulateAreaExtId);
+
+    long countByOrgIdAndAreaLevelAndAccumulateKey(String orgId, String areaLevel, String accumulateKey);
 }

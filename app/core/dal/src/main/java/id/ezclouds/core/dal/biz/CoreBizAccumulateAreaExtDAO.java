@@ -6,7 +6,9 @@ package id.ezclouds.core.dal.biz;
 
 import id.ezclouds.common.facade.dal.biz.report.BizAccumulateAreaExtDAO;
 import id.ezclouds.common.model.annotation.EzDAOLogger;
+import id.ezclouds.common.model.area.CoreAreaLevel;
 import id.ezclouds.common.model.biz.report.BizAccumulateAreaExt;
+import id.ezclouds.common.model.biz.report.BizAccumulateKey;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.dal.biz.converter.BizAccumulateAreaExtConverter;
@@ -46,5 +48,14 @@ public class CoreBizAccumulateAreaExtDAO implements BizAccumulateAreaExtDAO {
                         bizAccumulateAreaExtRepository
                                 .findAndLockById(accumulateExtId)
                 );
+    }
+
+    @Override
+    @EzDAOLogger
+    public int getCountPollStation(String orgId) {
+        return Math.toIntExact(
+                bizAccumulateAreaExtRepository
+                .countByOrgIdAndAreaLevelAndAccumulateKey(orgId, CoreAreaLevel.VILLAGE.getCode(), BizAccumulateKey.POLL_STATION_ID.getCode())
+        );
     }
 }

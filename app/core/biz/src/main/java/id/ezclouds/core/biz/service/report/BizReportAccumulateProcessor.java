@@ -4,7 +4,9 @@
  */
 package id.ezclouds.core.biz.service.report;
 
+import id.ezclouds.common.facade.biz.report.BizReportOverallService;
 import id.ezclouds.common.facade.broker.CoreEventPublisherService;
+import id.ezclouds.common.facade.dal.biz.report.BizAccumulateAreaExtDAO;
 import id.ezclouds.common.facade.dal.biz.report.BizReportAccumulateProcessDAO;
 import id.ezclouds.common.facade.integration.BizObjectMapperService;
 import id.ezclouds.common.model.biz.report.BizReportAccumulateProcess;
@@ -13,6 +15,7 @@ import id.ezclouds.common.model.broker.event.EzCommonEvent;
 import id.ezclouds.common.model.broker.event.OverallReportChangeEvent;
 import id.ezclouds.common.model.broker.topic.EzCoreTopic;
 import id.ezclouds.common.model.process.ProcessStatus;
+import id.ezclouds.common.model.report.BizReportOverallKey;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.exception.ExceptionUtil;
@@ -65,7 +68,16 @@ public class BizReportAccumulateProcessor {
     private TransactionTemplate finishProcessTemplate;
 
     @Autowired
+    private TransactionTemplate reportOverallUpdateTemplate;
+
+    @Autowired
     private Map<EzCoreTopic, ReportAccumulateProcessor> reportAccumulateProcessorMap;
+
+    @Autowired
+    private BizAccumulateAreaExtDAO bizAccumulateAreaExtDAO;
+
+    @Autowired
+    private BizReportOverallService bizReportOverallService;
 
     @Autowired
     private CoreEventPublisherService coreEventPublisherService;
@@ -88,8 +100,7 @@ public class BizReportAccumulateProcessor {
             processId = recoverData.getProcessId();
             ezCoreTopic = recoverData.getEzCoreTopic();
             eventPayload = ezCoreTopic == EzCoreTopic.ELECTION_VOTER_REGISTER ? recoverData.getBizVoter() : recoverData.getBizVoterInvalid();
-        }
-        else {
+        } else {
             String currentTime = DateUtil.getCurrentFormattedDateMillis();
             processId = HashUtil.createHash(orgId, ezCoreTopic.getCode(), currentTime);
 
@@ -137,6 +148,19 @@ public class BizReportAccumulateProcessor {
                 accumulateProcess.setExceptionStack(exceptionStack);
                 bizReportAccumulateProcessDAO.store(accumulateProcess);
 
+            }
+        });
+
+        reportOverallUpdateTemplate.execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(TransactionStatus status) {
+                int pollStationCount = bizAccumulateAreaExtDAO.getCountPollStation(orgId);
+
+                bizReportOverallService.updateReportOverall(
+                        orgId,
+                        BizReportOverallKey.VOTER_BASE_VOTE_STATION_COUNT.getCode(),
+                        pollStationCount
+                );
             }
         });
 
