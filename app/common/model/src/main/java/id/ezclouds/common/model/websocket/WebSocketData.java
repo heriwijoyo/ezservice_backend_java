@@ -14,6 +14,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class WebSocketData {
 
     private String event;
+    private String topic;
     private Object payload;
 
     public String getEvent() {
@@ -22,6 +23,14 @@ public class WebSocketData {
 
     public void setEvent(String event) {
         this.event = event;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 
     public Object getPayload() {

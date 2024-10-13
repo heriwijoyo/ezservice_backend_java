@@ -4,6 +4,9 @@
  */
 package id.ezclouds.core.bifrost.websocket.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: SessionIdentity.java, v 0.1 2024‐09‐09 10:54 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -13,7 +16,7 @@ public class SessionIdentity {
     private String sessionId;
     private String orgId;
     private String orgCode;
-    private String dataChannel;
+    private List<String> topics = new ArrayList<>();
 
     public SessionIdentity(String sessionId, String orgId, String orgCode) {
         this.sessionId = sessionId;
@@ -33,11 +36,7 @@ public class SessionIdentity {
         return orgCode;
     }
 
-    public String getDataChannel() {
-        return dataChannel;
-    }
-
-    public void setDataChannel(String dataChannel) {
-        this.dataChannel = dataChannel;
+    public List<String> getTopics() {
+        return topics;
     }
 }

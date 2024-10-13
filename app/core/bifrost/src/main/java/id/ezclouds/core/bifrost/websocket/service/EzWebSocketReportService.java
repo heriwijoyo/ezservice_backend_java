@@ -15,7 +15,7 @@ import id.ezclouds.common.model.websocket.WebSocketData;
 import id.ezclouds.common.model.websocket.WebSocketEvent;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.exception.ExceptionUtil;
-import id.ezclouds.core.bifrost.websocket.model.DataChannel;
+import id.ezclouds.core.bifrost.websocket.model.DataTopic;
 import id.ezclouds.core.bifrost.websocket.model.SessionIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
@@ -72,10 +72,9 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
         for (String sessionId : availSessionIds) {
             if (sessionMap.get(sessionId) != null) {
                 SessionIdentity identity = identityMap.get(sessionId);
-                DataChannel dataChannel = DataChannel.getByCode(identity.getDataChannel());
 
-                if (dataChannel == DataChannel.OVERALL) {
-                    sessionSendMessage(sessionMap.get(sessionId), WebSocketEvent.DATA_RESULT, reportOverallToMap(reportOverall));
+                if (identity.getTopics().contains(DataTopic.OVERALL.getCode())) {
+                    sessionSendMessage(sessionMap.get(sessionId), WebSocketEvent.DATA_RESULT, DataTopic.OVERALL, reportOverallToMap(reportOverall));
                 }
             }
         }
@@ -84,7 +83,7 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         super.afterConnectionEstablished(session);
-        sessionSendMessage(session, WebSocketEvent.SESSION_AUTH_REQUIRED, "");
+        sessionSendMessage(session, WebSocketEvent.SESSION_AUTH_REQUIRED, DataTopic.NON_DATA_TOPIC, "");
     }
 
     @Override
@@ -120,16 +119,18 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
         SessionIdentity identity = identityMap.get(session.getId());
 
         if (sessionMap.get(session.getId()) != null && identity != null) {
-            String channel = (String) payload;
-            identity.setDataChannel(channel);
+            String topic = (String) payload;
+            if (!identity.getTopics().contains(topic)) {
+                identity.getTopics().add(topic);
+            }
 
-            DataChannel dataChannel = DataChannel.getByCode(channel);
-            if (dataChannel == DataChannel.OVERALL) {
+            DataTopic dataTopic = DataTopic.getByCode(topic);
+            if (dataTopic == DataTopic.OVERALL) {
                 String orgId = identity.getOrgId();
                 List<BizReportOverall> reportOverall = bizReportOverallService.getReportOverall(orgId);
-                sessionSendMessage(session, WebSocketEvent.DATA_RESULT, reportOverallToMap(reportOverall));
+                sessionSendMessage(session, WebSocketEvent.DATA_RESULT, DataTopic.OVERALL, reportOverallToMap(reportOverall));
             }
-            if (dataChannel == DataChannel.VOTER_BASE_AREA) {
+            if (dataTopic == DataTopic.DEMOGRAPHIC) {
 
             }
         }
@@ -145,19 +146,19 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
 
                 sessionMap.put(session.getId(), session);
                 identityMap.put(session.getId(), identity);
-                sessionSendMessage(session, WebSocketEvent.SESSION_AUTH_RESULT, "SUCCESS");
+                sessionSendMessage(session, WebSocketEvent.SESSION_AUTH_RESULT, DataTopic.NON_DATA_TOPIC, "SUCCESS");
 
             } catch (Exception exception) {
                 exception.printStackTrace();
-                sessionSendMessage(session, WebSocketEvent.SESSION_AUTH_RESULT, "FAILED:"+ ExceptionUtil.getStackTrace(exception));
+                sessionSendMessage(session, WebSocketEvent.SESSION_AUTH_RESULT, DataTopic.NON_DATA_TOPIC, "FAILED:"+ ExceptionUtil.getStackTrace(exception));
                 sessionClose(session);
             }
         }
     }
 
-    private void sessionSendMessage(WebSocketSession session, WebSocketEvent event, Object payload) {
+    private void sessionSendMessage(WebSocketSession session, WebSocketEvent event, DataTopic dataTopic,  Object payload) {
         try {
-            session.sendMessage(composeMessage(event, payload));
+            session.sendMessage(composeMessage(event, dataTopic, payload));
         } catch (Exception ignored) {}
     }
 
@@ -168,11 +169,12 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
         } catch (Exception ignored) {}
     }
 
-    private TextMessage composeMessage(WebSocketEvent event, Object payload) {
+    private TextMessage composeMessage(WebSocketEvent event, DataTopic dataTopic, Object payload) {
         String strData = StringUtil.EMPTY;
         try {
             WebSocketData webSocketData = new WebSocketData();
             webSocketData.setEvent(event.getCode());
+            webSocketData.setTopic(dataTopic.getCode());
             webSocketData.setPayload(payload);
 
             strData = objectMapper.writeValueAsString(webSocketData);
