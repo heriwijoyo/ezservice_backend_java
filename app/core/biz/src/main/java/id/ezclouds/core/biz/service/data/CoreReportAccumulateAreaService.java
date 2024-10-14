@@ -7,16 +7,19 @@ package id.ezclouds.core.biz.service.data;
 import id.ezclouds.common.facade.area.CoreWorkingAreaService;
 import id.ezclouds.common.facade.biz.report.BizReportAccumulateAreaService;
 import id.ezclouds.common.facade.config.CoreConfigService;
+import id.ezclouds.common.facade.dal.biz.report.BizAccumulateAreaExtDAO;
 import id.ezclouds.common.facade.dal.biz.report.BizReportAccumulateAreaDAO;
 import id.ezclouds.common.model.area.AreaInitConfig;
 import id.ezclouds.common.model.area.CoreArea;
 import id.ezclouds.common.model.area.CoreAreaLevel;
+import id.ezclouds.common.model.biz.report.BizAccumulateKey;
 import id.ezclouds.common.model.biz.report.BizReportAccumulateArea;
 import id.ezclouds.common.model.biz.report.BizReportArea;
 import id.ezclouds.common.model.biz.report.BizReportAreaData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +39,9 @@ public class CoreReportAccumulateAreaService implements BizReportAccumulateAreaS
     @Autowired
     private BizReportAccumulateAreaDAO bizReportAccumulateAreaDAO;
 
+    @Autowired
+    private BizAccumulateAreaExtDAO bizAccumulateAreaExtDAO;
+
     @Override
     public List<BizReportAccumulateArea> getAccumulateAreaByParentId(String orgId, CoreAreaLevel areaLevel, String parentId) {
         return bizReportAccumulateAreaDAO.getByParentId(orgId, areaLevel, parentId);
@@ -50,7 +56,6 @@ public class CoreReportAccumulateAreaService implements BizReportAccumulateAreaS
     @Override
     public BizReportArea getReportArea(String orgId, CoreArea coreArea) {
         CoreAreaLevel childLevel = getChildLevel(coreArea.getAreaLevel());
-        System.out.println(childLevel);
         if (childLevel == null) {
             return null;
         }
@@ -59,6 +64,33 @@ public class CoreReportAccumulateAreaService implements BizReportAccumulateAreaS
                 .getByParentId(orgId, childLevel, coreArea.getAreaId());
 
         return composeBizReportArea(accumulateAreas, childLevel);
+    }
+
+    @Override
+    public BizReportArea getReportAreaPollStation(String orgId, String villageId) {
+        BizReportArea reportArea = new BizReportArea();
+        reportArea.setAreaLevel("POLL_STATION");
+
+        BizReportAccumulateArea accumulateArea = bizReportAccumulateAreaDAO
+                .getPollStationReportArea(orgId, villageId);
+        if (accumulateArea == null) {
+            reportArea.setAreaData(new ArrayList<>());
+            return reportArea;
+        }
+
+        reportArea.setAreaData(
+                bizAccumulateAreaExtDAO
+                        .getVillageAreaExt(accumulateArea.getAccumulateAreaId(), BizAccumulateKey.POLL_STATION_ID.getCode())
+                        .stream()
+                        .map(accumulateAreaExt -> {
+                            BizReportAreaData areaData = new BizReportAreaData();
+                            areaData.setDataName(accumulateAreaExt.getAccumulateVariable());
+                            areaData.setVoterCount(accumulateAreaExt.getAccumulateCount());
+                            return areaData;
+                        })
+                        .collect(Collectors.toList())
+        );
+        return reportArea;
     }
 
     private BizReportArea composeBizReportArea(List<BizReportAccumulateArea> accumulateAreas, CoreAreaLevel areaLevel) {

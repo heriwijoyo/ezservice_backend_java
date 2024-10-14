@@ -131,23 +131,32 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
 
             String orgId = identity.getOrgId();
             DataTopic dataTopic = DataTopic.getByCode(topic);
-            if (dataTopic == DataTopic.OVERALL) {
-                List<BizReportOverall> reportOverall = bizReportOverallService.getReportOverall(orgId);
-                sessionSendMessage(session, WebSocketEvent.DATA_RESULT, DataTopic.OVERALL, reportOverallToMap(reportOverall));
-            }
-            if (dataTopic == DataTopic.VOTER_BASE_AREA) {
-                BizReportArea reportArea;
-                if (payload instanceof Integer) {
-                    String districtId = String.valueOf((Integer)payload);
-                    District district = new District(districtId, "1802", "");
-                    System.out.println(district);
-                    reportArea = bizReportAccumulateAreaService.getReportArea(orgId, district);
-                }
-                else {
-                    System.out.println("WANJENG");
-                    reportArea = bizReportAccumulateAreaService.getReportArea(orgId);
-                }
-                sessionSendMessage(session, WebSocketEvent.DATA_RESULT, DataTopic.VOTER_BASE_AREA, reportArea);
+            BizReportArea reportArea;
+            switch (dataTopic) {
+                case OVERALL:
+                    List<BizReportOverall> reportOverall = bizReportOverallService.getReportOverall(orgId);
+                    sessionSendMessage(session, WebSocketEvent.DATA_RESULT, DataTopic.OVERALL, reportOverallToMap(reportOverall));
+                    break;
+
+                case VOTER_BASE_AREA:
+                    if (payload instanceof Integer) {
+                        String districtId = String.valueOf(payload);
+                        District district = new District(districtId, "1802", "");
+                        reportArea = bizReportAccumulateAreaService.getReportArea(orgId, district);
+                    }
+                    else {
+                        reportArea = bizReportAccumulateAreaService.getReportArea(orgId);
+                    }
+                    sessionSendMessage(session, WebSocketEvent.DATA_RESULT, DataTopic.VOTER_BASE_AREA, reportArea);
+                    break;
+
+                case VOTER_BASE_POLL_STATION:
+                    if (payload instanceof Integer) {
+                        String villageId = String.valueOf(payload);
+                        reportArea = bizReportAccumulateAreaService.getReportAreaPollStation(orgId, villageId);
+                        sessionSendMessage(session, WebSocketEvent.DATA_RESULT, DataTopic.VOTER_BASE_AREA, reportArea);
+                    }
+                    break;
             }
         }
     }

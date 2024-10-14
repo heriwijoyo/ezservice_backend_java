@@ -13,8 +13,11 @@ public enum DataTopic {
     OVERALL("OVERALL"),
     DEMOGRAPHIC("DEMOGRAPHIC"),
     VOTER_BASE_AREA("VOTER_BASE_AREA"),
+    VOTER_BASE_POLL_STATION("VOTER_BASE_POLL_STATION"),
 
     NON_DATA("NON_DATA"),
+
+    UNKNOWN("UNKNOWN")
 
     ;
 
@@ -34,6 +37,6 @@ public enum DataTopic {
                 return channel;
             }
         }
-        return null;
+        return UNKNOWN;
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.LockModeType;
 import javax.persistence.QueryHint;
+import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -27,4 +28,6 @@ public interface BizAccumulateAreaExtRepository extends JpaRepository<BizAccumul
     BizAccumulateAreaExtDO findAndLockById(String accumulateAreaExtId);
 
     long countByOrgIdAndAreaLevelAndAccumulateKey(String orgId, String areaLevel, String accumulateKey);
+
+    List<BizAccumulateAreaExtDO> findByAccumulateAreaIdAndAccumulateKey(String accumulateAreaId, String accumulateKey);
 }

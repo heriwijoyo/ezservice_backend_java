@@ -30,4 +30,6 @@ public interface BizReportAccumulateAreaRepository extends JpaRepository<BizRepo
     List<BizReportAccumulateAreaDO> findByOrgIdAndAreaLevelAndRegencyId(String orgId, String areaLevel, String regencyId);
 
     List<BizReportAccumulateAreaDO> findByOrgIdAndAreaLevelAndDistrictId(String orgId, String areaLevel, String districtId);
+
+    BizReportAccumulateAreaDO findByOrgIdAndAreaLevelAndVillageId(String orgId, String areaLevel, String villageId);
 }

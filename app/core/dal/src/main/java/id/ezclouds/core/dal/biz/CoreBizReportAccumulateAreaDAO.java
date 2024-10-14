@@ -4,12 +4,16 @@
  */
 package id.ezclouds.core.dal.biz;
 
+import id.ezclouds.common.facade.dal.biz.report.BizAccumulateAreaExtDAO;
 import id.ezclouds.common.facade.dal.biz.report.BizReportAccumulateAreaDAO;
 import id.ezclouds.common.model.annotation.EzDAOLogger;
 import id.ezclouds.common.model.area.CoreAreaLevel;
 import id.ezclouds.common.model.biz.report.BizReportAccumulateArea;
+import id.ezclouds.common.model.biz.report.BizReportArea;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.core.dal.biz.converter.BizReportAccumulateAreaConverter;
+import id.ezclouds.core.dal.biz.dataobject.BizReportAccumulateAreaDO;
+import id.ezclouds.core.dal.biz.repo.BizAccumulateAreaExtRepository;
 import id.ezclouds.core.dal.biz.repo.BizReportAccumulateAreaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,6 +31,9 @@ public class CoreBizReportAccumulateAreaDAO implements BizReportAccumulateAreaDA
 
     @Autowired
     private BizReportAccumulateAreaRepository bizReportAccumulateAreaRepository;
+
+    @Autowired
+    private BizAccumulateAreaExtRepository bizAccumulateAreaExtRepository;
 
     @Override
     @EzDAOLogger
@@ -46,6 +53,15 @@ public class CoreBizReportAccumulateAreaDAO implements BizReportAccumulateAreaDA
                 .convertQuery(
                         bizReportAccumulateAreaRepository
                                 .findAndLockById(accumulateAreaId)
+                );
+    }
+
+    @Override
+    public BizReportAccumulateArea getPollStationReportArea(String orgId, String villageId) {
+        return new BizReportAccumulateAreaConverter()
+                .convertQuery(
+                        bizReportAccumulateAreaRepository
+                                .findByOrgIdAndAreaLevelAndVillageId(orgId, CoreAreaLevel.VILLAGE.getCode(), villageId)
                 );
     }
 

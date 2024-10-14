@@ -16,6 +16,9 @@ import id.ezclouds.core.dal.biz.repo.BizAccumulateAreaExtRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: CoreBizAccumulateAreaExtDAO.java, v 0.1 2024‐10‐03 2:47 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -41,6 +44,17 @@ public class CoreBizAccumulateAreaExtDAO implements BizAccumulateAreaExtDAO {
 
     @Override
     @EzDAOLogger
+    public List<BizAccumulateAreaExt> getVillageAreaExt(String accumulateId, String accumulateKey) {
+        BizAccumulateAreaExtConverter converter = new BizAccumulateAreaExtConverter();
+        return bizAccumulateAreaExtRepository
+                .findByAccumulateAreaIdAndAccumulateKey(accumulateId, accumulateKey)
+                .stream()
+                .map(converter::convertQuery)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @EzDAOLogger
     public BizAccumulateAreaExt getAndLock(String accumulateAreaId, String orgId, String accumulateKey, String accumulateVariable) {
         String accumulateExtId = HashUtil.createHash(accumulateAreaId, orgId, accumulateKey, accumulateVariable);
         return new BizAccumulateAreaExtConverter()
@@ -55,7 +69,7 @@ public class CoreBizAccumulateAreaExtDAO implements BizAccumulateAreaExtDAO {
     public int getCountPollStation(String orgId) {
         return Math.toIntExact(
                 bizAccumulateAreaExtRepository
-                .countByOrgIdAndAreaLevelAndAccumulateKey(orgId, CoreAreaLevel.VILLAGE.getCode(), BizAccumulateKey.POLL_STATION_ID.getCode())
+                        .countByOrgIdAndAreaLevelAndAccumulateKey(orgId, CoreAreaLevel.VILLAGE.getCode(), BizAccumulateKey.POLL_STATION_ID.getCode())
         );
     }
 }

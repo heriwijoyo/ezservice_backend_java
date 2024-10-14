@@ -6,6 +6,7 @@ package id.ezclouds.common.facade.dal.biz.report;
 
 import id.ezclouds.common.model.area.CoreAreaLevel;
 import id.ezclouds.common.model.biz.report.BizReportAccumulateArea;
+import id.ezclouds.common.model.biz.report.BizReportArea;
 
 import java.util.List;
 
@@ -16,6 +17,8 @@ import java.util.List;
 public interface BizReportAccumulateAreaDAO {
 
     void store(BizReportAccumulateArea accumulateArea);
+
+    BizReportAccumulateArea getPollStationReportArea(String orgId, String villageId);
 
     BizReportAccumulateArea getAndLock(String orgId, CoreAreaLevel areaLevel, String areaLevelId);
 

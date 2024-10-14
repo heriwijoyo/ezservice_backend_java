@@ -26,4 +26,5 @@ public interface BizReportAccumulateAreaService {
 
     BizReportArea getReportArea(String orgId);
     BizReportArea getReportArea(String orgId, CoreArea coreArea);
+    BizReportArea getReportAreaPollStation(String orgId, String villageId);
 }
