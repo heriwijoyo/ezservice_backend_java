@@ -50,6 +50,7 @@ public class CoreReportAccumulateAreaService implements BizReportAccumulateAreaS
     @Override
     public BizReportArea getReportArea(String orgId, CoreArea coreArea) {
         CoreAreaLevel childLevel = getChildLevel(coreArea.getAreaLevel());
+        System.out.println(childLevel);
         if (childLevel == null) {
             return null;
         }

@@ -136,9 +136,10 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
             }
             if (dataTopic == DataTopic.VOTER_BASE_AREA) {
                 BizReportArea reportArea;
-                if (payload instanceof String && StringUtil.isNotBlank((String) payload)) {
+                if ((payload instanceof String) && ((String)payload).length() > 1) {
                     String districtId = (String) payload;
                     District district = new District(districtId, "1802", "");
+                    System.out.println(district);
                     reportArea = bizReportAccumulateAreaService.getReportArea(orgId, district);
                 }
                 else {
