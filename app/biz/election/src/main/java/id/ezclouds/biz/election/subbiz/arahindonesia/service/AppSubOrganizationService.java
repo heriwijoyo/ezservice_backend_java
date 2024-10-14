@@ -7,7 +7,6 @@ package id.ezclouds.biz.election.subbiz.arahindonesia.service;
 import id.ezclouds.biz.election.subbiz.arahindonesia.dataobject.BizSubOrganizationDO;
 import id.ezclouds.biz.election.subbiz.arahindonesia.repo.AppSubOrganizationRepository;
 import id.ezclouds.biz.election.converter.BizModelConverter;
-import id.ezclouds.biz.election.service.app.repo.BizMemberRepository;
 import id.ezclouds.biz.election.service.inner.service.BizPageQueryStrategy;
 import id.ezclouds.biz.election.service.request.BizPageRequest;
 import id.ezclouds.common.facade.core.CoreSequenceService;
@@ -42,9 +41,6 @@ public class AppSubOrganizationService {
 
     @Autowired
     private AppSubOrganizationRepository appSubOrganizationRepository;
-
-    @Autowired
-    private BizMemberRepository bizMemberRepository;
 
     @Autowired
     private CoreSequenceService coreSequenceService;
