@@ -122,6 +122,7 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
 
     private void performDataRequest(WebSocketSession session, String topic, Object payload) {
         SessionIdentity identity = identityMap.get(session.getId());
+        System.out.println(payload);
 
         if (sessionMap.get(session.getId()) != null && identity != null) {
             if (!identity.getTopics().contains(topic)) {
@@ -135,9 +136,13 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
                 sessionSendMessage(session, WebSocketEvent.DATA_RESULT, DataTopic.OVERALL, reportOverallToMap(reportOverall));
             }
             if (dataTopic == DataTopic.VOTER_BASE_AREA) {
+                String districtId = null;
+                if ((payload instanceof String)) {
+                    districtId = (String) payload;
+                }
+
                 BizReportArea reportArea;
-                if ((payload instanceof String) && ((String)payload).length() > 1) {
-                    String districtId = (String) payload;
+                if (StringUtil.isNotBlank(districtId) && districtId.length() > 1) {
                     District district = new District(districtId, "1802", "");
                     System.out.println(district);
                     reportArea = bizReportAccumulateAreaService.getReportArea(orgId, district);
