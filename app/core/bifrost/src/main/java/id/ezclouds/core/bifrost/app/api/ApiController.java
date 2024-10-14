@@ -464,22 +464,6 @@ public class ApiController extends AppController {
         });
     }
 
-    @PostMapping(value = {"/api/asyncProcessTrigger.json", "/api/v2/async/processTrigger.json"})
-    private ApiResult<String> asyncProcessTrigger(@RequestBody AsyncTriggerRequest request) {
-        return executeInTemplate(ApiEvent.API_ASYNC_PROCESS_TRIGGER, request, new RequestHandler<String>() {
-            @Override
-            public String convertResult(Object resultObject) {
-                return (String) resultObject;
-            }
-
-            @Override
-            public DigestLog composeDigestLog(ApiRequest request, ApiResult<String> result) {
-                return new SimpleDigestLog(result.isSuccess(), result.getResultCode());
-            }
-        });
-    }
-
-
     // ================ ADMIN APIs ==================
 
     @PostMapping(value = {"/api/admin/web_session_create.json", "/api/v2/admin/webSessionCreate.json"})

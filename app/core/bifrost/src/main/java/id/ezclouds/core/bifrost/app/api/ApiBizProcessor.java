@@ -68,9 +68,6 @@ public class ApiBizProcessor implements BizProcessor {
     private BizSubOrganizationService bizSubOrganizationService;
 
     @Autowired
-    private BizAsyncService bizAsyncService;
-
-    @Autowired
     private BizAppDocumentService bizAppDocumentService;
 
     @Override
@@ -162,8 +159,6 @@ public class ApiBizProcessor implements BizProcessor {
             case API_PAGE_APP_DOCUMENTS:
                 return bizAppDocumentService.getAppDocuments(BizRequestConverter.getBizPageRequest(apiRequest));
 
-            case API_ASYNC_PROCESS_TRIGGER:
-                return bizAsyncService.triggerAsync(BizRequestConverter.getBizAsyncTriggerRequest(apiRequest));
 
 
 

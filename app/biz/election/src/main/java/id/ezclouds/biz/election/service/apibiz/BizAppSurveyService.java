@@ -111,10 +111,6 @@ public class BizAppSurveyService extends BizBaseService {
                         throw new EzErrorException(EzErrorCode.SYSTEM_ERROR);
                     }
                 }
-
-                if (bizResult.isSuccess()) {
-                    appSurveyDataService.processResponseAsync((String)bizResult.getObject());
-                }
             }
 
             @Override
