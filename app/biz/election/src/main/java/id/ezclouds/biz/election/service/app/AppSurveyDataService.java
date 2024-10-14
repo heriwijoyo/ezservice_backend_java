@@ -48,9 +48,6 @@ public class AppSurveyDataService {
     @Autowired
     private BizSurveyResponseRepository bizSurveyResponseRepository;
 
-    @Autowired
-    private AppSurveyProcessorConfigRepository appSurveyProcessorConfigRepository;
-
     @Transactional
     public String submitSurvey(AppSurveyResponseRequest request) {
         BizSurveyResponseDO responseDO = new BizSurveyResponseDO();
