@@ -6,8 +6,11 @@ package id.ezclouds.core.bifrost.app.web.biz;
 
 import id.ezclouds.common.facade.auth.AuthAdminService;
 import id.ezclouds.common.facade.dal.biz.BizPageLayoutDAO;
+import id.ezclouds.common.facade.dal.biz.election.BizVoterDAO;
 import id.ezclouds.common.facade.dal.biz.report.BizReportPageDAO;
+import id.ezclouds.common.facade.integration.BizObjectMapperService;
 import id.ezclouds.common.model.auth.AuthSession;
+import id.ezclouds.common.model.biz.election.BizVoter;
 import id.ezclouds.common.model.biz.report.BizReportPage;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -35,6 +39,12 @@ public class BizReportPageController {
 
     @Autowired
     private BizPageLayoutDAO bizPageLayoutDAO;
+
+    @Autowired
+    private BizVoterDAO bizVoterDAO;
+
+    @Autowired
+    private BizObjectMapperService bizObjectMapperService;
 
     @GetMapping(value = "/biz/report/{section}/{code}/{sessionId}")
     private void getBizReportPage(
@@ -69,6 +79,32 @@ public class BizReportPageController {
                     .replace("PAGE_TITLE", reportPage.getPageTitle())
                     .replace("INCLUDE_PAGE_CONTENT", pageContent)
                     .replace("PAGE_SESSION_ID", sessionId);
+
+            response.setStatus(HttpStatus.OK.value());
+            response.getWriter().write(htmlContent);
+            response.getWriter().flush();
+
+        } catch (Exception e) {
+            response.setStatus(HttpStatus.NOT_FOUND.value());
+        }
+    }
+
+    @GetMapping(value = "/biz/data/voter/{districtId}/{villageId}/{pollStation}")
+    private void getBizDataVoter(
+            @PathVariable("districtId") String districtId,
+            @PathVariable("villageId") String villageId,
+            @PathVariable("pollStation") Integer pollStation,
+            HttpServletResponse response) {
+
+        response.setContentType("text/html;charset=UTF-8");
+
+        try {
+            String pollId = pollStation < 10 ? "0"+ pollStation : String.valueOf(pollStation);
+            List<BizVoter> voters =  bizVoterDAO.getVoterDataPollStation(districtId, villageId, pollId);
+
+            String layout = bizPageLayoutDAO.getContent("BIZ_DATA_VOTER");
+            String htmlContent = layout
+                    .replace("PAGE_CONTENT", bizObjectMapperService.toJson(voters));
 
             response.setStatus(HttpStatus.OK.value());
             response.getWriter().write(htmlContent);

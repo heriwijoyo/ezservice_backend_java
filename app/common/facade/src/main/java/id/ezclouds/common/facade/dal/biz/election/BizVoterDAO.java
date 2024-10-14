@@ -6,6 +6,8 @@ package id.ezclouds.common.facade.dal.biz.election;
 
 import id.ezclouds.common.model.biz.election.BizVoter;
 
+import java.util.List;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizVoterDAO.java, v 0.1 2024‐09‐23 11:03 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -17,4 +19,6 @@ public interface BizVoterDAO {
     BizVoter getVoterById(String voterId);
 
     void store(BizVoter voter);
+
+    List<BizVoter> getVoterDataPollStation(String districtId, String villageId, String pollStation);
 }

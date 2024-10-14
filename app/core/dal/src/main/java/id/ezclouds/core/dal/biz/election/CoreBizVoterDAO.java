@@ -12,6 +12,9 @@ import id.ezclouds.core.dal.biz.election.repo.BizElectionVoterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: CoreBizVoterDAO.java, v 0.1 2024‐09‐23 11:04 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -46,5 +49,17 @@ public class CoreBizVoterDAO implements BizVoterDAO {
     public void store(BizVoter voter) {
         bizElectionVoterRepository
                 .saveAndFlush(new BizVoterConverter().convertStore(voter));
+    }
+
+    @Override
+    @EzDAOLogger
+    public List<BizVoter> getVoterDataPollStation(String districtId, String villageId, String pollStation) {
+        BizVoterConverter converter = new BizVoterConverter();
+        return bizElectionVoterRepository
+                .findByOrgIdAndDistrictIdAndVillageIdAndPollStationId("RJL0", districtId, villageId, pollStation)
+                .stream()
+                .map(converter::convertQuery)
+                .collect(Collectors.toList());
+
     }
 }
