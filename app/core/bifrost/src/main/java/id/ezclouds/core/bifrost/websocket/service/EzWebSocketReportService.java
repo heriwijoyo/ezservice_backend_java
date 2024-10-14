@@ -9,6 +9,7 @@ import id.ezclouds.common.facade.auth.AuthAdminService;
 import id.ezclouds.common.facade.biz.BizReportRealtimeService;
 import id.ezclouds.common.facade.biz.report.BizReportAccumulateAreaService;
 import id.ezclouds.common.facade.biz.report.BizReportOverallService;
+import id.ezclouds.common.model.area.District;
 import id.ezclouds.common.model.auth.AuthSession;
 import id.ezclouds.common.model.biz.report.BizReportArea;
 import id.ezclouds.common.model.broker.event.OverallReportChangeEvent;
@@ -134,7 +135,15 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
                 sessionSendMessage(session, WebSocketEvent.DATA_RESULT, DataTopic.OVERALL, reportOverallToMap(reportOverall));
             }
             if (dataTopic == DataTopic.VOTER_BASE_AREA) {
-                BizReportArea reportArea = bizReportAccumulateAreaService.getReportArea(orgId);
+                BizReportArea reportArea;
+                if (payload instanceof String && StringUtil.isNotBlank((String) payload)) {
+                    String districtId = (String) payload;
+                    District district = new District(districtId, "1802", "");
+                    reportArea = bizReportAccumulateAreaService.getReportArea(orgId, district);
+                }
+                else {
+                    reportArea = bizReportAccumulateAreaService.getReportArea(orgId);
+                }
                 sessionSendMessage(session, WebSocketEvent.DATA_RESULT, DataTopic.VOTER_BASE_AREA, reportArea);
             }
         }
