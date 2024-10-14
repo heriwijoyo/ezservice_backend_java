@@ -68,6 +68,7 @@ public class CoreReportAccumulateAreaService implements BizReportAccumulateAreaS
                         .stream()
                         .map(accumulateArea -> {
                             BizReportAreaData areaData = new BizReportAreaData();
+                            areaData.setDataId(getAreaId(accumulateArea));
                             areaData.setDataName(getAreaName(accumulateArea));
                             areaData.setVoterCount(accumulateArea.getVoterCount());
                             areaData.setVoterMaleCount(accumulateArea.getVoterMaleCount());
@@ -77,6 +78,20 @@ public class CoreReportAccumulateAreaService implements BizReportAccumulateAreaS
                         .collect(Collectors.toList())
         );
         return bizReportArea;
+    }
+
+    private String getAreaId(BizReportAccumulateArea accumulateArea) {
+        switch (accumulateArea.getAreaLevel()) {
+            case PROVINCE:
+                return accumulateArea.getProvinceId();
+            case REGENCY:
+                return accumulateArea.getRegencyId();
+            case DISTRICT:
+                return accumulateArea.getDistrictId();
+            case VILLAGE:
+                return accumulateArea.getVillageId();
+        }
+        return null;
     }
 
     private String getAreaName(BizReportAccumulateArea accumulateArea) {

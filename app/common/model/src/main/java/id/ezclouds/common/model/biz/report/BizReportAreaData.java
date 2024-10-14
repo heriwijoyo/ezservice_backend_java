@@ -10,10 +10,19 @@ package id.ezclouds.common.model.biz.report;
  */
 public class BizReportAreaData {
 
+    private String dataId;
     private String dataName;
     private Integer voterCount;
     private Integer voterMaleCount;
     private Integer voterFemaleCount;
+
+    public String getDataId() {
+        return dataId;
+    }
+
+    public void setDataId(String dataId) {
+        this.dataId = dataId;
+    }
 
     public String getDataName() {
         return dataName;
