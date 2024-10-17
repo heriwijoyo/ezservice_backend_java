@@ -11,9 +11,12 @@ import id.ezclouds.common.facade.template.BizServiceTemplate;
 import id.ezclouds.common.model.auth.AuthAdminSession;
 import id.ezclouds.common.model.auth.AuthRole;
 import id.ezclouds.common.model.biz.BizCommonTable;
+import id.ezclouds.common.model.config.CoreConfig;
+import id.ezclouds.common.model.config.CoreOrgConfigType;
 import id.ezclouds.common.model.message.CommonMessageConstant;
 import id.ezclouds.common.model.request.WebBizPageRequest;
 import id.ezclouds.common.model.request.admin.CommonTableCreateRequest;
+import id.ezclouds.common.model.request.admin.WebAdminRequest;
 import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
 import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
 import id.ezclouds.common.model.result.BizResult;
@@ -168,6 +171,69 @@ public class CoreBizAdminConfigService implements BizAdminConfigService {
 
                 bizResult.setSuccess(true);
                 bizResult.setObject(bizCommonTable);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return BizErrorMessageHelper.getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
+    @Override
+    public BizResult getWatzapNumberKey(WebAdminRequest request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(request, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                AuthAdminSession session = authAdminService
+                        .authenticateAdminSession(request.getSessionId());
+                authAdminService.authorizeSessionForRole(session, AuthRole.ADMIN_ORG);
+
+                CoreConfig coreConfig = adminConfigService
+                        .getCoreConfig(session.getOrgId(), CoreOrgConfigType.WATZAP_NUMBER_KEY);
+
+                bizResult.setObject(coreConfig.getConfigValue());
+                bizResult.setSuccess(true);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return BizErrorMessageHelper.getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+
+    @Override
+    public BizResult updateWatzapNumberKey(WebBizUpdateRequest<String> request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(request, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getSessionId(), EzErrorCode.ILLEGAL_PARAM);
+                AssertUtil.notBlank(request.getObject(), EzErrorCode.ILLEGAL_PARAM);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                AuthAdminSession session = authAdminService
+                        .authenticateAdminSession(request.getSessionId());
+                authAdminService.authorizeSessionForRole(session, AuthRole.ADMIN_ORG);
+
+                adminConfigService
+                        .updateConfigValue(session.getOrgId(), CoreOrgConfigType.WATZAP_NUMBER_KEY, request.getObject());
+
+                bizResult.setSuccess(true);
+                bizResult.setObject(CommonMessageConstant.BIZ_OPERATION_SUCCESS);
             }
 
             @Override

@@ -6,7 +6,7 @@ package id.ezclouds.core.process.biz;
 
 import id.ezclouds.common.facade.member.MemberReportService;
 import id.ezclouds.common.model.report.BizReportOverallKey;
-import id.ezclouds.core.process.biz.inner.BizInnerProcessorReportGenerateOverall;
+import id.ezclouds.core.process.biz.inner.BizInnerProcessReportOverall;
 import id.ezclouds.core.process.model.BizProcessEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class BizProcessorReportUpdateMember extends BizAsyncProcessor {
     private MemberReportService memberReportService;
 
     @Autowired
-    private BizInnerProcessorReportGenerateOverall bizInnerProcessorReportGenerateOverall;
+    private BizInnerProcessReportOverall bizInnerProcessReportOverall;
 
     @Override
     public BizProcessEvent getProcessEvent() {
@@ -44,7 +44,7 @@ public class BizProcessorReportUpdateMember extends BizAsyncProcessor {
         long count = memberReportService.countToday(orgId);
         logData.add("COUNT="+ count);
 
-        bizInnerProcessorReportGenerateOverall
+        bizInnerProcessReportOverall
                 .storeReport(orgId, BizReportOverallKey.MEMBER_TODAY.getCode(), (int)count);
 
         return true;

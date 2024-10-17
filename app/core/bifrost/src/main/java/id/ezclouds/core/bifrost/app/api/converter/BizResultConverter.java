@@ -4,7 +4,7 @@
  */
 package id.ezclouds.core.bifrost.app.api.converter;
 
-import id.ezclouds.biz.ezservice.model.member.MemberBase;
+import id.ezclouds.biz.election.model.member.MemberBase;
 import id.ezclouds.core.bifrost.app.api.model.MemberInfo;
 
 /**

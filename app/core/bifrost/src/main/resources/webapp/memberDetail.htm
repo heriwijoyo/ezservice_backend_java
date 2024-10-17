@@ -15,6 +15,9 @@
                             <a href="javascript:void(0)">
                                 <button id="btnUpdateRoles" type="button" class="button button-rounded btn-offset waves-effect waves-float">UPDATE ROLES</button>
                             </a>
+                            <a href="javascript:void(0)">
+                                <button id="btnUpdateSubOrg" type="button" class="button button-rounded btn-offset waves-effect waves-float">UPDATE COMMUNITY</button>
+                            </a>
                         </div>
                     </div>
                     <div class="body">
@@ -23,8 +26,7 @@
                             <div class="form-group col-sm-12">
                                 <div class="form-line">
                                     <div class="font-12">Sub Organization</div>
-                                    <input type="text" class="form-control" id="subOrgName" placeholder="Name" disabled>
-                                    <!--select class="form-control show-tick" id="sub_org_id"></select-->
+                                    <select class="form-control show-tick" id="subOrgId" disabled></select>
                                 </div>
                             </div>
 
@@ -222,7 +224,9 @@
 <script type="text/javascript">
     var EzAdminUrl = {
         GET_MEMBER_DETAIL: 'api/memberDetail.json',
-        MEMBER_UPDATE_ROLES: 'api/memberUpdateRoles.json'
+        MEMBER_UPDATE_ROLES: 'api/memberUpdateRoles.json',
+        GET_MEMBER_REQUIRED_DATA: 'api/memberAddRequiredData.json',
+        MEMBER_UPDATE_SUB_ORG: 'api/memberUpdateSubOrg.json'
     };
     var EzDashboardBizService = {
         start: function() {
@@ -255,6 +259,13 @@
                 EzDashboardBizService.hideLoader();
                 window.location.reload();
             }
+            if (url === EzAdminUrl.GET_MEMBER_REQUIRED_DATA) {
+                EzDashboardBizService.parseSubOrg(response.data);
+            }
+            if (url === EzAdminUrl.MEMBER_UPDATE_SUB_ORG) {
+                alert(response.data);
+                $('#btnUpdateSubOrg').text('UPDATE COMMUNITY');
+            }
         },
         handleApiBizFailed: function(url, message) {
             if (url === EzAdminUrl.GET_MEMBER_DETAIL) {
@@ -272,9 +283,9 @@
             window.location.replace('members.htm');
         },
         parseData: function(data) {
-            $('#subOrgName').val(data.subOrgName);
+            $('#subOrgId').html('<option value="'+data.subOrgId+'">'+data.subOrgName+'</option>');
             $('#roles').val(data.roles);
-            $('#name').val(data.memberName);
+            $('#name').val(data.name);
             $('#gender').val(data.gender);
             $('#dateOfBirth').val(data.dateOfBirth);
             $('#phone').val(data.phone);
@@ -290,6 +301,16 @@
             $('#tpsNumber').val(data.tpsNumber);
 
             EzDashboardBizService.parseRoles(data.roles);
+        },
+        parseSubOrg: function(data) {
+            let currentValue = $('#subOrgId').val();
+            var subOrgOption = '';
+            for(i = 0; i < data.bizSubOrganizations.length; i++) {
+                var selected = '';
+                if (currentValue === data.bizSubOrganizations[i].subOrgId) { selected = ' selected'; }
+                subOrgOption += '<option value="'+ data.bizSubOrganizations[i].subOrgId +'"'+ selected +'>'+ data.bizSubOrganizations[i].name +'</option>';
+            }
+            $('#subOrgId').html(subOrgOption);
         },
         fetchRoles: function() {
             var roles = [];
@@ -353,7 +374,22 @@
         $('#submitButton').click(function(){
             EzDashboardBizService.submitUpdateRoles();
         });
-
+        $('#btnUpdateSubOrg').click(function(){
+            if ($(this).text() == 'SAVE COMMUNITY') {
+                $(this).text('PROCESSING...');
+                let memberId = EzWebAppClient.getUrlParameter('id');
+                EzWebAppClient.callApiService(EzAdminUrl.MEMBER_UPDATE_SUB_ORG, {
+                    memberId: memberId,
+                    subOrgId: $('#subOrgId').val()
+                });
+                $('#subOrgId').prop('disabled', true);
+            }
+            if ($(this).text() == 'UPDATE COMMUNITY') {
+                $('#subOrgId').prop('disabled', false);
+                $(this).text('SAVE COMMUNITY');
+                EzWebAppClient.callApiService(EzAdminUrl.GET_MEMBER_REQUIRED_DATA, {});
+            }
+        });
     });
 
 </script>

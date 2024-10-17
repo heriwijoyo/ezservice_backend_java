@@ -5,13 +5,15 @@
 package id.ezclouds.core.dal.auth;
 
 import id.ezclouds.common.facade.dal.auth.AuthAppClientDAO;
-import id.ezclouds.common.model.annotation.EzDAOLogger;
 import id.ezclouds.common.model.auth.AuthAppClient;
 import id.ezclouds.core.dal.auth.converter.EzAuthAppClientQueryConverter;
 import id.ezclouds.core.dal.auth.dataobject.DalAuthAppClientDO;
 import id.ezclouds.core.dal.auth.repo.DalAuthAppClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -23,7 +25,16 @@ public class CoreAuthAppClientDAO implements AuthAppClientDAO {
     @Autowired
     private DalAuthAppClientRepository dalAuthAppClientRepository;
 
-    @EzDAOLogger
+    @Override
+    public List<AuthAppClient> getAllActive() {
+        EzAuthAppClientQueryConverter converter = new EzAuthAppClientQueryConverter();
+        return dalAuthAppClientRepository
+                .findByStatus(1)
+                .stream()
+                .map(converter::convert)
+                .collect(Collectors.toList());
+    }
+
     @Override
     public AuthAppClient getByOrgId(String orgId) {
         DalAuthAppClientDO result = dalAuthAppClientRepository

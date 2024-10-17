@@ -8,7 +8,7 @@ import id.ezclouds.common.facade.dal.member.BizMemberUnionDAO;
 import id.ezclouds.common.facade.dal.organization.SubOrganizationDAO;
 import id.ezclouds.common.facade.member.MemberReportService;
 import id.ezclouds.common.model.report.BizReportOverallKey;
-import id.ezclouds.core.process.biz.inner.BizInnerProcessorReportGenerateOverall;
+import id.ezclouds.core.process.biz.inner.BizInnerProcessReportOverall;
 import id.ezclouds.core.process.model.BizProcessEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ public class BizProcessorReportGenerateOverall extends BizAsyncProcessor {
     private SubOrganizationDAO subOrganizationDAO;
 
     @Autowired
-    private BizInnerProcessorReportGenerateOverall bizInnerProcessorReportGenerateOverall;
+    private BizInnerProcessReportOverall bizInnerProcessReportOverall;
 
     @Autowired
     private MemberReportService memberReportService;
@@ -51,15 +51,15 @@ public class BizProcessorReportGenerateOverall extends BizAsyncProcessor {
 
         long totalMember = bizMemberUnionDAO.countByOrgId(orgId);
         logData.add("TOTAL_MEMBER=" + totalMember);
-        bizInnerProcessorReportGenerateOverall.storeReport(orgId, BizReportOverallKey.TOTAL_MEMBER_UNION.getCode(), (int)totalMember);
+        bizInnerProcessReportOverall.storeReport(orgId, BizReportOverallKey.TOTAL_MEMBER_UNION.getCode(), (int)totalMember);
 
         long totalSubOrg = subOrganizationDAO.countByOrgId(orgId) - 1;
         logData.add("TOTAL_SUB_ORG=" + totalSubOrg);
-        bizInnerProcessorReportGenerateOverall.storeReport(orgId, BizReportOverallKey.TOTAL_SUB_ORGANIZATION.getCode(), (int)totalSubOrg);
+        bizInnerProcessReportOverall.storeReport(orgId, BizReportOverallKey.TOTAL_SUB_ORGANIZATION.getCode(), (int)totalSubOrg);
 
         long memberYesterday = memberReportService.countYesterday(orgId);
         logData.add("MEMBER_YESTERDAY="+ memberYesterday);
-        bizInnerProcessorReportGenerateOverall.storeReport(orgId, BizReportOverallKey.MEMBER_YESTERDAY.getCode(), (int)memberYesterday);
+        bizInnerProcessReportOverall.storeReport(orgId, BizReportOverallKey.MEMBER_YESTERDAY.getCode(), (int)memberYesterday);
 
         return true;
     }

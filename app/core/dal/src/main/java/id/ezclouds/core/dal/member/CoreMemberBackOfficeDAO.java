@@ -12,7 +12,9 @@ import id.ezclouds.common.model.request.BizPageRequest;
 import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.common.model.util.PageResultUtil;
 import id.ezclouds.common.util.DateUtil;
-import id.ezclouds.core.dal.member.converter.MemberBackOfficeResultConverter;
+import id.ezclouds.common.util.assertion.AssertUtil;
+import id.ezclouds.common.util.exception.EzErrorCode;
+import id.ezclouds.core.dal.member.converter.CoreMemberBackOfficeConverter;
 import id.ezclouds.core.dal.member.dataobject.CoreMemberBackOfficeDO;
 import id.ezclouds.core.dal.member.dataobject.CoreMemberExtBackOfficeDO;
 import id.ezclouds.core.dal.member.repo.CoreMemberBackOfficeRepository;
@@ -54,6 +56,11 @@ public class CoreMemberBackOfficeDAO implements BizMemberBackOfficeDAO {
                         .findByOrgIdAndNameContains(bizPageRequest.getOrgId(), bizPageRequest.getSearchKeyword(), bizPageRequest.toPageRequest());
                 break;
 
+            case MEMBER_REFERRER:
+                findResult = coreMemberBackOfficeRepository
+                        .findByOrgIdAndReferrerId(bizPageRequest.getOrgId(), bizPageRequest.getSearchKeyword(), bizPageRequest.toPageRequest());
+                break;
+
             default:
                 findResult = coreMemberBackOfficeRepository
                         .findByOrgId(bizPageRequest.getOrgId(), bizPageRequest.toPageRequest());
@@ -68,7 +75,7 @@ public class CoreMemberBackOfficeDAO implements BizMemberBackOfficeDAO {
         List<CoreMemberExtBackOfficeDO> memberExtensions = coreMemberExtBackOfficeRepository
                 .findByMemberIdIn(memberIds);
 
-        return PageResultUtil.convertFindResult(findResult, new MemberBackOfficeResultConverter(memberExtensions));
+        return PageResultUtil.convertFindResult(findResult, new CoreMemberBackOfficeConverter(memberExtensions));
     }
 
     @EzDAOLogger
@@ -85,9 +92,32 @@ public class CoreMemberBackOfficeDAO implements BizMemberBackOfficeDAO {
         CoreMemberExtBackOfficeDO memberExtBackOfficeDO = coreMemberExtBackOfficeRepository
                 .findByMemberId(memberId);
 
-        MemberBackOfficeResultConverter converter = new MemberBackOfficeResultConverter(memberExtBackOfficeDO);
+        return new CoreMemberBackOfficeConverter(memberExtBackOfficeDO)
+                .convertQuery(memberBackOfficeDO);
+    }
 
-        return converter.convert(memberBackOfficeDO);
+    @EzDAOLogger
+    @Override
+    public List<MemberBackOffice> getByReferrerId(String referrerId) {
+        CoreMemberBackOfficeConverter converter = new CoreMemberBackOfficeConverter();
+        return coreMemberBackOfficeRepository
+                .findByReferrerId(referrerId)
+                .stream()
+                .map(converter::convertQuery)
+                .collect(Collectors.toList());
+    }
+
+    @EzDAOLogger
+    @Override
+    public void updateSubOrganization(String memberId, String subOrgId) {
+        CoreMemberBackOfficeDO memberBackOfficeDO = coreMemberBackOfficeRepository
+                .findById(memberId)
+                .orElse(null);
+        AssertUtil.notNull(memberBackOfficeDO, EzErrorCode.DATA_NOT_FOUND);
+
+        memberBackOfficeDO.setSubOrgId(subOrgId);
+        coreMemberBackOfficeRepository
+                .saveAndFlush(memberBackOfficeDO);
     }
 
     @EzDAOLogger

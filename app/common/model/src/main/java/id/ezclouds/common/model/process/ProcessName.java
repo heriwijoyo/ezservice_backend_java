@@ -10,8 +10,18 @@ package id.ezclouds.common.model.process;
  */
 public enum ProcessName {
 
-    SURVEY_RESPONSE_PARSE("SURVEY_RESPONSE_PARSE"),
-    UNKNOWN("UNKNOWN"),
+    INIT_SEQUENCE_CONFIG("INIT_SEQUENCE_CONFIG"),
+    INIT_MASTER_DATA_AREA("INIT_MASTER_DATA_AREA"),
+    INIT_REPORT_OVERALL("INIT_REPORT_OVERALL"),
+    INIT_REPORT_ACCUMULATE_AREA("INIT_REPORT_ACCUMULATE_AREA"),
+    INIT_MIGRATE_MEMBER("INIT_MIGRATE_MEMBER"),
+
+    INIT_REPORT_REAL_COUNT_OVERALL("INIT_REPORT_REAL_COUNT_OVERALL"),
+    INIT_REPORT_REAL_COUNT_AREA("INIT_REPORT_REAL_COUNT_AREA"),
+
+    GENERATE_PUBLIC_SESSION("GENERATE_PUBLIC_SESSION"),
+
+    TMP_RECOVER_ACCUMULATE_AREA("TMP_RECOVER_ACCUMULATE_AREA"),
 
     ;
     private final String code;
@@ -20,12 +30,16 @@ public enum ProcessName {
         this.code = code;
     }
 
+    public String getCode() {
+        return code;
+    }
+
     public static ProcessName getByCode(String code) {
         for (ProcessName processName : values()) {
             if (processName.code.equals(code)) {
                 return processName;
             }
         }
-        return UNKNOWN;
+        return null;
     }
 }

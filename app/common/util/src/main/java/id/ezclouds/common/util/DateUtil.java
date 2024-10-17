@@ -4,9 +4,6 @@
  */
 package id.ezclouds.common.util;
 
-import org.springframework.cache.annotation.Cacheable;
-
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -18,6 +15,7 @@ import java.util.Date;
 public class DateUtil {
 
     public static final String FORMAT_DATETIME_DEFAULT = "yyyy-MM-dd HH:mm:ss";
+    public static final String FORMAT_DATETIME_MILLIS = "yyyy-MM-dd HH:mm:ss.SSS";
     public static final String FORMAT_DATE = "yyyy-MM-dd";
 
     public static String getFormattedDate(Date date, String dateFormat) {
@@ -54,6 +52,10 @@ public class DateUtil {
 
     public static String getCurrentFormattedDate() {
         return getFormattedDate(new Date());
+    }
+
+    public static String getCurrentFormattedDateMillis() {
+        return getFormattedDate(new Date(), FORMAT_DATETIME_MILLIS);
     }
 
     public static String getFormattedDateFromDateTime(String dateTime) {

@@ -5,9 +5,10 @@
 package id.ezclouds.core.bifrost.app.webapp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import id.ezclouds.biz.ezservice.service.apibiz.BizMemberService;
-import id.ezclouds.biz.ezservice.service.core.BizCacheKey;
+import id.ezclouds.biz.election.service.apibiz.OldBizMemberService;
+import id.ezclouds.biz.election.service.core.BizCacheKey;
 import id.ezclouds.common.facade.biz.BizReportService;
+import id.ezclouds.common.facade.dal.web.EzWebAppContentDAO;
 import id.ezclouds.common.model.report.BizMainReport;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
@@ -16,15 +17,17 @@ import id.ezclouds.common.util.facade.BeanFacadeUtil;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.common.model.auth.AuthAdminSession;
-import id.ezclouds.core.auth.service.CoreAuthService;
+import id.ezclouds.core.auth.service.LegacyCoreAuthService;
 import id.ezclouds.core.bifrost.app.api.digestlog.EmptyDigestLog;
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;
 import id.ezclouds.core.bifrost.core.SpringContextConfig;
 import id.ezclouds.common.util.context.EzAppContextHolder;
-import id.ezclouds.core.bifrost.core.component.WebAppForm;
-import id.ezclouds.core.bifrost.core.component.render.WebAppFormRenderer;
-import id.ezclouds.core.bifrost.core.component.render.WebComponentRenderer;
-import id.ezclouds.core.bifrost.core.component.factory.CommonTableFormFactory;
+import id.ezclouds.core.bifrost.core.config.WebAppConfig;
+import id.ezclouds.core.bifrost.core.constant.WebConstant;
+import id.ezclouds.core.bifrost.core.web.component.WebAppForm;
+import id.ezclouds.core.bifrost.core.web.component.render.WebAppFormRenderer;
+import id.ezclouds.core.bifrost.core.web.component.render.WebComponentRenderer;
+import id.ezclouds.core.bifrost.core.web.component.factory.CommonTableFormFactory;
 import id.ezclouds.core.shared.util.DigestLogUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +44,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -58,7 +64,7 @@ public class WebAppController {
     private static final String ASSET_INCLUDE_NAVIGATION = "webapp/include/navigation.incl";
 
     @Autowired
-    private CoreAuthService coreAuthService;
+    private LegacyCoreAuthService legacyCoreAuthService;
 
     @Autowired
     private BizReportService bizReportService;
@@ -148,6 +154,11 @@ public class WebAppController {
         renderCachedWebApp(getDataUploadContent(), servletResponse);
     }
 
+    @GetMapping(value = "/webapp/masterData.htm")
+    private void masterData(HttpServletResponse servletResponse) {
+        renderCachedWebApp(getMasterDataContent(), servletResponse);
+    }
+
     @GetMapping(value = "/webapp/organization.htm")
     private void webAppOrganization(HttpServletResponse servletResponse) {
         renderCachedWebApp(getOrganizationContent(), servletResponse);
@@ -211,7 +222,7 @@ public class WebAppController {
             AssertUtil.notBlank(sessionId, EzErrorCode.ILLEGAL_PARAM);
 
             AuthAdminSession session = SpringContextConfig
-                    .getBean(CoreAuthService.class)
+                    .getBean(LegacyCoreAuthService.class)
                     .adminAuthWebSessionId(sessionId);
             AssertUtil.isTrue(orgCode.equals(session.getOrgCode()), EzErrorCode.SESSION_INVALID);
 
@@ -240,14 +251,17 @@ public class WebAppController {
             AssertUtil.notBlank(sessionId, EzErrorCode.ILLEGAL_PARAM);
 
             AuthAdminSession session = SpringContextConfig
-                    .getBean(CoreAuthService.class)
+                    .getBean(LegacyCoreAuthService.class)
                     .adminAuthWebSessionId(sessionId);
             AssertUtil.isTrue(orgCode.equals(session.getOrgCode()), EzErrorCode.SESSION_INVALID);
 
+            String jsReloadScript = "207".equals(orgCode) ? "setTimeout(function(){window.location.reload(1);},60000);" : "";
+
             String htmlLayout = getReportPublicContent(WebAppPage.REPORT_PUBLIC_LIMITED.getAssetFile());
             String htmlContent = htmlLayout
-                    .replace("HTML_TITLE_PAGE", "MSA Report Center")
-                    .replace("INNER_PAGE_TITLE", "MSA Report Center");
+                    .replace("HTML_TITLE_PAGE", "Report Center")
+                    .replace("INNER_PAGE_TITLE", "Report Center")
+                    .replace("JS_RELOAD_SCRIPT", jsReloadScript);
 
             BizMainReport mainReport = BeanFacadeUtil
                     .getBean(BizReportService.class)
@@ -279,7 +293,7 @@ public class WebAppController {
             AssertUtil.notBlank(sessionId, EzErrorCode.ILLEGAL_PARAM);
 
             AuthAdminSession session = SpringContextConfig
-                    .getBean(CoreAuthService.class)
+                    .getBean(LegacyCoreAuthService.class)
                     .adminAuthWebSessionId(sessionId);
             AssertUtil.isTrue(orgCode.equals(session.getOrgCode()), EzErrorCode.SESSION_INVALID);
 
@@ -310,12 +324,12 @@ public class WebAppController {
             AssertUtil.notBlank(sessionId, EzErrorCode.ILLEGAL_PARAM);
 
             AuthAdminSession session = SpringContextConfig
-                    .getBean(CoreAuthService.class)
+                    .getBean(LegacyCoreAuthService.class)
                     .adminAuthWebSessionId(sessionId);
             AssertUtil.isTrue(orgCode.equals(session.getOrgCode()), EzErrorCode.SESSION_INVALID);
 
             List<List<String>> jsonData = SpringContextConfig
-                    .getBean(BizMemberService.class)
+                    .getBean(OldBizMemberService.class)
                     .getAllMemberData(session.getOrgId());
 
             success = renderJsonData(new ObjectMapper().writeValueAsString(jsonData), servletResponse);
@@ -340,12 +354,12 @@ public class WebAppController {
             AssertUtil.notBlank(sessionId, EzErrorCode.ILLEGAL_PARAM);
 
             AuthAdminSession session = SpringContextConfig
-                    .getBean(CoreAuthService.class)
+                    .getBean(LegacyCoreAuthService.class)
                     .adminAuthWebSessionId(sessionId);
             AssertUtil.isTrue(orgCode.equals(session.getOrgCode()), EzErrorCode.SESSION_INVALID);
 
             List<List<String>> jsonData = SpringContextConfig
-                    .getBean(BizMemberService.class)
+                    .getBean(OldBizMemberService.class)
                     .getAllImportData(session.getOrgId());
 
             success = renderJsonData(new ObjectMapper().writeValueAsString(jsonData), servletResponse);
@@ -356,7 +370,6 @@ public class WebAppController {
         DigestLogUtil.logWebDigest(LOGGER, getDigestLog(success));
     }
 
-    @Cacheable(value = BizCacheKey.WEBAPP_HOME)
     public String getHomeContent() {
         return getWebAppContent(WebAppPage.HOME);
     }
@@ -441,6 +454,10 @@ public class WebAppController {
         return getWebAppContent(WebAppPage.DATA_UPLOAD);
     }
 
+    public String getMasterDataContent() {
+        return getWebAppContent(WebAppPage.MASTER_DATA);
+    }
+
     @Cacheable(value = BizCacheKey.WEBAPP_ORGANIZATION)
     public String getOrganizationContent() {
         return getWebAppContent(WebAppPage.ORGANIZATION);
@@ -495,7 +512,8 @@ public class WebAppController {
             String layoutContent = readHtmlContent(ASSET_INCLUDE_LAYOUT);
             String headerContent = readHtmlContent(ASSET_INCLUDE_HEADER);
             String navigationContent = readHtmlContent(ASSET_INCLUDE_NAVIGATION);
-            String pageContent = readHtmlContent(webAppPage.getAssetFile());
+            String pageContent = loadHtmlContent(webAppPage);
+
             String searchComponent = WebComponentRenderer.getListSearchComponent(webAppPage);
             if (StringUtil.isNotBlank(searchComponent)) {
                 pageContent = pageContent.replace("INCLUDE_SEARCH_COMPONENT", searchComponent);
@@ -507,6 +525,7 @@ public class WebAppController {
                     .replace("INCLUDE_PAGE_CONTENT", pageContent);
             return htmlContent;
         } catch (IOException e) {
+            e.printStackTrace();
             return StringUtil.EMPTY;
         }
     }
@@ -545,6 +564,21 @@ public class WebAppController {
             success = false;
         }
         return success;
+    }
+
+    private String loadHtmlContent(WebAppPage webAppPage) throws IOException {
+        WebAppConfig webConfig = BeanFacadeUtil.getBean(WebAppConfig.class);
+
+        if (WebConstant.DEV.equals(webConfig.getWebReleaseMode()) && StringUtil.isNotBlank(webConfig.getWebResourceDir())) {
+            Path webAppSourcePath = Paths.get(webConfig.getWebResourceDir(), webAppPage.getAssetFile());
+            return Files.readString(webAppSourcePath);
+        }
+        if (webAppPage.isLoadFromDatabase()) {
+            return BeanFacadeUtil
+                    .getBean(EzWebAppContentDAO.class)
+                    .getContentByAssetFileId(webAppPage.getAssetFile());
+        }
+        return readHtmlContent(webAppPage.getAssetFile());
     }
 
     private String readHtmlContent(String assetFile) throws IOException {

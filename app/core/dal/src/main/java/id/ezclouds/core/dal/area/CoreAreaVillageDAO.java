@@ -6,7 +6,7 @@ package id.ezclouds.core.dal.area;
 
 import id.ezclouds.common.facade.dal.area.AreaVillageDAO;
 import id.ezclouds.common.model.annotation.EzDAOLogger;
-import id.ezclouds.common.model.area.Village;
+import id.ezclouds.common.model.area.CoreArea;
 import id.ezclouds.common.model.util.ListModelConvertUtil;
 import id.ezclouds.core.dal.area.converter.EzVillageQueryConverter;
 import id.ezclouds.core.dal.area.repo.EzVillageRepository;
@@ -28,7 +28,7 @@ public class CoreAreaVillageDAO implements AreaVillageDAO {
 
     @EzDAOLogger
     @Override
-    public List<Village> getByDistrictId(String districtId) {
+    public List<CoreArea> getByDistrictId(String districtId) {
         return ListModelConvertUtil.convert(
                 ezVillageRepository.findByDistrictIdIn(Collections.singletonList(districtId)),
                 new EzVillageQueryConverter()
@@ -37,10 +37,18 @@ public class CoreAreaVillageDAO implements AreaVillageDAO {
 
     @EzDAOLogger
     @Override
-    public List<Village> getByDistrictIds(List<String> districtIds) {
+    public List<CoreArea> getByDistrictIds(List<String> districtIds) {
         return ListModelConvertUtil.convert(
                 ezVillageRepository.findByDistrictIdIn(districtIds),
                 new EzVillageQueryConverter()
+        );
+    }
+
+    @EzDAOLogger
+    @Override
+    public CoreArea getById(String areaId) {
+        return new EzVillageQueryConverter().convert(
+                ezVillageRepository.findById(areaId).orElse(null)
         );
     }
 }

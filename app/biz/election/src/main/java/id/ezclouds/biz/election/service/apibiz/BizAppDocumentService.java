@@ -1,0 +1,60 @@
+/**
+ * Ezclouds.id
+ * Copyright (c) 2020‐2024 All Rights Reserved.
+ */
+package id.ezclouds.biz.election.service.apibiz;
+
+import id.ezclouds.biz.election.config.BizPublicUrlResolverImpl;
+import id.ezclouds.biz.election.service.request.BizPageRequest;
+import id.ezclouds.biz.election.config.BizPublicUrlResolver;
+import id.ezclouds.biz.election.model.annotation.BizAnnotationProcessor;
+import id.ezclouds.biz.election.service.app.AppDocumentService;
+import id.ezclouds.biz.election.service.app.model.AppDocument;
+import id.ezclouds.common.model.result.BizResult;
+import id.ezclouds.common.facade.template.BizServiceTemplate;
+import id.ezclouds.common.util.assertion.AssertUtil;
+import id.ezclouds.common.util.exception.EzErrorCode;
+import id.ezclouds.common.util.exception.EzErrorException;
+import id.ezclouds.common.model.result.BizPageInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+/**
+ * @author Heri Wijoyo (heri.wijoyo@gmail.com)
+ * @version $Id: BizAppDocumentService.java, v 0.1 2024‐05‐25 3:52 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ */
+@Service
+public class BizAppDocumentService extends BizBaseService {
+
+    @Autowired
+    private AppDocumentService appDocumentService;
+
+    public BizResult getAppDocuments(BizPageRequest request) {
+        final BizResult bizResult = new BizResult();
+        BizServiceTemplate.execute(request, bizResult, new BizServiceTemplate.Handler() {
+            @Override
+            public void onRequestCheck() throws EzErrorException {
+                AssertUtil.notNull(request, EzErrorCode.ILLEGAL_PARAM);
+                adjustBizPageRequest(request);
+            }
+
+            @Override
+            public void onBizProcess() throws Exception {
+                BizPageInfo<AppDocument> bizPageInfo = appDocumentService.getAppDocuments(getOrgId(), request);
+                BizPublicUrlResolver urlResolver = new BizPublicUrlResolverImpl(appRootPublicUrl, getOrgCode());
+                bizPageInfo.getBizData().forEach(document -> {
+                    BizAnnotationProcessor.annotatePublicConfig(document, urlResolver);
+                });
+
+                bizResult.setSuccess(true);
+                bizResult.setBizPageInfo(bizPageInfo);
+            }
+
+            @Override
+            public String getErrorMessage(EzErrorCode ezErrorCode) {
+                return getBizErrorMessage(ezErrorCode);
+            }
+        });
+        return bizResult;
+    }
+}

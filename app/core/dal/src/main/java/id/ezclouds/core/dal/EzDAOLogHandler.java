@@ -28,10 +28,12 @@ public class EzDAOLogHandler {
     @Before("@annotation(id.ezclouds.common.model.annotation.EzDAOLogger)")
     public void before(JoinPoint joinPoint) {
         String traceId = "_";
+        String orgId = "ORG_ID";
         if (EzAppContextHolder.getContext() != null) {
             traceId = EzAppContextHolder.getContext().getTraceId();
+            orgId = EzAppContextHolder.getContext().getOrgId();
         }
-        EzDAOProfiler.start(traceId, "RJL0", getInvokeTarget(joinPoint));
+        EzDAOProfiler.start(traceId, orgId, getInvokeTarget(joinPoint));
     }
 
     @AfterReturning(value = "@annotation(id.ezclouds.common.model.annotation.EzDAOLogger)", returning = "retValue")

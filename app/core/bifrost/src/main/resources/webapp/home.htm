@@ -5,14 +5,86 @@
     </ol>
 
     <div class="container-fluid" id="fade-in">
-        <div id="dashboard-container" class="row"></div>
+        <div id="dashboard-container" class="row">
+            <a href="appgallery.htm">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase">Manage Gallery</div>
+                        <div class="color-name"><i class="material-icons">image</i></div>
+                        <!--div class="color-class-name">0 Images</div-->
+                        <br>
+                    </div>
+                </div>
+            </a>
+
+            <a href="news.htm">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase">Manage News</div>
+                        <div class="color-name"><i class="material-icons">library_books</i></div>
+                        <!--div class="color-class-name">0 Images</div-->
+                        <br>
+                    </div>
+                </div>
+            </a>
+
+            <a href="events.htm">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase">Manage Event</div>
+                        <div class="color-name"><i class="material-icons">calendar_month</i></div>
+                        <!--div class="color-class-name">0 Images</div-->
+                        <br>
+                    </div>
+                </div>
+            </a>
+
+            <a href="videocard.htm">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase">Manage Video Card</div>
+                        <div class="color-name"><i class="material-icons">smart_display</i></div>
+                        <!--div class="color-class-name">0 Images</div-->
+                        <br>
+                    </div>
+                </div>
+            </a>
+
+            <a href="profile.htm">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase">Candidate Profile</div>
+                        <div class="color-name"><i class="material-icons">assignment_ind</i></div>
+                        <!--div class="color-class-name">0 Images</div-->
+                        <br>
+                    </div>
+                </div>
+            </a>
+
+            <a href="documents.htm">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase">Manage Documents</div>
+                        <div class="color-name"><i class="material-icons">picture_as_pdf</i></div>
+                        <!--div class="color-class-name">0 Images</div-->
+                        <br>
+                    </div>
+                </div>
+            </a>
+        </div>
     </div>
 </section>
 
 <script type="text/javascript">
     var EzDashboardBizService = {
         start: function() {
-            EzWebAppClient.callApiService(EzApiUrl.GET_DASHBOARD_DATA, {});
+            //EzWebAppClient.callApiService(EzApiUrl.GET_DASHBOARD_DATA, {});
         },
         handleApiBizResult: function(url, response) {
             for (let i=0; i<response.data.length; i++) {

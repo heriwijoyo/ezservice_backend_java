@@ -5,7 +5,7 @@
 package id.ezclouds.core.bifrost.app.api.digestlog;
 
 import id.ezclouds.common.util.logger.DigestLog;
-import id.ezclouds.core.bifrost.app.api.result.ErrorResult;
+import id.ezclouds.common.model.result.api.ErrorResult;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -24,7 +24,7 @@ public abstract class BaseWebDigestLog extends DigestLog {
         if (errorResult == null) {
             errorContext = "NULL";
         } else {
-            errorContext = errorResult.getErrorContext();
+            errorContext = errorResult.getErrorMessage();
         }
         setErrorMessage(errorContext);
     }

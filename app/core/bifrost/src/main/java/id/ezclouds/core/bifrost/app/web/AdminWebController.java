@@ -4,8 +4,8 @@
  */
 package id.ezclouds.core.bifrost.app.web;
 
-import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
-import id.ezclouds.biz.ezservice.service.apibiz.admin.BizSuperAdminService;
+import id.ezclouds.biz.election.service.apibiz.admin.BizAdminService;
+import id.ezclouds.biz.election.service.apibiz.admin.BizSuperAdminService;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;

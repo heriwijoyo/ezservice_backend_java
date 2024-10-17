@@ -5,8 +5,8 @@
 package id.ezclouds.core.member.util;
 
 import id.ezclouds.common.util.BoolState;
-import id.ezclouds.core.member.dataobject.CoreMemberDO;
-import id.ezclouds.core.member.dataobject.CoreMemberExtensionDO;
+import id.ezclouds.core.member.dataobject.EzCoreMemberDO;
+import id.ezclouds.core.member.dataobject.EzCoreMemberExtensionDO;
 import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
 import id.ezclouds.core.member.model.MemberStatus;
@@ -17,7 +17,7 @@ import id.ezclouds.core.member.model.MemberStatus;
  */
 public class CoreMemberConverter {
 
-    public static CoreMember convert(CoreMemberDO memberDO) {
+    public static CoreMember convert(EzCoreMemberDO memberDO) {
         if (memberDO == null) { return null; }
         CoreMember member = new CoreMember();
         member.setMemberId(memberDO.getMemberId());
@@ -47,9 +47,9 @@ public class CoreMemberConverter {
         return member;
     }
 
-    public static CoreMemberDO convert(CoreMember coreMember) {
+    public static EzCoreMemberDO convert(CoreMember coreMember) {
         if (coreMember == null) { return null; }
-        CoreMemberDO memberDO = new CoreMemberDO();
+        EzCoreMemberDO memberDO = new EzCoreMemberDO();
         memberDO.setMemberId(coreMember.getMemberId());
         memberDO.setOrgId(coreMember.getOrgId());
         memberDO.setSubOrgId(coreMember.getSubOrgId());
@@ -77,7 +77,7 @@ public class CoreMemberConverter {
         return memberDO;
     }
 
-    public static CoreMemberExtension convert(CoreMemberExtensionDO extensionDO) {
+    public static CoreMemberExtension convert(EzCoreMemberExtensionDO extensionDO) {
         if (extensionDO == null) { return null; }
         CoreMemberExtension extension = new CoreMemberExtension();
         extension.setMemberId(extensionDO.getMemberId());
@@ -101,9 +101,9 @@ public class CoreMemberConverter {
         return extension;
     }
 
-    public static CoreMemberExtensionDO convert(CoreMemberExtension extension) {
+    public static EzCoreMemberExtensionDO convert(CoreMemberExtension extension) {
         if (extension == null) { return null; }
-        CoreMemberExtensionDO extensionDO = new CoreMemberExtensionDO();
+        EzCoreMemberExtensionDO extensionDO = new EzCoreMemberExtensionDO();
         extensionDO.setMemberId(extension.getMemberId());
         extensionDO.setOrgId(extension.getOrgId());
         extensionDO.setShard(extension.getShard());

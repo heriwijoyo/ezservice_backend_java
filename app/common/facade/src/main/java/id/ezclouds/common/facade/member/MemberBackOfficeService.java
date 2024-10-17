@@ -13,6 +13,10 @@ import id.ezclouds.common.model.result.PageResult;
  * @version $Id: MemberBackOfficeService.java, v 0.1 2024‐08‐10 11:41 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 public interface MemberBackOfficeService {
+
     PageResult<MemberBackOffice> getMemberPage(BizPageRequest bizPageRequest);
+
     MemberBackOffice getMemberDetail(String memberId);
+
+    void memberUpdateSubOrganization(MemberBackOffice memberBackOffice, String subOrganizationId);
 }

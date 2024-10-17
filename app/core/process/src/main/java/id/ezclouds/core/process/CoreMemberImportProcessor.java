@@ -7,8 +7,7 @@ package id.ezclouds.core.process;
 import id.ezclouds.common.facade.dal.area.AreaDistrictDAO;
 import id.ezclouds.common.facade.dal.area.AreaVillageDAO;
 import id.ezclouds.common.facade.process.MemberImportProcessor;
-import id.ezclouds.common.model.area.District;
-import id.ezclouds.common.model.area.Village;
+import id.ezclouds.common.model.area.CoreArea;
 import id.ezclouds.common.model.constant.OrgConstant;
 import id.ezclouds.common.model.member.BizMemberImport;
 import id.ezclouds.common.model.request.FileStreamImportRequest;
@@ -100,16 +99,16 @@ public class CoreMemberImportProcessor implements MemberImportProcessor {
     }
 
     private void loadAndMapDistricts(List<String> regencyIds) {
-        List<District> districts = areaDistrictDAO.getByRegencyIds(regencyIds);
-        for (District district : districts) {
-            districtIdMap.put(district.getName(), district.getId());
+        List<CoreArea> districts = areaDistrictDAO.getByRegencyIds(regencyIds);
+        for (CoreArea district : districts) {
+            districtIdMap.put(district.getName(), district.getAreaId());
         }
     }
 
     private void loadAndMapVillages(List<String> districtIds) {
-        List<Village> villages = areaVillageDAO.getByDistrictIds(districtIds);
-        for (Village village : villages) {
-            villageIdMap.put(village.getName(), village.getId());
+        List<CoreArea> villages = areaVillageDAO.getByDistrictIds(districtIds);
+        for (CoreArea village : villages) {
+            villageIdMap.put(village.getName(), village.getAreaId());
         }
     }
 

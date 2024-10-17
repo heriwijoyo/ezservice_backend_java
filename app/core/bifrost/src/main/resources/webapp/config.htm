@@ -3,74 +3,125 @@
         <li class="active">System Config</li>
     </ol>
 
-    <div class="container-fluid" id="fade-in">
-        <div id="dashboard-container" class="row">
-            <a id="refresh-all-caches-btn" href="#">
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <br>
-                        <div class="color-name uppercase"></div>
-                        <div class="color-name"><i class="material-icons">cached</i></div>
-                        <div class="color-class-name">Refresh All Caches</div>
-                        <br>
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="card corner-radius">
+                    <div class="header" style="border-bottom:none;">
+                        <h2>Trigger Async Processor</h2>
+                    </div>
+                    <div class="body" style="padding-top:0px">
+                        <div class="clearfix">
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Process Name</div>
+                                    <select class="form-control show-tick" id="processName">
+                                    </select>
+                                </div>
+                                <div class="form-line">
+                                    <div class="font-12">Process Param</div>
+                                    <input type="text" class="form-control" id="processParam" placeholder="Process Param">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <button id="btnSubmit" class="button button-rounded waves-effect waves-float pull-right" type="submit">SUBMIT</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </a>
-            <a id="refresh-all-dir-btn" href="#">
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <br>
-                        <div class="color-name uppercase"></div>
-                        <div class="color-name"><i class="material-icons">folder_open</i></div>
-                        <div class="color-class-name">Refresh All Directory</div>
-                        <br>
+            </div>
+
+            <!--div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="card corner-radius">
+                    <div class="header" style="border-bottom:none;">
+                        <h2>Init System Sequence</h2>
+                    </div>
+                    <div class="body" style="padding-top:0px">
+                        <div class="clearfix">
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Organization</div>
+                                    <select class="orgOptions form-control show-tick" id="initSeqOrgId">
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <button id="btnInitSequence" class="button button-rounded waves-effect waves-float pull-right" type="submit">SUBMIT</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </a>
-            <a id="refresh-all-menu-btn" href="#">
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <br>
-                        <div class="color-name uppercase"></div>
-                        <div class="color-name"><i class="material-icons">menu_book</i></div>
-                        <div class="color-class-name">Refresh All BO Menu</div>
-                        <br>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="card corner-radius">
+                    <div class="header" style="border-bottom:none;">
+                        <h2>Trigger Migrate Member</h2>
+                    </div>
+                    <div class="body" style="padding-top:0px">
+                        <div class="clearfix">
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Organization</div>
+                                    <select class="orgOptions form-control show-tick" id="migrateMemberOrgId">
+                                    </select>
+                                </div>
+                                <div class="form-line">
+                                    <div class="font-12">Date</div>
+                                    <input type="text" class="form-control" id="formDate" placeholder="Date">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <button id="btnMigrateMember" class="button button-rounded waves-effect waves-float pull-right" type="submit">SUBMIT</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </a>
-            <a id="trigger-async-process" href="specialProcess.htm">
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <br>
-                        <div class="color-name uppercase"></div>
-                        <div class="color-name"><i class="material-icons">rocket_launch</i></div>
-                        <div class="color-class-name">Special Process</div>
-                        <br>
-                    </div>
-                </div>
-            </a>
+            </div-->
+
         </div>
     </div>
 </section>
 
 <script type="text/javascript">
     var EzConfigApiUrl = {
+        GET_ORGANIZATIONS: 'api/organizations.json',
         GET_REFRESH_ALL_CACHES: 'api/refreshAllCaches.json',
         GET_REFRESH_ALL_DIRECTORIES: 'api/refreshAllDirectories.json',
-        GET_REFRESH_ALL_MENUS: 'api/refreshAllMenus.json'
+        GET_REFRESH_ALL_MENUS: 'api/refreshAllMenus.json',
+
+        GET_ADMIN_PARAM_CONFIG: 'api/adminParamConfig.json',
+        TRIGGER_ADMIN_PROCESS: 'api/triggerAsyncProcess.json',
+        INIT_SYSTEM_SEQUENCE: 'api/orgInitSystemSequence.json',
+        INIT_MIGRATE_MEMBER: 'api/orgInitMigrateMember.json'
     };
 
     var EzSystemConfigService = {
         start: function() {
-            $('#refresh-all-caches-btn').click(function(){
-                EzSystemConfigService.refreshAllCaches();
+            /**
+            $('#btnInitSequence').click(function(){
+                EzWebAppClient.callApiService(EzConfigApiUrl.INIT_SYSTEM_SEQUENCE, {
+                    orgId: $('#initSeqOrgId').val()
+                });
             });
-            $('#refresh-all-dir-btn').click(function(){
-                EzSystemConfigService.refreshAllDirectories();
+            $('#btnMigrateMember').click(function(){
+                EzWebAppClient.callApiService(EzConfigApiUrl.INIT_MIGRATE_MEMBER, {
+                    orgId: $('#migrateMemberOrgId').val(),
+                    date: $('#formDate').val()
+                });
             });
-            $('#refresh-all-menu-btn').click(function(){
-                EzSystemConfigService.refreshAllMenus();
+            EzWebAppClient.callApiService(EzConfigApiUrl.GET_ORGANIZATIONS, {});
+            */
+
+            $('#btnSubmit').click(function(){
+                EzWebAppClient.callApiService(EzConfigApiUrl.TRIGGER_ADMIN_PROCESS, {
+                    processName: $('#processName').val(),
+                    param: $('#processParam').val()
+                });
             });
+            EzWebAppClient.callApiService(EzConfigApiUrl.GET_ADMIN_PARAM_CONFIG, {});
         },
         refreshAllCaches: function() {
             EzWebAppClient.callApiService(EzConfigApiUrl.GET_REFRESH_ALL_CACHES, {});
@@ -82,6 +133,21 @@
             EzWebAppClient.callApiService(EzConfigApiUrl.GET_REFRESH_ALL_MENUS, {});
         },
         handleApiBizResult: function(url, response) {
+            if (url === EzConfigApiUrl.GET_ADMIN_PARAM_CONFIG) {
+                let processNames = response.data.asyncProcessNames;
+                for (var i=0; i<processNames.length; i++) {
+                    $('#processName').append('<option value="'+ processNames[i] +'">'+ processNames[i] +'</option>');
+                }
+            }
+            if (url === EzConfigApiUrl.TRIGGER_ADMIN_PROCESS) {
+                alert(response.data);
+            }
+
+            /**
+            if (url === EzConfigApiUrl.GET_ORGANIZATIONS) {
+                EzSystemConfigService.data.organizations = response.data;
+                EzSystemConfigService.renderOrgOptions();
+            }
             if (url === EzConfigApiUrl.GET_REFRESH_ALL_CACHES) {
                 var message = 'Refreshed caches:<br><ul>';
                 for (var i=0; i<response.data.length; i++) {
@@ -94,12 +160,25 @@
                     function(){}
                 );
             }
+            if (url === EzConfigApiUrl.INIT_SYSTEM_SEQUENCE || url === EzConfigApiUrl.INIT_MIGRATE_MEMBER) {
+                alert(response.data);
+            }
             if (url === EzConfigApiUrl.GET_REFRESH_ALL_DIRECTORIES) {
                 alert(response.data);
             }
             if (url === EzConfigApiUrl.GET_REFRESH_ALL_MENUS) {
                 alert(response.data);
             }
+            */
+        },
+        renderOrgOptions: function() {
+            let orgs = EzSystemConfigService.data.organizations;
+            for(var i=0; i<orgs.length; i++) {
+                $('.orgOptions').append('<option value="'+ orgs[i].orgId +'">['+ orgs[i].orgId +'] '+ orgs[i].orgName +'</option>');
+            }
+        },
+        data: {
+            organizations: []
         }
     };
 

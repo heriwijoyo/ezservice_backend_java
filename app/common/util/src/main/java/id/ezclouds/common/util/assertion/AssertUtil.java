@@ -14,6 +14,12 @@ import id.ezclouds.common.util.exception.EzErrorException;
  */
 public class AssertUtil {
 
+    public static void isNull(Object object, EzErrorCode ezErrorCode, String... message) throws EzErrorException {
+        if (object != null) {
+            throw new EzErrorException(ezErrorCode, StringUtil.concateStrings(message));
+        }
+    }
+
     public static void notNull(Object object, EzErrorCode ezErrorCode, String... message) throws EzErrorException {
         if (object == null) {
             throw new EzErrorException(ezErrorCode, StringUtil.concateStrings(message));
@@ -34,5 +40,24 @@ public class AssertUtil {
 
     public static void isNotTrue(boolean state, EzErrorCode ezErrorCode, String... message) throws EzErrorException {
         isTrue(!state, ezErrorCode, message);
+    }
+
+    public static void equals(String str1, String str2, EzErrorCode ezErrorCode) throws EzErrorException {
+        isTrue(StringUtil.equalsNotNull(str1, str2), ezErrorCode);
+    }
+
+    public static void isNumber(String value, EzErrorCode ezErrorCode) throws EzErrorException {
+        try {
+            Integer.parseInt(value);
+        } catch (Exception ignored) {
+            throw new EzErrorException(ezErrorCode);
+        }
+    }
+
+    public static void lengthMin(String value, int minLength, EzErrorCode ezErrorCode, String... message) throws EzErrorException {
+        notBlank(value, ezErrorCode);
+        if (value.length() < minLength) {
+            throw new EzErrorException(ezErrorCode, StringUtil.concateStrings(message));
+        }
     }
 }

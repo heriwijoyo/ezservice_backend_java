@@ -17,6 +17,7 @@ import id.ezclouds.core.member.converter.MemberBackOfficeAdjuster;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -57,5 +58,22 @@ public class CoreMemberBackOfficeService implements MemberBackOfficeService {
         }
 
         return memberBackOffice;
+    }
+
+    @Override
+    @Transactional
+    public void memberUpdateSubOrganization(MemberBackOffice memberBackOffice, String subOrganizationId) {
+        boolean needUpdateRefId = !StringUtil.equals(memberBackOffice.getSubOrgId(), subOrganizationId);
+
+        bizMemberBackOfficeDAO.updateSubOrganization(memberBackOffice.getMemberId(), subOrganizationId);
+
+        if (needUpdateRefId) {
+            List<MemberBackOffice> refMembers = bizMemberBackOfficeDAO
+                    .getByReferrerId(memberBackOffice.getMemberId());
+
+            for (MemberBackOffice refMember : refMembers) {
+                bizMemberBackOfficeDAO.updateSubOrganization(refMember.getMemberId(), subOrganizationId);
+            }
+        }
     }
 }

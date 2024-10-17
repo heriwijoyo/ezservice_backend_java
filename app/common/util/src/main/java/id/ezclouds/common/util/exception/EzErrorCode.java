@@ -11,9 +11,11 @@ package id.ezclouds.common.util.exception;
 public enum EzErrorCode {
 
     SYSTEM_ERROR("SYSTEM_ERROR", "Unknown System Error"),
+    UNSUPPORTED_DATA_ERROR("UNSUPPORTED_DATA_ERROR", "Unsupported Data Response"),
     ILLEGAL_ACTION("ILLEGAL_ACTION", "Illegal Action"),
     ILLEGAL_PARAM("ILLEGAL_PARAM", "Illegal Parameter"),
     UNAUTHORIZED("UNAUTHORIZED", "Unauthorized"),
+    BIZ_PROCESS_ERROR("BIZ_PROCESS_ERROR", "Unknown Biz Process Error"),
 
     MEMBER_LOGIN_FAILED("MEMBER_LOGIN_FAILED", "Member Login Failed"),
     MEMBER_NOT_FOUND("MEMBER_NOT_FOUND", "Member Not Found"),
@@ -40,13 +42,23 @@ public enum EzErrorCode {
     MEDIA_NOT_FOUND("MEDIA_NOT_FOUND", "Media Not Found"),
 
     ACTION_NOT_ALLOWED("ACTION_NOT_ALLOWED", "Action Not Allowed"),
+    BIZ_UNIQUE_FAILED("BIZ_UNIQUE_FAILED", "Biz Unique Failed"),
+    BIZ_VALIDATION_FAILED("BIZ_VALIDATION_FAILED", "Biz Validation Failed"),
+    DATA_INVALID("DATA_INVALID", "Data Invalid"),
+    INVALID_NUMBER_FORMAT("INVALID_NUMBER_FORMAT", "Invalid Number Format"),
 
     SYSTEM_STORE_FILE_FAILED("SYSTEM_STORE_FILE_FAILED", "System Store File Failed"),
     SYSTEM_FILE_ERROR("SYSTEM_FILE_ERROR", "System File Error"),
     CORE_SEQUENCE_ERROR("CORE_SEQUENCE_ERROR", "Core Sequence Error"),
     IDEMPOTENT_ERROR("IDEMPOTENT_ERROR", "Idempotent Error"),
+    WEB_PAGE_ERROR("WEB_PAGE_ERROR", "Web Page Error"),
+    WEB_BIZ_PAGE_NOT_FOUND("WEB_BIZ_PAGE_NOT_FOUND", "Web Page Not Found"),
+    WEB_BIZ_PAGE_UNAUTHORIZED("WEB_BIZ_PAGE_UNAUTHORIZED", "Web Page Unauthorized"),
 
     SCHEDULER_PRIORITY_OVERLAP("SCHEDULER_PRIORITY_OVERLAP", "Scheduler Overlap"),
+
+    /* Biz Validation */
+    BIZ_POLL_STATION_INVALID("BIZ_POLL_STATION_INVALID", "Invalid Poll Station"),
 
     ;
 

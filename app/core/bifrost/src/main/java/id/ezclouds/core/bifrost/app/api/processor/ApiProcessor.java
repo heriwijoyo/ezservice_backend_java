@@ -1,0 +1,36 @@
+/**
+ * Ezclouds.id
+ * Copyright (c) 2020‐2024 All Rights Reserved.
+ */
+package id.ezclouds.core.bifrost.app.api.processor;
+
+import id.ezclouds.common.facade.biz.election.BizVoterRegistrationService;
+import id.ezclouds.common.model.app.AppSystemSource;
+import id.ezclouds.common.model.request.api.election.VoterRegisterRequest;
+import id.ezclouds.common.model.result.BizResult;
+import id.ezclouds.common.model.request.api.ApiEvent;
+import id.ezclouds.common.model.request.api.ApiRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+/**
+ * @author Heri Wijoyo (heri.wijoyo@gmail.com)
+ * @version $Id: ApiProcessor.java, v 0.1 2024‐09‐29 12:43 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ */
+@Service
+public class ApiProcessor {
+
+    @Autowired
+    private BizVoterRegistrationService bizVoterRegistrationService;
+
+    public BizResult process(ApiEvent apiEvent, ApiRequest request) {
+        switch (apiEvent) {
+            case API_VOTER_REGISTER:
+                VoterRegisterRequest voterRegisterRequest = (VoterRegisterRequest) request;
+                voterRegisterRequest.getBizVoter().setSourceId(AppSystemSource.APP.getCode());
+                return bizVoterRegistrationService.registerVoter(voterRegisterRequest.getBizVoter());
+        }
+
+        return new BizResult();
+    }
+}

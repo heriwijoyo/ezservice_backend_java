@@ -10,6 +10,14 @@
                 <div class="card corner-radius">
                     <div class="header">
                         <h2>WHATSAPP LOGS</h2>
+                        <div class="header-dropdown m-r--5">
+                            <a href="javascript:void(0)">
+                                <button id="buttonSetting" type="button" class="button button-rounded btn-offset waves-effect waves-float">SETTING</button>
+                            </a>
+                            <a href="javascript:void(0)">
+                                <button id="buttonSend" type="button" class="button button-rounded btn-offset waves-effect waves-float">TEST SEND</button>
+                            </a>
+                        </div>
                     </div>
 
                     <div style="margin-top: -10px;" class="body table-responsive">
@@ -47,10 +55,61 @@
     </div>
 </section>
 
+<div class="modal fade" id="modal-setting" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="largeModalLabel">Update WA Setting</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row clearfix">
+                    <div class="form-group form-float col-sm-12">
+                        <div class="form-line">
+                            <div class="font-12">Watzap Number Key</div>
+                            <input type="text" class="form-control" id="numberKey" placeholder="Watzap Number Key" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <button id="updateButton" class="button button-rounded waves-effect waves-float pull-right" type="submit" name="submit">SUBMIT</button>
+                        <button class="cancelButton button button-rounded button-light waves-effect waves-float pull-right" type="submit" name="submit">CANCEL</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-send" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Test Send Message</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row clearfix">
+                    <div class="form-group form-float col-sm-12">
+                        <div class="form-line">
+                            <div class="font-12">Message</div>
+                            <input type="text" class="form-control" id="message" placeholder="Message" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <button id="sendButton" class="button button-rounded waves-effect waves-float pull-right" type="submit" name="submit">SEND</button>
+                        <button class="cancelButton button button-rounded button-light waves-effect waves-float pull-right" type="submit" name="submit">CANCEL</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
     var EzAdminUrl = {
         GET_WHATSAPP_LOG: 'api/getWhatsappLog.json',
-        WHATSAPP_RESEND: 'api/resendWhatsapp.json'
+        WHATSAPP_RESEND: 'api/resendWhatsapp.json',
+        WATZAP_NUMBER_KEY_GET: 'api/watzapNumberKey.json',
+        WATZAP_NUMBER_KEY_UPDATE: 'api/watzapNumberKeyUpdate.json',
+        WHATSAPP_SEND: 'api/sendWhatsapp.json'
     };
     var EzDashboardBizService = {
         start: function() {
@@ -72,14 +131,34 @@
                 });
             }
         },
+        fetchWatzapNumberKey: function() {
+            EzWebAppClient.callApiService(EzAdminUrl.WATZAP_NUMBER_KEY_GET, {});
+        },
+        updateWatzapNumberKey: function() {
+            EzWebAppClient.callApiService(EzAdminUrl.WATZAP_NUMBER_KEY_UPDATE, {
+                numberKey: $('#numberKey').val()
+            });
+        },
+        sendMessage: function() {
+            EzWebAppClient.callApiService(EzAdminUrl.WHATSAPP_SEND, {
+                message: $('#message').val()
+            });
+        },
         handleApiBizResult: function(url, response) {
             if (url === EzAdminUrl.GET_WHATSAPP_LOG) {
                 EzDashboardBizService.data.result = response.pageResult;
                 EzDashboardBizService.reloadPageResultView(response);
             }
-            if (url === EzAdminUrl.WHATSAPP_RESEND) {
+            if (url === EzAdminUrl.WHATSAPP_RESEND || url === EzAdminUrl.WHATSAPP_SEND) {
                 alert(response.data);
                 EzDashboardBizService.fetchData();
+            }
+            if (url === EzAdminUrl.WATZAP_NUMBER_KEY_GET) {
+                $('#numberKey').val(response.data);
+            }
+            if (url === EzAdminUrl.WATZAP_NUMBER_KEY_UPDATE) {
+                alert(response.data);
+                EzDashboardBizService.fetchWatzapNumberKey();
             }
         },
         reloadPageResultView: function(response) {
@@ -100,6 +179,21 @@
                 $('#rowsContainer').append(itemRow);
             }
             $('.pager').html(EzWebAppClient.renderPager(response.pageResult));
+        },
+        showSetting: function() {
+            $('#modal-setting').removeClass('fade');
+            $('#modal-setting').addClass('show');
+            EzDashboardBizService.fetchWatzapNumberKey();
+        },
+        showSend: function() {
+            $('#modal-send').removeClass('fade');
+            $('#modal-send').addClass('show');
+        },
+        hideForm: function() {
+            $('#modal-setting').removeClass('show');
+            $('#modal-setting').addClass('fade');
+            $('#modal-send').removeClass('show');
+            $('#modal-send').addClass('fade');
         },
         prev: function() {
             EzDashboardBizService.data.pageNumber--;
@@ -132,6 +226,7 @@
         });
         EzWebAppClient.onApiBizFailed(function(url, message){
             console.log(url +' --- '+ message);
+            alert(message);
         });
         EzWebAppClient.onApiCallError(function(xhr){
             console.log(xhr);
@@ -153,6 +248,21 @@
         $('#reset').click(function(){
             $('#keyword').val('');
             EzDashboardBizService.fetchData();
+        });
+        $('.cancelButton').click(function(){
+            EzDashboardBizService.hideForm();
+        });
+        $('#buttonSetting').click(function(){
+            EzDashboardBizService.showSetting();
+        });
+        $('#buttonSend').click(function(){
+            EzDashboardBizService.showSend();
+        });
+        $('#updateButton').click(function(){
+            EzDashboardBizService.updateWatzapNumberKey();
+        });
+        $('#sendButton').click(function(){
+            EzDashboardBizService.sendMessage();
         });
     });
 

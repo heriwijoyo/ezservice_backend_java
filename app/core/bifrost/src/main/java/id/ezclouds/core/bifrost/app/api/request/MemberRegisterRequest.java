@@ -5,6 +5,8 @@
 package id.ezclouds.core.bifrost.app.api.request;
 
 
+import id.ezclouds.common.model.request.api.ApiRequest;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: MemberRegisterRequest.java, v 0.1 2024‐01‐01 11:33 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$

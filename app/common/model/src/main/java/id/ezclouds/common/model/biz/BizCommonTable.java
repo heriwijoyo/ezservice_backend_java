@@ -13,9 +13,11 @@ public class BizCommonTable {
     private String tableId;
     private String orgId;
     private String code;
+    private String pageId;
     private String title;
     private String columns;
     private String config;
+    private String data;
     private String createdTime;
     private int status;
 
@@ -43,6 +45,14 @@ public class BizCommonTable {
         this.code = code;
     }
 
+    public String getPageId() {
+        return pageId;
+    }
+
+    public void setPageId(String pageId) {
+        this.pageId = pageId;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -65,6 +75,14 @@ public class BizCommonTable {
 
     public void setConfig(String config) {
         this.config = config;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
     }
 
     public String getCreatedTime() {

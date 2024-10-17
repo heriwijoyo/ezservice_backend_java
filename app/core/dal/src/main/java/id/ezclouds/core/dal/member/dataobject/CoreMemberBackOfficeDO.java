@@ -24,6 +24,9 @@ public class CoreMemberBackOfficeDO {
     @Column(name = "sub_org_id")
     private String subOrgId;
 
+    @Column(name = "referrer_id")
+    private String referrerId;
+
     @Column(name = "name")
     private String name;
 
@@ -79,6 +82,14 @@ public class CoreMemberBackOfficeDO {
 
     public void setSubOrgId(String subOrgId) {
         this.subOrgId = subOrgId;
+    }
+
+    public String getReferrerId() {
+        return referrerId;
+    }
+
+    public void setReferrerId(String referrerId) {
+        this.referrerId = referrerId;
     }
 
     public String getName() {

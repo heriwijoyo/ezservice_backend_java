@@ -30,8 +30,8 @@ public class CoreReportOverallDO {
     @Column(name = "count")
     private int count;
 
-    @Column(name = "created_time")
-    private String createdTime;
+    @Column(name = "updated_time")
+    private String updatedTime;
 
     public String getId() {
         return id;
@@ -65,11 +65,11 @@ public class CoreReportOverallDO {
         this.count = count;
     }
 
-    public String getCreatedTime() {
-        return createdTime;
+    public String getUpdatedTime() {
+        return updatedTime;
     }
 
-    public void setCreatedTime(String createdTime) {
-        this.createdTime = createdTime;
+    public void setUpdatedTime(String updatedTime) {
+        this.updatedTime = updatedTime;
     }
 }

@@ -6,27 +6,35 @@ package id.ezclouds.core.bifrost.app.web;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import id.ezclouds.biz.ezservice.enums.BizProfileSection;
-import id.ezclouds.biz.ezservice.enums.BizSwitchFlagObject;
-import id.ezclouds.biz.ezservice.model.BizWhatsappLog;
-import id.ezclouds.biz.ezservice.model.VideoCard;
-import id.ezclouds.biz.ezservice.model.admin.*;
-import id.ezclouds.biz.ezservice.model.event.AppEvent;
-import id.ezclouds.biz.ezservice.model.member.BizGender;
-import id.ezclouds.biz.ezservice.model.member.BizMember;
-import id.ezclouds.biz.ezservice.model.news.BizWebDetailNews;
-import id.ezclouds.biz.ezservice.model.news.BizWebSimpleNews;
-import id.ezclouds.biz.ezservice.model.profile.BizCandidateProfile;
-import id.ezclouds.biz.ezservice.model.profile.WebCandidateBio;
-import id.ezclouds.biz.ezservice.service.apibiz.admin.BizAdminService;
-import id.ezclouds.biz.ezservice.service.app.model.AppDocument;
-import id.ezclouds.biz.ezservice.service.app.model.AppImageGallery;
-import id.ezclouds.biz.ezservice.service.request.admin.BizAdminUploadRequest;
-import id.ezclouds.biz.ezservice.service.request.web.*;
+import id.ezclouds.biz.election.enums.BizProfileSection;
+import id.ezclouds.biz.election.enums.BizSwitchFlagObject;
+import id.ezclouds.biz.election.model.BizWhatsappLog;
+import id.ezclouds.biz.election.model.VideoCard;
+import id.ezclouds.common.model.admin.BizAdminAppData;
+import id.ezclouds.biz.election.model.admin.BizDashboardData;
+import id.ezclouds.biz.election.model.admin.BizMemberRequiredData;
+import id.ezclouds.biz.election.service.request.web.BizWebCommonRequest;
+import id.ezclouds.biz.election.service.request.web.BizWebCreateRequest;
+import id.ezclouds.biz.election.service.request.web.BizWebPageRequest;
+import id.ezclouds.biz.election.service.request.web.BizWebUpdateItemRequest;
+import id.ezclouds.biz.election.model.event.AppEvent;
+import id.ezclouds.biz.election.model.member.BizGender;
+import id.ezclouds.biz.election.model.member.BizMember;
+import id.ezclouds.biz.election.model.news.BizWebDetailNews;
+import id.ezclouds.biz.election.model.news.BizWebSimpleNews;
+import id.ezclouds.biz.election.model.profile.BizCandidateProfile;
+import id.ezclouds.biz.election.model.profile.WebCandidateBio;
+import id.ezclouds.biz.election.service.apibiz.admin.BizAdminService;
+import id.ezclouds.biz.election.service.app.model.AppDocument;
+import id.ezclouds.biz.election.service.app.model.AppImageGallery;
+import id.ezclouds.biz.election.service.request.admin.BizAdminUploadRequest;
+import id.ezclouds.common.facade.biz.admin.BizAdminConfigService;
+import id.ezclouds.common.facade.biz.admin.BizAdminWhatsappService;
+import id.ezclouds.common.model.request.admin.WebAdminRequest;
 import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
 import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
 import id.ezclouds.common.model.result.BizResult;
-import id.ezclouds.biz.ezservice.subbiz.arahindonesia.model.BizSubOrganization;
+import id.ezclouds.biz.election.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.common.model.member.MemberBackOffice;
 import id.ezclouds.common.model.organization.SubOrganization;
 import id.ezclouds.common.model.request.WebBizPageRequest;
@@ -37,7 +45,7 @@ import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;
 import id.ezclouds.core.bifrost.app.web.result.WebApiPageResult;
 import id.ezclouds.core.bifrost.app.web.result.WebApiResult;
-import id.ezclouds.core.shared.model.CoreArea;
+import id.ezclouds.core.shared.model.LegacyCoreArea;
 import id.ezclouds.core.shared.util.DigestLogUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,11 +70,17 @@ public class WebApiAdminController {
     @Autowired
     private BizAdminService bizAdminService;
 
+    @Autowired
+    private BizAdminConfigService bizAdminConfigService;
+
+    @Autowired
+    private BizAdminWhatsappService bizAdminWhatsappService;
+
     @PostMapping(value = "/webapp/api/getAppData.json")
     private WebApiResult<BizAdminAppData> getAppData(
             @RequestParam(name = "sessionId", required = false) String sessionId) {
         final WebApiResult<BizAdminAppData> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_APP_DATA, result, new WebApiControllerTemplate.Handler<BizAdminAppData>() {
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_APP_DATA, result, new WebApiControllerTemplate.Handler<>() {
             @Override
             public BizResult onProcess() throws Exception {
                 return bizAdminService.getAppData(sessionId);
@@ -713,7 +727,7 @@ public class WebApiAdminController {
             @RequestParam(name = "address", required = false) String address
     ) {
         final WebApiResult<String> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_CREATE_SUB_ORGANIZATION, result, new WebApiControllerTemplate.Handler<String>() {
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_CREATE_SUB_ORGANIZATION, result, new WebApiControllerTemplate.Handler<>() {
             @Override
             public BizResult onProcess() throws Exception {
                 BizSubOrganization subOrganization = new BizSubOrganization();
@@ -816,6 +830,8 @@ public class WebApiAdminController {
             @RequestParam(name = "religion", required = false) String religion,
             @RequestParam(name = "ethnic", required = false) String ethnic,
             @RequestParam(name = "idCardNumber", required = false) String idCardNumber,
+            @RequestParam(name = "provinceId", required = false) String provinceId,
+            @RequestParam(name = "regencyId", required = false) String regencyId,
             @RequestParam(name = "districtId", required = false) String districtId,
             @RequestParam(name = "villageId", required = false) String villageId,
             @RequestParam(name = "rukunWarga", required = false) String rukunWarga,
@@ -823,7 +839,7 @@ public class WebApiAdminController {
             @RequestParam(name = "tpsNo", required = false) String tpsNo
     ) {
         final WebApiResult<String> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_CREATE_MEMBER, result, new WebApiControllerTemplate.Handler<String>() {
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_CREATE_MEMBER, result, new WebApiControllerTemplate.Handler<>() {
             @Override
             public BizResult onProcess() throws Exception {
                 BizMember bizMember = new BizMember();
@@ -838,6 +854,8 @@ public class WebApiAdminController {
                 bizMember.setReligion(religion);
                 bizMember.setEthnic(ethnic);
                 bizMember.setIdCardNumber(idCardNumber);
+                bizMember.setProvinceId(provinceId);
+                bizMember.setRegencyId(regencyId);
                 bizMember.setDistrictId(districtId);
                 bizMember.setVillageId(villageId);
                 bizMember.setRukunWarga(rukunWarga);
@@ -891,20 +909,20 @@ public class WebApiAdminController {
     }
 
     @PostMapping(value = "/webapp/api/adminCoreArea.json")
-    private WebApiResult<List<CoreArea>> coreArea(
+    private WebApiResult<List<LegacyCoreArea>> coreArea(
             @RequestParam(name = "sessionId", required = false) String sessionId,
             @RequestParam(name = "level", required = false) String level,
             @RequestParam(name = "parentId", required = false) String parentId) {
-        final WebApiResult<List<CoreArea>> result = new WebApiResult<>();
-        WebApiControllerTemplate.execute(WebEvent.WEB_API_CORE_AREA, result, new WebApiControllerTemplate.Handler<List<CoreArea>>() {
+        final WebApiResult<List<LegacyCoreArea>> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_CORE_AREA, result, new WebApiControllerTemplate.Handler<List<LegacyCoreArea>>() {
             @Override
             public BizResult onProcess() throws Exception {
                 return bizAdminService.getCoreAreas(sessionId, level, parentId);
             }
 
             @Override
-            public List<CoreArea> convertResult(Object object) {
-                return (List<CoreArea>) object;
+            public List<LegacyCoreArea> convertResult(Object object) {
+                return (List<LegacyCoreArea>) object;
             }
 
             @Override
@@ -950,6 +968,85 @@ public class WebApiAdminController {
             @Override
             public BizResult onProcess() throws Exception {
                 return bizAdminService.memberUpdateRoles(sessionId, memberId, roles);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/watzapNumberKey.json")
+    private WebApiResult<String> watzapNumberKey(
+            @RequestParam(name = "sessionId", required = false) String sessionId) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_WHATSAPP_NUMBER_KEY, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                WebAdminRequest request = new WebAdminRequest();
+                request.setSessionId(sessionId);
+                return bizAdminConfigService.getWatzapNumberKey(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/watzapNumberKeyUpdate.json")
+    private WebApiResult<String> watzapNumberKeyUpdate(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "numberKey", required = false) String numberKey) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_WHATSAPP_NUMBER_KEY_UPDATE, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                WebBizUpdateRequest<String> request = new WebBizUpdateRequest<>();
+                request.setSessionId(sessionId);
+                request.setObject(numberKey);
+                return bizAdminConfigService.updateWatzapNumberKey(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/sendWhatsapp.json")
+    private WebApiResult<String> sendWhatsapp(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "message", required = false) String message) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_WHATSAPP_SEND, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                WebBizUpdateRequest<String> request = new WebBizUpdateRequest<>();
+                request.setSessionId(sessionId);
+                request.setObject(message);
+                return bizAdminWhatsappService.sendMessage(request);
             }
 
             @Override

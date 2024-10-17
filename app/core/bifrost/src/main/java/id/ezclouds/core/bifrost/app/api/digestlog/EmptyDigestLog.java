@@ -4,9 +4,9 @@
  */
 package id.ezclouds.core.bifrost.app.api.digestlog;
 
-import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
+import id.ezclouds.common.model.request.api.ApiRequest;
 import id.ezclouds.core.bifrost.app.api.request.VerifyCommonSessionRequest;
-import id.ezclouds.core.bifrost.app.api.result.ApiResult;
+import id.ezclouds.common.model.result.api.ApiResult;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)

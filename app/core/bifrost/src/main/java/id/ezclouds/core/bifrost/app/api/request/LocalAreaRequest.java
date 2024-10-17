@@ -4,6 +4,8 @@
  */
 package id.ezclouds.core.bifrost.app.api.request;
 
+import id.ezclouds.common.model.request.api.ApiRequest;
+
 import java.util.List;
 
 /**

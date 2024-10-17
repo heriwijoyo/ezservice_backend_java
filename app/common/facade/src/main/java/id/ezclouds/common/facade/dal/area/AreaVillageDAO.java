@@ -4,6 +4,7 @@
  */
 package id.ezclouds.common.facade.dal.area;
 
+import id.ezclouds.common.model.area.CoreArea;
 import id.ezclouds.common.model.area.Village;
 
 import java.util.List;
@@ -13,6 +14,10 @@ import java.util.List;
  * @version $Id: AreaVillageDAO.java, v 0.1 2024‐08‐12 4:55 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
  */
 public interface AreaVillageDAO {
-    List<Village> getByDistrictId(String districtId);
-    List<Village> getByDistrictIds(List<String> districtIds);
+
+    List<CoreArea> getByDistrictId(String districtId);
+
+    List<CoreArea> getByDistrictIds(List<String> districtIds);
+
+    CoreArea getById(String areaId);
 }

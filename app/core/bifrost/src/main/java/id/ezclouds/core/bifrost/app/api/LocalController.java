@@ -4,7 +4,7 @@
  */
 package id.ezclouds.core.bifrost.app.api;
 
-import id.ezclouds.biz.ezservice.service.apibiz.admin.BizSuperAdminService;
+import id.ezclouds.biz.election.service.apibiz.admin.BizSuperAdminService;
 import id.ezclouds.common.facade.process.AsyncProcessExecutor;
 import id.ezclouds.common.facade.process.SyncProcessExecutor;
 import id.ezclouds.common.model.process.ProcessMode;
@@ -87,29 +87,6 @@ public class LocalController {
             response.getWriter().flush();
         }
     }
-
-    /**
-    @GetMapping(value = "/api/local/scheduler/{scene}")
-    private void localSchedulerHandler(@PathVariable("scene") String scene, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String localAddr = request.getLocalAddr();
-
-        if (!"127.0.0.1".equals(localAddr)) {
-            response.setStatus(HttpStatus.NOT_FOUND.value());
-        }
-        else {
-            BizResult bizResult = bizSchedulerServiceImpl.execute(scene);
-            response.setStatus(HttpStatus.OK.value());
-
-            String responseBody;
-            if (bizResult.isSuccess()) {
-                responseBody = "Y - SUCCESS";
-            } else {
-                responseBody = "N - "+ bizResult.getErrorCode();
-            }
-            response.getWriter().write(responseBody);
-            response.getWriter().flush();
-        }
-    }*/
 
     @GetMapping(value = "/api/local/scheduler/{scene}")
     private void localScheduleHandler(@PathVariable("scene") String scene, HttpServletRequest request, HttpServletResponse response) throws IOException {

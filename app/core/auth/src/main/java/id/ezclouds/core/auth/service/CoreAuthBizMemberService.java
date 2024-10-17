@@ -5,19 +5,31 @@
 package id.ezclouds.core.auth.service;
 
 import id.ezclouds.common.facade.auth.AuthBizMemberService;
+import id.ezclouds.common.facade.biz.util.BizContextUtil;
+import id.ezclouds.common.facade.config.CoreConfigService;
 import id.ezclouds.common.facade.dal.auth.AuthAppClientDAO;
 import id.ezclouds.common.facade.dal.auth.AuthMemberClientDAO;
-import id.ezclouds.common.model.auth.AuthAppClient;
-import id.ezclouds.common.model.auth.AuthMemberClient;
+import id.ezclouds.common.facade.dal.auth.AuthMemberClientSessionDAO;
+import id.ezclouds.common.model.auth.*;
+import id.ezclouds.common.model.config.CoreOrgConfigType;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.RandomUtil;
 import id.ezclouds.common.util.ShardUtil;
+import id.ezclouds.common.util.assertion.AssertUtil;
+import id.ezclouds.common.util.exception.EzErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -31,6 +43,15 @@ public class CoreAuthBizMemberService implements AuthBizMemberService {
 
     @Autowired
     private AuthMemberClientDAO authMemberClientDAO;
+
+    @Autowired
+    private AuthMemberClientSessionDAO authMemberClientSessionDAO;
+
+    @Autowired
+    private CoreConfigService coreConfigService;
+
+    @Autowired
+    private TransactionTemplate transactionTemplate;
 
     @Override
     @Transactional
@@ -74,6 +95,49 @@ public class CoreAuthBizMemberService implements AuthBizMemberService {
 
         authMemberClientDAO.updateLoginPassword(clientId, encryptPassword);
         return newPassword;
+    }
+
+    @Override
+    public MemberAppSession authMemberAppSession(String sessionId, AuthRole authRole) {
+
+        String orgId = BizContextUtil.getOrgId();
+        String appId = BizContextUtil.getAppId();
+
+        int expiryExtendDays = coreConfigService
+                .getOrgConfig(orgId, CoreOrgConfigType.MEMBER_CLIENT_SESSION_EXPIRY_DAYS)
+                .getIntValue();
+
+        final MemberAppSession memberAppSession = new MemberAppSession();
+
+        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(TransactionStatus status) {
+                AuthMemberClientSession session = authMemberClientSessionDAO
+                        .findSessionById(sessionId);
+                AssertUtil.notNull(session, EzErrorCode.UNAUTHORIZED);
+                AssertUtil.equals(orgId, session.getOrgId(), EzErrorCode.UNAUTHORIZED);
+                AssertUtil.equals(appId, session.getAppId(), EzErrorCode.UNAUTHORIZED);
+                AssertUtil.notBlank(session.getMemberRoles(), EzErrorCode.UNAUTHORIZED);
+
+                List<String> authRoleList = Arrays.asList(session.getMemberRoles().split(","));
+                boolean authorized = authRoleList.contains(authRole.getCode());
+                AssertUtil.isTrue(authorized, EzErrorCode.UNAUTHORIZED);
+
+                Date updateExpiryDate = DateUtil.getDateAfterDays(new Date(), expiryExtendDays);
+                session.setExpiryTime(DateUtil.getFormattedDate(updateExpiryDate));
+                authMemberClientSessionDAO.store(session);
+
+                List<AuthRole> authRoles = new ArrayList<>();
+                for (String role : authRoleList) {
+                    authRoles.add(AuthRole.getByCode(role));
+                }
+
+                memberAppSession.setAuthRoles(authRoles);
+                memberAppSession.setMemberId(session.getMemberId());
+            }
+        });
+
+        return memberAppSession;
     }
 
     @Override

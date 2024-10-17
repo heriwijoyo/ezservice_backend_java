@@ -26,4 +26,10 @@ public class CoreSubOrganizationService implements SubOrganizationService {
     public List<SubOrganization> getSubOrganizationAll(String orgId) {
         return subOrganizationDAO.getByOrgId(orgId);
     }
+
+    @Override
+    public SubOrganization getById(String subOrgId) {
+        return subOrganizationDAO
+                .getById(subOrgId);
+    }
 }

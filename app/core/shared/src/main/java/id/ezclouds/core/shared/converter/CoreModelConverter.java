@@ -4,8 +4,10 @@
  */
 package id.ezclouds.core.shared.converter;
 
+import id.ezclouds.common.model.admin.CoreAdminBOPermission;
+import id.ezclouds.common.model.core.CoreOrganization;
 import id.ezclouds.common.util.StringUtil;
-import id.ezclouds.core.shared.enums.CoreAreaLevel;
+import id.ezclouds.common.model.area.CoreAreaLevel;
 import id.ezclouds.core.shared.model.*;
 import id.ezclouds.core.shared.repo.dataobject.*;
 
@@ -45,28 +47,6 @@ public class CoreModelConverter {
         return coreConfig;
     }
 
-    public static CoreOrgConfig convert(EzCoreOrgConfigDO coreConfigDO) {
-        if (coreConfigDO == null) { return null; }
-        CoreOrgConfig coreOrgConfig = new CoreOrgConfig();
-        coreOrgConfig.setConfigId(coreConfigDO.getConfigId());
-        coreOrgConfig.setOrgId(coreConfigDO.getOrgId());
-        coreOrgConfig.setConfigKey(coreConfigDO.getConfigKey());
-        coreOrgConfig.setConfigValue(coreConfigDO.getConfigValue());
-        return coreOrgConfig;
-    }
-
-    public static CoreAdminBOMenu convert(EzCoreAdminBOMenuDO menuDO) {
-        if (menuDO == null) { return null; }
-        CoreAdminBOMenu menu = new CoreAdminBOMenu();
-        menu.setOrgId(menuDO.getOrgId());
-        menu.setPermissionMain(menuDO.getPermissionMain());
-        menu.setMenuName(menuDO.getMenuName());
-        menu.setMenuUrl(menuDO.getMenuUrl());
-        menu.setMenuIcon(menuDO.getMenuIcon());
-        menu.setSorting(menuDO.getSorting());
-        return menu;
-    }
-
     public static CoreAdminBOPermission convert(EzCoreAdminBOPermissionDO permissionDO) {
         if (permissionDO == null) { return null; }
         CoreAdminBOPermission permission = new CoreAdminBOPermission();
@@ -92,39 +72,39 @@ public class CoreModelConverter {
         return dashboard;
     }
 
-    public static CoreArea convert(EzCoreAppProvinceDO provinceDO) {
+    public static LegacyCoreArea convert(EzCoreAppProvinceDO provinceDO) {
         if (provinceDO == null) { return null; }
-        CoreArea coreArea = new CoreArea();
-        coreArea.setId(provinceDO.getId());
-        coreArea.setName(provinceDO.getName());
-        coreArea.setAreaLevel(CoreAreaLevel.PROVINCE);
-        return coreArea;
+        LegacyCoreArea legacyCoreArea = new LegacyCoreArea();
+        legacyCoreArea.setId(provinceDO.getId());
+        legacyCoreArea.setName(provinceDO.getName());
+        legacyCoreArea.setAreaLevel(CoreAreaLevel.PROVINCE);
+        return legacyCoreArea;
     }
 
-    public static CoreArea convert(EzCoreAppRegencyDO regencyDO) {
+    public static LegacyCoreArea convert(EzCoreAppRegencyDO regencyDO) {
         if (regencyDO == null) { return null; }
-        CoreArea coreArea = new CoreArea();
-        coreArea.setId(regencyDO.getId());
-        coreArea.setName(regencyDO.getName());
-        coreArea.setAreaLevel(CoreAreaLevel.REGENCY);
-        return coreArea;
+        LegacyCoreArea legacyCoreArea = new LegacyCoreArea();
+        legacyCoreArea.setId(regencyDO.getId());
+        legacyCoreArea.setName(regencyDO.getName());
+        legacyCoreArea.setAreaLevel(CoreAreaLevel.REGENCY);
+        return legacyCoreArea;
     }
 
-    public static CoreArea convert(EzCoreAppDistrictDO districtDO) {
+    public static LegacyCoreArea convert(EzCoreAppDistrictDO districtDO) {
         if (districtDO == null) { return null; }
-        CoreArea coreArea = new CoreArea();
-        coreArea.setId(districtDO.getId());
-        coreArea.setName(districtDO.getName());
-        coreArea.setAreaLevel(CoreAreaLevel.DISTRICT);
-        return coreArea;
+        LegacyCoreArea legacyCoreArea = new LegacyCoreArea();
+        legacyCoreArea.setId(districtDO.getId());
+        legacyCoreArea.setName(districtDO.getName());
+        legacyCoreArea.setAreaLevel(CoreAreaLevel.DISTRICT);
+        return legacyCoreArea;
     }
 
-    public static CoreArea convert(EzCoreAppVillageDO villageDO) {
+    public static LegacyCoreArea convert(EzCoreAppVillageDO villageDO) {
         if (villageDO == null) { return null; }
-        CoreArea coreArea = new CoreArea();
-        coreArea.setId(villageDO.getId());
-        coreArea.setName(villageDO.getName());
-        coreArea.setAreaLevel(CoreAreaLevel.VILLAGE);
-        return coreArea;
+        LegacyCoreArea legacyCoreArea = new LegacyCoreArea();
+        legacyCoreArea.setId(villageDO.getId());
+        legacyCoreArea.setName(villageDO.getName());
+        legacyCoreArea.setAreaLevel(CoreAreaLevel.VILLAGE);
+        return legacyCoreArea;
     }
 }

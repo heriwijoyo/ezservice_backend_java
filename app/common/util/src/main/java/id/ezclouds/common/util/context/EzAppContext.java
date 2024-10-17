@@ -17,12 +17,13 @@ import java.util.UUID;
 public class EzAppContext {
 
     private EzAppEvent ezAppEvent;
-    private long startTimeMilis;
+    private long startTimeMillis;
     private String traceId;
     private String orgId;
     private String orgCode;
     private Map<String, String> orgExtendConfig = new HashMap<>();
     private String appId;
+    private String clientId;
     private String deviceId;
     private int appVersionNo;
     private String memberSessionId;
@@ -31,7 +32,7 @@ public class EzAppContext {
     public EzAppContext(EzAppEvent ezAppEvent) {
         this.ezAppEvent = ezAppEvent;
         this.traceId = HashUtil.createHash(UUID.randomUUID().toString());
-        this.startTimeMilis = System.currentTimeMillis();
+        this.startTimeMillis = System.currentTimeMillis();
     }
 
     public EzAppEvent getEzAppEvent() {
@@ -40,7 +41,7 @@ public class EzAppContext {
 
     public String getTimeCost() {
         long currentTimeMilis = System.currentTimeMillis();
-        long timeCostMilis = currentTimeMilis - startTimeMilis;
+        long timeCostMilis = currentTimeMilis - startTimeMillis;
         return String.valueOf(timeCostMilis);
     }
 
@@ -80,6 +81,14 @@ public class EzAppContext {
 
     public void setAppId(String appId) {
         this.appId = appId;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
     }
 
     public String getDeviceId() {

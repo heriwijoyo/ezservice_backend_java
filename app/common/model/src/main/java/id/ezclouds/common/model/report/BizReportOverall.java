@@ -14,7 +14,7 @@ public class BizReportOverall {
     private String orgId;
     private String keyId;
     private int count;
-    private String createdTime;
+    private String updatedTime;
 
     public String getId() {
         return id;
@@ -48,11 +48,11 @@ public class BizReportOverall {
         this.count = count;
     }
 
-    public String getCreatedTime() {
-        return createdTime;
+    public String getUpdatedTime() {
+        return updatedTime;
     }
 
-    public void setCreatedTime(String createdTime) {
-        this.createdTime = createdTime;
+    public void setUpdatedTime(String updatedTime) {
+        this.updatedTime = updatedTime;
     }
 }

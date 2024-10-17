@@ -12,18 +12,18 @@ import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.logger.DigestLog;
 import id.ezclouds.core.bifrost.app.api.ApiBizProcessor;
 import id.ezclouds.core.bifrost.app.api.digestlog.CommonWebDigestLog;
-import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
-import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
-import id.ezclouds.core.bifrost.app.api.result.ApiPageResult;
-import id.ezclouds.core.bifrost.app.api.result.ApiResult;
-import id.ezclouds.core.bifrost.app.api.result.ErrorResult;
+import id.ezclouds.common.model.request.api.ApiEvent;
+import id.ezclouds.common.model.request.api.ApiRequest;
+import id.ezclouds.common.model.result.api.ApiPageResult;
+import id.ezclouds.common.model.result.api.ApiResult;
+import id.ezclouds.common.model.result.api.ErrorResult;
 import id.ezclouds.core.bifrost.app.web.WebBizProcessor;
 import id.ezclouds.core.bifrost.app.web.event.WebEvent;
 import id.ezclouds.core.bifrost.core.SpringContextConfig;
 import id.ezclouds.core.bifrost.core.processor.BizProcessor;
 import id.ezclouds.core.bifrost.core.processor.PreBizProcessor;
 import id.ezclouds.core.bifrost.core.processor.WebProcessor;
-import id.ezclouds.core.bifrost.core.util.ErrorResultUtil;
+import id.ezclouds.common.model.util.ErrorResultUtil;
 import id.ezclouds.common.util.context.EzAppContextHolder;
 import id.ezclouds.core.shared.util.DigestLogUtil;
 import org.slf4j.Logger;
@@ -96,10 +96,6 @@ public abstract class AppController {
             DigestLogUtil.logDigest(getLogger(), digestLog);
         }
 
-        if (apiResult.getErrorResult() != null) {
-            apiResult.getErrorResult().setErrorContext(null);
-            apiPageResult.getErrorResult().setErrorContext(null);
-        }
         apiResult.setTimestamp(DateUtil.getCurrentFormattedDate());
         apiPageResult.setTimestamp(DateUtil.getCurrentFormattedDate());
 

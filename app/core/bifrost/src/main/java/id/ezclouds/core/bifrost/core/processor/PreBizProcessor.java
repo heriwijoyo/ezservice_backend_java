@@ -4,17 +4,17 @@
  */
 package id.ezclouds.core.bifrost.core.processor;
 
-import id.ezclouds.biz.ezservice.service.apibiz.BizAuthService;
+import id.ezclouds.biz.election.service.apibiz.BizAuthService;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.exception.EzErrorException;
 import id.ezclouds.core.auth.result.CoreAuthResult;
-import id.ezclouds.core.bifrost.app.api.event.ApiEvent;
-import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
-import id.ezclouds.core.bifrost.app.api.request.RequestAppClient;
+import id.ezclouds.common.model.request.api.ApiEvent;
+import id.ezclouds.common.model.request.api.ApiRequest;
+import id.ezclouds.common.model.request.api.RequestAppClient;
 import id.ezclouds.common.util.context.EzAppContextHolder;
 import id.ezclouds.common.util.context.EzAppEvent;
-import id.ezclouds.core.shared.model.CoreOrganization;
+import id.ezclouds.common.model.core.CoreOrganization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

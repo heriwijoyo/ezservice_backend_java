@@ -4,10 +4,10 @@
  */
 package id.ezclouds.core.bifrost.app.api.digestlog;
 
-import id.ezclouds.biz.ezservice.model.member.BizMemberRegisterResult;
-import id.ezclouds.core.bifrost.app.api.request.ApiRequest;
+import id.ezclouds.biz.election.model.member.BizMemberRegisterResult;
+import id.ezclouds.common.model.request.api.ApiRequest;
 import id.ezclouds.core.bifrost.app.api.request.MemberRegisterRequest;
-import id.ezclouds.core.bifrost.app.api.result.ApiResult;
+import id.ezclouds.common.model.result.api.ApiResult;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)

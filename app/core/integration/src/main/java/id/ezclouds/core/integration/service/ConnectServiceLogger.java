@@ -45,5 +45,6 @@ public class ConnectServiceLogger {
             traceId = StringUtil.EMPTY;
         }
         LOGGER.info(traceId + " --- Exception: " + ExceptionUtil.getErrorContext(e));
+        LOGGER.info(traceId + " --- Exception: " + ExceptionUtil.getStackTrace(e));
     }
 }

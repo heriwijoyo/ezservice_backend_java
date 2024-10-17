@@ -19,23 +19,13 @@ import id.ezclouds.core.dal.report.dataobject.CoreReportTimeSeriesDO;
  */
 public class BizReportConverter {
 
-    public static CoreReportOverallDO convert(BizReportOverall model) {
-        CoreReportOverallDO dataObject = new CoreReportOverallDO();
-        dataObject.setId(model.getId());
-        dataObject.setOrgId(model.getOrgId());
-        dataObject.setKeyId(model.getKeyId());
-        dataObject.setCount(model.getCount());
-        dataObject.setCreatedTime(model.getCreatedTime());
-        return dataObject;
-    }
-
     public static BizReportOverall convert(CoreReportOverallDO modelDO) {
         if (modelDO == null) { return null; }
         BizReportOverall reportOverall = new BizReportOverall();
         reportOverall.setOrgId(modelDO.getOrgId());
         reportOverall.setKeyId(modelDO.getKeyId());
         reportOverall.setCount(modelDO.getCount());
-        reportOverall.setCreatedTime(modelDO.getCreatedTime());
+        reportOverall.setUpdatedTime(modelDO.getUpdatedTime());
         reportOverall.setId(modelDO.getId());
         return reportOverall;
     }
