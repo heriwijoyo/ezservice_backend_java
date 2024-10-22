@@ -12,6 +12,7 @@ import id.ezclouds.biz.election.enums.BizMemberRole;
 import id.ezclouds.biz.election.enums.BizSwitchFlagObject;
 import id.ezclouds.biz.election.model.BizWhatsappLog;
 import id.ezclouds.biz.election.model.VideoCard;
+import id.ezclouds.biz.election.model.member.BizMemberInfo;
 import id.ezclouds.common.facade.broker.CoreEventPublisherService;
 import id.ezclouds.common.model.admin.AdminMenuView;
 import id.ezclouds.common.model.admin.CoreMenuComparator;
@@ -43,7 +44,9 @@ import id.ezclouds.common.facade.file.CoreFileService;
 import id.ezclouds.common.model.admin.BizAdminAppData;
 import id.ezclouds.common.model.admin.CoreAdminMenu;
 import id.ezclouds.common.model.admin.CoreMenuLevel;
+import id.ezclouds.common.model.broker.event.EzCommonEvent;
 import id.ezclouds.common.model.broker.event.OverallReportChangeEvent;
+import id.ezclouds.common.model.broker.topic.EzCoreTopic;
 import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
 import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
 import id.ezclouds.common.model.result.BizResult;
@@ -1066,9 +1069,15 @@ public class BizAdminService extends BizBaseService {
                 request.getData().setOrgId(session.getOrgId());
                 request.getData().setOrgCode(session.getOrgCode());
 
-                appSubOrganizationService.createSubOrganization(request.getData());
+                BizSubOrganization subOrganization = request.getData();
+                String subOrgId = appSubOrganizationService.createSubOrganization(subOrganization);
+                subOrganization.setSubOrgId(subOrgId);
 
-                coreEventPublisherService.publish(new OverallReportChangeEvent(session.getOrgId()));
+                coreEventPublisherService.publish(new EzCommonEvent(
+                        EzCoreTopic.CORE_SUB_ORG_CREATE,
+                        session.getOrgId(),
+                        subOrganization
+                ));
 
                 bizResult.setSuccess(true);
                 bizResult.setObject(WebAdminConstant.OPERATION_SUCCESS);
@@ -1195,10 +1204,14 @@ public class BizAdminService extends BizBaseService {
                 if (members != null) {
                     AssertUtil.isNotTrue(members.size() > 0, EzErrorCode.IDEMPOTENT_ERROR);
                 }
-                bizAdminInnerService
+                BizMemberInfo memberInfo = bizAdminInnerService
                         .createMember(request.getOrgId(), request.getData());
 
-                coreEventPublisherService.publish(new OverallReportChangeEvent(session.getOrgId()));
+                coreEventPublisherService.publish(new EzCommonEvent(
+                        EzCoreTopic.CORE_MEMBER_REGISTER,
+                        session.getOrgId(),
+                        memberInfo
+                ));
 
                 bizResult.setSuccess(true);
                 bizResult.setObject("OPERATION SUCCESS");

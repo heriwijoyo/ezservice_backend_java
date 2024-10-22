@@ -8,7 +8,6 @@ import id.ezclouds.biz.election.converter.BizModelConverter;
 import id.ezclouds.biz.election.model.VideoCard;
 import id.ezclouds.biz.election.model.admin.BizApplicationConfig;
 import id.ezclouds.biz.election.model.admin.BizMemberRequiredData;
-import id.ezclouds.common.facade.dal.report.BizReportOverallDAO;
 import id.ezclouds.common.model.core.BizOrganization;
 import id.ezclouds.biz.election.model.event.AppEvent;
 import id.ezclouds.biz.election.model.news.BizWebDetailNews;
@@ -152,9 +151,6 @@ public class BizAdminInnerService {
 
     @Autowired
     private CoreAreaService coreAreaService;
-
-    @Autowired
-    private BizReportOverallDAO bizReportOverallDAO;
 
     public void createAppBuildPackage(String orgId, String platformId, int versionCode, String versionName) throws EzErrorException {
         BizAppBuildPackage buildPackage = new BizAppBuildPackage();
@@ -568,7 +564,7 @@ public class BizAdminInnerService {
     }
 
     @Transactional
-    public void createMember(String orgId, BizMember bizMember) throws Exception {
+    public BizMemberInfo createMember(String orgId, BizMember bizMember) throws Exception {
         BizApplicationConfig bizApplicationConfig = getAppConfig(orgId);
         String orgCode = getOrganizationById(orgId).getCode();
         String appId = bizApplicationConfig.getAppId();
@@ -579,46 +575,19 @@ public class BizAdminInnerService {
         bizMember.setCreatedTime(DateUtil.getCurrentFormattedDate());
         bizMember.setModifiedTime(DateUtil.getCurrentFormattedDate());
 
-        if (OrgConstant.ORG_ID_RJL.equals(orgId)) {
-            bizMember.setProvinceId("18");
-            bizMember.setProvinceName("LAMPUNG");
-            bizMember.setRegencyId("1802");
-            bizMember.setRegencyName("KABUPATEN TANGGAMUS");
-
-            List<LegacyCoreArea> district = legacyCoreAreaService
-                    .getDistrictByIds(
-                            Collections.singletonList(bizMember.getDistrictId())
-                    );
-            if (district != null && district.size() > 0) {
-                bizMember.setDistrictName(district.get(0).getName());
-            }
-
-            List<LegacyCoreArea> village = legacyCoreAreaService
-                    .getVillageByIds(
-                            Collections.singletonList(bizMember.getVillageId())
-                    );
-            if (village != null && village.size() > 0) {
-                bizMember.setVillageName(village.get(0).getName());
-            }
-        }
-
         BizMemberInfo bizMemberInfo = bizMemberInnerService
                 .createCoreMember(orgId, orgCode, appId, bizMember);
 
         if (StringUtil.isBlank(bizMember.getRoles())) {
-            return;
+            return bizMemberInfo;
         }
-
-        BizReportOverall reportOverall = bizReportOverallDAO.getAndLock(orgId, BizReportOverallKey.VOTER_BASE_MEMBER_COUNT.getCode());
-        int increasedCount = reportOverall.getCount() + 1;
-        reportOverall.setCount(increasedCount);
-        bizReportOverallDAO.store(reportOverall);
 
         //generate member password
         String newPassword = RandomUtil.generateNumberCode(6);
         legacyCoreAuthService.updateMemberClientPassword(bizMemberInfo.getBizMemberClient().getClientId(), newPassword);
 
         memberSendPassword(orgId, bizMemberInfo.getBizMember().getPhone(), newPassword);
+        return bizMemberInfo;
     }
 
     public void memberSendPassword(String orgId, String phone, String password) {

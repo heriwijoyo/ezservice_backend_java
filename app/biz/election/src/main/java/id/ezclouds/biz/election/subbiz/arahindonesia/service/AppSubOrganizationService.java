@@ -57,7 +57,7 @@ public class AppSubOrganizationService {
     }
 
     @Transactional
-    public void create(String name, String address, String orgId, String orgCode) {
+    public String create(String name, String address, String orgId, String orgCode) {
         String subOrgId = coreSequenceService
                 .generateSequence(new Organization(orgId, orgCode), CoreSeqSceneEnum.BIZ_SUB_ORG);
         BizSubOrganizationDO bizSubOrganizationDO = new BizSubOrganizationDO();
@@ -69,22 +69,16 @@ public class AppSubOrganizationService {
         bizSubOrganizationDO.setCreatedTime(DateUtil.getCurrentFormattedDate());
         bizSubOrganizationDO.setModifiedTime(DateUtil.getCurrentFormattedDate());
         appSubOrganizationRepository.saveAndFlush(bizSubOrganizationDO);
+        return subOrgId;
     }
 
-    @Transactional
-    public void createSubOrganization(BizSubOrganization subOrganization) {
-        create(
+    public String createSubOrganization(BizSubOrganization subOrganization) {
+        return create(
                 subOrganization.getName(),
                 subOrganization.getAddress(),
                 subOrganization.getOrgId(),
                 subOrganization.getOrgCode()
         );
-
-        BizReportOverall reportOverall = bizReportOverallDAO
-                .getAndLock(subOrganization.getOrgId(), BizReportOverallKey.VOTER_BASE_CLUSTER_COUNT.getCode());
-        int increasedCount = reportOverall.getCount() + 1;
-        reportOverall.setCount(increasedCount);
-        bizReportOverallDAO.store(reportOverall);
     }
 
     public List<BizSubOrganization> getAllSubOrganization() {
