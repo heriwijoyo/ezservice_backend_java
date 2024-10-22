@@ -5,7 +5,7 @@
 package id.ezclouds.core.shared.service;
 
 import id.ezclouds.core.shared.converter.CoreModelConverter;
-import id.ezclouds.common.model.core.CoreOrganization;
+import id.ezclouds.common.model.core.organization.CoreOrganization;
 import id.ezclouds.core.shared.repo.CoreOrganizationRepository;
 import id.ezclouds.core.shared.repo.dataobject.EzCoreOrganizationDO;
 import org.springframework.beans.factory.annotation.Autowired;

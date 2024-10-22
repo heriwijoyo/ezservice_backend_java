@@ -41,7 +41,7 @@ import id.ezclouds.core.member.model.CoreMember;
 import id.ezclouds.core.member.model.CoreMemberExtension;
 import id.ezclouds.core.member.service.CoreMemberService;
 import id.ezclouds.common.util.context.EzAppContextHolder;
-import id.ezclouds.common.model.core.CoreOrganization;
+import id.ezclouds.common.model.core.organization.CoreOrganization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

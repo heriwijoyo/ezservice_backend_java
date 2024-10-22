@@ -4,7 +4,7 @@
  */
 package id.ezclouds.common.facade.dal.core;
 
-import id.ezclouds.common.model.core.Organization;
+import id.ezclouds.common.model.core.organization.Organization;
 
 import java.util.List;
 

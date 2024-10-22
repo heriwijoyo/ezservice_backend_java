@@ -6,7 +6,7 @@ package id.ezclouds.core.dal.organization;
 
 import id.ezclouds.common.facade.dal.organization.SubOrganizationDAO;
 import id.ezclouds.common.model.annotation.EzDAOLogger;
-import id.ezclouds.common.model.organization.SubOrganization;
+import id.ezclouds.common.model.core.organization.SubOrganization;
 import id.ezclouds.common.model.util.ListModelConvertUtil;
 import id.ezclouds.core.dal.organization.converter.CoreSubOrganizationResultConverter;
 import id.ezclouds.core.dal.organization.dataobject.CoreSubOrganizationDO;

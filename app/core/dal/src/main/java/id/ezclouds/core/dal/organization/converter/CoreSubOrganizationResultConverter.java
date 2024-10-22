@@ -4,7 +4,7 @@
  */
 package id.ezclouds.core.dal.organization.converter;
 
-import id.ezclouds.common.model.organization.SubOrganization;
+import id.ezclouds.common.model.core.organization.SubOrganization;
 import id.ezclouds.common.model.util.TemplateModelConverter;
 import id.ezclouds.core.dal.organization.dataobject.CoreSubOrganizationDO;
 

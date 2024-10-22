@@ -7,7 +7,7 @@ package id.ezclouds.biz.election.model.admin;
 import id.ezclouds.biz.election.service.app.model.BizAppBuildPackage;
 import id.ezclouds.biz.election.service.app.model.BizAppConfig;
 import id.ezclouds.biz.election.model.member.BizMember;
-import id.ezclouds.common.model.core.BizOrganization;
+import id.ezclouds.common.model.core.organization.BizOrganization;
 
 import java.util.List;
 import java.util.Map;

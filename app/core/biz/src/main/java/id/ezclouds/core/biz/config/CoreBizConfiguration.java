@@ -39,6 +39,14 @@ public class CoreBizConfiguration {
     @Qualifier(value = "bizReportAccumulateVoterInvalidRegister")
     private ReportAccumulateProcessor bizReportAccumulateVoterInvalidRegister;
 
+    @Autowired
+    @Qualifier(value = "bizReportAccumulateClusterRegister")
+    private ReportAccumulateProcessor bizReportAccumulateClusterRegister;
+
+    @Autowired
+    @Qualifier(value = "bizReportAccumulateMemberRegister")
+    private ReportAccumulateProcessor bizReportAccumulateMemberRegister;
+
     @Bean
     public Map<TableSource, BizSmartTableDataSource> tableDataSourceMap() {
         Map<TableSource, BizSmartTableDataSource> sourceMap = new HashMap<>();
@@ -52,6 +60,8 @@ public class CoreBizConfiguration {
         Map<EzCoreTopic, ReportAccumulateProcessor> processorMap = new HashMap<>();
         processorMap.put(EzCoreTopic.ELECTION_VOTER_REGISTER, bizReportAccumulateVoterRegister);
         processorMap.put(EzCoreTopic.ELECTION_VOTER_REGISTER_INVALID, bizReportAccumulateVoterInvalidRegister);
+        processorMap.put(EzCoreTopic.CORE_SUB_ORG_CREATE, bizReportAccumulateClusterRegister);
+        processorMap.put(EzCoreTopic.CORE_MEMBER_REGISTER, bizReportAccumulateMemberRegister);
         return processorMap;
     }
 }

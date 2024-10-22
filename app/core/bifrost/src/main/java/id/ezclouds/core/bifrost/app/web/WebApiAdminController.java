@@ -36,7 +36,7 @@ import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.biz.election.subbiz.arahindonesia.model.BizSubOrganization;
 import id.ezclouds.common.model.member.MemberBackOffice;
-import id.ezclouds.common.model.organization.SubOrganization;
+import id.ezclouds.common.model.core.organization.SubOrganization;
 import id.ezclouds.common.model.request.WebBizPageRequest;
 import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.common.util.exception.ExceptionUtil;

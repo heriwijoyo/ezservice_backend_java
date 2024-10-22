@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.biz.election.model.admin.BizApplicationConfig;
 import id.ezclouds.biz.election.model.admin.BizMemberRequiredData;
 import id.ezclouds.common.model.admin.AdminParamConfig;
-import id.ezclouds.common.model.core.BizOrganization;
+import id.ezclouds.common.model.core.organization.BizOrganization;
 import id.ezclouds.biz.election.model.admin.BizOrganizationDetail;
 import id.ezclouds.biz.election.service.request.web.BizWebCommonRequest;
 import id.ezclouds.biz.election.service.request.web.BizWebCreateRequest;

@@ -2,7 +2,7 @@
  * Ezclouds.id
  * Copyright (c) 2020‐2024 All Rights Reserved.
  */
-package id.ezclouds.common.model.organization;
+package id.ezclouds.common.model.core.organization;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -14,6 +14,14 @@ public class SubOrganization {
     private String orgId;
     private String name;
     private String address;
+
+    public SubOrganization() {
+    }
+
+    public SubOrganization(String subOrgId, String name) {
+        this.subOrgId = subOrgId;
+        this.name = name;
+    }
 
     public String getSubOrgId() {
         return subOrgId;

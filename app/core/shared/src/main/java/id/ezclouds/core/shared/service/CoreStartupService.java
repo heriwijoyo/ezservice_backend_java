@@ -8,7 +8,7 @@ import id.ezclouds.common.facade.core.CoreCacheService;
 import id.ezclouds.common.facade.core.CoreOrganizationService;
 import id.ezclouds.common.facade.file.CoreFileService;
 import id.ezclouds.common.model.constant.OrgConstant;
-import id.ezclouds.common.model.core.Organization;
+import id.ezclouds.common.model.core.organization.Organization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;

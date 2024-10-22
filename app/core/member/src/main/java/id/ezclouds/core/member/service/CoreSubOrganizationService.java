@@ -6,7 +6,7 @@ package id.ezclouds.core.member.service;
 
 import id.ezclouds.common.facade.dal.organization.SubOrganizationDAO;
 import id.ezclouds.common.facade.organization.SubOrganizationService;
-import id.ezclouds.common.model.organization.SubOrganization;
+import id.ezclouds.common.model.core.organization.SubOrganization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

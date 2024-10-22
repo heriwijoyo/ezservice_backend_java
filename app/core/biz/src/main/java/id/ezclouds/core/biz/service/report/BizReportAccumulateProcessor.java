@@ -52,7 +52,10 @@ public class BizReportAccumulateProcessor {
             EzCoreTopic.ELECTION_VOTER_REGISTER_INVALID,
             EzCoreTopic.ELECTION_QUICK_COUNT_SUBMIT,
             EzCoreTopic.ELECTION_QUICK_COUNT_VERIFY,
-            EzCoreTopic.BIZ_REPORT_RECOVER_ACCUMULATE_VOTER
+            EzCoreTopic.BIZ_REPORT_RECOVER_ACCUMULATE_VOTER,
+
+            EzCoreTopic.CORE_SUB_ORG_CREATE,
+            EzCoreTopic.CORE_MEMBER_REGISTER
     );
 
     @Autowired

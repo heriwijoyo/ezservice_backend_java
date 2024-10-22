@@ -6,7 +6,7 @@ package id.ezclouds.core.dal.core;
 
 import id.ezclouds.common.facade.dal.core.CoreOrganizationDAO;
 import id.ezclouds.common.model.annotation.EzDAOLogger;
-import id.ezclouds.common.model.core.Organization;
+import id.ezclouds.common.model.core.organization.Organization;
 import id.ezclouds.core.dal.core.converter.CoreOrganizationConverter;
 import id.ezclouds.core.dal.core.repo.EzCoreOrganizationRepository;
 import org.springframework.beans.factory.annotation.Autowired;

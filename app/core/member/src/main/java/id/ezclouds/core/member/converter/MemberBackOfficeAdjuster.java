@@ -5,7 +5,7 @@
 package id.ezclouds.core.member.converter;
 
 import id.ezclouds.common.model.member.MemberBackOffice;
-import id.ezclouds.common.model.organization.SubOrganization;
+import id.ezclouds.common.model.core.organization.SubOrganization;
 import id.ezclouds.common.model.util.ModelAdjuster;
 
 import java.util.HashMap;

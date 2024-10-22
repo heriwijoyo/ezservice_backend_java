@@ -5,7 +5,7 @@
 package id.ezclouds.common.model.request.biz.election;
 
 import id.ezclouds.common.model.biz.election.BizVoter;
-import id.ezclouds.common.model.core.CoreBizSeqScene;
+import id.ezclouds.common.model.core.sequence.CoreBizSeqScene;
 import id.ezclouds.common.model.request.BizRequest;
 
 /**

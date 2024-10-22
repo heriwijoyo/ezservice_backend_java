@@ -5,7 +5,7 @@
 package id.ezclouds.core.dal.core.converter;
 
 import id.ezclouds.common.model.converter.CommonDOModelConverter;
-import id.ezclouds.common.model.core.CoreBizSequence;
+import id.ezclouds.common.model.core.sequence.CoreBizSequence;
 import id.ezclouds.core.dal.core.dataobject.EzCoreBizSequenceDO;
 
 /**

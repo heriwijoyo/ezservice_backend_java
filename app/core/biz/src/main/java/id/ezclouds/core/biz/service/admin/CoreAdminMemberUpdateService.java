@@ -14,7 +14,7 @@ import id.ezclouds.common.model.auth.AuthRole;
 import id.ezclouds.common.model.constant.MapKey;
 import id.ezclouds.common.model.member.MemberBackOffice;
 import id.ezclouds.common.model.message.CommonMessageConstant;
-import id.ezclouds.common.model.organization.SubOrganization;
+import id.ezclouds.common.model.core.organization.SubOrganization;
 import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.util.assertion.AssertUtil;

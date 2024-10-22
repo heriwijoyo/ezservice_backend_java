@@ -8,7 +8,7 @@ import id.ezclouds.common.facade.dal.member.BizMemberBackOfficeDAO;
 import id.ezclouds.common.facade.dal.organization.SubOrganizationDAO;
 import id.ezclouds.common.facade.member.MemberBackOfficeService;
 import id.ezclouds.common.model.member.MemberBackOffice;
-import id.ezclouds.common.model.organization.SubOrganization;
+import id.ezclouds.common.model.core.organization.SubOrganization;
 import id.ezclouds.common.model.request.BizPageRequest;
 import id.ezclouds.common.model.result.PageResult;
 import id.ezclouds.common.model.util.PageResultUtil;

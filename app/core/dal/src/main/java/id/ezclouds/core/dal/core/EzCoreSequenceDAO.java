@@ -6,8 +6,8 @@ package id.ezclouds.core.dal.core;
 
 import id.ezclouds.common.facade.dal.core.CoreSequenceDAO;
 import id.ezclouds.common.model.annotation.EzDAOLogger;
-import id.ezclouds.common.model.core.CoreSeqScene;
-import id.ezclouds.common.model.core.CoreSequence;
+import id.ezclouds.common.model.core.sequence.CoreSeqScene;
+import id.ezclouds.common.model.core.sequence.CoreSequence;
 import id.ezclouds.core.dal.core.converter.CoreSequenceConverter;
 import id.ezclouds.core.dal.core.repo.CoreSequenceRepository;
 import org.springframework.beans.factory.annotation.Autowired;

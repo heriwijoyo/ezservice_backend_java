@@ -23,7 +23,7 @@ import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.context.EzAppContextHolder;
-import id.ezclouds.common.model.core.CoreOrganization;
+import id.ezclouds.common.model.core.organization.CoreOrganization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

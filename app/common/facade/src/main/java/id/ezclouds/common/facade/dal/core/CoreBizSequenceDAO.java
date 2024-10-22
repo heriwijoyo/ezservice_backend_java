@@ -4,7 +4,7 @@
  */
 package id.ezclouds.common.facade.dal.core;
 
-import id.ezclouds.common.model.core.CoreBizSequence;
+import id.ezclouds.common.model.core.sequence.CoreBizSequence;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)

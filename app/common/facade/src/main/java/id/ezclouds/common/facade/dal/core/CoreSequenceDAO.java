@@ -4,8 +4,8 @@
  */
 package id.ezclouds.common.facade.dal.core;
 
-import id.ezclouds.common.model.core.CoreSeqScene;
-import id.ezclouds.common.model.core.CoreSequence;
+import id.ezclouds.common.model.core.sequence.CoreSeqScene;
+import id.ezclouds.common.model.core.sequence.CoreSequence;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)

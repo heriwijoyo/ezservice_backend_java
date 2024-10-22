@@ -6,10 +6,10 @@ package id.ezclouds.core.shared.service;
 
 import id.ezclouds.common.facade.core.CoreSequenceService;
 import id.ezclouds.common.facade.dal.core.CoreSequenceDAO;
-import id.ezclouds.common.model.core.BizSeqInitConfig;
-import id.ezclouds.common.model.core.CoreSeqSceneEnum;
-import id.ezclouds.common.model.core.CoreSequence;
-import id.ezclouds.common.model.core.Organization;
+import id.ezclouds.common.model.core.sequence.BizSeqInitConfig;
+import id.ezclouds.common.model.core.sequence.CoreSeqSceneEnum;
+import id.ezclouds.common.model.core.sequence.CoreSequence;
+import id.ezclouds.common.model.core.organization.Organization;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.core.shared.util.CoreSeqUtil;

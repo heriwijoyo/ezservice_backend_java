@@ -5,7 +5,7 @@
 package id.ezclouds.core.bifrost.app.webapp.api;
 
 import id.ezclouds.common.facade.biz.admin.BizAdminOrganizationService;
-import id.ezclouds.common.model.core.Organization;
+import id.ezclouds.common.model.core.organization.Organization;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
 import id.ezclouds.common.util.logger.DigestLog;

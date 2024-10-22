@@ -4,7 +4,7 @@
  */
 package id.ezclouds.biz.election.enums;
 
-import id.ezclouds.common.model.core.CoreBizSeqScene;
+import id.ezclouds.common.model.core.sequence.CoreBizSeqScene;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)

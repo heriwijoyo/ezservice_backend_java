@@ -15,7 +15,7 @@ import id.ezclouds.common.model.area.CoreAreaLevel;
 import id.ezclouds.common.model.biz.election.BizVoter;
 import id.ezclouds.common.model.biz.report.*;
 import id.ezclouds.common.model.core.member.CoreGender;
-import id.ezclouds.common.model.organization.SubOrganization;
+import id.ezclouds.common.model.core.organization.SubOrganization;
 import id.ezclouds.common.model.process.ProcessStatus;
 import id.ezclouds.common.model.report.BizReportOverall;
 import id.ezclouds.common.model.report.BizReportOverallKey;

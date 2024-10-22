@@ -4,8 +4,8 @@
  */
 package id.ezclouds.common.facade.core;
 
-import id.ezclouds.common.model.core.CoreSeqSceneEnum;
-import id.ezclouds.common.model.core.Organization;
+import id.ezclouds.common.model.core.sequence.CoreSeqSceneEnum;
+import id.ezclouds.common.model.core.organization.Organization;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)

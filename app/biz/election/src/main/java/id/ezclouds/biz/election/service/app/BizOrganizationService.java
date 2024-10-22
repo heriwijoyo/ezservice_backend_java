@@ -5,7 +5,7 @@
 package id.ezclouds.biz.election.service.app;
 
 import id.ezclouds.common.util.StringUtil;
-import id.ezclouds.common.model.core.CoreOrganization;
+import id.ezclouds.common.model.core.organization.CoreOrganization;
 import id.ezclouds.core.shared.service.EzOrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

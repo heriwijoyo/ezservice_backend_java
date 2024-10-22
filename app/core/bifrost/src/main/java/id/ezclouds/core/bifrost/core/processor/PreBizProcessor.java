@@ -14,7 +14,7 @@ import id.ezclouds.common.model.request.api.ApiRequest;
 import id.ezclouds.common.model.request.api.RequestAppClient;
 import id.ezclouds.common.util.context.EzAppContextHolder;
 import id.ezclouds.common.util.context.EzAppEvent;
-import id.ezclouds.common.model.core.CoreOrganization;
+import id.ezclouds.common.model.core.organization.CoreOrganization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

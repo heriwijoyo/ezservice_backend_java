@@ -45,7 +45,6 @@ import id.ezclouds.common.model.admin.BizAdminAppData;
 import id.ezclouds.common.model.admin.CoreAdminMenu;
 import id.ezclouds.common.model.admin.CoreMenuLevel;
 import id.ezclouds.common.model.broker.event.EzCommonEvent;
-import id.ezclouds.common.model.broker.event.OverallReportChangeEvent;
 import id.ezclouds.common.model.broker.topic.EzCoreTopic;
 import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
 import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
@@ -59,7 +58,7 @@ import id.ezclouds.common.model.auth.AuthMemberClient;
 import id.ezclouds.common.model.auth.AuthMemberClientLoginType;
 import id.ezclouds.common.model.constant.PageSort;
 import id.ezclouds.common.model.member.MemberBackOffice;
-import id.ezclouds.common.model.organization.SubOrganization;
+import id.ezclouds.common.model.core.organization.SubOrganization;
 import id.ezclouds.common.model.request.FileStreamImportRequest;
 import id.ezclouds.common.model.request.WebBizPageRequest;
 import id.ezclouds.common.model.result.BaseResult;
@@ -80,7 +79,7 @@ import id.ezclouds.core.member.service.CoreMemberService;
 import id.ezclouds.core.shared.constant.CoreConstant;
 import id.ezclouds.common.model.file.PublicFileResolver;
 import id.ezclouds.core.shared.model.CoreAdminDashboard;
-import id.ezclouds.common.model.core.CoreOrganization;
+import id.ezclouds.common.model.core.organization.CoreOrganization;
 import id.ezclouds.core.shared.result.ListResult;
 import id.ezclouds.core.shared.service.CoreAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1069,10 +1068,10 @@ public class BizAdminService extends BizBaseService {
                 request.getData().setOrgId(session.getOrgId());
                 request.getData().setOrgCode(session.getOrgCode());
 
-                BizSubOrganization subOrganization = request.getData();
-                String subOrgId = appSubOrganizationService.createSubOrganization(subOrganization);
-                subOrganization.setSubOrgId(subOrgId);
+                BizSubOrganization bizSubOrganization = request.getData();
+                String subOrgId = appSubOrganizationService.createSubOrganization(bizSubOrganization);
 
+                SubOrganization subOrganization = new SubOrganization(subOrgId, bizSubOrganization.getName());
                 coreEventPublisherService.publish(new EzCommonEvent(
                         EzCoreTopic.CORE_SUB_ORG_CREATE,
                         session.getOrgId(),

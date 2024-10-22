@@ -6,8 +6,8 @@ package id.ezclouds.core.shared.service;
 
 import id.ezclouds.common.facade.core.CoreBizSequenceService;
 import id.ezclouds.common.facade.dal.core.CoreBizSequenceDAO;
-import id.ezclouds.common.model.core.CoreBizSeqScene;
-import id.ezclouds.common.model.core.CoreBizSequence;
+import id.ezclouds.common.model.core.sequence.CoreBizSeqScene;
+import id.ezclouds.common.model.core.sequence.CoreBizSequence;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.core.shared.util.CoreSeqUtil;
 import org.springframework.beans.factory.annotation.Autowired;

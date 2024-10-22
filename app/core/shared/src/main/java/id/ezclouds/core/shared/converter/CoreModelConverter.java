@@ -5,7 +5,7 @@
 package id.ezclouds.core.shared.converter;
 
 import id.ezclouds.common.model.admin.CoreAdminBOPermission;
-import id.ezclouds.common.model.core.CoreOrganization;
+import id.ezclouds.common.model.core.organization.CoreOrganization;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.model.area.CoreAreaLevel;
 import id.ezclouds.core.shared.model.*;

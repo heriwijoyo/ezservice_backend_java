@@ -5,8 +5,8 @@
 package id.ezclouds.core.dal.core.converter;
 
 import id.ezclouds.common.model.converter.CommonDOModelConverter;
-import id.ezclouds.common.model.core.CoreSeqSceneEnum;
-import id.ezclouds.common.model.core.CoreSequence;
+import id.ezclouds.common.model.core.sequence.CoreSeqSceneEnum;
+import id.ezclouds.common.model.core.sequence.CoreSequence;
 import id.ezclouds.core.dal.core.dataobject.EzCoreSequenceDO;
 
 /**

@@ -5,7 +5,7 @@
 package id.ezclouds.core.dal.core;
 
 import id.ezclouds.common.facade.dal.core.CoreBizSequenceDAO;
-import id.ezclouds.common.model.core.CoreBizSequence;
+import id.ezclouds.common.model.core.sequence.CoreBizSequence;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.core.dal.core.converter.CoreBizSequenceConverter;
 import id.ezclouds.core.dal.core.repo.EzCoreBizSequenceRepository;

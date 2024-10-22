@@ -7,7 +7,7 @@ package id.ezclouds.core.shared.service;
 import id.ezclouds.common.facade.core.CoreOrganizationService;
 import id.ezclouds.common.facade.dal.core.CoreOrganizationDAO;
 import id.ezclouds.common.model.core.CoreCacheKey;
-import id.ezclouds.common.model.core.Organization;
+import id.ezclouds.common.model.core.organization.Organization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
