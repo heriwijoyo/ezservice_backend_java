@@ -271,7 +271,7 @@ public class BizReportAccumulateVoterRegister implements ReportAccumulateProcess
         if (accumulateCluster == null) {
             accumulateCluster = new BizReportAccumulateCluster();
             accumulateCluster.setOrgId(bizVoter.getOrgId());
-            accumulateCluster.setClusterId(subOrganization.getSubOrgId());
+            accumulateCluster.setClusterId(bizVoter.getSubOrgId());
             accumulateCluster.setClusterName(subOrganization.getName());
             accumulateCluster.setVoterCount(0);
             accumulateCluster.setVoterMaleCount(0);

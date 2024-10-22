@@ -76,7 +76,6 @@ public abstract class BizMultipartRequest extends BizOptionalMultipartRequest {
             return "";
         }
         String contentType = multipartFile.getContentType();
-        System.out.println(contentType);
         if ("application/pdf".equals(contentType)) {
             return "PDF";
         }

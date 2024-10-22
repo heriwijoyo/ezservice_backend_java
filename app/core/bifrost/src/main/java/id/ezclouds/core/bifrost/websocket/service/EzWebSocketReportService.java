@@ -122,7 +122,6 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
 
     private void performDataRequest(WebSocketSession session, String topic, Object payload) {
         SessionIdentity identity = identityMap.get(session.getId());
-        System.out.println(payload);
 
         if (sessionMap.get(session.getId()) != null && identity != null) {
             if (!identity.getTopics().contains(topic)) {
