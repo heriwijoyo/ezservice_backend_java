@@ -7,12 +7,15 @@ package id.ezclouds.core.biz.service.report.accumulate;
 import id.ezclouds.common.facade.area.CoreWorkingAreaService;
 import id.ezclouds.common.facade.dal.biz.report.BizAccumulateAreaExtDAO;
 import id.ezclouds.common.facade.dal.biz.report.BizReportAccumulateAreaDAO;
+import id.ezclouds.common.facade.dal.biz.report.BizReportAccumulateClusterDAO;
 import id.ezclouds.common.facade.dal.biz.report.BizReportAccumulateMemberDAO;
+import id.ezclouds.common.facade.dal.organization.SubOrganizationDAO;
 import id.ezclouds.common.facade.dal.report.BizReportOverallDAO;
 import id.ezclouds.common.model.area.CoreAreaLevel;
 import id.ezclouds.common.model.biz.election.BizVoter;
 import id.ezclouds.common.model.biz.report.*;
 import id.ezclouds.common.model.core.member.CoreGender;
+import id.ezclouds.common.model.organization.SubOrganization;
 import id.ezclouds.common.model.process.ProcessStatus;
 import id.ezclouds.common.model.report.BizReportOverall;
 import id.ezclouds.common.model.report.BizReportOverallKey;
@@ -60,6 +63,12 @@ public class BizReportAccumulateVoterRegister implements ReportAccumulateProcess
     @Autowired
     private CoreWorkingAreaService coreWorkingAreaService;
 
+    @Autowired
+    private SubOrganizationDAO subOrganizationDAO;
+
+    @Autowired
+    private BizReportAccumulateClusterDAO bizReportAccumulateClusterDAO;
+
     @Override
     public void process(String orgId, Object payload, ReportAccumulateProcessHandler handler) {
         BizVoter bizVoter = (BizVoter) payload;
@@ -81,6 +90,9 @@ public class BizReportAccumulateVoterRegister implements ReportAccumulateProcess
                         processAccumulateMember(bizVoter);
                     }
 
+                    if (StringUtil.isNotBlank(bizVoter.getSubOrgId())) {
+                        processAccumulateCluster(bizVoter);
+                    }
                 }
             });
             handler.onFinished(ProcessStatus.SUCCESS, null);
@@ -249,5 +261,59 @@ public class BizReportAccumulateVoterRegister implements ReportAccumulateProcess
         accumulateMember.setModifiedTime(DateUtil.getCurrentFormattedDateMillis());
 
         bizReportAccumulateMemberDAO.store(accumulateMember);
+    }
+
+    private void processAccumulateCluster(BizVoter bizVoter) {
+        SubOrganization subOrganization = subOrganizationDAO.getById(bizVoter.getSubOrgId());
+
+        BizReportAccumulateCluster accumulateCluster = bizReportAccumulateClusterDAO
+                .getAndLock(bizVoter.getOrgId(), bizVoter.getSubOrgId());
+        if (accumulateCluster == null) {
+            accumulateCluster = new BizReportAccumulateCluster();
+            accumulateCluster.setOrgId(bizVoter.getOrgId());
+            accumulateCluster.setClusterId(bizVoter.getSubOrgId());
+            accumulateCluster.setClusterName(subOrganization.getName());
+            accumulateCluster.setVoterCount(0);
+            accumulateCluster.setVoterMaleCount(0);
+            accumulateCluster.setVoterFemaleCount(0);
+            accumulateCluster.setVoterExtraCount(0);
+            accumulateCluster.setVoterExtraMaleCount(0);
+            accumulateCluster.setVoterExtraFemaleCount(0);
+        }
+
+        int updateVoterCount = accumulateCluster.getVoterCount() + 1;
+        accumulateCluster.setVoterCount(updateVoterCount);
+
+        if (bizVoter.getFamilySize() > 1) {
+            int extraCount = accumulateCluster.getVoterExtraCount();
+            extraCount += (bizVoter.getFamilySize() - 1);
+            accumulateCluster.setVoterExtraCount(extraCount);
+        }
+
+        CoreGender coreGender = CoreGender.getByCode(bizVoter.getGender());
+        if (coreGender == CoreGender.MALE) {
+            int updateMaleCount = accumulateCluster.getVoterMaleCount() + 1;
+            accumulateCluster.setVoterMaleCount(updateMaleCount);
+
+            if (bizVoter.getFamilySizeMale() > 1) {
+                int extraMaleCount = accumulateCluster.getVoterExtraMaleCount();
+                extraMaleCount += (bizVoter.getFamilySizeMale() - 1);
+                accumulateCluster.setVoterExtraMaleCount(extraMaleCount);
+            }
+        }
+        if (coreGender == CoreGender.FEMALE) {
+            int updateFemaleCount = accumulateCluster.getVoterFemaleCount() + 1;
+            accumulateCluster.setVoterFemaleCount(updateFemaleCount);
+
+            if (bizVoter.getFamilySizeFemale() > 1) {
+                int extraFemaleCount = accumulateCluster.getVoterExtraFemaleCount();
+                extraFemaleCount += (bizVoter.getFamilySizeFemale() - 1);
+                accumulateCluster.setVoterExtraFemaleCount(extraFemaleCount);
+            }
+        }
+
+        accumulateCluster.setModifiedTime(DateUtil.getCurrentFormattedDateMillis());
+
+        bizReportAccumulateClusterDAO.store(accumulateCluster);
     }
 }
