@@ -15,6 +15,7 @@ import id.ezclouds.common.model.biz.data.BizMasterDataUpdate;
 import id.ezclouds.common.model.biz.data.OverallMasterData;
 import id.ezclouds.common.model.biz.data.VillageMasterData;
 import id.ezclouds.common.model.message.CommonMessageConstant;
+import id.ezclouds.common.model.report.BizReportOverallKey;
 import id.ezclouds.common.model.request.WebBizPageRequest;
 import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
 import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
@@ -99,7 +100,7 @@ public class CoreAdminMasterDataService implements BizAdminMasterDataService {
 
                 bizReportOverallService.updateReportOverall(
                         session.getOrgId(),
-                        overallMasterData.getOverallKey(),
+                        BizReportOverallKey.getByCode(overallMasterData.getOverallKey()),
                         overallMasterData.getValueCount()
                 );
 

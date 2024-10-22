@@ -161,7 +161,7 @@ public class BizReportAccumulateProcessor {
 
                 bizReportOverallService.updateReportOverall(
                         orgId,
-                        BizReportOverallKey.VOTER_BASE_VOTE_STATION_COUNT.getCode(),
+                        BizReportOverallKey.VOTER_BASE_VOTE_STATION_COUNT,
                         pollStationCount
                 );
             }

@@ -4,11 +4,14 @@
  */
 package id.ezclouds.core.process.biz;
 
+import id.ezclouds.common.facade.dal.report.BizReportOverallDAO;
 import id.ezclouds.common.model.report.BizReportOverallKey;
-import id.ezclouds.core.process.biz.inner.BizInnerProcessReportOverall;
 import id.ezclouds.core.process.model.BizProcessEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.List;
 
@@ -20,7 +23,10 @@ import java.util.List;
 public class BizProcessInitReportOverall extends BizAsyncProcessor {
 
     @Autowired
-    private BizInnerProcessReportOverall bizInnerProcessReportOverall;
+    private TransactionTemplate transactionTemplate;
+
+    @Autowired
+    private BizReportOverallDAO bizReportOverallDAO;
 
     @Override
     public BizProcessEvent getProcessEvent() {
@@ -36,9 +42,16 @@ public class BizProcessInitReportOverall extends BizAsyncProcessor {
     protected boolean onProcess(Object request, List<String> logData) {
         String orgId = (String) request;
 
-        for (BizReportOverallKey overallKey : BizReportOverallKey.values()) {
-            bizInnerProcessReportOverall.init(orgId, overallKey.getCode());
-        }
+        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(TransactionStatus status) {
+
+                for (BizReportOverallKey overallKey : BizReportOverallKey.values()) {
+                    bizReportOverallDAO.create(orgId, overallKey.getCode());
+                }
+
+            }
+        });
 
         return true;
     }

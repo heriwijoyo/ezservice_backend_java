@@ -9,6 +9,7 @@ import id.ezclouds.common.facade.broker.CoreEventPublisherService;
 import id.ezclouds.common.facade.dal.report.BizReportOverallDAO;
 import id.ezclouds.common.model.broker.event.OverallReportChangeEvent;
 import id.ezclouds.common.model.report.BizReportOverall;
+import id.ezclouds.common.model.report.BizReportOverallKey;
 import id.ezclouds.common.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,9 +37,9 @@ public class CoreReportOverallService implements BizReportOverallService {
 
     @Override
     @Transactional
-    public void updateReportOverall(String orgId, String reportKey, int value) {
+    public void updateReportOverall(String orgId, BizReportOverallKey overallKey, int value) {
         BizReportOverall reportOverall = bizReportOverallDAO
-                .getAndLock(orgId, reportKey);
+                .getAndLock(orgId, overallKey);
         bizReportOverallDAO.updateValue(reportOverall.getId(), value, DateUtil.getCurrentFormattedDateMillis());
 
         coreEventPublisherService.publish(new OverallReportChangeEvent(orgId));

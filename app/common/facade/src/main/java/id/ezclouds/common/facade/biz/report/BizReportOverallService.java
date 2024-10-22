@@ -5,6 +5,7 @@
 package id.ezclouds.common.facade.biz.report;
 
 import id.ezclouds.common.model.report.BizReportOverall;
+import id.ezclouds.common.model.report.BizReportOverallKey;
 
 import java.util.List;
 
@@ -16,5 +17,5 @@ public interface BizReportOverallService {
 
     List<BizReportOverall> getReportOverall(String orgId);
 
-    void updateReportOverall(String orgId, String reportKey, int value);
+    void updateReportOverall(String orgId, BizReportOverallKey overallKey, int value);
 }

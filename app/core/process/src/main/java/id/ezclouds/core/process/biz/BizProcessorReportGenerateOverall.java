@@ -7,8 +7,6 @@ package id.ezclouds.core.process.biz;
 import id.ezclouds.common.facade.dal.member.BizMemberUnionDAO;
 import id.ezclouds.common.facade.dal.organization.SubOrganizationDAO;
 import id.ezclouds.common.facade.member.MemberReportService;
-import id.ezclouds.common.model.report.BizReportOverallKey;
-import id.ezclouds.core.process.biz.inner.BizInnerProcessReportOverall;
 import id.ezclouds.core.process.model.BizProcessEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,9 +27,6 @@ public class BizProcessorReportGenerateOverall extends BizAsyncProcessor {
     private SubOrganizationDAO subOrganizationDAO;
 
     @Autowired
-    private BizInnerProcessReportOverall bizInnerProcessReportOverall;
-
-    @Autowired
     private MemberReportService memberReportService;
 
     @Override
@@ -49,17 +44,6 @@ public class BizProcessorReportGenerateOverall extends BizAsyncProcessor {
         String orgId = (String) request;
         logData.add("ORG_ID="+ orgId);
 
-        long totalMember = bizMemberUnionDAO.countByOrgId(orgId);
-        logData.add("TOTAL_MEMBER=" + totalMember);
-        bizInnerProcessReportOverall.storeReport(orgId, BizReportOverallKey.TOTAL_MEMBER_UNION.getCode(), (int)totalMember);
-
-        long totalSubOrg = subOrganizationDAO.countByOrgId(orgId) - 1;
-        logData.add("TOTAL_SUB_ORG=" + totalSubOrg);
-        bizInnerProcessReportOverall.storeReport(orgId, BizReportOverallKey.TOTAL_SUB_ORGANIZATION.getCode(), (int)totalSubOrg);
-
-        long memberYesterday = memberReportService.countYesterday(orgId);
-        logData.add("MEMBER_YESTERDAY="+ memberYesterday);
-        bizInnerProcessReportOverall.storeReport(orgId, BizReportOverallKey.MEMBER_YESTERDAY.getCode(), (int)memberYesterday);
 
         return true;
     }

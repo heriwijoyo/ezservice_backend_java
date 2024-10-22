@@ -6,7 +6,6 @@ package id.ezclouds.core.bifrost.websocket.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.common.facade.auth.AuthAdminService;
-import id.ezclouds.common.facade.biz.BizReportRealtimeService;
 import id.ezclouds.common.facade.biz.report.BizReportAccumulateAreaService;
 import id.ezclouds.common.facade.biz.report.BizReportOverallService;
 import id.ezclouds.common.model.area.District;
@@ -41,9 +40,6 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
 
     @Autowired
     private AuthAdminService authAdminService;
-
-    @Autowired
-    private BizReportRealtimeService bizReportRealtimeService;
 
     @Autowired
     private BizReportOverallService bizReportOverallService;

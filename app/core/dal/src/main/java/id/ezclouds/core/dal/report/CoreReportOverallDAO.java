@@ -7,6 +7,7 @@ package id.ezclouds.core.dal.report;
 import id.ezclouds.common.facade.dal.report.BizReportOverallDAO;
 import id.ezclouds.common.model.annotation.EzDAOLogger;
 import id.ezclouds.common.model.report.BizReportOverall;
+import id.ezclouds.common.model.report.BizReportOverallKey;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.core.dal.report.converter.BizReportConverter;
@@ -58,8 +59,8 @@ public class CoreReportOverallDAO implements BizReportOverallDAO {
 
     @EzDAOLogger
     @Override
-    public BizReportOverall getAndLock(String orgId, String reportKey) {
-        String reportId = HashUtil.createHash(orgId, reportKey);
+    public BizReportOverall getAndLock(String orgId, BizReportOverallKey overallKey) {
+        String reportId = HashUtil.createHash(orgId, overallKey.getCode());
         return new BizReportOverallConverter().convertQuery(
                 coreReportOverallRepository
                         .findAndLockById(reportId)

@@ -104,7 +104,7 @@ public class BizReportAccumulateVoterRegister implements ReportAccumulateProcess
 
     private void accumulateOverall(String orgId) {
         BizReportOverall reportOverall = bizReportOverallDAO
-                .getAndLock(orgId, BizReportOverallKey.VOTER_BASE_VOTER_COUNT.getCode());
+                .getAndLock(orgId, BizReportOverallKey.VOTER_BASE_VOTER_COUNT);
         int increasedCount = reportOverall.getCount() + 1;
 
         reportOverall.setCount(increasedCount);

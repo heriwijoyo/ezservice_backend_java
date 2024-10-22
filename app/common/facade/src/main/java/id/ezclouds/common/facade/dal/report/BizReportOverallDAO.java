@@ -5,6 +5,7 @@
 package id.ezclouds.common.facade.dal.report;
 
 import id.ezclouds.common.model.report.BizReportOverall;
+import id.ezclouds.common.model.report.BizReportOverallKey;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public interface BizReportOverallDAO {
     void create(String orgId, String keyId);
 
     List<BizReportOverall> getAllReport(String orgId);
-    BizReportOverall getAndLock(String orgId, String reportKey);
+    BizReportOverall getAndLock(String orgId, BizReportOverallKey overallKey);
     void store(BizReportOverall reportOverall);
 
     void updateValue(String reportId, int count, String updatedTime);

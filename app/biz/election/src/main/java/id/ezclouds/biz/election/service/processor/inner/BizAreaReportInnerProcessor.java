@@ -41,7 +41,7 @@ public class BizAreaReportInnerProcessor {
     @Transactional
     public void storeTpsCoverage(String orgId, int totalTps) {
         BizReportOverall reportOverall = bizReportOverallDAO
-                .getAndLock(orgId, BizReportOverallKey.TOTAL_TPS.getCode());
+                .getAndLock(orgId, BizReportOverallKey.TOTAL_TPS);
 
         bizReportOverallDAO
                 .updateValue(reportOverall.getId(), totalTps, DateUtil.getCurrentFormattedDateMillis());
