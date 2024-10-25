@@ -136,7 +136,7 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
             switch (dataTopic) {
                 case OVERALL:
                     List<BizReportOverall> reportOverall = bizReportOverallService.getReportOverall(orgId);
-                    sessionSendMessage(session, WebSocketEvent.DATA_RESULT, DataTopic.OVERALL, reportOverallToMap(reportOverall));
+                    sessionSendMessage(session, WebSocketEvent.DATA_RESULT, dataTopic, reportOverallToMap(reportOverall));
                     break;
 
                 case VOTER_BASE_AREA:
@@ -148,7 +148,7 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
                     else {
                         reportArea = bizReportAccumulateAreaService.getReportArea(orgId);
                     }
-                    sessionSendMessage(session, WebSocketEvent.DATA_RESULT, DataTopic.VOTER_BASE_AREA, reportArea);
+                    sessionSendMessage(session, WebSocketEvent.DATA_RESULT, dataTopic, reportArea);
                     break;
 
                 case VOTER_BASE_POLL_STATION:
@@ -159,11 +159,16 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
                     }
                     break;
 
+                case VOTER_BASE_PROGRESS_TODAY:
+                    List<BizReportOverall> overallToday = bizReportOverallService.getReportOverallToday(orgId);
+                    sessionSendMessage(session, WebSocketEvent.DATA_RESULT, dataTopic, reportOverallToMap(overallToday));
+                    break;
+
                 case VOTER_BASE_PROGRESS_CHART:
                     String scene = (String) payload;
                     BizCommonChart bizCommonChart = bizReportAccumulateTimeSeriesService
                             .fetchTimeSeriesChart(orgId, BizTimeSeriesScene.getByCode(scene), 10);
-                    sessionSendMessage(session, WebSocketEvent.DATA_RESULT, DataTopic.VOTER_BASE_PROGRESS_CHART, bizCommonChart);
+                    sessionSendMessage(session, WebSocketEvent.DATA_RESULT, dataTopic, bizCommonChart);
                     break;
             }
         }

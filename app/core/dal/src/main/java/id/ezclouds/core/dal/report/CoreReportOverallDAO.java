@@ -57,6 +57,17 @@ public class CoreReportOverallDAO implements BizReportOverallDAO {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    @EzDAOLogger
+    public List<BizReportOverall> getReportByKeys(String orgId, List<BizReportOverallKey> keys) {
+        List<String> keyIds = keys.stream().map(BizReportOverallKey::getCode).collect(Collectors.toList());
+        return coreReportOverallRepository
+                .findByOrgIdAndKeyIdIn(orgId, keyIds)
+                .stream()
+                .map(BizReportConverter::convert)
+                .collect(Collectors.toList());
+    }
+
     @EzDAOLogger
     @Override
     public BizReportOverall getAndLock(String orgId, BizReportOverallKey overallKey) {

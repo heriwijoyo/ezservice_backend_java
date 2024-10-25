@@ -17,5 +17,7 @@ public interface BizReportOverallService {
 
     List<BizReportOverall> getReportOverall(String orgId);
 
+    List<BizReportOverall> getReportOverallToday(String orgId);
+
     void updateReportOverall(String orgId, BizReportOverallKey overallKey, int value);
 }

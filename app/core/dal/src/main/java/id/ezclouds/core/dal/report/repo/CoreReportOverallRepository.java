@@ -23,6 +23,7 @@ public interface CoreReportOverallRepository extends JpaRepository<CoreReportOve
 
     CoreReportOverallDO findByOrgIdAndKeyId(String orgId, String keyId);
     List<CoreReportOverallDO> findByOrgId(String orgId);
+    List<CoreReportOverallDO> findByOrgIdAndKeyIdIn(String orgId, List<String> keyIds);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @QueryHints({@QueryHint(name = "jakarta.persistence.lock.timeout", value = "3000")})

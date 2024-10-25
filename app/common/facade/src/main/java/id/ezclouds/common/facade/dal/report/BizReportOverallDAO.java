@@ -18,6 +18,7 @@ public interface BizReportOverallDAO {
     void create(String orgId, String keyId);
 
     List<BizReportOverall> getAllReport(String orgId);
+    List<BizReportOverall> getReportByKeys(String orgId, List<BizReportOverallKey> keys);
     BizReportOverall getAndLock(String orgId, BizReportOverallKey overallKey);
     void store(BizReportOverall reportOverall);
 

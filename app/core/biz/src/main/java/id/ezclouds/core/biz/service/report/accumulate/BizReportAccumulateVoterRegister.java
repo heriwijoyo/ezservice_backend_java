@@ -115,9 +115,11 @@ public class BizReportAccumulateVoterRegister implements ReportAccumulateProcess
         String todayDate = DateUtil.getFormattedDate(new Date(), DateUtil.FORMAT_DATE);
         String registerDate = DateUtil.getFormattedDateFromDateTime(bizVoter.getCreatedTime());
         if (StringUtil.equals(todayDate, registerDate)) {
-            //BizReportOverall voterToday = bizReportOverallDAO
-            //        .getAndLock(orgId, BizReportOverallKey.VOTER_BASE_VOTER_COUNT_TODAY);
-
+            BizReportOverall voterToday = bizReportOverallDAO
+                    .getAndLock(orgId, BizReportOverallKey.VOTER_BASE_VOTER_COUNT_TODAY);
+            int updateCount = voterToday.getCount() + 1;
+            voterToday.setCount(updateCount);
+            bizReportOverallDAO.store(voterToday);
         }
     }
 

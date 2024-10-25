@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -33,6 +34,14 @@ public class CoreReportOverallService implements BizReportOverallService {
     @Override
     public List<BizReportOverall> getReportOverall(String orgId) {
         return bizReportOverallDAO.getAllReport(orgId);
+    }
+
+    @Override
+    public List<BizReportOverall> getReportOverallToday(String orgId) {
+        return bizReportOverallDAO.getReportByKeys(orgId, Arrays.asList(
+                BizReportOverallKey.VOTER_BASE_CLUSTER_COUNT_TODAY,
+                BizReportOverallKey.VOTER_BASE_VOTER_COUNT_YESTERDAY
+        ));
     }
 
     @Override
