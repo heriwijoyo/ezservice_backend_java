@@ -14,6 +14,11 @@ public class BizGroupQueryCount {
     private String groupLabel;
     private long groupCount;
 
+    public BizGroupQueryCount(String groupId, long groupCount) {
+        this.groupId = groupId;
+        this.groupCount = groupCount;
+    }
+
     public BizGroupQueryCount(String groupId, String groupLabel, long groupCount) {
         this.groupId = groupId;
         this.groupLabel = groupLabel;

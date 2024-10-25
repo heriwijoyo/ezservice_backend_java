@@ -23,7 +23,7 @@ public interface BizElectionVoterRepository extends JpaRepository<BizVoterDO, St
 
     List<BizVoterDO> findByOrgIdAndDistrictIdAndVillageIdAndPollStationId(String orgId, String districtId, String villageId, String pollStationId);
 
-    @Query("SELECT new id.ezclouds.common.model.query.BizGroupQueryCount(bv.subOrgId, NULL, COUNT(bv.subOrgId)) "
+    @Query("SELECT new id.ezclouds.common.model.query.BizGroupQueryCount(bv.subOrgId, COUNT(bv.subOrgId)) "
             + "FROM BizVoterDO AS bv WHERE bv.orgId = ?1 AND bv.createdTime >= ?2 AND bv.createdTime <= ?3 AND bv.subOrgId IS NOT NULL "
             + "GROUP BY bv.subOrgId")
     List<BizGroupQueryCount> countGroupBySubOrgWithinDate(String orgId, String startDate, String endDate);
