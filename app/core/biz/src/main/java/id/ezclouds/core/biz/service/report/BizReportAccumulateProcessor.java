@@ -160,7 +160,6 @@ public class BizReportAccumulateProcessor {
                 @Override
                 protected void doInTransactionWithoutResult(TransactionStatus status) {
                     int pollStationCount = bizAccumulateAreaExtDAO.getCountPollStation(orgId);
-
                     bizReportOverallService.updateReportOverall(
                             orgId,
                             BizReportOverallKey.VOTER_BASE_VOTE_STATION_COUNT,

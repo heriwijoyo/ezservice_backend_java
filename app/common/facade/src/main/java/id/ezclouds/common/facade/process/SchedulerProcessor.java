@@ -12,5 +12,5 @@ import id.ezclouds.common.model.result.BaseResult;
  */
 public interface SchedulerProcessor {
 
-    BaseResult execute(String scene);
+    BaseResult execute(String scene, String param);
 }

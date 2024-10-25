@@ -88,8 +88,13 @@ public class LocalController {
         }
     }
 
-    @GetMapping(value = "/api/local/scheduler/{scene}")
-    private void localScheduleHandler(@PathVariable("scene") String scene, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @GetMapping(value = "/api/local/scheduler/{scene}/{param}")
+    private void localScheduleHandler(
+            @PathVariable("scene") String scene,
+            @PathVariable("param") String param,
+            HttpServletRequest request,
+            HttpServletResponse response) throws IOException {
+
         String localAddr = request.getLocalAddr();
 
         if (!"127.0.0.1".equals(localAddr)) {
@@ -97,7 +102,7 @@ public class LocalController {
         }
         else {
             SchedulerProcessor schedulerProcessor = BeanFacadeUtil.getBean(SchedulerProcessor.class);
-            BaseResult result = schedulerProcessor.execute(scene);
+            BaseResult result = schedulerProcessor.execute(scene, param);
 
             response.setStatus(HttpStatus.OK.value());
             response.getWriter().write(result.getResultCode());

@@ -11,6 +11,7 @@ import id.ezclouds.common.util.facade.BeanFacadeUtil;
 import id.ezclouds.core.process.biz.BizProcessorReportGenerateOverall;
 import id.ezclouds.core.process.biz.BizProcessorReportUpdateMember;
 import id.ezclouds.core.process.model.CoreSchedulerScene;
+import id.ezclouds.core.process.report.BizProcessReportDailyReset;
 import id.ezclouds.core.process.template.CoreSchedulerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,13 +24,16 @@ import org.springframework.stereotype.Service;
 public class CoreSchedulerProcessor implements SchedulerProcessor {
 
     @Autowired
+    private BizProcessReportDailyReset bizProcessReportDailyReset;
+
+    @Autowired
     private BizProcessorReportGenerateOverall bizProcessorReportGenerateOverall;
 
     @Autowired
     private BizProcessorReportUpdateMember bizProcessorReportUpdateMember;
 
     @Override
-    public BaseResult execute(String scene) {
+    public BaseResult execute(String scene, String param) {
 
         CoreSchedulerScene schedulerScene = CoreSchedulerScene.getByCode(scene);
 
@@ -38,11 +42,11 @@ public class CoreSchedulerProcessor implements SchedulerProcessor {
                 BizSchedulerService bizSchedulerService = BeanFacadeUtil.getBean(BizSchedulerService.class);
                 return bizSchedulerService.execute(scene);
             default:
-                return executeCoreScheduler(schedulerScene);
+                return executeCoreScheduler(schedulerScene, param);
         }
     }
 
-    private BaseResult executeCoreScheduler(CoreSchedulerScene schedulerScene) {
+    private BaseResult executeCoreScheduler(CoreSchedulerScene schedulerScene, String param) {
         return CoreSchedulerTemplate.execute(schedulerScene.getCode(), new CoreSchedulerTemplate.Handler() {
             @Override
             public void preProcess(CoreSchedulerScene schedulerScene) {
@@ -51,6 +55,9 @@ public class CoreSchedulerProcessor implements SchedulerProcessor {
             @Override
             public void process(CoreSchedulerScene schedulerScene) {
                 switch (schedulerScene) {
+                    case REPORT_DAILY_RESET:
+                        bizProcessReportDailyReset.process(param);
+                        break;
                     case RJL_DAILY_REPORT_OVERALL:
                         bizProcessorReportGenerateOverall.process("RJL0");
                         break;

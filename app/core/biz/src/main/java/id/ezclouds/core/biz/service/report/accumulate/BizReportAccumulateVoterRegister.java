@@ -34,6 +34,7 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -81,7 +82,7 @@ public class BizReportAccumulateVoterRegister implements ReportAccumulateProcess
                 @Override
                 protected void doInTransactionWithoutResult(TransactionStatus status) {
 
-                    accumulateOverall(bizVoter.getOrgId());
+                    accumulateOverall(bizVoter.getOrgId(), bizVoter);
                     for (CoreAreaLevel areaLevel : workingAreaLevels) {
                         accumulateVoterOnAreaLevel(areaLevel, bizVoter);
                     }
@@ -102,13 +103,22 @@ public class BizReportAccumulateVoterRegister implements ReportAccumulateProcess
         }
     }
 
-    private void accumulateOverall(String orgId) {
+    private void accumulateOverall(String orgId, BizVoter bizVoter) {
         BizReportOverall reportOverall = bizReportOverallDAO
                 .getAndLock(orgId, BizReportOverallKey.VOTER_BASE_VOTER_COUNT);
         int increasedCount = reportOverall.getCount() + 1;
 
         reportOverall.setCount(increasedCount);
         bizReportOverallDAO.store(reportOverall);
+
+        //accumulate statistic today
+        String todayDate = DateUtil.getFormattedDate(new Date(), DateUtil.FORMAT_DATE);
+        String registerDate = DateUtil.getFormattedDateFromDateTime(bizVoter.getCreatedTime());
+        if (StringUtil.equals(todayDate, registerDate)) {
+            //BizReportOverall voterToday = bizReportOverallDAO
+            //        .getAndLock(orgId, BizReportOverallKey.VOTER_BASE_VOTER_COUNT_TODAY);
+
+        }
     }
 
     private void accumulateVoterOnAreaLevel(CoreAreaLevel areaLevel, BizVoter bizVoter) {

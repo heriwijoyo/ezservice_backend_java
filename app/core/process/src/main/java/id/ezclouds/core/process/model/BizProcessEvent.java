@@ -12,6 +12,7 @@ import id.ezclouds.common.util.context.EzAppEvent;
  */
 public enum BizProcessEvent implements EzAppEvent {
 
+    REPORT_DAILY_RESET("REPORT_DAILY_RESET"),
     MEMBER_IMPORT_CSV("MEMBER_IMPORT_CSV"),
 
     GENERATE_REPORT_OVERALL("GENERATE_REPORT_OVERALL"),

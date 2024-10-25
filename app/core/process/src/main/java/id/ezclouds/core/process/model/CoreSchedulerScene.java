@@ -10,6 +10,8 @@ package id.ezclouds.core.process.model;
  */
 public enum CoreSchedulerScene {
 
+    REPORT_DAILY_RESET("REPORT_DAILY_RESET"),
+
     RJL_DAILY_REPORT_OVERALL("RJL_DAILY_REPORT_OVERALL"),
     RJL_HOURLY_MEMBER_TODAY("RJL_HOURLY_MEMBER_TODAY"),
     UNKNOWN("UNKNOWN"),

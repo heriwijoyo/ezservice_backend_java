@@ -27,4 +27,6 @@ public interface BizVoterDAO {
     List<BizGroupQueryCount> countGroupBySubOrgWithinDate(String orgId, String startDate, String endDate);
 
     List<BizGroupQueryCount> countGroupByCoreAreaWithinDate(String orgId, CoreAreaLevel coreAreaLevel, String startDate, String endDate);
+
+    int countWithinDate(String orgId, String startDate, String endDate);
 }

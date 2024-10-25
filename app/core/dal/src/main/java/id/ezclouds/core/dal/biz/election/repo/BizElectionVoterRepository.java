@@ -42,4 +42,7 @@ public interface BizElectionVoterRepository extends JpaRepository<BizVoterDO, St
             + "FROM BizVoterDO AS bv WHERE bv.orgId = ?1 AND bv.createdTime >= ?2 AND bv.createdTime <= ?3 "
             + "GROUP BY bv.villageId")
     List<BizGroupQueryCount> countGroupByVillageWithinDate(String orgId, String startDate, String endDate);
+
+    @Query("SELECT COUNT(bv.voterId) FROM BizVoterDO AS bv WHERE bv.orgId = ?1 AND bv.createdTime >= ?2 AND bv.createdTime <= ?3 ")
+    long countWithinDate(String orgId, String startDate, String endDate);
 }

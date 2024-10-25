@@ -89,4 +89,10 @@ public class CoreBizVoterDAO implements BizVoterDAO {
         }
         return new ArrayList<>();
     }
+
+    @Override
+    public int countWithinDate(String orgId, String startDate, String endDate) {
+        return (int) bizElectionVoterRepository
+                .countWithinDate(orgId, startDate, endDate);
+    }
 }
