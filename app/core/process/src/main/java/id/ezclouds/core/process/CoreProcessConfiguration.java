@@ -10,6 +10,7 @@ import id.ezclouds.core.process.init.BizProcessGeneratePublicSession;
 import id.ezclouds.core.process.init.BizProcessInitReportAccumulateArea;
 import id.ezclouds.core.process.init.CoreProcessInitSequenceConfig;
 import id.ezclouds.core.process.migration.CoreProcessMigrateMember;
+import id.ezclouds.core.process.report.BizProcessGenerateReportAccumulateTimeSeries;
 import id.ezclouds.core.process.temp.TmpProcessRecoverAccumulateArea;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -56,6 +57,9 @@ public class CoreProcessConfiguration {
     private BizProcessGeneratePublicSession bizProcessGeneratePublicSession;
 
     @Autowired
+    private BizProcessGenerateReportAccumulateTimeSeries bizProcessGenerateReportAccumulateTimeSeries;
+
+    @Autowired
     private TmpProcessRecoverAccumulateArea tmpProcessRecoverAccumulateArea;
 
     @Bean
@@ -68,6 +72,7 @@ public class CoreProcessConfiguration {
 
         processorMap.put(ProcessName.INIT_MIGRATE_MEMBER, coreProcessMigrateMember);
         processorMap.put(ProcessName.GENERATE_PUBLIC_SESSION, bizProcessGeneratePublicSession);
+        processorMap.put(ProcessName.GENERATE_REPORT_ACCUMULATE_TIME_SERIES, bizProcessGenerateReportAccumulateTimeSeries);
         processorMap.put(ProcessName.TMP_RECOVER_ACCUMULATE_AREA, tmpProcessRecoverAccumulateArea);
 
         return processorMap;

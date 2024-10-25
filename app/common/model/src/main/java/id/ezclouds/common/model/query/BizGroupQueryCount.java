@@ -10,29 +10,25 @@ package id.ezclouds.common.model.query;
  */
 public class BizGroupQueryCount {
 
-    private String groupValue;
-    private long countValue;
-    private long count2Value;
+    private String groupId;
+    private String groupLabel;
+    private long groupCount;
 
-    public BizGroupQueryCount(String groupValue, long countValue, long count2Value) {
-        this.groupValue = groupValue;
-        this.countValue = countValue;
-        this.count2Value = count2Value;
+    public BizGroupQueryCount(String groupId, String groupLabel, long groupCount) {
+        this.groupId = groupId;
+        this.groupLabel = groupLabel;
+        this.groupCount = groupCount;
     }
 
-    public BizGroupQueryCount(String groupValue, long countValue) {
-        this(groupValue, countValue, 0);
+    public String getGroupId() {
+        return groupId;
     }
 
-    public String getGroupValue() {
-        return groupValue;
+    public String getGroupLabel() {
+        return groupLabel;
     }
 
-    public long getCountValue() {
-        return countValue;
-    }
-
-    public long getCount2Value() {
-        return count2Value;
+    public long getGroupCount() {
+        return groupCount;
     }
 }

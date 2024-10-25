@@ -10,19 +10,25 @@ package id.ezclouds.common.model.biz.report;
  */
 public enum BizTimeSeriesScene {
 
-    CLUSTER("CLUSTER"),
-    CORE_AREA("CORE_AREA"),
+    VOTER_PROGRESS_BY_CLUSTER_DAILY("VOTER_PROGRESS_BY_CLUSTER_DAILY", BizTimeFrame.DAILY),
+    VOTER_PROGRESS_BY_AREA_DAILY("VOTER_PROGRESS_BY_AREA_DAILY", BizTimeFrame.DAILY),
 
     ;
 
     private final String code;
+    private final BizTimeFrame timeFrame;
 
-    BizTimeSeriesScene(String code) {
+    BizTimeSeriesScene(String code, BizTimeFrame timeFrame) {
         this.code = code;
+        this.timeFrame = timeFrame;
     }
 
     public String getCode() {
         return code;
+    }
+
+    public BizTimeFrame getTimeFrame() {
+        return timeFrame;
     }
 
     public static BizTimeSeriesScene getByCode(String code) {

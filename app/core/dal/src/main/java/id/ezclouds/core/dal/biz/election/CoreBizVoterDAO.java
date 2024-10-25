@@ -7,6 +7,7 @@ package id.ezclouds.core.dal.biz.election;
 import id.ezclouds.common.facade.dal.biz.election.BizVoterDAO;
 import id.ezclouds.common.model.annotation.EzDAOLogger;
 import id.ezclouds.common.model.biz.election.BizVoter;
+import id.ezclouds.common.model.query.BizGroupQueryCount;
 import id.ezclouds.core.dal.biz.election.converter.BizVoterConverter;
 import id.ezclouds.core.dal.biz.election.repo.BizElectionVoterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,5 +62,12 @@ public class CoreBizVoterDAO implements BizVoterDAO {
                 .map(converter::convertQuery)
                 .collect(Collectors.toList());
 
+    }
+
+    @Override
+    @EzDAOLogger
+    public List<BizGroupQueryCount> countGroupBySubOrgWithinDate(String orgId, String startDate, String endDate) {
+        return bizElectionVoterRepository
+                .countGroupBySubOrgWithinDate(orgId, startDate, endDate);
     }
 }

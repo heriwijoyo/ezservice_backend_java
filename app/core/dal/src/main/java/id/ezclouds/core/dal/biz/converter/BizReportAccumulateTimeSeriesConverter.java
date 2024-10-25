@@ -25,6 +25,7 @@ public class BizReportAccumulateTimeSeriesConverter extends CommonDOModelConvert
         timeSeries.setSceneLabel(dataObject.getSceneLabel());
         timeSeries.setTimeFrame(dataObject.getTimeFrame());
         timeSeries.setAccumulateCount(dataObject.getAccumulateCount());
+        timeSeries.setModifiedTime(dataObject.getModifiedTime());
         return timeSeries;
     }
 
@@ -38,6 +39,7 @@ public class BizReportAccumulateTimeSeriesConverter extends CommonDOModelConvert
         timeSeriesDO.setSceneLabel(model.getSceneLabel());
         timeSeriesDO.setTimeFrame(model.getTimeFrame());
         timeSeriesDO.setAccumulateCount(model.getAccumulateCount());
+        timeSeriesDO.setModifiedTime(model.getModifiedTime());
         return timeSeriesDO;
     }
 }

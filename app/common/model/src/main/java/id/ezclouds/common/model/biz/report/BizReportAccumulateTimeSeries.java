@@ -17,6 +17,7 @@ public class BizReportAccumulateTimeSeries {
     private String sceneLabel;
     private String timeFrame;
     private int accumulateCount;
+    private String modifiedTime;
 
     public String getReportTimeSeriesId() {
         return reportTimeSeriesId;
@@ -72,5 +73,13 @@ public class BizReportAccumulateTimeSeries {
 
     public void setAccumulateCount(int accumulateCount) {
         this.accumulateCount = accumulateCount;
+    }
+
+    public String getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(String modifiedTime) {
+        this.modifiedTime = modifiedTime;
     }
 }

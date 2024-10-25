@@ -32,6 +32,8 @@ public class BizReportAccumulateTimeSeriesDO {
     private String timeFrame;
     @Column(name = "accumulate_count")
     private int accumulateCount;
+    @Column(name = "modified_time")
+    private String modifiedTime;
 
     public String getReportTimeSeriesId() {
         return reportTimeSeriesId;
@@ -87,5 +89,13 @@ public class BizReportAccumulateTimeSeriesDO {
 
     public void setAccumulateCount(int accumulateCount) {
         this.accumulateCount = accumulateCount;
+    }
+
+    public String getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(String modifiedTime) {
+        this.modifiedTime = modifiedTime;
     }
 }

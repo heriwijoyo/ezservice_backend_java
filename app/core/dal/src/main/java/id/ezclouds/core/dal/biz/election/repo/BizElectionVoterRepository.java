@@ -4,8 +4,10 @@
  */
 package id.ezclouds.core.dal.biz.election.repo;
 
+import id.ezclouds.common.model.query.BizGroupQueryCount;
 import id.ezclouds.core.dal.biz.election.dataobject.BizVoterDO;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,4 +22,9 @@ public interface BizElectionVoterRepository extends JpaRepository<BizVoterDO, St
     BizVoterDO findByOrgIdAndIdCardNumber(String orgId, String idCardNumber);
 
     List<BizVoterDO> findByOrgIdAndDistrictIdAndVillageIdAndPollStationId(String orgId, String districtId, String villageId, String pollStationId);
+
+    @Query("SELECT new id.ezclouds.common.model.query.BizGroupQueryCount(bv.subOrgId, NULL, COUNT(bv.subOrgId)) "
+            + "FROM BizVoterDO AS bv WHERE bv.orgId = ?1 AND bv.createdTime >= ?2 AND bv.createdTime <= ?3 AND bv.subOrgId IS NOT NULL "
+            + "GROUP BY bv.subOrgId")
+    List<BizGroupQueryCount> countGroupBySubOrgWithinDate(String orgId, String startDate, String endDate);
 }

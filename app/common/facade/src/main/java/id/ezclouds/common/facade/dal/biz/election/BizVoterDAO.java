@@ -5,6 +5,7 @@
 package id.ezclouds.common.facade.dal.biz.election;
 
 import id.ezclouds.common.model.biz.election.BizVoter;
+import id.ezclouds.common.model.query.BizGroupQueryCount;
 
 import java.util.List;
 
@@ -21,4 +22,6 @@ public interface BizVoterDAO {
     void store(BizVoter voter);
 
     List<BizVoter> getVoterDataPollStation(String districtId, String villageId, String pollStation);
+
+    List<BizGroupQueryCount> countGroupBySubOrgWithinDate(String orgId, String startDate, String endDate);
 }
