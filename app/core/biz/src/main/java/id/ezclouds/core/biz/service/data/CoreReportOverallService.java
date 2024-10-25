@@ -39,7 +39,7 @@ public class CoreReportOverallService implements BizReportOverallService {
     @Override
     public List<BizReportOverall> getReportOverallToday(String orgId) {
         return bizReportOverallDAO.getReportByKeys(orgId, Arrays.asList(
-                BizReportOverallKey.VOTER_BASE_CLUSTER_COUNT_TODAY,
+                BizReportOverallKey.VOTER_BASE_VOTER_COUNT_TODAY,
                 BizReportOverallKey.VOTER_BASE_VOTER_COUNT_YESTERDAY
         ));
     }
