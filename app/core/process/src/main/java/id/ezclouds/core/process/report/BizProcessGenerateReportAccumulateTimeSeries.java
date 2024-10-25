@@ -9,10 +9,8 @@ import id.ezclouds.common.facade.dal.biz.election.BizVoterDAO;
 import id.ezclouds.common.facade.dal.biz.report.BizReportAccumulateTimeSeriesDAO;
 import id.ezclouds.common.facade.organization.SubOrganizationService;
 import id.ezclouds.common.model.area.AreaInitConfig;
-import id.ezclouds.common.model.area.CoreArea;
 import id.ezclouds.common.model.area.CoreAreaLevel;
 import id.ezclouds.common.model.biz.report.BizReportAccumulateTimeSeries;
-import id.ezclouds.common.model.biz.report.BizTimeFrame;
 import id.ezclouds.common.model.biz.report.BizTimeSeriesScene;
 import id.ezclouds.common.model.core.organization.SubOrganization;
 import id.ezclouds.common.model.query.BizGroupQueryCount;
@@ -71,17 +69,20 @@ public class BizProcessGenerateReportAccumulateTimeSeries extends BizAsyncProces
         String orgId = param.split(",")[0];
         int nPrevTimeFrame = Integer.parseInt(param.split(",")[1]);
 
+        logData.add("ORG_ID="+ orgId);
+        logData.add(",NTF="+ nPrevTimeFrame);
+
         for (BizTimeSeriesScene timeSeriesScene : BizTimeSeriesScene.values()) {
             if (timeSeriesScene == BizTimeSeriesScene.UNKNOWN) {
                 continue;
             }
-            processGenerate(orgId, timeSeriesScene, nPrevTimeFrame);
+            processGenerate(orgId, timeSeriesScene, nPrevTimeFrame, logData);
         }
 
         return true;
     }
 
-    private void processGenerate(String orgId, BizTimeSeriesScene timeSeriesScene, int nPrevTimeFrame) {
+    private void processGenerate(String orgId, BizTimeSeriesScene timeSeriesScene, int nPrevTimeFrame, List<String> logData) {
         List<SubOrganization> subOrganizations = new ArrayList<>();
         CoreAreaLevel areaLevel = CoreAreaLevel.REGENCY;
 
@@ -106,6 +107,8 @@ public class BizProcessGenerateReportAccumulateTimeSeries extends BizAsyncProces
                     break;
             }
         }
+
+        logData.add(",TIME_PERIODS="+ String.join("|", timePeriods));
     }
 
     private void processGenerateTimeSeriesByCluster(String orgId, String timePeriod, List<SubOrganization> subOrganizations) {
