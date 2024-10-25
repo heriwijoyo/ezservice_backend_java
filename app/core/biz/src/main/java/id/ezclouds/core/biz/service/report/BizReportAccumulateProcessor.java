@@ -128,17 +128,18 @@ public class BizReportAccumulateProcessor {
             }
         }
 
+        final EzCoreTopic coreTopic = ezCoreTopic;
         reportAccumulateProcessorMap
                 .get(ezCoreTopic)
                 .process(orgId, eventPayload, new ReportAccumulateProcessHandler() {
                     @Override
                     public void onFinished(ProcessStatus status, String exceptionStack) {
-                        finishProcess(orgId, processId, status, exceptionStack);
+                        finishProcess(coreTopic, orgId, processId, status, exceptionStack);
                     }
                 });
     }
 
-    private void finishProcess(String orgId, String processId, ProcessStatus processStatus, String exceptionStack) {
+    private void finishProcess(EzCoreTopic ezCoreTopic, String orgId, String processId, ProcessStatus processStatus, String exceptionStack) {
         finishProcessTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
@@ -154,19 +155,26 @@ public class BizReportAccumulateProcessor {
             }
         });
 
-        reportOverallUpdateTemplate.execute(new TransactionCallbackWithoutResult() {
-            @Override
-            protected void doInTransactionWithoutResult(TransactionStatus status) {
-                int pollStationCount = bizAccumulateAreaExtDAO.getCountPollStation(orgId);
+        if (ezCoreTopic == EzCoreTopic.ELECTION_VOTER_REGISTER) {
+            reportOverallUpdateTemplate.execute(new TransactionCallbackWithoutResult() {
+                @Override
+                protected void doInTransactionWithoutResult(TransactionStatus status) {
+                    int pollStationCount = bizAccumulateAreaExtDAO.getCountPollStation(orgId);
 
-                bizReportOverallService.updateReportOverall(
-                        orgId,
-                        BizReportOverallKey.VOTER_BASE_VOTE_STATION_COUNT,
-                        pollStationCount
-                );
-            }
-        });
+                    bizReportOverallService.updateReportOverall(
+                            orgId,
+                            BizReportOverallKey.VOTER_BASE_VOTE_STATION_COUNT,
+                            pollStationCount
+                    );
+                }
+            });
+        }
 
-        coreEventPublisherService.publish(new OverallReportChangeEvent(orgId));
+        if (ezCoreTopic == EzCoreTopic.ELECTION_VOTER_REGISTER
+                || ezCoreTopic == EzCoreTopic.CORE_SUB_ORG_CREATE
+                || ezCoreTopic == EzCoreTopic.CORE_MEMBER_REGISTER) {
+
+            coreEventPublisherService.publish(new OverallReportChangeEvent(orgId));
+        }
     }
 }
