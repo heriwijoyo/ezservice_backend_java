@@ -30,8 +30,8 @@ public class CoreBizReportAccumulateTimeSeriesDAO implements BizReportAccumulate
 
     @Override
     @EzDAOLogger
-    public BizReportAccumulateTimeSeries getAndLock(String orgId, BizTimeSeriesScene scene, String sceneId) {
-        String accumulateId = HashUtil.createHash(orgId, scene.getCode(), sceneId);
+    public BizReportAccumulateTimeSeries getAndLock(String orgId, BizTimeSeriesScene scene, String sceneId, String timeFrame) {
+        String accumulateId = HashUtil.createHash(orgId, scene.getCode(), sceneId, timeFrame);
         return new BizReportAccumulateTimeSeriesConverter()
                 .convertQuery(
                         bizReportAccumulateTimeSeriesRepository

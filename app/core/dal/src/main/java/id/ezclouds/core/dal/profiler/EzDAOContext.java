@@ -54,7 +54,7 @@ public class EzDAOContext {
         return "["+ traceId +"]["+
                 orgId +","+
                 invokeTarget +"," +
-                timeCost +","+
+                timeCost +"ms,"+
                 successCode +","+
                 resultValue +"]";
     }

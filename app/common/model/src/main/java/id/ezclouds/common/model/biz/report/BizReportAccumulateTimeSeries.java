@@ -4,6 +4,8 @@
  */
 package id.ezclouds.common.model.biz.report;
 
+import id.ezclouds.common.util.HashUtil;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: BizReportAccumulateTimeSeries.java, v 0.1 2024‐10‐25 8:33 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -18,6 +20,17 @@ public class BizReportAccumulateTimeSeries {
     private String timeFrame;
     private int accumulateCount;
     private String modifiedTime;
+
+    public void generateId() {
+        setReportTimeSeriesId(
+                HashUtil.createHash(
+                        orgId,
+                        scene.getCode(),
+                        sceneId,
+                        timeFrame
+                )
+        );
+    }
 
     public String getReportTimeSeriesId() {
         return reportTimeSeriesId;

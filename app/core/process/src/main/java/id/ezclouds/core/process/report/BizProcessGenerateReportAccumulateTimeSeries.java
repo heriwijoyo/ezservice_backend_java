@@ -17,7 +17,6 @@ import id.ezclouds.common.model.query.BizGroupQueryCount;
 import id.ezclouds.common.model.util.CoreAreaUtil;
 import id.ezclouds.common.model.util.TimeFrameUtil;
 import id.ezclouds.common.util.DateUtil;
-import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.process.biz.BizAsyncProcessor;
 import id.ezclouds.core.process.model.BizProcessEvent;
@@ -83,6 +82,7 @@ public class BizProcessGenerateReportAccumulateTimeSeries extends BizAsyncProces
     }
 
     private void processGenerate(String orgId, BizTimeSeriesScene timeSeriesScene, int nPrevTimeFrame, List<String> logData) {
+        logData.add(",SCENE="+ timeSeriesScene.getCode());
         List<SubOrganization> subOrganizations = new ArrayList<>();
         CoreAreaLevel areaLevel = CoreAreaLevel.REGENCY;
 
@@ -95,6 +95,7 @@ public class BizProcessGenerateReportAccumulateTimeSeries extends BizAsyncProces
         }
 
         List<String> timePeriods = TimeFrameUtil.generateTimePeriods(timeSeriesScene.getTimeFrame(), nPrevTimeFrame);
+        logData.add(",TIME_PERIODS="+ String.join("|", timePeriods));
         for (String timePeriod : timePeriods) {
 
             switch (timeSeriesScene) {
@@ -108,7 +109,6 @@ public class BizProcessGenerateReportAccumulateTimeSeries extends BizAsyncProces
             }
         }
 
-        logData.add(",TIME_PERIODS="+ String.join("|", timePeriods));
     }
 
     private void processGenerateTimeSeriesByCluster(String orgId, String timePeriod, List<SubOrganization> subOrganizations) {
@@ -123,15 +123,15 @@ public class BizProcessGenerateReportAccumulateTimeSeries extends BizAsyncProces
                 protected void doInTransactionWithoutResult(TransactionStatus status) {
                     BizTimeSeriesScene timeSeriesScene = BizTimeSeriesScene.VOTER_PROGRESS_BY_CLUSTER_DAILY;
                     BizReportAccumulateTimeSeries accumulateTimeSeries = bizReportAccumulateTimeSeriesDAO
-                            .getAndLock(orgId, timeSeriesScene, groupQueryCount.getGroupId());
+                            .getAndLock(orgId, timeSeriesScene, groupQueryCount.getGroupId(), timePeriod);
                     if (accumulateTimeSeries == null) {
                         accumulateTimeSeries = new BizReportAccumulateTimeSeries();
-                        accumulateTimeSeries.setReportTimeSeriesId(HashUtil.createHash(orgId, timeSeriesScene.getCode(), groupQueryCount.getGroupId()));
                         accumulateTimeSeries.setOrgId(orgId);
                         accumulateTimeSeries.setScene(timeSeriesScene);
                         accumulateTimeSeries.setSceneId(groupQueryCount.getGroupId());
                         accumulateTimeSeries.setSceneLabel(fetchSubOrgName(subOrganizations, groupQueryCount.getGroupId()));
                         accumulateTimeSeries.setTimeFrame(timePeriod);
+                        accumulateTimeSeries.generateId();
                     }
 
                     accumulateTimeSeries.setAccumulateCount((int) groupQueryCount.getGroupCount());
@@ -156,15 +156,15 @@ public class BizProcessGenerateReportAccumulateTimeSeries extends BizAsyncProces
                 protected void doInTransactionWithoutResult(TransactionStatus status) {
                     BizTimeSeriesScene timeSeriesScene = BizTimeSeriesScene.VOTER_PROGRESS_BY_AREA_DAILY;
                     BizReportAccumulateTimeSeries accumulateTimeSeries = bizReportAccumulateTimeSeriesDAO
-                            .getAndLock(orgId, timeSeriesScene, groupQueryCount.getGroupId());
+                            .getAndLock(orgId, timeSeriesScene, groupQueryCount.getGroupId(), timePeriod);
                     if (accumulateTimeSeries == null) {
                         accumulateTimeSeries = new BizReportAccumulateTimeSeries();
-                        accumulateTimeSeries.setReportTimeSeriesId(HashUtil.createHash(orgId, timeSeriesScene.getCode(), groupQueryCount.getGroupId()));
                         accumulateTimeSeries.setOrgId(orgId);
                         accumulateTimeSeries.setScene(timeSeriesScene);
                         accumulateTimeSeries.setSceneId(groupQueryCount.getGroupId());
                         accumulateTimeSeries.setSceneLabel(groupQueryCount.getGroupLabel());
                         accumulateTimeSeries.setTimeFrame(timePeriod);
+                        accumulateTimeSeries.generateId();
                     }
 
                     accumulateTimeSeries.setAccumulateCount((int) groupQueryCount.getGroupCount());

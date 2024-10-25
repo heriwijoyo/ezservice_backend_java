@@ -15,7 +15,7 @@ import java.util.List;
  */
 public interface BizReportAccumulateTimeSeriesDAO {
 
-    BizReportAccumulateTimeSeries getAndLock(String orgId, BizTimeSeriesScene scene, String sceneId);
+    BizReportAccumulateTimeSeries getAndLock(String orgId, BizTimeSeriesScene scene, String sceneId, String timeFrame);
 
     void store(BizReportAccumulateTimeSeries accumulateTimeSeries);
 
