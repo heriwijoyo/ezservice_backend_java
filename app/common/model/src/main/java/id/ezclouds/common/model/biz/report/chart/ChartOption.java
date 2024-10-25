@@ -43,9 +43,8 @@ public class ChartOption {
 
             if (seriesDataMap.get(accTimeSeries.getSceneLabel()) == null) {
                 seriesDataMap.put(accTimeSeries.getSceneLabel(), new HashMap<>());
-
-                seriesDataMap.get(accTimeSeries.getSceneLabel()).put(accTimeSeries.getTimeFrame(), accTimeSeries.getAccumulateCount());
             }
+            seriesDataMap.get(accTimeSeries.getSceneLabel()).put(accTimeSeries.getTimeFrame(), accTimeSeries.getAccumulateCount());
         }
 
         for (String sceneLabel : allSceneLabels) {
