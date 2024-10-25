@@ -72,6 +72,9 @@ public class BizProcessGenerateReportAccumulateTimeSeries extends BizAsyncProces
         int nPrevTimeFrame = Integer.parseInt(param.split(",")[1]);
 
         for (BizTimeSeriesScene timeSeriesScene : BizTimeSeriesScene.values()) {
+            if (timeSeriesScene == BizTimeSeriesScene.UNKNOWN) {
+                continue;
+            }
             processGenerate(orgId, timeSeriesScene, nPrevTimeFrame);
         }
 
