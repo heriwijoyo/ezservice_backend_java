@@ -8,6 +8,8 @@ import id.ezclouds.biz.election.converter.BizModelConverter;
 import id.ezclouds.biz.election.model.VideoCard;
 import id.ezclouds.biz.election.model.admin.BizApplicationConfig;
 import id.ezclouds.biz.election.model.admin.BizMemberRequiredData;
+import id.ezclouds.common.model.core.member.CoreGender;
+import id.ezclouds.common.model.core.member.CoreMemberExtension;
 import id.ezclouds.common.model.core.organization.BizOrganization;
 import id.ezclouds.biz.election.model.event.AppEvent;
 import id.ezclouds.biz.election.model.news.BizWebDetailNews;
@@ -560,7 +562,7 @@ public class BizAdminInnerService {
     }
 
     @Transactional
-    public BizMemberInfo createMember(String orgId, BizMember bizMember) throws Exception {
+    public id.ezclouds.common.model.core.member.CoreMember createMember(String orgId, BizMember bizMember) throws Exception {
         BizApplicationConfig bizApplicationConfig = getAppConfig(orgId);
         String orgCode = getOrganizationById(orgId).getCode();
         String appId = bizApplicationConfig.getAppId();
@@ -575,7 +577,7 @@ public class BizAdminInnerService {
                 .createCoreMember(orgId, orgCode, appId, bizMember);
 
         if (StringUtil.isBlank(bizMember.getRoles())) {
-            return bizMemberInfo;
+            return convertCoreMember(bizMemberInfo.getBizMember());
         }
 
         //generate member password
@@ -583,7 +585,52 @@ public class BizAdminInnerService {
         legacyCoreAuthService.updateMemberClientPassword(bizMemberInfo.getBizMemberClient().getClientId(), newPassword);
 
         memberSendPassword(orgId, bizMemberInfo.getBizMember().getPhone(), newPassword);
-        return bizMemberInfo;
+        return convertCoreMember(bizMemberInfo.getBizMember());
+    }
+
+    private id.ezclouds.common.model.core.member.CoreMember convertCoreMember(BizMember bizMember) {
+        id.ezclouds.common.model.core.member.CoreMember coreMember = new id.ezclouds.common.model.core.member.CoreMember();
+        coreMember.setMemberId(bizMember.getMemberId());
+        coreMember.setOrgId(bizMember.getOrgId());
+        coreMember.setSubOrgId(bizMember.getSubOrgId());
+        coreMember.setReferrerId(bizMember.getReferrerId());
+        coreMember.setRoles(bizMember.getRoles());
+        coreMember.setName(bizMember.getName());
+        coreMember.setNickname(bizMember.getNickname());
+        coreMember.setGender(CoreGender.getByCode(bizMember.getGender().getCode()));
+        coreMember.setDateOfBirth(bizMember.getDateOfBirth());
+        coreMember.setPhone(bizMember.getPhone());
+        coreMember.setEducation(bizMember.getEducation());
+        coreMember.setOccupation(bizMember.getOccupation());
+        coreMember.setReligion(bizMember.getReligion());
+        coreMember.setEthnic(bizMember.getEthnic());
+        coreMember.setEmail(bizMember.getEmail());
+        coreMember.setAddress(bizMember.getAddress());
+        coreMember.setCreatedTime(bizMember.getCreatedTime());
+        coreMember.setMemberExtension(fetchMemberExtension(bizMember));
+        return coreMember;
+    }
+
+    private CoreMemberExtension fetchMemberExtension(BizMember bizMember) {
+        CoreMemberExtension extension = new CoreMemberExtension();
+        extension.setMemberId(bizMember.getMemberId());
+        extension.setOrgId(bizMember.getOrgId());
+        extension.setIdCardNumber(bizMember.getIdCardNumber());
+        extension.setIdCardDocUrl(bizMember.getIdCardDocUrl());
+        extension.setFamilyCardNumber(bizMember.getFamilyCardNumber());
+        extension.setFamilyCardDocUrl(bizMember.getFamilyCardDocUrl());
+        extension.setProvinceId(bizMember.getProvinceId());
+        extension.setProvinceName(bizMember.getProvinceName());
+        extension.setRegencyId(bizMember.getRegencyId());
+        extension.setRegencyName(bizMember.getRegencyName());
+        extension.setDistrictId(bizMember.getDistrictId());
+        extension.setDistrictName(bizMember.getDistrictName());
+        extension.setVillageId(bizMember.getVillageId());
+        extension.setVillageName(bizMember.getVillageName());
+        extension.setNeighbourhood(bizMember.getRukunWarga());
+        extension.setSubNeighbourhood(bizMember.getRukunTetangga());
+        extension.setPollStationId(bizMember.getTpsNumber());
+        return extension;
     }
 
     public void memberSendPassword(String orgId, String phone, String password) {

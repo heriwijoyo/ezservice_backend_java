@@ -1203,13 +1203,13 @@ public class BizAdminService extends BizBaseService {
                 if (members != null) {
                     AssertUtil.isNotTrue(members.size() > 0, EzErrorCode.IDEMPOTENT_ERROR);
                 }
-                BizMemberInfo memberInfo = bizAdminInnerService
+                id.ezclouds.common.model.core.member.CoreMember coreMember = bizAdminInnerService
                         .createMember(request.getOrgId(), request.getData());
 
                 coreEventPublisherService.publish(new EzCommonEvent(
                         EzCoreTopic.CORE_MEMBER_REGISTER,
                         session.getOrgId(),
-                        memberInfo
+                        coreMember
                 ));
 
                 bizResult.setSuccess(true);

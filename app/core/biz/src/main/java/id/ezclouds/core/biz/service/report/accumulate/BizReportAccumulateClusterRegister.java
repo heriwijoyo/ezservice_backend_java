@@ -6,9 +6,12 @@ package id.ezclouds.core.biz.service.report.accumulate;
 
 import id.ezclouds.common.facade.dal.biz.report.BizReportAccumulateClusterDAO;
 import id.ezclouds.common.facade.dal.report.BizReportOverallDAO;
+import id.ezclouds.common.model.biz.report.BizReportAccumulateCluster;
 import id.ezclouds.common.model.core.organization.SubOrganization;
 import id.ezclouds.common.model.process.ProcessStatus;
+import id.ezclouds.common.model.report.BizReportOverall;
 import id.ezclouds.common.model.report.BizReportOverallKey;
+import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.exception.ExceptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -57,7 +60,26 @@ public class BizReportAccumulateClusterRegister implements ReportAccumulateProce
     }
 
     private void processAccumulate(SubOrganization subOrganization) {
+        String currentTime = DateUtil.getCurrentFormattedDateMillis();
 
-        bizReportOverallDAO.getAndLock(subOrganization.getOrgId(), BizReportOverallKey.VOTER_BASE_CLUSTER_COUNT);
+        BizReportOverall reportOverall =  bizReportOverallDAO
+                .getAndLock(subOrganization.getOrgId(), BizReportOverallKey.VOTER_BASE_CLUSTER_COUNT);
+        int updateCount = reportOverall.getCount() + 1;
+        reportOverall.setCount(updateCount);
+        reportOverall.setUpdatedTime(currentTime);
+
+        BizReportAccumulateCluster accumulateCluster =  new BizReportAccumulateCluster();
+        accumulateCluster.setOrgId(subOrganization.getOrgId());
+        accumulateCluster.setClusterId(subOrganization.getSubOrgId());
+        accumulateCluster.setClusterName(subOrganization.getName());
+        accumulateCluster.setVoterCount(0);
+        accumulateCluster.setVoterMaleCount(0);
+        accumulateCluster.setVoterFemaleCount(0);
+        accumulateCluster.setVoterExtraCount(0);
+        accumulateCluster.setVoterExtraMaleCount(0);
+        accumulateCluster.setVoterExtraFemaleCount(0);
+        accumulateCluster.setModifiedTime(currentTime);
+
+        bizReportAccumulateClusterDAO.store(accumulateCluster);
     }
 }
