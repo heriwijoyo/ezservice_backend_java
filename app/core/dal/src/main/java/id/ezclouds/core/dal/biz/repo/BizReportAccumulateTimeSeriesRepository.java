@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.LockModeType;
 import javax.persistence.QueryHint;
+import java.util.List;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -25,4 +26,6 @@ public interface BizReportAccumulateTimeSeriesRepository extends JpaRepository<B
     @QueryHints({@QueryHint(name = "jakarta.persistence.lock.timeout", value = "3000")})
     @Query("SELECT rats FROM BizReportAccumulateTimeSeriesDO rats WHERE rats.reportTimeSeriesId = ?1")
     BizReportAccumulateTimeSeriesDO findAndLockById(String accumulateId);
+
+    List<BizReportAccumulateTimeSeriesDO> findByOrgIdAndSceneAndTimeFrameIn(String orgId, String scene, List<String> timeFrames);
 }

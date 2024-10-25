@@ -17,6 +17,7 @@ import id.ezclouds.common.model.biz.report.BizTimeSeriesScene;
 import id.ezclouds.common.model.core.organization.SubOrganization;
 import id.ezclouds.common.model.query.BizGroupQueryCount;
 import id.ezclouds.common.model.util.CoreAreaUtil;
+import id.ezclouds.common.model.util.TimeFrameUtil;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
@@ -89,7 +90,7 @@ public class BizProcessGenerateReportAccumulateTimeSeries extends BizAsyncProces
             areaLevel = CoreAreaUtil.getLowerLevel(areaInitConfig.getRootAreas().get(0).getAreaLevel());
         }
 
-        List<String> timePeriods = generateTimePeriods(timeSeriesScene.getTimeFrame(), nPrevTimeFrame);
+        List<String> timePeriods = TimeFrameUtil.generateTimePeriods(timeSeriesScene.getTimeFrame(), nPrevTimeFrame);
         for (String timePeriod : timePeriods) {
 
             switch (timeSeriesScene) {
@@ -102,24 +103,6 @@ public class BizProcessGenerateReportAccumulateTimeSeries extends BizAsyncProces
                     break;
             }
         }
-    }
-
-    private List<String> generateTimePeriods(BizTimeFrame timeFrame, int nPrevTimeFrame) {
-        List<String> periods = new ArrayList<>();
-
-        Date today = new Date();
-
-        for (int i = 1; i <= nPrevTimeFrame; i++) {
-
-            switch (timeFrame) {
-                case DAILY:
-                    Date prevDate = DateUtil.getDateAfterDays(today, -i);
-                    periods.add(DateUtil.getFormattedDate(prevDate, DateUtil.FORMAT_DATE));
-                    break;
-            }
-        }
-
-        return periods;
     }
 
     private void processGenerateTimeSeriesByCluster(String orgId, String timePeriod, List<SubOrganization> subOrganizations) {

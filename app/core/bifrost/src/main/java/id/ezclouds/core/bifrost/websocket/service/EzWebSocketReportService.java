@@ -7,10 +7,13 @@ package id.ezclouds.core.bifrost.websocket.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ezclouds.common.facade.auth.AuthAdminService;
 import id.ezclouds.common.facade.biz.report.BizReportAccumulateAreaService;
+import id.ezclouds.common.facade.biz.report.BizReportAccumulateTimeSeriesService;
 import id.ezclouds.common.facade.biz.report.BizReportOverallService;
 import id.ezclouds.common.model.area.District;
 import id.ezclouds.common.model.auth.AuthSession;
 import id.ezclouds.common.model.biz.report.BizReportArea;
+import id.ezclouds.common.model.biz.report.BizTimeSeriesScene;
+import id.ezclouds.common.model.biz.report.chart.BizCommonChart;
 import id.ezclouds.common.model.broker.event.OverallReportChangeEvent;
 import id.ezclouds.common.model.report.BizReportOverall;
 import id.ezclouds.common.model.websocket.WebSocketData;
@@ -46,6 +49,9 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
 
     @Autowired
     private BizReportAccumulateAreaService bizReportAccumulateAreaService;
+
+    @Autowired
+    private BizReportAccumulateTimeSeriesService bizReportAccumulateTimeSeriesService;
 
     private Map<String, WebSocketSession> sessionMap = new ConcurrentHashMap<>();
     private Map<String, SessionIdentity> identityMap = new ConcurrentHashMap<>();
@@ -151,6 +157,13 @@ public class EzWebSocketReportService extends TextWebSocketHandler {
                         reportArea = bizReportAccumulateAreaService.getReportAreaPollStation(orgId, villageId);
                         sessionSendMessage(session, WebSocketEvent.DATA_RESULT, DataTopic.VOTER_BASE_AREA, reportArea);
                     }
+                    break;
+
+                case VOTER_BASE_PROGRESS_CHART:
+                    String scene = (String) payload;
+                    BizCommonChart bizCommonChart = bizReportAccumulateTimeSeriesService
+                            .fetchTimeSeriesChart(orgId, BizTimeSeriesScene.getByCode(scene), 10);
+                    sessionSendMessage(session, WebSocketEvent.DATA_RESULT, DataTopic.VOTER_BASE_PROGRESS_CHART, bizCommonChart);
                     break;
             }
         }

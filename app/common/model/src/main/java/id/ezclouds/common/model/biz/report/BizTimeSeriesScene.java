@@ -13,6 +13,8 @@ public enum BizTimeSeriesScene {
     VOTER_PROGRESS_BY_CLUSTER_DAILY("VOTER_PROGRESS_BY_CLUSTER_DAILY", BizTimeFrame.DAILY),
     VOTER_PROGRESS_BY_AREA_DAILY("VOTER_PROGRESS_BY_AREA_DAILY", BizTimeFrame.DAILY),
 
+    UNKNOWN("UNKNOWN", null),
+
     ;
 
     private final String code;
