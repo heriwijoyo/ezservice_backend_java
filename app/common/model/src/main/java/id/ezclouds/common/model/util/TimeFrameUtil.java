@@ -22,8 +22,7 @@ public final class TimeFrameUtil {
 
         Date today = new Date();
 
-        for (int i = 1; i <= nPrevTimeFrame; i++) {
-
+        for (int i = nPrevTimeFrame; i >= 1; i--) {
             switch (timeFrame) {
                 case DAILY:
                     Date prevDate = DateUtil.getDateAfterDays(today, -i);
