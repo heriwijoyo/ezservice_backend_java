@@ -27,4 +27,19 @@ public interface BizElectionVoterRepository extends JpaRepository<BizVoterDO, St
             + "FROM BizVoterDO AS bv WHERE bv.orgId = ?1 AND bv.createdTime >= ?2 AND bv.createdTime <= ?3 AND bv.subOrgId IS NOT NULL "
             + "GROUP BY bv.subOrgId")
     List<BizGroupQueryCount> countGroupBySubOrgWithinDate(String orgId, String startDate, String endDate);
+
+    @Query("SELECT new id.ezclouds.common.model.query.BizGroupQueryCount(bv.regencyId, bv.regencyName, COUNT(bv.regencyId)) "
+            + "FROM BizVoterDO AS bv WHERE bv.orgId = ?1 AND bv.createdTime >= ?2 AND bv.createdTime <= ?3 "
+            + "GROUP BY bv.regencyId")
+    List<BizGroupQueryCount> countGroupByRegencyWithinDate(String orgId, String startDate, String endDate);
+
+    @Query("SELECT new id.ezclouds.common.model.query.BizGroupQueryCount(bv.districtId, bv.districtName, COUNT(bv.districtId)) "
+            + "FROM BizVoterDO AS bv WHERE bv.orgId = ?1 AND bv.createdTime >= ?2 AND bv.createdTime <= ?3 "
+            + "GROUP BY bv.districtId")
+    List<BizGroupQueryCount> countGroupByDistrictWithinDate(String orgId, String startDate, String endDate);
+
+    @Query("SELECT new id.ezclouds.common.model.query.BizGroupQueryCount(bv.villageId, bv.villageName, COUNT(bv.villageId)) "
+            + "FROM BizVoterDO AS bv WHERE bv.orgId = ?1 AND bv.createdTime >= ?2 AND bv.createdTime <= ?3 "
+            + "GROUP BY bv.villageId")
+    List<BizGroupQueryCount> countGroupByVillageWithinDate(String orgId, String startDate, String endDate);
 }

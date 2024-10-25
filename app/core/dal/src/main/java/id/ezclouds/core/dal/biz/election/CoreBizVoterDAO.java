@@ -6,6 +6,7 @@ package id.ezclouds.core.dal.biz.election;
 
 import id.ezclouds.common.facade.dal.biz.election.BizVoterDAO;
 import id.ezclouds.common.model.annotation.EzDAOLogger;
+import id.ezclouds.common.model.area.CoreAreaLevel;
 import id.ezclouds.common.model.biz.election.BizVoter;
 import id.ezclouds.common.model.query.BizGroupQueryCount;
 import id.ezclouds.core.dal.biz.election.converter.BizVoterConverter;
@@ -13,6 +14,7 @@ import id.ezclouds.core.dal.biz.election.repo.BizElectionVoterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,5 +71,22 @@ public class CoreBizVoterDAO implements BizVoterDAO {
     public List<BizGroupQueryCount> countGroupBySubOrgWithinDate(String orgId, String startDate, String endDate) {
         return bizElectionVoterRepository
                 .countGroupBySubOrgWithinDate(orgId, startDate, endDate);
+    }
+
+    @Override
+    @EzDAOLogger
+    public List<BizGroupQueryCount> countGroupByCoreAreaWithinDate(String orgId, CoreAreaLevel coreAreaLevel, String startDate, String endDate) {
+        switch (coreAreaLevel) {
+            case REGENCY:
+                return bizElectionVoterRepository
+                        .countGroupByRegencyWithinDate(orgId, startDate, endDate);
+            case DISTRICT:
+                return bizElectionVoterRepository
+                        .countGroupByDistrictWithinDate(orgId, startDate, endDate);
+            case VILLAGE:
+                return bizElectionVoterRepository
+                        .countGroupByVillageWithinDate(orgId, startDate, endDate);
+        }
+        return new ArrayList<>();
     }
 }

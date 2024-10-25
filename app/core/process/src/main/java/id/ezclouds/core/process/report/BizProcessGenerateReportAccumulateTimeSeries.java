@@ -79,15 +79,14 @@ public class BizProcessGenerateReportAccumulateTimeSeries extends BizAsyncProces
 
     private void processGenerate(String orgId, BizTimeSeriesScene timeSeriesScene, int nPrevTimeFrame) {
         List<SubOrganization> subOrganizations = new ArrayList<>();
-        List<CoreArea> coreAreas = new ArrayList<>();
+        CoreAreaLevel areaLevel = CoreAreaLevel.REGENCY;
 
         if (timeSeriesScene == BizTimeSeriesScene.VOTER_PROGRESS_BY_CLUSTER_DAILY) {
             subOrganizations.addAll(subOrganizationService.getSubOrganizationAll(orgId));
         }
         if (timeSeriesScene == BizTimeSeriesScene.VOTER_PROGRESS_BY_AREA_DAILY) {
             AreaInitConfig areaInitConfig = coreWorkingAreaService.getAreaInitConfig(orgId);
-            CoreAreaLevel targetAreaLevel = CoreAreaUtil.getLowerLevel(areaInitConfig.getRootAreas().get(0).getAreaLevel());
-            coreAreas.addAll(coreWorkingAreaService.fetchCoreAreas(orgId, targetAreaLevel));
+            areaLevel = CoreAreaUtil.getLowerLevel(areaInitConfig.getRootAreas().get(0).getAreaLevel());
         }
 
         List<String> timePeriods = generateTimePeriods(timeSeriesScene.getTimeFrame(), nPrevTimeFrame);
@@ -99,6 +98,7 @@ public class BizProcessGenerateReportAccumulateTimeSeries extends BizAsyncProces
                     break;
 
                 case VOTER_PROGRESS_BY_AREA_DAILY:
+                    processGenerateTimeSeriesByArea(orgId, timePeriod, areaLevel);
                     break;
             }
         }
@@ -142,6 +142,39 @@ public class BizProcessGenerateReportAccumulateTimeSeries extends BizAsyncProces
                         accumulateTimeSeries.setScene(timeSeriesScene);
                         accumulateTimeSeries.setSceneId(groupQueryCount.getGroupId());
                         accumulateTimeSeries.setSceneLabel(fetchSubOrgName(subOrganizations, groupQueryCount.getGroupId()));
+                        accumulateTimeSeries.setTimeFrame(timePeriod);
+                    }
+
+                    accumulateTimeSeries.setAccumulateCount((int) groupQueryCount.getGroupCount());
+                    accumulateTimeSeries.setModifiedTime(DateUtil.getCurrentFormattedDateMillis());
+
+                    bizReportAccumulateTimeSeriesDAO.store(accumulateTimeSeries);
+                }
+            });
+
+        }
+    }
+
+    private void processGenerateTimeSeriesByArea(String orgId, String timePeriod, CoreAreaLevel areaLevel) {
+        Date periodDate = DateUtil.parseFormattedDate(timePeriod, DateUtil.FORMAT_DATE);
+        String startDate = DateUtil.getFormattedDayStart(periodDate);
+        String endDate = DateUtil.getFormattedDayEnd(periodDate);
+        List<BizGroupQueryCount> groupQueryCounts = bizVoterDAO.countGroupByCoreAreaWithinDate(orgId, areaLevel, startDate, endDate);
+        for (BizGroupQueryCount groupQueryCount : groupQueryCounts) {
+
+            transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+                @Override
+                protected void doInTransactionWithoutResult(TransactionStatus status) {
+                    BizTimeSeriesScene timeSeriesScene = BizTimeSeriesScene.VOTER_PROGRESS_BY_AREA_DAILY;
+                    BizReportAccumulateTimeSeries accumulateTimeSeries = bizReportAccumulateTimeSeriesDAO
+                            .getAndLock(orgId, timeSeriesScene, groupQueryCount.getGroupId());
+                    if (accumulateTimeSeries == null) {
+                        accumulateTimeSeries = new BizReportAccumulateTimeSeries();
+                        accumulateTimeSeries.setReportTimeSeriesId(HashUtil.createHash(orgId, timeSeriesScene.getCode(), groupQueryCount.getGroupId()));
+                        accumulateTimeSeries.setOrgId(orgId);
+                        accumulateTimeSeries.setScene(timeSeriesScene);
+                        accumulateTimeSeries.setSceneId(groupQueryCount.getGroupId());
+                        accumulateTimeSeries.setSceneLabel(groupQueryCount.getGroupLabel());
                         accumulateTimeSeries.setTimeFrame(timePeriod);
                     }
 

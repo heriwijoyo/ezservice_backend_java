@@ -4,6 +4,7 @@
  */
 package id.ezclouds.common.facade.dal.biz.election;
 
+import id.ezclouds.common.model.area.CoreAreaLevel;
 import id.ezclouds.common.model.biz.election.BizVoter;
 import id.ezclouds.common.model.query.BizGroupQueryCount;
 
@@ -24,4 +25,6 @@ public interface BizVoterDAO {
     List<BizVoter> getVoterDataPollStation(String districtId, String villageId, String pollStation);
 
     List<BizGroupQueryCount> countGroupBySubOrgWithinDate(String orgId, String startDate, String endDate);
+
+    List<BizGroupQueryCount> countGroupByCoreAreaWithinDate(String orgId, CoreAreaLevel coreAreaLevel, String startDate, String endDate);
 }
