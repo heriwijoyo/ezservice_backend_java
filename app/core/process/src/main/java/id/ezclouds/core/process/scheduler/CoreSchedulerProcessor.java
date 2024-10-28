@@ -8,9 +8,8 @@ import id.ezclouds.common.facade.biz.BizSchedulerService;
 import id.ezclouds.common.facade.process.SchedulerProcessor;
 import id.ezclouds.common.model.result.BaseResult;
 import id.ezclouds.common.util.facade.BeanFacadeUtil;
-import id.ezclouds.core.process.biz.BizProcessorReportGenerateOverall;
-import id.ezclouds.core.process.biz.BizProcessorReportUpdateMember;
 import id.ezclouds.core.process.model.CoreSchedulerScene;
+import id.ezclouds.core.process.report.BizProcessGenerateReportAccumulateTimeSeries;
 import id.ezclouds.core.process.report.BizProcessReportDailyReset;
 import id.ezclouds.core.process.template.CoreSchedulerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +26,7 @@ public class CoreSchedulerProcessor implements SchedulerProcessor {
     private BizProcessReportDailyReset bizProcessReportDailyReset;
 
     @Autowired
-    private BizProcessorReportGenerateOverall bizProcessorReportGenerateOverall;
-
-    @Autowired
-    private BizProcessorReportUpdateMember bizProcessorReportUpdateMember;
+    private BizProcessGenerateReportAccumulateTimeSeries bizProcessGenerateReportAccumulateTimeSeries;
 
     @Override
     public BaseResult execute(String scene, String param) {
@@ -58,11 +54,8 @@ public class CoreSchedulerProcessor implements SchedulerProcessor {
                     case REPORT_DAILY_RESET:
                         bizProcessReportDailyReset.process(param);
                         break;
-                    case RJL_DAILY_REPORT_OVERALL:
-                        bizProcessorReportGenerateOverall.process("RJL0");
-                        break;
-                    case RJL_HOURLY_MEMBER_TODAY:
-                        bizProcessorReportUpdateMember.process("RJL0");
+                    case REPORT_TIME_SERIES_CLUSTER:
+                        bizProcessGenerateReportAccumulateTimeSeries.process(param);
                         break;
                 }
             }
