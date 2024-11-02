@@ -107,6 +107,17 @@ public class CoreMemberBackOfficeDAO implements BizMemberBackOfficeDAO {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    @EzDAOLogger
+    public List<MemberBackOffice> getBySubOrgId(String orgId, String subOrgId) {
+        CoreMemberBackOfficeConverter converter = new CoreMemberBackOfficeConverter();
+        return coreMemberBackOfficeRepository
+                .findByOrgIdAndSubOrgId(orgId, subOrgId)
+                .stream()
+                .map(converter::convertQuery)
+                .collect(Collectors.toList());
+    }
+
     @EzDAOLogger
     @Override
     public void updateSubOrganization(String memberId, String subOrgId) {

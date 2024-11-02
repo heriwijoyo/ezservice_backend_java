@@ -22,6 +22,8 @@ public interface BizMemberBackOfficeDAO {
 
     List<MemberBackOffice> getByReferrerId(String referrerId);
 
+    List<MemberBackOffice> getBySubOrgId(String orgId, String subOrgId);
+
     void updateSubOrganization(String memberId, String subOrgId);
 
     void updateRoles(String memberId, String roles);

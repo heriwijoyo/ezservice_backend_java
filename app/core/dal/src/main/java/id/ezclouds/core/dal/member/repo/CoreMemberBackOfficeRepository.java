@@ -28,4 +28,6 @@ public interface CoreMemberBackOfficeRepository extends JpaRepository<CoreMember
     Page<CoreMemberBackOfficeDO> findByOrgIdAndReferrerId(String orgId, String referrerId, Pageable pageable);
 
     List<CoreMemberBackOfficeDO> findByReferrerId(String referrerId);
+
+    List<CoreMemberBackOfficeDO> findByOrgIdAndSubOrgId(String orgId, String subOrgId);
 }

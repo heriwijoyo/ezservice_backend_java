@@ -8,12 +8,15 @@ import id.ezclouds.common.facade.auth.AuthAdminService;
 import id.ezclouds.common.facade.dal.biz.BizPageLayoutDAO;
 import id.ezclouds.common.facade.dal.biz.election.BizVoterDAO;
 import id.ezclouds.common.facade.dal.biz.report.BizReportPageDAO;
+import id.ezclouds.common.facade.dal.member.BizMemberBackOfficeDAO;
 import id.ezclouds.common.facade.integration.BizObjectMapperService;
 import id.ezclouds.common.facade.organization.SubOrganizationService;
 import id.ezclouds.common.model.auth.AuthSession;
 import id.ezclouds.common.model.biz.election.BizVoter;
 import id.ezclouds.common.model.biz.report.BizReportPage;
 import id.ezclouds.common.model.core.organization.SubOrganization;
+import id.ezclouds.common.model.member.MemberBackOffice;
+import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.facade.BeanFacadeUtil;
@@ -34,6 +37,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -60,6 +64,9 @@ public class BizReportPageController {
 
     @Autowired
     private SubOrganizationService subOrganizationService;
+
+    @Autowired
+    private BizMemberBackOfficeDAO bizMemberBackOfficeDAO;
 
     @GetMapping(value = "/biz/report/{section}/{code}/{sessionId}")
     private void getBizReportPage(
@@ -124,6 +131,57 @@ public class BizReportPageController {
                         .append("<td>")
                         .append(subOrganization.getName())
                         .append("</td>");
+                stringBuilder
+                        .append("<td>")
+                        .append("<a href=\"../cluster/"+ subOrganization.getSubOrgId() +"/"+ sessionId +"\">Lihat Detail</a>")
+                        .append("</td>");
+                stringBuilder.append("</tr>");
+                number++;
+            }
+
+            String assetPath = "biz/data/voterClusters.htm";
+            String htmlContent = getHtmlContent(assetPath)
+                    .replace("INCLUDE_CONTENT", stringBuilder.toString());
+
+            response.setStatus(HttpStatus.OK.value());
+            response.getWriter().write(htmlContent);
+            response.getWriter().flush();
+        } catch (Exception e) {
+            response.setStatus(HttpStatus.NOT_FOUND.value());
+        }
+    }
+
+    @GetMapping(value = "/biz/data/voter/cluster/{clusterId}/{sessionId}")
+    private void getVoterClusterMembers(@PathVariable("clusterId") String clusterId, @PathVariable("sessionId") String sessionId, HttpServletResponse response) {
+        response.setContentType("text/html;charset=UTF-8");
+
+        try {
+            AuthSession authSession = authAdminService.authorizeWebPublicSession(sessionId);
+
+            Date expiredToken = DateUtil.getDateAfterMins(new Date(), 30);
+            String tokenId = sessionId + expiredToken.getTime();
+
+            List<MemberBackOffice> members = bizMemberBackOfficeDAO.getBySubOrgId(authSession.getOrgId(), clusterId);
+
+            StringBuilder stringBuilder = new StringBuilder();
+            int number = 1;
+            for (MemberBackOffice member : members) {
+                stringBuilder.append("<tr>");
+                stringBuilder.append("<td>")
+                        .append(number)
+                        .append("</td>");
+                stringBuilder
+                        .append("<td>")
+                        .append(member.getName())
+                        .append("</td>");
+                stringBuilder
+                        .append("<td>")
+                        .append("<a href=\"../../member/"+ member.getMemberId() +"/valid/"+ tokenId +"\">Lihat Detail</a><br>(Data Valid)")
+                        .append("</td>");
+                stringBuilder
+                        .append("<td>")
+                        .append("<a href=\"../../member/"+ member.getMemberId() +"/invalid/"+ tokenId +"\">Lihat Detail</a><br>(Data Invalid)")
+                        .append("</td>");
                 stringBuilder.append("</tr>");
                 number++;
             }
@@ -140,12 +198,7 @@ public class BizReportPageController {
         }
     }
 
-    @GetMapping(value = "/biz/data/voter/cluster/{clusterId}/{sessionId}")
-    private void getVoterClusterMembers() {
-
-    }
-
-    @GetMapping(value = "/biz/data/voter/member/{memberId}/{sessionToken}")
+    @GetMapping(value = "/biz/data/voter/member/{memberId}/{status}/{sessionToken}")
     private void getVoterByMembers() {
 
     }
