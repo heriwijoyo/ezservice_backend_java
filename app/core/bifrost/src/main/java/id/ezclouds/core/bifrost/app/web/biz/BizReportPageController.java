@@ -300,7 +300,7 @@ public class BizReportPageController {
             inValidWs.finish();
 
             workbook.finish();
-            response.setContentType("application/octet-stream");
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             response.setHeader(
                     HttpHeaders.CONTENT_DISPOSITION,
                     ContentDisposition.attachment()
