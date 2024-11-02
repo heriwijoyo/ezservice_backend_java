@@ -18,5 +18,7 @@ public interface SubOrganizationDAO {
 
     List<SubOrganization> getByOrgId(String orgId);
 
+    List<SubOrganization> getActiveSubOrg(String orgId);
+
     SubOrganization getById(String subOrgId);
 }

@@ -28,6 +28,11 @@ public class CoreSubOrganizationService implements SubOrganizationService {
     }
 
     @Override
+    public List<SubOrganization> getSubOrganizationActive(String orgId) {
+        return subOrganizationDAO.getActiveSubOrg(orgId);
+    }
+
+    @Override
     public SubOrganization getById(String subOrgId) {
         return subOrganizationDAO
                 .getById(subOrgId);

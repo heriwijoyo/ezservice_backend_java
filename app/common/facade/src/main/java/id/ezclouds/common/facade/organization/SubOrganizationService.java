@@ -16,5 +16,7 @@ public interface SubOrganizationService {
 
     List<SubOrganization> getSubOrganizationAll(String orgId);
 
+    List<SubOrganization> getSubOrganizationActive(String orgId);
+
     SubOrganization getById(String subOrgId);
 }

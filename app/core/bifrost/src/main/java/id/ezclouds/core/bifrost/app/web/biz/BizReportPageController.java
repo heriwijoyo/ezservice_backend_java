@@ -9,19 +9,31 @@ import id.ezclouds.common.facade.dal.biz.BizPageLayoutDAO;
 import id.ezclouds.common.facade.dal.biz.election.BizVoterDAO;
 import id.ezclouds.common.facade.dal.biz.report.BizReportPageDAO;
 import id.ezclouds.common.facade.integration.BizObjectMapperService;
+import id.ezclouds.common.facade.organization.SubOrganizationService;
 import id.ezclouds.common.model.auth.AuthSession;
 import id.ezclouds.common.model.biz.election.BizVoter;
 import id.ezclouds.common.model.biz.report.BizReportPage;
+import id.ezclouds.common.model.core.organization.SubOrganization;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
+import id.ezclouds.common.util.facade.BeanFacadeUtil;
+import id.ezclouds.core.bifrost.core.config.WebAppConfig;
+import id.ezclouds.core.bifrost.core.constant.WebConstant;
 import id.ezclouds.core.bifrost.core.web.model.WebPageAuthType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 /**
@@ -45,6 +57,9 @@ public class BizReportPageController {
 
     @Autowired
     private BizObjectMapperService bizObjectMapperService;
+
+    @Autowired
+    private SubOrganizationService subOrganizationService;
 
     @GetMapping(value = "/biz/report/{section}/{code}/{sessionId}")
     private void getBizReportPage(
@@ -89,7 +104,53 @@ public class BizReportPageController {
         }
     }
 
-    @GetMapping(value = "/biz/data/voter/{districtId}/{villageId}/{pollStation}")
+    @GetMapping(value = "/biz/data/voter/clusters/{sessionId}")
+    private void getVoterByCluster(@PathVariable("sessionId") String sessionId, HttpServletResponse response) {
+        response.setContentType("text/html;charset=UTF-8");
+
+        try {
+            AuthSession authSession = authAdminService.authorizeWebPublicSession(sessionId);
+            List<SubOrganization> subOrganizations = subOrganizationService
+                    .getSubOrganizationActive(authSession.getOrgId());
+
+            StringBuilder stringBuilder = new StringBuilder();
+            int number = 1;
+            for (SubOrganization subOrganization : subOrganizations) {
+                stringBuilder.append("<tr>");
+                stringBuilder.append("<td>")
+                        .append(number)
+                        .append("</td>");
+                stringBuilder
+                        .append("<td>")
+                        .append(subOrganization.getName())
+                        .append("</td>");
+                stringBuilder.append("</tr>");
+                number++;
+            }
+
+            String assetPath = "biz/data/voterCluster.htm";
+            String htmlContent = getHtmlContent(assetPath)
+                    .replace("INCLUDE_CONTENT", stringBuilder.toString());
+
+            response.setStatus(HttpStatus.OK.value());
+            response.getWriter().write(htmlContent);
+            response.getWriter().flush();
+        } catch (Exception e) {
+            response.setStatus(HttpStatus.NOT_FOUND.value());
+        }
+    }
+
+    @GetMapping(value = "/biz/data/voter/cluster/{clusterId}/{sessionId}")
+    private void getVoterClusterMembers() {
+
+    }
+
+    @GetMapping(value = "/biz/data/voter/member/{memberId}/{sessionToken}")
+    private void getVoterByMembers() {
+
+    }
+
+    @GetMapping(value = "/biz/data/voter/pollstation/{districtId}/{villageId}/{pollStation}/{sessionId}")
     private void getBizDataVoter(
             @PathVariable("districtId") String districtId,
             @PathVariable("villageId") String villageId,
@@ -113,5 +174,14 @@ public class BizReportPageController {
         } catch (Exception e) {
             response.setStatus(HttpStatus.NOT_FOUND.value());
         }
+    }
+
+    private String getHtmlContent(String assetBizPath) throws IOException {
+        WebAppConfig webConfig = BeanFacadeUtil.getBean(WebAppConfig.class);
+        if (WebConstant.DEV.equals(webConfig.getWebReleaseMode())) {
+            Path webAppSourcePath = Paths.get(webConfig.getWebResourceDir(), assetBizPath);
+            return Files.readString(webAppSourcePath);
+        }
+        return StreamUtils.copyToString(new ClassPathResource(assetBizPath).getInputStream(), StandardCharsets.UTF_8);
     }
 }

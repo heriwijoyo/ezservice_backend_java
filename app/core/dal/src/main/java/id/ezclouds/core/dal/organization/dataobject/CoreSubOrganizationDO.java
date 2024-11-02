@@ -26,6 +26,9 @@ public class CoreSubOrganizationDO {
     private String name;
     @Column(name = "address")
     private String address;
+    @Column(name = "status")
+    private int status;
+
 
     public String getSubOrgId() {
         return subOrgId;

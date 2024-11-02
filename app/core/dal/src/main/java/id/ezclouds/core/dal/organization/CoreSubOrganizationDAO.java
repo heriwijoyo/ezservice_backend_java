@@ -9,12 +9,14 @@ import id.ezclouds.common.model.annotation.EzDAOLogger;
 import id.ezclouds.common.model.core.organization.SubOrganization;
 import id.ezclouds.common.model.util.ListModelConvertUtil;
 import id.ezclouds.core.dal.organization.converter.CoreSubOrganizationResultConverter;
+import id.ezclouds.core.dal.organization.converter.SubOrganizationConverter;
 import id.ezclouds.core.dal.organization.dataobject.CoreSubOrganizationDO;
 import id.ezclouds.core.dal.organization.repo.CoreSubOrganizationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -39,6 +41,17 @@ public class CoreSubOrganizationDAO implements SubOrganizationDAO {
                 .findByOrgId(orgId);
 
         return ListModelConvertUtil.convert(findResult, new CoreSubOrganizationResultConverter());
+    }
+
+    @Override
+    @EzDAOLogger
+    public List<SubOrganization> getActiveSubOrg(String orgId) {
+        SubOrganizationConverter converter = new SubOrganizationConverter();
+        return coreSubOrganizationRepository
+                .findByOrgIdAndStatus(orgId, 1)
+                .stream()
+                .map(converter::convertQuery)
+                .collect(Collectors.toList());
     }
 
     @EzDAOLogger

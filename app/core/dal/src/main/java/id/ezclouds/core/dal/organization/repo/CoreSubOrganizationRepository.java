@@ -18,4 +18,6 @@ import java.util.List;
 public interface CoreSubOrganizationRepository extends JpaRepository<CoreSubOrganizationDO, String> {
     long countByOrgId(String orgId);
     List<CoreSubOrganizationDO> findByOrgId(String orgId);
+
+    List<CoreSubOrganizationDO> findByOrgIdAndStatus(String orgId, int status);
 }
