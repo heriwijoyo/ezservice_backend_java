@@ -7,16 +7,19 @@ package id.ezclouds.core.bifrost.app.web.biz;
 import id.ezclouds.common.facade.auth.AuthAdminService;
 import id.ezclouds.common.facade.dal.biz.BizPageLayoutDAO;
 import id.ezclouds.common.facade.dal.biz.election.BizVoterDAO;
+import id.ezclouds.common.facade.dal.biz.election.BizVoterInvalidDAO;
 import id.ezclouds.common.facade.dal.biz.report.BizReportPageDAO;
 import id.ezclouds.common.facade.dal.member.BizMemberBackOfficeDAO;
+import id.ezclouds.common.facade.dal.organization.SubOrganizationDAO;
 import id.ezclouds.common.facade.integration.BizObjectMapperService;
-import id.ezclouds.common.facade.organization.SubOrganizationService;
 import id.ezclouds.common.model.auth.AuthSession;
 import id.ezclouds.common.model.biz.election.BizVoter;
+import id.ezclouds.common.model.biz.election.BizVoterInvalid;
 import id.ezclouds.common.model.biz.report.BizReportPage;
 import id.ezclouds.common.model.core.organization.SubOrganization;
 import id.ezclouds.common.model.member.MemberBackOffice;
 import id.ezclouds.common.util.DateUtil;
+import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.common.util.assertion.AssertUtil;
 import id.ezclouds.common.util.exception.EzErrorCode;
 import id.ezclouds.common.util.facade.BeanFacadeUtil;
@@ -60,10 +63,13 @@ public class BizReportPageController {
     private BizVoterDAO bizVoterDAO;
 
     @Autowired
+    private BizVoterInvalidDAO bizVoterInvalidDAO;
+
+    @Autowired
     private BizObjectMapperService bizObjectMapperService;
 
     @Autowired
-    private SubOrganizationService subOrganizationService;
+    private SubOrganizationDAO subOrganizationDAO;
 
     @Autowired
     private BizMemberBackOfficeDAO bizMemberBackOfficeDAO;
@@ -116,9 +122,9 @@ public class BizReportPageController {
         response.setContentType("text/html;charset=UTF-8");
 
         try {
+            AssertUtil.notBlank(sessionId, EzErrorCode.SYSTEM_ERROR);
             AuthSession authSession = authAdminService.authorizeWebPublicSession(sessionId);
-            List<SubOrganization> subOrganizations = subOrganizationService
-                    .getSubOrganizationActive(authSession.getOrgId());
+            List<SubOrganization> subOrganizations = subOrganizationDAO.getActiveSubOrg(authSession.getOrgId());
 
             StringBuilder stringBuilder = new StringBuilder();
             int number = 1;
@@ -152,13 +158,21 @@ public class BizReportPageController {
     }
 
     @GetMapping(value = "/biz/data/voter/cluster/{clusterId}/{sessionId}")
-    private void getVoterClusterMembers(@PathVariable("clusterId") String clusterId, @PathVariable("sessionId") String sessionId, HttpServletResponse response) {
+    private void getVoterClusterMembers(
+            @PathVariable("clusterId") String clusterId,
+            @PathVariable("sessionId") String sessionId,
+            HttpServletResponse response) {
         response.setContentType("text/html;charset=UTF-8");
 
         try {
+            AssertUtil.notBlank(clusterId, EzErrorCode.SYSTEM_ERROR);
+            AssertUtil.notBlank(sessionId, EzErrorCode.SYSTEM_ERROR);
             AuthSession authSession = authAdminService.authorizeWebPublicSession(sessionId);
 
-            Date expiredToken = DateUtil.getDateAfterMins(new Date(), 30);
+            SubOrganization subOrganization = subOrganizationDAO.getById(clusterId);
+            AssertUtil.notNull(subOrganization, EzErrorCode.SYSTEM_ERROR);
+
+            Date expiredToken = DateUtil.getDateAfterMins(new Date(), 10);
             String tokenId = sessionId + expiredToken.getTime();
 
             List<MemberBackOffice> members = bizMemberBackOfficeDAO.getBySubOrgId(authSession.getOrgId(), clusterId);
@@ -176,11 +190,11 @@ public class BizReportPageController {
                         .append("</td>");
                 stringBuilder
                         .append("<td>")
-                        .append("<a href=\"../../member/"+ member.getMemberId() +"/valid/"+ tokenId +"\">Lihat Detail</a><br>(Data Valid)")
+                        .append("<a href=\"../../member/"+ member.getMemberId() +"/valid/"+ tokenId +"\">Download Data</a><br>(Data Valid)")
                         .append("</td>");
                 stringBuilder
                         .append("<td>")
-                        .append("<a href=\"../../member/"+ member.getMemberId() +"/invalid/"+ tokenId +"\">Lihat Detail</a><br>(Data Invalid)")
+                        .append("<a href=\"../../member/"+ member.getMemberId() +"/invalid/"+ tokenId +"\">Download Data</a><br>(Data Invalid)")
                         .append("</td>");
                 stringBuilder.append("</tr>");
                 number++;
@@ -188,6 +202,7 @@ public class BizReportPageController {
 
             String assetPath = "biz/data/voterCluster.htm";
             String htmlContent = getHtmlContent(assetPath)
+                    .replace("INCLUDE_CLUSTER_NAME", subOrganization.getName())
                     .replace("INCLUDE_CONTENT", stringBuilder.toString());
 
             response.setStatus(HttpStatus.OK.value());
@@ -199,8 +214,42 @@ public class BizReportPageController {
     }
 
     @GetMapping(value = "/biz/data/voter/member/{memberId}/{status}/{sessionToken}")
-    private void getVoterByMembers() {
+    private void getVoterByMembers(
+            @PathVariable("memberId") String memberId,
+            @PathVariable("status") String status,
+            @PathVariable("sessionToken") String sessionToken,
+            HttpServletResponse response) {
+        response.setContentType("text/html;charset=UTF-8");
 
+        try {
+            AssertUtil.notBlank(memberId, EzErrorCode.SYSTEM_ERROR);
+            AssertUtil.notBlank(status, EzErrorCode.SYSTEM_ERROR);
+            AssertUtil.isTrue(status.equals("valid") || status.equals("invalid"), EzErrorCode.SYSTEM_ERROR);
+            AssertUtil.notBlank(sessionToken, EzErrorCode.SYSTEM_ERROR);
+            AssertUtil.isTrue(sessionToken.length() > 32, EzErrorCode.SYSTEM_ERROR);
+
+            String sessionId = StringUtil.leftSubstring(sessionToken, 32);
+            String expiryTime = sessionToken.substring(32);
+            Date expiryDate = new Date(Long.parseLong(expiryTime));
+
+            AssertUtil.isTrue(expiryDate.after(new Date()), EzErrorCode.SYSTEM_ERROR);
+            AuthSession authSession = authAdminService.authorizeWebPublicSession(sessionId);
+
+            MemberBackOffice member = bizMemberBackOfficeDAO.getMemberDetail(memberId);
+            AssertUtil.notNull(member, EzErrorCode.SYSTEM_ERROR);
+
+            if (status.equals("valid")) {
+                List<BizVoter> bizVoters = bizVoterDAO
+                        .getVoterByReferrer(authSession.getOrgId(), member.getMemberId());
+            } else {
+                List<BizVoterInvalid> bizVoterInvalids = bizVoterInvalidDAO
+                        .getByReferrerId(authSession.getOrgId(), member.getMemberId());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setStatus(HttpStatus.NOT_FOUND.value());
+        }
     }
 
     @GetMapping(value = "/biz/data/voter/pollstation/{districtId}/{villageId}/{pollStation}/{sessionId}")

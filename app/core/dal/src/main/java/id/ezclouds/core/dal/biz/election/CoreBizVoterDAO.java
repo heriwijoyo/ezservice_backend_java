@@ -68,6 +68,17 @@ public class CoreBizVoterDAO implements BizVoterDAO {
 
     @Override
     @EzDAOLogger
+    public List<BizVoter> getVoterByReferrer(String orgId, String referrerId) {
+        BizVoterConverter converter = new BizVoterConverter();
+        return bizElectionVoterRepository
+                .findByOrgIdAndReferrerId(orgId, referrerId)
+                .stream()
+                .map(converter::convertQuery)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @EzDAOLogger
     public List<BizGroupQueryCount> countGroupBySubOrgWithinDate(String orgId, String startDate, String endDate) {
         return bizElectionVoterRepository
                 .countGroupBySubOrgWithinDate(orgId, startDate, endDate);

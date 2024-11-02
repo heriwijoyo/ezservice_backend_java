@@ -21,6 +21,8 @@ public interface BizElectionVoterRepository extends JpaRepository<BizVoterDO, St
 
     BizVoterDO findByOrgIdAndIdCardNumber(String orgId, String idCardNumber);
 
+    List<BizVoterDO> findByOrgIdAndReferrerId(String orgId, String referrerId);
+
     List<BizVoterDO> findByOrgIdAndDistrictIdAndVillageIdAndPollStationId(String orgId, String districtId, String villageId, String pollStationId);
 
     @Query("SELECT new id.ezclouds.common.model.query.BizGroupQueryCount(bv.subOrgId, COUNT(bv.subOrgId)) "

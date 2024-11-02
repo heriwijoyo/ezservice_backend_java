@@ -115,4 +115,14 @@ public class StringUtil {
         }
         return origin;
     }
+
+    public static String leftSubstring(String origin, int length) {
+        if (isBlank(origin)) {
+            return null;
+        }
+        if (origin.length() < length) {
+            return null;
+        }
+        return origin.substring(0, length);
+    }
 }

@@ -12,6 +12,9 @@ import id.ezclouds.core.dal.biz.election.repo.BizVoterInvalidRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
  * @version $Id: CoreBizVoterInvalidDAO.java, v 0.1 2024‐10‐06 10:25 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
@@ -30,5 +33,16 @@ public class CoreBizVoterInvalidDAO implements BizVoterInvalidDAO {
                         new BizVoterInvalidConverter()
                                 .convertStore(bizVoter)
                 );
+    }
+
+    @Override
+    @EzDAOLogger
+    public List<BizVoterInvalid> getByReferrerId(String orgId, String referrerId) {
+        BizVoterInvalidConverter converter = new BizVoterInvalidConverter();
+        return bizVoterInvalidRepository
+                .findByOrgIdAndReferrerId(orgId, referrerId)
+                .stream()
+                .map(converter::convertQuery)
+                .collect(Collectors.toList());
     }
 }

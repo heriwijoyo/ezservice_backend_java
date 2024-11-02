@@ -24,6 +24,8 @@ public interface BizVoterDAO {
 
     List<BizVoter> getVoterDataPollStation(String districtId, String villageId, String pollStation);
 
+    List<BizVoter> getVoterByReferrer(String orgId, String referrerId);
+
     List<BizGroupQueryCount> countGroupBySubOrgWithinDate(String orgId, String startDate, String endDate);
 
     List<BizGroupQueryCount> countGroupByCoreAreaWithinDate(String orgId, CoreAreaLevel coreAreaLevel, String startDate, String endDate);
