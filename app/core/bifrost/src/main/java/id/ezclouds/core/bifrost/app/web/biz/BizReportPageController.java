@@ -236,10 +236,11 @@ public class BizReportPageController {
             AssertUtil.notNull(member, EzErrorCode.SYSTEM_ERROR);
             SubOrganization subOrganization = subOrganizationDAO.getById(member.getSubOrgId());
 
-            String fileName = (subOrganization.getName() +"_"+ member.getName())
-                    .toUpperCase()
-                    .replace(" ", "_");
-            Workbook workbook = new Workbook(response.getOutputStream(), fileName, "1.0");
+            Workbook workbook = new Workbook(response.getOutputStream(), "EzAppService", "1.0");
+            workbook.properties()
+                    .setTitle("Report Auto Generated")
+                    .setCategory("Data Export")
+                    .setDescription("EzAppService Auto Report");
 
             // start valid sheet
             Worksheet validWs = workbook.newWorksheet("Data Valid");
@@ -298,9 +299,12 @@ public class BizReportPageController {
                 invRow++;
             }
             inValidWs.finish();
-
             workbook.finish();
-            response.setContentType("application/vnd.ms-excel");
+
+            response.setContentType("application/vnd.openxmlformats-officedocument");
+            String fileName = (subOrganization.getName() +"_"+ member.getName())
+                    .toUpperCase()
+                    .replace(" ", "_");
             response.setHeader(
                     HttpHeaders.CONTENT_DISPOSITION,
                     ContentDisposition.attachment()
@@ -308,6 +312,7 @@ public class BizReportPageController {
                             .build()
                             .toString()
             );
+            response.flushBuffer();
 
         } catch (Exception e) {
             e.printStackTrace();
