@@ -26,8 +26,12 @@ import id.ezclouds.common.util.facade.BeanFacadeUtil;
 import id.ezclouds.core.bifrost.core.config.WebAppConfig;
 import id.ezclouds.core.bifrost.core.constant.WebConstant;
 import id.ezclouds.core.bifrost.core.web.model.WebPageAuthType;
+import org.dhatim.fastexcel.Workbook;
+import org.dhatim.fastexcel.Worksheet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StreamUtils;
@@ -190,11 +194,7 @@ public class BizReportPageController {
                         .append("</td>");
                 stringBuilder
                         .append("<td>")
-                        .append("<a href=\"../../member/"+ member.getMemberId() +"/valid/"+ tokenId +"\">Download Data</a><br>(Data Valid)")
-                        .append("</td>");
-                stringBuilder
-                        .append("<td>")
-                        .append("<a href=\"../../member/"+ member.getMemberId() +"/invalid/"+ tokenId +"\">Download Data</a><br>(Data Invalid)")
+                        .append("<a href=\"../../member/"+ member.getMemberId() +"/"+ tokenId +"\">Download Data (XLS)</a>")
                         .append("</td>");
                 stringBuilder.append("</tr>");
                 number++;
@@ -213,18 +213,15 @@ public class BizReportPageController {
         }
     }
 
-    @GetMapping(value = "/biz/data/voter/member/{memberId}/{status}/{sessionToken}")
+    @GetMapping(value = "/biz/data/voter/member/{memberId}/{sessionToken}")
     private void getVoterByMembers(
             @PathVariable("memberId") String memberId,
-            @PathVariable("status") String status,
             @PathVariable("sessionToken") String sessionToken,
             HttpServletResponse response) {
         response.setContentType("text/html;charset=UTF-8");
 
         try {
             AssertUtil.notBlank(memberId, EzErrorCode.SYSTEM_ERROR);
-            AssertUtil.notBlank(status, EzErrorCode.SYSTEM_ERROR);
-            AssertUtil.isTrue(status.equals("valid") || status.equals("invalid"), EzErrorCode.SYSTEM_ERROR);
             AssertUtil.notBlank(sessionToken, EzErrorCode.SYSTEM_ERROR);
             AssertUtil.isTrue(sessionToken.length() > 32, EzErrorCode.SYSTEM_ERROR);
 
@@ -237,14 +234,80 @@ public class BizReportPageController {
 
             MemberBackOffice member = bizMemberBackOfficeDAO.getMemberDetail(memberId);
             AssertUtil.notNull(member, EzErrorCode.SYSTEM_ERROR);
+            SubOrganization subOrganization = subOrganizationDAO.getById(member.getSubOrgId());
 
-            if (status.equals("valid")) {
-                List<BizVoter> bizVoters = bizVoterDAO
-                        .getVoterByReferrer(authSession.getOrgId(), member.getMemberId());
-            } else {
-                List<BizVoterInvalid> bizVoterInvalids = bizVoterInvalidDAO
-                        .getByReferrerId(authSession.getOrgId(), member.getMemberId());
+            String fileName = (subOrganization.getName() +"_"+ member.getName())
+                    .toUpperCase()
+                    .replace(" ", "_");
+            Workbook workbook = new Workbook(response.getOutputStream(), fileName, "1.0");
+
+            // start valid sheet
+            Worksheet validWs = workbook.newWorksheet("Data Valid");
+            validWs.value(0, 0, "Nama");
+            validWs.value(0, 1, "NIK");
+            validWs.value(0, 2, "No HP");
+            validWs.value(0, 3, "Kecamatan");
+            validWs.value(0, 4, "Pekon");
+            validWs.value(0, 5, "No TPS");
+            validWs.value(0, 6, "Pendidikan");
+            validWs.value(0, 7, "Pekerjaan");
+            validWs.value(0, 8, "Etnis");
+
+            List<BizVoter> bizVoters = bizVoterDAO
+                    .getVoterByReferrer(authSession.getOrgId(), member.getMemberId());
+            int row = 1;
+            for (BizVoter bizVoter : bizVoters) {
+                validWs.value(row, 0, bizVoter.getName());
+                validWs.value(row, 1, bizVoter.getIdCardNumber());
+                validWs.value(row, 2, bizVoter.getPhone());
+                validWs.value(row, 3, bizVoter.getDistrictName());
+                validWs.value(row, 4, bizVoter.getVillageName());
+                validWs.value(row, 5, bizVoter.getPollStationId());
+                validWs.value(row, 6, bizVoter.getEducation());
+                validWs.value(row, 7, bizVoter.getOccupation());
+                validWs.value(row, 8, bizVoter.getEthnic());
+                row++;
             }
+            validWs.finish();
+
+            // start invalid sheet
+            Worksheet inValidWs = workbook.newWorksheet("Data Invalid");
+            inValidWs.value(0, 0, "Nama");
+            inValidWs.value(0, 1, "NIK");
+            inValidWs.value(0, 2, "No HP");
+            inValidWs.value(0, 3, "Kecamatan");
+            inValidWs.value(0, 4, "Pekon");
+            inValidWs.value(0, 5, "No TPS");
+            inValidWs.value(0, 6, "Pendidikan");
+            inValidWs.value(0, 7, "Pekerjaan");
+            inValidWs.value(0, 8, "Etnis");
+
+            List<BizVoterInvalid> bizVoterInvalids = bizVoterInvalidDAO
+                    .getByReferrerId(authSession.getOrgId(), member.getMemberId());
+            int invRow = 1;
+            for (BizVoterInvalid invalidVoter : bizVoterInvalids) {
+                inValidWs.value(invRow, 0, invalidVoter.getName());
+                inValidWs.value(invRow, 1, invalidVoter.getIdCardNumber());
+                inValidWs.value(invRow, 2, invalidVoter.getPhone());
+                inValidWs.value(invRow, 3, invalidVoter.getDistrictName());
+                inValidWs.value(invRow, 4, invalidVoter.getVillageName());
+                inValidWs.value(invRow, 5, invalidVoter.getPollStationId());
+                inValidWs.value(invRow, 6, invalidVoter.getEducation());
+                inValidWs.value(invRow, 7, invalidVoter.getOccupation());
+                inValidWs.value(invRow, 8, invalidVoter.getEthnic());
+                invRow++;
+            }
+            inValidWs.finish();
+
+            workbook.finish();
+            response.setContentType("application/octet-stream");
+            response.setHeader(
+                    HttpHeaders.CONTENT_DISPOSITION,
+                    ContentDisposition.attachment()
+                            .filename(fileName +".xlsx", StandardCharsets.UTF_8)
+                            .build()
+                            .toString()
+            );
 
         } catch (Exception e) {
             e.printStackTrace();
