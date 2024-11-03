@@ -5,6 +5,7 @@
 package id.ezclouds.core.shared.service;
 
 import id.ezclouds.common.facade.file.CoreFileService;
+import id.ezclouds.common.model.file.ClusterFileResolver;
 import id.ezclouds.common.model.file.PrivateFileResolver;
 import id.ezclouds.common.model.file.PublicFileResolver;
 import id.ezclouds.common.util.exception.EzErrorCode;
@@ -47,6 +48,11 @@ public class EzCoreFileService implements CoreFileService {
     @Override
     public PublicFileResolver resolvePublicFileInfo(String orgId) {
         return new PublicFileResolverImpl(uploadRootDir, orgId);
+    }
+
+    @Override
+    public ClusterFileResolver resolveClusterFileInfo(String orgId, String clusterId) {
+        return new ClusterFileResolverImpl(uploadRootDir, orgId, clusterId);
     }
 
     @Override

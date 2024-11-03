@@ -30,7 +30,5 @@ public interface PublicFileResolver {
 
     Path getReportVoicePath(String fileName);
 
-    Path getReportRecapPath(String fileName);
-
     Path getOtherPath(String fileName);
 }

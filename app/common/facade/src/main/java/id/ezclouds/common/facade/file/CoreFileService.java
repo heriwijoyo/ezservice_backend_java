@@ -4,6 +4,7 @@
  */
 package id.ezclouds.common.facade.file;
 
+import id.ezclouds.common.model.file.ClusterFileResolver;
 import id.ezclouds.common.model.file.PrivateFileResolver;
 import id.ezclouds.common.model.file.PublicFileResolver;
 import id.ezclouds.common.util.exception.EzErrorException;
@@ -20,6 +21,8 @@ public interface CoreFileService {
     PrivateFileResolver resolveMemberFileInfo(String orgId, String memberId) throws EzErrorException;
 
     PublicFileResolver resolvePublicFileInfo(String orgId);
+
+    ClusterFileResolver resolveClusterFileInfo(String orgId, String clusterId);
 
     void storeFile(InputStream inputStream, Path targetPath) throws EzErrorException;
 

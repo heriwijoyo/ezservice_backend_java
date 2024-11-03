@@ -11,12 +11,14 @@ import id.ezclouds.common.facade.dal.biz.election.BizVoterInvalidDAO;
 import id.ezclouds.common.facade.dal.biz.report.BizReportPageDAO;
 import id.ezclouds.common.facade.dal.member.BizMemberBackOfficeDAO;
 import id.ezclouds.common.facade.dal.organization.SubOrganizationDAO;
+import id.ezclouds.common.facade.file.CoreFileService;
 import id.ezclouds.common.facade.integration.BizObjectMapperService;
 import id.ezclouds.common.model.auth.AuthSession;
 import id.ezclouds.common.model.biz.election.BizVoter;
 import id.ezclouds.common.model.biz.election.BizVoterInvalid;
 import id.ezclouds.common.model.biz.report.BizReportPage;
 import id.ezclouds.common.model.core.organization.SubOrganization;
+import id.ezclouds.common.model.file.ClusterFileResolver;
 import id.ezclouds.common.model.member.MemberBackOffice;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.StringUtil;
@@ -39,9 +41,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
@@ -77,6 +82,9 @@ public class BizReportPageController {
 
     @Autowired
     private BizMemberBackOfficeDAO bizMemberBackOfficeDAO;
+
+    @Autowired
+    private CoreFileService coreFileService;
 
     @GetMapping(value = "/biz/report/{section}/{code}/{sessionId}")
     private void getBizReportPage(
@@ -236,7 +244,12 @@ public class BizReportPageController {
             AssertUtil.notNull(member, EzErrorCode.SYSTEM_ERROR);
             SubOrganization subOrganization = subOrganizationDAO.getById(member.getSubOrgId());
 
-            Workbook workbook = new Workbook(response.getOutputStream(), "EzAppService", "1.0");
+            ClusterFileResolver fileResolver = coreFileService
+                    .resolveClusterFileInfo(authSession.getOrgId(), member.getSubOrgId());
+            Path reportPath = fileResolver.getMemberReportVoterXlsxPath(member.getMemberId());
+
+            OutputStream wbOutputStream = Files.newOutputStream(reportPath);
+            Workbook workbook = new Workbook(wbOutputStream, "EzAppService", "1.0");
             workbook.properties()
                     .setTitle("Report Auto Generated")
                     .setCategory("Data Export")
@@ -300,6 +313,8 @@ public class BizReportPageController {
             }
             inValidWs.finish();
             workbook.finish();
+            workbook.close();
+            wbOutputStream.close();
 
             response.setContentType("application/vnd.openxmlformats-officedocument");
             String fileName = (subOrganization.getName() +"_"+ member.getName())
@@ -312,7 +327,7 @@ public class BizReportPageController {
                             .build()
                             .toString()
             );
-            response.flushBuffer();
+            Files.copy(reportPath, response.getOutputStream());
 
         } catch (Exception e) {
             e.printStackTrace();

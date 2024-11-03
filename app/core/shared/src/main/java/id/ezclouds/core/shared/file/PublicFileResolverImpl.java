@@ -26,7 +26,6 @@ public class PublicFileResolverImpl implements PublicFileResolver {
     private static final String DIR_REPORT_IMAGE        = PublicFileInitializer.DIR_REPORT_IMAGE;
     private static final String DIR_REPORT_VIDEO        = PublicFileInitializer.DIR_REPORT_VIDEO;
     private static final String DIR_REPORT_VOICE        = PublicFileInitializer.DIR_REPORT_VOICE;
-    private static final String DIR_REPORT_RECAP        = PublicFileInitializer.DIR_REPORT_RECAP;
 
     private final String orgId;
     private final String uploadRootDir;
@@ -83,11 +82,6 @@ public class PublicFileResolverImpl implements PublicFileResolver {
     @Override
     public Path getReportVoicePath(String fileName) {
         return Paths.get(getOrgFiledDir(), DIR_REPORT, DIR_REPORT_VOICE, fileName).toAbsolutePath().normalize();
-    }
-
-    @Override
-    public Path getReportRecapPath(String fileName) {
-        return Paths.get(getOrgFiledDir(), DIR_REPORT, DIR_REPORT_RECAP, fileName).toAbsolutePath().normalize();
     }
 
     @Override
