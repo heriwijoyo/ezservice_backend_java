@@ -53,7 +53,7 @@ public class BizProcessReportDailyClusterPerformance extends BizAsyncProcessor {
         int nDays = Integer.parseInt(param.split(",")[1]);
         String reportMessage = fetchLastNDaysReport(orgId, nDays);
 
-        List<String> reportPhoneReceiver = Arrays.asList("6281281150355"/*, "6285310197009", "6281328602519"*/);
+        List<String> reportPhoneReceiver = Arrays.asList("6281281150355", "6285310197009", "6281328602519");
         for (String phone : reportPhoneReceiver) {
             WhatsappSendRequest sendRequest = new WhatsappSendRequest();
             sendRequest.setOrgId(orgId);
