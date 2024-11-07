@@ -10,6 +10,7 @@ import id.ezclouds.common.model.result.BaseResult;
 import id.ezclouds.common.util.facade.BeanFacadeUtil;
 import id.ezclouds.core.process.model.CoreSchedulerScene;
 import id.ezclouds.core.process.report.BizProcessGenerateReportAccumulateTimeSeries;
+import id.ezclouds.core.process.report.BizProcessReportDailyClusterPerformance;
 import id.ezclouds.core.process.report.BizProcessReportDailyReset;
 import id.ezclouds.core.process.template.CoreSchedulerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class CoreSchedulerProcessor implements SchedulerProcessor {
 
     @Autowired
     private BizProcessGenerateReportAccumulateTimeSeries bizProcessGenerateReportAccumulateTimeSeries;
+
+    @Autowired
+    private BizProcessReportDailyClusterPerformance bizProcessReportDailyClusterPerformance;
 
     @Override
     public BaseResult execute(String scene, String param) {
@@ -56,6 +60,9 @@ public class CoreSchedulerProcessor implements SchedulerProcessor {
                         break;
                     case REPORT_TIME_SERIES_CLUSTER:
                         bizProcessGenerateReportAccumulateTimeSeries.process(param);
+                        break;
+                    case REPORT_DAILY_CLUSTER_PERFORMANCE:
+                        bizProcessReportDailyClusterPerformance.process(param);
                         break;
                 }
             }
