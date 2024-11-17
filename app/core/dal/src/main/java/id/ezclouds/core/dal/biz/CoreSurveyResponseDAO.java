@@ -38,6 +38,18 @@ public class CoreSurveyResponseDAO implements BizSurveyResponseDAO {
     }
 
     @Override
+    @EzDAOLogger
+    public BizSurveyResponse getById(String responseId) {
+        return new BizSurveyResponseConverter()
+                .convertQuery(
+                        ezSurveyResponseRepository
+                                .findById(responseId)
+                                .orElse(null)
+                );
+    }
+
+    @Override
+    @EzDAOLogger
     public void updateResponse(String responseId, String processId, String processTime, String processMessage) {
         EzSurveyResponseDO response = ezSurveyResponseRepository
                 .findById(responseId)

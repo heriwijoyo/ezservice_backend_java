@@ -35,4 +35,15 @@ public class CoreSurveyResponseParserConfigDAO implements BizSurveyResponseParse
                 .map(converter::convertQuery)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    @EzDAOLogger
+    public BizSurveyResponseParserConfig getById(String parserId) {
+        return new AppSurveyResponseParserConfigConverter()
+                .convertQuery(
+                        ezSurveyResponseParserConfigRepository
+                                .findById(parserId)
+                                .orElse(null)
+                );
+    }
 }

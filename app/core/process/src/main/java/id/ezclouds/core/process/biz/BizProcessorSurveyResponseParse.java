@@ -7,7 +7,7 @@ package id.ezclouds.core.process.biz;
 import id.ezclouds.common.model.biz.survey.AppCommonDataSurvey;
 import id.ezclouds.common.model.biz.survey.BizSurveyResponse;
 import id.ezclouds.common.model.biz.survey.BizSurveyResponseParserConfig;
-import id.ezclouds.common.model.request.process.SurveyResponseParseProcessRequest;
+import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
 import id.ezclouds.core.process.biz.inner.BizInnerProcessorSurveyResponseParse;
@@ -36,12 +36,15 @@ public class BizProcessorSurveyResponseParse extends BizAsyncProcessor {
 
     @Override
     protected boolean onProcess(Object request, List<String> logData) {
-        SurveyResponseParseProcessRequest processRequest = (SurveyResponseParseProcessRequest) request;
-        logData.add("ORG_ID="+ processRequest.getOrgId());
-        logData.add("SURVEY_ID="+ processRequest.getSurveyId());
+        String param = (String) request;
+        String orgId = param.split(",")[0];
+        String surveyId = param.split(",")[1];
+
+        logData.add("ORG_ID="+ orgId);
+        logData.add("SURVEY_ID="+ surveyId);
 
         List<BizSurveyResponse> responses = bizInnerProcessorSurveyResponseParse
-                .getSurveyResponses(processRequest.getOrgId(), processRequest.getSurveyId())
+                .getSurveyResponses(orgId, surveyId)
                 .stream()
                 .filter(item -> StringUtil.isBlank(item.getProcessId()))
                 .collect(Collectors.toList());
@@ -52,7 +55,7 @@ public class BizProcessorSurveyResponseParse extends BizAsyncProcessor {
         }
 
         Map<String, BizSurveyResponseParserConfig> parserConfigMap = bizInnerProcessorSurveyResponseParse
-                .getParserConfigMap(processRequest.getOrgId(), processRequest.getSurveyId());
+                .getParserConfigMap(orgId, surveyId);
 
         for (BizSurveyResponse response : responses) {
             String parserId = HashUtil.createHash(response.getOrgId(), response.getSurveyId(), response.getQuestionVersion());
@@ -79,7 +82,7 @@ public class BizProcessorSurveyResponseParse extends BizAsyncProcessor {
             try {
                 String processId = dataSurvey == null ? null : dataSurvey.dataId;
                 bizInnerProcessorSurveyResponseParse
-                        .updateResponse(response.getId(), processId, response.getProcessTime(), processMessage);
+                        .updateResponse(response.getId(), processId, DateUtil.getCurrentFormattedDateMillis(), processMessage);
             } catch (Exception ignored) {}
         }
 

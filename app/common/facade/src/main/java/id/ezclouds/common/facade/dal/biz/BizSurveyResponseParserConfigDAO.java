@@ -15,4 +15,6 @@ import java.util.List;
 public interface BizSurveyResponseParserConfigDAO {
 
     List<BizSurveyResponseParserConfig> getParserConfig(String orgId, String surveyId);
+
+    BizSurveyResponseParserConfig getById(String parserId);
 }

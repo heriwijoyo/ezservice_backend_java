@@ -9,6 +9,9 @@ import id.ezclouds.biz.election.service.request.BizSurveySubmitRequest;
 import id.ezclouds.biz.election.enums.BizUniqueScene;
 import id.ezclouds.biz.election.model.survey.BizSurveyForm;
 import id.ezclouds.biz.election.service.app.AppSurveyDataService;
+import id.ezclouds.common.facade.broker.CoreEventPublisherService;
+import id.ezclouds.common.model.broker.event.EzCommonEvent;
+import id.ezclouds.common.model.broker.topic.EzCoreTopic;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.facade.template.BizServiceTemplate;
 import id.ezclouds.common.util.assertion.AssertUtil;
@@ -32,6 +35,9 @@ public class BizAppSurveyService extends BizBaseService {
 
     @Autowired
     private AppSurveyDataService appSurveyDataService;
+
+    @Autowired
+    private CoreEventPublisherService coreEventPublisherService;
 
     public BizResult getSurveyForm(String surveyId) {
         final BizResult bizResult = new BizResult();
@@ -94,9 +100,13 @@ public class BizAppSurveyService extends BizBaseService {
                     surveyRequest.setResponseDataEncoded(request.getResponseDataEncoded());
 
                     try {
-                        String submitId = appSurveyDataService.submitSurvey(surveyRequest);
+                        String responseId = appSurveyDataService.submitSurvey(surveyRequest);
                         bizResult.setSuccess(true);
-                        bizResult.setObject(submitId);
+                        bizResult.setObject(responseId);
+
+                        coreEventPublisherService.publish(
+                                new EzCommonEvent(EzCoreTopic.BIZ_SURVEY_RESPONSE_CREATE, getOrgId(), responseId)
+                        );
                     } catch (Exception e) {
                         coreUniqueService.revertUnique(
                                 getOrgId(), BizUniqueScene.BIZ_SURVEY_RESPONSE.getCode(), request.getRequestId());

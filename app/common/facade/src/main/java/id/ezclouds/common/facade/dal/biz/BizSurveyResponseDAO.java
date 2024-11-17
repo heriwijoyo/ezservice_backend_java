@@ -16,5 +16,7 @@ public interface BizSurveyResponseDAO {
 
     List<BizSurveyResponse> getResponse(String orgId, String surveyId);
 
+    BizSurveyResponse getById(String responseId);
+
     void updateResponse(String responseId, String processId, String processTime, String processMessage);
 }
