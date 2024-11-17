@@ -5,11 +5,15 @@
 package id.ezclouds.core.dal.biz;
 
 import id.ezclouds.common.facade.dal.biz.AppCommonDataSurveyDAO;
+import id.ezclouds.common.model.annotation.EzDAOLogger;
 import id.ezclouds.common.model.biz.survey.AppCommonDataSurvey;
 import id.ezclouds.core.dal.biz.converter.AppCommonDataSurveyConverter;
 import id.ezclouds.core.dal.biz.repo.EzCommonDataSurveyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -28,5 +32,15 @@ public class CoreCommonDataSurveyDAO implements AppCommonDataSurveyDAO {
                         AppCommonDataSurveyConverter
                                 .convert(dataSurvey)
                 );
+    }
+
+    @Override
+    @EzDAOLogger
+    public List<AppCommonDataSurvey> getData(String orgId, String surveyId) {
+        return ezCommonDataSurveyRepository
+                .findByOrgIdAndSurveyId(orgId, surveyId)
+                .stream()
+                .map(AppCommonDataSurveyConverter::convert)
+                .collect(Collectors.toList());
     }
 }

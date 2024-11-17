@@ -36,4 +36,24 @@ public class AppCommonDataSurveyConverter {
 
         return dataSurveyDO;
     }
+
+    public static AppCommonDataSurvey convert(EzCommonDataSurveyDO dataSurveyDO) {
+        AppCommonDataSurvey dataSurvey = new AppCommonDataSurvey();
+
+        Map<String, Field> targetFields = new HashMap<>();
+        for (Field targetField : dataSurvey.getClass().getDeclaredFields()) {
+            targetFields.put(targetField.getName(), targetField);
+        }
+
+        for (Field sourceField : dataSurveyDO.getClass().getDeclaredFields()) {
+            if (targetFields.get(sourceField.getName()) != null) {
+                targetFields.get(sourceField.getName()).setAccessible(true);
+                try {
+                    targetFields.get(sourceField.getName()).set(dataSurveyDO, sourceField.get(dataSurvey));
+                } catch (Exception ignored) {}
+            }
+        }
+
+        return dataSurvey;
+    }
 }

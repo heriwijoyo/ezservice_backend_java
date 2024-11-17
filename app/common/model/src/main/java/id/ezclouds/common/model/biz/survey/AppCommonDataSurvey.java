@@ -17,6 +17,7 @@ public class AppCommonDataSurvey {
     public String questionVersion;
     public String submitterId;
     public String submitterName;
+    public String createdTime;
 
     public String r001;
     public String r002;

@@ -131,6 +131,7 @@ public class BizSurveyResponseProcessor {
         commonDataSurvey.responseId = response.getId();
         commonDataSurvey.questionVersion = response.getQuestionVersion();
         commonDataSurvey.submitterId = response.getSubmitterMemberId();
+        commonDataSurvey.createdTime = response.getCreatedTime();
 
         Map<String, String> parserMap = bizObjectMapperService
                 .jsonToMap(parserConfig.getParserMapping());
