@@ -69,8 +69,10 @@ public class CoreProcessConfiguration {
         processorMap.put(ProcessName.INIT_MASTER_DATA_AREA, bizProcessInitMasterDataArea);
         processorMap.put(ProcessName.INIT_REPORT_ACCUMULATE_AREA, bizProcessInitReportAccumulateArea);
         processorMap.put(ProcessName.INIT_REPORT_OVERALL, bizProcessInitReportOverall);
-
         processorMap.put(ProcessName.INIT_MIGRATE_MEMBER, coreProcessMigrateMember);
+
+        processorMap.put(ProcessName.SURVEY_RESPONSE_PROCESS, bizProcessorSurveyResponseParse);
+
         processorMap.put(ProcessName.GENERATE_PUBLIC_SESSION, bizProcessGeneratePublicSession);
         processorMap.put(ProcessName.GENERATE_REPORT_ACCUMULATE_TIME_SERIES, bizProcessGenerateReportAccumulateTimeSeries);
         processorMap.put(ProcessName.TMP_RECOVER_ACCUMULATE_AREA, tmpProcessRecoverAccumulateArea);
