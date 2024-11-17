@@ -67,6 +67,7 @@ public class EzCoreMemberDAO implements CoreMemberDAO {
     }
 
     @Override
+    @EzDAOLogger
     public List<CoreMember> getMigrationMembers(String orgId, SortBy sortBy, int limit) {
         CoreMemberConverter memberConverter = new CoreMemberConverter();
         Pageable pageable = PageRequest.of(0, limit, convertSortBy(sortBy));
@@ -94,11 +95,23 @@ public class EzCoreMemberDAO implements CoreMemberDAO {
     }
 
     @Override
+    @EzDAOLogger
     public CoreMember getAndLock(String memberId) {
         return new CoreMemberConverter()
                 .convertQuery(
                         coreMemberRepository
                                 .findAndLockById(memberId)
+                );
+    }
+
+    @Override
+    @EzDAOLogger
+    public CoreMember getById(String memberId) {
+        return new CoreMemberConverter()
+                .convertQuery(
+                        coreMemberRepository
+                                .findById(memberId)
+                                .orElse(null)
                 );
     }
 

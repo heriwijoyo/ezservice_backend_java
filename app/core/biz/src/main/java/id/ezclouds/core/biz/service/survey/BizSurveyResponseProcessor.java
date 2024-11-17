@@ -7,12 +7,14 @@ package id.ezclouds.core.biz.service.survey;
 import id.ezclouds.common.facade.dal.biz.AppCommonDataSurveyDAO;
 import id.ezclouds.common.facade.dal.biz.BizSurveyResponseDAO;
 import id.ezclouds.common.facade.dal.biz.BizSurveyResponseParserConfigDAO;
+import id.ezclouds.common.facade.dal.member.CoreMemberDAO;
 import id.ezclouds.common.facade.integration.BizObjectMapperService;
 import id.ezclouds.common.model.biz.survey.AppCommonDataSurvey;
 import id.ezclouds.common.model.biz.survey.BizSurveyResponse;
 import id.ezclouds.common.model.biz.survey.BizSurveyResponseParserConfig;
 import id.ezclouds.common.model.broker.event.EzCommonEvent;
 import id.ezclouds.common.model.broker.topic.EzCoreTopic;
+import id.ezclouds.common.model.core.member.CoreMember;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
@@ -42,6 +44,9 @@ public class BizSurveyResponseProcessor {
 
     @Autowired
     private BizSurveyResponseDAO bizSurveyResponseDAO;
+
+    @Autowired
+    private CoreMemberDAO coreMemberDAO;
 
     @Autowired
     private AppCommonDataSurveyDAO appCommonDataSurveyDAO;
@@ -79,6 +84,8 @@ public class BizSurveyResponseProcessor {
             String processMessage = "SUCCESS";
             try {
                 dataSurvey = parseSurveyResponse(response, parserConfig);
+                CoreMember coreMember = coreMemberDAO.getById(dataSurvey.submitterId);
+                dataSurvey.submitterName = coreMember.getName();
             } catch (Exception e) {
                 processMessage = e.getMessage();
             }

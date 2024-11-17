@@ -30,6 +30,8 @@ public class EzCommonDataSurveyDO {
     public String questionVersion;
     @Column(name = "submitter_id")
     public String submitterId;
+    @Column(name = "submitter_name")
+    public String submitterName;
 
     @Column(name = "r_001")
     public String r001;

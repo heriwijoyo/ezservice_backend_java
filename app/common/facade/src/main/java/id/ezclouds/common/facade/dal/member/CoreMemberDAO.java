@@ -21,5 +21,7 @@ public interface CoreMemberDAO {
 
     CoreMember getAndLock(String memberId);
 
+    CoreMember getById(String memberId);
+
     void store(CoreMember coreMember);
 }
