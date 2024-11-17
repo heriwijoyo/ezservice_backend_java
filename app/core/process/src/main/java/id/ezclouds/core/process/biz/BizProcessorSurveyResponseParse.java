@@ -4,9 +4,11 @@
  */
 package id.ezclouds.core.process.biz;
 
+import id.ezclouds.common.facade.dal.member.CoreMemberDAO;
 import id.ezclouds.common.model.biz.survey.AppCommonDataSurvey;
 import id.ezclouds.common.model.biz.survey.BizSurveyResponse;
 import id.ezclouds.common.model.biz.survey.BizSurveyResponseParserConfig;
+import id.ezclouds.common.model.core.member.CoreMember;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.HashUtil;
 import id.ezclouds.common.util.StringUtil;
@@ -28,6 +30,9 @@ public class BizProcessorSurveyResponseParse extends BizAsyncProcessor {
 
     @Autowired
     private BizInnerProcessorSurveyResponseParse bizInnerProcessorSurveyResponseParse;
+
+    @Autowired
+    private CoreMemberDAO coreMemberDAO;
 
     @Override
     protected int maxProcessTime() {
@@ -72,6 +77,8 @@ public class BizProcessorSurveyResponseParse extends BizAsyncProcessor {
 
             if (dataSurvey != null) {
                 try {
+                    CoreMember coreMember = coreMemberDAO.getById(dataSurvey.submitterId);
+                    dataSurvey.submitterName = StringUtil.toTitleCase(coreMember.getName());
                     bizInnerProcessorSurveyResponseParse
                             .storeCommonData(dataSurvey);
                 } catch (Exception e2) {
