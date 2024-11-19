@@ -5,6 +5,7 @@
 package id.ezclouds.core.bifrost.app.web.biz;
 
 import id.ezclouds.common.facade.auth.AuthAdminService;
+import id.ezclouds.common.facade.dal.biz.AppCommonDataSurveyDAO;
 import id.ezclouds.common.facade.dal.biz.BizPageLayoutDAO;
 import id.ezclouds.common.facade.dal.biz.BizSurveyTableDAO;
 import id.ezclouds.common.facade.dal.biz.election.BizVoterDAO;
@@ -18,6 +19,7 @@ import id.ezclouds.common.model.auth.AuthSession;
 import id.ezclouds.common.model.biz.election.BizVoter;
 import id.ezclouds.common.model.biz.election.BizVoterInvalid;
 import id.ezclouds.common.model.biz.report.BizReportPage;
+import id.ezclouds.common.model.biz.survey.AppCommonDataSurvey;
 import id.ezclouds.common.model.biz.survey.BizSurveyTable;
 import id.ezclouds.common.model.core.organization.SubOrganization;
 import id.ezclouds.common.model.file.ClusterFileResolver;
@@ -45,12 +47,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -88,6 +90,9 @@ public class BizReportPageController {
 
     @Autowired
     private BizSurveyTableDAO bizSurveyTableDAO;
+
+    @Autowired
+    private AppCommonDataSurveyDAO appCommonDataSurveyDAO;
 
     @GetMapping(value = "/biz/report/{section}/{code}/{sessionId}")
     private void getBizReportPage(
@@ -376,18 +381,26 @@ public class BizReportPageController {
 
             String sessionId = StringUtil.leftSubstring(secretToken, 32);
             String tableDataId = secretToken.substring(32);
-            authAdminService.authorizeWebPublicSession(sessionId);
+            AuthSession session = authAdminService.authorizeWebPublicSession(sessionId);
 
             BizSurveyTable table = bizSurveyTableDAO.getByTableId(tableDataId);
             AssertUtil.notNull(table, EzErrorCode.ILLEGAL_PARAM);
 
+            List<String> dataKeys = Arrays.asList(table.getDataMap().split(","));
+            List<List<String>> parsedData = new ArrayList<>();
 
+            List<AppCommonDataSurvey> dataSurveys = appCommonDataSurveyDAO
+                    .getData(session.getOrgId(), table.getSurveyId());
+            for (AppCommonDataSurvey dataSurvey : dataSurveys) {
+                List<String> rowData = getRowData(dataSurvey, dataKeys);
+                parsedData.add(rowData);
+            }
 
             String layout = bizPageLayoutDAO.getContent("BIZ_DATA_SURVEY");
             String htmlContent = layout
                     .replace("_TABLE_TITLE_", table.getTitle())
                     .replace("_TABLE_COLUMN_", table.getColumn())
-                    .replace("_TABLE_ROW_DATA_", "[]");
+                    .replace("_TABLE_ROW_DATA_", bizObjectMapperService.toJson(parsedData));
 
             response.setStatus(HttpStatus.OK.value());
             response.getWriter().write(htmlContent);
@@ -395,6 +408,17 @@ public class BizReportPageController {
         } catch (Exception e) {
             response.setStatus(HttpStatus.NOT_FOUND.value());
         }
+    }
+
+    private List<String> getRowData(AppCommonDataSurvey dataSurvey, List<String> dataKeys) {
+        List<String> rowData = new ArrayList<>();
+        String jsonData = bizObjectMapperService.toJson(dataSurvey);
+        Map<String, String> dataMap = bizObjectMapperService.jsonToMap(jsonData);
+
+        for (String dataKey : dataKeys) {
+            rowData.add(dataMap.get(dataKey));
+        }
+        return rowData;
     }
 
     private String getHtmlContent(String assetBizPath) throws IOException {
