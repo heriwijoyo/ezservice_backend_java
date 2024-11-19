@@ -70,6 +70,7 @@ public class AppSubOrganizationService {
         return subOrgId;
     }
 
+    @Transactional
     public String createSubOrganization(BizSubOrganization subOrganization) {
         return create(
                 subOrganization.getName(),
