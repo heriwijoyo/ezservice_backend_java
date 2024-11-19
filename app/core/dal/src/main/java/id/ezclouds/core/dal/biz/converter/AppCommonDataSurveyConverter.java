@@ -49,7 +49,7 @@ public class AppCommonDataSurveyConverter {
             if (targetFields.get(sourceField.getName()) != null) {
                 targetFields.get(sourceField.getName()).setAccessible(true);
                 try {
-                    targetFields.get(sourceField.getName()).set(dataSurveyDO, sourceField.get(dataSurvey));
+                    targetFields.get(sourceField.getName()).set(dataSurvey, sourceField.get(dataSurveyDO));
                 } catch (Exception ignored) {}
             }
         }

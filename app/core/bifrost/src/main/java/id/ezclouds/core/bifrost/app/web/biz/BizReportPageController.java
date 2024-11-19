@@ -392,8 +392,7 @@ public class BizReportPageController {
             List<AppCommonDataSurvey> dataSurveys = appCommonDataSurveyDAO
                     .getData(session.getOrgId(), table.getSurveyId());
             for (AppCommonDataSurvey dataSurvey : dataSurveys) {
-                List<String> rowData = getRowData(dataSurvey, dataKeys);
-                parsedData.add(rowData);
+                parsedData.add(getRowData(dataSurvey, dataKeys));
             }
 
             String layout = bizPageLayoutDAO.getContent("BIZ_DATA_SURVEY");
@@ -412,12 +411,17 @@ public class BizReportPageController {
 
     private List<String> getRowData(AppCommonDataSurvey dataSurvey, List<String> dataKeys) {
         List<String> rowData = new ArrayList<>();
-        String jsonData = bizObjectMapperService.toJson(dataSurvey);
-        Map<String, String> dataMap = bizObjectMapperService.jsonToMap(jsonData);
+        try {
+            for (String dataKey : dataKeys) {
+                for (Field field : dataSurvey.getClass().getDeclaredFields()) {
+                    if (field.getName().equals(dataKey)) {
+                        field.setAccessible(true);
+                        rowData.add((String) field.get(dataSurvey));
+                    }
+                }
+            }
+        } catch (Exception ignored) {}
 
-        for (String dataKey : dataKeys) {
-            rowData.add(dataMap.get(dataKey));
-        }
         return rowData;
     }
 
