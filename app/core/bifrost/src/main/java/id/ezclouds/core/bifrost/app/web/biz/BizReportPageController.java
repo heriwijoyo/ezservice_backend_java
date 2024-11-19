@@ -6,6 +6,7 @@ package id.ezclouds.core.bifrost.app.web.biz;
 
 import id.ezclouds.common.facade.auth.AuthAdminService;
 import id.ezclouds.common.facade.dal.biz.BizPageLayoutDAO;
+import id.ezclouds.common.facade.dal.biz.BizSurveyTableDAO;
 import id.ezclouds.common.facade.dal.biz.election.BizVoterDAO;
 import id.ezclouds.common.facade.dal.biz.election.BizVoterInvalidDAO;
 import id.ezclouds.common.facade.dal.biz.report.BizReportPageDAO;
@@ -17,6 +18,7 @@ import id.ezclouds.common.model.auth.AuthSession;
 import id.ezclouds.common.model.biz.election.BizVoter;
 import id.ezclouds.common.model.biz.election.BizVoterInvalid;
 import id.ezclouds.common.model.biz.report.BizReportPage;
+import id.ezclouds.common.model.biz.survey.BizSurveyTable;
 import id.ezclouds.common.model.core.organization.SubOrganization;
 import id.ezclouds.common.model.file.ClusterFileResolver;
 import id.ezclouds.common.model.member.MemberBackOffice;
@@ -83,6 +85,9 @@ public class BizReportPageController {
 
     @Autowired
     private CoreFileService coreFileService;
+
+    @Autowired
+    private BizSurveyTableDAO bizSurveyTableDAO;
 
     @GetMapping(value = "/biz/report/{section}/{code}/{sessionId}")
     private void getBizReportPage(
@@ -354,6 +359,39 @@ public class BizReportPageController {
             response.getWriter().write(htmlContent);
             response.getWriter().flush();
 
+        } catch (Exception e) {
+            response.setStatus(HttpStatus.NOT_FOUND.value());
+        }
+    }
+
+    @GetMapping(value = "/biz/data/survey/{secretToken}")
+    private void getSurveyResponse(
+            @PathVariable("secretToken") String secretToken,
+            HttpServletResponse response) {
+        response.setContentType("text/html;charset=UTF-8");
+
+        try {
+            AssertUtil.notBlank(secretToken, EzErrorCode.ILLEGAL_PARAM);
+            AssertUtil.isTrue(secretToken.length() == 64, EzErrorCode.ILLEGAL_PARAM);
+
+            String sessionId = StringUtil.leftSubstring(secretToken, 32);
+            String tableDataId = secretToken.substring(32);
+            authAdminService.authorizeWebPublicSession(sessionId);
+
+            BizSurveyTable table = bizSurveyTableDAO.getByTableId(tableDataId);
+            AssertUtil.notNull(table, EzErrorCode.ILLEGAL_PARAM);
+
+
+
+            String layout = bizPageLayoutDAO.getContent("BIZ_DATA_SURVEY");
+            String htmlContent = layout
+                    .replace("_TABLE_TITLE_", table.getTitle())
+                    .replace("_TABLE_COLUMN_", table.getColumn())
+                    .replace("_TABLE_ROW_DATA_", "[]");
+
+            response.setStatus(HttpStatus.OK.value());
+            response.getWriter().write(htmlContent);
+            response.getWriter().flush();
         } catch (Exception e) {
             response.setStatus(HttpStatus.NOT_FOUND.value());
         }
