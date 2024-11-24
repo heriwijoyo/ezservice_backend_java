@@ -126,6 +126,7 @@ public class BizReportPageController {
             String htmlContent = layout
                     .replace("PAGE_TITLE", reportPage.getPageTitle())
                     .replace("INCLUDE_PAGE_CONTENT", pageContent)
+                    .replace("PAGE_CODE", code)
                     .replace("PAGE_SESSION_ID", sessionId);
 
             response.setStatus(HttpStatus.OK.value());
