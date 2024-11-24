@@ -23,9 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -78,9 +76,10 @@ public class BizReportSurveyServiceImpl implements BizReportSurveyService {
                         .getGroupQueryCount(param);
 
                 for (BizGroupQueryCount groupQueryCount : groupQueryCounts) {
-                    Map<String, Integer> groupDataMap = new HashMap<>();
-                    groupDataMap.put(groupQueryCount.getGroupId(), (int)groupQueryCount.getGroupCount());
-                    bizSurveyReport.getData().add(groupDataMap);
+                    List<String> groupDataList = new ArrayList<>();
+                    groupDataList.add(groupQueryCount.getGroupId());
+                    groupDataList.add(String.valueOf(groupQueryCount.getGroupCount()));
+                    bizSurveyReport.getData().add(groupDataList);
                 }
                 surveyReports.add(bizSurveyReport);
             }

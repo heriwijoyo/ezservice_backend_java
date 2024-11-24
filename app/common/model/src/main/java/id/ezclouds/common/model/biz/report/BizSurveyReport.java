@@ -6,7 +6,6 @@ package id.ezclouds.common.model.biz.report;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -15,7 +14,7 @@ import java.util.Map;
 public class BizSurveyReport {
 
     private String title;
-    private final List<Map<String, Integer>> data;
+    private final List<List<String>> data;
 
     public BizSurveyReport() {
         this.data = new ArrayList<>();
@@ -29,7 +28,7 @@ public class BizSurveyReport {
         this.title = title;
     }
 
-    public List<Map<String, Integer>> getData() {
+    public List<List<String>> getData() {
         return data;
     }
 }
