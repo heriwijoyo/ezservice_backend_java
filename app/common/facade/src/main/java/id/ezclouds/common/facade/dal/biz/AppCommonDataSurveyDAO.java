@@ -5,6 +5,8 @@
 package id.ezclouds.common.facade.dal.biz;
 
 import id.ezclouds.common.model.biz.survey.AppCommonDataSurvey;
+import id.ezclouds.common.model.query.BizGroupQueryCount;
+import id.ezclouds.common.model.query.BizSurveyGroupQueryParam;
 
 import java.util.List;
 
@@ -17,4 +19,6 @@ public interface AppCommonDataSurveyDAO {
     void store(AppCommonDataSurvey dataSurvey);
 
     List<AppCommonDataSurvey> getData(String orgId, String surveyId);
+
+    List<BizGroupQueryCount> getGroupQueryCount(BizSurveyGroupQueryParam param);
 }

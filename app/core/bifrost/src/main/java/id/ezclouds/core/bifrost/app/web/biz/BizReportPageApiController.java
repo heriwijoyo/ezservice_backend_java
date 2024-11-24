@@ -5,6 +5,7 @@
 package id.ezclouds.core.bifrost.app.web.biz;
 
 import id.ezclouds.common.facade.biz.report.BizReportSubOrganizationService;
+import id.ezclouds.common.facade.biz.report.BizReportSurveyService;
 import id.ezclouds.common.model.core.organization.SubOrganization;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
@@ -33,6 +34,9 @@ public class BizReportPageApiController {
     @Autowired
     private BizReportSubOrganizationService bizReportSubOrganizationService;
 
+    @Autowired
+    private BizReportSurveyService bizReportSurveyService;
+
     @PostMapping(value = "/biz/api/report/subOrganizations.json")
     private WebApiResult<List<SubOrganization>> getActiveSubOrganizations(@RequestParam(name = "sessionId", required = false) String sessionId) {
         final WebApiResult<List<SubOrganization>> result = new WebApiResult<>();
@@ -45,6 +49,30 @@ public class BizReportPageApiController {
 
             @Override
             public List<SubOrganization> convertResult(Object object) {
+                return (List) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+
+        return result;
+    }
+
+    @PostMapping(value = "/biz/api/report/surveyRecap.json")
+    private WebApiResult<List<List<String>>> getSurveyRecap(@RequestParam(name = "secretToken") String secretToken) {
+        final WebApiResult<List<List<String>>> result = new WebApiResult<>();
+
+        WebApiControllerTemplate.execute(BizReportWebApiEvent.BIZ_REPORT_WEB_API_GET_SURVEY_RECAP, result, new WebApiControllerTemplate.Handler<>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                return bizReportSurveyService.getSurveyRecap(secretToken);
+            }
+
+            @Override
+            public List<List<String>> convertResult(Object object) {
                 return (List) object;
             }
 

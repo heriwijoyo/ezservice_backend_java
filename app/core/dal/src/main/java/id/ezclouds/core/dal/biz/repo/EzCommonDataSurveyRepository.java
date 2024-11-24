@@ -4,6 +4,7 @@
  */
 package id.ezclouds.core.dal.biz.repo;
 
+import id.ezclouds.common.model.query.BizGroupQueryCount;
 import id.ezclouds.core.dal.biz.dataobject.EzCommonDataSurveyDO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,4 +21,8 @@ public interface EzCommonDataSurveyRepository extends JpaRepository<EzCommonData
 
     @Query(value = "SELECT ecds FROM EzCommonDataSurveyDO ecds WHERE ecds.orgId = ?1 AND ecds.surveyId = ?2 ORDER BY ecds.createdTime DESC")
     List<EzCommonDataSurveyDO> findByOrgIdAndSurveyId(String orgId, String surveyId);
+
+    @Query("SELECT new id.ezclouds.common.model.query.BizGroupQueryCount(cds.submitterId, cds.submitterName, COUNT(cds.submitterId)) " +
+            "FROM EzCommonDataSurveyDO AS cds WHERE cds.orgId = ?1 AND cds.surveyId = ?2 GROUP BY cds.submitterId" )
+    List<BizGroupQueryCount> queryGroupSubmitter(String orgId, String surveyId);
 }

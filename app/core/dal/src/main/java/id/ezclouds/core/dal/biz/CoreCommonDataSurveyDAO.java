@@ -7,11 +7,14 @@ package id.ezclouds.core.dal.biz;
 import id.ezclouds.common.facade.dal.biz.AppCommonDataSurveyDAO;
 import id.ezclouds.common.model.annotation.EzDAOLogger;
 import id.ezclouds.common.model.biz.survey.AppCommonDataSurvey;
+import id.ezclouds.common.model.query.BizGroupQueryCount;
+import id.ezclouds.common.model.query.BizSurveyGroupQueryParam;
 import id.ezclouds.core.dal.biz.converter.AppCommonDataSurveyConverter;
 import id.ezclouds.core.dal.biz.repo.EzCommonDataSurveyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,5 +45,16 @@ public class CoreCommonDataSurveyDAO implements AppCommonDataSurveyDAO {
                 .stream()
                 .map(AppCommonDataSurveyConverter::convert)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @EzDAOLogger
+    public List<BizGroupQueryCount> getGroupQueryCount(BizSurveyGroupQueryParam param) {
+        switch (param.getGroupQuery()) {
+            case BY_SUBMITTER:
+                return ezCommonDataSurveyRepository
+                        .queryGroupSubmitter(param.getOrgId(), param.getSurveyId());
+        }
+        return new ArrayList<>();
     }
 }
