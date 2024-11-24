@@ -12,5 +12,7 @@ import id.ezclouds.common.model.result.BizResult;
  */
 public interface BizReportSurveyService {
 
-    BizResult getSurveyRecap(String tokenId);
+    BizResult getSurveyReport(String secretToken);
+
+    BizResult getSurveyorPerformance(String secretToken);
 }

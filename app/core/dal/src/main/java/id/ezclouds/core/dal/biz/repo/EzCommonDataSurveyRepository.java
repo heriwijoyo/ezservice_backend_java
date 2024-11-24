@@ -25,4 +25,24 @@ public interface EzCommonDataSurveyRepository extends JpaRepository<EzCommonData
     @Query("SELECT new id.ezclouds.common.model.query.BizGroupQueryCount(cds.submitterId, cds.submitterName, COUNT(cds.submitterId)) " +
             "FROM EzCommonDataSurveyDO AS cds WHERE cds.orgId = ?1 AND cds.surveyId = ?2 GROUP BY cds.submitterId" )
     List<BizGroupQueryCount> queryGroupSubmitter(String orgId, String surveyId);
+
+    @Query("SELECT new id.ezclouds.common.model.query.BizGroupQueryCount(cds.r001, COUNT(cds.r001)) " +
+            "FROM EzCommonDataSurveyDO AS cds WHERE cds.orgId = ?1 AND cds.surveyId = ?2 GROUP BY cds.r001" )
+    List<BizGroupQueryCount> queryGroupResponse001(String orgId, String surveyId);
+
+    @Query("SELECT new id.ezclouds.common.model.query.BizGroupQueryCount(cds.r002, COUNT(cds.r002)) " +
+            "FROM EzCommonDataSurveyDO AS cds WHERE cds.orgId = ?1 AND cds.surveyId = ?2 GROUP BY cds.r002" )
+    List<BizGroupQueryCount> queryGroupResponse002(String orgId, String surveyId);
+
+    @Query("SELECT new id.ezclouds.common.model.query.BizGroupQueryCount(cds.r003, COUNT(cds.r003)) " +
+            "FROM EzCommonDataSurveyDO AS cds WHERE cds.orgId = ?1 AND cds.surveyId = ?2 GROUP BY cds.r003" )
+    List<BizGroupQueryCount> queryGroupResponse003(String orgId, String surveyId);
+
+    @Query("SELECT new id.ezclouds.common.model.query.BizGroupQueryCount(cds.r004, COUNT(cds.r004)) " +
+            "FROM EzCommonDataSurveyDO AS cds WHERE cds.orgId = ?1 AND cds.surveyId = ?2 GROUP BY cds.r004" )
+    List<BizGroupQueryCount> queryGroupResponse004(String orgId, String surveyId);
+
+    @Query("SELECT new id.ezclouds.common.model.query.BizGroupQueryCount(cds.r005, COUNT(cds.r005)) " +
+            "FROM EzCommonDataSurveyDO AS cds WHERE cds.orgId = ?1 AND cds.surveyId = ?2 GROUP BY cds.r005" )
+    List<BizGroupQueryCount> queryGroupResponse005(String orgId, String surveyId);
 }

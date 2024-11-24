@@ -9,6 +9,7 @@ import id.ezclouds.common.facade.biz.report.BizReportSurveyService;
 import id.ezclouds.common.facade.dal.biz.AppCommonDataSurveyDAO;
 import id.ezclouds.common.facade.dal.biz.BizSurveyTableDAO;
 import id.ezclouds.common.model.auth.AuthSession;
+import id.ezclouds.common.model.biz.report.BizSurveyReport;
 import id.ezclouds.common.model.biz.survey.BizSurveyTable;
 import id.ezclouds.common.model.constant.SurveyGroupQuery;
 import id.ezclouds.common.model.query.BizGroupQueryCount;
@@ -21,7 +22,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -40,7 +43,55 @@ public class BizReportSurveyServiceImpl implements BizReportSurveyService {
     private AppCommonDataSurveyDAO appCommonDataSurveyDAO;
 
     @Override
-    public BizResult getSurveyRecap(String secretToken) {
+    public BizResult getSurveyReport(String secretToken) {
+        BizResult result = new BizResult();
+        result.setSuccess(true);
+        final List<BizSurveyReport> surveyReports = new ArrayList<>();
+        result.setObject(surveyReports);
+
+        try {
+            AssertUtil.notBlank(secretToken, EzErrorCode.ILLEGAL_PARAM);
+            String sessionId = StringUtil.leftSubstring(secretToken, 32);
+            String tableDataId = secretToken.substring(32);
+            AuthSession session = authAdminService.authorizeWebPublicSession(sessionId);
+
+            BizSurveyTable table = bizSurveyTableDAO.getByTableId(tableDataId);
+            AssertUtil.notNull(table, EzErrorCode.ILLEGAL_PARAM);
+
+            Map<String, SurveyGroupQuery> groupQueryMap = new HashMap<>();
+            groupQueryMap.put("Kecenderungan Pilihan", SurveyGroupQuery.BY_RESPONSE_01);
+            groupQueryMap.put("Keikutsertaan Memilih", SurveyGroupQuery.BY_RESPONSE_02);
+            groupQueryMap.put("Alasan Memilih", SurveyGroupQuery.BY_RESPONSE_03);
+            groupQueryMap.put("Sumber/Media Informasi", SurveyGroupQuery.BY_RESPONSE_04);
+            groupQueryMap.put("Pengaruh Politik Uang", SurveyGroupQuery.BY_RESPONSE_05);
+
+            for (Map.Entry<String, SurveyGroupQuery> entry : groupQueryMap.entrySet()) {
+                BizSurveyReport bizSurveyReport = new BizSurveyReport();
+                bizSurveyReport.setTitle(entry.getKey());
+
+                BizSurveyGroupQueryParam param = new BizSurveyGroupQueryParam();
+                param.setOrgId(session.getOrgId());
+                param.setSurveyId(table.getSurveyId());
+                param.setGroupQuery(entry.getValue());
+                List<BizGroupQueryCount> groupQueryCounts = appCommonDataSurveyDAO
+                        .getGroupQueryCount(param);
+
+                for (BizGroupQueryCount groupQueryCount : groupQueryCounts) {
+                    Map<String, Integer> groupDataMap = new HashMap<>();
+                    groupDataMap.put(groupQueryCount.getGroupId(), (int)groupQueryCount.getGroupCount());
+                    bizSurveyReport.getData().add(groupDataMap);
+                }
+                surveyReports.add(bizSurveyReport);
+            }
+        } catch (Exception ignored) {
+            return result;
+        }
+
+        return result;
+    }
+
+    @Override
+    public BizResult getSurveyorPerformance(String secretToken) {
         BizResult result = new BizResult();
         result.setSuccess(true);
         List<List<String>> data = new ArrayList<>();

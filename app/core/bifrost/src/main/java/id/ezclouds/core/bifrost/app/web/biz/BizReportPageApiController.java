@@ -6,6 +6,7 @@ package id.ezclouds.core.bifrost.app.web.biz;
 
 import id.ezclouds.common.facade.biz.report.BizReportSubOrganizationService;
 import id.ezclouds.common.facade.biz.report.BizReportSurveyService;
+import id.ezclouds.common.model.biz.report.BizSurveyReport;
 import id.ezclouds.common.model.core.organization.SubOrganization;
 import id.ezclouds.common.model.result.BizResult;
 import id.ezclouds.common.util.logger.CommonLoggerConstant;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Heri Wijoyo (heri.wijoyo@gmail.com)
@@ -61,14 +63,38 @@ public class BizReportPageApiController {
         return result;
     }
 
-    @PostMapping(value = "/biz/api/report/surveyRecap.json")
-    private WebApiResult<List<List<String>>> getSurveyRecap(@RequestParam(name = "secretToken") String secretToken) {
+    @PostMapping(value = "/biz/api/report/survey.json")
+    private WebApiResult<List<BizSurveyReport>> getSurveyReport(@RequestParam(name = "secretToken") String secretToken) {
+        final WebApiResult<List<BizSurveyReport>> result = new WebApiResult<>();
+
+        WebApiControllerTemplate.execute(BizReportWebApiEvent.BIZ_REPORT_WEB_API_GET_SURVEY_REPORT, result, new WebApiControllerTemplate.Handler<>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                return bizReportSurveyService.getSurveyReport(secretToken);
+            }
+
+            @Override
+            public List<BizSurveyReport> convertResult(Object object) {
+                return (List<BizSurveyReport>) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+
+        return result;
+    }
+
+    @PostMapping(value = "/biz/api/report/surveyorPerformance.json")
+    private WebApiResult<List<List<String>>> getSurveyorPerformance(@RequestParam(name = "secretToken") String secretToken) {
         final WebApiResult<List<List<String>>> result = new WebApiResult<>();
 
         WebApiControllerTemplate.execute(BizReportWebApiEvent.BIZ_REPORT_WEB_API_GET_SURVEY_RECAP, result, new WebApiControllerTemplate.Handler<>() {
             @Override
             public BizResult onProcess() throws Exception {
-                return bizReportSurveyService.getSurveyRecap(secretToken);
+                return bizReportSurveyService.getSurveyorPerformance(secretToken);
             }
 
             @Override

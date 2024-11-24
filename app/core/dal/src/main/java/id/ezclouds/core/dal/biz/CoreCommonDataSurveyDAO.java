@@ -54,6 +54,26 @@ public class CoreCommonDataSurveyDAO implements AppCommonDataSurveyDAO {
             case BY_SUBMITTER:
                 return ezCommonDataSurveyRepository
                         .queryGroupSubmitter(param.getOrgId(), param.getSurveyId());
+
+            case BY_RESPONSE_01:
+                return ezCommonDataSurveyRepository
+                        .queryGroupResponse001(param.getOrgId(), param.getSurveyId());
+
+            case BY_RESPONSE_02:
+                return ezCommonDataSurveyRepository
+                        .queryGroupResponse002(param.getOrgId(), param.getSurveyId());
+
+            case BY_RESPONSE_03:
+                return ezCommonDataSurveyRepository
+                        .queryGroupResponse003(param.getOrgId(), param.getSurveyId());
+
+            case BY_RESPONSE_04:
+                return ezCommonDataSurveyRepository
+                        .queryGroupResponse004(param.getOrgId(), param.getSurveyId());
+
+            case BY_RESPONSE_05:
+                return ezCommonDataSurveyRepository
+                        .queryGroupResponse005(param.getOrgId(), param.getSurveyId());
         }
         return new ArrayList<>();
     }
