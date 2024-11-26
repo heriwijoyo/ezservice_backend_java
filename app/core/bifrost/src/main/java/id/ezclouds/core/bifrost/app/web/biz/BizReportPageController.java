@@ -23,6 +23,7 @@ import id.ezclouds.common.model.biz.survey.AppCommonDataSurvey;
 import id.ezclouds.common.model.biz.survey.BizSurveyTable;
 import id.ezclouds.common.model.core.organization.SubOrganization;
 import id.ezclouds.common.model.file.ClusterFileResolver;
+import id.ezclouds.common.model.file.PublicFileResolver;
 import id.ezclouds.common.model.member.MemberBackOffice;
 import id.ezclouds.common.util.DateUtil;
 import id.ezclouds.common.util.StringUtil;
@@ -405,6 +406,96 @@ public class BizReportPageController {
             response.setStatus(HttpStatus.OK.value());
             response.getWriter().write(htmlContent);
             response.getWriter().flush();
+        } catch (Exception e) {
+            response.setStatus(HttpStatus.NOT_FOUND.value());
+        }
+    }
+
+    @GetMapping(value = "/biz/data/downloadSurvey/{secretToken}")
+    private void downloadSurveyData(
+            @PathVariable("secretToken") String secretToken,
+            HttpServletResponse response) {
+        response.setContentType("text/html;charset=UTF-8");
+
+        try {
+            AssertUtil.notBlank(secretToken, EzErrorCode.ILLEGAL_PARAM);
+            AssertUtil.isTrue(secretToken.length() == 64, EzErrorCode.ILLEGAL_PARAM);
+
+            String sessionId = StringUtil.leftSubstring(secretToken, 32);
+            String tableDataId = secretToken.substring(32);
+            AuthSession session = authAdminService.authorizeWebPublicSession(sessionId);
+
+            BizSurveyTable table = bizSurveyTableDAO.getByTableId(tableDataId);
+            AssertUtil.notNull(table, EzErrorCode.ILLEGAL_PARAM);
+
+            PublicFileResolver publicFileResolver = coreFileService
+                    .resolvePublicFileInfo(session.getOrgId());
+            Path reportPath = publicFileResolver.getOtherPath("SURVEY_RESPONSE_DATA_"+ table.getSurveyId() + ".xlsx");
+
+            OutputStream wbOutputStream = Files.newOutputStream(reportPath);
+            Workbook workbook = new Workbook(wbOutputStream, "EzAppService", "1.0");
+            workbook.properties()
+                    .setTitle("Data Respon Survey")
+                    .setCategory("Data Export")
+                    .setDescription("EzAppService Auto Report");
+
+            // start valid sheet
+            Worksheet dataWs = workbook.newWorksheet("Data Response");
+            dataWs.value(0, 0, "Surveyor");
+            dataWs.value(0, 1, "Nama Responder");
+            dataWs.value(0, 2, "Jenis Kelamin");
+            dataWs.value(0, 3, "Usia");
+            dataWs.value(0, 4, "Pendidikan");
+            dataWs.value(0, 5, "Agama");
+            dataWs.value(0, 6, "Pekerjaan");
+            dataWs.value(0, 7, "Suku");
+            dataWs.value(0, 8, "Alamat");
+            dataWs.value(0, 9, "Paslon Pilihan");
+            dataWs.value(0, 10, "Akankan Memilih di TPS");
+            dataWs.value(0, 11, "Alasan Memilih");
+            dataWs.value(0, 12, "Sumber Informasi Tentang Paslon");
+            dataWs.value(0, 13, "Pengaruh Politik Uang");
+
+            List<AppCommonDataSurvey> dataSurveys = appCommonDataSurveyDAO
+                    .getData(session.getOrgId(), table.getSurveyId());
+
+            int row = 1;
+            for (AppCommonDataSurvey dataSurvey : dataSurveys) {
+                dataWs.value(row, 0, dataSurvey.submitterName);
+                dataWs.value(row, 1, dataSurvey.r001);
+                dataWs.value(row, 2, dataSurvey.r002);
+                dataWs.value(row, 3, dataSurvey.r003);
+                dataWs.value(row, 4, dataSurvey.r004);
+                dataWs.value(row, 5, dataSurvey.r005);
+                dataWs.value(row, 6, dataSurvey.r006);
+                dataWs.value(row, 7, dataSurvey.r007);
+                dataWs.value(row, 8, dataSurvey.r008);
+                dataWs.value(row, 9, dataSurvey.q001a);
+                dataWs.value(row, 10, dataSurvey.q002a);
+                dataWs.value(row, 11, dataSurvey.q003a);
+                dataWs.value(row, 12, dataSurvey.q004a);
+                dataWs.value(row, 13, dataSurvey.q005a);
+                row++;
+            }
+            dataWs.finish();
+
+            workbook.finish();
+            workbook.close();
+            wbOutputStream.close();
+
+            response.setContentType("application/vnd.openxmlformats-officedocument");
+            String fileName = "DATA_RESPON_SURVEY"
+                    .toUpperCase()
+                    .replace(" ", "_");
+            response.setHeader(
+                    HttpHeaders.CONTENT_DISPOSITION,
+                    ContentDisposition.attachment()
+                            .filename(fileName +".xlsx", StandardCharsets.UTF_8)
+                            .build()
+                            .toString()
+            );
+            Files.copy(reportPath, response.getOutputStream());
+
         } catch (Exception e) {
             response.setStatus(HttpStatus.NOT_FOUND.value());
         }
