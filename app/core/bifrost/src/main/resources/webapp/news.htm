@@ -1,0 +1,148 @@
+<section class="content">
+    <ol class="breadcrumb breadcrumb-offset">
+        <li><a href="home.htm">Dashboard</a></li>
+        <li class="active">Manage News</a></li>
+    </ol>
+
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card corner-radius">
+                    <div class="header">
+                        <h2>MANAGE NEWS</h2>
+                        <div class="header-dropdown m-r--5">
+                            <a href="newsAdd.htm">
+                                <button id="form-add-new-btn" type="button" class="button button-rounded btn-offset waves-effect waves-float">ADD NEWS</button>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: -10px;" class="body table-responsive">
+                        <table class="table table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th width="20%">Image</th>
+                                <th width="50%">Information</th>
+                                <th width="10%" class="text-center">Publish Date</th>
+                                <th width="10%" class="text-center">Highlight</th>
+                                <th width="10%" class="text-center">Status</th>
+                            </tr>
+                            </thead>
+                            <tbody id="rowsContainer"></tbody>
+                        </table>
+                        <ul class="pager"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    var EzAdminUrl = {
+        NEWS_GET: 'api/getNews.json',
+        NEWS_STATUS_SWITCH: 'api/newsFlagSwitch.json'
+    };
+    var EzDashboardBizService = {
+        start: function() {
+            EzDashboardBizService.fetchNews();
+        },
+        fetchNews: function() {
+            EzWebAppClient.callApiService(EzAdminUrl.NEWS_GET, {
+                sessionId: EzWebAppClient.getSessionId(),
+                pageNumber: EzDashboardBizService.data.pageNumber,
+                pageSize: EzDashboardBizService.data.pageSize
+            });
+        },
+        handleApiBizResult: function(url, response) {
+            if (url === EzAdminUrl.NEWS_GET) {
+                EzDashboardBizService.data.result = response.pageResult;
+                EzDashboardBizService.reloadPageResultView(response);
+            }
+            if (url === EzAdminUrl.NEWS_STATUS_SWITCH) {
+                alert(response.data);
+                EzDashboardBizService.fetchNews();
+            }
+        },
+        handleApiBizFailed: function(url, message) {
+            if (url === EzAdminUrl.NEWS_STATUS_SWITCH) {
+                alert(message);
+            }
+        },
+        reloadPageResultView: function(response) {
+            $('#rowsContainer').html('');
+            for(let i=0; i<response.pageResult.data.length; i++) {
+                let rowData = response.pageResult.data[i];
+                let title = '<a href="newsUpdate.htm?newsId='+ rowData.newsId +'"><b>'+ rowData.title +'</b></a><br>Description:<br>'+ rowData.description +'<br>Source: '+ rowData.source +'<br>Source URL: '+ rowData.sourceUrl;
+                let itemRow = $.parseHTML(DashTemplate);
+                $(itemRow).find('.img-rounded').attr('src', rowData.imageUrl);
+                $(itemRow).find('.rowTitle').html(title);
+                $(itemRow).find('.rowDate').html(rowData.publishDate);
+                $(itemRow).find('.rowHighlight').html(EzDashboardBizService.renderFlag(rowData.highlight,'highlight',rowData.newsId));
+                $(itemRow).find('.rowActive').html(EzDashboardBizService.renderFlag(rowData.status,'status',rowData.newsId));
+                $('#rowsContainer').append(itemRow);
+            }
+            $('.pager').html(EzWebAppClient.renderPager(response.pageResult));
+        },
+        renderFlag: function(flag,section,id) {
+            let flagText = flag == 1 ? 'ACTIVE' : 'NOT ACTIVE';
+            let switchFlag = flag == 1 ? '0' : '1';
+            return '<center>'+ flagText + '<br><button onClick="EzDashboardBizService.swithFlag(\''+id+'\',\''+section+'\',\''+switchFlag+'\')" class="button button-rounded waves-effect waves-float" type="submit">SWITCH</button></center>';
+        },
+        swithFlag: function(itemId,section,value) {
+            EzWebAppClient.callApiService(EzAdminUrl.NEWS_STATUS_SWITCH, {
+                sessionId: EzWebAppClient.getSessionId(),
+                itemId: itemId,
+                section: section,
+                value: value
+            });
+        },
+        prev: function() {
+            EzDashboardBizService.data.pageNumber--;
+            EzDashboardBizService.fetchNews();
+        },
+        next: function() {
+            EzDashboardBizService.data.pageNumber++;
+            EzDashboardBizService.fetchNews();
+        },
+        data: {
+            pageNumber: 1,
+            pageSize: 5,
+            result: null
+        }
+    };
+
+    $(document).ready(function(){
+        EzWebAppClient.onApiBizSuccess(function(url, response){
+            EzDashboardBizService.handleApiBizResult(url, response);
+        });
+        EzWebAppClient.onApiBizFailed(function(url, message){
+            EzDashboardBizService.handleApiBizFailed(url, message);
+        });
+        EzWebAppClient.onApiCallError(function(xhr){
+            console.log(xhr);
+        });
+        EzWebAppClient.onReady(function(){
+            EzDashboardBizService.start();
+        });
+        EzWebAppClient.onPrev(function(){
+            EzDashboardBizService.prev();
+        });
+        EzWebAppClient.onNext(function(){
+            EzDashboardBizService.next();
+        });
+        EzWebAppClient.start();
+    });
+
+    var DashTemplate = ''+
+        '<tr>'+
+            '<td style="vertical-align: middle;">'+
+                '<img class="img-rounded" style="object-fit:cover;" height="180px" width="240px">'+
+            '</td>'+
+            '<td class="rowTitle" style="vertical-align: middle;"></td>'+
+            '<td class="rowDate" style="vertical-align: middle;"></td>'+
+            '<td class="rowHighlight" style="vertical-align: middle;"></td>'+
+            '<td class="rowActive" style="vertical-align: middle;"></td>'+
+        '</tr>';
+
+</script>

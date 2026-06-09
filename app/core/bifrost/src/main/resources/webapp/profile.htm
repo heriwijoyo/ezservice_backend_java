@@ -1,0 +1,257 @@
+<section class="content">
+    <ol class="breadcrumb breadcrumb-offset">
+        <li><a href="home.htm">Dashboard</a></li>
+        <li class="active">Manage Candidate Profile</a></li>
+    </ol>
+
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card corner-radius">
+                    <div class="header">
+                        <h2>PORTFOLIO IMAGES</h2>
+                    </div>
+                    <div class="body">
+                        <div class="row clearfix">
+                            <div class="form-group col-sm-12">
+                                <div style="overflow-x:auto;white-space:nowrap;">
+                                    <div id="portfolios" style="width:2400px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card corner-radius">
+                    <div class="header">
+                        <h2>MANAGE BIOGRAPHY</h2>
+                    </div>
+                    <div class="body">
+                        <div class="row clearfix">
+                            <div style="margin-top: -10px;" class="body table-responsive">
+                                <table class="table table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th width="20%">Label</th>
+                                            <th width="50%">Value</th>
+                                            <th width="10%" class="text-center">Order</th>
+                                            <th width="10%" class="text-center">Status</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="rowsContainer">
+                                        <tr class="inputBio">
+                                            <td><input type="text" id="inputLabel" style="width:100%"></td>
+                                            <td><input type="text" id="inputValue" style="width:100%"></td>
+                                            <td><center><input type="text" id="inputOrder" value="0" style="width:40px"></center></td>
+                                            <td><center><input type="text" id="inputStatus" value="1" style="width:40px"></center></td>
+                                            <td><button id="btnAddBio" class="button button-rounded waves-effect waves-float pull-right" type="submit">ADD</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-sm-12">
+                                <button id="submitBtnBio" class="button button-rounded waves-effect waves-float pull-right" type="submit">SAVE</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card corner-radius">
+                    <div class="header">
+                        <h2>MANAGE PROFILE</h2>
+                    </div>
+                    <div class="body">
+                        <div class="row clearfix">
+                            <div class="form-group col-sm-12">
+                                <div class="font-12">Vision</div>
+                                <div class="form-line" style="margin-top: 6px;">
+                                    <textarea class="form-control" id="vision" cols="60" rows="5" required></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <div class="font-12">Mission</div>
+                                <div class="form-line" style="margin-top: 6px;">
+                                    <textarea class="form-control" id="mission" cols="60" rows="5" required></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Whatsapp Contact</div>
+                                    <input type="text" class="form-control" id="contactNumber" placeholder="Whatsapp Contact">
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <button id="submitBtnProfile" class="button button-rounded waves-effect waves-float pull-right" type="submit">SAVE</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<script type="text/javascript">
+    var EzAdminUrl = {
+        PROFILE_GET: 'api/profileDetail.json',
+        PROFILE_UPDATE: 'api/profileUpdate.json',
+        PROFILE_UPDATE_BIO: 'api/profileBioUpdate.json'
+    };
+    var EzDashboardBizService = {
+        start: function() {
+            EzDashboardBizService.fetchData();
+        },
+        fetchData: function() {
+            EzWebAppClient.callApiService(EzAdminUrl.PROFILE_GET, {});
+        },
+        handleApiBizResult: function(url, response) {
+            if (url === EzAdminUrl.PROFILE_GET) {
+                EzDashboardBizService.reloadPageResultView(response.data);
+            }
+            if (url === EzAdminUrl.PROFILE_UPDATE) {
+                alert(response.data);
+                EzDashboardBizService.fetchData();
+            }
+            if (url === EzAdminUrl.PROFILE_UPDATE_BIO) {
+                alert(response.data);
+                EzDashboardBizService.fetchData();
+            }
+        },
+        handleApiBizFailed: function(url, message) {
+            if (url === EzAdminUrl.PROFILE_UPDATE) {
+                alert(message);
+            }
+        },
+        addBioItem: function() {
+            let label = $('#inputLabel').val();
+            let value = $('#inputValue').val();
+            let order = $('#inputOrder').val();
+            let status = $('#inputStatus').val();
+            if (value.length < 1 || isNaN(parseInt(order)) || isNaN(parseInt(status))) {
+                alert('Invalid Input Fields');
+                return;
+            }
+
+            EzDashboardBizService.renderNewRowBio(label, value, order, status);
+
+            $('#inputLabel').val('');
+            $('#inputValue').val('');
+            $('#inputOrder').val('0');
+            $('#inputStatus').val('1');
+        },
+        renderNewRowBio: function(label, value, order, status) {
+            let rowHTML = $.parseHTML(DashTemplate);
+            $(rowHTML).find('.inputLabel').val(label);
+            $(rowHTML).find('.inputValue').val(value);
+            $(rowHTML).find('.inputOrder').val(order);
+            $(rowHTML).find('.inputStatus').val(status);
+            $('#rowsContainer .inputBio:last').before(rowHTML);
+        },
+        deleteRowBio: function(_this) {
+            $(_this).parent().parent().remove();
+        },
+        reloadPageResultView: function(data) {
+            $('#portfolios').html('');
+            for(let i=0; i<data.portfolios.length; i++) {
+                let portfolioTemplate = ''+
+                    '<div style="display:inline-block;height:180px;margin:5px">'+
+                        '<img class="img-rounded" src="'+  data.portfolios[i].imageUrl +'" style="height:180px"/>'+
+                    '</div>';
+                $('#portfolios').append($.parseHTML(portfolioTemplate));
+            }
+
+            $('#rowsContainer tr.inputBio:not(:last-child)').remove();
+            for(let x=0; x<data.candidateBios.length; x++) {
+                let bio = data.candidateBios[x];
+                EzDashboardBizService.renderNewRowBio(bio.label, bio.value, bio.sort, bio.status);
+            }
+
+            $('#vision').val(data.vision);
+            $('#mission').val(data.mission);
+            $('#contactNumber').val(data.contactNumber);
+        },
+        submitBio: function() {
+            let bioData = [];
+            let trData = $('#rowsContainer > tr');
+            for(let a=0; a<trData.length; a++) {
+                if (a < (trData.length - 1)) {
+                    let label = $(trData[a]).find('.inputLabel').val();
+                    let value = $(trData[a]).find('.inputValue').val();
+                    let order = $(trData[a]).find('.inputOrder').val();
+                    let status = $(trData[a]).find('.inputStatus').val();
+                    bioData.push({
+                        label: label,
+                        value: value,
+                        sort: order,
+                        status: status
+                    });
+                }
+            }
+            EzWebAppClient.callApiService(EzAdminUrl.PROFILE_UPDATE_BIO, {
+                data: JSON.stringify(bioData)
+            });
+        },
+        submitProfile: function() {
+            EzWebAppClient.callApiService(EzAdminUrl.PROFILE_UPDATE, {
+                vision: $('#vision').val(),
+                mission: $('#mission').val(),
+                contactNumber: $('#contactNumber').val()
+            });
+        }
+    };
+
+    $(document).ready(function(){
+        EzWebAppClient.onApiBizSuccess(function(url, response){
+            EzDashboardBizService.handleApiBizResult(url, response);
+        });
+        EzWebAppClient.onApiBizFailed(function(url, message){
+            EzDashboardBizService.handleApiBizFailed(url, message);
+        });
+        EzWebAppClient.onApiCallError(function(xhr){
+            console.log(xhr);
+        });
+        EzWebAppClient.onReady(function(){
+            EzDashboardBizService.start();
+        });
+        EzWebAppClient.onPrev(function(){
+            EzDashboardBizService.prev();
+        });
+        EzWebAppClient.onNext(function(){
+            EzDashboardBizService.next();
+        });
+        EzWebAppClient.start();
+
+        $('#btnAddBio').click(function(){
+            EzDashboardBizService.addBioItem();
+        });
+        $('#submitBtnBio').click(function(){
+            EzDashboardBizService.submitBio();
+        });
+        $('#submitBtnProfile').click(function(){
+            EzDashboardBizService.submitProfile();
+        });
+    });
+
+    var DashTemplate = ''+
+        '<tr class="inputBio">'+
+            '<td><input type="text" class="inputLabel" style="width:100%"></td>'+
+            '<td><input type="text" class="inputValue" style="width:100%"></td>'+
+            '<td><center><input type="text" class="inputOrder" style="width:40px"></center></td>'+
+            '<td><center><input type="text" class="inputStatus" style="width:40px"></center></td>'+
+            '<td><a onClick="EzDashboardBizService.deleteRowBio(this)" href="javascript:void(0)"><i class="material-icons">delete</i></a></td>'+
+        '</tr>';
+</script>

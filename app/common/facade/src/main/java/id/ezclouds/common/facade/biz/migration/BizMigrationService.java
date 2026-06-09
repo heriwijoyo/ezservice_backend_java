@@ -1,0 +1,16 @@
+/**
+ * Ezclouds.id
+ * Copyright (c) 2020‐2024 All Rights Reserved.
+ */
+package id.ezclouds.common.facade.biz.migration;
+
+import id.ezclouds.common.model.result.BizResult;
+
+/**
+ * @author Heri Wijoyo (heri.wijoyo@gmail.com)
+ * @version $Id: BizMigrationService.java, v 0.1 2024‐10‐04 11:37 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ */
+public interface BizMigrationService {
+
+    BizResult migrateMemberToVoter(String orgId);
+}

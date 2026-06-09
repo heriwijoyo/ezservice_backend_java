@@ -1,0 +1,278 @@
+<section class="content">
+    <ol class="breadcrumb breadcrumb-offset">
+        <li><a href="home.htm">Dashboard</a></li>
+        <li class="active">Whatsapp Send Logs</a></li>
+    </ol>
+
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card corner-radius">
+                    <div class="header">
+                        <h2>WHATSAPP LOGS</h2>
+                        <div class="header-dropdown m-r--5">
+                            <a href="javascript:void(0)">
+                                <button id="buttonSetting" type="button" class="button button-rounded btn-offset waves-effect waves-float">SETTING</button>
+                            </a>
+                            <a href="javascript:void(0)">
+                                <button id="buttonSend" type="button" class="button button-rounded btn-offset waves-effect waves-float">TEST SEND</button>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: -10px;" class="body table-responsive">
+                        <table class='table'>
+                            <tr>
+                                <td>
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" id="keyword" placeholder="Search Phone Number..." required>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td width="1%"><button id="reset" type="button" class="button button-rounded waves-effect waves-float">RESET</button></td>
+                                <td width="1%"><button id="search" type="submit" class="btn bg-blue btn-circle waves-effect waves-circle waves-float"><i class="material-icons">search</i></button></td>
+                            </tr>
+                        </table>
+                        <table class="table table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th width="12%">Time</th>
+                                <th width="12%">Phone</th>
+                                <th width="50%">Message</th>
+                                <th width="5%">Status</th>
+                                <th width="3%"></th>
+                                <th width="12%">Response</th>
+                            </tr>
+                            </thead>
+                            <tbody id="rowsContainer"></tbody>
+                        </table>
+                        <ul class="pager"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade" id="modal-setting" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="largeModalLabel">Update WA Setting</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row clearfix">
+                    <div class="form-group form-float col-sm-12">
+                        <div class="form-line">
+                            <div class="font-12">Watzap Number Key</div>
+                            <input type="text" class="form-control" id="numberKey" placeholder="Watzap Number Key" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <button id="updateButton" class="button button-rounded waves-effect waves-float pull-right" type="submit" name="submit">SUBMIT</button>
+                        <button class="cancelButton button button-rounded button-light waves-effect waves-float pull-right" type="submit" name="submit">CANCEL</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-send" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Test Send Message</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row clearfix">
+                    <div class="form-group form-float col-sm-12">
+                        <div class="form-line">
+                            <div class="font-12">Message</div>
+                            <input type="text" class="form-control" id="message" placeholder="Message" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <button id="sendButton" class="button button-rounded waves-effect waves-float pull-right" type="submit" name="submit">SEND</button>
+                        <button class="cancelButton button button-rounded button-light waves-effect waves-float pull-right" type="submit" name="submit">CANCEL</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var EzAdminUrl = {
+        GET_WHATSAPP_LOG: 'api/getWhatsappLog.json',
+        WHATSAPP_RESEND: 'api/resendWhatsapp.json',
+        WATZAP_NUMBER_KEY_GET: 'api/watzapNumberKey.json',
+        WATZAP_NUMBER_KEY_UPDATE: 'api/watzapNumberKeyUpdate.json',
+        WHATSAPP_SEND: 'api/sendWhatsapp.json'
+    };
+    var EzDashboardBizService = {
+        start: function() {
+            EzDashboardBizService.fetchData();
+        },
+        fetchData: function() {
+            EzWebAppClient.callApiService(EzAdminUrl.GET_WHATSAPP_LOG, {
+                sessionId: EzWebAppClient.getSessionId(),
+                pageNumber: EzDashboardBizService.data.pageNumber,
+                pageSize: EzDashboardBizService.data.pageSize,
+                keyword: $('#keyword').val()
+            });
+        },
+        resendMessage: function(mid) {
+            if (window.confirm('Resend Message?')) {
+                EzWebAppClient.callApiService(EzAdminUrl.WHATSAPP_RESEND, {
+                    sessionId: EzWebAppClient.getSessionId(),
+                    mid: mid
+                });
+            }
+        },
+        fetchWatzapNumberKey: function() {
+            EzWebAppClient.callApiService(EzAdminUrl.WATZAP_NUMBER_KEY_GET, {});
+        },
+        updateWatzapNumberKey: function() {
+            EzWebAppClient.callApiService(EzAdminUrl.WATZAP_NUMBER_KEY_UPDATE, {
+                numberKey: $('#numberKey').val()
+            });
+        },
+        sendMessage: function() {
+            EzWebAppClient.callApiService(EzAdminUrl.WHATSAPP_SEND, {
+                message: $('#message').val()
+            });
+        },
+        handleApiBizResult: function(url, response) {
+            if (url === EzAdminUrl.GET_WHATSAPP_LOG) {
+                EzDashboardBizService.data.result = response.pageResult;
+                EzDashboardBizService.reloadPageResultView(response);
+            }
+            if (url === EzAdminUrl.WHATSAPP_RESEND || url === EzAdminUrl.WHATSAPP_SEND) {
+                alert(response.data);
+                EzDashboardBizService.fetchData();
+            }
+            if (url === EzAdminUrl.WATZAP_NUMBER_KEY_GET) {
+                $('#numberKey').val(response.data);
+            }
+            if (url === EzAdminUrl.WATZAP_NUMBER_KEY_UPDATE) {
+                alert(response.data);
+                EzDashboardBizService.fetchWatzapNumberKey();
+            }
+        },
+        reloadPageResultView: function(response) {
+            $('#rowsContainer').html('');
+            for(let i=0; i<response.pageResult.data.length; i++) {
+                let rowData = response.pageResult.data[i];
+                let itemRow = $.parseHTML(DashTemplate);
+                let resendText = '<a href="javascript:void(0)" onclick="EzDashboardBizService.resendMessage(\''+ rowData.id +'\')"><i class="material-icons">send</i></a>';
+                if (rowData.status == 'SUCCESS' || rowData.status == 'RESEND') {
+                    resendText = '';
+                }
+                $(itemRow).find('.rowPhone').html(rowData.phone);
+                $(itemRow).find('.rowMessage').html(rowData.message);
+                $(itemRow).find('.rowTime').html(rowData.createdTime);
+                $(itemRow).find('.rowStatus').html(rowData.status);
+                $(itemRow).find('.rowSend').html(resendText);
+                $(itemRow).find('.rowResponse').html(rowData.responseTime);
+                $('#rowsContainer').append(itemRow);
+            }
+            $('.pager').html(EzWebAppClient.renderPager(response.pageResult));
+        },
+        showSetting: function() {
+            $('#modal-setting').removeClass('fade');
+            $('#modal-setting').addClass('show');
+            EzDashboardBizService.fetchWatzapNumberKey();
+        },
+        showSend: function() {
+            $('#modal-send').removeClass('fade');
+            $('#modal-send').addClass('show');
+        },
+        hideForm: function() {
+            $('#modal-setting').removeClass('show');
+            $('#modal-setting').addClass('fade');
+            $('#modal-send').removeClass('show');
+            $('#modal-send').addClass('fade');
+        },
+        prev: function() {
+            EzDashboardBizService.data.pageNumber--;
+            EzDashboardBizService.fetchData();
+        },
+        next: function() {
+            EzDashboardBizService.data.pageNumber++;
+            EzDashboardBizService.fetchData();
+        },
+        getDataItem: function(id) {
+            let data = EzDashboardBizService.data.result.data;
+            var dataItem;
+            for(let i=0; i<data.length; i++) {
+                if (data[i].id === id) {
+                    dataItem = data[i];
+                }
+            }
+            return dataItem;
+        },
+        data: {
+            pageNumber: 1,
+            pageSize: 20,
+            result: null
+        }
+    };
+
+    $(document).ready(function(){
+        EzWebAppClient.onApiBizSuccess(function(url, response){
+            EzDashboardBizService.handleApiBizResult(url, response);
+        });
+        EzWebAppClient.onApiBizFailed(function(url, message){
+            console.log(url +' --- '+ message);
+            alert(message);
+        });
+        EzWebAppClient.onApiCallError(function(xhr){
+            console.log(xhr);
+        });
+        EzWebAppClient.onReady(function(){
+            EzDashboardBizService.start();
+        });
+        EzWebAppClient.onPrev(function(){
+            EzDashboardBizService.prev();
+        });
+        EzWebAppClient.onNext(function(){
+            EzDashboardBizService.next();
+        });
+        EzWebAppClient.start();
+
+        $('#search').click(function(){
+            EzDashboardBizService.fetchData();
+        });
+        $('#reset').click(function(){
+            $('#keyword').val('');
+            EzDashboardBizService.fetchData();
+        });
+        $('.cancelButton').click(function(){
+            EzDashboardBizService.hideForm();
+        });
+        $('#buttonSetting').click(function(){
+            EzDashboardBizService.showSetting();
+        });
+        $('#buttonSend').click(function(){
+            EzDashboardBizService.showSend();
+        });
+        $('#updateButton').click(function(){
+            EzDashboardBizService.updateWatzapNumberKey();
+        });
+        $('#sendButton').click(function(){
+            EzDashboardBizService.sendMessage();
+        });
+    });
+
+    var DashTemplate = ''+
+        '<tr>'+
+            '<td class="rowTime" style="vertical-align: middle;"></td>'+
+            '<td class="rowPhone" style="vertical-align: middle;"></td>'+
+            '<td class="rowMessage" style="vertical-align: middle;"></td>'+
+            '<td class="rowStatus" style="vertical-align: middle;"></td>'+
+            '<td class="rowSend" style="vertical-align: middle;"></td>'+
+            '<td class="rowResponse" style="vertical-align: middle;"></td>'+
+        '</tr>';
+</script>

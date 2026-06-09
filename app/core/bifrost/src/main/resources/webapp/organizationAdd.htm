@@ -1,0 +1,154 @@
+<section class="content">
+    <ol class="breadcrumb">
+        <li><a href="home.htm">Dashboard</a></li>
+        <li><a href="organization.htm">Manage Organization</a></li>
+        <li class="active">Add Organization</li>
+    </ol>
+
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card corner-radius">
+                    <div class="header">
+                        <h2>ADD ORGANIZATION</h2>
+                    </div>
+                    <div class="body">
+                        <div class="row clearfix">
+
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Organization Name</div>
+                                    <input type="text" class="form-control" id="orgName" placeholder="Organization Name" required="" aria-required="true">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Organization ID</div>
+                                    <input type="text" class="form-control" id="orgId" placeholder="Organization ID" required="" aria-required="true">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Organization Code</div>
+                                    <input type="text" class="form-control" id="orgCode" placeholder="Organization Code" required="" aria-required="true">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Organization Address</div>
+                                    <input type="text" class="form-control" id="address" placeholder="Address" required="" aria-required="true">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Contact Name</div>
+                                    <input type="text" class="form-control" id="contactName" placeholder="Contact Name" required="" aria-required="true">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Contact Phone</div>
+                                    <input type="text" class="form-control" id="contactPhone" placeholder="Contact Phone" required="" aria-required="true">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Contact Email</div>
+                                    <input type="text" class="form-control" id="contactEmail" placeholder="Contact Email" required="" aria-required="true">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <img id="submitLoader" src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right">
+                                <button id="submitBtn" class="button button-rounded waves-effect waves-float pull-right" type="submit">SUBMIT</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<script type="text/javascript">
+    var EzAdminUrl = {
+        CREATE_ORGANIZATION: 'api/createOrganization.json'
+    };
+    var EzDashboardBizService = {
+        start: function() {
+        },
+        postNewOrganization: function() {
+            EzWebAppClient.callApiService(EzAdminUrl.CREATE_ORGANIZATION, {
+                name: $('#orgName').val(),
+                orgId: $('#orgId').val(),
+                orgCode: $('#orgCode').val(),
+                address: $('#address').val(),
+                contactName: $('#contactName').val(),
+                contactPhone: $('#contactPhone').val(),
+                contactEmail: $('#contactEmail').val()
+            });
+        },
+        handleApiBizResult: function(url, response) {
+            if (url === EzAdminUrl.CREATE_ORGANIZATION) {
+                alert(response.data);
+                window.location = 'organization.htm';
+            }
+        },
+        handleApiBizFailed: function(url, message) {
+            if (url === EzAdminUrl.CREATE_ORGANIZATION) {
+                alert(message);
+                $('#submitLoader').hide();
+                $('#submitBtn').show();
+            }
+        }
+    };
+
+    $(document).ready(function(){
+        EzWebAppClient.onApiBizSuccess(function(url, response){
+            EzDashboardBizService.handleApiBizResult(url, response);
+        });
+        EzWebAppClient.onApiBizFailed(function(url, message){
+            console.log(url +' --- '+ message);
+            EzDashboardBizService.handleApiBizFailed(url, message);
+        });
+        EzWebAppClient.onApiCallError(function(xhr){
+            console.log(xhr);
+        });
+        EzWebAppClient.onReady(function(){
+            EzDashboardBizService.start();
+        });
+        EzWebAppClient.onPrev(function(){
+            EzDashboardBizService.prev();
+        });
+        EzWebAppClient.onNext(function(){
+            EzDashboardBizService.next();
+        });
+        EzWebAppClient.start();
+
+        $('#submitBtn').click(function(event){
+            $('#submitBtn').hide();
+            $('#submitLoader').show();
+            EzDashboardBizService.postNewOrganization();
+        });
+    });
+
+    var DashTemplate = ''+
+        '<tr>'+
+            '<td class="rowName" style="vertical-align: middle;"></td>'+
+            '<td class="rowId" style="vertical-align: middle;"></td>'+
+            '<td class="rowCode" style="vertical-align: middle;"></td>'+
+            '<td class="rowAddress" style="vertical-align: middle;"></td>'+
+            '<td class="rowContact" style="vertical-align: middle;"></td>'+
+            '<td class="rowTime" style="vertical-align: middle;"></td>'+
+            '<td class="rowStatus" style="vertical-align: middle;"></td>'+
+        '</tr>';
+
+</script>

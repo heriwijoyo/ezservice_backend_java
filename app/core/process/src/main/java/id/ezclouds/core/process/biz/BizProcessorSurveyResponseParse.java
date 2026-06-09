@@ -1,0 +1,103 @@
+/**
+ * Ezclouds.id
+ * Copyright (c) 2020‐2024 All Rights Reserved.
+ */
+package id.ezclouds.core.process.biz;
+
+import id.ezclouds.common.facade.dal.member.CoreMemberDAO;
+import id.ezclouds.common.model.biz.survey.AppCommonDataSurvey;
+import id.ezclouds.common.model.biz.survey.BizSurveyResponse;
+import id.ezclouds.common.model.biz.survey.BizSurveyResponseParserConfig;
+import id.ezclouds.common.model.core.member.CoreMember;
+import id.ezclouds.common.util.DateUtil;
+import id.ezclouds.common.util.HashUtil;
+import id.ezclouds.common.util.StringUtil;
+import id.ezclouds.core.process.biz.inner.BizInnerProcessorSurveyResponseParse;
+import id.ezclouds.core.process.model.BizProcessEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+/**
+ * @author Heri Wijoyo (heri.wijoyo@gmail.com)
+ * @version $Id: BizProcessorSurveyResponseParse.java, v 0.1 2024‐08‐18 11:23 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ */
+@Service
+public class BizProcessorSurveyResponseParse extends BizAsyncProcessor {
+
+    @Autowired
+    private BizInnerProcessorSurveyResponseParse bizInnerProcessorSurveyResponseParse;
+
+    @Autowired
+    private CoreMemberDAO coreMemberDAO;
+
+    @Override
+    protected int maxProcessTime() {
+        return 10 * 60 * 1000;
+    }
+
+    @Override
+    protected boolean onProcess(Object request, List<String> logData) {
+        String param = (String) request;
+        String orgId = param.split(",")[0];
+        String surveyId = param.split(",")[1];
+
+        logData.add("ORG_ID="+ orgId);
+        logData.add("SURVEY_ID="+ surveyId);
+
+        List<BizSurveyResponse> responses = bizInnerProcessorSurveyResponseParse
+                .getSurveyResponses(orgId, surveyId)
+                .stream()
+                .filter(item -> StringUtil.isBlank(item.getProcessId()))
+                .collect(Collectors.toList());
+
+        logData.add("COUNT="+ responses.size());
+        if (responses.size() < 1) {
+            return true;
+        }
+
+        Map<String, BizSurveyResponseParserConfig> parserConfigMap = bizInnerProcessorSurveyResponseParse
+                .getParserConfigMap(orgId, surveyId);
+
+        for (BizSurveyResponse response : responses) {
+            String parserId = HashUtil.createHash(response.getOrgId(), response.getSurveyId(), response.getQuestionVersion());
+            BizSurveyResponseParserConfig parserConfig = parserConfigMap.get(parserId);
+
+            AppCommonDataSurvey dataSurvey = null;
+            String processMessage = "SUCCESS";
+            try {
+                dataSurvey = bizInnerProcessorSurveyResponseParse
+                        .parseResponse(response, parserConfig);
+            } catch (Exception e) {
+                processMessage = e.getMessage();
+            }
+
+            if (dataSurvey != null) {
+                try {
+                    CoreMember coreMember = coreMemberDAO.getById(dataSurvey.submitterId);
+                    dataSurvey.submitterName = StringUtil.toTitleCase(coreMember.getName());
+                    bizInnerProcessorSurveyResponseParse
+                            .storeCommonData(dataSurvey);
+                } catch (Exception e2) {
+                    processMessage = e2.getMessage();
+                }
+            }
+
+            try {
+                String processId = dataSurvey == null ? null : dataSurvey.dataId;
+                bizInnerProcessorSurveyResponseParse
+                        .updateResponse(response.getId(), processId, DateUtil.getCurrentFormattedDateMillis(), processMessage);
+            } catch (Exception ignored) {}
+        }
+
+        return true;
+    }
+
+    @Override
+    public BizProcessEvent getProcessEvent() {
+        return BizProcessEvent.SURVEY_RESPONSE_PARSE;
+    }
+}

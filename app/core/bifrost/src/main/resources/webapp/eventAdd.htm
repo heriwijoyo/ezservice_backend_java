@@ -1,0 +1,217 @@
+
+<section class="content">
+
+    <ol class="breadcrumb breadcrumb-offset">
+        <li><a href="home.htm">Dashboard</a></li>
+        <li><a href="events.htm">Manage Events</a></li>
+        <li class="active">Add Event</a></li>
+    </ol>
+
+    <div class="container-fluid" id="fade-in">
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                    <div class="card corner-radius">
+                        <div class="header">
+                            <h2>ADD EVENT</h2>
+                            <div class="header-dropdown m-r--5">
+                                <img id="submitLoader" src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right">
+                                <button id="add-news-submit" type="submit" name="submit" class="button button-rounded btn-offset bg-blue waves-effect pull-right">SAVE</button>
+                            </div>
+                        </div>
+                        <div class="body">
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <div id="video_post">
+                                        <div class="font-12 ex1">Image Primary ( jpg / png ) *</div>
+                                        <div class="form-group">
+                                            <form id="add-news-form" method="post" enctype="multipart/form-data">
+                                                <input type="file" name="imageFile" class="dropify-image" data-max-file-size="2M" data-allowed-file-extensions="jpg jpeg png gif" required />
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="font-12">Event Title *</div>
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" id="newsTitle" placeholder="Event Title" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="font-12">Category *</div>
+                                        <select class="form-control show-tick" id="newsCategory">
+                                            <option value="BAKSOS">Bakti Sosial</option>
+                                            <option value="BIMTEK">Bimtek</option>
+                                            <option value="TRAINING">Training</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="font-12">Event Description *</div>
+                                        <div class="form-line">
+                                            <textarea class="form-control" id="newsDescription" cols="1" rows="5" required></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="font-12">Date Start *</div>
+                                        <div class="form-line">
+                                            <input type="text" id="dateStart" class="datetimepicker form-control" placeholder="Date Start" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="font-12">Time Start *</div>
+                                        <div class="form-line">
+                                            <input type="text" id="timeStart" class="datetimepicker form-control" placeholder="Time Start" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="font-12">Date End</div>
+                                        <div class="form-line">
+                                            <input type="text" id="dateEnd" class="datetimepicker form-control" placeholder="Date End" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="font-12">Time End</div>
+                                        <div class="form-line">
+                                            <input type="text" id="timeEnd" class="datetimepicker form-control" placeholder="Time End" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="font-12">Location *</div>
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" id="location" placeholder="Location" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    var EzAdminUrl = {
+        ADMIN_COMMON_POST: 'api/adminCommonPost.json'
+    };
+    var EzDashboardBizService = {
+        start: function() {},
+        handleApiBizResult: function(url, response) {
+            if (url === EzAdminUrl.ADMIN_COMMON_POST) {
+                alert(response.data);
+                window.location.replace('events.htm');
+            }
+        },
+        handleApiBizFailed: function(url, message) {
+            if (url === EzAdminUrl.ADMIN_COMMON_POST) {
+                alert(message);
+                EzDashboardBizService.hideLoader();
+            }
+        },
+        postAddNewsForm: function() {
+            let postData = {
+                scene: 'ADMIN_EVENT_GALLERY',
+                extendInfo: {
+                    TITLE: $('#newsTitle').val(),
+                    DESCRIPTION: $('#newsDescription').val(),
+                    CATEGORY: $('#newsCategory').val(),
+                    DATE_START: $('#dateStart').val(),
+                    DATE_END: $('#dateEnd').val(),
+                    TIME_START: $('#timeStart').val(),
+                    TIME_END: $('#timeEnd').val(),
+                    LOCATION: $('#location').val()
+                }
+            };
+            EzWebAppClient.postMultipartForm('add-news-form', postData, EzAdminUrl.ADMIN_COMMON_POST, '');
+        },
+        showLoader: function() {
+            $('#add-news-submit').hide();
+            $('#submitLoader').show();
+        },
+        hideLoader: function() {
+            $('#submitLoader').hide();
+            $('#add-news-submit').show();
+        }
+    };
+
+    $(document).ready(function(){
+        EzWebAppClient.onApiBizSuccess(function(url, response){
+            EzDashboardBizService.handleApiBizResult(url, response);
+        });
+        EzWebAppClient.onApiBizFailed(function(url, message){
+            EzDashboardBizService.handleApiBizFailed(url, message);
+        });
+        EzWebAppClient.onApiCallError(function(xhr){
+            console.log(xhr);
+        });
+        EzWebAppClient.onReady(function(){
+            EzDashboardBizService.start();
+        });
+        EzWebAppClient.start();
+
+        $('#add-news-submit').click(function(event) {
+            event.preventDefault();
+            EzDashboardBizService.showLoader();
+            EzDashboardBizService.postAddNewsForm();
+        });
+
+
+        // dropify and timepicker
+        $('.dropify').dropify();
+        $('.dropify-image').dropify({
+            messages: {
+                default : '<center>Drag and drop a image here or click</center>',
+                error   : 'Ooops, something wrong appended.'
+            },
+            error: {
+                'fileSize': '<center>The file size is too big broo ({{ value }} max).</center>',
+                'minWidth': '<center>The image width is too small ({{ value }}}px min).</center>',
+                'maxWidth': '<center>The image width is too big ({{ value }}}px max).</center>',
+                'minHeight': '<center>The image height is too small ({{ value }}}px min).</center>',
+                'maxHeight': '<center>The image height is too big ({{ value }}px max).</center>',
+                'imageFormat': '<center>The image format is not allowed ({{ value }} only).</center>',
+                'fileExtension': '<center>The file is not allowed ({{ value }} only).</center>'
+            },
+        });
+        $('.dropify-notification').dropify({
+            messages: {
+                default : '<center>Drag and drop a image here or click<br>(Optional)</center>',
+            }
+        });
+        var drEvent = $('#input-file-events').dropify();
+        drEvent.on('dropify.beforeClear', function(event, element){
+            return confirm("Do you really want to delete \"" + element.file.name + "\" ?");
+        });
+        drEvent.on('dropify.afterClear', function(event, element){
+            alert('File deleted');
+        });
+        drEvent.on('dropify.errors', function(event, element){
+            console.log('Has Errors');
+        });
+        var drDestroy = $('#input-file-to-destroy').dropify();
+        drDestroy = drDestroy.data('dropify')
+        $('#toggleDropify').on('click', function(e){
+            e.preventDefault();
+            if (drDestroy.isDropified()) {
+                drDestroy.destroy();
+            } else {
+                drDestroy.init();
+            }
+        });
+        $('#dateStart').bootstrapMaterialDatePicker({
+            time: false,
+            format: 'YYYY-MM-DD'
+        });
+        $('#timeStart').bootstrapMaterialDatePicker({
+            date: false,
+            format: 'HH:mm'
+        });
+        $('#dateEnd').bootstrapMaterialDatePicker({
+            time: false,
+            format: 'YYYY-MM-DD'
+        });
+        $('#timeEnd').bootstrapMaterialDatePicker({
+            date: false,
+            format: 'HH:mm'
+        });
+    });
+</script>

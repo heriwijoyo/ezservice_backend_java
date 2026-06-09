@@ -1,0 +1,123 @@
+<section class="content">
+    <ol class="breadcrumb breadcrumb-offset">
+        <li class="active">Upload Data</li>
+    </ol>
+
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                <div class="card corner-radius">
+                    <div class="header">
+                        <h2>UPLOAD DATA CSV</h2>
+                    </div>
+                    <div class="body">
+                        <div class="row clearfix">
+
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">Sub Organization</div>
+                                    <select class="form-control show-tick" id="subOrgId"></select>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-sm-12">
+                                <div class="form-line">
+                                    <div class="font-12">CSV File</div>
+                                    <form id="importForm" enctype="multipart/form-data" method="post">
+                                        <input type="file" id="importFile" name="importFile" data-allowed-file-extensions="csv" required/>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <img id="btnLoader" src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right">
+                                <button id="btnSubmit" class="button button-rounded waves-effect waves-float pull-right" type="submit">SUBMIT</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<script type="text/javascript">
+    var EzConfigApiUrl = {
+        GET_SUB_ORGANIZATIONS: 'api/subOrganizationAll.json',
+        CSV_UPLOAD_URL: 'api/csvUpload.json'
+    };
+
+    var EzBizAppService = {
+        selectedSubOrgId: '',
+        start: function() {
+            EzBizAppService.getSubOrganizations();
+            $('#importCancelButton').click(function(){
+                EzBizAppService.hideImportForm();
+            });
+        },
+        getSubOrganizations: function() {
+            EzWebAppClient.callApiService(EzConfigApiUrl.GET_SUB_ORGANIZATIONS, {});
+        },
+        uploadForm: function(subOrgId, subOrgName) {
+            EzBizAppService.selectedSubOrgId = subOrgId;
+            EzBizAppService.showImportForm(subOrgName);
+        },
+        handleApiBizResult: function(url, response) {
+            if (url === EzConfigApiUrl.GET_SUB_ORGANIZATIONS) {
+                EzBizAppService.parseSubOrgItemHTML(response.data);
+            }
+            if (url === EzConfigApiUrl.CSV_UPLOAD_URL) {
+                alert(response.data);
+                $('#btnLoader').hide();
+                $('#btnSubmit').show();
+                $('#importFile').val('');
+            }
+
+        },
+        parseSubOrgItemHTML: function(data) {
+            var optionHTML = '';
+            for (let i = 0; i < data.length; i++) {
+                optionHTML += '<option value="'+ data[i].subOrgId +'">'+ data[i].name +'</option>';
+            }
+            $('#subOrgId').html(optionHTML);
+        },
+        submitImportForm: function() {
+            let postData = {
+                subOrgId : $('#subOrgId').val()
+            };
+            EzWebAppClient.postMultipartFormData('importForm', postData, EzConfigApiUrl.CSV_UPLOAD_URL, '');
+        }
+    };
+
+    $(document).ready(function(){
+        EzWebAppClient.onApiBizSuccess(function(url, response){
+            EzBizAppService.handleApiBizResult(url, response);
+        });
+        EzWebAppClient.onApiBizFailed(function(url, message){
+            EzWebAppViewHelper.showModalAlert(
+                'API Biz Failed',
+                message,
+                function(){}
+            );
+        });
+        EzWebAppClient.onApiCallError(function(xhr){
+            EzWebAppViewHelper.showModalAlert(
+                'Application Error',
+                xhr.responseText,
+                function(){}
+            );
+        });
+        EzWebAppClient.onReady(function(){
+            EzBizAppService.start();
+        });
+        EzWebAppClient.start();
+
+        $('#btnSubmit').click(function(){
+            $('#btnLoader').show();
+            $('#btnSubmit').hide();
+            EzBizAppService.submitImportForm();
+        });
+    });
+</script>

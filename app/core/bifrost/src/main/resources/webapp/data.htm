@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>MSA Report Center</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat|Open+Sans|Roboto|Material+Icons" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400&display=swap">
+    <link rel="stylesheet" href="../../assets/css/report/a11y-light.css">
+    <link rel="stylesheet" href="../../assets/css/report/jsuites.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../assets/css/report/style.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../assets/css/report/menu.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../assets/css/report/style.css" type="text/css" />
+    <link rel="stylesheet" href="../../assets/css/report/jspreadsheet.min.css" type="text/css" />
+
+    <script src="../../assets/js/report/index.min.js" type="text/javascript"></script>
+    <script src="../../assets/js/report/highlight.min.js" type="text/javascript"></script>
+    <script src="../../assets/js/report/highlightjs-line-numbers.min.js" type="text/javascript"></script>
+    <script src="../../assets/js/report/lemonade.min.js" type="text/javascript"></script>
+    <script src="../../assets/js/report/jsuites.min.js" type="text/javascript"></script>
+    <script src="../../assets/js/report/menu.min.js" type="text/javascript"></script>
+    <script src="../../assets/js/report/themes.js" type="text/javascript"></script>
+    <script src="../../assets/js/report/app.js" type="text/javascript"></script>
+</head>
+<body>
+<style type="text/css">
+.jexcel>tbody>tr>td.readonly {
+    color: rgba(0,0,0,.8)
+}
+</style>
+
+<section class='top'>
+    <div class='row container middle' style="min-height:60px">
+        <nav id='top' class='big-screen-only'>
+            <ul>
+                <li><a href="../../data/ORG_CODE/INCLUDE_SESSION_ID">Data Aplikasi</a></li>
+                <li><a href="../../import/ORG_CODE/INCLUDE_SESSION_ID">Data Google Sheet</a></li>
+            </ul>
+        </nav>
+    </div>
+</section>
+
+<section>
+    <div class='row container'>
+        <div class='column f3'>
+            <div id='content'>
+                <div class="section">
+                    <div class="section-content">
+
+                        <h2 id="title">TABLE_TITLE</h2>
+
+                        <div id='dataTable'></div>
+
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                table = jspreadsheet(document.getElementById('dataTable'), {
+                                    url: 'app/INCLUDE_SESSION_ID.json',
+                                    columns: [
+                                        { readOnly:true, align:'left', title:'Komunitas', width:180 },
+                                        { readOnly:true, align:'left', title:'Nama', width:180 },
+                                        { readOnly:true, align:'left', title:'No KTP', width:160 },
+                                        { readOnly:true, align:'left', title:'Jenis Kelamin', width:100 },
+                                        { readOnly:true, align:'left', title:'Tgl Lahir', width:100 },
+                                        { readOnly:true, align:'left', title:'No HP', width:100 },
+                                        { readOnly:true, align:'left', title:'Pendidikan', width:100 },
+                                        { readOnly:true, align:'left', title:'Pekerjaan', width:100 },
+                                        { readOnly:true, align:'left', title:'Agama', width:100 },
+                                        { readOnly:true, align:'left', title:'Etnis', width:100 },
+                                        { readOnly:true, align:'left', title:'Kecamatan', width:100 },
+                                        { readOnly:true, align:'left', title:'Kelurahan', width:100 },
+                                        { readOnly:true, align:'left', title:'RW', width:100 },
+                                        { readOnly:true, align:'left', title:'RT', width:100 },
+                                        { readOnly:true, align:'left', title:'No TPS', width:100 },
+                                    ],
+                                    toolbar: [
+                                        {
+                                            type: 'i',
+                                            content: 'save',
+                                            onclick: function () {
+                                                table.download();
+                                            }
+                                        },
+                                        {
+                                            type: 'select',
+                                            k: 'font-family',
+                                            v: ['Arial','Verdana']
+                                        },
+                                        {
+                                            type: 'select',
+                                            k: 'font-size',
+                                            v: ['9px','10px','11px','12px','13px','14px','15px','16px','17px','18px','19px','20px']
+                                        },
+                                        {
+                                            type: 'i',
+                                            content: 'format_align_left',
+                                            k: 'text-align',
+                                            v: 'left'
+                                        },
+                                        {
+                                            type:'i',
+                                            content:'format_align_center',
+                                            k:'text-align',
+                                            v:'center'
+                                        },
+                                        {
+                                            type: 'i',
+                                            content: 'format_align_right', 
+                                            k: 'text-align',
+                                            v: 'right'
+                                        },
+                                        {
+                                            type: 'i',
+                                            content: 'format_bold',
+                                            k: 'font-weight',
+                                            v: 'bold'
+                                        },
+                                        {
+                                            type: 'color',
+                                            content: 'format_color_text',
+                                            k: 'color'
+                                        },
+                                        {
+                                            type: 'color',
+                                            content: 'format_color_fill',
+                                            k: 'background-color'
+                                        },
+                                    ],
+                                    csvHeaders:true,
+                                    search:true,
+                                    columnSorting:true,
+                                    pagination: 100,
+                                    includeHeadersOnDownload:true,
+                                    csvFileName:'Report_MSA_Center'
+                                });
+                            });
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--footer id="footer">
+<div class="container p20">
+    <div class="row">
+        <div class="column f3 p20">
+            <div class='footer-list'>
+                <h4>Dynamic Report</h4>
+                <p>Prepared by ArahIndonesia</p>
+                <a href='mailto:marketing@arahindonesia.id'>marketing@arahindonesia.id</a>
+            </div>
+        </div>
+    </div>
+</div>
+</footer-->
+
+</body>
+
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', app);
+</script>
+</html>

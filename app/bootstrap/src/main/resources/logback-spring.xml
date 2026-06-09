@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <springProperty scope="context" name="APP_NAME" source="spring.application.name" />
+    <springProperty scope="context" name="ROOT_LOG_LEVEL" source="logging.root.log_level" />
+    <springProperty scope="context" name="APP_LOG_ROOT" source="logging.app.root_path" />
+    <springProperty scope="context" name="APP_LOG_TYPE" source="logging.app.log_type" />
+
+    <appender name="Appender_File"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/${APP_NAME}/default.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/default.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <append>true</append>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d %p %C{1.} [%t] %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ErrorAppender_File"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/${APP_NAME}/default-error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/default-error.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>error</level>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d %p %C{1.} [%t] %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="AppErrorAppender_File"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/${APP_NAME}/common-error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/common-error.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>error</level>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d --- [%thread]%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="API_CONTROLLER_File"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/${APP_NAME}/controller-api.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/controller-api.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d --- [%thread]%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="API_CONTROLLER_ELECTION_File"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/${APP_NAME}/controller-election-api.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/controller-election-api.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d --- [%thread]%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="API_CONTROLLER_COMMERCE_File"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/${APP_NAME}/controller-commerce-api.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/controller-commerce-api.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d --- [%thread]%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="WEB_PAGES_CONTROLLER_File"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/${APP_NAME}/controller-web-pages.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/controller-web-pages.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d --- [%thread]%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="WEB_CONTROLLER_File"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/${APP_NAME}/controller-web.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/controller-web.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d --- [%thread]%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ADMIN_WEB_CONTROLLER_File"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/${APP_NAME}/controller-web-admin.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/controller-web-admin.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d --- [%thread]%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="WEB_API_CONTROLLER_File"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/${APP_NAME}/controller-web-api.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/controller-web-api.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d --- [%thread]%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="APP_BIZ_SERVICE_File"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/${APP_NAME}/biz-service.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/biz-service.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d --- [%thread]%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="INTEGRATION_SERVICE_File"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/${APP_NAME}/integration-service.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/integration-service.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d --- [%thread]%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="CORE_PROCESS_File"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/${APP_NAME}/core-process.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/core-process.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d --- [%thread]%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC_PROCESS_File"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/${APP_NAME}/async-process.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/async-process.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d --- [%thread]%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="SCHEDULER_File"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/${APP_NAME}/scheduler.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/scheduler.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d --- [%thread]%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="EZDAL_File"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/${APP_NAME}/ez-dal.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/ez-dal.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d --- [%thread]%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="BROKER_File"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_ROOT}/${APP_NAME}/ez-broker.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_ROOT}/${APP_NAME}/ez-broker.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d --- [%thread]%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="API_CONTROLLER" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="API_CONTROLLER_${APP_LOG_TYPE}" />
+        <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
+    </logger>
+
+    <logger name="APP_BIZ_SERVICE" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="APP_BIZ_SERVICE_${APP_LOG_TYPE}" />
+        <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
+    </logger>
+
+    <logger name="INTEGRATION_SERVICE" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="INTEGRATION_SERVICE_${APP_LOG_TYPE}" />
+        <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
+    </logger>
+
+    <logger name="CORE_PROCESS" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="CORE_PROCESS_${APP_LOG_TYPE}" />
+        <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
+    </logger>
+
+    <logger name="ASYNC_PROCESS" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="ASYNC_PROCESS_${APP_LOG_TYPE}" />
+        <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
+    </logger>
+
+    <logger name="SCHEDULER" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="SCHEDULER_${APP_LOG_TYPE}" />
+        <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
+    </logger>
+
+    <logger name="EZDAL" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="EZDAL_${APP_LOG_TYPE}" />
+        <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
+    </logger>
+
+    <logger name="BROKER" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="BROKER_${APP_LOG_TYPE}" />
+        <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
+    </logger>
+
+    <!-- WEB LOGGER RELATED -->
+    <logger name="WEB_PAGES_CONTROLLER" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="WEB_PAGES_CONTROLLER_${APP_LOG_TYPE}" />
+        <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
+    </logger>
+
+    <logger name="WEB_CONTROLLER" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="WEB_CONTROLLER_${APP_LOG_TYPE}" />
+        <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
+    </logger>
+
+    <logger name="ADMIN_WEB_CONTROLLER" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="ADMIN_WEB_CONTROLLER_${APP_LOG_TYPE}" />
+        <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
+    </logger>
+
+    <logger name="WEB_API_CONTROLLER" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="WEB_API_CONTROLLER_${APP_LOG_TYPE}" />
+        <appender-ref ref="AppErrorAppender_${APP_LOG_TYPE}" />
+    </logger>
+
+    <root level="${ROOT_LOG_LEVEL}">
+        <appender-ref ref="Appender_${APP_LOG_TYPE}" />
+        <appender-ref ref="ErrorAppender_${APP_LOG_TYPE}" />
+    </root>
+
+</configuration>

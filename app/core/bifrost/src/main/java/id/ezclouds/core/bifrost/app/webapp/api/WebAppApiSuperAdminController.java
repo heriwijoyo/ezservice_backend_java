@@ -1,0 +1,628 @@
+/**
+ * Ezclouds.id
+ * Copyright (c) 2020‐2024 All Rights Reserved.
+ */
+package id.ezclouds.core.bifrost.app.webapp.api;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import id.ezclouds.biz.election.model.admin.BizApplicationConfig;
+import id.ezclouds.biz.election.model.admin.BizMemberRequiredData;
+import id.ezclouds.common.model.admin.AdminParamConfig;
+import id.ezclouds.common.model.core.organization.BizOrganization;
+import id.ezclouds.biz.election.model.admin.BizOrganizationDetail;
+import id.ezclouds.biz.election.service.request.web.BizWebCommonRequest;
+import id.ezclouds.biz.election.service.request.web.BizWebCreateRequest;
+import id.ezclouds.biz.election.service.request.web.BizWebPageRequest;
+import id.ezclouds.biz.election.model.member.BizGender;
+import id.ezclouds.biz.election.model.member.BizMember;
+import id.ezclouds.biz.election.service.apibiz.admin.BizSuperAdminService;
+import id.ezclouds.biz.election.service.app.model.BizAppConfig;
+import id.ezclouds.common.model.request.admin.WebBizUpdateRequest;
+import id.ezclouds.common.model.request.admin.WebBizDetailRequest;
+import id.ezclouds.common.model.result.BizResult;
+import id.ezclouds.biz.election.subbiz.arahindonesia.model.BizSubOrganization;
+import id.ezclouds.core.bifrost.app.web.WebApiControllerTemplate;
+import id.ezclouds.core.bifrost.app.webapp.event.WebAppApiEvent;
+import id.ezclouds.core.shared.model.LegacyCoreArea;
+import id.ezclouds.common.model.result.PageResult;
+import id.ezclouds.common.util.logger.CommonLoggerConstant;
+import id.ezclouds.common.util.logger.DigestLog;
+import id.ezclouds.core.bifrost.app.web.event.WebEvent;
+import id.ezclouds.core.bifrost.app.web.result.WebApiPageResult;
+import id.ezclouds.core.bifrost.app.web.result.WebApiResult;
+import id.ezclouds.core.shared.util.DigestLogUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @author Heri Wijoyo (heri.wijoyo@gmail.com)
+ * @version $Id: WebApiAdminController.java, v 0.1 2024‐02‐11 11:00 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ */
+@RestController
+public class WebAppApiSuperAdminController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommonLoggerConstant.WEB_API_CONTROLLER);
+
+    @Autowired
+    private BizSuperAdminService bizSuperAdminService;
+
+    @PostMapping(value = "/webapp/api/getOrganization.json")
+    private WebApiPageResult<BizOrganization> getOrganization(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "pageNumber", required = false) int pageNumber,
+            @RequestParam(name = "pageSize", required = false) int pageSize
+    ) {
+        final WebApiPageResult<BizOrganization> result = new WebApiPageResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_ORGANIZATION, result, new WebApiControllerTemplate.PageHandler<>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizWebPageRequest request = new BizWebPageRequest();
+                request.setSessionId(sessionId);
+                request.setPageNumber(pageNumber);
+                request.setPageSize(pageSize);
+                return bizSuperAdminService.getOrganization(request);
+            }
+
+            @Override
+            public PageResult<BizOrganization> convertResult(Object object) {
+                if (object instanceof PageResult) {
+                    return (PageResult<BizOrganization>) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/createOrganization.json")
+    private WebApiResult<String> createOrganization(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "orgId", required = false) String orgId,
+            @RequestParam(name = "orgCode", required = false) String orgCode,
+            @RequestParam(name = "address", required = false) String address,
+            @RequestParam(name = "contactName", required = false) String contactName,
+            @RequestParam(name = "contactPhone", required = false) String contactPhone,
+            @RequestParam(name = "contactEmail", required = false) String contactEmail
+    ) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_CREATE_ORGANIZATION, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizOrganization organization = new BizOrganization();
+                organization.setName(name);
+                organization.setOrgId(orgId);
+                organization.setCode(orgCode);
+                organization.setAddress(address);
+                organization.setContactName(contactName);
+                organization.setContactPhone(contactPhone);
+                organization.setContactEmail(contactEmail);
+
+                BizWebCreateRequest<BizOrganization> request = new BizWebCreateRequest<>();
+                request.setSessionId(sessionId);
+                request.setData(organization);
+                return bizSuperAdminService.createOrganization(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                if (object instanceof String) {
+                    return (String) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/getOrganizationDetail.json")
+    private WebApiResult<BizOrganizationDetail> getOrganizationDetail(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "orgId", required = false) String orgId) {
+        final WebApiResult<BizOrganizationDetail> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_GET_ORGANIZATION_DETAIL, result, new WebApiControllerTemplate.Handler<BizOrganizationDetail>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                WebBizDetailRequest<String> request = new WebBizDetailRequest<>();
+                request.setSessionId(sessionId);
+                request.setObject(orgId);
+                return bizSuperAdminService.getOrganizationDetail(request);
+            }
+
+            @Override
+            public BizOrganizationDetail convertResult(Object object) {
+                if (object instanceof BizOrganizationDetail) {
+                    return (BizOrganizationDetail) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/addMemberRequiredData.json")
+    private WebApiResult<BizMemberRequiredData> addMemberRequiredData(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "orgId", required = false) String orgId) {
+        final WebApiResult<BizMemberRequiredData> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_MEMBER_REQUIRED_DATA, result, new WebApiControllerTemplate.Handler<BizMemberRequiredData>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                WebBizDetailRequest<String> request = new WebBizDetailRequest<>();
+                request.setSessionId(sessionId);
+                request.setObject(orgId);
+                return bizSuperAdminService.getMemberRequiredData(request);
+            }
+
+            @Override
+            public BizMemberRequiredData convertResult(Object object) {
+                if (object instanceof BizMemberRequiredData) {
+                    return (BizMemberRequiredData) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/organizationUpdate.json")
+    private WebApiResult<String> organizationUpdate(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "orgId", required = false) String orgId,
+            @RequestParam(name = "extendConfig", required = false) String extendConfig,
+            @RequestParam(name = "address", required = false) String address,
+            @RequestParam(name = "contactName", required = false) String contactName,
+            @RequestParam(name = "contactPhone", required = false) String contactPhone,
+            @RequestParam(name = "contactEmail", required = false) String contactEmail,
+            @RequestParam(name = "status", required = false) int status) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_UPDATE_ORGANIZATION, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizOrganization organization = new BizOrganization();
+                organization.setOrgId(orgId);
+                organization.setExtendConfig(extendConfig);
+                organization.setAddress(address);
+                organization.setContactName(contactName);
+                organization.setContactPhone(contactPhone);
+                organization.setContactEmail(contactEmail);
+                organization.setStatus(status);
+
+                WebBizUpdateRequest<BizOrganization> request = new WebBizUpdateRequest<>();
+                request.setSessionId(sessionId);
+                request.setObject(organization);
+                return bizSuperAdminService.updateOrganization(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/appClientConfigUpdate.json")
+    private WebApiResult<String> appConfigUpdate(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "orgId", required = false) String orgId,
+            @RequestParam(name = "id", required = false) String id,
+            @RequestParam(name = "appId", required = false) String appId,
+            @RequestParam(name = "clientId", required = false) String clientId,
+            @RequestParam(name = "clientSecret", required = false) String clientSecret,
+            @RequestParam(name = "createdTime", required = false) String createdTime,
+            @RequestParam(name = "status", required = false) int status ) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_UPDATE_CLIENT_APP_CONFIG, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizApplicationConfig applicationConfig = new BizApplicationConfig();
+                applicationConfig.setOrgId(orgId);
+                applicationConfig.setId(id);
+                applicationConfig.setAppId(appId);
+                applicationConfig.setClientId(clientId);
+                applicationConfig.setClientSecret(clientSecret);
+                applicationConfig.setCreatedTime(createdTime);
+                applicationConfig.setStatus(status);
+
+                WebBizUpdateRequest<BizApplicationConfig> request = new WebBizUpdateRequest<>();
+                request.setSessionId(sessionId);
+                request.setObject(applicationConfig);
+                return bizSuperAdminService.updateAppConfig(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                if (object instanceof String) {
+                    return (String) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/appConfigUpdate.json")
+    private WebApiResult<String> appConfigUpdate(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "orgId", required = false) String orgId,
+            @RequestParam(name = "mapData", required = false) String mapData ) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_UPDATE_APP_CONFIG, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                WebBizUpdateRequest<List<BizAppConfig>> request = new WebBizUpdateRequest<>();
+                request.setSessionId(sessionId);
+                request.setOrgId(orgId);
+                request.setObject(new ObjectMapper().readValue(mapData, new TypeReference<List<BizAppConfig>>(){}));
+                return bizSuperAdminService.updateBizAppConfig(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                if (object instanceof String) {
+                    return (String) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/coreOrgConfigUpdate.json")
+    private WebApiResult<String> coreOrgConfigUpdate(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "orgId", required = false) String orgId,
+            @RequestParam(name = "mapData", required = false) String mapData ) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_UPDATE_CORE_ORG_CONFIG, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                WebBizUpdateRequest<Map<String, String>> request = new WebBizUpdateRequest<>();
+                request.setSessionId(sessionId);
+                request.setOrgId(orgId);
+                request.setObject(new ObjectMapper().readValue(mapData, new TypeReference<Map<String, String>>(){}));
+                return bizSuperAdminService.updateCoreOrgConfig(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                if (object instanceof String) {
+                    return (String) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/coreOrgAdminAdd.json")
+    private WebApiResult<String> coreOrgAdminAdd(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "orgId", required = false) String orgId,
+            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "phone", required = false) String phone,
+            @RequestParam(name = "email", required = false) String email ) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_CREATE_ADMIN_ORG, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizMember bizMember = new BizMember();
+                bizMember.setName(name);
+                bizMember.setPhone(phone);
+                bizMember.setEmail(email);
+
+                BizWebCreateRequest<BizMember> request = new BizWebCreateRequest<>();
+                request.setSessionId(sessionId);
+                request.setOrgId(orgId);
+                request.setData(bizMember);
+                return bizSuperAdminService.adminOrgCreateMember(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                if (object instanceof String) {
+                    return (String) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/addMember.json")
+    private WebApiResult<String> addMember(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "orgId", required = false) String orgId,
+            @RequestParam(name = "referrerId", required = false) String referrerId,
+            @RequestParam(name = "subOrgId", required = false) String subOrgId,
+            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "gender", required = false) String gender,
+            @RequestParam(name = "dateOfBirth", required = false) String dateOfBirth,
+            @RequestParam(name = "phone", required = false) String phone,
+            @RequestParam(name = "education", required = false) String education,
+            @RequestParam(name = "occupation", required = false) String occupation,
+            @RequestParam(name = "religion", required = false) String religion,
+            @RequestParam(name = "ethnic", required = false) String ethnic,
+            @RequestParam(name = "idCardNumber", required = false) String idCardNumber,
+            @RequestParam(name = "districtId", required = false) String districtId,
+            @RequestParam(name = "villageId", required = false) String villageId,
+            @RequestParam(name = "rukunWarga", required = false) String rukunWarga,
+            @RequestParam(name = "rukunTetangga", required = false) String rukunTetangga,
+            @RequestParam(name = "tpsNo", required = false) String tpsNo
+    ) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_CREATE_MEMBER, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizMember bizMember = new BizMember();
+                bizMember.setOrgId(orgId);
+                bizMember.setReferrerId(referrerId);
+                bizMember.setSubOrganization(new BizSubOrganization(subOrgId));
+                bizMember.setName(name);
+                bizMember.setGender(BizGender.getByCode(gender));
+                bizMember.setDateOfBirth(dateOfBirth);
+                bizMember.setPhone(phone);
+                bizMember.setEducation(education);
+                bizMember.setOccupation(occupation);
+                bizMember.setReligion(religion);
+                bizMember.setEthnic(ethnic);
+                bizMember.setIdCardNumber(idCardNumber);
+                bizMember.setDistrictId(districtId);
+                bizMember.setVillageId(villageId);
+                bizMember.setRukunWarga(rukunWarga);
+                bizMember.setRukunTetangga(rukunTetangga);
+                bizMember.setTpsNumber(tpsNo);
+
+                BizWebCreateRequest<BizMember> request = new BizWebCreateRequest<>();
+                request.setSessionId(sessionId);
+                request.setOrgId(orgId);
+                request.setData(bizMember);
+                return bizSuperAdminService.createBizMember(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                if (object instanceof String) {
+                    return (String) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/whatsappSend.json")
+    private WebApiResult<String> whatsappSend(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "orgId", required = false) String orgId,
+            @RequestParam(name = "phone", required = false) String phone,
+            @RequestParam(name = "message", required = false) String message ) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_WHATSAPP_SEND, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                BizWebCommonRequest request = new BizWebCommonRequest();
+                request.setSessionId(sessionId);
+                request.getExtendInfo().put("ORG_ID", orgId);
+                request.getExtendInfo().put("PHONE", phone);
+                request.getExtendInfo().put("MESSAGE", message);
+                return bizSuperAdminService.adminWhatsappSendMessage(request);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                if (object instanceof String) {
+                    return (String) object;
+                }
+                return null;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/refreshAllCaches.json")
+    private WebApiResult<List<String>> refreshAllCaches(@RequestParam(name = "sessionId", required = false) String sessionId) {
+        final WebApiResult<List<String>> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_REFRESH_ALL_CACHES, result, new WebApiControllerTemplate.Handler<List<String>>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                return bizSuperAdminService.refreshAllCaches(sessionId);
+            }
+
+            @Override
+            public List<String> convertResult(Object object) {
+                return (List<String>) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/refreshAllDirectories.json")
+    private WebApiResult<String> refreshAllDirectories(@RequestParam(name = "sessionId", required = false) String sessionId) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_REFRESH_ALL_DIRECTORIES, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                return bizSuperAdminService.refreshAllDirectories(sessionId);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/refreshAllMenus.json")
+    private WebApiResult<String> refreshAllMenus(@RequestParam(name = "sessionId", required = false) String sessionId) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_REFRESH_ALL_MENUS, result, new WebApiControllerTemplate.Handler<String>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                return bizSuperAdminService.refreshAllMenus(sessionId);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/coreArea.json")
+    private WebApiResult<List<LegacyCoreArea>> coreArea(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "level", required = false) String level,
+            @RequestParam(name = "parentId", required = false) String parentId) {
+        final WebApiResult<List<LegacyCoreArea>> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebEvent.WEB_API_CORE_AREA, result, new WebApiControllerTemplate.Handler<>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                return bizSuperAdminService
+                        .getCoreAreas(sessionId, level, parentId);
+            }
+
+            @Override
+            public List<LegacyCoreArea> convertResult(Object object) {
+                return (List<LegacyCoreArea>) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/adminParamConfig.json")
+    private WebApiResult<AdminParamConfig> adminParamConfig(
+            @RequestParam(name = "sessionId", required = false) String sessionId) {
+        final WebApiResult<AdminParamConfig> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebAppApiEvent.WEBAPP_API_ADMIN_PARAM_CONFIG, result, new WebApiControllerTemplate.Handler<>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                return bizSuperAdminService
+                        .getAdminParamConfig(sessionId);
+            }
+
+            @Override
+            public AdminParamConfig convertResult(Object object) {
+                return (AdminParamConfig) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+
+    @PostMapping(value = "/webapp/api/triggerAsyncProcess.json")
+    private WebApiResult<String> triggerAsyncProcess(
+            @RequestParam(name = "sessionId", required = false) String sessionId,
+            @RequestParam(name = "processName", required = false) String processName,
+            @RequestParam(name = "param", required = false) String param) {
+        final WebApiResult<String> result = new WebApiResult<>();
+        WebApiControllerTemplate.execute(WebAppApiEvent.WEBAPP_API_TRIGGER_ASYNC_PROCESS, result, new WebApiControllerTemplate.Handler<>() {
+            @Override
+            public BizResult onProcess() throws Exception {
+                return bizSuperAdminService
+                        .triggerAsyncProcess(sessionId, processName, param);
+            }
+
+            @Override
+            public String convertResult(Object object) {
+                return (String) object;
+            }
+
+            @Override
+            public void onDigestLog(DigestLog digestLog) {
+                DigestLogUtil.logWebDigest(LOGGER, digestLog);
+            }
+        });
+        return result;
+    }
+}

@@ -1,0 +1,37 @@
+/**
+ * Ezclouds.id
+ * Copyright (c) 2020‐2024 All Rights Reserved.
+ */
+package id.ezclouds.core.bifrost.app.api.digestlog;
+
+import id.ezclouds.biz.election.service.result.BizMemberLoginResult;
+import id.ezclouds.common.model.request.api.ApiRequest;
+import id.ezclouds.core.bifrost.app.api.request.MemberLoginRequest;
+import id.ezclouds.common.model.result.api.ApiResult;
+
+/**
+ * @author Heri Wijoyo (heri.wijoyo@gmail.com)
+ * @version $Id: MemberLoginDigestLog.java, v 0.1 2024‐01‐29 4:35 AM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ */
+public class MemberLoginDigestLog extends BaseDigestLog<BizMemberLoginResult> {
+
+    public MemberLoginDigestLog(boolean success, String resultCode) {
+        super(success, resultCode);
+    }
+
+    @Override
+    public void composeDigest(ApiRequest request, ApiResult<BizMemberLoginResult> result) {
+        String requestData;
+        if (request instanceof MemberLoginRequest) {
+            MemberLoginRequest loginRequest = (MemberLoginRequest) request;
+            requestData = "loginType=" + loginRequest.getLoginType() + ",loginId=" + loginRequest.getLoginId();
+        } else {
+            requestData = "NULL";
+        }
+
+        String requestInfo = "request(" + requestData + ")";
+        setDigestMessage(requestInfo);
+
+        setErrorMessage(getErrorMessage(result));
+    }
+}

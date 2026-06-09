@@ -1,0 +1,129 @@
+<section class="content">
+    <ol class="breadcrumb breadcrumb-offset">
+        <li><a href="home.htm">Dashboard</a></li>
+        <li class="active">Home</a></li>
+    </ol>
+
+    <div class="container-fluid" id="fade-in">
+        <div id="dashboard-container" class="row">
+            <a href="appgallery.htm">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase">Manage Gallery</div>
+                        <div class="color-name"><i class="material-icons">image</i></div>
+                        <!--div class="color-class-name">0 Images</div-->
+                        <br>
+                    </div>
+                </div>
+            </a>
+
+            <a href="news.htm">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase">Manage News</div>
+                        <div class="color-name"><i class="material-icons">library_books</i></div>
+                        <!--div class="color-class-name">0 Images</div-->
+                        <br>
+                    </div>
+                </div>
+            </a>
+
+            <a href="events.htm">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase">Manage Event</div>
+                        <div class="color-name"><i class="material-icons">calendar_month</i></div>
+                        <!--div class="color-class-name">0 Images</div-->
+                        <br>
+                    </div>
+                </div>
+            </a>
+
+            <a href="videocard.htm">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase">Manage Video Card</div>
+                        <div class="color-name"><i class="material-icons">smart_display</i></div>
+                        <!--div class="color-class-name">0 Images</div-->
+                        <br>
+                    </div>
+                </div>
+            </a>
+
+            <a href="profile.htm">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase">Candidate Profile</div>
+                        <div class="color-name"><i class="material-icons">assignment_ind</i></div>
+                        <!--div class="color-class-name">0 Images</div-->
+                        <br>
+                    </div>
+                </div>
+            </a>
+
+            <a href="documents.htm">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase">Manage Documents</div>
+                        <div class="color-name"><i class="material-icons">picture_as_pdf</i></div>
+                        <!--div class="color-class-name">0 Images</div-->
+                        <br>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    var EzDashboardBizService = {
+        start: function() {
+            //EzWebAppClient.callApiService(EzApiUrl.GET_DASHBOARD_DATA, {});
+        },
+        handleApiBizResult: function(url, response) {
+            for (let i=0; i<response.data.length; i++) {
+                let dashboard = $.parseHTML(DashTemplate);
+                $(dashboard).attr('href', response.data[i].url);
+                $(dashboard).find('#dashboard-name').html(response.data[i].displayName);
+                $(dashboard).find('#dashboard-icon').html(response.data[i].icon);
+                $(dashboard).find('#dashboard-label').html(response.data[i].countValue +' '+ response.data[i].countLabel);
+                $('#dashboard-container').append(dashboard);
+            }
+        }
+    };
+
+    $(document).ready(function(){
+        EzWebAppClient.onApiBizSuccess(function(url, response){
+            EzDashboardBizService.handleApiBizResult(url, response);
+        });
+        EzWebAppClient.onApiBizFailed(function(url, message){
+            console.log(url +' --- '+ message);
+        });
+        EzWebAppClient.onApiCallError(function(xhr){
+            console.log(xhr);
+        });
+        EzWebAppClient.onReady(function(){
+            EzDashboardBizService.start();
+        });
+        EzWebAppClient.start();
+    });
+
+    var DashTemplate = ''+
+        '<a href="">'+
+            '<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">'+
+                '<div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">'+
+                    '<br>'+
+                    '<div id="dashboard-name" class="color-name uppercase"></div>'+
+                    '<div class="color-name"><i id="dashboard-icon" class="material-icons"></i></div>'+
+                    '<div id="dashboard-label" class="color-class-name">Total 9 item</div>'+
+                    '<br>'+
+                '</div>'+
+            '</div>'+
+        '</a>';
+</script>

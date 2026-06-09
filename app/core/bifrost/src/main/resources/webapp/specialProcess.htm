@@ -1,0 +1,173 @@
+<section class="content">
+    <ol class="breadcrumb breadcrumb-offset">
+        <li class="active">Special Process</li>
+    </ol>
+
+    <div class="container-fluid" id="fade-in">
+        <div id="dashboard-container" class="row">
+            <a id="sync-member-report-btn" href="#">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase"></div>
+                        <div class="color-name"><i class="material-icons">analytics</i></div>
+                        <div class="color-class-name">Sync Member Report</div>
+                        <br>
+                    </div>
+                </div>
+            </a>
+            <a id="import-data-btn" href="#">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="card corner-radius demo-color-box bg-blue waves-effect col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="color-name uppercase"></div>
+                        <div class="color-name"><i class="material-icons">storage</i></div>
+                        <div class="color-class-name">Import Data</div>
+                        <br>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade" id="modal-import-form" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Import Special Data</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row clearfix">
+                    <div class="form-group form-float col-sm-12">
+                        <div class="form-line">
+                            <div class="font-12">Import Scene</div>
+                            <input type="text" class="form-control" id="importScene" placeholder="Import Scene" required>
+                        </div>
+                    </div>
+                    <div class="form-group form-float col-sm-12">
+                        <div class="form-line">
+                            <div class="font-12">Organization ID</div>
+                            <input type="text" class="form-control" id="orgId" placeholder="Organization ID" required>
+                        </div>
+                    </div>
+                    <div class="form-group form-float col-sm-12">
+                        <div class="form-line">
+                            <div class="font-12">Sub Organization ID</div>
+                            <input type="text" class="form-control" id="subOrgId" placeholder="Sub Organization ID" required>
+                        </div>
+                    </div>
+                    <div class="form-group form-float col-sm-12">
+                        <div class="form-line">
+                            <div class="font-12">File ID</div>
+                            <input type="text" class="form-control" id="fileId" placeholder="File ID" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-6" style="margin-bottom: 0px;">
+                        <div class="form-group">
+                            <div class="font-12 ex1">CSV File</div>
+                            <form id="importForm" enctype="multipart/form-data" method="post">
+                                <input type="file" id="importFile" name="importFile" data-allowed-file-extensions="csv" required/>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <img id="importLoader" src="assets/img/loading.gif" style="height:40px;display:none" class="pull-right">
+                        <button id="importSubmitButton" class="button button-rounded waves-effect waves-float pull-right" type="submit" name="submit">SUBMIT</button>
+                        <button id="importCancelButton" class="button button-rounded button-light waves-effect waves-float pull-right" type="submit" name="submit">CANCEL</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var EzProcessApiUrl = {
+        RELOAD_REPORT_URL : 'api/reloadReport.json',
+        COMMON_IMPORT_URL : 'api/commonImport.json'
+    };
+
+    var EzProcessService = {
+        start: function() {
+            $('#sync-member-report-btn').click(function(){
+                EzProcessService.reloadReport();
+            });
+            $('#import-data-btn').click(function(){
+                EzProcessService.showImportForm();
+            });
+            $('#importCancelButton').click(function(){
+                EzProcessService.hideImportForm();
+            });
+            $('#importSubmitButton').click(function(){
+                EzProcessService.submitImportForm();
+            });
+        },
+        reloadReport: function() {
+            EzWebAppClient.callApiService(EzProcessApiUrl.RELOAD_REPORT_URL, {});
+        },
+        showImportForm: function() {
+            $('#modal-import-form').removeClass('fade');
+            $('#modal-import-form').addClass('show');
+        },
+        hideImportForm: function() {
+            $('#modal-import-form').removeClass('show');
+            $('#modal-import-form').addClass('fade');
+        },
+        resetImportForm: function() {
+            $('#importScene').val('');
+            $('#orgId').val('');
+            $('#subOrgId').val('');
+            $('#fileId').val('');
+            $('#importFile').val('');
+            $('#importCancelButton').show();
+            $('#importSubmitButton').show();
+            $('#importLoader').hide();
+        },
+        submitImportForm: function() {
+            $('#importCancelButton').hide();
+            $('#importSubmitButton').hide();
+            $('#importLoader').show();
+            let postData = {
+                orgId : $('#orgId').val(),
+                subOrgId : $('#subOrgId').val(),
+                fileId : $('#fileId').val(),
+                scene : $('#importScene').val()
+            };
+            EzWebAppClient.postMultipartForm('importForm', postData, EzProcessApiUrl.COMMON_IMPORT_URL, 'IMPORT_FILE');
+        },
+        handleApiBizResult: function(url, response) {
+            if (url === EzProcessApiUrl.COMMON_IMPORT_URL + 'IMPORT_FILE') {
+                alert(response.data);
+                EzProcessService.resetImportForm();
+            }
+            if (url === EzProcessApiUrl.RELOAD_REPORT_URL) {
+                alert(response.data);
+            }
+        }
+    };
+
+    $(document).ready(function(){
+        EzWebAppClient.onApiBizSuccess(function(url, response){
+            EzProcessService.handleApiBizResult(url, response);
+        });
+        EzWebAppClient.onApiBizFailed(function(url, message){
+            EzWebAppViewHelper.showModalAlert(
+                'API Biz Failed',
+                message,
+                function(){}
+            );
+        });
+        EzWebAppClient.onApiCallError(function(xhr){
+            EzWebAppViewHelper.showModalAlert(
+                'Application Error',
+                xhr.responseText,
+                function(){}
+            );
+        });
+        EzWebAppClient.onReady(function(){
+            EzProcessService.start();
+        });
+        EzWebAppClient.start();
+    });
+</script>

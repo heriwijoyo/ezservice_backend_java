@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Admin</title>
+    <style>
+    /* Some basic styling for the OTP form */
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .otp-form {
+      max-width: 340px;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .otp-form h2 {
+        text-align: center;
+    }
+    .otp-form h3 {
+        text-align: center;
+        display: none;
+    }
+    .otp-input {
+      width: 30px;
+      height: 30px;
+      font-size: 20px;
+      text-align: center;
+      margin: 0 5px;
+    }
+    div.loading {
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 20px 0 0 0;
+    }
+    div.loading img {
+        width: 40px;
+        height:40px;
+        display: none;
+    }
+  </style>
+    <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+</head>
+<body>
+<div class="otp-form">
+    <h2 style="text-align:center">Enter Login Code</h2>
+    <form>
+        <div>
+            <input id="input0" data-prev="0" type="text" class="otp-input" maxlength="1" required>
+            <input id="input1" data-prev="0" type="text" class="otp-input" maxlength="1" required>
+            <input id="input2" data-prev="1" type="text" class="otp-input" maxlength="1" required>
+            <input id="input3" data-prev="2" type="text" class="otp-input" maxlength="1" required>
+            <input id="input4" data-prev="3" type="text" class="otp-input" maxlength="1" required>
+            <input id="input5" data-prev="4" type="text" class="otp-input" maxlength="1" required>
+        </div>
+        <div class="loading">
+            <img id="loader" src="assets/img/loading.gif">
+            <img id="success" src="assets/img/check.png">
+            <img id="failed" src="assets/img/cross.png">
+        </div>
+    </form>
+    <h3 id="message"></h3>
+</div>
+
+<script>
+    var EzCookieName = 'EzWebappCookieSessionId';
+    var EzInputs = [];
+    for (var i = 0; i < 6; i++) {
+        var selector = '#input' + i;
+        var elem = $(selector);
+        elem.keyup(function(e){
+            if (e.keyCode != 8) {
+                refreshInputBoxes();
+            }
+        });
+        elem.keydown(function(e){
+            if (e.keyCode == 8) {
+                if (isEmptyValue($(this).val())) {
+                    var prevIdx = $(this).attr('data-prev');
+                    EzInputs[prevIdx].val('');
+                    refreshInputBoxes();
+                }
+            }
+        })
+        EzInputs[i] = elem;
+    }
+
+    function refreshInputBoxes() {
+        var allBoxFilled = true;
+        var allInputValue = '';
+        for (var i = 0; i < EzInputs.length; i++) {
+            if (isEmptyValue(EzInputs[i].val())) {
+                EzInputs[i].val('');
+                EzInputs[i].focus();
+                allBoxFilled = false;
+                break;
+            }
+            else {
+                allInputValue += EzInputs[i].val();
+            }
+        }
+
+        if (allBoxFilled) {
+            disableAllInputs();
+            $('#failed').hide();
+            $('#success').hide();
+            $('#loader').show();
+
+            $.ajax({
+                type: 'POST',
+                url: 'login.json',
+                data: {sessionCode: allInputValue},
+                success: function(sessionId) {
+                    $('#loader').hide();
+                    $('#failed').hide();
+                    $('#success').show();
+                    $('#message').html('Login success, redirecting...');
+                    document.cookie = EzCookieName + '=' + sessionId +'; Path=/webapp;';
+                    window.location.replace('home.htm');
+                },
+                error: function(xhr) {
+                    $('#loader').hide();
+                    $('#success').hide();
+                    $('#failed').show();
+                    $('#message').html('Invalid Login Code');
+                    $('#message').show();
+                    restartAllInputs();
+                    refreshInputBoxes();
+                }
+            });
+        }
+    }
+
+    function disableAllInputs() {
+        for (var i = 0; i < EzInputs.length; i++) {
+            EzInputs[i].attr('disabled','disabled');
+        }
+    }
+
+    function restartAllInputs() {
+        for (var i = 0; i < EzInputs.length; i++) {
+            EzInputs[i].val('');
+            EzInputs[i].removeAttr('disabled');
+        }
+    }
+
+    function isEmptyValue(val) {
+        return val.replace(/^\s+|\s+$/g, "").length < 1;
+    }
+
+    refreshInputBoxes();
+</script>
+</body>
+</html>

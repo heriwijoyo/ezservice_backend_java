@@ -1,0 +1,69 @@
+/**
+ * Ezclouds.id
+ * Copyright (c) 2020‐2024 All Rights Reserved.
+ */
+package id.ezclouds.common.model.area;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+/**
+ * @author Heri Wijoyo (heri.wijoyo@gmail.com)
+ * @version $Id: District.java, v 0.1 2024‐08‐12 4:47 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ */
+public class District implements CoreArea {
+
+    private String id;
+    private String regencyId;
+    private String name;
+
+    public District(String id, String regencyId, String name) {
+        this.id = id;
+        this.regencyId = regencyId;
+        this.name = name;
+    }
+
+    @Override
+    public CoreAreaLevel getAreaLevel() {
+        return CoreAreaLevel.DISTRICT;
+    }
+
+    @Override
+    public String getAreaId() {
+        return id;
+    }
+
+    @Override
+    public String getParentId() {
+        return regencyId;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getRegencyId() {
+        return regencyId;
+    }
+
+    public void setRegencyId(String regencyId) {
+        this.regencyId = regencyId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+}

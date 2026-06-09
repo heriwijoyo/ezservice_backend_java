@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>HTML_TITLE_PAGE</title>
+    <link rel="stylesheet" href="../../../assets/report/css/vendors.css">
+    <style type="text/css">
+		@media (min-width: 1px) {
+			.content-wrapper {
+				margin-left: 20px;
+				margin: 20px;
+			}
+		}
+	</style>
+    <link rel="stylesheet" href="../../../assets/report/css/style.css">
+    <link rel="stylesheet" href="../../../assets/report/css/skin_color.css">
+    <link rel="stylesheet" href="../../../assets/report/css/custom.css">
+    <link rel="stylesheet" href="../../../assets/report/css/vendor/jqueryscripttop.css">
+</head>
+
+<body class="hold-transition light-skin sidebar-mini theme-primary fixed sidebar-collapse">
+
+<div class="wrapper" style="height:auto">
+    <div class="content-wrapper">
+        <div class="container-full">
+            <section class="content">
+                <div>
+                    <div class="mb-20 d-flex b-0 justify-content-between align-items-center">
+                        <h2 class="mt-0 mb-5 fw-600">INNER_PAGE_TITLE</h2>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xl-3 col-md-6 col-12">
+                        <div class="box pull-up">
+                            <div class="box-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="bs-5 ps-10 border-primary">
+                                        <p class="text-fade mb-10">Total Komunitas</p>
+                                        <h2 class="my-0 fw-700">TOTAL_SUB_ORG</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 col-12">
+                        <div class="box pull-up">
+                            <div class="box-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="bs-5 ps-10 border-primary">
+                                        <p class="text-fade mb-10">Total Rekrut</p>
+                                        <h2 class="my-0 fw-700">TOTAL_MEMBER</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 col-12">
+                        <div class="box pull-up">
+                            <div class="box-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="bs-5 ps-10 border-primary">
+                                        <p class="text-fade mb-10">TPS Coverage</p>
+                                        <h2 class="my-0 fw-700">TOTAL_TPS</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 col-12">
+                        <div class="box pull-up">
+                            <div class="box-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="bs-5 ps-10 border-primary">
+                                        <p class="text-fade mb-10">Rekrut Hari Ini</p>
+                                        <h2 class="my-0 fw-700">MEMBER_TODAY</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6">
+                        <div class="box rounded-4">
+                            <div class="box-header d-flex b-0 justify-content-between align-items-center pb-0">
+                                <h3 class="box-title">REPORT_TS_TITLE_SUB_ORG</h3>
+                            </div>
+                            <div class="box-body py-0">
+                                <div class="row">
+                                    <div class="col-lg-12 p-0">
+                                        <div id="chart-time-series-sub-org" class="me-0"></div>
+                                    </div>
+                                    <!--div class="col-lg-3 bg-light rounded align-self-center">
+                                        <div class="row  py-10 me-1">
+                                            <div class="col-lg-12 col-md-4">
+                                                <div class="mb-25">
+                                                    <p class="text-fade mb-5"><i class="fa-solid fa-circle text-primary"/> Additional Info</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6">
+                        <div class="box rounded-4">
+                            <div class="box-header d-flex b-0 justify-content-between align-items-center pb-0">
+                                <h3 class="box-title">REPORT_TS_TITLE_DISTRICT</h3>
+                            </div>
+                            <div class="box-body py-0">
+                                <div class="row">
+                                    <div class="col-lg-12 p-0">
+                                        <div id="chart-time-series-district" class="me-0"></div>
+                                    </div>
+                                    <!--div class="col-lg-3 bg-light rounded align-self-center">
+                                        <div class="row  py-10 me-1">
+                                            <div class="col-lg-12 col-md-4">
+                                                <div class="mb-25">
+                                                    <p class="text-fade mb-5"><i class="fa-solid fa-circle text-primary"/> Additional Info</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="box">
+                            <div class="box-header d-flex b-0 justify-content-between align-items-center">
+                                <h3 class="box-title">Rekap Data Voter per Komunitas</h3>
+                                <!--button class="waves-effect waves-dark btn btn-outline btn-dark btn-md">See All</button-->
+                            </div>
+                            <div>
+                                <div class="table-responsive">
+                                    <table class="text-fade table">
+                                        <thead class="bg-light">
+                                        <tr>
+                                            <th class="ps-25">No</th>
+                                            <th>Komunitas</th>
+                                            <th>Voter Total</th>
+                                            <th>Voter Strong</th>
+                                            <th>Voter Lazy</th>
+                                            <th>Laki-Laki</th>
+                                            <th>Perempuan</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>RECAP_SUB_ORG</tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="box">
+                            <div class="box-header d-flex b-0 justify-content-between align-items-center">
+                                <h3 class="box-title">Rekap Data Voter per Kecamatan</h3>
+                                <!--button class="waves-effect waves-dark btn btn-outline btn-dark btn-md">See All</button-->
+                            </div>
+                            <div>
+                                <div class="table-responsive">
+                                    <table class="text-fade table">
+                                        <thead class="bg-light">
+                                        <tr>
+                                            <th class="ps-25">No</th>
+                                            <th>Kecamatan</th>
+                                            <th>Voter Total</th>
+                                            <th>Voter Strong</th>
+                                            <th>Voter Lazy</th>
+                                            <th>Laki-Laki</th>
+                                            <th>Perempuan</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>RECAP_DISTRICT</tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <footer class="main-footer bt-1">
+        &copy; 2024 ArahIndonesia. All Rights Reserved.
+    </footer>
+
+</div>
+
+<script src="../../../assets/report/js/jquery-3.6.0.min.js"></script>
+<script src="../../../assets/report/js/apexcharts.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	var chart = new ApexCharts(document.querySelector("#chart-time-series-sub-org"), $.parseJSON('TS_DATA_SUB_ORG'));
+	chart.render();
+
+	var chart2 = new ApexCharts(document.querySelector("#chart-time-series-district"), $.parseJSON('TS_DATA_DISTRICT'));
+	chart2.render();
+});
+JS_RELOAD_SCRIPT
+</script>
+
+</body>
+</html>

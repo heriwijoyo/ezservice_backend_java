@@ -1,0 +1,69 @@
+/**
+ * Ezclouds.id
+ * Copyright (c) 2020‐2024 All Rights Reserved.
+ */
+package id.ezclouds.common.model.area;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+/**
+ * @author Heri Wijoyo (heri.wijoyo@gmail.com)
+ * @version $Id: Village.java, v 0.1 2024‐08‐12 4:49 PM Heri Wijoyo (heri.wijoyo@gmail.com) Exp $$
+ */
+public class Village implements CoreArea {
+
+    private String id;
+    private String districtId;
+    private String name;
+
+    public Village(String id, String districtId, String name) {
+        this.id = id;
+        this.districtId = districtId;
+        this.name = name;
+    }
+
+    @Override
+    public CoreAreaLevel getAreaLevel() {
+        return CoreAreaLevel.VILLAGE;
+    }
+
+    @Override
+    public String getAreaId() {
+        return id;
+    }
+
+    @Override
+    public String getParentId() {
+        return districtId;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getDistrictId() {
+        return districtId;
+    }
+
+    public void setDistrictId(String districtId) {
+        this.districtId = districtId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+}
